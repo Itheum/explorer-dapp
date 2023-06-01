@@ -12,10 +12,7 @@ const HomePage = () => {
           <h2 className="mt-5 text-left">App Marketplace</h2>
 
           <div className="row mt-3">
-            <div
-              className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
-              key={`o-c-d`}
-            >
+            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center">
               <div
                 className="card shadow-sm border-0"
                 style={{ backgroundColor: "#f6f8fa" }}
@@ -42,10 +39,7 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div
-              className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
-              key={`o-c-d`}
-            >
+            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center">
               <div
                 className="card shadow-sm border-0"
                 style={{ backgroundColor: "#f6f8fa" }}
@@ -72,10 +66,7 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div
-              className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
-              key={`o-c-d`}
-            >
+            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center">
               <div
                 className="card shadow-sm border-0"
                 style={{ backgroundColor: "#f6f8fa" }}
