@@ -7,6 +7,7 @@ import { logout } from "helpers";
 import { useGetIsLoggedIn } from "hooks";
 import { routeNames } from "routes";
 import { ReactComponent as MultiversXLogo } from "../../assets/img/multiversx.svg";
+import { ELROND_NETWORK } from "config";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -29,6 +30,8 @@ export const Navbar = () => {
           {/* <MultiversXLogo className='dapp-logo' /> */}
           <span className="dapp-name text-muted">{dAppName}</span>
         </Link>
+
+        <div className="ml-2">{ELROND_NETWORK.toUpperCase()}</div>
 
         <BsNavbar.Toggle aria-controls="responsive-navbar-nav">
           <IoMenu />
