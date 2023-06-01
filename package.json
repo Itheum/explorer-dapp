@@ -1,0 +1,85 @@
+{
+  "name": "explorer-dapp",
+  "description": "Itheum Explorer the public explore the Itheum protocol components",
+  "version": "0.0.1",
+  "author": "Itheum",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "6.1.0",
+    "@fortawesome/free-solid-svg-icons": "6.1.0",
+    "@fortawesome/react-fontawesome": "0.1.18",
+    "@itheum/sdk-mx-data-nft": "^0.0.2",
+    "@multiversx/sdk-core": "^12.1.1",
+    "@multiversx/sdk-dapp": "2.10.17",
+    "@multiversx/sdk-network-providers": "^1.3.0",
+    "@types/react-modal": "^3.16.0",
+    "axios": "0.24.0",
+    "bootstrap": "4.6.2",
+    "moment": "2.29.4",
+    "moment-timezone": "^0.5.43",
+    "react": "18.2.0",
+    "react-bootstrap": "2.1.2",
+    "react-calendar-heatmap": "^1.9.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.8.0",
+    "react-modal": "^3.16.1",
+    "react-router-dom": "6.4.2",
+    "react-tooltip": "^5.11.1",
+    "react-vertical-timeline-component": "^3.6.0",
+    "web-vitals": "1.0.1"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext js,ts,tsx src"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "jest": {
+    "moduleNameMapper": {
+      "@multiversx/sdk-dapp/(.*)": "<rootDir>/node_modules/@multiversx/sdk-dapp/__commonjs/$1.js"
+    }
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "14.0.0",
+    "@testing-library/user-event": "14.4.3",
+    "@types/jest": "26.0.15",
+    "@types/node": "12.0.0",
+    "@types/react": "18.0.24",
+    "@types/react-dom": "18.0.8",
+    "@types/react-router-dom": "5.1.7",
+    "@types/react-vertical-timeline-component": "^3.3.3",
+    "crypto-browserify": "3.12.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-react": "1.1.7",
+    "eslint-config-react-app": "7.0.1",
+    "eslint-config-standard": "17.0.0",
+    "eslint-import-resolver-alias": "1.1.2",
+    "eslint-import-resolver-typescript": "3.2.5",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-promise": "6.0.0",
+    "eslint-plugin-react": "7.30.1",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "nft.storage": "^7.0.3",
+    "path-browserify": "1.0.1",
+    "prettier": "2.7.1",
+    "react-app-rewired": "2.2.1",
+    "react-scripts": "5.0.1",
+    "sass": "1.55.0",
+    "stream-browserify": "3.0.0",
+    "typescript": "4.1.2"
+  },
+  "resolutions": {
+    "**/*/nth-check": "2.0.1"
+  }
+}

@@ -1,0 +1,296 @@
+/* Bootstrap overrides
+-------------------------------------------------- */
+
+$body: #000;
+$headings-font-weight: 300 !important;
+$primary: #1b46c2;
+$light: #fafafa;
+$card-border-radius: 0.75rem;
+$card-inner-border-radius: subtract($card-border-radius, 1px);
+
+$headings-font-weight: 300 !important;
+$a: #1392ff;
+
+/* Do not move the imports from here.
+Override Bootstrap variables only above.
+-------------------------------------------------- */
+
+// Bootstrap
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+@import '~bootstrap/scss/reboot';
+
+.custom-classname.btn-primary {
+  background-color: green;
+}
+/* Base
+-------------------------------------------------- */
+html {
+  min-height: 100%;
+  font-size: 14px;
+}
+
+.wrapper {
+  min-height: 100vh;
+}
+
+.opacity-6 {
+  opacity: 0.6;
+}
+
+.dapp-icon {
+  padding: 5px;
+  border-radius: 50%;
+  background-color: $light;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+
+  &.icon-medium {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Navbar
+-------------------------------------------------- */
+.dapp-logo {
+  width: auto;
+  height: 25px;
+}
+
+.dapp-name {
+  line-height: 1;
+  padding-left: 3px;
+  margin-left: 4px;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Dashboard
+-------------------------------------------------- */
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: $white;
+  margin: 0 7px;
+
+  button {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: $white;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+/* Sign Message
+-------------------------------------------------- */
+.sign-message {
+
+  & h1 {
+    font-size: 24px;
+  }
+
+  & textarea {
+    min-height: 100px;
+  }
+
+  & button {
+    align-self: center;
+  }
+}
+
+.textarea-with-copy {
+  position: relative;
+
+  & a {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+  }
+
+  @include media-breakpoint-up(md) {
+    min-width: 650px;
+  }
+}
+
+.transactions {
+  .transaction-icon {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+
+  &.table {
+    .transaction-hash .trim {
+      @include media-breakpoint-down(xl) {
+        max-width: none;
+      }
+      @include media-breakpoint-down(lg) {
+        max-width: 26rem;
+      }
+      @include media-breakpoint-down(md) {
+        max-width: 12rem;
+      }
+      @include media-breakpoint-down(sm) {
+        max-width: 8rem;
+      }
+    }
+
+    td,
+    tr {
+      padding: 0.65rem;
+    }
+
+    td {
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    tr:last-of-type {
+      td {
+        border-bottom: 1px solid #dee2e6;
+      }
+    }
+  }
+}
+
+/* Actions
+-------------------------------------------------- */
+
+.not-allwed {
+  cursor: not-allowed;
+}
+
+/* Loader, Transaction success/Fail
+-------------------------------------------------- */
+.page-state {
+  .lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .lds-ellipsis div {
+    position: absolute;
+    top: 27px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  .bg-blue .lds-ellipsis div {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .lds-ellipsis div:nth-child(1) {
+    left: 6px;
+    animation: lds-ellipsis1 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(2) {
+    left: 6px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(3) {
+    left: 26px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(4) {
+    left: 45px;
+    animation: lds-ellipsis3 0.6s infinite;
+  }
+  @keyframes lds-ellipsis1 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes lds-ellipsis3 {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  @keyframes lds-ellipsis2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(19px, 0);
+    }
+  }
+}
+
+/* Footer
+-------------------------------------------------- */
+footer {
+  div {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.155rem;
+
+    a {
+      color: $black;
+
+      &:hover {
+        color: $black;
+      }
+
+      #heart {
+        height: 16px;
+        width: 16px;
+
+        path {
+          fill: #c00;
+        }
+      }
+    }
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cuprum:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+$font-cuprum: 'Cuprum', sans-serif;
+$font-poppins: 'Poppins', sans-serif;
+
+.font-title {
+  font-family: $font-poppins;
+  // font-family: $font-cuprum;
+}
+
+.data-nft-image {
+  max-width:100%;
+  // height: auto;
+}
