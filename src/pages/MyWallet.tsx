@@ -99,9 +99,7 @@ export const MyWallet = () => {
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h4 className="mt-5 text-center">
-            Data NFTs on my wallet: {dataNftCount}
-          </h4>
+          <h4 className="mt-5 text-center">My Data NFTs: {dataNftCount}</h4>
 
           <div className="row mt-5">
             {dataNfts.length > 0 ? (

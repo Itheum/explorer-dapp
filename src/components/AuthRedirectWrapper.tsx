@@ -6,9 +6,9 @@ import { routeNames } from "routes";
 export const AuthRedirectWrapper = ({ children }: PropsWithChildren) => {
   const isLoggedIn = useGetIsLoggedIn();
 
-  if (isLoggedIn) {
-    return <Navigate to={routeNames.dashboard} />;
-  }
+  // if (isLoggedIn) {
+  //   return <Navigate to={routeNames.dashboard} />;
+  // }
 
   return <>{children}</>;
 };

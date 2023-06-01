@@ -24,7 +24,7 @@ export const Navbar = () => {
       <div className="container-fluid">
         <Link
           className="d-flex align-items-center navbar-brand mr-0"
-          to={isLoggedIn ? routeNames.dashboard : routeNames.home}
+          to={isLoggedIn ? routeNames.home : routeNames.home}
         >
           {/* <MultiversXLogo className='dapp-logo' /> */}
           <span className="dapp-name text-muted">{dAppName}</span>
@@ -36,33 +36,36 @@ export const Navbar = () => {
         <BsNavbar.Collapse id="responsive-navbar-nav" className="nav-menu-wrap">
           <Nav className="ml-auto">
             <NavItem>
-              <Link to={routeNames.dashboard} className="nav-link">
-                Dashboard
+              <Link
+                to={isLoggedIn ? routeNames.home : routeNames.home}
+                className="nav-link"
+              >
+                Home
               </Link>
             </NavItem>
-            <NavItem>
+            {/* <NavItem>
               <Link to={routeNames.cantinacorner} className="nav-link">
                 Cantina Corner
               </Link>
-            </NavItem>
-            <NavItem>
+            </NavItem> */}
+            {/* <NavItem>
               <Link to={routeNames.gamerpassportgamer} className="nav-link">
                 Web3 Gamer Passport
               </Link>
-            </NavItem>
-            <NavItem>
+            </NavItem> */}
+            {/* <NavItem>
               <Link
                 to={routeNames.playstationgamerpassport}
                 className="nav-link"
               >
                 Sony Playstation Data Passport
               </Link>
-            </NavItem>
-            <NavItem>
+            </NavItem> */}
+            {/* <NavItem>
               <Link to={routeNames.itheumtrailblazer} className="nav-link">
                 Itheum Trailblazer
               </Link>
-            </NavItem>
+            </NavItem> */}
             {isLoggedIn ? (
               <>
                 <NavItem>

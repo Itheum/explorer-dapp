@@ -26,4 +26,4 @@ yarn-error.log*
 .yalc
 yalc.lock
 
-.env
+.env*

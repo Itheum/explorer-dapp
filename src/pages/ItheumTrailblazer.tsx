@@ -2,30 +2,16 @@ import React, { useEffect, useState } from "react";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
 import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
-import { ModalBody, Table } from "react-bootstrap";
+import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { Radar } from "react-chartjs-2";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { ElrondAddressLink, Loader } from "components";
-import {
-  CANTINA_CORNER_NONCES,
-  CC_SHOW_SIZE,
-  TRAILBLAZER_NONCES,
-} from "config";
+import { MARKETPLACE_DETAILS_PAGE, TRAILBLAZER_NONCES } from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
@@ -35,80 +21,6 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { FaCalendarCheck, FaHandshake, FaTrophy } from "react-icons/fa";
-
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
-
-export const BORDER_COLORS = [
-  "#ff6384",
-  "#3366CC",
-  "#DC3912",
-  "#FF9900",
-  "#109618",
-  "#990099",
-  "#3B3EAC",
-  "#0099C6",
-  "#DD4477",
-  "#66AA00",
-  "#B82E2E",
-  "#316395",
-  "#994499",
-  "#22AA99",
-  "#AAAA11",
-  "#6633CC",
-  "#E67300",
-  "#8B0707",
-  "#329262",
-  "#5574A6",
-  "#3B3EAC",
-  "#ffa600",
-  "#ff7c43",
-];
-
-export const BACKGROUND_COLORS = [
-  "#ff638433",
-  "#3366CC33",
-  "#DC391233",
-  "#FF990033",
-  "#10961833",
-  "#99009933",
-  "#3B3EAC33",
-  "#0099C633",
-  "#DD447733",
-  "#66AA0033",
-  "#B82E2E33",
-  "#31639533",
-  "#99449933",
-  "#22AA9933",
-  "#AAAA1133",
-  "#6633CC33",
-  "#E6730033",
-  "#8B070733",
-  "#32926233",
-  "#5574A633",
-  "#3B3EAC33",
-  "#ffa60033",
-  "#ff7c4333",
-];
-
-const chartOptions = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Cantina Corner Ranking",
-    },
-  },
-};
 
 const customStyles = {
   content: {
@@ -228,6 +140,10 @@ export const ItheumTrailblazer = () => {
     }
   }
 
+  function goToMarketplace(tokenIdentifier: string) {
+    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`);
+  }
+
   if (isLoading) {
     return <Loader />;
   }
@@ -246,8 +162,9 @@ export const ItheumTrailblazer = () => {
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h4 className="mt-5 text-center">
-            Itheum Trailblazer NFTs: {itDataNfts.length}
+          <h3 className="mt-5 text-center">Itheum Trailblazer</h3>
+          <h4 className="mt-2 text-center">
+            Data NFTs that Unlock this App: {itDataNfts.length}
           </h4>
 
           <div className="row mt-5">
@@ -340,12 +257,23 @@ export const ItheumTrailblazer = () => {
                         </div>
 
                         <div className="mt-4 mb-1 d-flex justify-content-center">
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => viewData(index)}
-                          >
-                            View Data
-                          </button>
+                          {flags[index] ? (
+                            <button
+                              className="btn btn-success"
+                              onClick={() => viewData(index)}
+                            >
+                              View Data
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() =>
+                                goToMarketplace(dataNft.tokenIdentifier)
+                              }
+                            >
+                              Get this from the Data NFT Marketplace
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -353,7 +281,7 @@ export const ItheumTrailblazer = () => {
                 );
               })
             ) : (
-              <h3 className="text-center text-white">No DataNFT</h3>
+              <h3 className="text-center text-white">No Data NFTs</h3>
             )}
           </div>
         </div>
@@ -378,22 +306,16 @@ export const ItheumTrailblazer = () => {
           </div>
         </div>
         <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">View Data</h4>
+          <h4 className="text-center font-title font-weight-bold">
+            Itheum Trailblazer
+          </h4>
         </ModalHeader>
         <ModalBody>
           {!owned ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "50vw",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}
-            >
+            <div className="d-flex flex-column align-items-center justify-content-center">
               <img
                 src={imgBlurChart}
-                style={{ width: "24rem", height: "auto" }}
+                style={{ width: "90%", height: "auto" }}
               />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>
@@ -405,7 +327,7 @@ export const ItheumTrailblazer = () => {
               className="d-flex flex-column align-items-center justify-content-center"
               style={{
                 minWidth: "24rem",
-                maxWidth: "50vw",
+                maxWidth: "100%",
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}
