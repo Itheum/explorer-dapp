@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
-import { ModalBody, ModalTitle } from "react-bootstrap";
+import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
@@ -11,7 +12,6 @@ import {
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { toastError } from "libs/utils";
 
 const customStyles = {
@@ -220,7 +220,7 @@ export const MyWallet = () => {
         </div>
         <ModalHeader>
           <h4 className="text-center font-title font-weight-bold">
-            Data Marshal Response
+            File Viewer
           </h4>
         </ModalHeader>
         <ModalBody>
@@ -229,7 +229,7 @@ export const MyWallet = () => {
               className="d-flex flex-column align-items-center justify-content-center"
               style={{
                 minWidth: "24rem",
-                maxWidth: "50vw",
+                maxWidth: "100% !important",
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}
@@ -239,12 +239,11 @@ export const MyWallet = () => {
           ) : (
             <div
               style={{
-                minWidth: "22rem",
-                maxWidth: "50vw",
+                minWidth: "26rem",
+                maxWidth: "100%",
                 minHeight: "36rem",
                 maxHeight: "60vh",
                 overflowY: "auto",
-                backgroundColor: "#f6f8fa",
               }}
             >
               <p
