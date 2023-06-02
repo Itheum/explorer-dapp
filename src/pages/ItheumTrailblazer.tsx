@@ -21,19 +21,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { FaCalendarCheck, FaHandshake, FaTrophy } from "react-icons/fa";
-
-const customStyles = {
-  content: {
-    width: "80%",
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    maxHeight: "80vh",
-  },
-};
+import { modalStyles } from "libs/ui";
 
 export const ItheumTrailblazer = () => {
   const {
@@ -171,10 +159,7 @@ export const ItheumTrailblazer = () => {
                     className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
                     key={`o-c-${index}`}
                   >
-                    <div
-                      className="card shadow-sm border-0"
-                      style={{ backgroundColor: "#f6f8fa" }}
-                    >
+                    <div className="card shadow-sm border">
                       <div className="card-body p-3">
                         <div className="mb-4">
                           <img
@@ -286,7 +271,7 @@ export const ItheumTrailblazer = () => {
       <Modal
         isOpen={isModalOpened}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={modalStyles}
         ariaHideApp={false}
       >
         <div style={{ height: "3rem" }}>

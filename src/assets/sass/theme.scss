@@ -18,8 +18,67 @@ Override Bootstrap variables only above.
 // Bootstrap
 
 @import '~bootstrap/scss/bootstrap.scss';
-
 @import '~bootstrap/scss/reboot';
+
+// @import "~bootstrap/scss/mixins";
+// @import "~bootstrap/scss/utilities";
+
+// @import "~bootstrap/scss/functions";
+// @import "~bootstrap/scss/variables";
+
+.dark {
+  $custom-bg: #0F0F0F;
+  $teal50: #E6FFFA;
+  $teal100: #B2F5EA;
+  $teal200: #00C797;
+
+  /* redefine theme colors for dark theme */
+  $primary: $teal200;
+  // $secondary: red;
+  // $success: #222222;
+  // $dark: $light;
+  
+  $theme-colors: (
+    "primary": $teal200,
+    "secondary": $secondary,
+    "success": $success,
+    "danger": $danger,
+    "info": $indigo,
+    "dark": $teal50,
+    "light": $custom-bg,
+  );
+
+  /* redefine theme color variables */
+  // @each $color, $value in $theme-colors {
+  //     --#{$variable-prefix}#{$color}: #{$value};
+  // }
+
+  /* redefine theme color rgb vars (used for bg- colors) */
+  // $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+  // @each $color, $value in $theme-colors-rgb {
+  //     --#{$variable-prefix}#{$color}-rgb: #{$value};
+  // }
+
+  $body-color: $teal50;
+  $body-bg: $custom-bg;
+  $navbar-light-color: $teal50;
+  $navbar-light-hover-color: $teal200;
+  $navbar-light-active-color: $teal50;
+
+  $card-bg: $custom-bg;
+  $border-color: $teal200;
+
+  $dropdown-bg: $custom-bg;
+  $dropdown-border-color: $teal200;
+  $dropdown-link-hover-bg: transparent;
+
+  --light: #0F0F0F;
+  --light-20: #0F0F0F88;
+  
+  // --#{$variable-prefix}body-color: #{$body-color};
+  // --#{$variable-prefix}body-bg: #{$body-bg};
+  @import "bootstrap";
+}
 
 .custom-classname.btn-primary {
   background-color: green;

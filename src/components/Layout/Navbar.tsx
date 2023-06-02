@@ -18,7 +18,7 @@ export const Navbar = () => {
 
   return (
     <BsNavbar
-      className="bg-white border-bottom px-4 py-3"
+      className="border-bottom px-4 py-3"
       expand="sm"
       collapseOnSelect
     >

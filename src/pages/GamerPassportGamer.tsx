@@ -20,19 +20,7 @@ import {
   thirdPartyDataInsights_LIB,
 } from "libs/utils/core";
 import GamerInsights from "./GamerInsights";
-
-const customStyles = {
-  overlay: {},
-  content: {
-    width: "80%",
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
+import { modalStyles } from "libs/ui";
 
 export const GamerPassportGamer = () => {
   const {
@@ -312,10 +300,7 @@ export const GamerPassportGamer = () => {
                     className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
                     key={`o-c-${index}`}
                   >
-                    <div
-                      className="card shadow-sm border-0"
-                      style={{ backgroundColor: "#f6f8fa" }}
-                    >
+                    <div className="card shadow-sm border">
                       <div className="card-body p-3">
                         <div className="mb-4">
                           <img
@@ -427,7 +412,7 @@ export const GamerPassportGamer = () => {
       <Modal
         isOpen={isModalOpened}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={modalStyles}
         ariaHideApp={false}
       >
         <div style={{ height: "3rem" }}>
