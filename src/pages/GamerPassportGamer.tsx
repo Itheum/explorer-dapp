@@ -66,11 +66,7 @@ export const GamerPassportGamer = () => {
   async function fetchCantinaCornerNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = [];
-    for (const nonce of GAMER_PASSPORT_GAMER_NONCES) {
-      const _nft = await DataNft.createFromApi(nonce);
-      _nfts.push(_nft);
-    }
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(GAMER_PASSPORT_GAMER_NONCES);
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 

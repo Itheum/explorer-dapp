@@ -64,11 +64,7 @@ export const PlayStationGamer = () => {
   async function fetchCantinaCornerNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = [];
-    for (const nonce of PLAYSTATION_GAMER_PASSPORT_NONCES) {
-      const _nft = await DataNft.createFromApi(nonce);
-      _nfts.push(_nft);
-    }
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES);
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 

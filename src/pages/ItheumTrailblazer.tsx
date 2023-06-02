@@ -66,11 +66,7 @@ export const ItheumTrailblazer = () => {
   async function fetchCantinaCornerNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = [];
-    for (const nonce of TRAILBLAZER_NONCES) {
-      const _nft = await DataNft.createFromApi(nonce);
-      _nfts.push(_nft);
-    }
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_NONCES);
     console.log("itDataNfts", _nfts);
     setItDataNfts(_nfts);
 

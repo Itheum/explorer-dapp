@@ -143,12 +143,7 @@ export const CantinaCorner = () => {
   async function fetchCantinaCornerNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = [];
-    for (const nonce of CANTINA_CORNER_NONCES) {
-      const _nft = await DataNft.createFromApi(nonce);
-      _nfts.push(_nft);
-    }
-
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(CANTINA_CORNER_NONCES);
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
