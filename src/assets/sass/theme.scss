@@ -353,3 +353,15 @@ $font-poppins: 'Poppins', sans-serif;
   max-width:100%;
   // height: auto;
 }
+
+.custom-control-label::before {
+  background-color: #28a745;
+}
+
+.custom-switch .custom-control-label::after {
+  background-color: white;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+  background-color: red;
+}

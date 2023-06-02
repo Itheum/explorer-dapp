@@ -1,5 +1,5 @@
-import React from "react";
-import { Navbar as BsNavbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Navbar as BsNavbar, NavItem, Nav, NavDropdown, Form } from "react-bootstrap";
 import { IoMenu } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { dAppName } from "config";
@@ -8,6 +8,7 @@ import { logout } from "helpers";
 import { useGetIsLoggedIn } from "hooks";
 import { routeNames } from "routes";
 import { ReactComponent as MultiversXLogo } from "../../assets/img/multiversx.svg";
+import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -109,6 +110,10 @@ export const Navbar = () => {
                 </Link>
               </NavItem>
             )}
+
+            <div className="ml-3">
+              <SwitchButton />
+            </div>
           </Nav>
         </BsNavbar.Collapse>
       </div>
