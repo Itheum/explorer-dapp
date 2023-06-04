@@ -44,11 +44,7 @@ export const MyListed = () => {
   async function fetchDataNfts() {
     setIsNftLoading(true);
 
-    const _dataNfts: DataNft[] = [];
-    for (const offer of offers) {
-      const dataNft = await DataNft.createFromApi(offer.offeredTokenNonce);
-      _dataNfts.push(dataNft);
-    }
+    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(offers.map((offer) => offer.offeredTokenNonce));
     console.log("_dataNfts", _dataNfts);
     setDataNfts(_dataNfts);
 
@@ -85,10 +81,7 @@ export const MyListed = () => {
                     className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
                     key={`o-c-${index}`}
                   >
-                    <div
-                      className="card shadow-sm border-0"
-                      style={{ backgroundColor: "#f6f8fa" }}
-                    >
+                    <div className="card shadow-sm border">
                       <div className="card-body p-3">
                         <div className="mb-4">
                           <img
