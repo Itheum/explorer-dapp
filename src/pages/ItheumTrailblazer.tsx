@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { ModalBody } from "react-bootstrap";
+import ModalHeader from "react-bootstrap/esm/ModalHeader";
+import { FaCalendarCheck, FaHandshake, FaTrophy } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import Modal from "react-modal";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
-import { ModalBody } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { IoClose } from "react-icons/io5";
-import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { ElrondAddressLink, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE, TRAILBLAZER_NONCES } from "config";
@@ -17,12 +19,14 @@ import {
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
-import { FaCalendarCheck, FaHandshake, FaTrophy } from "react-icons/fa";
 
 const customStyles = {
+  overlay: {
+    backgroundColor: "var(--light-20) !important",
+    backdropFilter: "blur(10px)",
+  },
   content: {
     width: "80%",
     top: "50%",
@@ -32,6 +36,7 @@ const customStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     maxHeight: "80vh",
+    backgroundColor: "var(--light)",
   },
 };
 
@@ -41,39 +46,31 @@ export const ItheumTrailblazer = () => {
   } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
-
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNftLoading, setIsNftLoading] = useState(false);
-
-  const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
     useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
-
-  const [players, setPlayers] = useState<any[]>([]);
   const [data, setData] = useState<any>();
+  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
-  const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
-    setIsModalOpenend(true);
+    setIsModalOpened(true);
   }
   function closeModal() {
-    setIsModalOpenend(false);
+    setIsModalOpened(false);
   }
 
   async function fetchCantinaCornerNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = [];
-    for (const nonce of TRAILBLAZER_NONCES) {
-      const _nft = await DataNft.createFromApi(nonce);
-      _nfts.push(_nft);
-    }
-    console.log("itDataNfts", _nfts);
-    setItDataNfts(_nfts);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      TRAILBLAZER_NONCES
+    );
 
+    setItDataNfts(_nfts);
     setIsLoading(false);
   }
 
@@ -81,16 +78,14 @@ export const ItheumTrailblazer = () => {
     setIsNftLoading(true);
 
     const _dataNfts = await DataNft.ownedByAddress(address);
-    console.log("myDataNfts", _dataNfts);
-
     const _flags = [];
+
     for (const cnft of itDataNfts) {
       const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
       _flags.push(matches.length > 0);
     }
-    console.log("_flags", _flags);
-    setFlags(_flags);
 
+    setFlags(_flags);
     setIsNftLoading(false);
   }
 
@@ -117,23 +112,25 @@ export const ItheumTrailblazer = () => {
 
     if (_owned) {
       setIsFetchingDataMarshal(true);
-      setDataMarshalRes("");
       openModal();
 
       const dataNft = itDataNfts[index];
+
       const messageToBeSigned = await dataNft.getMessageToSign();
       console.log("messageToBeSigned", messageToBeSigned);
+
       const signedMessage = await signMessage({ message: messageToBeSigned });
       console.log("signedMessage", signedMessage);
+
       const res = await dataNft.viewData(
         messageToBeSigned,
         signedMessage as any as SignableMessage
       );
-      console.log("viewData", res);
-      setDataMarshalRes(JSON.stringify(res, null, 4));
-      setData(res.data);
-      console.log("data", res.data);
 
+      console.log("viewData", res);
+      console.log(JSON.stringify(res, null, 4));
+
+      setData(res.data);
       setIsFetchingDataMarshal(false);
     } else {
       openModal();
@@ -175,10 +172,7 @@ export const ItheumTrailblazer = () => {
                     className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
                     key={`o-c-${index}`}
                   >
-                    <div
-                      className="card shadow-sm border-0"
-                      style={{ backgroundColor: "#f6f8fa" }}
-                    >
+                    <div className="card shadow-sm border">
                       <div className="card-body p-3">
                         <div className="mb-4">
                           <img
@@ -210,7 +204,7 @@ export const ItheumTrailblazer = () => {
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8">
+                          <span className="col-8 cs-creator-link">
                             {
                               <ElrondAddressLink
                                 explorerAddress={explorerAddress}
@@ -266,7 +260,7 @@ export const ItheumTrailblazer = () => {
                             </button>
                           ) : (
                             <button
-                              className="btn btn-primary"
+                              className="btn btn-outline-success"
                               onClick={() =>
                                 goToMarketplace(dataNft.tokenIdentifier)
                               }
@@ -340,6 +334,7 @@ export const ItheumTrailblazer = () => {
                 {data.map((_dataItem: any, _index: any) => {
                   return (
                     <VerticalTimelineElement
+                      key={_index}
                       icon={getIconForCategory(_dataItem.category)}
                     >
                       <h2>

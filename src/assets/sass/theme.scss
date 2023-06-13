@@ -17,9 +17,93 @@ Override Bootstrap variables only above.
 
 // Bootstrap
 
-@import '~bootstrap/scss/bootstrap.scss';
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap/scss/reboot";
 
-@import '~bootstrap/scss/reboot';
+// @import "~bootstrap/scss/mixins";
+// @import "~bootstrap/scss/utilities";
+
+// @import "~bootstrap/scss/functions";
+// @import "~bootstrap/scss/variables";
+
+.dark {
+  $custom-bg: #0f0f0f;
+  $teal50: #e6fffa;
+  $teal100: #b2f5ea;
+  $teal200: #00c797;
+
+  /* redefine theme colors for dark theme */
+  $primary: $teal200;
+  // $secondary: red;
+  // $success: #222222;
+  // $dark: $light;
+
+  $theme-colors: (
+    "primary": $teal200,
+    "secondary": $secondary,
+    "success": $success,
+    "danger": $danger,
+    "info": $indigo,
+    "dark": $teal50,
+    "light": $custom-bg,
+  );
+
+  /* redefine theme color variables */
+  // @each $color, $value in $theme-colors {
+  //     --#{$variable-prefix}#{$color}: #{$value};
+  // }
+
+  /* redefine theme color rgb vars (used for bg- colors) */
+  // $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+  // @each $color, $value in $theme-colors-rgb {
+  //     --#{$variable-prefix}#{$color}-rgb: #{$value};
+  // }
+
+  $body-color: $teal50;
+  $body-bg: $custom-bg;
+  $navbar-light-color: $teal50;
+  $navbar-light-hover-color: $teal200;
+  $navbar-light-active-color: $teal50;
+
+  $card-bg: $custom-bg;
+  $border-color: $teal200;
+
+  $dropdown-bg: $custom-bg;
+  $dropdown-border-color: $teal200;
+  $dropdown-link-hover-bg: transparent;
+
+  --light: #0f0f0f;
+  --light-20: #0f0f0f88;
+
+  // --#{$variable-prefix}body-color: #{$body-color};
+  // --#{$variable-prefix}body-bg: #{$body-bg};
+  @import "bootstrap";
+
+  .cs-made-with-love {
+    color: #fafafa;
+  }
+
+  .dapp-name.text-muted {
+    color: #fafafa !important;
+  }
+
+  .text-info {
+    color: #00c797 !important;
+  }
+
+  .cs-creator-link a {
+    color: #00c79895 !important;
+  }
+
+  // S: App : TrailBlazer
+  .vertical-timeline-element-content {
+    background-color: #00c797;
+  }
+
+  .vertical-timeline-element-icon {
+    background-color: #17a2b8;
+  }
+}
 
 .custom-classname.btn-primary {
   background-color: green;
@@ -96,7 +180,6 @@ html {
 /* Sign Message
 -------------------------------------------------- */
 .sign-message {
-
   & h1 {
     font-size: 24px;
   }
@@ -267,23 +350,23 @@ footer {
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cuprum:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cuprum:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
 
-$font-cuprum: 'Cuprum', sans-serif;
-$font-poppins: 'Poppins', sans-serif;
+$font-cuprum: "Cuprum", sans-serif;
+$font-poppins: "Poppins", sans-serif;
 
 .font-title {
   font-family: $font-poppins;
@@ -291,6 +374,18 @@ $font-poppins: 'Poppins', sans-serif;
 }
 
 .data-nft-image {
-  max-width:100%;
+  max-width: 100%;
   // height: auto;
+}
+
+.custom-control-label::before {
+  background-color: #28a745;
+}
+
+.custom-switch .custom-control-label::after {
+  background-color: white;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: red;
 }

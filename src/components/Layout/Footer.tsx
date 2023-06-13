@@ -9,7 +9,7 @@ export const Footer = () => {
           {...{
             target: "_blank",
           }}
-          className="d-flex align-items-center"
+          className="d-flex align-items-center cs-made-with-love"
           href="https://itheum.com"
         >
           Made with <HeartIcon className="mx-1" /> by Itheum

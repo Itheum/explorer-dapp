@@ -25,6 +25,7 @@ import {
 } from "hooks";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { toastError } from "libs/utils";
+import { modalStyles } from "libs/ui";
 
 ChartJS.register(
   RadialLinearScale,
@@ -100,18 +101,6 @@ const chartOptions = {
   },
 };
 
-const customStyles = {
-  content: {
-    width: "80%",
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
-
 export const CantinaCorner = () => {
   const {
     network: { explorerAddress },
@@ -143,12 +132,9 @@ export const CantinaCorner = () => {
   async function fetchCantinaCornerNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = [];
-    for (const nonce of CANTINA_CORNER_NONCES) {
-      const _nft = await DataNft.createFromApi(nonce);
-      _nfts.push(_nft);
-    }
-
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      CANTINA_CORNER_NONCES
+    );
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
@@ -258,10 +244,7 @@ export const CantinaCorner = () => {
                     className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
                     key={`o-c-${index}`}
                   >
-                    <div
-                      className="card shadow-sm border-0"
-                      style={{ backgroundColor: "#f6f8fa" }}
-                    >
+                    <div className="card shadow-sm border">
                       <div className="card-body p-3">
                         <div className="mb-4">
                           <img
@@ -293,7 +276,7 @@ export const CantinaCorner = () => {
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8">
+                          <span className="col-8 cs-creator-link">
                             {
                               <ElrondAddressLink
                                 explorerAddress={explorerAddress}
@@ -362,7 +345,7 @@ export const CantinaCorner = () => {
       <Modal
         isOpen={isModalOpened}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={modalStyles}
         ariaHideApp={false}
       >
         <div style={{ height: "3rem" }}>
@@ -420,7 +403,7 @@ export const CantinaCorner = () => {
                 minHeight: "36rem",
                 maxHeight: "60vh",
                 overflowY: "auto",
-                backgroundColor: "#f6f8fa",
+                // backgroundColor: "#f6f8fa",
               }}
             >
               <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">
