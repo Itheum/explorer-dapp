@@ -1,5 +1,6 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
+import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
 import {
   CantinaCorner,
@@ -10,7 +11,6 @@ import {
   MyListed,
   MyWallet,
 } from "./pages";
-import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 
 export const routeNames = {
   home: "/",
@@ -37,7 +37,7 @@ export const routes: RouteWithTitleType[] = [
   {
     path: routeNames.dashboard,
     title: "Dashboard",
-    component: Dashboard,
+    component: Home,
     authenticatedRoute: false,
   },
   {

@@ -44,7 +44,9 @@ export const MyListed = () => {
   async function fetchDataNfts() {
     setIsNftLoading(true);
 
-    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(offers.map((offer) => offer.offeredTokenNonce));
+    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(
+      offers.map((offer) => offer.offeredTokenNonce)
+    );
     console.log("_dataNfts", _dataNfts);
     setDataNfts(_dataNfts);
 
@@ -143,7 +145,7 @@ export const MyListed = () => {
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8">
+                          <span className="col-8 cs-creator-link">
                             {isDataNftLoaded && (
                               <ElrondAddressLink
                                 explorerAddress={explorerAddress}

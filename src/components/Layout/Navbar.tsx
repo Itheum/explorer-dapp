@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Navbar as BsNavbar, NavItem, Nav, NavDropdown, Form } from "react-bootstrap";
+import React from "react";
+import { Navbar as BsNavbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import { IoMenu } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { dAppName } from "config";
@@ -7,7 +7,6 @@ import { ELROND_NETWORK } from "config";
 import { logout } from "helpers";
 import { useGetIsLoggedIn } from "hooks";
 import { routeNames } from "routes";
-import { ReactComponent as MultiversXLogo } from "../../assets/img/multiversx.svg";
 import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
@@ -18,21 +17,16 @@ export const Navbar = () => {
   };
 
   return (
-    <BsNavbar
-      className="border-bottom px-4 py-3"
-      expand="sm"
-      collapseOnSelect
-    >
+    <BsNavbar className="border-bottom px-4 py-3" expand="sm" collapseOnSelect>
       <div className="container-fluid">
         <Link
           className="d-flex align-items-center navbar-brand mr-0"
           to={isLoggedIn ? routeNames.home : routeNames.home}
         >
-          {/* <MultiversXLogo className='dapp-logo' /> */}
           <span className="dapp-name text-muted">{dAppName}</span>
         </Link>
 
-        <div className="ml-2">{ELROND_NETWORK.toUpperCase()}</div>
+        <small className="ml-2">{ELROND_NETWORK.toUpperCase()}</small>
 
         <BsNavbar.Toggle aria-controls="responsive-navbar-nav">
           <IoMenu />
@@ -47,14 +41,14 @@ export const Navbar = () => {
                 Home
               </Link>
             </NavItem>
-            
-            <NavDropdown title="Features">
-              <NavDropdown.Item as="div">
+
+            <NavDropdown title="App Marketplace">
+              {/* <NavDropdown.Item as="div">
                 <Link to={routeNames.cantinacorner} className="nav-link">
                   Cantina Corner
                 </Link>
-              </NavDropdown.Item>
-              
+              </NavDropdown.Item> */}
+
               <NavDropdown.Item as="div">
                 <Link to={routeNames.gamerpassportgamer} className="nav-link">
                   Web3 Gamer Passport
@@ -92,8 +86,8 @@ export const Navbar = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
 
-                <div style={{ width: '1rem' }}></div>
-                
+                <div style={{ width: "1rem" }}></div>
+
                 <NavItem>
                   <button
                     className="btn btn-outline-primary"

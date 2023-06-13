@@ -53,7 +53,9 @@ export const PlayStationGamer = () => {
   async function fetchCantinaCornerNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      PLAYSTATION_GAMER_PASSPORT_NONCES
+    );
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
@@ -352,7 +354,7 @@ export const PlayStationGamer = () => {
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8">
+                          <span className="col-8 cs-creator-link">
                             {
                               <ElrondAddressLink
                                 explorerAddress={explorerAddress}
@@ -408,7 +410,7 @@ export const PlayStationGamer = () => {
                             </button>
                           ) : (
                             <button
-                              className="btn btn-primary"
+                              className="btn btn-outline-success"
                               onClick={() =>
                                 goToMarketplace(dataNft.tokenIdentifier)
                               }
