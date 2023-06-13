@@ -130,7 +130,7 @@ export const MyWallet = () => {
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8">
+                          <span className="col-8 cs-creator-link">
                             {
                               <ElrondAddressLink
                                 explorerAddress={explorerAddress}

@@ -9,7 +9,7 @@ const HomePage = () => {
     <div className="d-flex flex-fill justify-content-center container-fluid">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h2 className="mt-5 text-left">App Marketplace</h2>
+          <h3 className="mt-5 text-left">App Marketplace</h3>
 
           <div className="row mt-3">
             <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center">
@@ -18,7 +18,7 @@ const HomePage = () => {
                   <div className="mb-4">
                     <img
                       className="data-nft-image"
-                      src="https://elements-video-cover-images-0.imgix.net/files/08bc1ced-a01d-4760-83fc-a09d05f108d0/inline_image_preview.jpg?auto=compress%2Cformat&fit=min&h=394&w=700&s=ce16b6b7ec1dbcdbc76081d363b892dd"
+                      src="https://itheum-static.s3.ap-southeast-2.amazonaws.com/expl-app-trailblazer-icon.png"
                     />
                   </div>
                   <h5 className="card-title">Itheum Trailblazer</h5>
@@ -42,7 +42,7 @@ const HomePage = () => {
                   <div className="mb-4">
                     <img
                       className="data-nft-image"
-                      src="https://itheum-static.s3-ap-southeast-2.amazonaws.com/dex-gamer-passport-data.png"
+                      src="https://itheum-static.s3.ap-southeast-2.amazonaws.com/expl-app-gamer-passport-icon.png"
                     />
                   </div>
                   <h5 className="card-title">Web3 Gamer Passport</h5>
@@ -66,7 +66,7 @@ const HomePage = () => {
                   <div className="mb-4">
                     <img
                       className="data-nft-image"
-                      src="https://itheum-static.s3-ap-southeast-2.amazonaws.com/dex-sony-playstation-data-passport.png"
+                      src="https://itheum-static.s3.ap-southeast-2.amazonaws.com/expl-app-playstation-icon.png"
                     />
                   </div>
                   <h5 className="card-title">
