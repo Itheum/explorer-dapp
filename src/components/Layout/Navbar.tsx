@@ -69,6 +69,12 @@ export const Navbar = () => {
                   Itheum Trailblazer
                 </Link>
               </NavDropdown.Item>
+
+              <NavDropdown.Item as="div">
+                <Link to={routeNames.esdtBubble} className="nav-link">
+                  ESDT Bubble
+                </Link>
+              </NavDropdown.Item>
             </NavDropdown>
 
             {isLoggedIn ? (
