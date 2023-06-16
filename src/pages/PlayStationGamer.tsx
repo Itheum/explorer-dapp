@@ -115,13 +115,13 @@ export const PlayStationGamer = () => {
         signedMessage as any as SignableMessage
       );
       // console.log('viewData', res);
-      setDataMarshalRes(JSON.stringify(res, null, 4));
+      setDataMarshalRes(JSON.stringify(res.data, null, 4));
 
-      fixData(res);
+      fixData(res.data);
 
-      setData(res);
+      setData(res.data);
 
-      console.log(res);
+      console.log(res.data);
 
       setIsFetchingDataMarshal(false);
     } else {

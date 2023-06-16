@@ -158,9 +158,9 @@ export const EsdtBubble = () => {
         signedMessage as any as SignableMessage
       );
       console.log("viewData", res);
-      setDataMarshalRes(JSON.stringify(res, null, 4));
+      setDataMarshalRes(JSON.stringify(res.data, null, 4));
 
-      processData(res);
+      processData(res.data);
 
       setIsFetchingDataMarshal(false);
     } else {

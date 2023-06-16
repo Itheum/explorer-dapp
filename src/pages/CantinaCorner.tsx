@@ -194,9 +194,9 @@ export const CantinaCorner = () => {
         signedMessage as any as SignableMessage
       );
       console.log("viewData", res);
-      setDataMarshalRes(JSON.stringify(res, null, 4));
+      setDataMarshalRes(JSON.stringify(res.data, null, 4));
 
-      const players = res.sort((pa: any, pb: any) => pa.rank - pb.rank);
+      const players = res.data.sort((pa: any, pb: any) => pa.rank - pb.rank);
 
       const datasets = [];
       for (let i = 0; i < CC_SHOW_SIZE; i++) {

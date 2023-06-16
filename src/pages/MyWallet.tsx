@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
+import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
-import { ModalBody } from "react-bootstrap";
+import { Image, ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
@@ -12,8 +12,12 @@ import {
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
-import { toastError } from "libs/utils";
 import { modalStyles } from "libs/ui";
+import { toastError } from "libs/utils";
+
+interface ExtendedViewDataReturnType extends ViewDataReturnType {
+  isImage: boolean,
+}
 
 export const MyWallet = () => {
   const {
@@ -26,9 +30,10 @@ export const MyWallet = () => {
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
+  const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
     useState<boolean>(true);
+  console.log('viewDataRes', viewDataRes);
 
   const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
@@ -62,7 +67,7 @@ export const MyWallet = () => {
     }
 
     setIsFetchingDataMarshal(true);
-    setDataMarshalRes("");
+    setViewDataRes(undefined);
     openModal();
 
     const dataNft = dataNfts[index];
@@ -72,10 +77,27 @@ export const MyWallet = () => {
     console.log("signedMessage", signedMessage);
     const res = await dataNft.viewData(
       messageToBeSigned,
-      signedMessage as any as SignableMessage
+      signedMessage as any as SignableMessage,
+      true,
     );
     console.log("viewData", res);
-    setDataMarshalRes(JSON.stringify(res, null, 4));
+    
+    if (!res.error) {
+      if (res.contentType.search('image') >= 0) {
+        res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+      } else {
+        res.data = await (res.data as Blob).text();
+        res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+      }
+    } else {
+      console.error(res.error);
+      toastError(res.error);
+    }
+
+    setViewDataRes({
+      ...res,
+      isImage: res.contentType.search('image') >= 0,
+    });
 
     setIsFetchingDataMarshal(false);
   }
@@ -209,7 +231,14 @@ export const MyWallet = () => {
             File Viewer
           </h4>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody
+          style={{
+            minWidth: "26rem",
+            minHeight: "36rem",
+            maxHeight: "80vh",
+            overflowY: "auto",
+          }}
+        >
           {isFetchingDataMarshal ? (
             <div
               className="d-flex flex-column align-items-center justify-content-center"
@@ -223,22 +252,19 @@ export const MyWallet = () => {
               <Loader />
             </div>
           ) : (
-            <div
-              style={{
-                minWidth: "26rem",
-                maxWidth: "100%",
-                minHeight: "36rem",
-                maxHeight: "60vh",
-                overflowY: "auto",
-              }}
-            >
-              <p
-                className="p-2"
-                style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
-              >
-                {dataMarshalRes}
-              </p>
-            </div>
+            viewDataRes && !viewDataRes.error &&
+              (
+                viewDataRes.isImage ?
+                  <img src={viewDataRes.data} style={{ width: '100%', height: 'auto' }} />
+                  : (
+                      <p
+                        className="p-2"
+                        style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
+                      >
+                        {viewDataRes.data}
+                      </p>
+                  )
+              )
           )}
         </ModalBody>
       </Modal>

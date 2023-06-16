@@ -128,7 +128,7 @@ export const ItheumTrailblazer = () => {
       );
 
       console.log("viewData", res);
-      console.log(JSON.stringify(res, null, 4));
+      console.log(JSON.stringify(res.data, null, 4));
 
       setData(res.data);
       setIsFetchingDataMarshal(false);
