@@ -66,13 +66,13 @@ export const Navbar = () => {
 
               <NavDropdown.Item as="div">
                 <Link to={routeNames.itheumtrailblazer} className="nav-link">
-                  Itheum Trailblazer
+                  Trailblazer
                 </Link>
               </NavDropdown.Item>
 
               <NavDropdown.Item as="div">
                 <Link to={routeNames.esdtBubble} className="nav-link">
-                  ESDT Bubble
+                  ESDT Bubbles
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>

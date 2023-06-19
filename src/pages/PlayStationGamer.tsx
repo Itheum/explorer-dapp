@@ -50,7 +50,7 @@ export const PlayStationGamer = () => {
     setIsModalOpenend(false);
   }
 
-  async function fetchCantinaCornerNfts() {
+  async function fetchAppNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(
@@ -81,7 +81,7 @@ export const PlayStationGamer = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      fetchCantinaCornerNfts();
+      fetchAppNfts();
     }
   }, [hasPendingTransactions]);
 

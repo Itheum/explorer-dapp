@@ -63,7 +63,7 @@ export const ItheumTrailblazer = () => {
     setIsModalOpened(false);
   }
 
-  async function fetchCantinaCornerNfts() {
+  async function fetchAppNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(
@@ -91,7 +91,7 @@ export const ItheumTrailblazer = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      fetchCantinaCornerNfts();
+      fetchAppNfts();
     }
   }, [hasPendingTransactions]);
 
@@ -132,7 +132,7 @@ export const ItheumTrailblazer = () => {
       console.log("viewData", res);
       console.log(JSON.stringify(res.data, null, 4));
 
-      setData(res.data);
+      setData(res.data.data.reverse());
       setIsFetchingDataMarshal(false);
     } else {
       openModal();
@@ -161,7 +161,7 @@ export const ItheumTrailblazer = () => {
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h3 className="mt-5 text-center">Itheum Trailblazer</h3>
+          <h3 className="mt-5 text-center">Trailblazer</h3>
           <h4 className="mt-2 text-center">
             Data NFTs that Unlock this App: {itDataNfts.length}
           </h4>
@@ -333,7 +333,7 @@ export const ItheumTrailblazer = () => {
           ) : (
             <div>
               <VerticalTimeline>
-                {data.map((_dataItem: any, _index: any) => {
+                {data?.map((_dataItem: any, _index: any) => {
                   return (
                     <VerticalTimelineElement
                       key={_index}

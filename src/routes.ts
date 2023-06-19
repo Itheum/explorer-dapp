@@ -74,13 +74,13 @@ export const routes: RouteWithTitleType[] = [
   },
   {
     path: routeNames.itheumtrailblazer,
-    title: "Itheum Trailblazer",
+    title: "Trailblazer",
     component: ItheumTrailblazer,
     authenticatedRoute: false,
   },
   {
     path: routeNames.esdtBubble,
-    title: "ESDT Bubble",
+    title: "ESDT Bubbles",
     component: EsdtBubble,
     authenticatedRoute: false,
   },

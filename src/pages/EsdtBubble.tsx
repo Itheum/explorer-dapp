@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
-import BigNumber from 'bignumber.js';
+import BigNumber from "bignumber.js";
 import {
   Chart as ChartJS,
   LinearScale,
   PointElement,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { Bubble } from 'react-chartjs-2';
+import { Bubble } from "react-chartjs-2";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
@@ -27,12 +27,7 @@ import {
 import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 
-ChartJS.register(
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend
-);
+ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
 const maxScaleSize = 800;
 const chartOptions = {
@@ -40,16 +35,18 @@ const chartOptions = {
   responsive: true,
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       callbacks: {
         label: (ctx: any) => {
           console.log(ctx);
-          return `${shortenAddress(ctx.dataset.label)} (${ctx.dataset.percent.toFixed(4)}%)`;
+          return `${shortenAddress(
+            ctx.dataset.label
+          )} (${ctx.dataset.percent.toFixed(4)}%)`;
         },
-      }
-    }
+      },
+    },
   },
   scales: {
     x: {
@@ -97,8 +94,10 @@ export const EsdtBubble = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES);
-    console.log("ESDT Bubble NFTs:", _nfts);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      ESDT_BUBBLE_NONCES
+    );
+    console.log("ESDT Bubbles NFTs:", _nfts);
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -172,23 +171,23 @@ export const EsdtBubble = () => {
 
   function processData(rawData: any[]) {
     let sum = new BigNumber(0);
-    rawData.forEach(row => sum = sum.plus(row['balance']));
+    rawData.forEach((row) => (sum = sum.plus(row["balance"])));
 
-    const accounts = rawData.map(row => {
-      const percent = new BigNumber(row['balance']).div(sum).toNumber() * 100;
-      let backgroundColor = '#f0f';
+    const accounts = rawData.map((row) => {
+      const percent = new BigNumber(row["balance"]).div(sum).toNumber() * 100;
+      let backgroundColor = "#f0f";
       if (percent > 1) {
-        backgroundColor = '#f00';
+        backgroundColor = "#f00";
       } else if (percent > 0.1) {
-        backgroundColor = '#0f0';
+        backgroundColor = "#0f0";
       } else if (percent > 0.01) {
-        backgroundColor = '#00f';
+        backgroundColor = "#00f";
       }
 
       return {
-          address: row['address'],
-          percent,
-          backgroundColor,
+        address: row["address"],
+        percent,
+        backgroundColor,
       };
     });
 
@@ -196,21 +195,24 @@ export const EsdtBubble = () => {
 
     const _data = {
       datasets: accounts.map((acc, i) => {
-          // const angle = i < 10 ? 0.5 * i : 0.4 * i;
-          const angle = 0.4 * i;
-          // const distance = (60 + Math.pow(i * 500, 0.45) * 2);
-          const distance = (100 + Math.pow(i * 2000, 0.45) + Math.pow(1.01, i) * 20);
-          const pos = pointRadial(angle, distance);
-          return {
-            label: acc.address,
-            data: [{
+        // const angle = i < 10 ? 0.5 * i : 0.4 * i;
+        const angle = 0.4 * i;
+        // const distance = (60 + Math.pow(i * 500, 0.45) * 2);
+        const distance =
+          100 + Math.pow(i * 2000, 0.45) + Math.pow(1.01, i) * 20;
+        const pos = pointRadial(angle, distance);
+        return {
+          label: acc.address,
+          data: [
+            {
               x: pos[0],
               y: pos[1],
               r: Math.pow(acc.percent * 1500, 0.16) * 2,
-            }],
-            backgroundColor: acc.backgroundColor,
-            percent: acc.percent,
-          };
+            },
+          ],
+          backgroundColor: acc.backgroundColor,
+          percent: acc.percent,
+        };
       }),
     };
     setData(_data);
@@ -225,7 +227,7 @@ export const EsdtBubble = () => {
       <div className="row w-100">
         <div className="col-12 mx-auto">
           <h4 className="mt-5 text-center">
-            ESDT Bubble NFTs: {dataNfts.length}
+            ESDT Bubbles NFTs: {dataNfts.length}
           </h4>
 
           <div className="row mt-5">
@@ -400,37 +402,67 @@ export const EsdtBubble = () => {
               <div className="text-center font-title font-weight-bold">
                 (TOP {data.datasets.length} Accounts)
               </div>
-              
+
               <div>
-                <Bubble options={chartOptions} data={data}
+                <Bubble
+                  options={chartOptions}
+                  data={data}
                   // style={{ marginLeft: 'auto', marginRight: 'auto' }}
                 />
               </div>
               <div className="d-flex justify-content-center">
                 <div className="d-flex flex-row align-items-center">
                   <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        marginRight: "0.25rem",
+                      }}
+                    >
                       <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f00" />
                     </svg>
-                    <span>{'> 1%'}</span>
+                    <span>{"> 1%"}</span>
                   </div>
                   <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        marginRight: "0.25rem",
+                      }}
+                    >
                       <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#0f0" />
                     </svg>
-                    <span>{'> 0.1%'}</span>
+                    <span>{"> 0.1%"}</span>
                   </div>
                   <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        marginRight: "0.25rem",
+                      }}
+                    >
                       <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#00f" />
                     </svg>
-                    <span>{'> 0.01%'}</span>
+                    <span>{"> 0.01%"}</span>
                   </div>
                   <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        marginRight: "0.25rem",
+                      }}
+                    >
                       <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f0f" />
                     </svg>
-                    <span>{'< 0.01%'}</span>
+                    <span>{"< 0.01%"}</span>
                   </div>
                 </div>
               </div>

@@ -51,7 +51,7 @@ export const GamerPassportGamer = () => {
     setIsModalOpenend(false);
   }
 
-  async function fetchCantinaCornerNfts() {
+  async function fetchAppNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(
@@ -82,7 +82,7 @@ export const GamerPassportGamer = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      fetchCantinaCornerNfts();
+      fetchAppNfts();
     }
   }, [hasPendingTransactions]);
 
