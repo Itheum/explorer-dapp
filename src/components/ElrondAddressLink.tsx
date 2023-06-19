@@ -15,7 +15,7 @@ export const ElrondAddressLink: FC<ElrondAddressLinkPropsType> = ({
 }) => {
   return (
     <a
-      className="text-decoration-none"
+      className="text-decoration-none address-link"
       href={`${explorerAddress}/accounts/${address}`}
       target="blank"
     >

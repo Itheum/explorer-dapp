@@ -103,6 +103,21 @@ Override Bootstrap variables only above.
   .vertical-timeline-element-icon {
     background-color: #17a2b8;
   }
+
+  .table {
+    color: $teal200;
+  }
+
+  a.address-link {
+    color: $teal200;
+    .hover {
+      color: $teal100 !important;
+    }
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
 }
 
 .custom-classname.btn-primary {
