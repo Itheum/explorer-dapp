@@ -114,6 +114,8 @@ export const PlayStationGamer = () => {
         messageToBeSigned,
         signedMessage as any as SignableMessage
       );
+      res.data = await (res.data as Blob).text();
+      res.data = JSON.parse(res.data);
       // console.log('viewData', res);
       setDataMarshalRes(JSON.stringify(res.data, null, 4));
 
