@@ -17,7 +17,7 @@ export const sampleAuthenticatedDomains = [TOOLS_API_URL];
 export const dAppName = "Itheum Explorer";
 
 export const CANTINA_CORNER_NONCES = [50, 51, 52];
-export const TRAILBLAZER_NONCES = [407];
+export const TRAILBLAZER_NONCES = [407, 423];
 export const CC_SHOW_SIZE = 10;
 export const GAMER_PASSPORT_GAMER_NONCES = [12];
 export const PLAYSTATION_GAMER_PASSPORT_NONCES = [379, 380];
