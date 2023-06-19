@@ -19,7 +19,7 @@ export const ElrondAddressLink: FC<ElrondAddressLinkPropsType> = ({
       href={`${explorerAddress}/accounts/${address}`}
       target="blank"
     >
-      {address.slice(0, precision) + " ... " + address.slice(-precision)}
+      {precision > 0 ? address.slice(0, precision) + " ... " + address.slice(-precision) : address}
       <FontAwesomeIcon icon={faLink} className="ml-2" />
     </a>
   );

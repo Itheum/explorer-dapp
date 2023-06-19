@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { AuthRedirectWrapper } from "components";
-import { dAppName } from "config";
+// import { dAppName } from "config";
 import { routeNames } from "routes";
 
 const HomePage = () => {

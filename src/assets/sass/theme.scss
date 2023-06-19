@@ -389,3 +389,11 @@ $font-poppins: "Poppins", sans-serif;
 .custom-control-input:checked ~ .custom-control-label::before {
   background-color: red;
 }
+
+@media screen and (max-width: 564px) {
+  .ReactModal__Content.ReactModal__Content--after-open {
+    margin-right: 5px !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

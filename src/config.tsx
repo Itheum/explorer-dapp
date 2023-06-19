@@ -21,6 +21,8 @@ export const TRAILBLAZER_NONCES = [407];
 export const CC_SHOW_SIZE = 10;
 export const GAMER_PASSPORT_GAMER_NONCES = [12];
 export const PLAYSTATION_GAMER_PASSPORT_NONCES = [379, 380];
+export const ESDT_BUBBLE_NONCES = [417];
+export const EB_SHOW_SIZE = 10;
 
 export const MARKETPLACE_DETAILS_PAGE =
   process.env.REACT_APP_ENV_NETWORK &&

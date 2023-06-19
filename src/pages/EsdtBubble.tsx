@@ -1,35 +1,79 @@
 import React, { useEffect, useState } from "react";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import BigNumber from 'bignumber.js';
+import {
+  Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
+import { Bubble } from 'react-chartjs-2';
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { ElrondAddressLink, Loader } from "components";
-import { GAMER_PASSPORT_GAMER_NONCES, MARKETPLACE_DETAILS_PAGE } from "config";
+import { EB_SHOW_SIZE, ESDT_BUBBLE_NONCES } from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { toastError } from "libs/utils";
-import {
-  onChainDataInsights_LIB,
-  thirdPartyDataInsights_LIB,
-} from "libs/utils/core";
-import GamerInsights from "./GamerInsights";
 import { modalStyles } from "libs/ui";
+import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 
-export const GamerPassportGamer = () => {
+ChartJS.register(
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend
+);
+
+const maxScaleSize = 800;
+const chartOptions = {
+  aspectRatio: 1,
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltip: {
+      callbacks: {
+        label: (ctx: any) => {
+          console.log(ctx);
+          return `${shortenAddress(ctx.dataset.label)} (${ctx.dataset.percent.toFixed(4)}%)`;
+        },
+      }
+    }
+  },
+  scales: {
+    x: {
+      max: maxScaleSize,
+      min: -maxScaleSize,
+      display: false,
+    },
+    y: {
+      max: maxScaleSize,
+      min: -maxScaleSize,
+      display: false,
+    },
+  },
+};
+
+export const EsdtBubble = () => {
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
-  const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
+  const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
+  const [selectedDataNft, setSelectedDataNft] = useState<DataNft>();
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNftLoading, setIsNftLoading] = useState(false);
@@ -40,8 +84,7 @@ export const GamerPassportGamer = () => {
   const [owned, setOwned] = useState<boolean>(false);
 
   const [data, setData] = useState<any>();
-
-  const [activeGamerData, setActiveGamerData] = useState<any>(null);
+  const [dataItems, setDataItems] = useState<any[]>([]);
 
   const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
@@ -51,14 +94,12 @@ export const GamerPassportGamer = () => {
     setIsModalOpenend(false);
   }
 
-  async function fetchCantinaCornerNfts() {
+  async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      GAMER_PASSPORT_GAMER_NONCES
-    );
-    console.log("ccDataNfts", _nfts);
-    setCcDataNfts(_nfts);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES);
+    console.log("ESDT Bubble NFTs:", _nfts);
+    setDataNfts(_nfts);
 
     setIsLoading(false);
   }
@@ -70,7 +111,7 @@ export const GamerPassportGamer = () => {
     console.log("myDataNfts", _dataNfts);
 
     const _flags = [];
-    for (const cnft of ccDataNfts) {
+    for (const cnft of dataNfts) {
       const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
       _flags.push(matches.length > 0);
     }
@@ -82,7 +123,7 @@ export const GamerPassportGamer = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      fetchCantinaCornerNfts();
+      fetchDataNfts();
     }
   }, [hasPendingTransactions]);
 
@@ -93,7 +134,7 @@ export const GamerPassportGamer = () => {
   }, [isLoading, address]);
 
   async function viewData(index: number) {
-    if (!(index >= 0 && index < ccDataNfts.length)) {
+    if (!(index >= 0 && index < dataNfts.length)) {
       toastError("Data is not loaded");
       return;
     }
@@ -106,7 +147,8 @@ export const GamerPassportGamer = () => {
       setDataMarshalRes("");
       openModal();
 
-      const dataNft = ccDataNfts[index];
+      const dataNft = dataNfts[index];
+      setSelectedDataNft(dataNft);
       const messageToBeSigned = await dataNft.getMessageToSign();
       console.log("messageToBeSigned", messageToBeSigned);
       const signedMessage = await signMessage({ message: messageToBeSigned });
@@ -120,11 +162,7 @@ export const GamerPassportGamer = () => {
       console.log("viewData", res);
       setDataMarshalRes(JSON.stringify(res.data, null, 4));
 
-      fixData(res.data);
-
-      setData(res.data);
-
-      console.log(res.data);
+      processData(res.data);
 
       setIsFetchingDataMarshal(false);
     } else {
@@ -132,173 +170,67 @@ export const GamerPassportGamer = () => {
     }
   }
 
-  const fixData = (rawData: any) => {
-    if (rawData.items.length > 0) {
-      const readingsInGroups =
-        rawData.metaData.getDataConfig.dataToGather.allApplicableDataTypes.reduce(
-          (t: any, i: any) => {
-            t[i.toString()] = [];
-            return t;
-          },
-          {}
-        );
+  function processData(rawData: any[]) {
+    let sum = new BigNumber(0);
+    rawData.forEach(row => sum = sum.plus(row['balance']));
 
-      rawData.items.forEach((i: any) => {
-        readingsInGroups[i.dataType].push(i);
-      });
+    const accounts = rawData.map(row => {
+      const percent = new BigNumber(row['balance']).div(sum).toNumber() * 100;
+      let backgroundColor = '#f0f';
+      if (percent > 1) {
+        backgroundColor = '#f00';
+      } else if (percent > 0.1) {
+        backgroundColor = '#0f0';
+      } else if (percent > 0.01) {
+        backgroundColor = '#00f';
+      }
 
-      const gamingActivityAll: any = [];
-      const socialActivityAll: any = [];
-
-      const onChainManualDataSets: any = {
-        onChainAddrTxOnCon: [],
-        onChainAddrTxOnConErd: [],
+      return {
+          address: row['address'],
+          percent,
+          backgroundColor,
       };
+    });
 
-      const thirdPartyManualDataSets: any = {
-        discordBotUserOnGuildActivity: [],
-        trdPtyWonderHeroGameApi: [],
-      };
+    setDataItems(accounts);
 
-      Object.keys(readingsInGroups).forEach((dataType) => {
-        switch (dataType) {
-          case "4":
-            {
-              if (readingsInGroups["4"].length > 0) {
-                const programOnChainReadingsWithInsights =
-                  onChainDataInsights_LIB({
-                    rawReadings: readingsInGroups["4"],
-                    userTz: "",
-                  });
-
-                const readingsWithInsights: any =
-                  programOnChainReadingsWithInsights.readings;
-
-                // S: Time Data graphs
-                for (let i = 0; i < readingsWithInsights.length; i++) {
-                  if (readingsWithInsights[i].manual === "OnChainAddrTxOnCon") {
-                    const item = {
-                      group: readingsWithInsights[i].scoreGroup,
-                      time: readingsWithInsights[i].time,
-                      when: readingsWithInsights[i].friendyCreatedAt,
-                      val: 0,
-                      data: readingsWithInsights[i].data,
-                    };
-
-                    onChainManualDataSets.onChainAddrTxOnCon.push(item);
-                    gamingActivityAll.push(item);
-                  } else if (
-                    readingsWithInsights[i].manual === "OnChainAddrTxOnConErd"
-                  ) {
-                    const item = {
-                      group: readingsWithInsights[i].scoreGroup,
-                      time: readingsWithInsights[i].time,
-                      when: readingsWithInsights[i].friendyCreatedAt,
-                      val: 0,
-                      data: readingsWithInsights[i].data,
-                    };
-
-                    onChainManualDataSets.onChainAddrTxOnConErd.push(item);
-                    gamingActivityAll.push(item);
-                  }
-                }
-                // E: Time Data graphs
-              }
-            }
-
-            break;
-
-          case "5":
-            {
-              if (readingsInGroups["5"].length > 0) {
-                const thirdPartyReadingsWithInsights =
-                  thirdPartyDataInsights_LIB({
-                    rawReadings: readingsInGroups["5"],
-                    userTz: "",
-                  });
-
-                const readingsWithInsights: any =
-                  thirdPartyReadingsWithInsights.readings;
-
-                // S: Time Data graphs
-                for (let i = 0; i < readingsWithInsights.length; i++) {
-                  if (
-                    readingsWithInsights[i].manual ===
-                    "DiscordBotUserOnGuildActivity"
-                  ) {
-                    thirdPartyManualDataSets.discordBotUserOnGuildActivity.push(
-                      {
-                        // group: parseInt(readingsWithInsights[i].val, 10),
-                        when: readingsWithInsights[i].friendyCreatedAt,
-                        data: readingsWithInsights[i].data,
-                        val: parseInt(readingsWithInsights[i].val, 10),
-                      }
-                    );
-
-                    socialActivityAll.push(
-                      parseInt(readingsWithInsights[i].val, 10)
-                    );
-                  } else if (
-                    readingsWithInsights[i].manual === "TrdPtyWonderHeroGameApi"
-                  ) {
-                    const item: any = {
-                      group: readingsWithInsights[i].scoreGroup,
-                      time: readingsWithInsights[i].time,
-                      when: readingsWithInsights[i].friendyCreatedAt,
-                      val: 0,
-                      data: readingsWithInsights[i].data,
-                    };
-
-                    thirdPartyManualDataSets.trdPtyWonderHeroGameApi.push(item);
-                    gamingActivityAll.push(item);
-                  }
-                }
-                // E: Time Data graphs
-              }
-            }
-
-            break;
-        }
-      });
-
-      setActiveGamerData({
-        readingsOnChainAddrTxOnCon: onChainManualDataSets.onChainAddrTxOnCon,
-        readingsOnChainAddrTxOnConErd:
-          onChainManualDataSets.onChainAddrTxOnConErd,
-        readingsDiscordBotUserOnGuildActivity:
-          thirdPartyManualDataSets.discordBotUserOnGuildActivity,
-        readingsTrdPtyWonderHeroGameApi:
-          thirdPartyManualDataSets.trdPtyWonderHeroGameApi,
-        socialActivityAllData: socialActivityAll,
-        gamingActivityAllData: gamingActivityAll,
-      });
-    }
-  };
-
-  function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`);
+    const _data = {
+      datasets: accounts.map((acc, i) => {
+          // const angle = i < 10 ? 0.5 * i : 0.4 * i;
+          const angle = 0.4 * i;
+          // const distance = (60 + Math.pow(i * 500, 0.45) * 2);
+          const distance = (100 + Math.pow(i * 2000, 0.45) + Math.pow(1.01, i) * 20);
+          const pos = pointRadial(angle, distance);
+          return {
+            label: acc.address,
+            data: [{
+              x: pos[0],
+              y: pos[1],
+              r: Math.pow(acc.percent * 1500, 0.16) * 2,
+            }],
+            backgroundColor: acc.backgroundColor,
+            percent: acc.percent,
+          };
+      }),
+    };
+    setData(_data);
   }
 
   if (isLoading) {
     return <Loader />;
   }
 
-  console.log("isFetchingDataMarshal", isFetchingDataMarshal);
-  console.log("data", data);
-  console.log("activeGamerData", activeGamerData);
-
   return (
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h3 className="mt-5 text-center">Web3 Gamer Passport</h3>
-          <h4 className="mt-2 text-center">
-            Data NFTs that Unlock this App: {ccDataNfts.length}
+          <h4 className="mt-5 text-center">
+            ESDT Bubble NFTs: {dataNfts.length}
           </h4>
 
           <div className="row mt-5">
-            {ccDataNfts.length > 0 ? (
-              ccDataNfts.map((dataNft, index) => {
+            {dataNfts.length > 0 ? (
+              dataNfts.map((dataNft, index) => {
                 return (
                   <div
                     className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
@@ -383,23 +315,13 @@ export const GamerPassportGamer = () => {
                         </div>
 
                         <div className="mt-4 mb-1 d-flex justify-content-center">
-                          {flags[index] ? (
-                            <button
-                              className="btn btn-success"
-                              onClick={() => viewData(index)}
-                            >
-                              View Data
-                            </button>
-                          ) : (
-                            <button
-                              className="btn btn-outline-success"
-                              onClick={() =>
-                                goToMarketplace(dataNft.tokenIdentifier)
-                              }
-                            >
-                              Get this from the Data NFT Marketplace
-                            </button>
-                          )}
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => viewData(index)}
+                            disabled={isNftLoading}
+                          >
+                            View Data
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -407,7 +329,7 @@ export const GamerPassportGamer = () => {
                 );
               })
             ) : (
-              <h3 className="text-center text-white">No Data NFTs</h3>
+              <h3 className="text-center text-white">No DataNFT</h3>
             )}
           </div>
         </div>
@@ -432,16 +354,29 @@ export const GamerPassportGamer = () => {
           </div>
         </div>
         <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">
-            Web3 Gamer Passport
-          </h4>
+          <h4 className="text-center font-title font-weight-bold">View Data</h4>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody
+          style={{
+            minWidth: "26rem",
+            minHeight: "36rem",
+            maxHeight: "80vh",
+            overflowY: "auto",
+          }}
+        >
           {!owned ? (
-            <div className="d-flex flex-column align-items-center justify-content-center">
+            <div
+              className="d-flex flex-column align-items-center justify-content-center"
+              style={{
+                minWidth: "24rem",
+                maxWidth: "50vw",
+                minHeight: "40rem",
+                maxHeight: "80vh",
+              }}
+            >
               <img
                 src={imgBlurChart}
-                style={{ width: "90%", height: "auto" }}
+                style={{ width: "24rem", height: "auto" }}
               />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>
@@ -452,26 +387,83 @@ export const GamerPassportGamer = () => {
             <div
               className="d-flex flex-column align-items-center justify-content-center"
               style={{
-                minWidth: "24rem",
-                maxWidth: "100%",
                 minHeight: "40rem",
-                maxHeight: "80vh",
               }}
             >
               <Loader />
             </div>
           ) : (
-            <div
-              style={{
-                minWidth: "26rem",
-                maxWidth: "100%",
-                minHeight: "36rem",
-                maxHeight: "60vh",
-                overflowY: "auto",
-              }}
-            >
-              <GamerInsights gamerId={"userId"} gamerData={activeGamerData} />
-            </div>
+            <>
+              <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">
+                {selectedDataNft?.title}
+              </h5>
+              <div className="text-center font-title font-weight-bold">
+                (TOP {data.datasets.length} Accounts)
+              </div>
+              
+              <div>
+                <Bubble options={chartOptions} data={data}
+                  // style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                />
+              </div>
+              <div className="d-flex justify-content-center">
+                <div className="d-flex flex-row align-items-center">
+                  <div className="d-flex justify-content-center align-items-center p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f00" />
+                    </svg>
+                    <span>{'> 1%'}</span>
+                  </div>
+                  <div className="d-flex justify-content-center align-items-center p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#0f0" />
+                    </svg>
+                    <span>{'> 0.1%'}</span>
+                  </div>
+                  <div className="d-flex justify-content-center align-items-center p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#00f" />
+                    </svg>
+                    <span>{'> 0.01%'}</span>
+                  </div>
+                  <div className="d-flex justify-content-center align-items-center p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }}>
+                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f0f" />
+                    </svg>
+                    <span>{'< 0.01%'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <Table striped responsive className="mt-3 bg-success">
+                <thead>
+                  <tr className="">
+                    <th>#</th>
+                    <th>Address</th>
+                    <th>Balance</th>
+                    <th>Percent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataItems
+                    .slice(0, EB_SHOW_SIZE)
+                    .map((row: any, index: number) => (
+                      <tr key={`e-b-p-${index}`}>
+                        <td>{index + 1}</td>
+                        <td>
+                          <ElrondAddressLink
+                            explorerAddress={explorerAddress}
+                            address={row.address}
+                            precision={9}
+                          />
+                        </td>
+                        <td>{convertWeiToEsdt(row.balance).toNumber()}</td>
+                        <td>{row.percent.toFixed(4)}%</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </>
           )}
         </ModalBody>
       </Modal>
