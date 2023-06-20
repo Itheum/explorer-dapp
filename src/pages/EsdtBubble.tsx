@@ -25,7 +25,7 @@ import {
   useGetPendingTransactions,
 } from "hooks";
 import { modalStyles } from "libs/ui";
-import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
+import { convertToLocalString, convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
@@ -188,6 +188,7 @@ export const EsdtBubble = () => {
         address: row["address"],
         percent,
         backgroundColor,
+        balance: row["balance"],
       };
     });
 
@@ -467,7 +468,7 @@ export const EsdtBubble = () => {
                 </div>
               </div>
 
-              <Table striped responsive className="mt-3 bg-success">
+              <Table striped responsive className="mt-3">
                 <thead>
                   <tr className="">
                     <th>#</th>
@@ -489,7 +490,7 @@ export const EsdtBubble = () => {
                             precision={9}
                           />
                         </td>
-                        <td>{convertWeiToEsdt(row.balance).toNumber()}</td>
+                        <td>{convertToLocalString(convertWeiToEsdt(row.balance))} EGLD</td>
                         <td>{row.percent.toFixed(4)}%</td>
                       </tr>
                     ))}

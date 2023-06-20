@@ -2,15 +2,16 @@ import React from "react";
 import { Navbar as BsNavbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import { IoMenu } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { dAppName } from "config";
-import { ELROND_NETWORK } from "config";
+import { CopyAddress } from "components/CopyAddress";
+import { dAppName, ELROND_NETWORK } from "config";
 import { logout } from "helpers";
-import { useGetIsLoggedIn } from "hooks";
+import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { routeNames } from "routes";
 import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
+  const { address } = useGetAccount();
 
   const handleLogout = () => {
     logout(`${window.location.origin}/unlock`);
@@ -89,6 +90,19 @@ export const Navbar = () => {
                     <Link to={routeNames.mywallet} className="nav-link">
                       My Wallet
                     </Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as="div" style={{ fontSize: '.8rem' }} disabled>
+                    My Address Quick Copy
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as="div">
+                    {/* <a className="nav-link">
+                      Copy Wallet
+                    </a> */}
+                    <CopyAddress
+                      address={address}
+                      precision={6}
+                    />
                   </NavDropdown.Item>
                 </NavDropdown>
 
