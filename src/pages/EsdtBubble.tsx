@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { SignableMessage } from "@multiversx/sdk-core/out";
+import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
 import BigNumber from "bignumber.js";
 import {
@@ -15,6 +15,7 @@ import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
+import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
@@ -452,8 +453,11 @@ export const EsdtBubble = () => {
                       <tr key={`e-b-p-${index}`}>
                         <td>{pageSize * pageIndex + index + 1}</td>
                         <td>
+                          {
+                            <FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? 'visible' : 'hidden'} />
+                          }
                           <ElrondAddressLink
-                            explorerAddress={explorerAddress}
+                            explorerAddress={MAINNET_EXPLORER_ADDRESS}
                             address={row.address}
                             precision={9}
                           />

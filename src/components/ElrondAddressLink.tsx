@@ -16,7 +16,7 @@ export const ElrondAddressLink: FC<ElrondAddressLinkPropsType> = ({
     <a
       className="text-decoration-none address-link"
       href={`${explorerAddress}/accounts/${address}`}
-      target="blank"
+      target="_blank"
     >
       {precision > 0 ? address.slice(0, precision) + " ... " + address.slice(-precision) : address}
       <FaExternalLinkAlt className="ml-2" />
