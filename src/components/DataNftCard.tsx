@@ -95,13 +95,9 @@ export function DataNftCard({
           </div>
 
           <div className="mt-3 text-center">
-            {owned ? (
+            {owned && (
               <h6 className="font-title font-weight-bold">
                 You have this Data NFT
-              </h6>
-            ) : (
-              <h6 className="font-title font-weight-bold opacity-6">
-                You do not have this Data NFT
               </h6>
             )}
           </div>
@@ -121,7 +117,7 @@ export function DataNftCard({
                   goToMarketplace(dataNft.tokenIdentifier)
                 }
               >
-                Get this from the Data NFT Marketplace
+                View in the Data NFT Marketplace
               </button>
             )}
           </div>
