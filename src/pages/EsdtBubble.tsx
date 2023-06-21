@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import zoomPlugin from 'chartjs-plugin-zoom';
 import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -27,7 +28,7 @@ import {
 import { modalStyles } from "libs/ui";
 import { convertToLocalString, convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 
-ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
+ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
 const maxScaleSize = 800;
 const chartOptions = {
@@ -40,12 +41,25 @@ const chartOptions = {
     tooltip: {
       callbacks: {
         label: (ctx: any) => {
-          console.log(ctx);
           return `${shortenAddress(
             ctx.dataset.label
           )} (${ctx.dataset.percent.toFixed(4)}%)`;
         },
       },
+    },
+    zoom: {
+      zoom: {
+        wheel: {
+          enabled: true,
+        },
+        pinch: {
+          enabled: true
+        },
+        drag: {
+          enabled: true,
+        },
+        // mode: 'xy',
+      }
     },
   },
   scales: {
@@ -214,8 +228,18 @@ export const EsdtBubble = () => {
   const chartRef = useRef<ChartJS<"bubble">>();
   function onChartClick(event: any) {
     if (!chartRef.current) return;
-    const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0].datasetIndex;
-    window.open(`${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`, '_blank')?.focus();
+    const items = getDatasetAtEvent(chartRef.current, event);
+    if (items.length > 0) {
+      const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0].datasetIndex;
+      window.open(`${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`, '_blank')?.focus();
+    }
+  }
+
+  function onClickResetZoom() {
+    if (chartRef.current) {
+      const chart = chartRef.current as ChartJS;
+      chart.resetZoom();
+    }
   }
 
   if (isLoading) {
@@ -313,6 +337,14 @@ export const EsdtBubble = () => {
                 (TOP {data.datasets.length} Accounts)
               </div>
 
+              <div className="d-flex justify-content-end mt-2">
+                <button
+                  className="btn btn-success mr-3"
+                  onClick={onClickResetZoom}
+                >
+                  Reset Zoom
+                </button>
+              </div>
               <div>
                 <Bubble
                   options={chartOptions}
