@@ -18,15 +18,22 @@ import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
-import { DataNftCard, ElrondAddressLink, Loader } from "components";
-import { EB_SHOW_SIZE, ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
+import { CustomPagination, DataNftCard, ElrondAddressLink, Loader } from "components";
+import { 
+  ESDT_BUBBLE_NONCES,
+  MAINNET_EXPLORER_ADDRESS,
+} from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
 import { modalStyles } from "libs/ui";
-import { convertToLocalString, convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
+import { 
+  convertWeiToEsdt,
+  shortenAddress,
+  toastError,
+} from "libs/utils";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
@@ -102,6 +109,16 @@ export const EsdtBubble = () => {
   function closeModal() {
     setIsModalOpenend(false);
   }
+
+  const pageSize = 50;
+  const pageCount = Math.max(Math.floor(dataItems.length / pageSize), 1);
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  function onGotoPage(value: number) {
+    if (value < 0) return;
+    if (value >= pageCount) return;
+    setPageIndex(value);
+  }
+  console.log({pageSize, pageCount, pageIndex});
 
   async function fetchDataNfts() {
     setIsLoading(true);
@@ -411,6 +428,14 @@ export const EsdtBubble = () => {
                 </div>
               </div>
 
+              <div>
+                <CustomPagination
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                  pageSize={pageSize}
+                  gotoPage={onGotoPage}
+                />
+              </div>
               <Table striped responsive className="mt-3">
                 <thead>
                   <tr className="">
@@ -422,10 +447,10 @@ export const EsdtBubble = () => {
                 </thead>
                 <tbody>
                   {dataItems
-                    .slice(0, EB_SHOW_SIZE)
+                    .slice(pageSize * pageIndex, pageSize * (pageIndex + 1))
                     .map((row: any, index: number) => (
                       <tr key={`e-b-p-${index}`}>
-                        <td>{index + 1}</td>
+                        <td>{pageSize * pageIndex + index + 1}</td>
                         <td>
                           <ElrondAddressLink
                             explorerAddress={explorerAddress}
@@ -433,12 +458,20 @@ export const EsdtBubble = () => {
                             precision={9}
                           />
                         </td>
-                        <td>{convertToLocalString(convertWeiToEsdt(row.balance))} EGLD</td>
+                        <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
                         <td>{row.percent.toFixed(4)}%</td>
                       </tr>
                     ))}
                 </tbody>
               </Table>
+              <div>
+                <CustomPagination
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                  pageSize={pageSize}
+                  gotoPage={onGotoPage}
+                />
+              </div>
             </>
           )}
         </ModalBody>
