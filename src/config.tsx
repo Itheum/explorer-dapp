@@ -29,3 +29,5 @@ export const MARKETPLACE_DETAILS_PAGE =
   process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
     ? "https://stg.datadex.itheum.io/datanfts/marketplace/"
     : "https://datadex.itheum.io/datanfts/marketplace/";
+
+export const MAINNET_EXPLORER_ADDRESS = 'https://explorer.multiversx.com';

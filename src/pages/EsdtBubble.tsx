@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
@@ -13,12 +13,12 @@ import {
 import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { Bubble } from "react-chartjs-2";
+import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { DataNftCard, ElrondAddressLink, Loader } from "components";
-import { EB_SHOW_SIZE, ESDT_BUBBLE_NONCES } from "config";
+import { EB_SHOW_SIZE, ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
@@ -211,6 +211,13 @@ export const EsdtBubble = () => {
     setData(_data);
   }
 
+  const chartRef = useRef<ChartJS<"bubble">>();
+  function onChartClick(event: any) {
+    if (!chartRef.current) return;
+    const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0].datasetIndex;
+    window.open(`${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`, '_blank')?.focus();
+  }
+
   if (isLoading) {
     return <Loader />;
   }
@@ -311,6 +318,8 @@ export const EsdtBubble = () => {
                   options={chartOptions}
                   data={data}
                   // style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                  ref={chartRef}
+                  onClick={onChartClick}
                 />
               </div>
               <div className="d-flex justify-content-center">
