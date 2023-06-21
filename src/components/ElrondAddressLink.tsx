@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 interface ElrondAddressLinkPropsType {
   explorerAddress: string;
@@ -20,7 +19,7 @@ export const ElrondAddressLink: FC<ElrondAddressLinkPropsType> = ({
       target="blank"
     >
       {precision > 0 ? address.slice(0, precision) + " ... " + address.slice(-precision) : address}
-      <FontAwesomeIcon icon={faLink} className="ml-2" />
+      <FaExternalLinkAlt className="ml-2" />
     </a>
   );
 };

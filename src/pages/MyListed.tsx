@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
 import { ElrondAddressLink, Loader } from "components";
-import { dataNftMarket } from "libs/mvx";
 import {
   useGetAccount,
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
-import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
-import { convertWeiToEsdt } from "libs/utils";
+import { dataNftMarket } from "libs/mvx";
+import { convertToLocalString, convertWeiToEsdt } from "libs/utils";
 import { createNftId } from "libs/utils/token";
 
 export const MyListed = () => {
@@ -171,7 +171,7 @@ export const MyListed = () => {
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Royalties:</span>
                           <span className="col-8">
-                            {isDataNftLoaded && dataNfts[index].royalties + "%"}
+                            {isDataNftLoaded && `${convertToLocalString(dataNfts[index].royalties * 100, 2)}%`}
                           </span>
                         </div>
                       </div>

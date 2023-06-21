@@ -1,9 +1,10 @@
 import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
-import { ElrondAddressLink } from "./ElrondAddressLink";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { convertToLocalString } from "libs/utils";
+import { ElrondAddressLink } from "./ElrondAddressLink";
 
 export function DataNftCard({
   index,
@@ -80,7 +81,14 @@ export function DataNftCard({
           <div className="mb-1 row">
             <span className="col-4 opacity-6">Identifier:</span>
             <span className="col-8">
-              {dataNft.tokenIdentifier}
+              <span>{dataNft.tokenIdentifier}</span>
+              <a
+                href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
+                className="ml-2 address-link text-decoration-none"
+                target="blank"
+              >
+                <FaExternalLinkAlt />
+              </a>
             </span>
           </div>
           <div className="mb-1 row">
