@@ -84,6 +84,65 @@ const chartOptions = {
   },
 };
 
+export const ChartDescription = () => (
+  <div className="d-flex justify-content-center">
+    <div className="d-flex flex-row align-items-center">
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f00" />
+        </svg>
+        <span>{"> 1%"}</span>
+      </div>
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#0f0" />
+        </svg>
+        <span>{"> 0.1%"}</span>
+      </div>
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#00f" />
+        </svg>
+        <span>{"> 0.01%"}</span>
+      </div>
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f0f" />
+        </svg>
+        <span>{"< 0.01%"}</span>
+      </div>
+    </div>
+  </div>
+);
+
 export const EsdtBubble = () => {
   const {
     network: { explorerAddress },
@@ -355,14 +414,7 @@ export const EsdtBubble = () => {
                 (TOP {data.datasets.length} Accounts)
               </div>
 
-              {/* <div className="d-flex justify-content-end mt-2">
-                <button
-                  className="btn btn-success mr-3"
-                  onClick={onClickResetZoom}
-                >
-                  Reset Zoom
-                </button>
-              </div> */}
+              <ChartDescription />
               <div style={{ position: 'relative' }}>
                 <button
                   className="btn btn-danger ml-1 zoom-reset"
@@ -377,62 +429,7 @@ export const EsdtBubble = () => {
                   onClick={onChartClick}
                 />
               </div>
-              <div className="d-flex justify-content-center">
-                <div className="d-flex flex-row align-items-center">
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f00" />
-                    </svg>
-                    <span>{"> 1%"}</span>
-                  </div>
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#0f0" />
-                    </svg>
-                    <span>{"> 0.1%"}</span>
-                  </div>
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#00f" />
-                    </svg>
-                    <span>{"> 0.01%"}</span>
-                  </div>
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f0f" />
-                    </svg>
-                    <span>{"< 0.01%"}</span>
-                  </div>
-                </div>
-              </div>
+              <ChartDescription />
 
               <div>
                 <CustomPagination
