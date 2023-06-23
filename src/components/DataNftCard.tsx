@@ -103,11 +103,9 @@ export function DataNftCard({
           </div>
 
           <div className="mt-3 text-center">
-            {owned && (
-              <h6 className="font-title font-weight-bold">
+              <h6 className="font-title font-weight-bold" style={{ visibility: owned ? "visible" : "hidden" }}>
                 You have this Data NFT
               </h6>
-            )}
           </div>
 
           <div className="mt-3 text-center">
