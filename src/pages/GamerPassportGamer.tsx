@@ -275,10 +275,6 @@ export const GamerPassportGamer = () => {
     }
   };
 
-  function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`);
-  }
-
   if (isLoading) {
     return <Loader />;
   }

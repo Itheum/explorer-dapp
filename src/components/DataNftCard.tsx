@@ -22,11 +22,11 @@ export function DataNftCard({
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
-
-  function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`);
-  }
   
+  function goToMarketplace(tokenIdentifier: string) {
+    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
+  }
+
   return (
     <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center">
       <div className="card shadow-sm border">
@@ -85,7 +85,7 @@ export function DataNftCard({
               <a
                 href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
                 className="ml-2 address-link text-decoration-none"
-                target="blank"
+                target="_blank"
               >
                 <FaExternalLinkAlt />
               </a>

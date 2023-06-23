@@ -1,3 +1,5 @@
+import { MARKETPLACE_DETAILS_PAGE } from "config";
+
 export const modalStyles = {
   overlay: {
     backgroundColor: 'var(--light-20) !important',

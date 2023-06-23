@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import { ElrondAddressLink, Loader } from "components";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
@@ -78,6 +80,8 @@ export const MyListed = () => {
               offers.map((offer, index) => {
                 const isDataNftLoaded =
                   !isNftLoading && dataNfts.length > index;
+                const nftId = createNftId(offer.offeredTokenIdentifier, offer.offeredTokenNonce);
+
                 return (
                   <div
                     className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
@@ -102,10 +106,16 @@ export const MyListed = () => {
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Offering:</span>
                           <span className="col-8">
-                            {createNftId(
-                              offer.offeredTokenIdentifier,
-                              offer.offeredTokenNonce
-                            )}
+                            <span>
+                              {nftId}
+                            </span>
+                            <a
+                              href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`}
+                              className="ml-2 address-link text-decoration-none"
+                              target="_blank"
+                            >
+                              <FaExternalLinkAlt />
+                            </a>
                           </span>
                         </div>
                         <div className="mb-1 row">
