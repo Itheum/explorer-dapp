@@ -355,19 +355,24 @@ export const EsdtBubble = () => {
                 (TOP {data.datasets.length} Accounts)
               </div>
 
-              <div className="d-flex justify-content-end mt-2">
+              {/* <div className="d-flex justify-content-end mt-2">
                 <button
                   className="btn btn-success mr-3"
                   onClick={onClickResetZoom}
                 >
                   Reset Zoom
                 </button>
-              </div>
-              <div>
+              </div> */}
+              <div style={{ position: 'relative' }}>
+                <button
+                  className="btn btn-danger ml-1 zoom-reset"
+                  onClick={onClickResetZoom}
+                >
+                  Reset
+                </button>
                 <Bubble
                   options={chartOptions}
                   data={data}
-                  // style={{ marginLeft: 'auto', marginRight: 'auto' }}
                   ref={chartRef}
                   onClick={onChartClick}
                 />
