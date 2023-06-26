@@ -104,7 +104,7 @@ export const MyListed = () => {
                           <h5 className="text-center text-info">Offer Info</h5>
                         </div>
                         <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Offering:</span>
+                          <span className="col-4 opacity-6">Identifier:</span>
                           <span className="col-8">
                             <span>
                               {nftId}
