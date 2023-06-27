@@ -4,7 +4,17 @@ import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { FaCalendarCheck, FaHandshake, FaTrophy } from "react-icons/fa";
+import {
+  FaCalendarCheck,
+  FaHandshake,
+  FaTrophy,
+  FaMoneyBillAlt,
+  FaChessKnight,
+  FaChartBar,
+  FaShopify,
+  FaShoppingCart,
+  FaFlagCheckered,
+} from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import {
@@ -143,15 +153,186 @@ export const ItheumTrailblazer = () => {
     return <Loader />;
   }
 
-  const getIconForCategory = (category: string) => {
-    if (category === "Partnership") {
-      return <FaHandshake />;
-    } else if (category === "Achievement") {
-      return <FaTrophy />;
-    } else {
-      return <FaCalendarCheck />;
+  const getIconForCategory = (dataItem: any) => {
+    switch (dataItem.category) {
+      case "Partnership":
+        return <FaHandshake />;
+        break;
+      case "Achievement":
+        return <FaTrophy />;
+        break;
+      case "Offer":
+        return <FaMoneyBillAlt />;
+        break;
+      case "Quest":
+        return <FaChessKnight />;
+        break;
+      case "Leaderboard":
+        return <FaChartBar />;
+        break;
+      default:
+        return <FaCalendarCheck />;
+        break;
     }
   };
+
+  const getTileForCategory = (dataItem: any) => {
+    let tileCode: any = null;
+
+    switch (dataItem.category) {
+      case "Offer":
+        tileCode = (
+          <div className="base-tile offer">
+            <div className="header">
+              <div className="title">
+                Congratulations! You've unlocked a special offer.
+              </div>
+            </div>
+            <div className="body">
+              <div className="icon">
+                <FaShoppingCart />
+              </div>
+              <div className="item">{dataItem.title}</div>
+              <a className="action" href={dataItem.link} target="_blank">
+                <div>Grab your offer now!</div>
+              </a>
+            </div>
+            <div className="footer">
+              <div className="added">
+                Added on: {new Date(dataItem.date).toUTCString()}
+              </div>
+              <div className="platform">
+                Claimable On:{" "}
+                <span className="icon">
+                  <FaShopify />
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+      case "Quest":
+        tileCode = (
+          <div className="base-tile quest">
+            <div className="header">
+              <div className="title">Psst! A secret quest is underway.</div>
+            </div>
+            <div className="body">
+              <div className="icon">
+                <FaFlagCheckered />
+              </div>
+              <div className="item">{dataItem.title}</div>
+              <a className="action" href={dataItem.link} target="_blank">
+                <div>Join quest!</div>
+              </a>
+            </div>
+            <div className="footer">
+              <div className="added">
+                Added on: {new Date(dataItem.date).toUTCString()}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+      case "Leaderboard":
+        tileCode = (
+          <div className="base-tile leaderboard">
+            <div className="header">
+              <div className="title">Secret Leaderboard</div>
+              <div className="sub-title">{dataItem.title}</div>
+            </div>
+            <div className="body">
+              {(normalizeLeaderboardData(dataItem.link).processedSuccess ===
+                false && (
+                <div className="process-error">
+                  {normalizeLeaderboardData(dataItem.link).processMsg}
+                </div>
+              )) || (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Points</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {normalizeLeaderboardData(dataItem.link).tableData.map(
+                      (rowData: any, idx: number) => {
+                        return (
+                          <tr>
+                            <th scope="row">{++idx}</th>
+                            <td>{rowData.leaderAddress}</td>
+                            <td>{rowData.points}</td>
+                          </tr>
+                        );
+                      }
+                    )}
+                  </tbody>
+                </table>
+              )}
+            </div>
+            <div className="footer">
+              <div className="added">
+                Added on: {new Date(dataItem.date).toUTCString()}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+      default:
+        tileCode = (
+          <>
+            <h2>
+              {dataItem.category} - {new Date(dataItem.date).toUTCString()}
+            </h2>
+            <h3>{dataItem.title}</h3>
+            <a href={dataItem.link} target="_blank">
+              <h6>See more...</h6>
+            </a>
+          </>
+        );
+        break;
+    }
+
+    return tileCode;
+  };
+
+  function normalizeLeaderboardData(rawData: string) {
+    const leaderBoard: {
+      processedSuccess: boolean;
+      tableData: any;
+      processMsg: string;
+    } = {
+      processedSuccess: false,
+      tableData: [],
+      processMsg: "",
+    };
+
+    try {
+      const addressPointAry = rawData
+        .split(":")
+        .map((i: string) => {
+          const [leaderAddress, points] = i.split("_");
+          return { leaderAddress, points: parseInt(points, 10) };
+        })
+        .sort(function (x, y) {
+          return y.points - x.points; // sort in descending order of points
+        });
+
+      leaderBoard.processedSuccess = true;
+      leaderBoard.tableData = addressPointAry;
+    } catch (e) {
+      leaderBoard.processMsg = `ERROR processing leaderBoard. Check console for error details.`;
+      console.log("----------- ERROR (S) -----------");
+      console.log("Processing leaderBoard data =", rawData);
+      console.log("Error =");
+      console.error(e);
+      console.log("----------- ERROR (E) -----------");
+    }
+
+    return leaderBoard;
+  }
 
   return (
     <div className="d-flex flex-fill justify-content-center container py-4">
@@ -227,22 +408,15 @@ export const ItheumTrailblazer = () => {
               <Loader />
             </div>
           ) : (
-            <div>
+            <div className="trailblazer-view">
               <VerticalTimeline>
                 {data?.map((_dataItem: any, _index: any) => {
                   return (
                     <VerticalTimelineElement
                       key={_index}
-                      icon={getIconForCategory(_dataItem.category)}
+                      icon={getIconForCategory(_dataItem)}
                     >
-                      <h2>
-                        {_dataItem.category} -{" "}
-                        {new Date(_dataItem.date).toUTCString()}
-                      </h2>
-                      <h3>{_dataItem.title}</h3>
-                      <a href={_dataItem.link} target="_blank">
-                        <h6>See more...</h6>
-                      </a>
+                      {getTileForCategory(_dataItem)}
                     </VerticalTimelineElement>
                   );
                 })}
