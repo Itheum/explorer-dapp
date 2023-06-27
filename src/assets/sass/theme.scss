@@ -412,3 +412,98 @@ $font-poppins: "Poppins", sans-serif;
     height: 100% !important;
   }
 }
+
+/* Apps Custom Styles
+-------------------------------------------------- */
+
+.trailblazer-view {
+  .base-tile {
+    .header {
+      min-height: 65px;
+      border-bottom: solid 1px;
+
+      .title {
+        max-width: 220px;
+        margin: auto;
+        font-size: 1.3rem;
+      }
+    }
+
+    .body {
+      display: flex;
+      min-height: 100px;
+      justify-content: space-around;
+      align-items: center;
+      border-bottom: solid 1px;
+
+      .icon {
+        font-size: 3rem;
+      }
+
+      .item {
+        max-width: 155px;
+      }
+
+      .action {
+        text-decoration: none;
+        background-color: #eeeeee;
+        color: #333333;
+        padding: 2px 6px 2px 6px;
+        border-top: 1px solid #cccccc;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #cccccc;
+      }
+    }
+
+    .footer {
+      display: flex;
+      font-size: 0.8rem;
+      justify-content: space-around;
+      min-height: 30px;
+      align-items: center;
+
+      .added {
+        margin-top: 10px;
+      }
+
+      .platform .icon {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .base-tile.offer {
+  }
+
+  .base-tile.quest {
+    .header {
+      min-height: 45px;
+      text-align: center;
+
+      .title {
+        max-width: initial;
+      }
+    }
+  }
+
+  .base-tile.leaderboard {
+    .header {
+      .title {
+        max-width: initial;
+      }
+    }
+
+    .body {
+      .process-error {
+        color: #ec5720;
+      }
+    }
+  }
+}
+
+.dark .trailblazer-view {
+  .leaderboard .body table {
+    color: #fff;
+  }
+}
