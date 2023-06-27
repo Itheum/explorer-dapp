@@ -62,7 +62,7 @@ export const Dashboard = () => {
                       <a
                         className="text-white text-decoration-none"
                         href={`${explorerAddress}/accounts/${scAddress}`}
-                        target="blank"
+                        target="_blank"
                       >
                         {scAddress.slice(0, 24) +
                           " ... " +

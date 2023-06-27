@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
 import { ModalBody } from "react-bootstrap";
@@ -6,32 +7,26 @@ import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
-import { ElrondAddressLink, Loader } from "components";
+import { DataNftCard, Loader } from "components";
 import {
   PLAYSTATION_GAMER_PASSPORT_NONCES,
   MARKETPLACE_DETAILS_PAGE,
 } from "config";
 import {
   useGetAccount,
-  useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
+import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import PlaystationGamerInsights from "./PlaystationGamerInsights";
-import { modalStyles } from "libs/ui";
 
 export const PlayStationGamer = () => {
-  const {
-    network: { explorerAddress },
-  } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isNftLoading, setIsNftLoading] = useState(false);
 
   const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
@@ -63,8 +58,6 @@ export const PlayStationGamer = () => {
   }
 
   async function fetchMyNfts() {
-    setIsNftLoading(true);
-
     const _dataNfts = await DataNft.ownedByAddress(address);
     console.log("myDataNfts", _dataNfts);
 
@@ -75,8 +68,6 @@ export const PlayStationGamer = () => {
     }
     console.log("_flags", _flags);
     setFlags(_flags);
-
-    setIsNftLoading(false);
   }
 
   useEffect(() => {
@@ -295,10 +286,6 @@ export const PlayStationGamer = () => {
     // }
   };
 
-  function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`);
-  }
-
   if (isLoading) {
     return <Loader />;
   }
@@ -318,114 +305,14 @@ export const PlayStationGamer = () => {
 
           <div className="row mt-5">
             {ccDataNfts.length > 0 ? (
-              ccDataNfts.map((dataNft, index) => {
-                return (
-                  <div
-                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
-                    key={`o-c-${index}`}
-                  >
-                    <div className="card shadow-sm border">
-                      <div className="card-body p-3">
-                        <div className="mb-4">
-                          <img
-                            className="data-nft-image"
-                            src={
-                              !isLoading
-                                ? dataNft.nftImgUrl
-                                : "https://media.elrond.com/nfts/thumbnail/default.png"
-                            }
-                          />
-                        </div>
-
-                        <div className="mt-4 mb-1">
-                          <h5 className="text-center text-info">
-                            Data NFT Info
-                          </h5>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Title:</span>
-                          <span className="col-8">{dataNft.title}</span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Description:</span>
-                          <span className="col-8">
-                            {dataNft.description.length > 20
-                              ? dataNft.description.slice(0, 20) + " ..."
-                              : dataNft.description}
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8 cs-creator-link">
-                            {
-                              <ElrondAddressLink
-                                explorerAddress={explorerAddress}
-                                address={dataNft.creator}
-                                precision={6}
-                              />
-                            }
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Created At:</span>
-                          <span className="col-8">
-                            {dataNft.creationTime.toLocaleString()}
-                          </span>
-                        </div>
-
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Identifier:</span>
-                          <span className="col-8">
-                            {dataNft.tokenIdentifier}
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Supply:</span>
-                          <span className="col-8">{dataNft.supply}</span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Royalties:</span>
-                          <span className="col-8">
-                            {dataNft.royalties + "%"}
-                          </span>
-                        </div>
-
-                        <div className="mt-3 text-center">
-                          {flags[index] ? (
-                            <h6 className="font-title font-weight-bold">
-                              You have this Data NFT
-                            </h6>
-                          ) : (
-                            <h6 className="font-title font-weight-bold opacity-6">
-                              You do not have this Data NFT
-                            </h6>
-                          )}
-                        </div>
-
-                        <div className="mt-4 mb-1 d-flex justify-content-center">
-                          {flags[index] ? (
-                            <button
-                              className="btn btn-success"
-                              onClick={() => viewData(index)}
-                            >
-                              View Data
-                            </button>
-                          ) : (
-                            <button
-                              className="btn btn-outline-success"
-                              onClick={() =>
-                                goToMarketplace(dataNft.tokenIdentifier)
-                              }
-                            >
-                              Get this from the Data NFT Marketplace
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
+              ccDataNfts.map((dataNft, index) => <DataNftCard
+                key={index}
+                index={index}
+                dataNft={dataNft}
+                isLoading={isLoading}
+                owned={flags[index]}
+                viewData={viewData}
+              />)
             ) : (
               <h3 className="text-center text-white">No Data NFTs</h3>
             )}

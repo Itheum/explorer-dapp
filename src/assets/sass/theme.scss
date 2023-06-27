@@ -413,6 +413,19 @@ $font-poppins: "Poppins", sans-serif;
   }
 }
 
+
+.zoom-reset {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  // margin-top: 5rem !important;
+  top: 2rem;
+  left: 0;
+  transform: translateY(-50%);
+  width: 4rem !important;
+  height: 4rem !important;
+  border-radius: 100px !important;
+  z-index: 100;
+
 /* Apps Custom Styles
 -------------------------------------------------- */
 

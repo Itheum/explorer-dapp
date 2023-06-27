@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { SignableMessage } from "@multiversx/sdk-core/out";
+import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
 import BigNumber from "bignumber.js";
 import {
@@ -10,24 +10,33 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import zoomPlugin from 'chartjs-plugin-zoom';
 import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { Bubble } from "react-chartjs-2";
+import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
+import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
-import { ElrondAddressLink, Loader } from "components";
-import { EB_SHOW_SIZE, ESDT_BUBBLE_NONCES } from "config";
+import { CustomPagination, DataNftCard, ElrondAddressLink, Loader } from "components";
+import { 
+  ESDT_BUBBLE_NONCES,
+  MAINNET_EXPLORER_ADDRESS,
+} from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
 import { modalStyles } from "libs/ui";
-import { convertToLocalString, convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
+import { 
+  convertWeiToEsdt,
+  shortenAddress,
+  toastError,
+} from "libs/utils";
 
-ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
+ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
 const maxScaleSize = 800;
 const chartOptions = {
@@ -40,12 +49,25 @@ const chartOptions = {
     tooltip: {
       callbacks: {
         label: (ctx: any) => {
-          console.log(ctx);
           return `${shortenAddress(
             ctx.dataset.label
           )} (${ctx.dataset.percent.toFixed(4)}%)`;
         },
       },
+    },
+    zoom: {
+      zoom: {
+        wheel: {
+          enabled: true,
+        },
+        pinch: {
+          enabled: true
+        },
+        drag: {
+          enabled: true,
+        },
+        // mode: 'xy',
+      }
     },
   },
   scales: {
@@ -62,6 +84,65 @@ const chartOptions = {
   },
 };
 
+export const ChartDescription = () => (
+  <div className="d-flex justify-content-center">
+    <div className="d-flex flex-row align-items-center">
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f00" />
+        </svg>
+        <span>{"> 1%"}</span>
+      </div>
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#0f0" />
+        </svg>
+        <span>{"> 0.1%"}</span>
+      </div>
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#00f" />
+        </svg>
+        <span>{"> 0.01%"}</span>
+      </div>
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: "1rem",
+            height: "1rem",
+            marginRight: "0.25rem",
+          }}
+        >
+          <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f0f" />
+        </svg>
+        <span>{"< 0.01%"}</span>
+      </div>
+    </div>
+  </div>
+);
+
 export const EsdtBubble = () => {
   const {
     network: { explorerAddress },
@@ -73,9 +154,7 @@ export const EsdtBubble = () => {
   const [selectedDataNft, setSelectedDataNft] = useState<DataNft>();
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isNftLoading, setIsNftLoading] = useState(false);
 
-  const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
     useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
@@ -91,6 +170,16 @@ export const EsdtBubble = () => {
     setIsModalOpenend(false);
   }
 
+  const pageSize = 50;
+  const pageCount = Math.max(Math.floor(dataItems.length / pageSize), 1);
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  function onGotoPage(value: number) {
+    if (value < 0) return;
+    if (value >= pageCount) return;
+    setPageIndex(value);
+  }
+  console.log({pageSize, pageCount, pageIndex});
+
   async function fetchDataNfts() {
     setIsLoading(true);
 
@@ -104,8 +193,6 @@ export const EsdtBubble = () => {
   }
 
   async function fetchMyNfts() {
-    setIsNftLoading(true);
-
     const _dataNfts = await DataNft.ownedByAddress(address);
     console.log("myDataNfts", _dataNfts);
 
@@ -116,8 +203,6 @@ export const EsdtBubble = () => {
     }
     console.log("_flags", _flags);
     setFlags(_flags);
-
-    setIsNftLoading(false);
   }
 
   useEffect(() => {
@@ -143,7 +228,6 @@ export const EsdtBubble = () => {
 
     if (_owned) {
       setIsFetchingDataMarshal(true);
-      setDataMarshalRes("");
       openModal();
 
       const dataNft = dataNfts[index];
@@ -159,7 +243,6 @@ export const EsdtBubble = () => {
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
       console.log("viewData", res);
-      setDataMarshalRes(JSON.stringify(res.data, null, 4));
 
       processData(res.data);
 
@@ -219,6 +302,23 @@ export const EsdtBubble = () => {
     setData(_data);
   }
 
+  const chartRef = useRef<ChartJS<"bubble">>();
+  function onChartClick(event: any) {
+    if (!chartRef.current) return;
+    const items = getDatasetAtEvent(chartRef.current, event);
+    if (items.length > 0) {
+      const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0].datasetIndex;
+      window.open(`${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`, '_blank')?.focus();
+    }
+  }
+
+  function onClickResetZoom() {
+    if (chartRef.current) {
+      const chart = chartRef.current as ChartJS;
+      chart.resetZoom();
+    }
+  }
+
   if (isLoading) {
     return <Loader />;
   }
@@ -233,104 +333,14 @@ export const EsdtBubble = () => {
 
           <div className="row mt-5">
             {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => {
-                return (
-                  <div
-                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
-                    key={`o-c-${index}`}
-                  >
-                    <div className="card shadow-sm border">
-                      <div className="card-body p-3">
-                        <div className="mb-4">
-                          <img
-                            className="data-nft-image"
-                            src={
-                              !isLoading
-                                ? dataNft.nftImgUrl
-                                : "https://media.elrond.com/nfts/thumbnail/default.png"
-                            }
-                          />
-                        </div>
-
-                        <div className="mt-4 mb-1">
-                          <h5 className="text-center text-info">
-                            Data NFT Info
-                          </h5>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Title:</span>
-                          <span className="col-8">{dataNft.title}</span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Description:</span>
-                          <span className="col-8">
-                            {dataNft.description.length > 20
-                              ? dataNft.description.slice(0, 20) + " ..."
-                              : dataNft.description}
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8 cs-creator-link">
-                            {
-                              <ElrondAddressLink
-                                explorerAddress={explorerAddress}
-                                address={dataNft.creator}
-                                precision={6}
-                              />
-                            }
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Created At:</span>
-                          <span className="col-8">
-                            {dataNft.creationTime.toLocaleString()}
-                          </span>
-                        </div>
-
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Identifier:</span>
-                          <span className="col-8">
-                            {dataNft.tokenIdentifier}
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Supply:</span>
-                          <span className="col-8">{dataNft.supply}</span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Royalties:</span>
-                          <span className="col-8">
-                            {dataNft.royalties + "%"}
-                          </span>
-                        </div>
-
-                        <div className="mt-3 text-center">
-                          {flags[index] ? (
-                            <h6 className="font-title font-weight-bold">
-                              You have this Data NFT
-                            </h6>
-                          ) : (
-                            <h6 className="font-title font-weight-bold opacity-6">
-                              You do not have this Data NFT
-                            </h6>
-                          )}
-                        </div>
-
-                        <div className="mt-4 mb-1 d-flex justify-content-center">
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => viewData(index)}
-                            disabled={isNftLoading}
-                          >
-                            View Data
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
+              dataNfts.map((dataNft, index) => <DataNftCard
+                key={index}
+                index={index}
+                dataNft={dataNft}
+                isLoading={isLoading}
+                owned={flags[index]}
+                viewData={viewData}
+              />)
             ) : (
               <h3 className="text-center text-white">No DataNFT</h3>
             )}
@@ -404,70 +414,31 @@ export const EsdtBubble = () => {
                 (TOP {data.datasets.length} Accounts)
               </div>
 
-              <div>
+              <ChartDescription />
+              <div style={{ position: 'relative' }}>
+                <button
+                  className="btn btn-danger ml-1 zoom-reset"
+                  onClick={onClickResetZoom}
+                >
+                  Reset
+                </button>
                 <Bubble
                   options={chartOptions}
                   data={data}
-                  // style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                  ref={chartRef}
+                  onClick={onChartClick}
                 />
               </div>
-              <div className="d-flex justify-content-center">
-                <div className="d-flex flex-row align-items-center">
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f00" />
-                    </svg>
-                    <span>{"> 1%"}</span>
-                  </div>
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#0f0" />
-                    </svg>
-                    <span>{"> 0.1%"}</span>
-                  </div>
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#00f" />
-                    </svg>
-                    <span>{"> 0.01%"}</span>
-                  </div>
-                  <div className="d-flex justify-content-center align-items-center p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        marginRight: "0.25rem",
-                      }}
-                    >
-                      <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f0f" />
-                    </svg>
-                    <span>{"< 0.01%"}</span>
-                  </div>
-                </div>
-              </div>
+              <ChartDescription />
 
+              <div>
+                <CustomPagination
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                  pageSize={pageSize}
+                  gotoPage={onGotoPage}
+                />
+              </div>
               <Table striped responsive className="mt-3">
                 <thead>
                   <tr className="">
@@ -479,23 +450,34 @@ export const EsdtBubble = () => {
                 </thead>
                 <tbody>
                   {dataItems
-                    .slice(0, EB_SHOW_SIZE)
+                    .slice(pageSize * pageIndex, pageSize * (pageIndex + 1))
                     .map((row: any, index: number) => (
                       <tr key={`e-b-p-${index}`}>
-                        <td>{index + 1}</td>
+                        <td>{pageSize * pageIndex + index + 1}</td>
                         <td>
+                          {
+                            <FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? 'visible' : 'hidden'} />
+                          }
                           <ElrondAddressLink
-                            explorerAddress={explorerAddress}
+                            explorerAddress={MAINNET_EXPLORER_ADDRESS}
                             address={row.address}
                             precision={9}
                           />
                         </td>
-                        <td>{convertToLocalString(convertWeiToEsdt(row.balance))} EGLD</td>
+                        <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
                         <td>{row.percent.toFixed(4)}%</td>
                       </tr>
                     ))}
                 </tbody>
               </Table>
+              <div>
+                <CustomPagination
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                  pageSize={pageSize}
+                  gotoPage={onGotoPage}
+                />
+              </div>
             </>
           )}
         </ModalBody>
