@@ -20,7 +20,6 @@ export const convertEsdtToWei = (amount: BigNumber.Value, decimals?: number): Bi
 
 export const convertToLocalString = (value: BigNumber.Value, precision?: number): string => {
   return new BigNumber(value)
-    .decimalPlaces(precision ? precision : 4, BigNumber.ROUND_FLOOR)
-    .toNumber()
+    .decimalPlaces(precision ? precision : 4)
     .toLocaleString();
 };
