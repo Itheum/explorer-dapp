@@ -31,6 +31,7 @@ import {
 } from "hooks";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
+import headerHero from "assets/img/custom-app-header-trailblazer.png";
 
 const customStyles = {
   overlay: {
@@ -335,28 +336,37 @@ export const ItheumTrailblazer = () => {
   }
 
   return (
-    <div className="d-flex flex-fill justify-content-center container py-4">
+    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h3 className="mt-5 text-center">Trailblazer</h3>
-          <h4 className="mt-2 text-center">
-            Data NFTs that Unlock this App: {itDataNfts.length}
-          </h4>
-
-          <div className="row mt-5">
-            {itDataNfts.length > 0 ? (
-              itDataNfts.map((dataNft, index) => <DataNftCard
-                key={index}
-                index={index}
-                dataNft={dataNft}
-                isLoading={isLoading}
-                owned={flags[index]}
-                viewData={viewData}
-              />)
-            ) : (
-              <h3 className="text-center text-white">No Data NFTs</h3>
-            )}
+          <div className="hero">
+            {" "}
+            <img src={headerHero} style={{ width: "100%", height: "auto" }} />
           </div>
+          <div className="body">
+            {/* <h3 className="mt-5 text-center">TrailBlazer</h3> */}
+            <h4 className="my-3 text-center">
+              Data NFTs that Unlock this App: {itDataNfts.length}
+            </h4>
+
+            <div className="row mt-5">
+              {itDataNfts.length > 0 ? (
+                itDataNfts.map((dataNft, index) => (
+                  <DataNftCard
+                    key={index}
+                    index={index}
+                    dataNft={dataNft}
+                    isLoading={isLoading}
+                    owned={flags[index]}
+                    viewData={viewData}
+                  />
+                ))
+              ) : (
+                <h3 className="text-center text-white">No Data NFTs</h3>
+              )}
+            </div>
+          </div>
+          <div className="footer"></div>
         </div>
       </div>
 
@@ -380,7 +390,7 @@ export const ItheumTrailblazer = () => {
         </div>
         <ModalHeader>
           <h4 className="text-center font-title font-weight-bold">
-            Itheum Trailblazer
+            Itheum TrailBlazer
           </h4>
         </ModalHeader>
         <ModalBody>

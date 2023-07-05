@@ -7,15 +7,12 @@ import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { DataNftCard, Loader } from "components";
-import {
-  useGetAccount,
-  useGetPendingTransactions,
-} from "hooks";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  isImage: boolean,
+  isImage: boolean;
 }
 
 export const MyWallet = () => {
@@ -29,7 +26,7 @@ export const MyWallet = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
     useState<boolean>(true);
-  console.log('viewDataRes', viewDataRes);
+  console.log("viewDataRes", viewDataRes);
 
   const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
@@ -74,13 +71,15 @@ export const MyWallet = () => {
     const res = await dataNft.viewData(
       messageToBeSigned,
       signedMessage as any as SignableMessage,
-      true,
+      true
     );
     console.log("viewData", res);
-    
+
     if (!res.error) {
-      if (res.contentType.search('image') >= 0) {
-        res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+      if (res.contentType.search("image") >= 0) {
+        res.data = window.URL.createObjectURL(
+          new Blob([res.data], { type: res.contentType })
+        );
       } else {
         res.data = await (res.data as Blob).text();
         res.data = JSON.stringify(JSON.parse(res.data), null, 4);
@@ -92,7 +91,7 @@ export const MyWallet = () => {
 
     setViewDataRes({
       ...res,
-      isImage: res.contentType.search('image') >= 0,
+      isImage: res.contentType.search("image") >= 0,
     });
 
     setIsFetchingDataMarshal(false);
@@ -110,14 +109,17 @@ export const MyWallet = () => {
 
           <div className="row mt-5">
             {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => <DataNftCard
-                key={index}
-                index={index}
-                dataNft={dataNft}
-                isLoading={isLoading}
-                owned={true}
-                viewData={viewData}
-              />)
+              dataNfts.map((dataNft, index) => (
+                <DataNftCard
+                  key={index}
+                  index={index}
+                  dataNft={dataNft}
+                  isLoading={isLoading}
+                  owned={true}
+                  viewData={viewData}
+                  isWallet={true}
+                />
+              ))
             ) : (
               <h3 className="text-center text-white">
                 You have not listed any offer
@@ -171,19 +173,21 @@ export const MyWallet = () => {
               <Loader />
             </div>
           ) : (
-            viewDataRes && !viewDataRes.error &&
-              (
-                viewDataRes.isImage ?
-                  <img src={viewDataRes.data} style={{ width: '100%', height: 'auto' }} />
-                  : (
-                      <p
-                        className="p-2"
-                        style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
-                      >
-                        {viewDataRes.data}
-                      </p>
-                  )
-              )
+            viewDataRes &&
+            !viewDataRes.error &&
+            (viewDataRes.isImage ? (
+              <img
+                src={viewDataRes.data}
+                style={{ width: "100%", height: "auto" }}
+              />
+            ) : (
+              <p
+                className="p-2"
+                style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
+              >
+                {viewDataRes.data}
+              </p>
+            ))
           )}
         </ModalBody>
       </Modal>
