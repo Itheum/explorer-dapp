@@ -118,6 +118,14 @@ Override Bootstrap variables only above.
   .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(255, 255, 255, 0.05);
   }
+
+  .btn-primary {
+    color: $custom-bg;
+  }
+
+  .btn-outline-primary:hover {
+    color: $custom-bg;
+  }
 }
 
 .custom-classname.btn-primary {
@@ -425,6 +433,24 @@ $font-poppins: "Poppins", sans-serif;
   border-radius: 100px !important;
   z-index: 100;
 }
+
+.c-app-tile,
+.dark .c-app-tile {
+  max-width: 600px;
+}
+
+.c-marketplace-app {
+  .hero {
+    height: 300px;
+  }
+
+  .body {
+  }
+
+  .footer {
+  }
+}
+
 /* Apps Custom Styles
 -------------------------------------------------- */
 

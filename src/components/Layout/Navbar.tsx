@@ -14,7 +14,8 @@ export const Navbar = () => {
   const { address } = useGetAccount();
 
   const handleLogout = () => {
-    logout(`${window.location.origin}/unlock`);
+    // logout(`${window.location.origin}/unlock`);
+    logout(`${window.location.origin}`);
   };
 
   return (
@@ -67,7 +68,7 @@ export const Navbar = () => {
 
               <NavDropdown.Item as="div">
                 <Link to={routeNames.itheumtrailblazer} className="nav-link">
-                  Trailblazer
+                  TrailBlazer
                 </Link>
               </NavDropdown.Item>
 
@@ -92,17 +93,18 @@ export const Navbar = () => {
                     </Link>
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item as="div" style={{ fontSize: '.8rem' }} disabled>
+                  <NavDropdown.Item
+                    as="div"
+                    style={{ fontSize: ".8rem" }}
+                    disabled
+                  >
                     My Address Quick Copy
                   </NavDropdown.Item>
                   <NavDropdown.Item as="div">
                     {/* <a className="nav-link">
                       Copy Wallet
                     </a> */}
-                    <CopyAddress
-                      address={address}
-                      precision={6}
-                    />
+                    <CopyAddress address={address} precision={6} />
                   </NavDropdown.Item>
                 </NavDropdown>
 
@@ -119,7 +121,11 @@ export const Navbar = () => {
               </>
             ) : (
               <NavItem>
-                <Link to={routeNames.unlock} className="nav-link">
+                <Link
+                  to={routeNames.unlock}
+                  className="nav-link"
+                  state={{ from: location.pathname }}
+                >
                   Login
                 </Link>
               </NavItem>

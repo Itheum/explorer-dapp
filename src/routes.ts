@@ -21,9 +21,9 @@ export const routeNames = {
   mywallet: "/my-wallet",
   cantinacorner: "/cantina-corner-poc",
   gamerpassportgamer: "/gamer-passport-gamer-poc",
-  playstationgamerpassport: "/playstation-gamer-passport-poc",
-  itheumtrailblazer: "/itheum-trailblazer-poc",
-  esdtBubble: "/esdt-bubble-poc",
+  playstationgamerpassport: "/gamer-passport",
+  itheumtrailblazer: "/project-trailblazer",
+  esdtBubble: "/esdt-bubbles",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -68,13 +68,13 @@ export const routes: RouteWithTitleType[] = [
   },
   {
     path: routeNames.playstationgamerpassport,
-    title: "Sony Playstation Data Passport",
+    title: "PlayStation Gamer Passport",
     component: PlayStationGamer,
     authenticatedRoute: false,
   },
   {
     path: routeNames.itheumtrailblazer,
-    title: "Trailblazer",
+    title: "TrailBlazer",
     component: ItheumTrailblazer,
     authenticatedRoute: false,
   },

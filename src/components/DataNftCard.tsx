@@ -11,18 +11,20 @@ export function DataNftCard({
   dataNft,
   isLoading,
   owned,
+  isWallet,
   viewData,
-} : {
-  index: number,
-  dataNft: DataNft,
-  isLoading: boolean,
-  owned: boolean,
-  viewData: (e: number) => void,
+}: {
+  index: number;
+  dataNft: DataNft;
+  isLoading: boolean;
+  owned: boolean;
+  isWallet?: boolean;
+  viewData: (e: number) => void;
 }) {
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
-  
+
   function goToMarketplace(tokenIdentifier: string) {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
@@ -43,9 +45,7 @@ export function DataNftCard({
           </div>
 
           <div className="mt-4 mb-1">
-            <h5 className="text-center text-info">
-              Data NFT Info
-            </h5>
+            <h5 className="text-center text-info">Data NFT Info</h5>
           </div>
           <div className="mb-1 row">
             <span className="col-4 opacity-6">Title:</span>
@@ -102,26 +102,29 @@ export function DataNftCard({
             </span>
           </div>
 
-          <div className="mt-3 text-center">
-              <h6 className="font-title font-weight-bold" style={{ visibility: owned ? "visible" : "hidden" }}>
+          {!isWallet && (
+            <div className="mt-3 text-center">
+              <h6
+                className="font-title font-weight-bold"
+                style={{ visibility: owned ? "visible" : "hidden" }}
+              >
                 You have this Data NFT
               </h6>
-          </div>
+            </div>
+          )}
 
           <div className="mt-3 text-center">
             {owned ? (
               <button
-                className="btn btn-success"
+                className="btn btn-primary"
                 onClick={() => viewData(index)}
               >
                 View Data
               </button>
             ) : (
               <button
-                className="btn btn-outline-success"
-                onClick={() =>
-                  goToMarketplace(dataNft.tokenIdentifier)
-                }
+                className="btn btn-outline-primary"
+                onClick={() => goToMarketplace(dataNft.tokenIdentifier)}
               >
                 View in the Data NFT Marketplace
               </button>

@@ -12,10 +12,7 @@ import {
   PLAYSTATION_GAMER_PASSPORT_NONCES,
   MARKETPLACE_DETAILS_PAGE,
 } from "config";
-import {
-  useGetAccount,
-  useGetPendingTransactions,
-} from "hooks";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import PlaystationGamerInsights from "./PlaystationGamerInsights";
@@ -298,21 +295,23 @@ export const PlayStationGamer = () => {
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h3 className="mt-5 text-center">Sony Playstation Data Passport</h3>
+          <h3 className="mt-5 text-center">PlayStation Gamer Passport</h3>
           <h4 className="mt-2 text-center">
             Data NFTs that Unlock this App: {ccDataNfts.length}
           </h4>
 
           <div className="row mt-5">
             {ccDataNfts.length > 0 ? (
-              ccDataNfts.map((dataNft, index) => <DataNftCard
-                key={index}
-                index={index}
-                dataNft={dataNft}
-                isLoading={isLoading}
-                owned={flags[index]}
-                viewData={viewData}
-              />)
+              ccDataNfts.map((dataNft, index) => (
+                <DataNftCard
+                  key={index}
+                  index={index}
+                  dataNft={dataNft}
+                  isLoading={isLoading}
+                  owned={flags[index]}
+                  viewData={viewData}
+                />
+              ))
             ) : (
               <h3 className="text-center text-white">No Data NFTs</h3>
             )}
@@ -340,7 +339,7 @@ export const PlayStationGamer = () => {
         </div>
         <ModalHeader>
           <h4 className="text-center font-title font-weight-bold">
-            Sony Playstation Data Passport
+            PlayStation Gamer Passport
           </h4>
         </ModalHeader>
         <ModalBody>
