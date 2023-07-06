@@ -17,8 +17,8 @@ import {
   ELROND_NETWORK,
 } from "config";
 import { PageNotFound, Unlock } from "pages";
-import { routeNames } from "routes";
-import { routes } from "routes";
+import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
+import { routes, routeNames } from "routes";
 
 export const App = () => {
   return (
@@ -49,6 +49,7 @@ export const App = () => {
                     element={<route.component />}
                   />
                 ))}
+                <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
             </Layout>
