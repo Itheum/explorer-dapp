@@ -14,7 +14,8 @@ export const Navbar = () => {
   const { address } = useGetAccount();
 
   const handleLogout = () => {
-    logout(`${window.location.origin}/unlock`);
+    // logout(`${window.location.origin}/unlock`);
+    logout(`${window.location.origin}`);
   };
 
   return (
@@ -120,7 +121,11 @@ export const Navbar = () => {
               </>
             ) : (
               <NavItem>
-                <Link to={routeNames.unlock} className="nav-link">
+                <Link
+                  to={routeNames.unlock}
+                  className="nav-link"
+                  state={{ from: location.pathname }}
+                >
                   Login
                 </Link>
               </NavItem>
