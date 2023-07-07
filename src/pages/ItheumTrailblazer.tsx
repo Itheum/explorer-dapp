@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { Address, SignableMessage } from "@multiversx/sdk-core/out";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import qs from "qs";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import {
@@ -17,21 +19,22 @@ import {
 } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import imgBlurChart from "assets/img/blur-chart.png";
-import { DataNftCard, ElrondAddressLink, Loader } from "components";
-import { MARKETPLACE_DETAILS_PAGE, TRAILBLAZER_NONCES } from "config";
+import headerHero from "assets/img/custom-app-header-trailblazer.png";
+import { DataNftCard, Loader } from "components";
+import { TRAILBLAZER_NONCES } from "config";
 import {
   useGetAccount,
-  useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
-import headerHero from "assets/img/custom-app-header-trailblazer.png";
+import { routeNames } from "routes";
 
 const customStyles = {
   overlay: {
@@ -52,11 +55,14 @@ const customStyles = {
 };
 
 export const ItheumTrailblazer = () => {
-  const {
-    network: { explorerAddress },
-  } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
+  const { signMessage } = useSignMessage();
+  const { loginMethod } = useGetLoginInfo();
+  const navigate = useNavigate();
+  const isWebWallet = loginMethod == "wallet";
+  const { targetNonce, targetMessageToBeSigned } = useParams();
+
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -113,26 +119,63 @@ export const ItheumTrailblazer = () => {
   }, [isLoading, address]);
 
   async function viewData(index: number) {
-    if (!(index >= 0 && index < itDataNfts.length)) {
-      toastError("Data is not loaded");
-      return;
+    try {
+      if (!(index >= 0 && index < itDataNfts.length)) {
+        toastError("Data is not loaded");
+        return;
+      }
+
+      const _owned = flags[index];
+      setOwned(_owned);
+
+      if (_owned) {
+        setIsFetchingDataMarshal(true);
+        openModal();
+
+        const dataNft = itDataNfts[index];
+
+        const messageToBeSigned = await dataNft.getMessageToSign();
+        console.log("messageToBeSigned", messageToBeSigned);
+
+        // const signedMessage = await signMessage({ message: messageToBeSigned });
+        // console.log("signedMessage", signedMessage);
+        const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
+        const signedMessage = await signMessage({
+          message: messageToBeSigned,
+          callbackRoute: isWebWallet ? callbackRoute : undefined,
+        });
+        if (isWebWallet) return;
+
+        const res = await dataNft.viewData(
+          messageToBeSigned,
+          signedMessage as any as SignableMessage
+        );
+        res.data = await (res.data as Blob).text();
+        res.data = JSON.parse(res.data);
+
+        console.log("viewData", res);
+        console.log(JSON.stringify(res.data, null, 4));
+
+        setData(res.data.data.reverse());
+        setIsFetchingDataMarshal(false);
+      } else {
+        openModal();
+      }
+    } catch (err) {
+      console.error(err);
+      toastError((err as Error).message);
+      closeModal();
+      setIsFetchingDataMarshal(false);
     }
+  }
 
-    const _owned = flags[index];
-    setOwned(_owned);
-
-    if (_owned) {
+  async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
+    try {
       setIsFetchingDataMarshal(true);
+      setOwned(true);
       openModal();
 
-      const dataNft = itDataNfts[index];
-
-      const messageToBeSigned = await dataNft.getMessageToSign();
-      console.log("messageToBeSigned", messageToBeSigned);
-
-      const signedMessage = await signMessage({ message: messageToBeSigned });
-      console.log("signedMessage", signedMessage);
-
+      const dataNft = await DataNft.createFromApi(nonce);
       const res = await dataNft.viewData(
         messageToBeSigned,
         signedMessage as any as SignableMessage
@@ -145,10 +188,46 @@ export const ItheumTrailblazer = () => {
 
       setData(res.data.data.reverse());
       setIsFetchingDataMarshal(false);
-    } else {
-      openModal();
+
+      if (isWebWallet) {
+        navigate(routeNames.itheumtrailblazer);
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
+
+  function getMessageSignatureFromWalletUrl(): string {
+    const url = window.location.search.slice(1);
+    // console.info("getMessageSignatureFromWalletUrl(), url:", url);
+
+    const urlParams = qs.parse(url);
+    const status = urlParams.status?.toString() || "";
+    const expectedStatus = "signed";
+
+    if (status !== expectedStatus) {
+      throw new Error("No signature");
+    }
+
+    const signature = urlParams.signature?.toString() || "";
+    return signature;
+  }
+  
+  useEffect(() => {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned) {
+      (async () => {
+        console.log('Sign', {isWebWallet, targetNonce, targetMessageToBeSigned});
+        const signature = getMessageSignatureFromWalletUrl();
+        const signedMessage = new SignableMessage({
+          address: new Address(address),
+          message: Buffer.from(targetMessageToBeSigned, "ascii"),
+          signature: Buffer.from(signature, "hex"),
+          signer: loginMethod,
+        });
+        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
+      })();
+    }
+  }, [isWebWallet, targetNonce]);
 
   if (isLoading) {
     return <Loader />;
