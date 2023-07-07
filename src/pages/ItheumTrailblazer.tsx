@@ -145,10 +145,15 @@ export const ItheumTrailblazer = () => {
           callbackRoute: isWebWallet ? callbackRoute : undefined,
         });
         if (isWebWallet) return;
+        const sm = new SignableMessage({
+          address: new Address(address),
+          message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
+          signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
+        });
 
         const res = await dataNft.viewData(
           messageToBeSigned,
-          signedMessage as any as SignableMessage
+          sm,
         );
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
