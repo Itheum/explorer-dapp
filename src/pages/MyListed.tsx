@@ -80,11 +80,14 @@ export const MyListed = () => {
               offers.map((offer, index) => {
                 const isDataNftLoaded =
                   !isNftLoading && dataNfts.length > index;
-                const nftId = createNftId(offer.offeredTokenIdentifier, offer.offeredTokenNonce);
+                const nftId = createNftId(
+                  offer.offeredTokenIdentifier,
+                  offer.offeredTokenNonce
+                );
 
                 return (
                   <div
-                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
+                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-nft-tile"
                     key={`o-c-${index}`}
                   >
                     <div className="card shadow-sm border">
@@ -101,14 +104,14 @@ export const MyListed = () => {
                         </div>
 
                         <div className="mb-1">
-                          <h5 className="text-center text-info">Offer Info</h5>
+                          <h5 className="text-center text-info">
+                            Offer Detail
+                          </h5>
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Identifier:</span>
-                          <span className="col-8">
-                            <span>
-                              {nftId}
-                            </span>
+                          <span className="col-8 c-identifier-link">
+                            <span>{nftId}</span>
                             <a
                               href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`}
                               className="ml-2 address-link text-decoration-none"
@@ -134,7 +137,7 @@ export const MyListed = () => {
 
                         <div className="mt-4 mb-1">
                           <h5 className="text-center text-info">
-                            Data NFT Info
+                            Data NFT Detail
                           </h5>
                         </div>
                         <div className="mb-1 row">
@@ -181,7 +184,11 @@ export const MyListed = () => {
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Royalties:</span>
                           <span className="col-8">
-                            {isDataNftLoaded && `${convertToLocalString(dataNfts[index].royalties * 100, 2)}%`}
+                            {isDataNftLoaded &&
+                              `${convertToLocalString(
+                                dataNfts[index].royalties * 100,
+                                2
+                              )}%`}
                           </span>
                         </div>
                       </div>

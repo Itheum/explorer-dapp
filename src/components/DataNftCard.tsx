@@ -30,7 +30,7 @@ export function DataNftCard({
   }
 
   return (
-    <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center">
+    <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-nft-tile">
       <div className="card shadow-sm border">
         <div className="card-body p-3">
           <div className="mb-4">
@@ -44,9 +44,6 @@ export function DataNftCard({
             />
           </div>
 
-          <div className="mt-4 mb-1">
-            <h5 className="text-center text-info">Data NFT Info</h5>
-          </div>
           <div className="mb-1 row">
             <span className="col-4 opacity-6">Title:</span>
             <span className="col-8">{dataNft.title}</span>
@@ -80,7 +77,7 @@ export function DataNftCard({
 
           <div className="mb-1 row">
             <span className="col-4 opacity-6">Identifier:</span>
-            <span className="col-8">
+            <span className="col-8 c-identifier-link">
               <span>{dataNft.tokenIdentifier}</span>
               <a
                 href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
@@ -102,33 +99,35 @@ export function DataNftCard({
             </span>
           </div>
 
-          {!isWallet && (
-            <div className="mt-3 text-center">
-              <h6
-                className="font-title font-weight-bold"
-                style={{ visibility: owned ? "visible" : "hidden" }}
-              >
-                You have this Data NFT
-              </h6>
-            </div>
-          )}
-
-          <div className="mt-3 text-center">
-            {owned ? (
-              <button
-                className="btn btn-primary"
-                onClick={() => viewData(index)}
-              >
-                View Data
-              </button>
-            ) : (
-              <button
-                className="btn btn-outline-primary"
-                onClick={() => goToMarketplace(dataNft.tokenIdentifier)}
-              >
-                View in the Data NFT Marketplace
-              </button>
+          <div className="c-actions">
+            {!isWallet && (
+              <div className="mt-3 text-center">
+                <h6
+                  className="font-title font-weight-bold"
+                  style={{ visibility: owned ? "visible" : "hidden" }}
+                >
+                  You have this Data NFT
+                </h6>
+              </div>
             )}
+
+            <div className="mt-3 text-center">
+              {owned ? (
+                <button
+                  className="btn btn-primary"
+                  onClick={() => viewData(index)}
+                >
+                  View Data
+                </button>
+              ) : (
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() => goToMarketplace(dataNft.tokenIdentifier)}
+                >
+                  View in the Data NFT Marketplace
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
