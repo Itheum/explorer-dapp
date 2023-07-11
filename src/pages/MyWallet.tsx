@@ -8,11 +8,12 @@ import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { BlobDataType } from "libs/types";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  isImage: boolean;
+  blobDataType: BlobDataType;
 }
 
 export const MyWallet = () => {
@@ -75,11 +76,18 @@ export const MyWallet = () => {
     );
     console.log("viewData", res);
 
+    let blobDataType = BlobDataType.TEXT;
     if (!res.error) {
       if (res.contentType.search("image") >= 0) {
         res.data = window.URL.createObjectURL(
           new Blob([res.data], { type: res.contentType })
         );
+        blobDataType = BlobDataType.IMAGE;
+      } else if (res.contentType.search("audio") >= 0) {
+        res.data = window.URL.createObjectURL(
+          new Blob([res.data], { type: res.contentType })
+        );
+        blobDataType = BlobDataType.AUDIO;
       } else {
         res.data = await (res.data as Blob).text();
         res.data = JSON.stringify(JSON.parse(res.data), null, 4);
@@ -91,7 +99,7 @@ export const MyWallet = () => {
 
     setViewDataRes({
       ...res,
-      isImage: res.contentType.search("image") >= 0,
+      blobDataType,
     });
 
     setIsFetchingDataMarshal(false);
@@ -175,11 +183,15 @@ export const MyWallet = () => {
           ) : (
             viewDataRes &&
             !viewDataRes.error &&
-            (viewDataRes.isImage ? (
+            (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
               <img
                 src={viewDataRes.data}
                 style={{ width: "100%", height: "auto" }}
               />
+            ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
+              <div className="d-flex justify-content-center align-items-center" style={{ height: '30rem' }}>
+                <audio controls autoPlay src={viewDataRes.data} />
+              </div>
             ) : (
               <p
                 className="p-2"
