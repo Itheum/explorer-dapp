@@ -16,3 +16,12 @@ export const toastError = (message: string) => {
     }
   );
 };
+
+export const toastSuccess = (message: string) => {
+  toast.success(
+    message,
+    {
+      position: 'top-right',
+    }
+  );
+};

@@ -31,15 +31,17 @@ Override Bootstrap variables only above.
   $teal50: #e6fffa;
   $teal100: #b2f5ea;
   $teal200: #00c797;
+  $blueMx: #3066ff;
+  $mxDefiWalBG: #242527;
 
   /* redefine theme colors for dark theme */
-  $primary: $teal200;
+  $primary: $blueMx;
   // $secondary: red;
   // $success: #222222;
   // $dark: $light;
 
   $theme-colors: (
-    "primary": $teal200,
+    "primary": $blueMx,
     "secondary": $secondary,
     "success": $success,
     "danger": $danger,
@@ -62,14 +64,14 @@ Override Bootstrap variables only above.
   $body-color: $teal50;
   $body-bg: $custom-bg;
   $navbar-light-color: $teal50;
-  $navbar-light-hover-color: $teal200;
+  $navbar-light-hover-color: $blueMx;
   $navbar-light-active-color: $teal50;
 
   $card-bg: $custom-bg;
-  $border-color: $teal200;
+  $border-color: $blueMx;
 
   $dropdown-bg: $custom-bg;
-  $dropdown-border-color: $teal200;
+  $dropdown-border-color: $blueMx;
   $dropdown-link-hover-bg: transparent;
 
   --light: #0f0f0f;
@@ -87,27 +89,97 @@ Override Bootstrap variables only above.
     color: #fafafa !important;
   }
 
-  .text-info {
-    color: #00c797 !important;
-  }
-
   .cs-creator-link a {
-    color: #00c79895 !important;
+    color: $blueMx !important;
   }
 
   // S: App : TrailBlazer
+  .vertical-timeline-element-content h2 {
+    color: #0f0f0f;
+  }
+
   .vertical-timeline-element-content {
-    background-color: #00c797;
+    background-color: $blueMx;
   }
 
   .vertical-timeline-element-icon {
-    background-color: #17a2b8;
+    background-color: $blueMx !important;
+  }
+
+  .vertical-timeline-element-content a h6 {
+    color: #0f0f0f;
+  }
+
+  .table {
+    color: $blueMx;
+  }
+
+  a.address-link {
+    color: $blueMx;
+
+    .hover {
+      color: $teal100 !important;
+    }
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .btn-primary {
+    color: $custom-bg;
+  }
+
+  .btn-outline-primary:hover {
+    color: $custom-bg;
+  }
+
+  .text-info {
+    color: #fff !important;
+    font-weight: bold !important;
+  }
+
+  .c-actions {
+    border-color: #e6fffa;
+  }
+
+  // Bootstrap overide
+  .btn-primary {
+    color: #fff;
+  }
+
+  .btn-outline-primary {
+    color: #fff;
+  }
+
+  // Dapp Core
+  .dapp-core-component__dappModalStyles__dappModalContent {
+    background-color: $mxDefiWalBG;
+  }
+
+  .dapp-core-component__dappModalStyles__dappModalCloseButton {
+    background-color: $mxDefiWalBG;
+    color: #fff;
+  }
+
+  .dapp-core-component__dappModalStyles__dappModalBody {
+    padding: 30px !important;
+  }
+
+  .dapp-core-component__addressTableStyles__ledger-address-table-header {
+    background-color: #343a40 !important;
+  }
+
+  .dapp-core-component__addressTableStyles__ledger-address-table-navigation
+    button {
+    color: #fff !important;
   }
 }
 
 .custom-classname.btn-primary {
   background-color: green;
 }
+
 /* Base
 -------------------------------------------------- */
 html {
@@ -374,7 +446,7 @@ $font-poppins: "Poppins", sans-serif;
 }
 
 .data-nft-image {
-  max-width: 100%;
+  max-width: 90%;
   // height: auto;
 }
 
@@ -388,4 +460,171 @@ $font-poppins: "Poppins", sans-serif;
 
 .custom-control-input:checked ~ .custom-control-label::before {
   background-color: red;
+}
+
+@media screen and (max-width: 564px) {
+  .ReactModal__Content.ReactModal__Content--after-open {
+    margin-right: 5px !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.zoom-reset {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  // margin-top: 5rem !important;
+  top: 2rem;
+  left: 0;
+  transform: translateY(-50%);
+  width: 4rem !important;
+  height: 4rem !important;
+  border-radius: 100px !important;
+  z-index: 100;
+}
+
+.c-app-tile,
+.dark .c-app-tile {
+  max-width: 600px;
+}
+
+.c-app-tile {
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 400 !important;
+  }
+
+  .card-body .mb-4 {
+    max-height: 280px;
+    overflow: hidden;
+    text-align: center;
+  }
+}
+
+.c-nft-tile {
+  .card-body .mb-4 {
+    text-align: center;
+  }
+
+  .c-identifier-link {
+    font-size: 0.9rem;
+  }
+}
+
+.c-marketplace-app {
+  .hero {
+    height: 300px;
+  }
+
+  .body {
+  }
+
+  .footer {
+  }
+}
+
+.text-info {
+  color: #0f0f0f !important;
+  font-weight: bold !important;
+}
+
+.c-actions {
+  margin-top: 5px;
+  border-top: solid 1px #0f0f0f;
+  padding-top: 3px;
+}
+
+/* Apps Custom Styles
+-------------------------------------------------- */
+
+.trailblazer-view {
+  .base-tile {
+    .header {
+      min-height: 65px;
+      border-bottom: solid 1px;
+
+      .title {
+        max-width: 220px;
+        margin: auto;
+        font-size: 1.3rem;
+      }
+    }
+
+    .body {
+      display: flex;
+      min-height: 100px;
+      justify-content: space-around;
+      align-items: center;
+      border-bottom: solid 1px;
+
+      .icon {
+        font-size: 3rem;
+      }
+
+      .item {
+        max-width: 155px;
+      }
+
+      .action {
+        text-decoration: none;
+        background-color: #eeeeee;
+        color: #333333;
+        padding: 2px 6px 2px 6px;
+        border-top: 1px solid #cccccc;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #cccccc;
+      }
+    }
+
+    .footer {
+      display: flex;
+      font-size: 0.8rem;
+      justify-content: space-around;
+      min-height: 30px;
+      align-items: center;
+
+      .added {
+        margin-top: 10px;
+      }
+
+      .platform .icon {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .base-tile.offer {
+  }
+
+  .base-tile.quest {
+    .header {
+      min-height: 45px;
+      text-align: center;
+
+      .title {
+        max-width: initial;
+      }
+    }
+  }
+
+  .base-tile.leaderboard {
+    .header {
+      .title {
+        max-width: initial;
+      }
+    }
+
+    .body {
+      .process-error {
+        color: #ec5720;
+      }
+    }
+  }
+}
+
+.dark .trailblazer-view {
+  .leaderboard .body table {
+    color: #fff;
+  }
 }

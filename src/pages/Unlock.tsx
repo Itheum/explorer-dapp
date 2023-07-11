@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   AuthRedirectWrapper,
   ExtensionLoginButton,
@@ -9,9 +10,25 @@ import {
 } from "components";
 import { routeNames } from "routes";
 
+// find a route name based on a pathname that comes in via React Router Link params
+function getRouteNameBasedOnPathNameParam(pathname: string) {
+  const matchPathnameToRouteName = Object.keys(routeNames).find((i: string) => {
+    return (routeNames as any)[i] === pathname;
+  });
+
+  if (matchPathnameToRouteName && matchPathnameToRouteName !== "home") {
+    // Note: if it's home route, better UX is to go the dashboard
+    return (routeNames as any)[matchPathnameToRouteName];
+  } else {
+    return routeNames.dashboard;
+  }
+}
+
 const UnlockPage = () => {
+  const location = useLocation();
+
   const commonProps = {
-    callbackRoute: routeNames.dashboard,
+    callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
     nativeAuth: true, // optional
   };
 
