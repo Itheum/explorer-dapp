@@ -10,6 +10,7 @@ import {
   Home,
   MyListed,
   MyWallet,
+  EsdtBubble,
 } from "./pages";
 
 export const routeNames = {
@@ -20,8 +21,9 @@ export const routeNames = {
   mywallet: "/my-wallet",
   cantinacorner: "/cantina-corner-poc",
   gamerpassportgamer: "/gamer-passport-gamer-poc",
-  playstationgamerpassport: "/playstation-gamer-passport-poc",
-  itheumtrailblazer: "/itheum-trailblazer-poc",
+  playstationgamerpassport: "/gamer-passport",
+  itheumtrailblazer: "/project-trailblazer",
+  esdtBubble: "/esdt-bubbles",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -66,14 +68,20 @@ export const routes: RouteWithTitleType[] = [
   },
   {
     path: routeNames.playstationgamerpassport,
-    title: "Sony Playstation Data Passport",
+    title: "PlayStation Gamer Passport",
     component: PlayStationGamer,
     authenticatedRoute: false,
   },
   {
     path: routeNames.itheumtrailblazer,
-    title: "Itheum Trailblazer",
+    title: "TrailBlazer",
     component: ItheumTrailblazer,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.esdtBubble,
+    title: "ESDT Bubbles",
+    component: EsdtBubble,
     authenticatedRoute: false,
   },
 ];

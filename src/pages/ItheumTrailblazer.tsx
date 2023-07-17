@@ -1,26 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { Address, SignableMessage } from "@multiversx/sdk-core/out";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import qs from "qs";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { FaCalendarCheck, FaHandshake, FaTrophy } from "react-icons/fa";
+import {
+  FaCalendarCheck,
+  FaHandshake,
+  FaTrophy,
+  FaMoneyBillAlt,
+  FaChessKnight,
+  FaChartBar,
+  FaShopify,
+  FaShoppingCart,
+  FaFlagCheckered,
+} from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import imgBlurChart from "assets/img/blur-chart.png";
-import { ElrondAddressLink, Loader } from "components";
-import { MARKETPLACE_DETAILS_PAGE, TRAILBLAZER_NONCES } from "config";
+import headerHero from "assets/img/custom-app-header-trailblazer.png";
+import { DataNftCard, Loader } from "components";
+import { TRAILBLAZER_NONCES } from "config";
 import {
   useGetAccount,
-  useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
+import { routeNames } from "routes";
 
 const customStyles = {
   overlay: {
@@ -41,11 +55,14 @@ const customStyles = {
 };
 
 export const ItheumTrailblazer = () => {
-  const {
-    network: { explorerAddress },
-  } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
+  const { signMessage } = useSignMessage();
+  const { loginMethod } = useGetLoginInfo();
+  const navigate = useNavigate();
+  const isWebWallet = loginMethod == "wallet";
+  const { targetNonce, targetMessageToBeSigned } = useParams();
+
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +80,7 @@ export const ItheumTrailblazer = () => {
     setIsModalOpened(false);
   }
 
-  async function fetchCantinaCornerNfts() {
+  async function fetchAppNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(
@@ -91,7 +108,7 @@ export const ItheumTrailblazer = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      fetchCantinaCornerNfts();
+      fetchAppNfts();
     }
   }, [hasPendingTransactions]);
 
@@ -102,182 +119,338 @@ export const ItheumTrailblazer = () => {
   }, [isLoading, address]);
 
   async function viewData(index: number) {
-    if (!(index >= 0 && index < itDataNfts.length)) {
-      toastError("Data is not loaded");
-      return;
+    try {
+      if (!(index >= 0 && index < itDataNfts.length)) {
+        toastError("Data is not loaded");
+        return;
+      }
+
+      const _owned = flags[index];
+      setOwned(_owned);
+
+      if (_owned) {
+        setIsFetchingDataMarshal(true);
+        openModal();
+
+        const dataNft = itDataNfts[index];
+
+        const messageToBeSigned = await dataNft.getMessageToSign();
+        console.log("messageToBeSigned", messageToBeSigned);
+
+        // const signedMessage = await signMessage({ message: messageToBeSigned });
+        // console.log("signedMessage", signedMessage);
+        const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
+        const signedMessage = await signMessage({
+          message: messageToBeSigned,
+          callbackRoute: isWebWallet ? callbackRoute : undefined,
+        });
+        if (isWebWallet) return;
+        const sm = new SignableMessage({
+          address: new Address(address),
+          message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
+          signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
+        });
+
+        const res = await dataNft.viewData(
+          messageToBeSigned,
+          sm,
+        );
+        res.data = await (res.data as Blob).text();
+        res.data = JSON.parse(res.data);
+
+        console.log("viewData", res);
+        console.log(JSON.stringify(res.data, null, 4));
+
+        setData(res.data.data.reverse());
+        setIsFetchingDataMarshal(false);
+      } else {
+        openModal();
+      }
+    } catch (err) {
+      console.error(err);
+      toastError((err as Error).message);
+      closeModal();
+      setIsFetchingDataMarshal(false);
     }
+  }
 
-    const _owned = flags[index];
-    setOwned(_owned);
-
-    if (_owned) {
+  async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
+    try {
       setIsFetchingDataMarshal(true);
+      setOwned(true);
       openModal();
 
-      const dataNft = itDataNfts[index];
-
-      const messageToBeSigned = await dataNft.getMessageToSign();
-      console.log("messageToBeSigned", messageToBeSigned);
-
-      const signedMessage = await signMessage({ message: messageToBeSigned });
-      console.log("signedMessage", signedMessage);
-
+      const dataNft = await DataNft.createFromApi(nonce);
       const res = await dataNft.viewData(
         messageToBeSigned,
         signedMessage as any as SignableMessage
       );
+      res.data = await (res.data as Blob).text();
+      res.data = JSON.parse(res.data);
 
       console.log("viewData", res);
-      console.log(JSON.stringify(res, null, 4));
+      console.log(JSON.stringify(res.data, null, 4));
 
-      setData(res.data);
+      setData(res.data.data.reverse());
       setIsFetchingDataMarshal(false);
-    } else {
-      openModal();
+
+      if (isWebWallet) {
+        navigate(routeNames.itheumtrailblazer);
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 
-  function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`);
+  function getMessageSignatureFromWalletUrl(): string {
+    const url = window.location.search.slice(1);
+    // console.info("getMessageSignatureFromWalletUrl(), url:", url);
+
+    const urlParams = qs.parse(url);
+    const status = urlParams.status?.toString() || "";
+    const expectedStatus = "signed";
+
+    if (status !== expectedStatus) {
+      throw new Error("No signature");
+    }
+
+    const signature = urlParams.signature?.toString() || "";
+    return signature;
   }
+  
+  useEffect(() => {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned) {
+      (async () => {
+        console.log('Sign', {isWebWallet, targetNonce, targetMessageToBeSigned});
+        const signature = getMessageSignatureFromWalletUrl();
+        const signedMessage = new SignableMessage({
+          address: new Address(address),
+          message: Buffer.from(targetMessageToBeSigned, "ascii"),
+          signature: Buffer.from(signature, "hex"),
+          signer: loginMethod,
+        });
+        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
+      })();
+    }
+  }, [isWebWallet, targetNonce]);
 
   if (isLoading) {
     return <Loader />;
   }
 
-  const getIconForCategory = (category: string) => {
-    if (category === "Partnership") {
-      return <FaHandshake />;
-    } else if (category === "Achievement") {
-      return <FaTrophy />;
-    } else {
-      return <FaCalendarCheck />;
+  const getIconForCategory = (dataItem: any) => {
+    switch (dataItem.category) {
+      case "Partnership":
+        return <FaHandshake />;
+        break;
+      case "Achievement":
+        return <FaTrophy />;
+        break;
+      case "Offer":
+        return <FaMoneyBillAlt />;
+        break;
+      case "Quest":
+        return <FaChessKnight />;
+        break;
+      case "Leaderboard":
+        return <FaChartBar />;
+        break;
+      default:
+        return <FaCalendarCheck />;
+        break;
     }
   };
 
+  const getTileForCategory = (dataItem: any) => {
+    let tileCode: any = null;
+
+    switch (dataItem.category) {
+      case "Offer":
+        tileCode = (
+          <div className="base-tile offer">
+            <div className="header">
+              <div className="title">
+                Congratulations! You've unlocked a special offer.
+              </div>
+            </div>
+            <div className="body">
+              <div className="icon">
+                <FaShoppingCart />
+              </div>
+              <div className="item">{dataItem.title}</div>
+              <a className="action" href={dataItem.link} target="_blank">
+                <div>Grab your offer now!</div>
+              </a>
+            </div>
+            <div className="footer">
+              <div className="added">
+                Added on: {new Date(dataItem.date).toUTCString()}
+              </div>
+              <div className="platform">
+                Claimable On:{" "}
+                <span className="icon">
+                  <FaShopify />
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+      case "Quest":
+        tileCode = (
+          <div className="base-tile quest">
+            <div className="header">
+              <div className="title">Psst! A secret quest is underway.</div>
+            </div>
+            <div className="body">
+              <div className="icon">
+                <FaFlagCheckered />
+              </div>
+              <div className="item">{dataItem.title}</div>
+              <a className="action" href={dataItem.link} target="_blank">
+                <div>Join quest!</div>
+              </a>
+            </div>
+            <div className="footer">
+              <div className="added">
+                Added on: {new Date(dataItem.date).toUTCString()}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+      case "Leaderboard":
+        tileCode = (
+          <div className="base-tile leaderboard">
+            <div className="header">
+              <div className="title">Secret Leaderboard</div>
+              <div className="sub-title">{dataItem.title}</div>
+            </div>
+            <div className="body">
+              {(normalizeLeaderboardData(dataItem.link).processedSuccess ===
+                false && (
+                <div className="process-error">
+                  {normalizeLeaderboardData(dataItem.link).processMsg}
+                </div>
+              )) || (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Points</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {normalizeLeaderboardData(dataItem.link).tableData.map(
+                      (rowData: any, idx: number) => {
+                        return (
+                          <tr>
+                            <th scope="row">{++idx}</th>
+                            <td>{rowData.leaderAddress}</td>
+                            <td>{rowData.points}</td>
+                          </tr>
+                        );
+                      }
+                    )}
+                  </tbody>
+                </table>
+              )}
+            </div>
+            <div className="footer">
+              <div className="added">
+                Added on: {new Date(dataItem.date).toUTCString()}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+      default:
+        tileCode = (
+          <>
+            <h2>
+              {dataItem.category} - {new Date(dataItem.date).toUTCString()}
+            </h2>
+            <h3>{dataItem.title}</h3>
+            <a href={dataItem.link} target="_blank">
+              <h6>See more...</h6>
+            </a>
+          </>
+        );
+        break;
+    }
+
+    return tileCode;
+  };
+
+  function normalizeLeaderboardData(rawData: string) {
+    const leaderBoard: {
+      processedSuccess: boolean;
+      tableData: any;
+      processMsg: string;
+    } = {
+      processedSuccess: false,
+      tableData: [],
+      processMsg: "",
+    };
+
+    try {
+      const addressPointAry = rawData
+        .split(":")
+        .map((i: string) => {
+          const [leaderAddress, points] = i.split("_");
+          return { leaderAddress, points: parseInt(points, 10) };
+        })
+        .sort(function (x, y) {
+          return y.points - x.points; // sort in descending order of points
+        });
+
+      leaderBoard.processedSuccess = true;
+      leaderBoard.tableData = addressPointAry;
+    } catch (e) {
+      leaderBoard.processMsg = `ERROR processing leaderBoard. Check console for error details.`;
+      console.log("----------- ERROR (S) -----------");
+      console.log("Processing leaderBoard data =", rawData);
+      console.log("Error =");
+      console.error(e);
+      console.log("----------- ERROR (E) -----------");
+    }
+
+    return leaderBoard;
+  }
+
   return (
-    <div className="d-flex flex-fill justify-content-center container py-4">
+    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h3 className="mt-5 text-center">Itheum Trailblazer</h3>
-          <h4 className="mt-2 text-center">
-            Data NFTs that Unlock this App: {itDataNfts.length}
-          </h4>
-
-          <div className="row mt-5">
-            {itDataNfts.length > 0 ? (
-              itDataNfts.map((dataNft, index) => {
-                return (
-                  <div
-                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
-                    key={`o-c-${index}`}
-                  >
-                    <div className="card shadow-sm border">
-                      <div className="card-body p-3">
-                        <div className="mb-4">
-                          <img
-                            className="data-nft-image"
-                            src={
-                              !isLoading
-                                ? dataNft.nftImgUrl
-                                : "https://media.elrond.com/nfts/thumbnail/default.png"
-                            }
-                          />
-                        </div>
-
-                        <div className="mt-4 mb-1">
-                          <h5 className="text-center text-info">
-                            Data NFT Info
-                          </h5>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Title:</span>
-                          <span className="col-8">{dataNft.title}</span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Description:</span>
-                          <span className="col-8">
-                            {dataNft.description.length > 20
-                              ? dataNft.description.slice(0, 20) + " ..."
-                              : dataNft.description}
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Creator:</span>
-                          <span className="col-8 cs-creator-link">
-                            {
-                              <ElrondAddressLink
-                                explorerAddress={explorerAddress}
-                                address={dataNft.creator}
-                                precision={6}
-                              />
-                            }
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Created At:</span>
-                          <span className="col-8">
-                            {dataNft.creationTime.toLocaleString()}
-                          </span>
-                        </div>
-
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Identifier:</span>
-                          <span className="col-8">
-                            {dataNft.tokenIdentifier}
-                          </span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Supply:</span>
-                          <span className="col-8">{dataNft.supply}</span>
-                        </div>
-                        <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Royalties:</span>
-                          <span className="col-8">
-                            {dataNft.royalties + "%"}
-                          </span>
-                        </div>
-
-                        <div className="mt-3 text-center">
-                          {flags[index] ? (
-                            <h6 className="font-title font-weight-bold">
-                              You have this Data NFT
-                            </h6>
-                          ) : (
-                            <h6 className="font-title font-weight-bold opacity-6">
-                              You do not have this Data NFT
-                            </h6>
-                          )}
-                        </div>
-
-                        <div className="mt-4 mb-1 d-flex justify-content-center">
-                          {flags[index] ? (
-                            <button
-                              className="btn btn-success"
-                              onClick={() => viewData(index)}
-                            >
-                              View Data
-                            </button>
-                          ) : (
-                            <button
-                              className="btn btn-outline-success"
-                              onClick={() =>
-                                goToMarketplace(dataNft.tokenIdentifier)
-                              }
-                            >
-                              Get this from the Data NFT Marketplace
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <h3 className="text-center text-white">No Data NFTs</h3>
-            )}
+          <div className="hero">
+            {" "}
+            <img src={headerHero} style={{ width: "100%", height: "auto" }} />
           </div>
+          <div className="body">
+            {/* <h3 className="mt-5 text-center">TrailBlazer</h3> */}
+            <h4 className="my-3 text-center">
+              Data NFTs that Unlock this App: {itDataNfts.length}
+            </h4>
+
+            <div className="row mt-5">
+              {itDataNfts.length > 0 ? (
+                itDataNfts.map((dataNft, index) => (
+                  <DataNftCard
+                    key={index}
+                    index={index}
+                    dataNft={dataNft}
+                    isLoading={isLoading}
+                    owned={flags[index]}
+                    viewData={viewData}
+                  />
+                ))
+              ) : (
+                <h3 className="text-center text-white">No Data NFTs</h3>
+              )}
+            </div>
+          </div>
+          <div className="footer"></div>
         </div>
       </div>
 
@@ -301,7 +474,7 @@ export const ItheumTrailblazer = () => {
         </div>
         <ModalHeader>
           <h4 className="text-center font-title font-weight-bold">
-            Itheum Trailblazer
+            Itheum TrailBlazer
           </h4>
         </ModalHeader>
         <ModalBody>
@@ -329,22 +502,15 @@ export const ItheumTrailblazer = () => {
               <Loader />
             </div>
           ) : (
-            <div>
+            <div className="trailblazer-view">
               <VerticalTimeline>
-                {data.map((_dataItem: any, _index: any) => {
+                {data?.map((_dataItem: any, _index: any) => {
                   return (
                     <VerticalTimelineElement
                       key={_index}
-                      icon={getIconForCategory(_dataItem.category)}
+                      icon={getIconForCategory(_dataItem)}
                     >
-                      <h2>
-                        {_dataItem.category} -{" "}
-                        {new Date(_dataItem.date).toUTCString()}
-                      </h2>
-                      <h3>{_dataItem.title}</h3>
-                      <a href={_dataItem.link} target="_blank">
-                        <h6>See more...</h6>
-                      </a>
+                      {getTileForCategory(_dataItem)}
                     </VerticalTimelineElement>
                   );
                 })}

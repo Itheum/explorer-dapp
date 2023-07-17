@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import { ElrondAddressLink, Loader } from "components";
-import { dataNftMarket } from "libs/mvx";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
-import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
-import { convertWeiToEsdt } from "libs/utils";
+import { dataNftMarket } from "libs/mvx";
+import { convertToLocalString, convertWeiToEsdt } from "libs/utils";
 import { createNftId } from "libs/utils/token";
 
 export const MyListed = () => {
@@ -78,9 +80,14 @@ export const MyListed = () => {
               offers.map((offer, index) => {
                 const isDataNftLoaded =
                   !isNftLoading && dataNfts.length > index;
+                const nftId = createNftId(
+                  offer.offeredTokenIdentifier,
+                  offer.offeredTokenNonce
+                );
+
                 return (
                   <div
-                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center"
+                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-nft-tile"
                     key={`o-c-${index}`}
                   >
                     <div className="card shadow-sm border">
@@ -97,15 +104,21 @@ export const MyListed = () => {
                         </div>
 
                         <div className="mb-1">
-                          <h5 className="text-center text-info">Offer Info</h5>
+                          <h5 className="text-center text-info">
+                            Offer Detail
+                          </h5>
                         </div>
                         <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Offering:</span>
-                          <span className="col-8">
-                            {createNftId(
-                              offer.offeredTokenIdentifier,
-                              offer.offeredTokenNonce
-                            )}
+                          <span className="col-4 opacity-6">Identifier:</span>
+                          <span className="col-8 c-identifier-link">
+                            <span>{nftId}</span>
+                            <a
+                              href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`}
+                              className="ml-2 address-link text-decoration-none"
+                              target="_blank"
+                            >
+                              <FaExternalLinkAlt />
+                            </a>
                           </span>
                         </div>
                         <div className="mb-1 row">
@@ -124,7 +137,7 @@ export const MyListed = () => {
 
                         <div className="mt-4 mb-1">
                           <h5 className="text-center text-info">
-                            Data NFT Info
+                            Data NFT Detail
                           </h5>
                         </div>
                         <div className="mb-1 row">
@@ -171,7 +184,11 @@ export const MyListed = () => {
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Royalties:</span>
                           <span className="col-8">
-                            {isDataNftLoaded && dataNfts[index].royalties + "%"}
+                            {isDataNftLoaded &&
+                              `${convertToLocalString(
+                                dataNfts[index].royalties * 100,
+                                2
+                              )}%`}
                           </span>
                         </div>
                       </div>

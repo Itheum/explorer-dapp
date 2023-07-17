@@ -2,18 +2,22 @@ import React from "react";
 import { Navbar as BsNavbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import { IoMenu } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { dAppName } from "config";
-import { ELROND_NETWORK } from "config";
+import { CopyAddress } from "components/CopyAddress";
+import { dAppName, ELROND_NETWORK, SUPPORTED_APPS } from "config";
+import { APP_MAPPINGS } from "libs/utils/constant";
 import { logout } from "helpers";
-import { useGetIsLoggedIn } from "hooks";
+import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { routeNames } from "routes";
 import { SwitchButton } from "./SwitchButton";
+import { returnRoute } from "pages/Home";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
+  const { address } = useGetAccount();
 
   const handleLogout = () => {
-    logout(`${window.location.origin}/unlock`);
+    // logout(`${window.location.origin}/unlock`);
+    logout(`${window.location.origin}`);
   };
 
   return (
@@ -43,32 +47,15 @@ export const Navbar = () => {
             </NavItem>
 
             <NavDropdown title="App Marketplace">
-              {/* <NavDropdown.Item as="div">
-                <Link to={routeNames.cantinacorner} className="nav-link">
-                  Cantina Corner
-                </Link>
-              </NavDropdown.Item> */}
-
-              <NavDropdown.Item as="div">
-                <Link to={routeNames.gamerpassportgamer} className="nav-link">
-                  Web3 Gamer Passport
-                </Link>
-              </NavDropdown.Item>
-
-              <NavDropdown.Item as="div">
-                <Link
-                  to={routeNames.playstationgamerpassport}
-                  className="nav-link"
-                >
-                  Sony Playstation Data Passport
-                </Link>
-              </NavDropdown.Item>
-
-              <NavDropdown.Item as="div">
-                <Link to={routeNames.itheumtrailblazer} className="nav-link">
-                  Itheum Trailblazer
-                </Link>
-              </NavDropdown.Item>
+              {APP_MAPPINGS.filter((app) =>
+                SUPPORTED_APPS.includes(app.routeKey)
+              ).map((item) => (
+                <NavDropdown.Item key={item.routeKey} as="div">
+                  <Link to={returnRoute(item.routeKey)} className="nav-link">
+                    {item.appName}
+                  </Link>
+                </NavDropdown.Item>
+              ))}
             </NavDropdown>
 
             {isLoggedIn ? (
@@ -83,6 +70,20 @@ export const Navbar = () => {
                     <Link to={routeNames.mywallet} className="nav-link">
                       My Wallet
                     </Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    as="div"
+                    style={{ fontSize: ".8rem" }}
+                    disabled
+                  >
+                    My Address Quick Copy
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as="div">
+                    {/* <a className="nav-link">
+                      Copy Wallet
+                    </a> */}
+                    <CopyAddress address={address} precision={6} />
                   </NavDropdown.Item>
                 </NavDropdown>
 
@@ -99,7 +100,11 @@ export const Navbar = () => {
               </>
             ) : (
               <NavItem>
-                <Link to={routeNames.unlock} className="nav-link">
+                <Link
+                  to={routeNames.unlock}
+                  className="nav-link"
+                  state={{ from: location.pathname }}
+                >
                   Login
                 </Link>
               </NavItem>
