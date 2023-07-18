@@ -644,3 +644,23 @@ $font-poppins: "Poppins", sans-serif;
     color: #fff;
   }
 }
+
+.dark .modal-body::-webkit-scrollbar {
+  width: .8rem;
+  height: .8rem;
+  // background:lightgray;
+  // border: 1px solid #3C3C3C;
+  border-radius: 5px;
+}
+
+.dark .modal-body::-webkit-scrollbar-track  {
+  background: #374151; /* Set the background color of the scroll track */
+}
+.dark .modal-body::-webkit-scrollbar-thumb  {
+  background: #888; /* Set the color of the scroll thumb */
+  border-radius: 20px;
+}
+
+.dark .modal-body {
+  scrollbar-color: #374151 #888;
+}
