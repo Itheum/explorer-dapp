@@ -174,10 +174,26 @@ Override Bootstrap variables only above.
     button {
     color: #fff !important;
   }
+
+  .custom-box-border {
+    border: 1px solid #939da7;
+  }
 }
 
 .custom-classname.btn-primary {
   background-color: green;
+}
+
+.custom-box-border {
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+}
+
+.selected {
+  box-shadow: 0px 0px 2px #b2f5ea, 
+              0px 0px 4px #b2f5ea, 
+              0px 0px 8px #b2f5ea,
+              0px 0px 12px #b2f5ea;
 }
 
 /* Base
@@ -477,8 +493,8 @@ $font-poppins: "Poppins", sans-serif;
   top: 2rem;
   left: 0;
   transform: translateY(-50%);
-  width: 4rem !important;
-  height: 4rem !important;
+  width: 5rem !important;
+  height: 5rem !important;
   border-radius: 100px !important;
   z-index: 100;
 }
@@ -627,4 +643,24 @@ $font-poppins: "Poppins", sans-serif;
   .leaderboard .body table {
     color: #fff;
   }
+}
+
+.dark .modal-body::-webkit-scrollbar {
+  width: .8rem;
+  height: .8rem;
+  // background:lightgray;
+  // border: 1px solid #3C3C3C;
+  border-radius: 5px;
+}
+
+.dark .modal-body::-webkit-scrollbar-track  {
+  background: #374151; /* Set the background color of the scroll track */
+}
+.dark .modal-body::-webkit-scrollbar-thumb  {
+  background: #888; /* Set the color of the scroll thumb */
+  border-radius: 20px;
+}
+
+.dark .modal-body {
+  scrollbar-color: #374151 #888;
 }
