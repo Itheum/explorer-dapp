@@ -30,9 +30,12 @@ export const App = () => {
           <DappProvider
             environment={ELROND_NETWORK}
             customNetworkConfig={{
-              name: "customConfig",
+              name: "itheum-explorer",
               apiTimeout,
               walletConnectV2ProjectId,
+            }}
+            dappConfig={{
+              shouldUseWebViewProvider: true,
             }}
           >
             <Layout>

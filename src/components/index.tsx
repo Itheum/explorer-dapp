@@ -6,3 +6,4 @@ export * from "./CustomPagination";
 export * from "./DataNftCard";
 export * from "./ElrondAddressLink";
 export * from "./sdkDappComponents";
+export * from "./TrailBlazerModal";
