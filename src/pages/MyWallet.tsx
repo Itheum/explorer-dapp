@@ -220,6 +220,8 @@ export const MyWallet = () => {
           signature: Buffer.from(signature, "hex"),
           signer: loginMethod,
         });
+
+        setIsTrailBlazer(true);
         await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
       })();
     }
