@@ -3,13 +3,15 @@ import { Navbar as BsNavbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import { IoMenu } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { CopyAddress } from "components/CopyAddress";
-import { dAppName, ELROND_NETWORK, SUPPORTED_APPS } from "config";
-import { APP_MAPPINGS } from "libs/utils/constant";
+import { dAppName, SUPPORTED_APPS } from "config";
 import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
+import { APP_MAPPINGS } from "libs/utils/constant";
+import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
 import { SwitchButton } from "./SwitchButton";
-import { returnRoute } from "pages/Home";
+import darkLogo from "assets/img/logo-sml-d.png";
+import lightLogo from "assets/img/logo-icon-b.png";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -27,10 +29,18 @@ export const Navbar = () => {
           className="d-flex align-items-center navbar-brand mr-0"
           to={isLoggedIn ? routeNames.home : routeNames.home}
         >
+          <img
+            src={lightLogo}
+            className="lightLogo"
+            style={{ width: "45px", height: "auto" }}
+          />
+          <img
+            src={darkLogo}
+            className="darkLogo"
+            style={{ width: "45px", height: "auto" }}
+          />
           <span className="dapp-name text-muted">{dAppName}</span>
         </Link>
-
-        <small className="ml-2">{ELROND_NETWORK.toUpperCase()}</small>
 
         <BsNavbar.Toggle aria-controls="responsive-navbar-nav">
           <IoMenu />
