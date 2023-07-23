@@ -294,14 +294,16 @@ export const GamerPassportGamer = () => {
 
           <div className="row mt-5">
             {ccDataNfts.length > 0 ? (
-              ccDataNfts.map((dataNft, index) => <DataNftCard
-                key={index}
-                index={index}
-                dataNft={dataNft}
-                isLoading={isLoading}
-                owned={flags[index]}
-                viewData={viewData}
-              />)
+              ccDataNfts.map((dataNft, index) => (
+                <DataNftCard
+                  key={index}
+                  index={index}
+                  dataNft={dataNft}
+                  isLoading={isLoading}
+                  owned={flags[index]}
+                  viewData={viewData}
+                />
+              ))
             ) : (
               <h3 className="text-center text-white">No Data NFTs</h3>
             )}
@@ -341,7 +343,7 @@ export const GamerPassportGamer = () => {
               />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>
-                (Buy the Data NFT from marketplace if you want to see data)
+                (Buy the Data NFT from the marketplace to unlock the data)
               </h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
