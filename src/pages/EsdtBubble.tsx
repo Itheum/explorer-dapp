@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import zoomPlugin from 'chartjs-plugin-zoom';
+import zoomPlugin from "chartjs-plugin-zoom";
 import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -19,22 +19,20 @@ import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
-import { CustomPagination, DataNftCard, ElrondAddressLink, Loader } from "components";
-import { 
-  ESDT_BUBBLE_NONCES,
-  MAINNET_EXPLORER_ADDRESS,
-} from "config";
+import {
+  CustomPagination,
+  DataNftCard,
+  ElrondAddressLink,
+  Loader,
+} from "components";
+import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
 import {
   useGetAccount,
   useGetNetworkConfig,
   useGetPendingTransactions,
 } from "hooks";
 import { modalStyles } from "libs/ui";
-import { 
-  convertWeiToEsdt,
-  shortenAddress,
-  toastError,
-} from "libs/utils";
+import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
@@ -92,13 +90,13 @@ const chartOptionsWithZoom = {
           enabled: true,
         },
         pinch: {
-          enabled: true
+          enabled: true,
         },
         drag: {
           enabled: true,
         },
-        mode: 'xy' as any,
-      }
+        mode: "xy" as any,
+      },
     },
   },
   scales: {
@@ -211,7 +209,7 @@ export const EsdtBubble = () => {
     if (value >= pageCount) return;
     setPageIndex(value);
   }
-  console.log({pageSize, pageCount, pageIndex});
+  console.log({ pageSize, pageCount, pageIndex });
 
   async function fetchDataNfts() {
     setIsLoading(true);
@@ -340,8 +338,14 @@ export const EsdtBubble = () => {
     if (!chartRef.current) return;
     const items = getDatasetAtEvent(chartRef.current, event);
     if (items.length > 0) {
-      const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0].datasetIndex;
-      window.open(`${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`, '_blank')?.focus();
+      const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0]
+        .datasetIndex;
+      window
+        .open(
+          `${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`,
+          "_blank"
+        )
+        ?.focus();
     }
   }
 
@@ -366,14 +370,16 @@ export const EsdtBubble = () => {
 
           <div className="row mt-5">
             {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => <DataNftCard
-                key={index}
-                index={index}
-                dataNft={dataNft}
-                isLoading={isLoading}
-                owned={flags[index]}
-                viewData={viewData}
-              />)
+              dataNfts.map((dataNft, index) => (
+                <DataNftCard
+                  key={index}
+                  index={index}
+                  dataNft={dataNft}
+                  isLoading={isLoading}
+                  owned={flags[index]}
+                  viewData={viewData}
+                />
+              ))
             ) : (
               <h3 className="text-center text-white">No DataNFT</h3>
             )}
@@ -426,7 +432,7 @@ export const EsdtBubble = () => {
               />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>
-                (Buy the Data NFT from marketplace if you want to see data)
+                (Buy the Data NFT from the marketplace to unlock the data)
               </h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
@@ -448,7 +454,7 @@ export const EsdtBubble = () => {
               </div>
 
               <ChartDescription />
-              <div style={{ position: 'relative' }}>
+              <div style={{ position: "relative" }}>
                 <button
                   className="btn btn-danger ml-1 zoom-reset"
                   onClick={onClickResetZoom}
@@ -457,17 +463,27 @@ export const EsdtBubble = () => {
                 </button>
 
                 <button
-                  className={chartSelected ? "btn btn-info ml-2 zoom-reset" : "btn btn-primary ml-2 zoom-reset"}
+                  className={
+                    chartSelected
+                      ? "btn btn-info ml-2 zoom-reset"
+                      : "btn btn-primary ml-2 zoom-reset"
+                  }
                   onClick={() => setChartSelected(!chartSelected)}
                 >
                   {chartSelected ? "Unfocus" : "Focus"}
                 </button>
 
                 <div
-                  className={chartSelected ? "custom-box-border selected" : "custom-box-border"}
+                  className={
+                    chartSelected
+                      ? "custom-box-border selected"
+                      : "custom-box-border"
+                  }
                 >
                   <Bubble
-                    options={chartSelected ? chartOptionsWithZoom : chartOptions}
+                    options={
+                      chartSelected ? chartOptionsWithZoom : chartOptions
+                    }
                     data={data}
                     ref={chartRef}
                     onClick={onChartClick}
@@ -501,7 +517,14 @@ export const EsdtBubble = () => {
                         <td>{pageSize * pageIndex + index + 1}</td>
                         <td>
                           {
-                            <FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? 'visible' : 'hidden'} />
+                            <FaFileAlt
+                              className="mr-2"
+                              visibility={
+                                new Address(row.address).isContractAddress()
+                                  ? "visible"
+                                  : "hidden"
+                              }
+                            />
                           }
                           <ElrondAddressLink
                             explorerAddress={MAINNET_EXPLORER_ADDRESS}

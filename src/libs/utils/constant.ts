@@ -18,7 +18,7 @@ export const APP_MAPPINGS = [
   {
     appName: "PlayStation Gamer Passport",
     routeKey: "playstationgamerpassport",
-    desc: "There are over 110 million active Sony Playstation gamers today, and now, they can own some of their data. Unlock these PlatStation gamers Data NFTs by using this app.",
+    desc: "There are over 110 million active Sony Playstation gamers, and now, they can own some of their data. Unlock these PlatStation gamers Data NFTs by using this app.",
     img: "https://itheum-static.s3.ap-southeast-2.amazonaws.com/expl-app-playstation-icon.png",
   },
 ];

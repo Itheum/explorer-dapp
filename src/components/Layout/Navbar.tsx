@@ -24,7 +24,7 @@ export const Navbar = () => {
 
   return (
     <BsNavbar className="border-bottom px-4 py-3" expand="sm" collapseOnSelect>
-      <div className="container-fluid">
+      <div className="container">
         <Link
           className="d-flex align-items-center navbar-brand mr-0"
           to={isLoggedIn ? routeNames.home : routeNames.home}
@@ -39,7 +39,8 @@ export const Navbar = () => {
             className="darkLogo"
             style={{ width: "45px", height: "auto" }}
           />
-          <span className="dapp-name text-muted">{dAppName}</span>
+          <span className="dapp-name-mute">Itheum</span>
+          <span className="dapp-name text-muted">Explorer</span>
         </Link>
 
         <BsNavbar.Toggle aria-controls="responsive-navbar-nav">
@@ -120,7 +121,7 @@ export const Navbar = () => {
               </NavItem>
             )}
 
-            <div className="ml-3">
+            <div className="c-theme-switcher">
               <SwitchButton />
             </div>
           </Nav>

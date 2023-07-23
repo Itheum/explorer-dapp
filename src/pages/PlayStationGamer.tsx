@@ -348,7 +348,7 @@ export const PlayStationGamer = () => {
               />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>
-                (Buy the Data NFT from marketplace if you want to see data)
+                (Buy the Data NFT from the marketplace to unlock the data)
               </h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
