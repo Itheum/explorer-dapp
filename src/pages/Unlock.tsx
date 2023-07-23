@@ -8,6 +8,7 @@ import {
   WalletConnectLoginButton,
   WebWalletLoginButton,
 } from "components";
+import { walletConnectV2ProjectId } from "config";
 import { routeNames } from "routes";
 
 // find a route name based on a pathname that comes in via React Router Link params
@@ -46,6 +47,7 @@ const UnlockPage = () => {
               <WalletConnectLoginButton
                 loginButtonText="xPortal App"
                 {...commonProps}
+                {...(walletConnectV2ProjectId ? { isWalletConnectV2: true }: {})}
               />
               <ExtensionLoginButton
                 loginButtonText="Browser Wallet"

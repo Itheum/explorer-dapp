@@ -8,10 +8,7 @@ import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { DataNftCard, Loader } from "components";
-import {
-  PLAYSTATION_GAMER_PASSPORT_NONCES,
-  MARKETPLACE_DETAILS_PAGE,
-} from "config";
+import { PLAYSTATION_GAMER_PASSPORT_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";

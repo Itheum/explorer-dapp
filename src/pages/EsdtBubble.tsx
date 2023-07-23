@@ -55,6 +55,37 @@ const chartOptions = {
         },
       },
     },
+  },
+  scales: {
+    x: {
+      max: maxScaleSize,
+      min: -maxScaleSize,
+      display: false,
+    },
+    y: {
+      max: maxScaleSize,
+      min: -maxScaleSize,
+      display: false,
+    },
+  },
+};
+
+const chartOptionsWithZoom = {
+  aspectRatio: 1,
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    tooltip: {
+      callbacks: {
+        label: (ctx: any) => {
+          return `${shortenAddress(
+            ctx.dataset.label
+          )} (${ctx.dataset.percent.toFixed(4)}%)`;
+        },
+      },
+    },
     zoom: {
       zoom: {
         wheel: {
@@ -66,7 +97,7 @@ const chartOptions = {
         drag: {
           enabled: true,
         },
-        // mode: 'xy',
+        mode: 'xy' as any,
       }
     },
   },
@@ -161,6 +192,8 @@ export const EsdtBubble = () => {
 
   const [data, setData] = useState<any>();
   const [dataItems, setDataItems] = useState<any[]>([]);
+
+  const [chartSelected, setChartSelected] = useState<boolean>(false);
 
   const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
@@ -374,7 +407,7 @@ export const EsdtBubble = () => {
             minWidth: "26rem",
             minHeight: "36rem",
             maxHeight: "80vh",
-            overflowY: "auto",
+            overflowY: "scroll",
           }}
         >
           {!owned ? (
@@ -422,12 +455,24 @@ export const EsdtBubble = () => {
                 >
                   Reset
                 </button>
-                <Bubble
-                  options={chartOptions}
-                  data={data}
-                  ref={chartRef}
-                  onClick={onChartClick}
-                />
+
+                <button
+                  className={chartSelected ? "btn btn-info ml-2 zoom-reset" : "btn btn-primary ml-2 zoom-reset"}
+                  onClick={() => setChartSelected(!chartSelected)}
+                >
+                  {chartSelected ? "Unfocus" : "Focus"}
+                </button>
+
+                <div
+                  className={chartSelected ? "custom-box-border selected" : "custom-box-border"}
+                >
+                  <Bubble
+                    options={chartSelected ? chartOptionsWithZoom : chartOptions}
+                    data={data}
+                    ref={chartRef}
+                    onClick={onChartClick}
+                  />
+                </div>
               </div>
               <ChartDescription />
 
