@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { AuthRedirectWrapper } from "components";
-import { APP_MAPPINGS } from "libs/utils/constant";
 import { SUPPORTED_APPS } from "config";
+import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 
 export function returnRoute(routeKey: string) {
@@ -11,10 +11,10 @@ export function returnRoute(routeKey: string) {
 
 const HomePage = () => {
   return (
-    <div className="d-flex flex-fill justify-content-center container-fluid">
+    <div className="container d-flex flex-fill justify-content-center">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h3 className="mt-5 text-left">App Marketplace</h3>
+          <h3 className="c-app-market-title">App Marketplace</h3>
 
           <div className="row mt-3">
             {APP_MAPPINGS.filter((app) =>
@@ -27,7 +27,7 @@ const HomePage = () => {
                 <div className="card shadow-sm border">
                   <div className="card-body p-3">
                     <div className="mb-4">
-                      <img className="data-nft-image" src={item.img} />
+                      <img className="data-app-image" src={item.img} />
                     </div>
                     <h5 className="card-title">{item.appName}</h5>
                     <p className="card-text">{item.desc}</p>

@@ -49,6 +49,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// S: App : Trailblazer
+.vertical-timeline-element-icon {
+  background-color: #fff;
+}
+
 .dark {
   $custom-bg: #0f0f0f;
   $teal50: #e6fffa;
@@ -106,6 +111,12 @@ body {
   // --#{$variable-prefix}body-bg: #{$body-bg};
   @import "bootstrap";
 
+  body {
+    font-family: $font-inter;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   .cs-made-with-love {
     color: #fafafa;
   }
@@ -116,7 +127,8 @@ body {
     text-decoration: none;
   }
 
-  .dapp-name {
+  .dapp-name,
+  .dapp-name-mute {
     color: #fafafa !important;
   }
 
@@ -132,17 +144,19 @@ body {
     color: $orangeB !important;
   }
 
-  // S: App : TrailBlazer
+  // S: App : Trailblazer
   .vertical-timeline-element-content h2 {
     color: #0f0f0f;
   }
 
   .vertical-timeline-element-content {
-    background-color: $orangeA;
+    background-color: transparent;
+    border: solid 1px $orangeA;
+    box-shadow: 0 3px 0 $orangeA;
   }
 
   .vertical-timeline-element-icon {
-    background-color: $orangeB !important;
+    background-color: $orangeA !important;
     color: #000;
   }
 
@@ -273,13 +287,29 @@ html {
   height: 25px;
 }
 
-.dapp-name {
+.dapp-name-mute {
   line-height: 1;
   padding-left: 3px;
   margin-left: 4px;
+  font-size: 1.25rem;
+  color: #0f0f0f !important;
+}
+
+.dapp-name {
+  line-height: 1;
+  padding-left: 3px;
   font-weight: bold;
   font-size: 1.25rem;
   color: #0f0f0f !important;
+}
+
+.c-theme-switcher {
+  margin-top: 25px;
+
+  @include media-breakpoint-up(md) {
+    margin-top: 0px;
+    margin-left: 20px;
+  }
 }
 
 /* Dashboard
@@ -302,6 +332,15 @@ html {
       opacity: 0.9;
     }
   }
+}
+
+/* Home
+-------------------------------------------------- */
+.dark .c-app-market-title,
+.c-app-market-title {
+  font-size: 3rem;
+  padding: 40px 0 20px 0;
+  font-weight: bold !important;
 }
 
 /* Sign Message
@@ -493,7 +532,10 @@ code {
 
 .data-nft-image {
   max-width: 90%;
-  // height: auto;
+}
+
+.data-app-image {
+  max-width: 99%;
 }
 
 .custom-control-label::before {
@@ -531,7 +573,7 @@ code {
 
 .c-app-tile,
 .dark .c-app-tile {
-  max-width: 600px;
+  max-width: 370px;
 }
 
 .c-app-tile {
@@ -559,12 +601,21 @@ code {
 
 .c-marketplace-app {
   h1 {
-    margin: 30px 0;
-    font-size: 4rem;
+    font-size: 3rem;
+    padding: 20px 0 15px 0;
+    font-weight: bold !important;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 3rem;
+    }
   }
 
   .hero {
-    height: 300px;
+    height: 150px;
+
+    @include media-breakpoint-up(sm) {
+      height: 300px;
+    }
 
     img {
       border-radius: 30px;
@@ -622,13 +673,13 @@ code {
 
       .action {
         text-decoration: none;
-        background-color: #eeeeee;
-        color: #333333;
-        padding: 2px 6px 2px 6px;
-        border-top: 1px solid #cccccc;
-        border-right: 1px solid #333333;
-        border-bottom: 1px solid #333333;
-        border-left: 1px solid #cccccc;
+        background-color: #ffce00;
+        color: #000;
+        padding: 3px 6px 3px 6px;
+        border-top: 1px solid #ff7201;
+        border-right: 1px solid #ffce00;
+        border-bottom: 1px solid #ffce00;
+        border-left: 1px solid #ff7201;
       }
     }
 
@@ -676,11 +727,27 @@ code {
       }
     }
   }
+
+  .news-tile {
+    h2 {
+      color: #888;
+    }
+
+    a {
+      color: #000;
+    }
+  }
 }
 
 .dark .trailblazer-view {
   .leaderboard .body table {
     color: #fff;
+  }
+
+  .news-tile {
+    a {
+      color: #fff;
+    }
   }
 }
 

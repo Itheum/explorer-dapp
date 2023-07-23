@@ -202,7 +202,11 @@ export const ItheumTrailblazer = () => {
         <div className="col-12 mx-auto">
           <h1>Trailblazer</h1>
           <div className="hero">
-            <img src={headerHero} style={{ width: "100%", height: "auto" }} />
+            <img
+              className="img-fluid"
+              src={headerHero}
+              style={{ width: "100%", height: "auto" }}
+            />
           </div>
           <div className="body">
             <h4 className="my-3 text-center">

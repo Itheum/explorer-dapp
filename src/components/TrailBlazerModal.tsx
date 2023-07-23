@@ -45,13 +45,12 @@ export const TrailBlazerModal = ({
   isFetchingDataMarshal,
   data,
 }: {
-  isModalOpened: boolean,
-  closeModal: () => void,
-  owned: boolean,
-  isFetchingDataMarshal: boolean,
-  data: any,
+  isModalOpened: boolean;
+  closeModal: () => void;
+  owned: boolean;
+  isFetchingDataMarshal: boolean;
+  data: any;
 }) => {
-
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
       case "Partnership":
@@ -181,15 +180,15 @@ export const TrailBlazerModal = ({
         break;
       default:
         tileCode = (
-          <>
+          <div className="news-tile">
             <h2>
               {dataItem.category} - {new Date(dataItem.date).toUTCString()}
             </h2>
             <h3>{dataItem.title}</h3>
             <a href={dataItem.link} target="_blank">
-              <h6>See more...</h6>
+              See more...
             </a>
-          </>
+          </div>
         );
         break;
     }
@@ -232,7 +231,7 @@ export const TrailBlazerModal = ({
 
     return leaderBoard;
   }
-  
+
   return (
     <Modal
       isOpen={isModalOpened}
@@ -254,20 +253,15 @@ export const TrailBlazerModal = ({
       </div>
       <ModalHeader>
         <h4 className="text-center font-title font-weight-bold">
-          Itheum TrailBlazer
+          Itheum Trailblazer
         </h4>
       </ModalHeader>
       <ModalBody>
         {!owned ? (
           <div className="d-flex flex-column align-items-center justify-content-center">
-            <img
-              src={imgBlurChart}
-              style={{ width: "90%", height: "auto" }}
-            />
+            <img src={imgBlurChart} style={{ width: "90%", height: "auto" }} />
             <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-            <h6>
-              (Buy the Data NFT from marketplace if you want to see data)
-            </h6>
+            <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
           </div>
         ) : isFetchingDataMarshal || !data ? (
           <div
