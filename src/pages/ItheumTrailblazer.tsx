@@ -7,15 +7,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
 import { TRAILBLAZER_NONCES } from "config";
-import {
-  useGetAccount,
-  useGetPendingTransactions,
-} from "hooks";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { routeNames } from "routes";
-
 
 export const ItheumTrailblazer = () => {
   const { address } = useGetAccount();
@@ -110,14 +106,17 @@ export const ItheumTrailblazer = () => {
         if (isWebWallet) return;
         const sm = new SignableMessage({
           address: new Address(address),
-          message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
-          signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
+          message: Buffer.from(
+            signedMessage.payload.signedSession.message,
+            "ascii"
+          ),
+          signature: Buffer.from(
+            signedMessage.payload.signedSession.signature,
+            "hex"
+          ),
         });
 
-        const res = await dataNft.viewData(
-          messageToBeSigned,
-          sm,
-        );
+        const res = await dataNft.viewData(messageToBeSigned, sm);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
 
@@ -137,7 +136,11 @@ export const ItheumTrailblazer = () => {
     }
   }
 
-  async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
+  async function processSignature(
+    nonce: number,
+    messageToBeSigned: string,
+    signedMessage: SignableMessage
+  ) {
     try {
       setIsFetchingDataMarshal(true);
       setOwned(true);
@@ -168,7 +171,11 @@ export const ItheumTrailblazer = () => {
   useEffect(() => {
     if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned) {
       (async () => {
-        console.log('Sign', {isWebWallet, targetNonce, targetMessageToBeSigned});
+        console.log("Sign", {
+          isWebWallet,
+          targetNonce,
+          targetMessageToBeSigned,
+        });
         const signature = getMessageSignatureFromWalletUrl();
         const signedMessage = new SignableMessage({
           address: new Address(address),
@@ -176,7 +183,11 @@ export const ItheumTrailblazer = () => {
           signature: Buffer.from(signature, "hex"),
           signer: loginMethod,
         });
-        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
+        await processSignature(
+          Number(targetNonce),
+          targetMessageToBeSigned,
+          signedMessage
+        );
       })();
     }
   }, [isWebWallet, targetNonce]);
@@ -189,12 +200,11 @@ export const ItheumTrailblazer = () => {
     <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
       <div className="row w-100">
         <div className="col-12 mx-auto">
+          <h1>Trailblazer</h1>
           <div className="hero">
-            {" "}
             <img src={headerHero} style={{ width: "100%", height: "auto" }} />
           </div>
           <div className="body">
-            {/* <h3 className="mt-5 text-center">TrailBlazer</h3> */}
             <h4 className="my-3 text-center">
               Data NFTs that Unlock this App: {itDataNfts.length}
             </h4>

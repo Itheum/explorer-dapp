@@ -73,7 +73,9 @@ export const MyListed = () => {
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h4 className="mt-5 text-center">My Listed Offers: {offerCount}</h4>
+          {offerCount > 0 && (
+            <h4 className="mt-5 text-center">My Listed Offers: {offerCount}</h4>
+          )}
 
           <div className="row mt-5">
             {offers.length > 0 ? (
@@ -197,9 +199,9 @@ export const MyListed = () => {
                 );
               })
             ) : (
-              <h3 className="text-center text-white">
-                You have not listed any offer
-              </h3>
+              <h4 className="text-center text-white">
+                You do not have any listed Data NFTs offers.
+              </h4>
             )}
           </div>
         </div>

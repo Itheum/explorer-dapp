@@ -1,3 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@font-face {
+  font-family: "Inter", sans-serif;
+  src: url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+}
+
+$font-inter: "Inter", sans-serif;
+
 /* Bootstrap overrides
 -------------------------------------------------- */
 
@@ -26,23 +35,39 @@ Override Bootstrap variables only above.
 // @import "~bootstrap/scss/functions";
 // @import "~bootstrap/scss/variables";
 
+.darkLogo {
+  display: none !important;
+}
+
+.lightLogo {
+  display: block !important;
+}
+
+body {
+  font-family: $font-inter;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .dark {
   $custom-bg: #0f0f0f;
   $teal50: #e6fffa;
   $teal100: #b2f5ea;
   $teal200: #00c797;
   $blueMx: #3066ff;
+  $orangeA: #ff7201;
+  $orangeB: #ffce00;
   $mxDefiWalBG: #242527;
 
   /* redefine theme colors for dark theme */
-  $primary: $blueMx;
+  $primary: $orangeA;
   // $secondary: red;
   // $success: #222222;
   // $dark: $light;
 
   $theme-colors: (
-    "primary": $blueMx,
-    "secondary": $secondary,
+    "primary": $orangeA,
+    "secondary": $orangeB,
     "success": $success,
     "danger": $danger,
     "info": $indigo,
@@ -64,14 +89,14 @@ Override Bootstrap variables only above.
   $body-color: $teal50;
   $body-bg: $custom-bg;
   $navbar-light-color: $teal50;
-  $navbar-light-hover-color: $blueMx;
+  $navbar-light-hover-color: $orangeB;
   $navbar-light-active-color: $teal50;
 
   $card-bg: $custom-bg;
-  $border-color: $blueMx;
+  $border-color: $teal50;
 
   $dropdown-bg: $custom-bg;
-  $dropdown-border-color: $blueMx;
+  $dropdown-border-color: $orangeB;
   $dropdown-link-hover-bg: transparent;
 
   --light: #0f0f0f;
@@ -85,12 +110,26 @@ Override Bootstrap variables only above.
     color: #fafafa;
   }
 
-  .dapp-name.text-muted {
+  .cs-made-with-love:hover {
+    color: #fafafa;
+    opacity: 0.8;
+    text-decoration: none;
+  }
+
+  .dapp-name {
     color: #fafafa !important;
   }
 
+  .lightLogo {
+    display: none !important;
+  }
+
+  .darkLogo {
+    display: block !important;
+  }
+
   .cs-creator-link a {
-    color: $blueMx !important;
+    color: $orangeB !important;
   }
 
   // S: App : TrailBlazer
@@ -99,11 +138,12 @@ Override Bootstrap variables only above.
   }
 
   .vertical-timeline-element-content {
-    background-color: $blueMx;
+    background-color: $orangeA;
   }
 
   .vertical-timeline-element-icon {
-    background-color: $blueMx !important;
+    background-color: $orangeB !important;
+    color: #000;
   }
 
   .vertical-timeline-element-content a h6 {
@@ -111,11 +151,11 @@ Override Bootstrap variables only above.
   }
 
   .table {
-    color: $blueMx;
+    color: $orangeA;
   }
 
   a.address-link {
-    color: $blueMx;
+    color: $orangeB;
 
     .hover {
       color: $teal100 !important;
@@ -190,10 +230,8 @@ Override Bootstrap variables only above.
 }
 
 .selected {
-  box-shadow: 0px 0px 2px #b2f5ea, 
-              0px 0px 4px #b2f5ea, 
-              0px 0px 8px #b2f5ea,
-              0px 0px 12px #b2f5ea;
+  box-shadow: 0px 0px 2px #b2f5ea, 0px 0px 4px #b2f5ea, 0px 0px 8px #b2f5ea,
+    0px 0px 12px #b2f5ea;
 }
 
 /* Base
@@ -240,7 +278,8 @@ html {
   padding-left: 3px;
   margin-left: 4px;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  color: #0f0f0f !important;
 }
 
 /* Dashboard
@@ -438,9 +477,7 @@ footer {
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: $font-inter;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -450,15 +487,8 @@ code {
     monospace;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Cuprum:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
-
-$font-cuprum: "Cuprum", sans-serif;
-$font-poppins: "Poppins", sans-serif;
-
 .font-title {
-  font-family: $font-poppins;
-  // font-family: $font-cuprum;
+  font-family: $font-inter;
 }
 
 .data-nft-image {
@@ -528,8 +558,17 @@ $font-poppins: "Poppins", sans-serif;
 }
 
 .c-marketplace-app {
+  h1 {
+    margin: 30px 0;
+    font-size: 4rem;
+  }
+
   .hero {
     height: 300px;
+
+    img {
+      border-radius: 30px;
+    }
   }
 
   .body {
@@ -646,17 +685,17 @@ $font-poppins: "Poppins", sans-serif;
 }
 
 .dark .modal-body::-webkit-scrollbar {
-  width: .8rem;
-  height: .8rem;
+  width: 0.8rem;
+  height: 0.8rem;
   // background:lightgray;
   // border: 1px solid #3C3C3C;
   border-radius: 5px;
 }
 
-.dark .modal-body::-webkit-scrollbar-track  {
+.dark .modal-body::-webkit-scrollbar-track {
   background: #374151; /* Set the background color of the scroll track */
 }
-.dark .modal-body::-webkit-scrollbar-thumb  {
+.dark .modal-body::-webkit-scrollbar-thumb {
   background: #888; /* Set the color of the scroll thumb */
   border-radius: 20px;
 }

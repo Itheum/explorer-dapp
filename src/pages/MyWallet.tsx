@@ -8,8 +8,12 @@ import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { useNavigate, useParams } from "react-router-dom";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
-import { TRAILBLAZER_NONCES } from "config";
-import { useGetAccount, useGetPendingTransactions, useSignMessage } from "hooks";
+import { TRAILBLAZER_NONCES, MARKETPLACE_DETAILS_PAGE } from "config";
+import {
+  useGetAccount,
+  useGetPendingTransactions,
+  useSignMessage,
+} from "hooks";
 import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { BlobDataType } from "libs/types";
 import { modalStyles } from "libs/ui";
@@ -39,7 +43,7 @@ export const MyWallet = () => {
   console.log("viewDataRes", viewDataRes);
   const [data, setData] = useState<any>();
   const [isTrailBlazer, setIsTrailBlazer] = useState<boolean>(false);
-  console.log('isTrailBlazer', isTrailBlazer);
+  console.log("isTrailBlazer", isTrailBlazer);
 
   const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
@@ -70,7 +74,7 @@ export const MyWallet = () => {
   }, [hasPendingTransactions]);
 
   async function viewNormalData(index: number) {
-    console.log('viewNormalData');
+    console.log("viewNormalData");
     if (isWebWallet) {
       toastError("Web Wallet is not supported on this page.");
       return;
@@ -91,15 +95,17 @@ export const MyWallet = () => {
     console.log("signedMessage", signedMessage);
     const sm = new SignableMessage({
       address: new Address(address),
-      message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
-      signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
+      message: Buffer.from(
+        signedMessage.payload.signedSession.message,
+        "ascii"
+      ),
+      signature: Buffer.from(
+        signedMessage.payload.signedSession.signature,
+        "hex"
+      ),
     });
 
-    const res = await dataNft.viewData(
-      messageToBeSigned,
-      sm,
-      true
-    );
+    const res = await dataNft.viewData(messageToBeSigned, sm, true);
     console.log("viewData", res);
 
     let blobDataType = BlobDataType.TEXT;
@@ -132,7 +138,7 @@ export const MyWallet = () => {
   }
 
   async function viewTrailBlazerData(index: number) {
-    console.log('viewTrailBlazerData');
+    console.log("viewTrailBlazerData");
     try {
       if (!(index >= 0 && index < dataNfts.length)) {
         toastError("Data is not loaded");
@@ -158,14 +164,17 @@ export const MyWallet = () => {
       if (isWebWallet) return;
       const sm = new SignableMessage({
         address: new Address(address),
-        message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
-        signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
+        message: Buffer.from(
+          signedMessage.payload.signedSession.message,
+          "ascii"
+        ),
+        signature: Buffer.from(
+          signedMessage.payload.signedSession.signature,
+          "hex"
+        ),
       });
 
-      const res = await dataNft.viewData(
-        messageToBeSigned,
-        sm,
-      );
+      const res = await dataNft.viewData(messageToBeSigned, sm);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
 
@@ -182,7 +191,11 @@ export const MyWallet = () => {
     }
   }
 
-  async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
+  async function processSignature(
+    nonce: number,
+    messageToBeSigned: string,
+    signedMessage: SignableMessage
+  ) {
     try {
       setIsFetchingDataMarshal(true);
       openModal();
@@ -212,7 +225,11 @@ export const MyWallet = () => {
   useEffect(() => {
     if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned) {
       (async () => {
-        console.log('Sign', {isWebWallet, targetNonce, targetMessageToBeSigned});
+        console.log("Sign", {
+          isWebWallet,
+          targetNonce,
+          targetMessageToBeSigned,
+        });
         const signature = getMessageSignatureFromWalletUrl();
         const signedMessage = new SignableMessage({
           address: new Address(address),
@@ -222,7 +239,11 @@ export const MyWallet = () => {
         });
 
         setIsTrailBlazer(true);
-        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
+        await processSignature(
+          Number(targetNonce),
+          targetMessageToBeSigned,
+          signedMessage
+        );
       })();
     }
   }, [isWebWallet, targetNonce]);
@@ -235,7 +256,9 @@ export const MyWallet = () => {
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h4 className="mt-5 text-center">My Data NFTs: {dataNftCount}</h4>
+          {dataNftCount > 0 && (
+            <h4 className="mt-5 text-center">My Data NFTs: {dataNftCount}</h4>
+          )}
 
           <div className="row mt-5">
             {dataNfts.length > 0 ? (
@@ -246,97 +269,111 @@ export const MyWallet = () => {
                   dataNft={dataNft}
                   isLoading={isLoading}
                   owned={true}
-                  viewData={TRAILBLAZER_NONCES.indexOf(dataNft.nonce) >= 0 ? viewTrailBlazerData : viewNormalData}
+                  viewData={
+                    TRAILBLAZER_NONCES.indexOf(dataNft.nonce) >= 0
+                      ? viewTrailBlazerData
+                      : viewNormalData
+                  }
                   isWallet={true}
                 />
               ))
             ) : (
-              <h3 className="text-center text-white">
-                You have not listed any offer
-              </h3>
+              <h4 className="text-white">
+                You do not own any Data NFTs yet. <br />
+                You can change that! browse and purchase Data NFTs by visiting
+                the
+                <a
+                  href={`${MARKETPLACE_DETAILS_PAGE}`}
+                  className="ml-2 address-link text-decoration-none"
+                  target="_blank"
+                >
+                  Data DEX
+                </a>
+              </h4>
             )}
           </div>
         </div>
       </div>
 
-      {
-        isTrailBlazer || targetNonce ? (
-          <TrailBlazerModal
-            isModalOpened={isModalOpened}
-            closeModal={closeModal}
-            owned={true}
-            isFetchingDataMarshal={isFetchingDataMarshal}
-            data={data}
-          />
-        ) : (
-          <Modal
-            isOpen={isModalOpened}
-            onRequestClose={closeModal}
-            style={modalStyles}
-            ariaHideApp={false}
-          >
-            <div style={{ height: "3rem" }}>
-              <div
-                style={{
-                  float: "right",
-                  cursor: "pointer",
-                  fontSize: "2rem",
-                }}
-                onClick={closeModal}
-              >
-                <IoClose />
-              </div>
-            </div>
-            <ModalHeader>
-              <h4 className="text-center font-title font-weight-bold">
-                File Viewer
-              </h4>
-            </ModalHeader>
-            <ModalBody
+      {isTrailBlazer || targetNonce ? (
+        <TrailBlazerModal
+          isModalOpened={isModalOpened}
+          closeModal={closeModal}
+          owned={true}
+          isFetchingDataMarshal={isFetchingDataMarshal}
+          data={data}
+        />
+      ) : (
+        <Modal
+          isOpen={isModalOpened}
+          onRequestClose={closeModal}
+          style={modalStyles}
+          ariaHideApp={false}
+        >
+          <div style={{ height: "3rem" }}>
+            <div
               style={{
-                minWidth: "26rem",
-                minHeight: "36rem",
-                maxHeight: "80vh",
-                overflowY: "auto",
+                float: "right",
+                cursor: "pointer",
+                fontSize: "2rem",
               }}
+              onClick={closeModal}
             >
-              {isFetchingDataMarshal ? (
+              <IoClose />
+            </div>
+          </div>
+          <ModalHeader>
+            <h4 className="text-center font-title font-weight-bold">
+              File Viewer
+            </h4>
+          </ModalHeader>
+          <ModalBody
+            style={{
+              minWidth: "26rem",
+              minHeight: "36rem",
+              maxHeight: "80vh",
+              overflowY: "auto",
+            }}
+          >
+            {isFetchingDataMarshal ? (
+              <div
+                className="d-flex flex-column align-items-center justify-content-center"
+                style={{
+                  minWidth: "24rem",
+                  maxWidth: "100% !important",
+                  minHeight: "40rem",
+                  maxHeight: "80vh",
+                }}
+              >
+                <Loader />
+              </div>
+            ) : (
+              viewDataRes &&
+              !viewDataRes.error &&
+              (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                <img
+                  src={viewDataRes.data}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
                 <div
-                  className="d-flex flex-column align-items-center justify-content-center"
-                  style={{
-                    minWidth: "24rem",
-                    maxWidth: "100% !important",
-                    minHeight: "40rem",
-                    maxHeight: "80vh",
-                  }}
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ height: "30rem" }}
                 >
-                  <Loader />
+                  <audio controls autoPlay src={viewDataRes.data} />
                 </div>
               ) : (
-                viewDataRes &&
-                !viewDataRes.error &&
-                (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                  <img
-                    src={viewDataRes.data}
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-                  <div className="d-flex justify-content-center align-items-center" style={{ height: '30rem' }}>
-                    <audio controls autoPlay src={viewDataRes.data} />
-                  </div>
-                ) : (
-                  <p
-                    className="p-2"
-                    style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
-                  >
-                    {viewDataRes.data}
-                  </p>
-                ))
-              )}
-            </ModalBody>
-          </Modal>
-        )
-      }
+                <p
+                  className="p-2"
+                  style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
+                >
+                  {viewDataRes.data}
+                </p>
+              ))
+            )}
+          </ModalBody>
+        </Modal>
+      )}
     </div>
   );
 };
