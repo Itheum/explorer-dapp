@@ -19,6 +19,7 @@ import {
 } from "react-vertical-timeline-component";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { Loader } from "components";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 
 const customStyles = {
   overlay: {
@@ -51,6 +52,7 @@ export const TrailBlazerModal = ({
   isFetchingDataMarshal: boolean;
   data: any;
 }) => {
+  const { loginMethod } = useGetLoginInfo();
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
       case "Partnership":
@@ -273,7 +275,14 @@ export const TrailBlazerModal = ({
               maxHeight: "80vh",
             }}
           >
-            <Loader />
+            <div>
+              <Loader noText />
+              <p className="text-center font-weight-bold">
+                {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
+                  ? "Please sign the message using xPortal or Ledger"
+                  : "Loading..."}
+              </p>
+            </div>
           </div>
         ) : (
           <div className="trailblazer-view">
