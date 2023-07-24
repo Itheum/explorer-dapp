@@ -345,7 +345,16 @@ export const MyWallet = () => {
                   maxHeight: "80vh",
                 }}
               >
-                <Loader />
+                <div>
+                  <Loader noText />
+                  <p className="text-center font-weight-bold">
+                    {["ledger", "walletconnectv2", "extra"].includes(
+                      loginMethod
+                    )
+                      ? "Please sign the message using xPortal or Ledger"
+                      : "Loading..."}
+                  </p>
+                </div>
               </div>
             ) : (
               viewDataRes &&

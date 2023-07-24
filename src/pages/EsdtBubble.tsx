@@ -33,6 +33,7 @@ import {
 } from "hooks";
 import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
@@ -177,12 +178,14 @@ export const EsdtBubble = () => {
     network: { explorerAddress },
   } = useGetNetworkConfig();
   const { address } = useGetAccount();
+  const { loginMethod } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [selectedDataNft, setSelectedDataNft] = useState<DataNft>();
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPendingMessageSigned, setIsPendingMessageSigned] = useState(false);
 
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
     useState<boolean>(true);
@@ -265,7 +268,9 @@ export const EsdtBubble = () => {
       setSelectedDataNft(dataNft);
       const messageToBeSigned = await dataNft.getMessageToSign();
       console.log("messageToBeSigned", messageToBeSigned);
+      setIsPendingMessageSigned(true);
       const signedMessage = await signMessage({ message: messageToBeSigned });
+      setIsPendingMessageSigned(false);
       console.log("signedMessage", signedMessage);
       const res = await dataNft.viewData(
         messageToBeSigned,
@@ -442,7 +447,14 @@ export const EsdtBubble = () => {
                 minHeight: "40rem",
               }}
             >
-              <Loader />
+              <div>
+                <Loader noText />
+                <p className="text-center font-weight-bold">
+                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
+                    ? "Please sign the message using xPortal or Ledger"
+                    : "Loading..."}
+                </p>
+              </div>
             </div>
           ) : (
             <>

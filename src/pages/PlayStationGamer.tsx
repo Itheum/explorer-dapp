@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -17,6 +18,7 @@ import PlaystationGamerInsights from "./PlaystationGamerInsights";
 export const PlayStationGamer = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
+  const { loginMethod } = useGetLoginInfo();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -361,7 +363,14 @@ export const PlayStationGamer = () => {
                 maxHeight: "80vh",
               }}
             >
-              <Loader />
+              <div>
+                <Loader noText />
+                <p className="text-center font-weight-bold">
+                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
+                    ? "Please sign the message using xPortal or Ledger"
+                    : "Loading..."}
+                </p>
+              </div>
             </div>
           ) : (
             <div

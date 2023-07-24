@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer the public explore the Itheum protocol components",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -35,6 +35,7 @@
   },
   "scripts": {
     "start": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-app-rewired start",
+    "winStart": "set \"REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version')\" && react-app-rewired start",
     "build": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
