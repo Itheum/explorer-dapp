@@ -1,5 +1,5 @@
-import React from "react";
-import { ModalBody, ModalHeader } from "react-bootstrap";
+import React, {useState} from "react";
+import {ModalBody, ModalHeader} from "react-bootstrap";
 import {
   FaCalendarCheck,
   FaChartBar,
@@ -11,15 +11,15 @@ import {
   FaShoppingCart,
   FaTrophy,
 } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
+import {IoClose} from "react-icons/io5";
 import Modal from "react-modal";
-import {
-  VerticalTimeline,
-  VerticalTimelineElement,
-} from "react-vertical-timeline-component";
+import {VerticalTimeline, VerticalTimelineElement,} from "react-vertical-timeline-component";
 import imgBlurChart from "assets/img/blur-chart.png";
-import { Loader } from "components";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import {Loader} from "components";
+import {useGetLoginInfo} from "@multiversx/sdk-dapp/hooks";
+import {IFrameModal} from "./iFrameModal";
+import TwModal from "./Modal/TwModal";
+import {createPortal} from "react-dom";
 
 const customStyles = {
   overlay: {
@@ -53,6 +53,20 @@ export const TrailBlazerModal = ({
   data: any;
 }) => {
   const { loginMethod } = useGetLoginInfo();
+  const [content, setContent] = useState<React.ReactElement | null>(null);
+  const [title, setTitle] = useState<string>();
+
+  const handleIFrameModal = (link: string) => {
+    setContent(
+      <IFrameModal link={link}/>
+    );
+  };
+
+  const handleCloseModal = () => {
+    setContent(null);
+    setTitle("");
+  };
+
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
       case "Partnership":
@@ -122,14 +136,15 @@ export const TrailBlazerModal = ({
                 <FaFlagCheckered />
               </div>
               <div className="item">{dataItem.title}</div>
-              <a className="action" href={dataItem.link} target="_blank">
-                <div>Join quest!</div>
-              </a>
+              <button onClick={() => handleIFrameModal(dataItem.link)}>Join quest!</button>
             </div>
             <div className="footer">
               <div className="added">
                 Added on: {new Date(dataItem.date).toUTCString()}
               </div>
+            </div>
+            <div className="hidden">
+              <TwModal title={title} content={content} setContent={setContent}/>
             </div>
           </div>
         );

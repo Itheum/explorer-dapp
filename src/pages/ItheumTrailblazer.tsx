@@ -12,6 +12,8 @@ import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { routeNames } from "routes";
+import {IFrameModal} from "../components/iFrameModal";
+import TwModal from "../components/Modal/TwModal";
 
 export const ItheumTrailblazer = () => {
   const { address } = useGetAccount();
@@ -31,6 +33,20 @@ export const ItheumTrailblazer = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+
+  const [content, setContent] = useState<React.ReactElement | null>(null);
+  const [title, setTitle] = useState<string>();
+
+  const handleIFrameModal = (link: string) => {
+    setContent(
+      <IFrameModal link={link}/>
+    );
+  };
+
+  const handleCloseModal = () => {
+    setContent(null);
+    setTitle("");
+  };
 
   function openModal() {
     setIsModalOpened(true);
@@ -213,6 +229,7 @@ export const ItheumTrailblazer = () => {
               Data NFTs that Unlock this App: {itDataNfts.length}
             </h4>
 
+            <button onClick={() => handleIFrameModal("https://docs.google.com/forms/d/e/1FAIpQLSfZNM3yex-oAvpowOyqfZ6AmYn9Fpk6RMQSlsE3mrxQDNGcKQ/viewform?embedded=true")}>OpenModal</button>
             <div className="row mt-5">
               {itDataNfts.length > 0 ? (
                 itDataNfts.map((dataNft, index) => (
@@ -241,6 +258,9 @@ export const ItheumTrailblazer = () => {
         isFetchingDataMarshal={isFetchingDataMarshal}
         data={data}
       />
+      <div className="hidden">
+        <TwModal title={title} content={content} setContent={setContent}/>
+      </div>
     </div>
   );
 };
