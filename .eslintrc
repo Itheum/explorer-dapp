@@ -31,9 +31,10 @@
   },
   "extends": [
     "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "prettier"
   ],
-  "plugins": ["react-hooks", "import"],
+  "plugins": ["react-hooks", "prettier", "import"],
   "rules": {
     "import/order": [
       "warn",

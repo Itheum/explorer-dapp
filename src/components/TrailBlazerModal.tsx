@@ -1,25 +1,15 @@
-import React, {useState} from "react";
-import {ModalBody, ModalHeader} from "react-bootstrap";
-import {
-  FaCalendarCheck,
-  FaChartBar,
-  FaChessKnight,
-  FaFlagCheckered,
-  FaHandshake,
-  FaMoneyBillAlt,
-  FaShopify,
-  FaShoppingCart,
-  FaTrophy,
-} from "react-icons/fa";
-import {IoClose} from "react-icons/io5";
+import React, { useState } from "react";
+import { ModalBody, ModalHeader } from "react-bootstrap";
+import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import {VerticalTimeline, VerticalTimelineElement,} from "react-vertical-timeline-component";
+import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import imgBlurChart from "assets/img/blur-chart.png";
-import {Loader} from "components";
-import {useGetLoginInfo} from "@multiversx/sdk-dapp/hooks";
-import {IFrameModal} from "./iFrameModal";
+import { Loader } from "components";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { IFrameModal } from "./iFrameModal";
 import TwModal from "./Modal/TwModal";
-import {createPortal} from "react-dom";
+import { createPortal } from "react-dom";
 
 const customStyles = {
   overlay: {
@@ -53,18 +43,17 @@ export const TrailBlazerModal = ({
   data: any;
 }) => {
   const { loginMethod } = useGetLoginInfo();
-  const [content, setContent] = useState<React.ReactElement | null>(null);
+  const [content, setContent] = useState<React.ReactElement>(<></>);
   const [title, setTitle] = useState<string>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleIFrameModal = (link: string) => {
-    setContent(
-      <IFrameModal link={link}/>
-    );
+    setContent(<IFrameModal link={link} />);
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setContent(null);
-    setTitle("");
+    setContent(<></>);
   };
 
   const getIconForCategory = (dataItem: any) => {
@@ -98,9 +87,7 @@ export const TrailBlazerModal = ({
         tileCode = (
           <div className="base-tile offer">
             <div className="header">
-              <div className="title">
-                Congratulations! You've unlocked a special offer.
-              </div>
+              <div className="title">Congratulations! You've unlocked a special offer.</div>
             </div>
             <div className="body">
               <div className="icon">
@@ -112,9 +99,7 @@ export const TrailBlazerModal = ({
               </a>
             </div>
             <div className="footer">
-              <div className="added">
-                Added on: {new Date(dataItem.date).toUTCString()}
-              </div>
+              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
               <div className="platform">
                 Claimable On:{" "}
                 <span className="icon">
@@ -136,15 +121,17 @@ export const TrailBlazerModal = ({
                 <FaFlagCheckered />
               </div>
               <div className="item">{dataItem.title}</div>
-              <button onClick={() => handleIFrameModal(dataItem.link)}>Join quest!</button>
+
+              <button
+                className="bg-[#ff7201] rounded-lg"
+                onClick={() => {
+                  handleIFrameModal(dataItem.link);
+                }}>
+                <TwModal isModalOpen={isModalOpen} content={content} setIsModalOpen={setIsModalOpen} />
+              </button>
             </div>
             <div className="footer">
-              <div className="added">
-                Added on: {new Date(dataItem.date).toUTCString()}
-              </div>
-            </div>
-            <div className="hidden">
-              <TwModal title={title} content={content} setContent={setContent}/>
+              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
             </div>
           </div>
         );
@@ -157,11 +144,8 @@ export const TrailBlazerModal = ({
               <div className="sub-title">{dataItem.title}</div>
             </div>
             <div className="body">
-              {(normalizeLeaderboardData(dataItem.link).processedSuccess ===
-                false && (
-                <div className="process-error">
-                  {normalizeLeaderboardData(dataItem.link).processMsg}
-                </div>
+              {(normalizeLeaderboardData(dataItem.link).processedSuccess === false && (
+                <div className="process-error">{normalizeLeaderboardData(dataItem.link).processMsg}</div>
               )) || (
                 <table className="table">
                   <thead>
@@ -172,25 +156,21 @@ export const TrailBlazerModal = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {normalizeLeaderboardData(dataItem.link).tableData.map(
-                      (rowData: any, idx: number) => {
-                        return (
-                          <tr>
-                            <th scope="row">{++idx}</th>
-                            <td>{rowData.leaderAddress}</td>
-                            <td>{rowData.points}</td>
-                          </tr>
-                        );
-                      }
-                    )}
+                    {normalizeLeaderboardData(dataItem.link).tableData.map((rowData: any, idx: number) => {
+                      return (
+                        <tr>
+                          <th scope="row">{++idx}</th>
+                          <td>{rowData.leaderAddress}</td>
+                          <td>{rowData.points}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               )}
             </div>
             <div className="footer">
-              <div className="added">
-                Added on: {new Date(dataItem.date).toUTCString()}
-              </div>
+              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
             </div>
           </div>
         );
@@ -250,12 +230,7 @@ export const TrailBlazerModal = ({
   }
 
   return (
-    <Modal
-      isOpen={isModalOpened}
-      onRequestClose={closeModal}
-      style={customStyles}
-      ariaHideApp={false}
-    >
+    <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={customStyles} ariaHideApp={false}>
       <div style={{ height: "3rem" }}>
         <div
           style={{
@@ -263,15 +238,12 @@ export const TrailBlazerModal = ({
             cursor: "pointer",
             fontSize: "2rem",
           }}
-          onClick={closeModal}
-        >
+          onClick={closeModal}>
           <IoClose />
         </div>
       </div>
       <ModalHeader>
-        <h4 className="text-center font-title font-weight-bold">
-          Itheum Trailblazer
-        </h4>
+        <h4 className="text-center font-title font-weight-bold">Itheum Trailblazer</h4>
       </ModalHeader>
       <ModalBody>
         {!owned ? (
@@ -288,14 +260,11 @@ export const TrailBlazerModal = ({
               maxWidth: "100%",
               minHeight: "40rem",
               maxHeight: "80vh",
-            }}
-          >
+            }}>
             <div>
               <Loader noText />
               <p className="text-center font-weight-bold">
-                {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
-                  ? "Please sign the message using xPortal or Ledger"
-                  : "Loading..."}
+                {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
               </p>
             </div>
           </div>
@@ -304,10 +273,7 @@ export const TrailBlazerModal = ({
             <VerticalTimeline>
               {data?.map((_dataItem: any, _index: any) => {
                 return (
-                  <VerticalTimelineElement
-                    key={_index}
-                    icon={getIconForCategory(_dataItem)}
-                  >
+                  <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
                     {getTileForCategory(_dataItem)}
                   </VerticalTimelineElement>
                 );

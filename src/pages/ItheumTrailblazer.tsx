@@ -12,7 +12,7 @@ import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { routeNames } from "routes";
-import {IFrameModal} from "../components/iFrameModal";
+import { IFrameModal } from "../components/iFrameModal";
 import TwModal from "../components/Modal/TwModal";
 
 export const ItheumTrailblazer = () => {
@@ -28,25 +28,10 @@ export const ItheumTrailblazer = () => {
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNftLoading, setIsNftLoading] = useState(false);
-  const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
-    useState<boolean>(true);
+  const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
-
-  const [content, setContent] = useState<React.ReactElement | null>(null);
-  const [title, setTitle] = useState<string>();
-
-  const handleIFrameModal = (link: string) => {
-    setContent(
-      <IFrameModal link={link}/>
-    );
-  };
-
-  const handleCloseModal = () => {
-    setContent(null);
-    setTitle("");
-  };
 
   function openModal() {
     setIsModalOpened(true);
@@ -58,9 +43,7 @@ export const ItheumTrailblazer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      TRAILBLAZER_NONCES
-    );
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_NONCES);
 
     setItDataNfts(_nfts);
     setIsLoading(false);
@@ -122,14 +105,8 @@ export const ItheumTrailblazer = () => {
         if (isWebWallet) return;
         const sm = new SignableMessage({
           address: new Address(address),
-          message: Buffer.from(
-            signedMessage.payload.signedSession.message,
-            "ascii"
-          ),
-          signature: Buffer.from(
-            signedMessage.payload.signedSession.signature,
-            "hex"
-          ),
+          message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
+          signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
         });
 
         const res = await dataNft.viewData(messageToBeSigned, sm);
@@ -152,21 +129,14 @@ export const ItheumTrailblazer = () => {
     }
   }
 
-  async function processSignature(
-    nonce: number,
-    messageToBeSigned: string,
-    signedMessage: SignableMessage
-  ) {
+  async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
     try {
       setIsFetchingDataMarshal(true);
       setOwned(true);
       openModal();
 
       const dataNft = await DataNft.createFromApi(nonce);
-      const res = await dataNft.viewData(
-        messageToBeSigned,
-        signedMessage as any as SignableMessage
-      );
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any as SignableMessage);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
 
@@ -199,11 +169,7 @@ export const ItheumTrailblazer = () => {
           signature: Buffer.from(signature, "hex"),
           signer: loginMethod,
         });
-        await processSignature(
-          Number(targetNonce),
-          targetMessageToBeSigned,
-          signedMessage
-        );
+        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
       })();
     }
   }, [isWebWallet, targetNonce]);
@@ -218,29 +184,15 @@ export const ItheumTrailblazer = () => {
         <div className="col-12 mx-auto">
           <h1>Trailblazer</h1>
           <div className="hero">
-            <img
-              className="img-fluid"
-              src={headerHero}
-              style={{ width: "100%", height: "auto" }}
-            />
+            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
           </div>
           <div className="body">
-            <h4 className="my-3 text-center">
-              Data NFTs that Unlock this App: {itDataNfts.length}
-            </h4>
+            <h4 className="my-3 text-center">Data NFTs that Unlock this App: {itDataNfts.length}</h4>
 
-            <button onClick={() => handleIFrameModal("https://docs.google.com/forms/d/e/1FAIpQLSfZNM3yex-oAvpowOyqfZ6AmYn9Fpk6RMQSlsE3mrxQDNGcKQ/viewform?embedded=true")}>OpenModal</button>
             <div className="row mt-5">
               {itDataNfts.length > 0 ? (
                 itDataNfts.map((dataNft, index) => (
-                  <DataNftCard
-                    key={index}
-                    index={index}
-                    dataNft={dataNft}
-                    isLoading={isLoading}
-                    owned={flags[index]}
-                    viewData={viewData}
-                  />
+                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
                 ))
               ) : (
                 <h3 className="text-center text-white">No Data NFTs</h3>
@@ -251,16 +203,7 @@ export const ItheumTrailblazer = () => {
         </div>
       </div>
 
-      <TrailBlazerModal
-        isModalOpened={isModalOpened}
-        closeModal={closeModal}
-        owned={owned}
-        isFetchingDataMarshal={isFetchingDataMarshal}
-        data={data}
-      />
-      <div className="hidden">
-        <TwModal title={title} content={content} setContent={setContent}/>
-      </div>
+      <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
     </div>
   );
 };
