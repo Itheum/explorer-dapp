@@ -8,6 +8,7 @@ import { Navbar } from "./Navbar";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { search } = useLocation();
+
   return (
     <div className="d-flex flex-column flex-fill wrapper">
       <Navbar />
