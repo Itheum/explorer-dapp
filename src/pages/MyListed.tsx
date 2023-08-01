@@ -124,7 +124,7 @@ export const MyListed = () => {
                           </span>
                         </div>
                         <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Amount:</span>
+                          <span className="col-4 opacity-6">Listed:</span>
                           <span className="col-8">{offer.quantity}</span>
                         </div>
                         <div className="mb-1 row">
@@ -178,7 +178,7 @@ export const MyListed = () => {
                           </span>
                         </div>
                         <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Supply:</span>
+                          <span className="col-4 opacity-6">Total Supply:</span>
                           <span className="col-8">
                             {isDataNftLoaded && dataNfts[index].supply}
                           </span>

@@ -89,7 +89,7 @@ export function DataNftCard({
             </span>
           </div>
           <div className="mb-1 row">
-            <span className="col-4 opacity-6">Supply:</span>
+            <span className="col-4 opacity-6">Total Supply:</span>
             <span className="col-8">{dataNft.supply}</span>
           </div>
           <div className="mb-1 row">
