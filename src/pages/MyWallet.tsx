@@ -5,6 +5,7 @@ import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
+import SVG from 'react-inlinesvg';
 import Modal from "react-modal";
 import { useNavigate, useParams } from "react-router-dom";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
@@ -111,10 +112,15 @@ export const MyWallet = () => {
     let blobDataType = BlobDataType.TEXT;
     if (!res.error) {
       if (res.contentType.search("image") >= 0) {
-        res.data = window.URL.createObjectURL(
-          new Blob([res.data], { type: res.contentType })
-        );
-        blobDataType = BlobDataType.IMAGE;
+        if (res.contentType == "image/svg+xml") {
+          blobDataType = BlobDataType.SVG;
+          res.data = await (res.data as Blob).text();
+        } else {
+          blobDataType = BlobDataType.IMAGE;
+          res.data = window.URL.createObjectURL(
+            new Blob([res.data], { type: res.contentType })
+          );
+        }
       } else if (res.contentType.search("audio") >= 0) {
         res.data = window.URL.createObjectURL(
           new Blob([res.data], { type: res.contentType })
@@ -371,6 +377,11 @@ export const MyWallet = () => {
                 >
                   <audio controls autoPlay src={viewDataRes.data} />
                 </div>
+              ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                <SVG
+                  src={viewDataRes.data}
+                  style={{ width: "100%", height: "auto" }}
+                />
               ) : (
                 <p
                   className="p-2"

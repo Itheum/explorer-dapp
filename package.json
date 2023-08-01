@@ -27,6 +27,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "2.4.0",
     "react-icons": "4.8.0",
+    "react-inlinesvg": "^3.0.2",
     "react-modal": "3.16.1",
     "react-router-dom": "6.4.2",
     "react-tooltip": "5.11.1",
