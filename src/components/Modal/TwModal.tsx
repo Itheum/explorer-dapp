@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import { MdOutlineClose } from "react-icons/md";
 
 type ModalProps = {
   isModalOpen: boolean;
@@ -25,7 +26,7 @@ export default function MyModal(props: ModalProps) {
         type="button"
         onClick={openModal}
         className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-        Open dialog
+        Join quest!
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -52,16 +53,13 @@ export default function MyModal(props: ModalProps) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95">
                 <Dialog.Panel className="w-full max-w-6xl transform overflow-hidden rounded-2xl bg-black p-6 text-left align-middle shadow-xl transition-all">
-                  <div className="mt-2">{content}</div>
-
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center !rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}>
-                      Close
+                  <Dialog.Title>
+                    <button type="button" onClick={closeModal}>
+                      <MdOutlineClose className="text-white" />
                     </button>
-                  </div>
+                  </Dialog.Title>
+
+                  <div className="mt-2">{content}</div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
