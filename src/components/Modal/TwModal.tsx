@@ -12,8 +12,6 @@ export default function MyModal(props: ModalProps) {
   const { isModalOpen = false, content, setIsModalOpen } = props;
   let [isOpen, setIsOpen] = useState(isModalOpen);
 
-  console.log("isModal", isModalOpen);
-  console.log("isOpen", isOpen);
   function closeModal() {
     setIsOpen(false);
   }
@@ -21,6 +19,7 @@ export default function MyModal(props: ModalProps) {
   useEffect(() => {
     setIsOpen(isModalOpen);
   }, [isModalOpen]);
+
   function openModal() {
     setIsOpen(isModalOpen);
   }
