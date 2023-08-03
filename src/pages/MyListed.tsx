@@ -127,7 +127,7 @@ export const MyListed = () => {
                           <span className="col-4 opacity-6">Listed:</span>
                           <span className="col-8">{offer.quantity}</span>
                         </div>
-                        <div className="mb-1 row">
+                        {/* <div className="mb-1 row">
                           <span className="col-4 opacity-6">Wanting:</span>
                           <span className="col-8">
                             {convertWeiToEsdt(
@@ -135,7 +135,7 @@ export const MyListed = () => {
                             ).toNumber()}{" "}
                             {offer.wantedTokenIdentifier.split("-")[0]}
                           </span>
-                        </div>
+                        </div> */}
 
                         <div className="mt-4 mb-1">
                           <h5 className="text-center text-info">
