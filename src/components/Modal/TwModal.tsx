@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { MdOutlineClose } from "react-icons/md";
 
 type ModalProps = {
@@ -15,6 +15,10 @@ export default function MyModal(props: ModalProps) {
   function closeModal() {
     setIsOpen(false);
   }
+
+  useEffect(() => {
+    setIsOpen(isModalOpen);
+  }, [isModalOpen]);
 
   function openModal() {
     setIsOpen(isModalOpen);
