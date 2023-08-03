@@ -13,6 +13,7 @@ export function DataNftCard({
   owned,
   isWallet,
   viewData,
+  showBalance = false,
 }: {
   index: number;
   dataNft: DataNft;
@@ -20,6 +21,7 @@ export function DataNftCard({
   owned: boolean;
   isWallet?: boolean;
   viewData: (e: number) => void;
+  showBalance?: boolean,
 }) {
   const {
     network: { explorerAddress },
@@ -88,6 +90,14 @@ export function DataNftCard({
               </a>
             </span>
           </div>
+          {
+            showBalance && (
+              <div className="mb-1 row">
+                <span className="col-4 opacity-6">Balance:</span>
+                <span className="col-8">{dataNft.balance}</span>
+              </div>
+            )
+          }
           <div className="mb-1 row">
             <span className="col-4 opacity-6">Total Supply:</span>
             <span className="col-8">{dataNft.supply}</span>

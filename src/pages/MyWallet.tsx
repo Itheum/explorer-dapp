@@ -281,6 +281,7 @@ export const MyWallet = () => {
                       : viewNormalData
                   }
                   isWallet={true}
+                  showBalance={true}
                 />
               ))
             ) : (
