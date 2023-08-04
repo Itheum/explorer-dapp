@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import BigNumber from "bignumber.js";
 import {
   Chart as ChartJS,
@@ -180,6 +180,7 @@ export const EsdtBubble = () => {
   const { address } = useGetAccount();
   const { loginMethod } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
+  const { signMessage } = useSignMessage();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [selectedDataNft, setSelectedDataNft] = useState<DataNft>();

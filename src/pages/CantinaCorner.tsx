@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -109,6 +109,7 @@ export const CantinaCorner = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { loginMethod } = useGetLoginInfo();
+  const { signMessage } = useSignMessage();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
