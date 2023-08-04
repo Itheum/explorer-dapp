@@ -10,7 +10,7 @@ import {
   useGetPendingTransactions,
 } from "hooks";
 import { dataNftMarket } from "libs/mvx";
-import { convertToLocalString, convertWeiToEsdt } from "libs/utils";
+import { convertToLocalString } from "libs/utils";
 import { createNftId } from "libs/utils/token";
 
 export const MyListed = () => {
@@ -56,10 +56,9 @@ export const MyListed = () => {
   }
 
   useEffect(() => {
-    if (!hasPendingTransactions) {
-      fetchMyListed();
-    }
-  }, [hasPendingTransactions]);
+    if (!address || hasPendingTransactions) return;
+    fetchMyListed();
+  }, [address, hasPendingTransactions]);
 
   useEffect(() => {
     fetchDataNfts();
