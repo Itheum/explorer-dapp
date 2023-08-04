@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer the public explore the Itheum protocol components",
-  "version": "0.0.4",
+  "version": "0.1.0.beta.1",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
