@@ -5,27 +5,16 @@ import {
   DappProvider,
   Layout,
 } from "components";
-import {
-  TransactionsToastList,
-  NotificationModal,
-  SignTransactionsModals,
-} from "components";
-import {
-  apiTimeout,
-  walletConnectV2ProjectId,
-  sampleAuthenticatedDomains,
-  ELROND_NETWORK,
-} from "config";
-import { MyWallet, PageNotFound, Unlock } from "pages";
+import { TransactionsToastList, NotificationModal, SignTransactionsModals } from "components";
+import { apiTimeout, walletConnectV2ProjectId, sampleAuthenticatedDomains, ELROND_NETWORK } from "config";
+import { MultiversxBubbles, MyWallet, PageNotFound, Unlock } from "pages";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { routes, routeNames } from "routes";
 
 export const App = () => {
   return (
     <AxiosInterceptorContext.Provider>
-      <AxiosInterceptorContext.Interceptor
-        authenticatedDomanis={sampleAuthenticatedDomains}
-      >
+      <AxiosInterceptorContext.Interceptor authenticatedDomanis={sampleAuthenticatedDomains}>
         <Router>
           <DappProvider
             environment={ELROND_NETWORK}
@@ -36,8 +25,7 @@ export const App = () => {
             }}
             dappConfig={{
               shouldUseWebViewProvider: true,
-            }}
-          >
+            }}>
             <Layout>
               <AxiosInterceptorContext.Listener />
               <TransactionsToastList />
@@ -46,13 +34,12 @@ export const App = () => {
               <Routes>
                 <Route path={routeNames.unlock} element={<Unlock />} />
                 {routes.map((route, index) => (
-                  <Route
-                    path={route.path}
-                    key={"route-key-" + index}
-                    element={<route.component />}
-                  />
+                  <Route path={route.path} key={"route-key-" + index} element={<route.component />} />
                 ))}
+
                 <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
+                <Route path={`${routeNames.multiversxbubbles}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxBubbles />} />
+
                 <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>

@@ -20,6 +20,9 @@ $card-inner-border-radius: subtract($card-border-radius, 1px);
 $headings-font-weight: 300 !important;
 $a: #1392ff;
 
+$orangeB: #ffce00;
+$blueMx: #3066ff;
+
 /* Do not move the imports from here.
 Override Bootstrap variables only above.
 -------------------------------------------------- */
@@ -59,9 +62,7 @@ body {
   $teal50: #e6fffa;
   $teal100: #b2f5ea;
   $teal200: #00c797;
-  $blueMx: #3066ff;
   $orangeA: #ff7201;
-  $orangeB: #ffce00;
   $mxDefiWalBG: #242527;
 
   /* redefine theme colors for dark theme */
@@ -168,14 +169,6 @@ body {
     color: $orangeA;
   }
 
-  a.address-link {
-    color: $orangeB;
-
-    .hover {
-      color: $teal100 !important;
-    }
-  }
-
   .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(255, 255, 255, 0.05);
   }
@@ -224,8 +217,7 @@ body {
     background-color: #343a40 !important;
   }
 
-  .dapp-core-component__addressTableStyles__ledger-address-table-navigation
-    button {
+  .dapp-core-component__addressTableStyles__ledger-address-table-navigation button {
     color: #fff !important;
   }
 
@@ -244,8 +236,7 @@ body {
 }
 
 .selected {
-  box-shadow: 0px 0px 2px #b2f5ea, 0px 0px 4px #b2f5ea, 0px 0px 8px #b2f5ea,
-    0px 0px 12px #b2f5ea;
+  box-shadow: 0px 0px 2px #b2f5ea, 0px 0px 4px #b2f5ea, 0px 0px 8px #b2f5ea, 0px 0px 12px #b2f5ea;
 }
 
 /* Base
@@ -336,6 +327,13 @@ html {
 
 /* Home
 -------------------------------------------------- */
+.c-app-tile {
+  .card-text {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+}
+
 .dark .c-app-market-title,
 .c-app-market-title {
   font-size: 3rem;
@@ -414,13 +412,6 @@ html {
   }
 }
 
-/* Actions
--------------------------------------------------- */
-
-.not-allwed {
-  cursor: not-allowed;
-}
-
 /* Loader, Transaction success/Fail
 -------------------------------------------------- */
 .page-state {
@@ -484,6 +475,50 @@ html {
   }
 }
 
+/* Unlock
+-------------------------------------------------- */
+.c-unlock {
+  .login-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* My Listed
+-------------------------------------------------- */
+.c-my-listed {
+  .count-title {
+    font-size: 1.5rem;
+  }
+
+  .no-items {
+    font-size: 1.5rem;
+  }
+}
+
+/* My Wallet
+-------------------------------------------------- */
+.c-my-wallet {
+  .count-title {
+    font-size: 1.5rem;
+  }
+
+  .no-items {
+    font-size: 1.5rem;
+
+    .address-link {
+      color: $blueMx;
+    }
+  }
+}
+
+.dark .c-my-wallet {
+  .no-items {
+    .address-link {
+      color: $orangeB;
+    }
+  }
+}
+
 /* Footer
 -------------------------------------------------- */
 footer {
@@ -522,8 +557,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .font-title {
@@ -532,6 +566,7 @@ code {
 
 .data-nft-image {
   max-width: 90%;
+  margin: auto;
 }
 
 .data-app-image {
@@ -561,7 +596,6 @@ code {
 .zoom-reset {
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  // margin-top: 5rem !important;
   top: 2rem;
   left: 0;
   transform: translateY(-50%);
@@ -626,6 +660,16 @@ code {
   }
 
   .footer {
+  }
+
+  .app-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .nfts-unlocks {
+    font-size: 1.5rem;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
   }
 }
 
@@ -762,6 +806,7 @@ code {
 .dark .modal-body::-webkit-scrollbar-track {
   background: #374151; /* Set the background color of the scroll track */
 }
+
 .dark .modal-body::-webkit-scrollbar-thumb {
   background: #888; /* Set the color of the scroll thumb */
   border-radius: 20px;
@@ -769,4 +814,12 @@ code {
 
 .dark .modal-body {
   scrollbar-color: #374151 #888;
+}
+
+/* Light vs Dark mode overides so they align
+-------------------------------------------------- */
+@media screen and (min-width: 1280px) {
+  .container {
+    max-width: 1140px !important;
+  }
 }
