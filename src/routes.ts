@@ -2,16 +2,7 @@ import { dAppName } from "config";
 import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
-import {
-  CantinaCorner,
-  GamerPassportGamer,
-  PlayStationGamer,
-  Dashboard,
-  Home,
-  MyListed,
-  MyWallet,
-  EsdtBubble,
-} from "./pages";
+import { CantinaCorner, GamerPassportGamer, PlayStationGamer, Dashboard, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles } from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -24,6 +15,7 @@ export const routeNames = {
   playstationgamerpassport: "/gamer-passport",
   itheumtrailblazer: "/project-trailblazer",
   esdtBubble: "/esdt-bubbles",
+  multiversxbubbles: "/multiversx-bubbles",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -84,12 +76,16 @@ export const routes: RouteWithTitleType[] = [
     component: EsdtBubble,
     authenticatedRoute: false,
   },
+  {
+    path: routeNames.multiversxbubbles,
+    title: "MultiversX Bubbles",
+    component: MultiversxBubbles,
+    authenticatedRoute: false,
+  },
 ];
 
 export const mappedRoutes = routes.map((route) => {
-  const title = route.title
-    ? `${route.title} • MultiversX ${dAppName}`
-    : `MultiversX ${dAppName}`;
+  const title = route.title ? `${route.title} • MultiversX ${dAppName}` : `MultiversX ${dAppName}`;
 
   const requiresAuth = Boolean(route.authenticatedRoute);
   const wrappedComponent = withPageTitle(title, route.component);

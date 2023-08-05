@@ -34,40 +34,20 @@ const UnlockPage = () => {
   };
 
   return (
-    <div className="home d-flex flex-fill align-items-center">
+    <div className="home d-flex flex-fill align-items-center c-unlock">
       <div className="m-auto" data-testid="unlockPage">
         <div className="card my-4 text-center">
           <div className="card-body py-5 px-2 px-sm-2 mx-lg-4">
-            <h4 className="mb-4 font-title font-weight-bold">Login</h4>
+            <h4 className="mb-4 font-title font-weight-bold login-title">Login</h4>
 
-            <div
-              className="d-flex flex-column"
-              style={{ minWidth: "20rem", gap: "1rem" }}
-            >
-              <WalletConnectLoginButton
-                loginButtonText="xPortal App"
-                {...commonProps}
-                {...(walletConnectV2ProjectId ? { isWalletConnectV2: true }: {})}
-              />
-              <ExtensionLoginButton
-                loginButtonText="Browser Wallet"
-                {...commonProps}
-              />
+            <div className="d-flex flex-column" style={{ minWidth: "20rem", gap: "1rem" }}>
+              <WalletConnectLoginButton loginButtonText="xPortal App" {...commonProps} {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})} />
+              <ExtensionLoginButton loginButtonText="Browser Wallet" {...commonProps} />
 
-              <OperaWalletLoginButton
-                loginButtonText="Opera Crypto Wallet"
-                {...commonProps}
-              />
+              <OperaWalletLoginButton loginButtonText="Opera Crypto Wallet" {...commonProps} />
 
-              <WebWalletLoginButton
-                loginButtonText="Web Wallet"
-                {...commonProps}
-              />
-              <LedgerLoginButton
-                loginButtonText="Ledger"
-                className="test-class_name"
-                {...commonProps}
-              />
+              <WebWalletLoginButton loginButtonText="Web Wallet" {...commonProps} />
+              <LedgerLoginButton loginButtonText="Ledger" className="test-class_name" {...commonProps} />
             </div>
           </div>
         </div>
