@@ -16,6 +16,7 @@ import { BlobDataType } from "libs/types";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import { routeNames } from "routes";
+import toast from "react-hot-toast";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -71,7 +72,29 @@ export const MyWallet = () => {
 
   async function viewNormalData(index: number) {
     if (isWebWallet) {
-      toastError("Web Wallet is not supported on this page.");
+      toast.error(
+        <div>
+          Web Wallet is yet to be supported as an option to <b>View Data</b> on this page (it's coming very soon). In the meantime: <br />
+          <br />
+          <div>
+            1) You can use Web Wallet to <b>View Data</b> in <b>Itheum Explorer</b> by using a custom app in the <b>App Marketplace</b> section by{" "}
+            <a href="/" target="_blank">
+              heading here
+            </a>
+          </div>
+          <br />
+          <div>
+            2) Or head over to the <b>Data DEX</b> at{" "}
+            <a href="https://datadex.itheum.io" target="_blank">
+              datadex.itheum.io
+            </a>
+            , login, and then navigate to the <b>Wallet</b> section to view and open your Data NFTs.
+          </div>
+        </div>,
+        {
+          position: "top-right",
+        }
+      );
       return;
     }
     if (!(index >= 0 && index < dataNfts.length)) {
@@ -262,7 +285,7 @@ export const MyWallet = () => {
       {isTrailBlazer || targetNonce ? (
         <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={true} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
       ) : (
-        <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
+        <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
           <div style={{ height: "3rem" }}>
             <div
               style={{
