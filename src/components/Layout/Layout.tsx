@@ -13,15 +13,19 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="d-flex flex-column flex-fill wrapper">
       <Navbar />
       <main className="d-flex flex-column flex-grow-1">
-        <AuthenticatedRoutesWrapper
-          routes={routes}
-          unlockRoute={`${routeNames.unlock}${search}`}
-        >
+        <AuthenticatedRoutesWrapper routes={routes} unlockRoute={`${routeNames.unlock}${search}`}>
           {children}
         </AuthenticatedRoutesWrapper>
       </main>
       <Footer />
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          // Default options for specific types
+          error: {
+            duration: 30000,
+          },
+        }}
+      />
     </div>
   );
 };
