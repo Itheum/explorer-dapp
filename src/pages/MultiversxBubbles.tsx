@@ -16,7 +16,7 @@ import { MULTIVERSX_BUBBLE_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { BlobDataType } from "libs/types";
-import { modalStyles } from "libs/ui";
+import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
 import { routeNames } from "routes";
 
@@ -200,6 +200,15 @@ export const MultiversxBubbles = () => {
     }
   }
 
+  function preProcess(code: any) {
+    // let newCode = code.replace(/fill=".*?"/g, 'fill="red"');
+    let newCode = code.replace(/height="1080pt"/, 'height="100%"');
+    newCode = newCode.replace(/width="1080pt"/, 'width="100%"');
+    newCode = newCode.replace(/<a/g, '<a xlink:show="new"'); // makes all link open in new tab
+
+    return newCode;
+  }
+
   if (isLoading) {
     return <Loader />;
   }
@@ -230,7 +239,7 @@ export const MultiversxBubbles = () => {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
+      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -243,7 +252,7 @@ export const MultiversxBubbles = () => {
           </div>
         </div>
         <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">View Data</h4>
+          <h4 className="text-center font-title font-weight-bold">MultiversX Bubbles</h4>
         </ModalHeader>
         <ModalBody
           style={{
@@ -289,7 +298,7 @@ export const MultiversxBubbles = () => {
                     <audio controls autoPlay src={viewDataRes.data} />
                   </div>
                 ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                  <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                  <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
                 ) : (
                   <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
                     {viewDataRes.data}

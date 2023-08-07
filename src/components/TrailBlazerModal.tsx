@@ -230,7 +230,7 @@ export const TrailBlazerModal = ({
   }
 
   return (
-    <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={customStyles} ariaHideApp={false}>
+    <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={customStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
       <div style={{ height: "3rem" }}>
         <div
           style={{
@@ -243,7 +243,7 @@ export const TrailBlazerModal = ({
         </div>
       </div>
       <ModalHeader>
-        <h4 className="text-center font-title font-weight-bold">Itheum Trailblazer</h4>
+        <h4 className="text-center font-title font-weight-bold">Trailblazer</h4>
       </ModalHeader>
       <ModalBody>
         {!owned ? (
