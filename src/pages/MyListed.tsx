@@ -4,11 +4,7 @@ import { Address } from "@multiversx/sdk-core/out";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { ElrondAddressLink, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
-import {
-  useGetAccount,
-  useGetNetworkConfig,
-  useGetPendingTransactions,
-} from "hooks";
+import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
 import { dataNftMarket } from "libs/mvx";
 import { convertToLocalString } from "libs/utils";
 import { createNftId } from "libs/utils/token";
@@ -29,14 +25,10 @@ export const MyListed = () => {
   async function fetchMyListed() {
     setIsLoading(true);
 
-    const _totalOfferCount = await dataNftMarket.viewAddressTotalOffers(
-      new Address(address)
-    );
+    const _totalOfferCount = await dataNftMarket.viewAddressTotalOffers(new Address(address));
     setOfferCount(_totalOfferCount);
 
-    const _offers = await dataNftMarket.viewAddressListedOffers(
-      new Address(address)
-    );
+    const _offers = await dataNftMarket.viewAddressListedOffers(new Address(address));
     console.log("_offers", _offers);
     setOffers(_offers);
 
@@ -46,9 +38,7 @@ export const MyListed = () => {
   async function fetchDataNfts() {
     setIsNftLoading(true);
 
-    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(
-      offers.map((offer) => offer.offeredTokenNonce)
-    );
+    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(offers.map((offer) => offer.offeredTokenNonce));
     console.log("_dataNfts", _dataNfts);
     setDataNfts(_dataNfts);
 
@@ -57,6 +47,7 @@ export const MyListed = () => {
 
   useEffect(() => {
     if (!address || hasPendingTransactions) return;
+
     fetchMyListed();
   }, [address, hasPendingTransactions]);
 
@@ -69,55 +60,36 @@ export const MyListed = () => {
   }
 
   return (
-    <div className="d-flex flex-fill justify-content-center container py-4">
+    <div className="d-flex flex-fill justify-content-center container py-4 c-my-listed">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          {offerCount > 0 && (
-            <h4 className="mt-5 text-center">My Listed Offers: {offerCount}</h4>
-          )}
+          {offerCount > 0 && <h4 className="mt-5 text-center count-title">My Listed Offers: {offerCount}</h4>}
 
           <div className="row mt-5">
             {offers.length > 0 ? (
               offers.map((offer, index) => {
-                const isDataNftLoaded =
-                  !isNftLoading && dataNfts.length > index;
-                const nftId = createNftId(
-                  offer.offeredTokenIdentifier,
-                  offer.offeredTokenNonce
-                );
+                const isDataNftLoaded = !isNftLoading && dataNfts.length > index;
+                const nftId = createNftId(offer.offeredTokenIdentifier, offer.offeredTokenNonce);
 
                 return (
-                  <div
-                    className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-nft-tile"
-                    key={`o-c-${index}`}
-                  >
+                  <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-nft-tile" key={`o-c-${index}`}>
                     <div className="card shadow-sm border">
                       <div className="card-body p-3">
                         <div className="mb-4">
                           <img
-                            src={
-                              isDataNftLoaded
-                                ? dataNfts[index].nftImgUrl
-                                : "https://media.elrond.com/nfts/thumbnail/default.png"
-                            }
+                            src={isDataNftLoaded ? dataNfts[index].nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"}
                             className="data-nft-image"
                           />
                         </div>
 
                         <div className="mb-1">
-                          <h5 className="text-center text-info">
-                            Offer Detail
-                          </h5>
+                          <h5 className="text-center text-info">Offer Detail</h5>
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Identifier:</span>
                           <span className="col-8 c-identifier-link">
                             <span>{nftId}</span>
-                            <a
-                              href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`}
-                              className="ml-2 address-link text-decoration-none"
-                              target="_blank"
-                            >
+                            <a href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`} className="ml-2 address-link text-decoration-none" target="_blank">
                               <FaExternalLinkAlt />
                             </a>
                           </span>
@@ -137,60 +109,36 @@ export const MyListed = () => {
                         </div> */}
 
                         <div className="mt-4 mb-1">
-                          <h5 className="text-center text-info">
-                            Data NFT Detail
-                          </h5>
+                          <h5 className="text-center text-info">Data NFT Detail</h5>
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Title:</span>
-                          <span className="col-8">
-                            {isDataNftLoaded && dataNfts[index].title}
-                          </span>
+                          <span className="col-8">{isDataNftLoaded && dataNfts[index].title}</span>
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Description:</span>
                           <span className="col-8">
                             {isDataNftLoaded &&
-                              (dataNfts[index].description.length > 20
-                                ? dataNfts[index].description.slice(0, 20) +
-                                  " ..."
-                                : dataNfts[index].description)}
+                              (dataNfts[index].description.length > 20 ? dataNfts[index].description.slice(0, 20) + " ..." : dataNfts[index].description)}
                           </span>
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Creator:</span>
                           <span className="col-8 cs-creator-link">
-                            {isDataNftLoaded && (
-                              <ElrondAddressLink
-                                explorerAddress={explorerAddress}
-                                address={dataNfts[index].creator}
-                                precision={6}
-                              />
-                            )}
+                            {isDataNftLoaded && <ElrondAddressLink explorerAddress={explorerAddress} address={dataNfts[index].creator} precision={6} />}
                           </span>
                         </div>
                         <div className="mb-1 row">
                           <span className="col-4 opacity-6">Created At:</span>
-                          <span className="col-8">
-                            {isDataNftLoaded &&
-                              dataNfts[index].creationTime.toLocaleString()}
-                          </span>
+                          <span className="col-8">{isDataNftLoaded && dataNfts[index].creationTime.toLocaleString()}</span>
                         </div>
                         <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Total Supply:</span>
-                          <span className="col-8">
-                            {isDataNftLoaded && dataNfts[index].supply}
-                          </span>
+                          <span className="col-5 opacity-6">Total Supply:</span>
+                          <span className="col-7">{isDataNftLoaded && dataNfts[index].supply}</span>
                         </div>
                         <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Royalties:</span>
-                          <span className="col-8">
-                            {isDataNftLoaded &&
-                              `${convertToLocalString(
-                                dataNfts[index].royalties * 100,
-                                2
-                              )}%`}
-                          </span>
+                          <span className="col-5 opacity-6">Royalties:</span>
+                          <span className="col-7">{isDataNftLoaded && `${convertToLocalString(dataNfts[index].royalties * 100, 2)}%`}</span>
                         </div>
                       </div>
                     </div>
@@ -198,9 +146,7 @@ export const MyListed = () => {
                 );
               })
             ) : (
-              <h4 className="text-center text-white">
-                You do not have any listed Data NFTs offers.
-              </h4>
+              <h4 className="no-items">You do not have any listed Data NFTs offers.</h4>
             )}
           </div>
         </div>
