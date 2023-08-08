@@ -37,9 +37,8 @@ export const MyListed = () => {
 
   async function fetchDataNfts() {
     setIsNftLoading(true);
-
-    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(offers.map((offer) => offer.offeredTokenNonce));
-    console.log("_dataNfts", _dataNfts);
+    const nonces: number[] = offers.map((offer) => offer.offeredTokenNonce);
+    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(nonces);
     setDataNfts(_dataNfts);
 
     setIsNftLoading(false);
@@ -52,6 +51,8 @@ export const MyListed = () => {
   }, [address, hasPendingTransactions]);
 
   useEffect(() => {
+    if (!offers.length) return;
+
     fetchDataNfts();
   }, [offers]);
 
