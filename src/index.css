@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Satoshi-Regular';
+    src: url(./assets/fonts/Satoshi-Light.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Clash-Regular';
+    src: url(./assets/fonts/ClashDisplay-Regular.woff2) format('woff2');
+}
+
+body {
+    @apply font-satoshi font-semibold !important;
+}
+
+h1, h2, h3 {
+    @apply font-clash font-bold !important;
+}
+
+h4, h5, h6 {
+    @apply font-clash font-semibold !important;
+}
+
+.filter::placeholder {
+    font-size: 14px;
+    font-weight: 600;
+}

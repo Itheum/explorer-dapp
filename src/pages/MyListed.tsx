@@ -52,6 +52,9 @@ export const MyListed = () => {
   }, [address, hasPendingTransactions]);
 
   useEffect(() => {
+    if (!offers.length) {
+      return;
+    }
     fetchDataNfts();
   }, [offers]);
 
