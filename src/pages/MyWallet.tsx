@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
+import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
@@ -16,7 +18,6 @@ import { BlobDataType } from "libs/types";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import { routeNames } from "routes";
-import toast from "react-hot-toast";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -30,6 +31,7 @@ export const MyWallet = () => {
   const navigate = useNavigate();
   const isWebWallet = loginMethod == "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
+  const lastSignedMessageSession = useGetLastSignedMessageSession();
 
   const [dataNftCount, setDataNftCount] = useState<number>(0);
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -111,13 +113,12 @@ export const MyWallet = () => {
     console.log("messageToBeSigned", messageToBeSigned);
     const signedMessage = await signMessage({ message: messageToBeSigned });
     console.log("signedMessage", signedMessage);
-    const sm = new SignableMessage({
-      address: new Address(address),
-      message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
-      signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
-    });
+    if (!signedMessage) {
+      toastError("Wallet signing failed.");
+      return;
+    }
 
-    const res = await dataNft.viewData(messageToBeSigned, sm, true);
+    const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true);
     console.log("viewData", res);
 
     let blobDataType = BlobDataType.TEXT;
@@ -175,13 +176,12 @@ export const MyWallet = () => {
         callbackRoute: isWebWallet ? callbackRoute : undefined,
       });
       if (isWebWallet) return;
-      const sm = new SignableMessage({
-        address: new Address(address),
-        message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
-        signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
-      });
+      if (!signedMessage) {
+        toastError("Wallet signing failed.");
+        return;
+      }
 
-      const res = await dataNft.viewData(messageToBeSigned, sm);
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
 
@@ -204,7 +204,7 @@ export const MyWallet = () => {
       openModal();
 
       const dataNft = await DataNft.createFromApi(nonce);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any as SignableMessage);
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
 
@@ -223,14 +223,14 @@ export const MyWallet = () => {
   }
 
   useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned) {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession) {
       (async () => {
         console.log("Sign", {
           isWebWallet,
           targetNonce,
           targetMessageToBeSigned,
         });
-        const signature = getMessageSignatureFromWalletUrl();
+        const signature = lastSignedMessageSession.signature ?? '';
         const signedMessage = new SignableMessage({
           address: new Address(address),
           message: Buffer.from(targetMessageToBeSigned, "ascii"),
