@@ -1,15 +1,15 @@
 import React, { useState } from "react";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { ModalBody, ModalHeader } from "react-bootstrap";
+import { createPortal } from "react-dom";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { Loader } from "components";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { IFrameModal } from "./iFrameModal";
 import TwModal from "./Modal/TwModal";
-import { createPortal } from "react-dom";
 
 const customStyles = {
   overlay: {
@@ -158,7 +158,7 @@ export const TrailBlazerModal = ({
                   <tbody>
                     {normalizeLeaderboardData(dataItem.link).tableData.map((rowData: any, idx: number) => {
                       return (
-                        <tr>
+                        <tr key={++idx}>
                           <th scope="row">{++idx}</th>
                           <td>{rowData.leaderAddress}</td>
                           <td>{rowData.points}</td>

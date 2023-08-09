@@ -17,13 +17,8 @@ const HomePage = () => {
           <h3 className="c-app-market-title">App Marketplace</h3>
 
           <div className="row mt-3">
-            {APP_MAPPINGS.filter((app) =>
-              SUPPORTED_APPS.includes(app.routeKey)
-            ).map((item) => (
-              <div
-                key={item.routeKey}
-                className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-app-tile"
-              >
+            {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
+              <div key={item.routeKey} className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-app-tile">
                 <div className="card shadow-sm border">
                   <div className="card-body p-3">
                     <div className="mb-4">
@@ -31,10 +26,7 @@ const HomePage = () => {
                     </div>
                     <h5 className="card-title">{item.appName}</h5>
                     <p className="card-text">{item.desc}</p>
-                    <Link
-                      to={returnRoute(item.routeKey)}
-                      className="btn btn-primary"
-                    >
+                    <Link to={returnRoute(item.routeKey)} className="btn btn-primary">
                       Launch App
                     </Link>
                   </div>
