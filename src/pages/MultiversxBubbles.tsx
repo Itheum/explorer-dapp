@@ -30,6 +30,7 @@ export const MultiversxBubbles = () => {
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { signMessage } = useSignMessage();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
+  console.log('lastSignedMessageSession', lastSignedMessageSession);
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -55,7 +56,7 @@ export const MultiversxBubbles = () => {
   }, [isLoading, address]);
 
   useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession) {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession && lastSignedMessageSession.status == 'signed') {
       (async () => {
         console.log("Sign", {
           isWebWallet,
@@ -72,7 +73,7 @@ export const MultiversxBubbles = () => {
         await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
       })();
     }
-  }, [isWebWallet, targetNonce]);
+  }, [isWebWallet, targetNonce, lastSignedMessageSession]);
 
   function openModal() {
     setIsModalOpened(true);

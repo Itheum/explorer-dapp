@@ -188,7 +188,7 @@ export const MyWallet = () => {
       console.log("viewData", res);
       console.log(JSON.stringify(res.data, null, 4));
 
-      setData(res.data.data.reverse());
+      setData(res.data && res.data.data ? res.data.data.reverse() : undefined);
       setIsFetchingDataMarshal(false);
     } catch (err) {
       console.error(err);
@@ -211,7 +211,7 @@ export const MyWallet = () => {
       console.log("viewData", res);
       console.log(JSON.stringify(res.data, null, 4));
 
-      setData(res.data.data.reverse());
+      setData(res.data.data);
       setIsFetchingDataMarshal(false);
 
       if (isWebWallet) {
