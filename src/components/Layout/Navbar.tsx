@@ -87,11 +87,14 @@ export const Navbar = () => {
                 </NavItem>
               </>
             ) : (
-              <NavItem>
-                <Link to={routeNames.unlock} className="nav-link" state={{ from: location.pathname }}>
-                  Login
-                </Link>
-              </NavItem>
+              <>
+                <div style={{ width: "1rem" }}></div>
+                <NavItem>
+                  <Link to={routeNames.unlock} className="btn btn-primary" state={{ from: location.pathname }}>
+                    Login
+                  </Link>
+                </NavItem>
+              </>
             )}
 
             <div className="c-theme-switcher">
