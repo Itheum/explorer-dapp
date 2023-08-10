@@ -30,7 +30,7 @@ export const MultiversxBubbles = () => {
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { signMessage } = useSignMessage();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
-  console.log('lastSignedMessageSession', lastSignedMessageSession);
+  console.log("lastSignedMessageSession", lastSignedMessageSession);
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -56,14 +56,14 @@ export const MultiversxBubbles = () => {
   }, [isLoading, address]);
 
   useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession && lastSignedMessageSession.status == 'signed') {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession && lastSignedMessageSession.status == "signed") {
       (async () => {
         console.log("Sign", {
           isWebWallet,
           targetNonce,
           targetMessageToBeSigned,
         });
-        const signature = lastSignedMessageSession.signature ?? '';
+        const signature = lastSignedMessageSession.signature ?? "";
         const signedMessage = new SignableMessage({
           address: new Address(address),
           message: Buffer.from(targetMessageToBeSigned, "ascii"),

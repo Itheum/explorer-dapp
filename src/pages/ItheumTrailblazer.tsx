@@ -4,6 +4,7 @@ import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import * as DOMPurify from "dompurify";
 import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
@@ -51,7 +52,7 @@ export const ItheumTrailblazer = () => {
           targetNonce,
           targetMessageToBeSigned,
         });
-        const signature = lastSignedMessageSession.signature ?? '';
+        const signature = lastSignedMessageSession.signature ?? "";
         const signedMessage = new SignableMessage({
           address: new Address(address),
           message: Buffer.from(targetMessageToBeSigned, "ascii"),
@@ -122,7 +123,7 @@ export const ItheumTrailblazer = () => {
         }
 
         const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-        res.data = await (res.data as Blob).text();
+        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         res.data = JSON.parse(res.data);
 
         setData(res.data.data.reverse());
@@ -146,7 +147,7 @@ export const ItheumTrailblazer = () => {
 
       const dataNft = await DataNft.createFromApi(nonce);
       const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-      res.data = await (res.data as Blob).text();
+      res.data = DOMPurify.sanitize(await (res.data as Blob).text());
       res.data = JSON.parse(res.data);
 
       setData(res.data.data.reverse());

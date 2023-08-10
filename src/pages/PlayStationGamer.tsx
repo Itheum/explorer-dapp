@@ -3,6 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import * as DOMPurify from "dompurify";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
@@ -26,8 +27,7 @@ export const PlayStationGamer = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
-  const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
-    useState<boolean>(true);
+  const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
 
   const [data, setData] = useState<any>();
@@ -45,9 +45,7 @@ export const PlayStationGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      PLAYSTATION_GAMER_PASSPORT_NONCES
-    );
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES);
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
@@ -103,11 +101,8 @@ export const PlayStationGamer = () => {
         return;
       }
 
-      const res = await dataNft.viewData(
-        messageToBeSigned,
-        signedMessage as any
-      );
-      res.data = await (res.data as Blob).text();
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
+      res.data = DOMPurify.sanitize(await (res.data as Blob).text());
       res.data = JSON.parse(res.data);
       // console.log('viewData', res);
       setDataMarshalRes(JSON.stringify(res.data, null, 4));
@@ -127,20 +122,17 @@ export const PlayStationGamer = () => {
   const fixData = (rawData: any) => {
     console.log("rawData", rawData);
 
-    const titleAndTrophies = rawData.trophy_titles.reduce(
-      (total: any, item: any) => {
-        if (!total[item.name]) {
-          total[item.name] = {};
-        }
+    const titleAndTrophies = rawData.trophy_titles.reduce((total: any, item: any) => {
+      if (!total[item.name]) {
+        total[item.name] = {};
+      }
 
-        total[item.name].trophies = {
-          ...item,
-        };
+      total[item.name].trophies = {
+        ...item,
+      };
 
-        return total;
-      },
-      {}
-    );
+      return total;
+    }, {});
 
     rawData.title_stats.forEach((title: any) => {
       if (!titleAndTrophies[title.name]) {
@@ -301,21 +293,12 @@ export const PlayStationGamer = () => {
       <div className="row w-100">
         <div className="col-12 mx-auto">
           <h3 className="mt-5 text-center">PlayStation Gamer Passport</h3>
-          <h4 className="mt-2 text-center">
-            Data NFTs that Unlock this App: {ccDataNfts.length}
-          </h4>
+          <h4 className="mt-2 text-center">Data NFTs that Unlock this App: {ccDataNfts.length}</h4>
 
           <div className="row mt-5">
             {ccDataNfts.length > 0 ? (
               ccDataNfts.map((dataNft, index) => (
-                <DataNftCard
-                  key={index}
-                  index={index}
-                  dataNft={dataNft}
-                  isLoading={isLoading}
-                  owned={flags[index]}
-                  viewData={viewData}
-                />
+                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
               ))
             ) : (
               <h3 className="text-center text-white">No Data NFTs</h3>
@@ -324,12 +307,7 @@ export const PlayStationGamer = () => {
         </div>
       </div>
 
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        style={modalStyles}
-        ariaHideApp={false}
-      >
+      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -337,27 +315,19 @@ export const PlayStationGamer = () => {
               cursor: "pointer",
               fontSize: "2rem",
             }}
-            onClick={closeModal}
-          >
+            onClick={closeModal}>
             <IoClose />
           </div>
         </div>
         <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">
-            PlayStation Gamer Passport
-          </h4>
+          <h4 className="text-center font-title font-weight-bold">PlayStation Gamer Passport</h4>
         </ModalHeader>
         <ModalBody>
           {!owned ? (
             <div className="d-flex flex-column align-items-center justify-content-center">
-              <img
-                src={imgBlurChart}
-                style={{ width: "90%", height: "auto" }}
-              />
+              <img src={imgBlurChart} style={{ width: "90%", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>
-                (Buy the Data NFT from the marketplace to unlock the data)
-              </h6>
+              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
             <div
@@ -367,14 +337,11 @@ export const PlayStationGamer = () => {
                 maxWidth: "100%",
                 minHeight: "40rem",
                 maxHeight: "80vh",
-              }}
-            >
+              }}>
               <div>
                 <Loader noText />
                 <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
-                    ? "Please sign the message using xPortal or Ledger"
-                    : "Loading..."}
+                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
                 </p>
               </div>
             </div>
@@ -386,12 +353,8 @@ export const PlayStationGamer = () => {
                 minHeight: "36rem",
                 maxHeight: "60vh",
                 overflowY: "auto",
-              }}
-            >
-              <PlaystationGamerInsights
-                gamerId={"userId"}
-                gamerData={activeGamerData}
-              />
+              }}>
+              <PlaystationGamerInsights gamerId={"userId"} gamerData={activeGamerData} />
             </div>
           )}
         </ModalBody>

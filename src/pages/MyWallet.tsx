@@ -3,6 +3,7 @@ import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
+import * as DOMPurify from "dompurify";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import toast from "react-hot-toast";
@@ -126,7 +127,7 @@ export const MyWallet = () => {
       if (res.contentType.search("image") >= 0) {
         if (res.contentType == "image/svg+xml") {
           blobDataType = BlobDataType.SVG;
-          res.data = await (res.data as Blob).text();
+          res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         } else {
           blobDataType = BlobDataType.IMAGE;
           res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
@@ -135,7 +136,7 @@ export const MyWallet = () => {
         res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         blobDataType = BlobDataType.AUDIO;
       } else {
-        res.data = await (res.data as Blob).text();
+        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         res.data = JSON.stringify(JSON.parse(res.data), null, 4);
       }
     } else {
@@ -182,7 +183,7 @@ export const MyWallet = () => {
       }
 
       const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-      res.data = await (res.data as Blob).text();
+      res.data = DOMPurify.sanitize(await (res.data as Blob).text());
       res.data = JSON.parse(res.data);
 
       console.log("viewData", res);
@@ -205,7 +206,7 @@ export const MyWallet = () => {
 
       const dataNft = await DataNft.createFromApi(nonce);
       const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-      res.data = await (res.data as Blob).text();
+      res.data = DOMPurify.sanitize(await (res.data as Blob).text());
       res.data = JSON.parse(res.data);
 
       console.log("viewData", res);
@@ -230,7 +231,7 @@ export const MyWallet = () => {
           targetNonce,
           targetMessageToBeSigned,
         });
-        const signature = lastSignedMessageSession.signature ?? '';
+        const signature = lastSignedMessageSession.signature ?? "";
         const signedMessage = new SignableMessage({
           address: new Address(address),
           message: Buffer.from(targetMessageToBeSigned, "ascii"),
