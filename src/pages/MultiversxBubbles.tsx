@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -14,7 +15,6 @@ import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_BUBBLE_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
@@ -29,6 +29,9 @@ export const MultiversxBubbles = () => {
   const { loginMethod } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { signMessage } = useSignMessage();
+  const lastSignedMessageSession = useGetLastSignedMessageSession();
+  console.log('lastSignedMessageSession', lastSignedMessageSession);
+
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,14 +56,14 @@ export const MultiversxBubbles = () => {
   }, [isLoading, address]);
 
   useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned) {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession && lastSignedMessageSession.status == 'signed') {
       (async () => {
         console.log("Sign", {
           isWebWallet,
           targetNonce,
           targetMessageToBeSigned,
         });
-        const signature = getMessageSignatureFromWalletUrl();
+        const signature = lastSignedMessageSession.signature ?? '';
         const signedMessage = new SignableMessage({
           address: new Address(address),
           message: Buffer.from(targetMessageToBeSigned, "ascii"),
@@ -70,7 +73,7 @@ export const MultiversxBubbles = () => {
         await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
       })();
     }
-  }, [isWebWallet, targetNonce]);
+  }, [isWebWallet, targetNonce, lastSignedMessageSession]);
 
   function openModal() {
     setIsModalOpened(true);
@@ -126,14 +129,12 @@ export const MultiversxBubbles = () => {
         });
 
         if (isWebWallet) return;
+        if (!signedMessage) {
+          toastError("Wallet signing failed.");
+          return;
+        }
 
-        const sm = new SignableMessage({
-          address: new Address(address),
-          message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
-          signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
-        });
-
-        const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, sm);
+        const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage as any);
 
         setViewDataRes(viewDataPayload);
         setIsFetchingDataMarshal(false);
@@ -149,7 +150,7 @@ export const MultiversxBubbles = () => {
   }
 
   async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
-    const res = await dataNft.viewData(messageToBeSigned, signedMessage, true);
+    const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true);
 
     let blobDataType = BlobDataType.TEXT;
 
@@ -187,7 +188,7 @@ export const MultiversxBubbles = () => {
       openModal();
 
       const dataNft = await DataNft.createFromApi(nonce);
-      const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage as any as SignableMessage);
+      const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage);
 
       setViewDataRes(viewDataPayload);
       setIsFetchingDataMarshal(false);
