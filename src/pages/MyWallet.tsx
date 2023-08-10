@@ -10,10 +10,9 @@ import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
 import { useNavigate, useParams } from "react-router-dom";
-import { DataNftCard, Loader, TrailBlazerModal } from "components";
-import { TRAILBLAZER_NONCES, MARKETPLACE_DETAILS_PAGE } from "config";
+import { DataNftCard, Loader } from "components";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions, useSignMessage } from "hooks";
-import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { BlobDataType } from "libs/types";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
@@ -32,6 +31,8 @@ export const MyWallet = () => {
   const isWebWallet = loginMethod == "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
+  console.log('targetNonce', targetNonce);
+  console.log('lastSignedMessageSession', lastSignedMessageSession);
 
   const [dataNftCount, setDataNftCount] = useState<number>(0);
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -41,8 +42,6 @@ export const MyWallet = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   console.log("viewDataRes", viewDataRes);
   const [data, setData] = useState<any>();
-  const [isTrailBlazer, setIsTrailBlazer] = useState<boolean>(false);
-  console.log("isTrailBlazer", isTrailBlazer);
 
   const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
@@ -52,7 +51,6 @@ export const MyWallet = () => {
     setIsModalOpenend(false);
     setData(undefined);
     setViewDataRes(undefined);
-    setIsTrailBlazer(false);
   }
 
   async function fetchData() {
@@ -72,33 +70,53 @@ export const MyWallet = () => {
     }
   }, [hasPendingTransactions]);
 
-  async function viewNormalData(index: number) {
-    if (isWebWallet) {
-      toast.error(
-        <div>
-          Web Wallet is yet to be supported as an option to <b>View Data</b> on this page (it's coming very soon). In the meantime: <br />
-          <br />
-          <div>
-            1) You can use Web Wallet to <b>View Data</b> in <b>Itheum Explorer</b> by using a custom app in the <b>App Marketplace</b> section by{" "}
-            <a href="/" target="_blank">
-              heading here
-            </a>
-          </div>
-          <br />
-          <div>
-            2) Or head over to the <b>Data DEX</b> at{" "}
-            <a href="https://datadex.itheum.io" target="_blank">
-              datadex.itheum.io
-            </a>
-            , login, and then navigate to the <b>Wallet</b> section to view and open your Data NFTs.
-          </div>
-        </div>,
-        {
-          position: "top-right",
-        }
-      );
-      return;
+  useEffect(() => {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession && lastSignedMessageSession.status == 'signed') {
+      (async () => {
+        console.log("Sign", {
+          isWebWallet,
+          targetNonce,
+          targetMessageToBeSigned,
+        });
+        const signature = lastSignedMessageSession.signature ?? '';
+        const signedMessage = new SignableMessage({
+          address: new Address(address),
+          message: Buffer.from(targetMessageToBeSigned, "ascii"),
+          signature: Buffer.from(signature, "hex"),
+          signer: loginMethod,
+        });
+        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
+      })();
     }
+  }, [isWebWallet, targetNonce, lastSignedMessageSession]);
+
+  async function viewNormalData(index: number) {
+    // if (isWebWallet) {
+    //   toast.error(
+    //     <div>
+    //       Web Wallet is yet to be supported as an option to <b>View Data</b> on this page (it's coming very soon). In the meantime: <br />
+    //       <br />
+    //       <div>
+    //         1) You can use Web Wallet to <b>View Data</b> in <b>Itheum Explorer</b> by using a custom app in the <b>App Marketplace</b> section by{" "}
+    //         <a href="/" target="_blank">
+    //           heading here
+    //         </a>
+    //       </div>
+    //       <br />
+    //       <div>
+    //         2) Or head over to the <b>Data DEX</b> at{" "}
+    //         <a href="https://datadex.itheum.io" target="_blank">
+    //           datadex.itheum.io
+    //         </a>
+    //         , login, and then navigate to the <b>Wallet</b> section to view and open your Data NFTs.
+    //       </div>
+    //     </div>,
+    //     {
+    //       position: "top-right",
+    //     }
+    //   );
+    //   return;
+    // }
     if (!(index >= 0 && index < dataNfts.length)) {
       toastError("Data is not loaded");
       return;
@@ -110,18 +128,28 @@ export const MyWallet = () => {
 
     const dataNft = dataNfts[index];
     const messageToBeSigned = await dataNft.getMessageToSign();
-    console.log("messageToBeSigned", messageToBeSigned);
-    const signedMessage = await signMessage({ message: messageToBeSigned });
-    console.log("signedMessage", signedMessage);
+    const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
+    const signedMessage = await signMessage({
+      message: messageToBeSigned,
+      callbackRoute: isWebWallet ? callbackRoute : undefined,
+    });
+
+    if (isWebWallet) return;
     if (!signedMessage) {
       toastError("Wallet signing failed.");
       return;
     }
 
+    const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage as any);
+    setViewDataRes(viewDataPayload);
+    setIsFetchingDataMarshal(false);
+  }
+
+  async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
     const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true);
-    console.log("viewData", res);
 
     let blobDataType = BlobDataType.TEXT;
+
     if (!res.error) {
       if (res.contentType.search("image") >= 0) {
         if (res.contentType == "image/svg+xml") {
@@ -143,59 +171,10 @@ export const MyWallet = () => {
       toastError(res.error);
     }
 
-    setViewDataRes({
+    return {
       ...res,
       blobDataType,
-    });
-
-    setIsFetchingDataMarshal(false);
-  }
-
-  async function viewTrailBlazerData(index: number) {
-    console.log("viewTrailBlazerData");
-    try {
-      if (!(index >= 0 && index < dataNfts.length)) {
-        toastError("Data is not loaded");
-        return;
-      }
-
-      setIsFetchingDataMarshal(true);
-      setIsTrailBlazer(true);
-      openModal();
-
-      const dataNft = dataNfts[index];
-
-      const messageToBeSigned = await dataNft.getMessageToSign();
-      console.log("messageToBeSigned", messageToBeSigned);
-
-      // const signedMessage = await signMessage({ message: messageToBeSigned });
-      // console.log("signedMessage", signedMessage);
-      const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
-      const signedMessage = await signMessage({
-        message: messageToBeSigned,
-        callbackRoute: isWebWallet ? callbackRoute : undefined,
-      });
-      if (isWebWallet) return;
-      if (!signedMessage) {
-        toastError("Wallet signing failed.");
-        return;
-      }
-
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-      res.data = await (res.data as Blob).text();
-      res.data = JSON.parse(res.data);
-
-      console.log("viewData", res);
-      console.log(JSON.stringify(res.data, null, 4));
-
-      setData(res.data && res.data.data ? res.data.data.reverse() : undefined);
-      setIsFetchingDataMarshal(false);
-    } catch (err) {
-      console.error(err);
-      toastError((err as Error).message);
-      closeModal();
-      setIsFetchingDataMarshal(false);
-    }
+    };
   }
 
   async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
@@ -204,14 +183,9 @@ export const MyWallet = () => {
       openModal();
 
       const dataNft = await DataNft.createFromApi(nonce);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-      res.data = await (res.data as Blob).text();
-      res.data = JSON.parse(res.data);
+      const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage);
 
-      console.log("viewData", res);
-      console.log(JSON.stringify(res.data, null, 4));
-
-      setData(res.data.data);
+      setViewDataRes(viewDataPayload);
       setIsFetchingDataMarshal(false);
 
       if (isWebWallet) {
@@ -221,28 +195,6 @@ export const MyWallet = () => {
       console.error(err);
     }
   }
-
-  useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession) {
-      (async () => {
-        console.log("Sign", {
-          isWebWallet,
-          targetNonce,
-          targetMessageToBeSigned,
-        });
-        const signature = lastSignedMessageSession.signature ?? '';
-        const signedMessage = new SignableMessage({
-          address: new Address(address),
-          message: Buffer.from(targetMessageToBeSigned, "ascii"),
-          signature: Buffer.from(signature, "hex"),
-          signer: loginMethod,
-        });
-
-        setIsTrailBlazer(true);
-        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
-      })();
-    }
-  }, [isWebWallet, targetNonce]);
 
   if (isLoading) {
     return <Loader />;
@@ -263,7 +215,7 @@ export const MyWallet = () => {
                   dataNft={dataNft}
                   isLoading={isLoading}
                   owned={true}
-                  viewData={TRAILBLAZER_NONCES.indexOf(dataNft.nonce) >= 0 ? viewTrailBlazerData : viewNormalData}
+                  viewData={viewNormalData}
                   isWallet={true}
                   showBalance={true}
                 />
@@ -282,67 +234,63 @@ export const MyWallet = () => {
         </div>
       </div>
 
-      {isTrailBlazer || targetNonce ? (
-        <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={true} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
-      ) : (
-        <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
-          <div style={{ height: "3rem" }}>
-            <div
-              style={{
-                float: "right",
-                cursor: "pointer",
-                fontSize: "2rem",
-              }}
-              onClick={closeModal}>
-              <IoClose />
-            </div>
-          </div>
-          <ModalHeader>
-            <h4 className="text-center font-title font-weight-bold">File Viewer</h4>
-          </ModalHeader>
-          <ModalBody
+      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
+        <div style={{ height: "3rem" }}>
+          <div
             style={{
-              minWidth: "26rem",
-              minHeight: "36rem",
-              maxHeight: "80vh",
-              overflowY: "auto",
-            }}>
-            {isFetchingDataMarshal ? (
-              <div
-                className="d-flex flex-column align-items-center justify-content-center"
-                style={{
-                  minWidth: "24rem",
-                  maxWidth: "100% !important",
-                  minHeight: "40rem",
-                  maxHeight: "80vh",
-                }}>
-                <div>
-                  <Loader noText />
-                  <p className="text-center font-weight-bold">
-                    {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              viewDataRes &&
-              !viewDataRes.error &&
-              (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-              ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-                <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
-                  <audio controls autoPlay src={viewDataRes.data} />
-                </div>
-              ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-              ) : (
-                <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                  {viewDataRes.data}
+              float: "right",
+              cursor: "pointer",
+              fontSize: "2rem",
+            }}
+            onClick={closeModal}>
+            <IoClose />
+          </div>
+        </div>
+        <ModalHeader>
+          <h4 className="text-center font-title font-weight-bold">File Viewer</h4>
+        </ModalHeader>
+        <ModalBody
+          style={{
+            minWidth: "26rem",
+            minHeight: "36rem",
+            maxHeight: "80vh",
+            overflowY: "auto",
+          }}>
+          {isFetchingDataMarshal ? (
+            <div
+              className="d-flex flex-column align-items-center justify-content-center"
+              style={{
+                minWidth: "24rem",
+                maxWidth: "100% !important",
+                minHeight: "40rem",
+                maxHeight: "80vh",
+              }}>
+              <div>
+                <Loader noText />
+                <p className="text-center font-weight-bold">
+                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
                 </p>
-              ))
-            )}
-          </ModalBody>
-        </Modal>
-      )}
+              </div>
+            </div>
+          ) : (
+            viewDataRes &&
+            !viewDataRes.error &&
+            (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+              <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+            ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
+              <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
+                <audio controls autoPlay src={viewDataRes.data} />
+              </div>
+            ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+              <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+            ) : (
+              <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                {viewDataRes.data}
+              </p>
+            ))
+          )}
+        </ModalBody>
+      </Modal>
     </div>
   );
 };
