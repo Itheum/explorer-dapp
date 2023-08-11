@@ -3,6 +3,7 @@ import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
+import { useGetSignMessageInfoStatus } from '@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus';
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import toast from "react-hot-toast";
@@ -17,6 +18,7 @@ import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { BlobDataType } from "libs/types";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
+import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -31,6 +33,7 @@ export const MyWallet = () => {
   const navigate = useNavigate();
   const isWebWallet = loginMethod == "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
+  const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
 
   const [dataNftCount, setDataNftCount] = useState<number>(0);
@@ -220,40 +223,48 @@ export const MyWallet = () => {
   }
 
   useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession) {
-      (async () => {
-        try {
+    const asyncFnc = async () => {
+      await sleep(1); //temporary solution until we find out racing condition
+      try {
+        let signature = "";
+
+        if (lastSignedMessageSession && lastSignedMessageSession.status == 'signed' && lastSignedMessageSession.signature) {
+          signature = lastSignedMessageSession.signature;
+        } else {
           let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
           signSessions = JSON.parse(signSessions.signedSessions);
-          console.log('signSessions', signSessions);
-          let signature = "";
+          console.log("signSessions", signSessions);
+          
+          // find the first 'signed' session
           for (const session of Object.values(signSessions) as any[]) {
-            if (session.status && session.status == 'signed' && session.signature) {
+            if (session.status && session.status == "signed" && session.signature) {
               signature = session.signature;
+              break;
             }
           }
-          sessionStorage.removeItem('persist:sdk-dapp-signedMessageInfo');
-          if (isWebWallet) {
-            navigate(routeNames.mywallet);
-          }
-
-          if (!signature) {
-            throw Error ("Signature is empty");
-          }
-
-          const signedMessage = new SignableMessage({
-            address: new Address(address),
-            message: Buffer.from(targetMessageToBeSigned, "ascii"),
-            signature: Buffer.from(signature, "hex"),
-            signer: loginMethod,
-          });
-          await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
-        } catch (e) {
-          console.error(e);
         }
-      })();
+        
+        if (!signature) {
+          throw Error("Signature is empty");
+        }
+
+        const signedMessage = new SignableMessage({
+          address: new Address(address),
+          message: Buffer.from(targetMessageToBeSigned || "", "ascii"),
+          signature: Buffer.from(signature, "hex"),
+          signer: loginMethod,
+        });
+        await processSignature(Number(targetNonce), targetMessageToBeSigned || "", signedMessage);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        navigate(routeNames.mywallet);
+      }
+    };
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && !isSignMessagePending) {
+      asyncFnc();
     }
-  }, [isWebWallet, lastSignedMessageSession]);
+  }, [isWebWallet, isSignMessagePending]);
 
   if (isLoading) {
     return <Loader />;
