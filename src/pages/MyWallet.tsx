@@ -4,6 +4,7 @@ import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
 import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
+import * as DOMPurify from "dompurify";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import toast from "react-hot-toast";
@@ -113,7 +114,7 @@ export const MyWallet = () => {
       if (res.contentType.search("image") >= 0) {
         if (res.contentType == "image/svg+xml") {
           blobDataType = BlobDataType.SVG;
-          res.data = await (res.data as Blob).text();
+          res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         } else {
           blobDataType = BlobDataType.IMAGE;
           res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
@@ -121,14 +122,16 @@ export const MyWallet = () => {
       } else if (res.contentType.search("audio") >= 0) {
         res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         blobDataType = BlobDataType.AUDIO;
-      } else if (res.contentType.search("application/pdf") >= 0) {
-        const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-        res.data = "PDF opened in new tab";
-        blobDataType = BlobDataType.PDF;
-        window.open(pdfObject, "_blank");
-        closeModal();
-      } else {
-        res.data = await (res.data as Blob).text();
+      }
+      //  else if (res.contentType.search("application/pdf") >= 0) {
+      //   const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+      //   res.data = "PDF opened in new tab";
+      //   blobDataType = BlobDataType.PDF;
+      //   window.open(pdfObject, "_blank");
+      //   closeModal();
+      // }
+      else {
+        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         res.data = JSON.stringify(JSON.parse(res.data), null, 4);
       }
     } else {
