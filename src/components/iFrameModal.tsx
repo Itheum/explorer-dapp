@@ -17,7 +17,6 @@ export const IFrameModal: React.FC<Props> = (props: any) => {
     <>
       <div className="bg-white p-8 rounded shadow-lg" onClick={handleModalClick}>
         <iframe title="Modal Content" src={link} className="w-full h-[85dvh]" onClick={handleIframeClick} />
-        Testing
       </div>
     </>
   );
