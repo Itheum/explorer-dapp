@@ -34,8 +34,8 @@ export const MyWallet = () => {
   const { targetNonce, targetMessageToBeSigned } = useParams();
   const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
-  console.log('isSignMessagePending', isSignMessagePending);
-  console.log('lastSignedMessageSession', lastSignedMessageSession);
+  console.log("isSignMessagePending", isSignMessagePending);
+  console.log("lastSignedMessageSession", lastSignedMessageSession);
 
   const [dataNftCount, setDataNftCount] = useState<number>(0);
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -85,7 +85,7 @@ export const MyWallet = () => {
 
     const dataNft = dataNfts[index];
     const messageToBeSigned = await dataNft.getMessageToSign();
-    
+
     const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
     const signedMessage = await signMessage({
       message: messageToBeSigned,
@@ -121,6 +121,12 @@ export const MyWallet = () => {
       } else if (res.contentType.search("audio") >= 0) {
         res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         blobDataType = BlobDataType.AUDIO;
+      } else if (res.contentType.search("application/pdf") >= 0) {
+        const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        res.data = "PDF opened in new tab";
+        blobDataType = BlobDataType.PDF;
+        window.open(pdfObject, "_blank");
+        closeModal();
       } else {
         res.data = await (res.data as Blob).text();
         res.data = JSON.stringify(JSON.parse(res.data), null, 4);
