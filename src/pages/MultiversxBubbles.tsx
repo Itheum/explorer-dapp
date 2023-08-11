@@ -69,6 +69,9 @@ export const MultiversxBubbles = () => {
             }
           }
           sessionStorage.removeItem('persist:sdk-dapp-signedMessageInfo');
+          if (isWebWallet) {
+            navigate(routeNames.multiversxbubbles);
+          }
           
           if (!signature) {
             throw Error ("Signature is empty");
@@ -209,10 +212,6 @@ export const MultiversxBubbles = () => {
 
       setViewDataRes(viewDataPayload);
       setIsFetchingDataMarshal(false);
-
-      if (isWebWallet) {
-        navigate(routeNames.multiversxbubbles);
-      }
     } catch (err) {
       console.error(err);
     }

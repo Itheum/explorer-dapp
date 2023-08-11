@@ -214,10 +214,6 @@ export const MyWallet = () => {
 
       setData(res.data.data);
       setIsFetchingDataMarshal(false);
-
-      if (isWebWallet) {
-        navigate(routeNames.mywallet);
-      }
     } catch (err) {
       console.error(err);
     }
@@ -237,6 +233,9 @@ export const MyWallet = () => {
             }
           }
           sessionStorage.removeItem('persist:sdk-dapp-signedMessageInfo');
+          if (isWebWallet) {
+            navigate(routeNames.mywallet);
+          }
 
           if (!signature) {
             throw Error ("Signature is empty");

@@ -58,6 +58,9 @@ export const ItheumTrailblazer = () => {
             }
           }
           sessionStorage.removeItem('persist:sdk-dapp-signedMessageInfo');
+          if (isWebWallet) {
+            navigate(routeNames.itheumtrailblazer);
+          }
           
           if (!signature) {
             throw Error ("Signature is empty");
@@ -169,10 +172,6 @@ export const ItheumTrailblazer = () => {
 
       setData(res.data.data.reverse());
       setIsFetchingDataMarshal(false);
-
-      if (isWebWallet) {
-        navigate(routeNames.itheumtrailblazer);
-      }
     } catch (err) {
       console.error(err);
     }
