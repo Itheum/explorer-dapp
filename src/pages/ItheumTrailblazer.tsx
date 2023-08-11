@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
 import { TRAILBLAZER_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { getMessageSignatureFromWalletUrl } from "libs/mvx";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { routeNames } from "routes";
@@ -21,6 +21,8 @@ export const ItheumTrailblazer = () => {
   const navigate = useNavigate();
   const isWebWallet = loginMethod == "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
+  const lastSignedMessageSession = useGetLastSignedMessageSession();
+
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,14 +44,14 @@ export const ItheumTrailblazer = () => {
   }, [isLoading, address]);
 
   useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned) {
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession) {
       (async () => {
         console.log("Sign", {
           isWebWallet,
           targetNonce,
           targetMessageToBeSigned,
         });
-        const signature = getMessageSignatureFromWalletUrl();
+        const signature = lastSignedMessageSession.signature ?? '';
         const signedMessage = new SignableMessage({
           address: new Address(address),
           message: Buffer.from(targetMessageToBeSigned, "ascii"),
@@ -114,14 +116,12 @@ export const ItheumTrailblazer = () => {
         });
 
         if (isWebWallet) return;
+        if (!signedMessage) {
+          toastError("Wallet signing failed.");
+          return;
+        }
 
-        const sm = new SignableMessage({
-          address: new Address(address),
-          message: Buffer.from(signedMessage.payload.signedSession.message, "ascii"),
-          signature: Buffer.from(signedMessage.payload.signedSession.signature, "hex"),
-        });
-
-        const res = await dataNft.viewData(messageToBeSigned, sm);
+        const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
 
@@ -145,7 +145,7 @@ export const ItheumTrailblazer = () => {
       openModal();
 
       const dataNft = await DataNft.createFromApi(nonce);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any as SignableMessage);
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
 

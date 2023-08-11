@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
@@ -19,6 +19,7 @@ export const PlayStationGamer = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { loginMethod } = useGetLoginInfo();
+  const { signMessage } = useSignMessage();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -97,9 +98,14 @@ export const PlayStationGamer = () => {
       // console.log('messageToBeSigned', messageToBeSigned);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       // console.log('signedMessage', signedMessage);
+      if (!signedMessage) {
+        toastError("Wallet signing failed.");
+        return;
+      }
+
       const res = await dataNft.viewData(
         messageToBeSigned,
-        signedMessage as any as SignableMessage
+        signedMessage as any
       );
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);

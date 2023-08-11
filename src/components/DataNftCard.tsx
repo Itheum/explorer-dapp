@@ -40,24 +40,24 @@ export function DataNftCard({
           </div>
 
           <div className="mb-1 row">
-            <span className="col-4 opacity-6">Title:</span>
+            <span className="col-4 opacity-6 fontsize-sm">Title:</span>
             <span className="col-8">{dataNft.title}</span>
           </div>
           <div className="mb-1 row">
-            <span className="col-4 opacity-6">Description:</span>
+            <span className="col-4 opacity-6 fontsize-sm">Description:</span>
             <span className="col-8">{dataNft.description.length > 20 ? dataNft.description.slice(0, 20) + " ..." : dataNft.description}</span>
           </div>
           <div className="mb-1 row">
-            <span className="col-4 opacity-6">Creator:</span>
+            <span className="col-4 opacity-6 fontsize-sm">Creator:</span>
             <span className="col-8 cs-creator-link">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
           </div>
           <div className="mb-1 row">
-            <span className="col-4 opacity-6">Created At:</span>
+            <span className="col-4 opacity-6 fontsize-sm">Created At:</span>
             <span className="col-8">{dataNft.creationTime.toLocaleString()}</span>
           </div>
 
           <div className="mb-1 row">
-            <span className="col-4 opacity-6">Identifier:</span>
+            <span className="col-4 opacity-6 fontsize-sm">Identifier:</span>
             <span className="col-8 c-identifier-link">
               <span>{dataNft.tokenIdentifier}</span>
               <a href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`} className="ml-2 address-link text-decoration-none" target="_blank">
@@ -67,17 +67,17 @@ export function DataNftCard({
           </div>
           {showBalance && (
             <div className="mb-1 row">
-              <span className="col-5 opacity-6">Balance:</span>
-              <span className="col-7">{dataNft.balance}</span>
+              <span className="col-4 opacity-6 fontsize-sm">Balance:</span>
+              <span className="col-8">{dataNft.balance}</span>
             </div>
           )}
           <div className="mb-1 row">
-            <span className="col-5 opacity-6">Total Supply:</span>
-            <span className="col-7">{dataNft.supply}</span>
+            <span className="col-4 opacity-6 fontsize-sm">Total Supply:</span>
+            <span className="col-8">{dataNft.supply}</span>
           </div>
           <div className="mb-1 row">
-            <span className="col-5 opacity-6">Royalties:</span>
-            <span className="col-7">{convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
+            <span className="col-4 opacity-6 fontsize-sm">Royalties:</span>
+            <span className="col-8">{convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
           </div>
 
           <div className="c-actions">
