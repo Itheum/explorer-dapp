@@ -43,25 +43,39 @@ export const ItheumTrailblazer = () => {
     }
   }, [isLoading, address]);
 
+  console.log({isWebWallet , targetNonce, targetMessageToBeSigned, lastSignedMessageSession});
   useEffect(() => {
     if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession) {
       (async () => {
-        console.log("Sign", {
-          isWebWallet,
-          targetNonce,
-          targetMessageToBeSigned,
-        });
-        const signature = lastSignedMessageSession.signature ?? '';
-        const signedMessage = new SignableMessage({
-          address: new Address(address),
-          message: Buffer.from(targetMessageToBeSigned, "ascii"),
-          signature: Buffer.from(signature, "hex"),
-          signer: loginMethod,
-        });
-        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
+        try {
+          let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
+          signSessions = JSON.parse(signSessions.signedSessions);
+          console.log('signSessions', signSessions);
+          let signature = "";
+          for (const session of Object.values(signSessions) as any[]) {
+            if (session.status && session.status == 'signed' && session.signature) {
+              signature = session.signature;
+            }
+          }
+          sessionStorage.removeItem('persist:sdk-dapp-signedMessageInfo');
+          
+          if (!signature) {
+            throw Error ("Signature is empty");
+          }
+
+          const signedMessage = new SignableMessage({
+            address: new Address(address),
+            message: Buffer.from(targetMessageToBeSigned, "ascii"),
+            signature: Buffer.from(signature, "hex"),
+            signer: loginMethod,
+          });
+          await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
+        } catch (e) {
+          console.error(e);
+        }
       })();
     }
-  }, [isWebWallet, targetNonce]);
+  }, [isWebWallet, lastSignedMessageSession]);
 
   function openModal() {
     setIsModalOpened(true);
@@ -109,6 +123,10 @@ export const ItheumTrailblazer = () => {
         const dataNft = itDataNfts[index];
 
         const messageToBeSigned = await dataNft.getMessageToSign();
+
+        if (isWebWallet) {
+          sessionStorage.removeItem('persist:sdk-dapp-signedMessageInfo');
+        }
         const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
         const signedMessage = await signMessage({
           message: messageToBeSigned,
