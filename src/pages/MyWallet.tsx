@@ -3,7 +3,7 @@ import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
-import { useGetSignMessageInfoStatus } from '@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus';
+import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import toast from "react-hot-toast";
@@ -45,7 +45,6 @@ export const MyWallet = () => {
   console.log("viewDataRes", viewDataRes);
   const [data, setData] = useState<any>();
   const [isTrailBlazer, setIsTrailBlazer] = useState<boolean>(false);
-  console.log("isTrailBlazer", isTrailBlazer);
 
   const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
   function openModal() {
@@ -172,7 +171,7 @@ export const MyWallet = () => {
       console.log("messageToBeSigned", messageToBeSigned);
 
       if (isWebWallet) {
-        sessionStorage.removeItem('persist:sdk-dapp-signedMessageInfo');
+        sessionStorage.removeItem("persist:sdk-dapp-signedMessageInfo");
       }
       const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
       const signedMessage = await signMessage({
@@ -228,13 +227,13 @@ export const MyWallet = () => {
       try {
         let signature = "";
 
-        if (lastSignedMessageSession && lastSignedMessageSession.status == 'signed' && lastSignedMessageSession.signature) {
+        if (lastSignedMessageSession && lastSignedMessageSession.status == "signed" && lastSignedMessageSession.signature) {
           signature = lastSignedMessageSession.signature;
         } else {
           let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
           signSessions = JSON.parse(signSessions.signedSessions);
           console.log("signSessions", signSessions);
-          
+
           // find the first 'signed' session
           for (const session of Object.values(signSessions) as any[]) {
             if (session.status && session.status == "signed" && session.signature) {
@@ -243,7 +242,7 @@ export const MyWallet = () => {
             }
           }
         }
-        
+
         if (!signature) {
           throw Error("Signature is empty");
         }
@@ -285,7 +284,7 @@ export const MyWallet = () => {
                   dataNft={dataNft}
                   isLoading={isLoading}
                   owned={true}
-                  viewData={TRAILBLAZER_NONCES.indexOf(dataNft.nonce) >= 0 ? viewTrailBlazerData : viewNormalData}
+                  viewData={viewNormalData}
                   isWallet={true}
                   showBalance={true}
                 />
