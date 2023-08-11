@@ -17,7 +17,10 @@
     "axios": "0.24.0",
     "bootstrap": "4.6.2",
     "chartjs-plugin-zoom": "2.0.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
     "d3": "7.8.5",
+    "lucide-react": "^0.265.0",
     "moment": "2.29.4",
     "moment-timezone": "0.5.43",
     "react": "18.2.0",
@@ -33,6 +36,8 @@
     "react-tooltip": "5.11.1",
     "react-vertical-timeline-component": "3.6.0",
     "styled-components": "5.3.11",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.6",
     "web-vitals": "1.0.1"
   },
   "scripts": {
