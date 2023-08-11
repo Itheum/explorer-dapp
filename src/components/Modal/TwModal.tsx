@@ -8,7 +8,7 @@ type ModalProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function MyModal(props: ModalProps) {
+export const TwModal = (props: ModalProps) => {
   const { isModalOpen = false, content, setIsModalOpen } = props;
   let [isOpen, setIsOpen] = useState(isModalOpen);
 
@@ -72,4 +72,4 @@ export default function MyModal(props: ModalProps) {
       </Transition>
     </>
   );
-}
+};

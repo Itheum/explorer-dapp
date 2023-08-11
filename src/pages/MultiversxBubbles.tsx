@@ -214,8 +214,8 @@ export const MultiversxBubbles = () => {
   }
 
   return (
-    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
-      <div className="row w-100">
+    <div className="container flex justify-center py-4">
+      <div className="row w-full">
         <div className="col-12 mx-auto">
           <h1 className="app-title">MultiversX Bubbles</h1>
           <div className="hero">
