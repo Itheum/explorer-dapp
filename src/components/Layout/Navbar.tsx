@@ -25,7 +25,7 @@ export const Navbar = () => {
 
   return (
     <BsNavbar className="px-4 py-4" collapseOnSelect>
-      <div className="flex flex-row justify-around w-full items-center">
+      <div className="flex flex-row justify-between w-full items-center 2xl:mx-[19.5rem] xl:mx-[7.5rem] md:mx-[3.5rem]">
         <div className="flex flex-row items-center text-xl">
           <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
             <img src={lightLogo} className="lightLogo" style={{ width: "45px", height: "auto" }} />

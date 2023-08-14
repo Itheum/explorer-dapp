@@ -39,7 +39,7 @@ export function DataNftCard({
             <img className="" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
           </div>
 
-          <div className="h-[260px]">
+          <div className="h-[220px]">
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Title:</span>
               <span className="col-span-8 text-center">{dataNft.title}</span>
@@ -52,7 +52,7 @@ export function DataNftCard({
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Creator:</span>
-              <span className="col-span-8 text-center">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
+              <span className="col-span-8 text-center ">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Created At:</span>
@@ -61,13 +61,14 @@ export function DataNftCard({
 
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Identifier:</span>
-              <span className="col-span-8">
-                <div className="w-full items-center justify-center">
-                  <a href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`} className="flex flex-row items-center text-decoration-none" target="_blank">
-                    <p className="flex flex-row items-center ">{dataNft.tokenIdentifier}</p>
-                  </a>
-                </div>
-              </span>
+              <div className="col-span-8 w-full items-center justify-center">
+                <a
+                  href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
+                  className="flex flex-row items-center text-decoration-none !text-blue-500"
+                  target="_blank">
+                  <p className="flex flex-row items-center ">{dataNft.tokenIdentifier}</p>
+                </a>
+              </div>
             </div>
             {showBalance && (
               <div className="grid grid-cols-12 mb-1">

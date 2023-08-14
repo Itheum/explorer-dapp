@@ -3,13 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { signMessage } from "@multiversx/sdk-dapp/utils/account";
 import BigNumber from "bignumber.js";
-import {
-  Chart as ChartJS,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
@@ -19,18 +13,9 @@ import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
-import {
-  CustomPagination,
-  DataNftCard,
-  ElrondAddressLink,
-  Loader,
-} from "components";
+import { CustomPagination, DataNftCard, ElrondAddressLink, Loader } from "components";
 import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
-import {
-  useGetAccount,
-  useGetNetworkConfig,
-  useGetPendingTransactions,
-} from "hooks";
+import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
@@ -48,9 +33,7 @@ const chartOptions = {
     tooltip: {
       callbacks: {
         label: (ctx: any) => {
-          return `${shortenAddress(
-            ctx.dataset.label
-          )} (${ctx.dataset.percent.toFixed(4)}%)`;
+          return `${shortenAddress(ctx.dataset.label)} (${ctx.dataset.percent.toFixed(4)}%)`;
         },
       },
     },
@@ -79,9 +62,7 @@ const chartOptionsWithZoom = {
     tooltip: {
       callbacks: {
         label: (ctx: any) => {
-          return `${shortenAddress(
-            ctx.dataset.label
-          )} (${ctx.dataset.percent.toFixed(4)}%)`;
+          return `${shortenAddress(ctx.dataset.label)} (${ctx.dataset.percent.toFixed(4)}%)`;
         },
       },
     },
@@ -124,8 +105,7 @@ export const ChartDescription = () => (
             width: "1rem",
             height: "1rem",
             marginRight: "0.25rem",
-          }}
-        >
+          }}>
           <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f00" />
         </svg>
         <span>{"> 1%"}</span>
@@ -137,8 +117,7 @@ export const ChartDescription = () => (
             width: "1rem",
             height: "1rem",
             marginRight: "0.25rem",
-          }}
-        >
+          }}>
           <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#0f0" />
         </svg>
         <span>{"> 0.1%"}</span>
@@ -150,8 +129,7 @@ export const ChartDescription = () => (
             width: "1rem",
             height: "1rem",
             marginRight: "0.25rem",
-          }}
-        >
+          }}>
           <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#00f" />
         </svg>
         <span>{"> 0.01%"}</span>
@@ -163,8 +141,7 @@ export const ChartDescription = () => (
             width: "1rem",
             height: "1rem",
             marginRight: "0.25rem",
-          }}
-        >
+          }}>
           <circle cx=".5rem" cy=".5rem" r=".5rem" fill="#f0f" />
         </svg>
         <span>{"< 0.01%"}</span>
@@ -187,8 +164,7 @@ export const EsdtBubble = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isPendingMessageSigned, setIsPendingMessageSigned] = useState(false);
 
-  const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
-    useState<boolean>(true);
+  const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
 
   const [data, setData] = useState<any>();
@@ -217,9 +193,7 @@ export const EsdtBubble = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      ESDT_BUBBLE_NONCES
-    );
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES);
     console.log("ESDT Bubbles NFTs:", _nfts);
     setDataNfts(_nfts);
 
@@ -272,10 +246,7 @@ export const EsdtBubble = () => {
       const signedMessage = await signMessage({ message: messageToBeSigned });
       setIsPendingMessageSigned(false);
       console.log("signedMessage", signedMessage);
-      const res = await dataNft.viewData(
-        messageToBeSigned,
-        signedMessage as any as SignableMessage
-      );
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any as SignableMessage);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
       console.log("viewData", res);
@@ -318,8 +289,7 @@ export const EsdtBubble = () => {
         // const angle = i < 10 ? 0.5 * i : 0.4 * i;
         const angle = 0.4 * i;
         // const distance = (60 + Math.pow(i * 500, 0.45) * 2);
-        const distance =
-          100 + Math.pow(i * 2000, 0.45) + Math.pow(1.01, i) * 20;
+        const distance = 100 + Math.pow(i * 2000, 0.45) + Math.pow(1.01, i) * 20;
         const pos = pointRadial(angle, distance);
         return {
           label: acc.address,
@@ -343,14 +313,8 @@ export const EsdtBubble = () => {
     if (!chartRef.current) return;
     const items = getDatasetAtEvent(chartRef.current, event);
     if (items.length > 0) {
-      const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0]
-        .datasetIndex;
-      window
-        .open(
-          `${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`,
-          "_blank"
-        )
-        ?.focus();
+      const datasetIndex = getDatasetAtEvent(chartRef.current, event)[0].datasetIndex;
+      window.open(`${MAINNET_EXPLORER_ADDRESS}/accounts/${dataItems[datasetIndex].address}/tokens`, "_blank")?.focus();
     }
   }
 
@@ -366,24 +330,15 @@ export const EsdtBubble = () => {
   }
 
   return (
-    <div className="d-flex flex-fill justify-content-center container py-4">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h4 className="mt-5 text-center">
-            ESDT Bubbles NFTs: {dataNfts.length}
-          </h4>
-
-          <div className="row mt-5">
+    <div className="flex justify-center py-4">
+      <div className="flex flex-col w-full">
+        <h1 className="py-4 mb-0">ESDT Bubbles</h1>
+        <div>
+          <h4 className="my-4 text-center">ESDT Bubbles NFTs: {dataNfts.length}</h4>
+          <div className="flex flex-wrap justify-center md:justify-normal gap-5">
             {dataNfts.length > 0 ? (
               dataNfts.map((dataNft, index) => (
-                <DataNftCard
-                  key={index}
-                  index={index}
-                  dataNft={dataNft}
-                  isLoading={isLoading}
-                  owned={flags[index]}
-                  viewData={viewData}
-                />
+                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
               ))
             ) : (
               <h3 className="text-center text-white">No DataNFT</h3>
@@ -392,12 +347,7 @@ export const EsdtBubble = () => {
         </div>
       </div>
 
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        style={modalStyles}
-        ariaHideApp={false}
-      >
+      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -405,8 +355,7 @@ export const EsdtBubble = () => {
               cursor: "pointer",
               fontSize: "2rem",
             }}
-            onClick={closeModal}
-          >
+            onClick={closeModal}>
             <IoClose />
           </div>
         </div>
@@ -419,8 +368,7 @@ export const EsdtBubble = () => {
             minHeight: "36rem",
             maxHeight: "80vh",
             overflowY: "scroll",
-          }}
-        >
+          }}>
           {!owned ? (
             <div
               className="d-flex flex-column align-items-center justify-content-center"
@@ -429,88 +377,49 @@ export const EsdtBubble = () => {
                 maxWidth: "50vw",
                 minHeight: "40rem",
                 maxHeight: "80vh",
-              }}
-            >
-              <img
-                src={imgBlurChart}
-                style={{ width: "24rem", height: "auto" }}
-              />
+              }}>
+              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>
-                (Buy the Data NFT from the marketplace to unlock the data)
-              </h6>
+              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
             <div
               className="d-flex flex-column align-items-center justify-content-center"
               style={{
                 minHeight: "40rem",
-              }}
-            >
+              }}>
               <div>
                 <Loader noText />
                 <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
-                    ? "Please sign the message using xPortal or Ledger"
-                    : "Loading..."}
+                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
                 </p>
               </div>
             </div>
           ) : (
             <>
-              <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">
-                {selectedDataNft?.title}
-              </h5>
-              <div className="text-center font-title font-weight-bold">
-                (TOP {data.datasets.length} Accounts)
-              </div>
+              <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">{selectedDataNft?.title}</h5>
+              <div className="text-center font-title font-weight-bold">(TOP {data.datasets.length} Accounts)</div>
 
               <ChartDescription />
               <div style={{ position: "relative" }}>
-                <button
-                  className="btn btn-danger ml-1 zoom-reset"
-                  onClick={onClickResetZoom}
-                >
+                <button className="btn btn-danger ml-1 zoom-reset" onClick={onClickResetZoom}>
                   Reset
                 </button>
 
                 <button
-                  className={
-                    chartSelected
-                      ? "btn btn-info ml-2 zoom-reset"
-                      : "btn btn-primary ml-2 zoom-reset"
-                  }
-                  onClick={() => setChartSelected(!chartSelected)}
-                >
+                  className={chartSelected ? "btn btn-info ml-2 zoom-reset" : "btn btn-primary ml-2 zoom-reset"}
+                  onClick={() => setChartSelected(!chartSelected)}>
                   {chartSelected ? "Unfocus" : "Focus"}
                 </button>
 
-                <div
-                  className={
-                    chartSelected
-                      ? "custom-box-border selected"
-                      : "custom-box-border"
-                  }
-                >
-                  <Bubble
-                    options={
-                      chartSelected ? chartOptionsWithZoom : chartOptions
-                    }
-                    data={data}
-                    ref={chartRef}
-                    onClick={onChartClick}
-                  />
+                <div className={chartSelected ? "custom-box-border selected" : "custom-box-border"}>
+                  <Bubble options={chartSelected ? chartOptionsWithZoom : chartOptions} data={data} ref={chartRef} onClick={onChartClick} />
                 </div>
               </div>
               <ChartDescription />
 
               <div>
-                <CustomPagination
-                  pageCount={pageCount}
-                  pageIndex={pageIndex}
-                  pageSize={pageSize}
-                  gotoPage={onGotoPage}
-                />
+                <CustomPagination pageCount={pageCount} pageIndex={pageIndex} pageSize={pageSize} gotoPage={onGotoPage} />
               </div>
               <Table striped responsive className="mt-3">
                 <thead>
@@ -522,41 +431,21 @@ export const EsdtBubble = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataItems
-                    .slice(pageSize * pageIndex, pageSize * (pageIndex + 1))
-                    .map((row: any, index: number) => (
-                      <tr key={`e-b-p-${index}`}>
-                        <td>{pageSize * pageIndex + index + 1}</td>
-                        <td>
-                          {
-                            <FaFileAlt
-                              className="mr-2"
-                              visibility={
-                                new Address(row.address).isContractAddress()
-                                  ? "visible"
-                                  : "hidden"
-                              }
-                            />
-                          }
-                          <ElrondAddressLink
-                            explorerAddress={MAINNET_EXPLORER_ADDRESS}
-                            address={row.address}
-                            precision={9}
-                          />
-                        </td>
-                        <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
-                        <td>{row.percent.toFixed(4)}%</td>
-                      </tr>
-                    ))}
+                  {dataItems.slice(pageSize * pageIndex, pageSize * (pageIndex + 1)).map((row: any, index: number) => (
+                    <tr key={`e-b-p-${index}`}>
+                      <td>{pageSize * pageIndex + index + 1}</td>
+                      <td>
+                        {<FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? "visible" : "hidden"} />}
+                        <ElrondAddressLink explorerAddress={MAINNET_EXPLORER_ADDRESS} address={row.address} precision={9} />
+                      </td>
+                      <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
+                      <td>{row.percent.toFixed(4)}%</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
               <div>
-                <CustomPagination
-                  pageCount={pageCount}
-                  pageIndex={pageIndex}
-                  pageSize={pageSize}
-                  gotoPage={onGotoPage}
-                />
+                <CustomPagination pageCount={pageCount} pageIndex={pageIndex} pageSize={pageSize} gotoPage={onGotoPage} />
               </div>
             </>
           )}

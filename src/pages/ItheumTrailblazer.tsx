@@ -167,14 +167,13 @@ export const ItheumTrailblazer = () => {
   return (
     <div className="flex justify-center py-4">
       <div className="flex flex-col w-full">
-        <h1 className="text-4xl py-4 mb-0">Trailblazer</h1>
-        <div className="">
-          <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
+        <h1 className="py-4 mb-0">Trailblazer</h1>
+        <div className=" border-[0.5px] dark:border-slate-100/30 border-slate-300 rounded-[3rem]">
+          <img className="rounded-[3rem] w-full 2xl:h-[375px]" src={headerHero} alt="itheumTrailblazer" />
         </div>
         <div>
-          <h4 className="my-3 text-center text-2xl">Data NFTs that Unlock this App: {itDataNfts.length}</h4>
-
-          <div className="flex flex-wrap justify-center md:justify-normal gap-5 mt-5">
+          <h4 className="my-4 text-center text-2xl">Data NFTs that Unlock this App: {itDataNfts.length}</h4>
+          <div className="flex flex-wrap justify-center md:justify-normal gap-5 ">
             {itDataNfts.length > 0 ? (
               itDataNfts.map((dataNft, index) => (
                 <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />

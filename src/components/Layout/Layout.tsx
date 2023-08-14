@@ -10,7 +10,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { search } = useLocation();
 
   return (
-    <div className="d-flex flex-column flex-fill wrapper">
+    <div className="flex flex-column flex-fill wrapper">
       <Navbar />
       <main className="flex flex-column flex-grow-1 2xl:mx-[20rem] xl:mx-[8rem] md:mx-[4rem]">
         <AuthenticatedRoutesWrapper routes={routes} unlockRoute={`${routeNames.unlock}${search}`}>
