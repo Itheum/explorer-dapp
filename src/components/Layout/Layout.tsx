@@ -12,7 +12,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="d-flex flex-column flex-fill wrapper">
       <Navbar />
-      <main className="d-flex flex-column flex-grow-1">
+      <main className="flex flex-column flex-grow-1 2xl:mx-[20rem] xl:mx-[8rem] md:mx-[4rem]">
         <AuthenticatedRoutesWrapper routes={routes} unlockRoute={`${routeNames.unlock}${search}`}>
           {children}
         </AuthenticatedRoutesWrapper>

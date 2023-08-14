@@ -7,17 +7,9 @@ interface ElrondAddressLinkPropsType {
   precision?: number;
 }
 
-export const ElrondAddressLink: FC<ElrondAddressLinkPropsType> = ({
-  explorerAddress,
-  address,
-  precision = 6,
-}) => {
+export const ElrondAddressLink: FC<ElrondAddressLinkPropsType> = ({ explorerAddress, address, precision = 6 }) => {
   return (
-    <a
-      className="text-decoration-none address-link"
-      href={`${explorerAddress}/accounts/${address}`}
-      target="_blank"
-    >
+    <a className="text-decoration-none flex flex-row items-center justify-center" href={`${explorerAddress}/accounts/${address}`} target="_blank">
       {precision > 0 ? address.slice(0, precision) + " ... " + address.slice(-precision) : address}
       <FaExternalLinkAlt className="ml-2" />
     </a>

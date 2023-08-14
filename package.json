@@ -13,6 +13,7 @@
     "@multiversx/sdk-core": "12.2.1",
     "@multiversx/sdk-dapp": "2.10.17",
     "@multiversx/sdk-network-providers": "1.4.0",
+    "@radix-ui/react-slot": "^1.0.2",
     "@types/react-modal": "3.16.0",
     "axios": "0.24.0",
     "bootstrap": "4.6.2",

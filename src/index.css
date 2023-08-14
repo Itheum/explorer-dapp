@@ -1,27 +1,23 @@
+@import "assets/satoshi.css";
+@import "assets/clashDisplay.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: 'Satoshi-Regular';
-    src: url(./assets/fonts/Satoshi-Light.woff2) format('woff2');
-}
-
-@font-face {
-    font-family: 'Clash-Regular';
-    src: url(./assets/fonts/ClashDisplay-Regular.woff2) format('woff2');
-}
-
 body {
-    @apply font-satoshi font-semibold !important;
+    @apply font-[Satoshi-Medium] !important;
 }
 
-h1, h2, h3 {
-    @apply font-clash font-bold !important;
+h1, h2 {
+    @apply font-[Clash-Medium] text-4xl !important;
 }
 
-h4, h5, h6 {
-    @apply font-clash font-semibold !important;
+h3, h4 {
+    @apply font-[Clash-Regular] text-2xl !important;
+}
+
+h5, h6 {
+    @apply font-[Clash-Regular] text-lg !important;
 }
 
 .filter::placeholder {

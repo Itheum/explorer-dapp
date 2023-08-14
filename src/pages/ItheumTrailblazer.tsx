@@ -165,28 +165,26 @@ export const ItheumTrailblazer = () => {
   }
 
   return (
-    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h1 className="app-title">Trailblazer</h1>
-          <div className="hero">
-            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
-          </div>
-          <div className="body">
-            <h4 className="my-3 text-center nfts-unlocks">Data NFTs that Unlock this App: {itDataNfts.length}</h4>
-
-            <div className="row mt-5">
-              {itDataNfts.length > 0 ? (
-                itDataNfts.map((dataNft, index) => (
-                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-                ))
-              ) : (
-                <h3 className="text-center text-white">No Data NFTs</h3>
-              )}
-            </div>
-          </div>
-          <div className="footer"></div>
+    <div className="flex justify-center py-4">
+      <div className="flex flex-col w-full">
+        <h1 className="text-4xl py-4 mb-0">Trailblazer</h1>
+        <div className="">
+          <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
         </div>
+        <div>
+          <h4 className="my-3 text-center text-2xl">Data NFTs that Unlock this App: {itDataNfts.length}</h4>
+
+          <div className="flex flex-wrap justify-center md:justify-normal gap-5 mt-5">
+            {itDataNfts.length > 0 ? (
+              itDataNfts.map((dataNft, index) => (
+                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+              ))
+            ) : (
+              <h3 className="text-center text-white">No Data NFTs</h3>
+            )}
+          </div>
+        </div>
+        <div className="footer"></div>
       </div>
 
       <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />

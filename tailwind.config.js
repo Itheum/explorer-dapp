@@ -5,11 +5,17 @@ module.exports = {
   darkMode: ["class"],
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    screens: {
+      "base": "0px",
+      "md": "768px",
+      "xl": "1200px",
+      "2xl": "1500px",
+    },
     container: {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1500px",
       },
     },
     extend: {
@@ -55,8 +61,6 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
-        satoshi: ["Satoshi-Regular"],
-        clash: ["Clash-Regular"],
       },
       keyframes: {
         "accordion-down": {
