@@ -42,7 +42,7 @@ const UnlockPage = () => {
 
             <div className="d-flex flex-column" style={{ minWidth: "20rem", gap: "1rem" }}>
               <WalletConnectLoginButton loginButtonText="xPortal App" {...commonProps} {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})} />
-              <ExtensionLoginButton loginButtonText="Browser Wallet" {...commonProps} />
+              <ExtensionLoginButton loginButtonText="Defi Wallet" {...commonProps} />
 
               <OperaWalletLoginButton loginButtonText="Opera Crypto Wallet" {...commonProps} />
 
