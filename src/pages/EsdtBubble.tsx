@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import BigNumber from "bignumber.js";
 import {
   Chart as ChartJS,
@@ -180,6 +180,7 @@ export const EsdtBubble = () => {
   const { address } = useGetAccount();
   const { loginMethod } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
+  const { signMessage } = useSignMessage();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [selectedDataNft, setSelectedDataNft] = useState<DataNft>();
@@ -272,9 +273,14 @@ export const EsdtBubble = () => {
       const signedMessage = await signMessage({ message: messageToBeSigned });
       setIsPendingMessageSigned(false);
       console.log("signedMessage", signedMessage);
+      if (!signedMessage) {
+        toastError("Wallet signing failed.");
+        return;
+      }
+
       const res = await dataNft.viewData(
         messageToBeSigned,
-        signedMessage as any as SignableMessage
+        signedMessage as any
       );
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);

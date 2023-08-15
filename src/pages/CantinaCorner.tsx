@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -109,6 +109,7 @@ export const CantinaCorner = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { loginMethod } = useGetLoginInfo();
+  const { signMessage } = useSignMessage();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -191,9 +192,14 @@ export const CantinaCorner = () => {
       console.log("messageToBeSigned", messageToBeSigned);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       console.log("signedMessage", signedMessage);
+      if (!signedMessage) {
+        toastError("Wallet signing failed.");
+        return;
+      }
+
       const res = await dataNft.viewData(
         messageToBeSigned,
-        signedMessage as any as SignableMessage
+        signedMessage as any
       );
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
