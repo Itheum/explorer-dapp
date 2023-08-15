@@ -29,11 +29,7 @@
       "version": "detect"
     }
   },
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
-  ],
+  "extends": ["plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "prettier"],
   "plugins": ["react-hooks", "prettier", "import"],
   "rules": {
     "import/order": [
