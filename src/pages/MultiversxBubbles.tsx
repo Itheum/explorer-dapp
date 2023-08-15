@@ -3,6 +3,7 @@ import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
+import { useGetSignMessageInfoStatus } from '@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus';
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -18,6 +19,7 @@ import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
+import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -29,6 +31,7 @@ export const MultiversxBubbles = () => {
   const { loginMethod } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { signMessage } = useSignMessage();
+  const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
   console.log('lastSignedMessageSession', lastSignedMessageSession);
 
@@ -56,24 +59,48 @@ export const MultiversxBubbles = () => {
   }, [isLoading, address]);
 
   useEffect(() => {
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && lastSignedMessageSession && lastSignedMessageSession.status == 'signed') {
-      (async () => {
-        console.log("Sign", {
-          isWebWallet,
-          targetNonce,
-          targetMessageToBeSigned,
-        });
-        const signature = lastSignedMessageSession.signature ?? '';
+    const asyncFnc = async () => {
+      await sleep(1); //temporary solution until we find out racing condition
+      try {
+        let signature = "";
+
+        if (lastSignedMessageSession && lastSignedMessageSession.status == 'signed' && lastSignedMessageSession.signature) {
+          signature = lastSignedMessageSession.signature;
+        } else {
+          let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
+          signSessions = JSON.parse(signSessions.signedSessions);
+          console.log("signSessions", signSessions);
+          
+          // find the first 'signed' session
+          for (const session of Object.values(signSessions) as any[]) {
+            if (session.status && session.status == "signed" && session.signature) {
+              signature = session.signature;
+              break;
+            }
+          }
+        }
+        
+        if (!signature) {
+          throw Error("Signature is empty");
+        }
+
         const signedMessage = new SignableMessage({
           address: new Address(address),
-          message: Buffer.from(targetMessageToBeSigned, "ascii"),
+          message: Buffer.from(targetMessageToBeSigned || "", "ascii"),
           signature: Buffer.from(signature, "hex"),
           signer: loginMethod,
         });
-        await processSignature(Number(targetNonce), targetMessageToBeSigned, signedMessage);
-      })();
+        await processSignature(Number(targetNonce), targetMessageToBeSigned || "", signedMessage);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        navigate(routeNames.multiversxbubbles);
+      }
+    };
+    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && !isSignMessagePending) {
+      asyncFnc();
     }
-  }, [isWebWallet, targetNonce, lastSignedMessageSession]);
+  }, [isWebWallet, isSignMessagePending]);
 
   function openModal() {
     setIsModalOpened(true);
@@ -120,8 +147,8 @@ export const MultiversxBubbles = () => {
         openModal();
 
         const dataNft = dataNfts[index];
-
         const messageToBeSigned = await dataNft.getMessageToSign();
+
         const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
         const signedMessage = await signMessage({
           message: messageToBeSigned,
@@ -192,10 +219,6 @@ export const MultiversxBubbles = () => {
 
       setViewDataRes(viewDataPayload);
       setIsFetchingDataMarshal(false);
-
-      if (isWebWallet) {
-        navigate(routeNames.multiversxbubbles);
-      }
     } catch (err) {
       console.error(err);
     }
