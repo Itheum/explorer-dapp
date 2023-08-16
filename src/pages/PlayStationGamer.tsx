@@ -14,6 +14,7 @@ import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import PlaystationGamerInsights from "./PlaystationGamerInsights";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 export const PlayStationGamer = () => {
   const { address } = useGetAccount();
@@ -286,23 +287,14 @@ export const PlayStationGamer = () => {
   console.log("activeGamerData", activeGamerData);
 
   return (
-    <div className="flex justify-center py-4">
-      <div className="flex flex-col w-full">
-        <h1 className="py-4 mb-0">PlayStation Gamer Passport</h1>
-        <div>
-          <h4 className="my-4 text-center">Data NFTs that Unlock this App: {ccDataNfts.length}</h4>
-
-          <div className="flex flex-wrap justify-center md:justify-normal gap-5">
-            {ccDataNfts.length > 0 ? (
-              ccDataNfts.map((dataNft, index) => (
-                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-              ))
-            ) : (
-              <h3 className="text-center text-white">No Data NFTs</h3>
-            )}
-          </div>
-        </div>
-      </div>
+    <HeaderComponent pageTitle={"PlayStation Gamer Passport"} hasImage={false} pageSubtitle={"Data NFTs that Unlock this App"} dataNftCount={ccDataNfts.length}>
+      {ccDataNfts.length > 0 ? (
+        ccDataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No Data NFTs</h3>
+      )}
 
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <div style={{ height: "3rem" }}>
@@ -356,6 +348,6 @@ export const PlayStationGamer = () => {
           )}
         </ModalBody>
       </Modal>
-    </div>
+    </HeaderComponent>
   );
 };

@@ -19,6 +19,7 @@ import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "h
 import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
@@ -330,22 +331,14 @@ export const EsdtBubble = () => {
   }
 
   return (
-    <div className="flex justify-center py-4">
-      <div className="flex flex-col w-full">
-        <h1 className="py-4 mb-0">ESDT Bubbles</h1>
-        <div>
-          <h4 className="my-4 text-center">ESDT Bubbles NFTs: {dataNfts.length}</h4>
-          <div className="flex flex-wrap justify-center md:justify-normal gap-5">
-            {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => (
-                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-              ))
-            ) : (
-              <h3 className="text-center text-white">No DataNFT</h3>
-            )}
-          </div>
-        </div>
-      </div>
+    <HeaderComponent pageTitle={"ESDT Bubbles"} hasImage={false} pageSubtitle={"ESDT Bubbles NFTs"} dataNftCount={dataNfts.length}>
+      {dataNfts.length > 0 ? (
+        dataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No DataNFT</h3>
+      )}
 
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <div style={{ height: "3rem" }}>
@@ -451,6 +444,6 @@ export const EsdtBubble = () => {
           )}
         </ModalBody>
       </Modal>
-    </div>
+    </HeaderComponent>
   );
 };
