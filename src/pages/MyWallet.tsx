@@ -206,12 +206,13 @@ export const MyWallet = () => {
   }
 
   return (
-    <div className="d-flex flex-fill justify-content-center container py-4 c-my-wallet">
-      <div className="row w-100">
+    <div className="flex justify-center py-4">
+      <div className="flex flex-col w-full">
+        <h1 className="py-4 mb-0">My Data NFT's</h1>
         <div className="col-12 mx-auto">
-          {dataNftCount > 0 && <h4 className="mt-5 text-center count-title">My Data NFTs: {dataNftCount}</h4>}
+          {dataNftCount > 0 && <h4 className="my-4 text-center text-2xl">My Data NFTs: {dataNftCount}</h4>}
 
-          <div className="row mt-5">
+          <div className="flex flex-wrap justify-center md:justify-normal gap-5 ">
             {dataNfts.length > 0 ? (
               dataNfts.map((dataNft, index) => (
                 <DataNftCard

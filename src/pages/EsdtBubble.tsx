@@ -242,7 +242,7 @@ export const EsdtBubble = () => {
       setIsPendingMessageSigned(false);
 
       console.log("signedMessage", signedMessage);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any as SignableMessage);
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       if (!signedMessage) {
         toastError("Wallet signing failed.");
         return;

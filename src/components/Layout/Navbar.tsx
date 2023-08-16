@@ -12,8 +12,6 @@ import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
 import { SwitchButton } from "./SwitchButton";
-import darkLogo from "assets/img/logo-sml-d.png";
-import lightLogo from "assets/img/logo-icon-b.png";
 import { Button } from "../../libComponents/Button";
 
 export const Navbar = () => {
@@ -42,7 +40,7 @@ export const Navbar = () => {
             <IoMenu />
           </BsNavbar.Toggle>
           <BsNavbar.Collapse id="responsive-navbar-nav" className="nav-menu-wrap">
-            <Nav className="">
+            <Nav className="flex items-center">
               <NavItem>
                 <Link to={isLoggedIn ? routeNames.home : routeNames.home} className="nav-link">
                   Home
