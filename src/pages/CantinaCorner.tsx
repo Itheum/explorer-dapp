@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from "chart.js";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { Radar } from "react-chartjs-2";
@@ -18,24 +10,13 @@ import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { DataNftCard, ElrondAddressLink, Loader } from "components";
 import { CANTINA_CORNER_NONCES, CC_SHOW_SIZE } from "config";
-import {
-  useGetAccount,
-  useGetNetworkConfig,
-  useGetPendingTransactions,
-} from "hooks";
+import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { toastError } from "libs/utils";
 import { modalStyles } from "libs/ui";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 export const BORDER_COLORS = [
   "#ff6384",
@@ -109,6 +90,7 @@ export const CantinaCorner = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { loginMethod } = useGetLoginInfo();
+  const { signMessage } = useSignMessage();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -116,8 +98,7 @@ export const CantinaCorner = () => {
   const [isNftLoading, setIsNftLoading] = useState(false);
 
   const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
-  const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
-    useState<boolean>(true);
+  const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
 
   const [players, setPlayers] = useState<any[]>([]);
@@ -134,9 +115,7 @@ export const CantinaCorner = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      CANTINA_CORNER_NONCES
-    );
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(CANTINA_CORNER_NONCES);
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
@@ -147,7 +126,6 @@ export const CantinaCorner = () => {
     setIsNftLoading(true);
 
     const _dataNfts = await DataNft.ownedByAddress(address);
-    console.log("myDataNfts", _dataNfts);
 
     const _flags = [];
     for (const cnft of ccDataNfts) {
@@ -191,10 +169,12 @@ export const CantinaCorner = () => {
       console.log("messageToBeSigned", messageToBeSigned);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       console.log("signedMessage", signedMessage);
-      const res = await dataNft.viewData(
-        messageToBeSigned,
-        signedMessage as any as SignableMessage
-      );
+      if (!signedMessage) {
+        toastError("Wallet signing failed.");
+        return;
+      }
+
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
       console.log("viewData", res);
@@ -236,21 +216,12 @@ export const CantinaCorner = () => {
     <div className="d-flex flex-fill justify-content-center container py-4">
       <div className="row w-100">
         <div className="col-12 mx-auto">
-          <h4 className="mt-5 text-center">
-            Cantina Corner NFTs: {ccDataNfts.length}
-          </h4>
+          <h4 className="mt-5 text-center">Cantina Corner NFTs: {ccDataNfts.length}</h4>
 
           <div className="row mt-5">
             {ccDataNfts.length > 0 ? (
               ccDataNfts.map((dataNft, index) => (
-                <DataNftCard
-                  key={index}
-                  index={index}
-                  dataNft={dataNft}
-                  isLoading={isLoading}
-                  owned={flags[index]}
-                  viewData={viewData}
-                />
+                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
               ))
             ) : (
               <h3 className="text-center text-white">No DataNFT</h3>
@@ -259,12 +230,7 @@ export const CantinaCorner = () => {
         </div>
       </div>
 
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        style={modalStyles}
-        ariaHideApp={false}
-      >
+      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -272,8 +238,7 @@ export const CantinaCorner = () => {
               cursor: "pointer",
               fontSize: "2rem",
             }}
-            onClick={closeModal}
-          >
+            onClick={closeModal}>
             <IoClose />
           </div>
         </div>
@@ -289,16 +254,10 @@ export const CantinaCorner = () => {
                 maxWidth: "50vw",
                 minHeight: "40rem",
                 maxHeight: "80vh",
-              }}
-            >
-              <img
-                src={imgBlurChart}
-                style={{ width: "24rem", height: "auto" }}
-              />
+              }}>
+              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>
-                (Buy the Data NFT from the marketplace to unlock the data)
-              </h6>
+              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
             <div
@@ -308,14 +267,11 @@ export const CantinaCorner = () => {
                 maxWidth: "50vw",
                 minHeight: "40rem",
                 maxHeight: "80vh",
-              }}
-            >
+              }}>
               <div>
                 <Loader noText />
                 <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
-                    ? "Please sign the message using xPortal or Ledger"
-                    : "Loading..."}
+                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
                 </p>
               </div>
             </div>
@@ -328,11 +284,8 @@ export const CantinaCorner = () => {
                 maxHeight: "60vh",
                 overflowY: "auto",
                 // backgroundColor: "#f6f8fa",
-              }}
-            >
-              <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">
-                TOP {CC_SHOW_SIZE} Players
-              </h5>
+              }}>
+              <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">TOP {CC_SHOW_SIZE} Players</h5>
               <Radar options={chartOptions} data={data} />
               {/* <p className='p-2' style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>{dataMarshalRes}</p> */}
               <Table striped responsive className="mt-3">
@@ -348,19 +301,17 @@ export const CantinaCorner = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {players
-                    .slice(0, CC_SHOW_SIZE)
-                    .map((player: any, index: number) => (
-                      <tr key={`c-c-p-${index}`}>
-                        <td>{index + 1}</td>
-                        <td>{player.nickname}</td>
-                        <td>{player.rank}</td>
-                        <td>{player.kills}</td>
-                        <td>{player.deaths}</td>
-                        <td>{player.wins}</td>
-                        <td>{player.losses}</td>
-                      </tr>
-                    ))}
+                  {players.slice(0, CC_SHOW_SIZE).map((player: any, index: number) => (
+                    <tr key={`c-c-p-${index}`}>
+                      <td>{index + 1}</td>
+                      <td>{player.nickname}</td>
+                      <td>{player.rank}</td>
+                      <td>{player.kills}</td>
+                      <td>{player.deaths}</td>
+                      <td>{player.wins}</td>
+                      <td>{player.losses}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </div>

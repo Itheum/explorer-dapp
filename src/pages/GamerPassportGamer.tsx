@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
@@ -8,17 +8,10 @@ import Modal from "react-modal";
 import imgBlurChart from "assets/img/blur-chart.png";
 import { DataNftCard, ElrondAddressLink, Loader } from "components";
 import { GAMER_PASSPORT_GAMER_NONCES, MARKETPLACE_DETAILS_PAGE } from "config";
-import {
-  useGetAccount,
-  useGetNetworkConfig,
-  useGetPendingTransactions,
-} from "hooks";
+import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { toastError } from "libs/utils";
-import {
-  onChainDataInsights_LIB,
-  thirdPartyDataInsights_LIB,
-} from "libs/utils/core";
+import { onChainDataInsights_LIB, thirdPartyDataInsights_LIB } from "libs/utils/core";
 import GamerInsights from "./GamerInsights";
 import { modalStyles } from "libs/ui";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
@@ -30,6 +23,7 @@ export const GamerPassportGamer = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { loginMethod } = useGetLoginInfo();
+  const { signMessage } = useSignMessage();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -37,8 +31,7 @@ export const GamerPassportGamer = () => {
   const [isNftLoading, setIsNftLoading] = useState(false);
 
   const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
-  const [isFetchingDataMarshal, setIsFetchingDataMarshal] =
-    useState<boolean>(true);
+  const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
 
   const [data, setData] = useState<any>();
@@ -56,9 +49,7 @@ export const GamerPassportGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      GAMER_PASSPORT_GAMER_NONCES
-    );
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(GAMER_PASSPORT_GAMER_NONCES);
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
@@ -69,7 +60,6 @@ export const GamerPassportGamer = () => {
     setIsNftLoading(true);
 
     const _dataNfts = await DataNft.ownedByAddress(address);
-    console.log("myDataNfts", _dataNfts);
 
     const _flags = [];
     for (const cnft of ccDataNfts) {
@@ -113,10 +103,12 @@ export const GamerPassportGamer = () => {
       console.log("messageToBeSigned", messageToBeSigned);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       console.log("signedMessage", signedMessage);
-      const res = await dataNft.viewData(
-        messageToBeSigned,
-        signedMessage as any as SignableMessage
-      );
+      if (!signedMessage) {
+        toastError("Wallet signing failed.");
+        return;
+      }
+
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
       console.log("viewData", res);
@@ -136,14 +128,10 @@ export const GamerPassportGamer = () => {
 
   const fixData = (rawData: any) => {
     if (rawData.items.length > 0) {
-      const readingsInGroups =
-        rawData.metaData.getDataConfig.dataToGather.allApplicableDataTypes.reduce(
-          (t: any, i: any) => {
-            t[i.toString()] = [];
-            return t;
-          },
-          {}
-        );
+      const readingsInGroups = rawData.metaData.getDataConfig.dataToGather.allApplicableDataTypes.reduce((t: any, i: any) => {
+        t[i.toString()] = [];
+        return t;
+      }, {});
 
       rawData.items.forEach((i: any) => {
         readingsInGroups[i.dataType].push(i);
@@ -167,14 +155,12 @@ export const GamerPassportGamer = () => {
           case "4":
             {
               if (readingsInGroups["4"].length > 0) {
-                const programOnChainReadingsWithInsights =
-                  onChainDataInsights_LIB({
-                    rawReadings: readingsInGroups["4"],
-                    userTz: "",
-                  });
+                const programOnChainReadingsWithInsights = onChainDataInsights_LIB({
+                  rawReadings: readingsInGroups["4"],
+                  userTz: "",
+                });
 
-                const readingsWithInsights: any =
-                  programOnChainReadingsWithInsights.readings;
+                const readingsWithInsights: any = programOnChainReadingsWithInsights.readings;
 
                 // S: Time Data graphs
                 for (let i = 0; i < readingsWithInsights.length; i++) {
@@ -189,9 +175,7 @@ export const GamerPassportGamer = () => {
 
                     onChainManualDataSets.onChainAddrTxOnCon.push(item);
                     gamingActivityAll.push(item);
-                  } else if (
-                    readingsWithInsights[i].manual === "OnChainAddrTxOnConErd"
-                  ) {
+                  } else if (readingsWithInsights[i].manual === "OnChainAddrTxOnConErd") {
                     const item = {
                       group: readingsWithInsights[i].scoreGroup,
                       time: readingsWithInsights[i].time,
@@ -213,36 +197,25 @@ export const GamerPassportGamer = () => {
           case "5":
             {
               if (readingsInGroups["5"].length > 0) {
-                const thirdPartyReadingsWithInsights =
-                  thirdPartyDataInsights_LIB({
-                    rawReadings: readingsInGroups["5"],
-                    userTz: "",
-                  });
+                const thirdPartyReadingsWithInsights = thirdPartyDataInsights_LIB({
+                  rawReadings: readingsInGroups["5"],
+                  userTz: "",
+                });
 
-                const readingsWithInsights: any =
-                  thirdPartyReadingsWithInsights.readings;
+                const readingsWithInsights: any = thirdPartyReadingsWithInsights.readings;
 
                 // S: Time Data graphs
                 for (let i = 0; i < readingsWithInsights.length; i++) {
-                  if (
-                    readingsWithInsights[i].manual ===
-                    "DiscordBotUserOnGuildActivity"
-                  ) {
-                    thirdPartyManualDataSets.discordBotUserOnGuildActivity.push(
-                      {
-                        // group: parseInt(readingsWithInsights[i].val, 10),
-                        when: readingsWithInsights[i].friendyCreatedAt,
-                        data: readingsWithInsights[i].data,
-                        val: parseInt(readingsWithInsights[i].val, 10),
-                      }
-                    );
+                  if (readingsWithInsights[i].manual === "DiscordBotUserOnGuildActivity") {
+                    thirdPartyManualDataSets.discordBotUserOnGuildActivity.push({
+                      // group: parseInt(readingsWithInsights[i].val, 10),
+                      when: readingsWithInsights[i].friendyCreatedAt,
+                      data: readingsWithInsights[i].data,
+                      val: parseInt(readingsWithInsights[i].val, 10),
+                    });
 
-                    socialActivityAll.push(
-                      parseInt(readingsWithInsights[i].val, 10)
-                    );
-                  } else if (
-                    readingsWithInsights[i].manual === "TrdPtyWonderHeroGameApi"
-                  ) {
+                    socialActivityAll.push(parseInt(readingsWithInsights[i].val, 10));
+                  } else if (readingsWithInsights[i].manual === "TrdPtyWonderHeroGameApi") {
                     const item: any = {
                       group: readingsWithInsights[i].scoreGroup,
                       time: readingsWithInsights[i].time,
@@ -265,12 +238,9 @@ export const GamerPassportGamer = () => {
 
       setActiveGamerData({
         readingsOnChainAddrTxOnCon: onChainManualDataSets.onChainAddrTxOnCon,
-        readingsOnChainAddrTxOnConErd:
-          onChainManualDataSets.onChainAddrTxOnConErd,
-        readingsDiscordBotUserOnGuildActivity:
-          thirdPartyManualDataSets.discordBotUserOnGuildActivity,
-        readingsTrdPtyWonderHeroGameApi:
-          thirdPartyManualDataSets.trdPtyWonderHeroGameApi,
+        readingsOnChainAddrTxOnConErd: onChainManualDataSets.onChainAddrTxOnConErd,
+        readingsDiscordBotUserOnGuildActivity: thirdPartyManualDataSets.discordBotUserOnGuildActivity,
+        readingsTrdPtyWonderHeroGameApi: thirdPartyManualDataSets.trdPtyWonderHeroGameApi,
         socialActivityAllData: socialActivityAll,
         gamingActivityAllData: gamingActivityAll,
       });
@@ -290,21 +260,12 @@ export const GamerPassportGamer = () => {
       <div className="row w-100">
         <div className="col-12 mx-auto">
           <h3 className="mt-5 text-center">Web3 Gamer Passport</h3>
-          <h4 className="mt-2 text-center">
-            Data NFTs that Unlock this App: {ccDataNfts.length}
-          </h4>
+          <h4 className="mt-2 text-center">Data NFTs that Unlock this App: {ccDataNfts.length}</h4>
 
           <div className="row mt-5">
             {ccDataNfts.length > 0 ? (
               ccDataNfts.map((dataNft, index) => (
-                <DataNftCard
-                  key={index}
-                  index={index}
-                  dataNft={dataNft}
-                  isLoading={isLoading}
-                  owned={flags[index]}
-                  viewData={viewData}
-                />
+                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
               ))
             ) : (
               <h3 className="text-center text-white">No Data NFTs</h3>
@@ -313,12 +274,7 @@ export const GamerPassportGamer = () => {
         </div>
       </div>
 
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        style={modalStyles}
-        ariaHideApp={false}
-      >
+      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -326,27 +282,19 @@ export const GamerPassportGamer = () => {
               cursor: "pointer",
               fontSize: "2rem",
             }}
-            onClick={closeModal}
-          >
+            onClick={closeModal}>
             <IoClose />
           </div>
         </div>
         <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">
-            Web3 Gamer Passport
-          </h4>
+          <h4 className="text-center font-title font-weight-bold">Web3 Gamer Passport</h4>
         </ModalHeader>
         <ModalBody>
           {!owned ? (
             <div className="d-flex flex-column align-items-center justify-content-center">
-              <img
-                src={imgBlurChart}
-                style={{ width: "90%", height: "auto" }}
-              />
+              <img src={imgBlurChart} style={{ width: "90%", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>
-                (Buy the Data NFT from the marketplace to unlock the data)
-              </h6>
+              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
             <div
@@ -356,14 +304,11 @@ export const GamerPassportGamer = () => {
                 maxWidth: "100%",
                 minHeight: "40rem",
                 maxHeight: "80vh",
-              }}
-            >
+              }}>
               <div>
                 <Loader noText />
                 <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod)
-                    ? "Please sign the message using xPortal or Ledger"
-                    : "Loading..."}
+                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
                 </p>
               </div>
             </div>
@@ -375,8 +320,7 @@ export const GamerPassportGamer = () => {
                 minHeight: "36rem",
                 maxHeight: "60vh",
                 overflowY: "auto",
-              }}
-            >
+              }}>
               <GamerInsights gamerId={"userId"} gamerData={activeGamerData} />
             </div>
           )}

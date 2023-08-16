@@ -99,7 +99,7 @@ export const TrailBlazerModal = ({
               </a>
             </div>
             <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
+              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
               <div className="platform">
                 Claimable On:{" "}
                 <span className="icon">
@@ -131,7 +131,7 @@ export const TrailBlazerModal = ({
               </button>
             </div>
             <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
+              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
             </div>
           </div>
         );
@@ -170,7 +170,7 @@ export const TrailBlazerModal = ({
               )}
             </div>
             <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
+              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
             </div>
           </div>
         );
@@ -179,7 +179,7 @@ export const TrailBlazerModal = ({
         tileCode = (
           <div className="news-tile">
             <h2>
-              {dataItem.category} - {new Date(dataItem.date).toUTCString()}
+              {dataItem.category} - {new Date(dataItem.date).toDateString()}
             </h2>
             <h3>{dataItem.title}</h3>
             <a href={dataItem.link} target="_blank">

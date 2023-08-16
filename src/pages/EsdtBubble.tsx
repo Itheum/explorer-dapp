@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
-import { signMessage } from "@multiversx/sdk-dapp/utils/account";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import BigNumber from "bignumber.js";
 import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
@@ -157,6 +157,7 @@ export const EsdtBubble = () => {
   const { address } = useGetAccount();
   const { loginMethod } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
+  const { signMessage } = useSignMessage();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [selectedDataNft, setSelectedDataNft] = useState<DataNft>();
@@ -188,13 +189,10 @@ export const EsdtBubble = () => {
     if (value >= pageCount) return;
     setPageIndex(value);
   }
-  console.log({ pageSize, pageCount, pageIndex });
-
   async function fetchDataNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES);
-    console.log("ESDT Bubbles NFTs:", _nfts);
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -202,14 +200,12 @@ export const EsdtBubble = () => {
 
   async function fetchMyNfts() {
     const _dataNfts = await DataNft.ownedByAddress(address);
-    console.log("myDataNfts", _dataNfts);
 
     const _flags = [];
     for (const cnft of dataNfts) {
       const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
       _flags.push(matches.length > 0);
     }
-    console.log("_flags", _flags);
     setFlags(_flags);
   }
 
@@ -241,15 +237,19 @@ export const EsdtBubble = () => {
       const dataNft = dataNfts[index];
       setSelectedDataNft(dataNft);
       const messageToBeSigned = await dataNft.getMessageToSign();
-      console.log("messageToBeSigned", messageToBeSigned);
       setIsPendingMessageSigned(true);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       setIsPendingMessageSigned(false);
+
       console.log("signedMessage", signedMessage);
       const res = await dataNft.viewData(messageToBeSigned, signedMessage as any as SignableMessage);
+      if (!signedMessage) {
+        toastError("Wallet signing failed.");
+        return;
+      }
+
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
-      console.log("viewData", res);
 
       processData(res.data);
 

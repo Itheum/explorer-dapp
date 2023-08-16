@@ -687,6 +687,29 @@ code {
 /* Apps Custom Styles
 -------------------------------------------------- */
 
+.c-model-header-with-action {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  margin: auto;
+
+  @media screen and (min-width: 564px) {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.c-model-title {
+  font-size: 1.5rem;
+  font-weight: 700 !important;
+  margin-bottom: 5px;
+
+  @media screen and (min-width: 564px) {
+    margin-bottom: auto;
+  }
+}
+
 .trailblazer-view {
   .base-tile {
     .header {
@@ -822,4 +845,8 @@ code {
   .container {
     max-width: 1140px !important;
   }
+}
+
+.fontsize-sm {
+  font-size: 0.9rem !important;
 }

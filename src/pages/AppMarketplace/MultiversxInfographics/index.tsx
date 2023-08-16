@@ -5,34 +5,51 @@ import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
 import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import type { PDFDocumentProxy } from "pdfjs-dist";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
-import SVG from "react-inlinesvg";
 import Modal from "react-modal";
+import { Document, Page } from "react-pdf";
+import { pdfjs } from "react-pdf";
 import { useNavigate, useParams } from "react-router-dom";
 import imgBlurChart from "assets/img/blur-chart.png";
-import headerHero from "assets/img/custom-app-header-bubblemaps.png";
+import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
-import { MULTIVERSX_BUBBLE_NONCES } from "config";
+import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
+import "./MultiversxInfographics.scss";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+const options = {
+  cMapUrl: "/cmaps/",
+  standardFontDataUrl: "/standard_fonts/",
+};
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
 }
 
-export const MultiversxBubbles = () => {
+type PDFFile = string | File | null;
+
+// we are using react-pdf : https://levelup.gitconnected.com/displaying-pdf-in-react-app-6e9d1fffa1a9
+
+export const MultiversxInfographics = () => {
   const { address } = useGetAccount();
   const { loginMethod } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { signMessage } = useSignMessage();
   const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
+
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +60,10 @@ export const MultiversxBubbles = () => {
   const navigate = useNavigate();
   const isWebWallet = loginMethod === "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
-  const [file, setFile] = useState<string | null>(null);
+
+  const [file, setFile] = useState<PDFFile>(null);
+  const [numPages, setNumPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState(1); //setting 1 to show first page
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -68,7 +88,6 @@ export const MultiversxBubbles = () => {
         } else {
           let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
           signSessions = JSON.parse(signSessions.signedSessions);
-          console.log("signSessions", signSessions);
 
           // find the first 'signed' session
           for (const session of Object.values(signSessions) as any[]) {
@@ -93,7 +112,7 @@ export const MultiversxBubbles = () => {
       } catch (e) {
         console.error(e);
       } finally {
-        navigate(routeNames.multiversxbubbles);
+        navigate(routeNames.multiversxinfographics);
       }
     };
     if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && !isSignMessagePending) {
@@ -109,12 +128,14 @@ export const MultiversxBubbles = () => {
     setIsModalOpened(false);
     setViewDataRes(undefined);
     setFile(null);
+    setNumPages(0);
+    setPageNumber(1);
   }
 
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES);
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -182,21 +203,12 @@ export const MultiversxBubbles = () => {
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {
-      if (res.contentType.search("image") >= 0) {
-        if (res.contentType == "image/svg+xml") {
-          blobDataType = BlobDataType.SVG;
-          res.data = await (res.data as Blob).text();
+      const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+      res.data = "PDF opened in new tab";
+      blobDataType = BlobDataType.PDF;
+      // window.open(pdfObject, "_blank");
 
-          // create a file so it can also be loaded in a new window
-          const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-          setFile(pdfObject);
-        } else {
-          blobDataType = BlobDataType.IMAGE;
-          res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-        }
-      } else {
-        toastError("This content type is not supported");
-      }
+      setFile(pdfObject);
     } else {
       console.error(res.error);
       toastError(res.error);
@@ -224,13 +236,21 @@ export const MultiversxBubbles = () => {
     }
   }
 
-  function preProcess(code: any) {
-    // let newCode = code.replace(/fill=".*?"/g, 'fill="red"');
-    let newCode = code.replace(/height="1080pt"/, 'height="100%"');
-    newCode = newCode.replace(/width="1080pt"/, 'width="100%"');
-    newCode = newCode.replace(/<a/g, '<a xlink:show="new"'); // makes all link open in new tab
+  function onDocumentLoadSuccess({ numPages: totalPages }: PDFDocumentProxy): void {
+    setNumPages(totalPages);
+    setPageNumber(1);
+  }
 
-    return newCode;
+  function changePage(offset: number) {
+    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  }
+
+  function previousPage() {
+    changePage(-1);
+  }
+
+  function nextPage() {
+    changePage(1);
   }
 
   if (isLoading) {
@@ -238,28 +258,30 @@ export const MultiversxBubbles = () => {
   }
 
   return (
-    <div className="flex justify-center py-4">
-      <div className="flex flex-col w-full">
-        <h1 className="py-4 mb-0">MultiversX Bubbles</h1>
+    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
+      <div className="row w-100">
+        <div className="col-12 mx-auto">
+          <h1 className="app-title">MultiversX Infographics</h1>
 
-        <div className=" border-[0.5px] dark:border-slate-100/30 border-slate-300 rounded-[3rem]">
-          <img className="rounded-[3rem] w-full 2xl:h-[375px]" src={headerHero} alt="bubbleMap" />
-        </div>
-
-        <div>
-          <h4 className="my-4 text-center">Data NFTs that Unlock this App: {dataNfts.length}</h4>
-
-          <div className="flex flex-wrap justify-center md:justify-normal gap-5">
-            {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => (
-                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-              ))
-            ) : (
-              <h3 className="text-center text-white">No DataNFT</h3>
-            )}
+          <div className="hero">
+            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
           </div>
+
+          <div className="body">
+            <h4 className="mt-5 text-center nfts-unlocks">Data NFTs that Unlock this App: {dataNfts.length}</h4>
+
+            <div className="row mt-5">
+              {dataNfts.length > 0 ? (
+                dataNfts.map((dataNft, index) => (
+                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+                ))
+              ) : (
+                <h3 className="text-center text-white">No DataNFT</h3>
+              )}
+            </div>
+          </div>
+          <div className="footer"></div>
         </div>
-        <div className="footer"></div>
       </div>
 
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
@@ -276,7 +298,7 @@ export const MultiversxBubbles = () => {
         </div>
         <ModalHeader>
           <div className="c-model-header-with-action">
-            <h4 className="text-center font-title font-weight-bold c-model-title">MultiversX Bubbles</h4>
+            <h4 className="text-center font-title font-weight-bold c-model-title">MultiversX Infographics</h4>
             {file && (
               <button
                 className="btn btn-outline-primary"
@@ -285,7 +307,7 @@ export const MultiversxBubbles = () => {
                     window.open(file as string, "_blank");
                   }
                 }}>
-                Open this file in full screen mode
+                Open this PDF in full screen mode
               </button>
             )}
           </div>
@@ -325,17 +347,35 @@ export const MultiversxBubbles = () => {
             </div>
           ) : (
             <>
-              {viewDataRes &&
-                !viewDataRes.error &&
-                (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                  <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-                ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                  <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
-                ) : (
-                  <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                    {viewDataRes.data}
-                  </p>
-                ))}
+              {viewDataRes && !viewDataRes.error && (
+                <div>
+                  <div className="d-flex justify-content-center c-container-paging">
+                    <button className="btn btn-outline-primary mr-3" type="button" disabled={pageNumber <= 1} onClick={previousPage}>
+                      Previous
+                    </button>
+                    <p className="c-pagecount">
+                      Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+                    </p>
+                    <button className="btn btn-outline-primary ml-3" type="button" disabled={pageNumber >= numPages} onClick={nextPage}>
+                      Next
+                    </button>
+                  </div>
+
+                  <div className="c-container-document">
+                    <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                      <Page pageNumber={pageNumber} />
+                    </Document>
+                  </div>
+
+                  {/* <div className="c-container-document">
+                      <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                        {Array.from(new Array(numPages), (el, index) => (
+                          <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                        ))}
+                      </Document>
+                    </div> */}
+                </div>
+              )}
             </>
           )}
         </ModalBody>

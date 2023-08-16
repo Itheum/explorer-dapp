@@ -2,6 +2,8 @@ import React from "react";
 import { Navbar as BsNavbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import { IoMenu } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import lightLogo from "assets/img/logo-icon-b.png";
+import darkLogo from "assets/img/logo-sml-d.png";
 import { CopyAddress } from "components/CopyAddress";
 import { SUPPORTED_APPS } from "config";
 import { logout } from "helpers";
@@ -103,7 +105,6 @@ export const Navbar = () => {
                   </Link>
                 </NavItem>
               )}
-
               <div className="c-theme-switcher">
                 <SwitchButton />
               </div>

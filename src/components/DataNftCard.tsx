@@ -82,7 +82,7 @@ export function DataNftCard({
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Royalties:</span>
-              <span className="col-span-8 text-center">{convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
+              <span className="col-span-8 text-center">{isNaN(dataNft.royalties) ? "0%" : convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
             </div>
           </div>
 
