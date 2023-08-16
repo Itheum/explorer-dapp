@@ -2,7 +2,18 @@ import { dAppName } from "config";
 import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
-import { CantinaCorner, GamerPassportGamer, PlayStationGamer, Dashboard, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles } from "./pages";
+import {
+  CantinaCorner,
+  GamerPassportGamer,
+  PlayStationGamer,
+  Dashboard,
+  Home,
+  MyListed,
+  MyWallet,
+  EsdtBubble,
+  MultiversxBubbles,
+  MultiversxInfographics,
+} from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -16,6 +27,7 @@ export const routeNames = {
   itheumtrailblazer: "/project-trailblazer",
   esdtBubble: "/esdt-bubbles",
   multiversxbubbles: "/multiversx-bubbles",
+  multiversxinfographics: "/multiversx-infographics",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -80,6 +92,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.multiversxbubbles,
     title: "MultiversX Bubbles",
     component: MultiversxBubbles,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.multiversxinfographics,
+    title: "MultiversX Infographics",
+    component: MultiversxInfographics,
     authenticatedRoute: false,
   },
 ];

@@ -1,5 +1,6 @@
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
+import iconInfrographics from "assets/img/expl-app-infographs-icon.png";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
@@ -29,5 +30,11 @@ export const APP_MAPPINGS = [
     routeKey: "playstationgamerpassport",
     desc: "There are over 110 million active Sony Playstation gamers, and now, they can own some of their data. Unlock these PlatStation gamers Data NFTs by using this app.",
     img: "https://itheum-static.s3.ap-southeast-2.amazonaws.com/expl-app-playstation-icon.png",
+  },
+  {
+    appName: "MultiversX Infographics",
+    routeKey: "multiversxinfographics",
+    desc: 'This app visualizes dynamic and evolving data streams rendered into PDF files that showcase unique MultiversX ecosystem "alpha", insights, and education.',
+    img: iconInfrographics,
   },
 ];
