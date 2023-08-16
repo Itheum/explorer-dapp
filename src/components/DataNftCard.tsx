@@ -1,11 +1,11 @@
 import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
-import { FaExternalLinkAlt } from "react-icons/fa";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { convertToLocalString } from "libs/utils";
 import { ElrondAddressLink } from "./ElrondAddressLink";
 import { Button } from "../libComponents/Button";
+import { Card, CardContent, CardFooter } from "../libComponents/Card";
 
 export function DataNftCard({
   index,
@@ -33,8 +33,8 @@ export function DataNftCard({
 
   return (
     <div className="mb-3 ">
-      <div className="border-[0.5px] dark:border-slate-100/30 border-slate-300 rounded-[2.37rem] xl:w-[330px] w-[296px]">
-        <div className="flex flex-col p-3">
+      <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px]">
+        <CardContent className="flex flex-col p-3">
           <div className="mb-4">
             <img className="" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
           </div>
@@ -66,7 +66,7 @@ export function DataNftCard({
                   href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
                   className="flex flex-row items-center text-decoration-none !text-blue-500"
                   target="_blank">
-                  <p className="flex flex-row items-center ">{dataNft.tokenIdentifier}</p>
+                  <p className="flex flex-row w-full items-center mb-0 text-sm xl:text-base">{dataNft.tokenIdentifier}</p>
                 </a>
               </div>
             </div>
@@ -95,7 +95,7 @@ export function DataNftCard({
               </div>
             )}
 
-            <div className="flex w-full justify-center mt-3 text-center">
+            <CardFooter className="flex w-full justify-center mt-3 pb-2 text-center">
               {owned ? (
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
                   <Button
@@ -115,10 +115,10 @@ export function DataNftCard({
                   </Button>
                 </div>
               )}
-            </div>
+            </CardFooter>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

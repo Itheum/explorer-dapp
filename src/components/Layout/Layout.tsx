@@ -12,7 +12,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-column flex-fill wrapper">
       <Navbar />
-      <main className="flex flex-column flex-grow-1 2xl:mx-[20rem] xl:mx-[8rem] md:mx-[4rem]">
+      <main className="flex flex-column flex-grow-1 2xl:mx-[20rem] xl:mx-[8rem] md:mx-[4rem] base:mx-[1.5rem]">
         <AuthenticatedRoutesWrapper routes={routes} unlockRoute={`${routeNames.unlock}${search}`}>
           {children}
         </AuthenticatedRoutesWrapper>
@@ -22,8 +22,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         toastOptions={{
           // Default options for specific types
           error: {
-            duration: 30000,
-          },
+            duration: 30000
+          }
         }}
       />
     </div>
