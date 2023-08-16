@@ -26,7 +26,7 @@ export function DataNftCard({
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
-
+  console.log(dataNft);
   function goToMarketplace(tokenIdentifier: string) {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
