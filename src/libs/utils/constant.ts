@@ -1,6 +1,6 @@
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
-import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographs-icon.png";
+import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
@@ -34,7 +34,7 @@ export const APP_MAPPINGS = [
   {
     appName: "MultiversX Infographics",
     routeKey: "multiversxinfographics",
-    desc: "This app visualizes dynamic data streams of various MultiversX ecosystem projects as PDF files.",
+    desc: 'This app visualizes dynamic and evolving data streams rendered into PDF files that showcase unique MultiversX ecosystem "alpha", insights, and education.',
     img: iconInfrographics,
   },
 ];

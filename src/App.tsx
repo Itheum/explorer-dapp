@@ -7,7 +7,7 @@ import {
 } from "components";
 import { TransactionsToastList, NotificationModal, SignTransactionsModals } from "components";
 import { apiTimeout, walletConnectV2ProjectId, sampleAuthenticatedDomains, ELROND_NETWORK } from "config";
-import { MultiversxBubbles, MyWallet, PageNotFound, Unlock } from "pages";
+import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock } from "pages";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { routes, routeNames } from "routes";
 
@@ -39,7 +39,7 @@ export const App = () => {
 
                 <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
                 <Route path={`${routeNames.multiversxbubbles}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxBubbles />} />
-
+                <Route path={`${routeNames.multiversxinfographics}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxInfographics />} />
                 <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
