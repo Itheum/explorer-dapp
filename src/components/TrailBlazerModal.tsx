@@ -8,7 +8,7 @@ import imgBlurChart from "assets/img/blur-chart.png";
 import { Loader } from "components";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { IFrameModal } from "./iFrameModal";
-import TwModal from "./Modal/TwModal";
+import { TwModal } from "./Modal/TwModal";
 import { createPortal } from "react-dom";
 
 const customStyles = {

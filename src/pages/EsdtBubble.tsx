@@ -19,6 +19,7 @@ import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "h
 import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
@@ -240,12 +241,14 @@ export const EsdtBubble = () => {
       setIsPendingMessageSigned(true);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       setIsPendingMessageSigned(false);
+
+      console.log("signedMessage", signedMessage);
+      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       if (!signedMessage) {
         toastError("Wallet signing failed.");
         return;
       }
 
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
 
@@ -328,22 +331,14 @@ export const EsdtBubble = () => {
   }
 
   return (
-    <div className="d-flex flex-fill justify-content-center container py-4">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h4 className="mt-5 text-center">ESDT Bubbles NFTs: {dataNfts.length}</h4>
-
-          <div className="row mt-5">
-            {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => (
-                <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-              ))
-            ) : (
-              <h3 className="text-center text-white">No DataNFT</h3>
-            )}
-          </div>
-        </div>
-      </div>
+    <HeaderComponent pageTitle={"ESDT Bubbles"} hasImage={false} pageSubtitle={"ESDT Bubbles NFTs"} dataNftCount={dataNfts.length}>
+      {dataNfts.length > 0 ? (
+        dataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No DataNFT</h3>
+      )}
 
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <div style={{ height: "3rem" }}>
@@ -449,6 +444,6 @@ export const EsdtBubble = () => {
           )}
         </ModalBody>
       </Modal>
-    </div>
+    </HeaderComponent>
   );
 };

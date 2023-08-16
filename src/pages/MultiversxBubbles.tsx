@@ -21,6 +21,7 @@ import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -238,30 +239,20 @@ export const MultiversxBubbles = () => {
   }
 
   return (
-    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h1 className="app-title">MultiversX Bubbles</h1>
-          <div className="hero">
-            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
-          </div>
-
-          <div className="body">
-            <h4 className="mt-5 text-center nfts-unlocks">Data NFTs that Unlock this App: {dataNfts.length}</h4>
-
-            <div className="row mt-5">
-              {dataNfts.length > 0 ? (
-                dataNfts.map((dataNft, index) => (
-                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-                ))
-              ) : (
-                <h3 className="text-center text-white">No DataNFT</h3>
-              )}
-            </div>
-          </div>
-          <div className="footer"></div>
-        </div>
-      </div>
+    <HeaderComponent
+      pageTitle={"MultiversX Bubbles"}
+      hasImage={true}
+      imgSrc={headerHero}
+      altImageAttribute={"bubbleMap"}
+      pageSubtitle={"Data NFTs that Unlock this App"}
+      dataNftCount={dataNfts.length}>
+      {dataNfts.length > 0 ? (
+        dataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No DataNFT</h3>
+      )}
 
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
         <div style={{ height: "3rem" }}>
@@ -341,6 +332,6 @@ export const MultiversxBubbles = () => {
           )}
         </ModalBody>
       </Modal>
-    </div>
+    </HeaderComponent>
   );
 };

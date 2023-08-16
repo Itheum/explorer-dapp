@@ -3,7 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
-import { useGetSignMessageInfoStatus } from '@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus';
+import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
@@ -14,6 +14,7 @@ import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 export const ItheumTrailblazer = () => {
   const { address } = useGetAccount();
@@ -25,8 +26,8 @@ export const ItheumTrailblazer = () => {
   const { targetNonce, targetMessageToBeSigned } = useParams();
   const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
-  console.log('isSignMessagePending', isSignMessagePending);
-  console.log('lastSignedMessageSession', lastSignedMessageSession);
+  console.log("isSignMessagePending", isSignMessagePending);
+  console.log("lastSignedMessageSession", lastSignedMessageSession);
 
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -54,13 +55,13 @@ export const ItheumTrailblazer = () => {
       try {
         let signature = "";
 
-        if (lastSignedMessageSession && lastSignedMessageSession.status == 'signed' && lastSignedMessageSession.signature) {
+        if (lastSignedMessageSession && lastSignedMessageSession.status == "signed" && lastSignedMessageSession.signature) {
           signature = lastSignedMessageSession.signature;
         } else {
           let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
           signSessions = JSON.parse(signSessions.signedSessions);
           console.log("signSessions", signSessions);
-          
+
           // find the first 'signed' session
           for (const session of Object.values(signSessions) as any[]) {
             if (session.status && session.status == "signed" && session.signature) {
@@ -69,7 +70,7 @@ export const ItheumTrailblazer = () => {
             }
           }
         }
-        
+
         if (!signature) {
           throw Error("Signature is empty");
         }
@@ -190,31 +191,22 @@ export const ItheumTrailblazer = () => {
   }
 
   return (
-    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h1 className="app-title">Trailblazer</h1>
-          <div className="hero">
-            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
-          </div>
-          <div className="body">
-            <h4 className="my-3 text-center nfts-unlocks">Data NFTs that Unlock this App: {itDataNfts.length}</h4>
-
-            <div className="row mt-5">
-              {itDataNfts.length > 0 ? (
-                itDataNfts.map((dataNft, index) => (
-                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-                ))
-              ) : (
-                <h3 className="text-center text-white">No Data NFTs</h3>
-              )}
-            </div>
-          </div>
-          <div className="footer"></div>
-        </div>
-      </div>
+    <HeaderComponent
+      pageTitle={"Trailblazer"}
+      hasImage={true}
+      imgSrc={headerHero}
+      altImageAttribute={"itheumTrailblazer"}
+      pageSubtitle={"Data NFTs that Unlock this App"}
+      dataNftCount={itDataNfts.length}>
+      {itDataNfts.length > 0 ? (
+        itDataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No Data NFTs</h3>
+      )}
 
       <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
-    </div>
+    </HeaderComponent>
   );
 };
