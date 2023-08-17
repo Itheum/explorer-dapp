@@ -107,9 +107,6 @@ export const MyWallet = () => {
 
   async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
     const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true);
-    // console.log("THE type RESPOMSE IS " + res.contentType);
-    // console.log("THE eroare RESPOMSE IS " + res.error);
-    // console.log("THE Data RESPOMSE IS " + res.data);
 
     let blobDataType = BlobDataType.TEXT;
 
@@ -134,11 +131,11 @@ export const MyWallet = () => {
       } else if (res.contentType.search("application/json") >= 0) {
         res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+      } else if (res.contentType.search("text/plain") >= 0) {
+        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
       } else {
         // we don't support that format
         res.data = "Sorry, this file type is currently not supported by the Explorer File Viewer. The file type is: " + res.contentType;
-        //res.error = "Sorry, this file type is currently not supported by the Explorer File Viewer. The file type is: " + res.contentType;
-        toastError("Not supported");
       }
     } else {
       console.error(res.error);
