@@ -190,13 +190,10 @@ export const EsdtBubble = () => {
     if (value >= pageCount) return;
     setPageIndex(value);
   }
-  console.log({ pageSize, pageCount, pageIndex });
-
   async function fetchDataNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES);
-    console.log("ESDT Bubbles NFTs:", _nfts);
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -204,14 +201,12 @@ export const EsdtBubble = () => {
 
   async function fetchMyNfts() {
     const _dataNfts = await DataNft.ownedByAddress(address);
-    console.log("myDataNfts", _dataNfts);
 
     const _flags = [];
     for (const cnft of dataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
+      const matches = _dataNfts.filter((mnft: any) => cnft.nonce === mnft.nonce);
       _flags.push(matches.length > 0);
     }
-    console.log("_flags", _flags);
     setFlags(_flags);
   }
 
@@ -243,11 +238,9 @@ export const EsdtBubble = () => {
       const dataNft = dataNfts[index];
       setSelectedDataNft(dataNft);
       const messageToBeSigned = await dataNft.getMessageToSign();
-      console.log("messageToBeSigned", messageToBeSigned);
       setIsPendingMessageSigned(true);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       setIsPendingMessageSigned(false);
-      console.log("signedMessage", signedMessage);
       if (!signedMessage) {
         toastError("Wallet signing failed.");
         return;
@@ -256,7 +249,6 @@ export const EsdtBubble = () => {
       const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
-      console.log("viewData", res);
 
       processData(res.data);
 
