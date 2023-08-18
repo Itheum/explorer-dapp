@@ -29,7 +29,7 @@ export const MyWallet = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { signMessage } = useSignMessage();
-  const { loginMethod } = useGetLoginInfo();
+  const { loginMethod, tokenLogin } = useGetLoginInfo();
   const navigate = useNavigate();
   const isWebWallet = loginMethod == "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
@@ -103,7 +103,9 @@ export const MyWallet = () => {
   }
 
   async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
-    const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true);
+    const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true, false, "Authorization", {
+      "Authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+    });
 
     let blobDataType = BlobDataType.TEXT;
 

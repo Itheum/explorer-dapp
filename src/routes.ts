@@ -13,6 +13,7 @@ import {
   EsdtBubble,
   MultiversxBubbles,
   MultiversxInfographics,
+  MintNewCollection,
 } from "./pages";
 
 export const routeNames = {
@@ -28,6 +29,7 @@ export const routeNames = {
   esdtBubble: "/esdt-bubbles",
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
+  tutorials: "/tutorials",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -98,6 +100,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.multiversxinfographics,
     title: "MultiversX Infographics",
     component: MultiversxInfographics,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.tutorials,
+    title: "SDK Tutorials",
+    component: MintNewCollection,
     authenticatedRoute: false,
   },
 ];

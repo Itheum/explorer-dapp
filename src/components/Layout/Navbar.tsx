@@ -66,6 +66,11 @@ export const Navbar = () => {
                       My Wallet
                     </Link>
                   </NavDropdown.Item>
+                  <NavDropdown.Item as="div">
+                    <Link to={routeNames.tutorials} className="nav-link">
+                      Tutorials
+                    </Link>
+                  </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item as="div" style={{ fontSize: ".8rem" }} disabled>
                     My Address Quick Copy

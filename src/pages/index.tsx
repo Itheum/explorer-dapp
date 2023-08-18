@@ -10,3 +10,4 @@ export * from "./MyListed";
 export * from "./MyWallet";
 export * from "./PageNotFound";
 export * from "./Unlock";
+export * from "./Tutorials/MintNewCollection";
