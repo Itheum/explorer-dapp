@@ -668,7 +668,7 @@ code {
 
   .nfts-unlocks {
     font-size: 1.5rem;
-    margin-top: 1rem !important;
+    margin-top: 2rem !important;
     margin-bottom: 1rem !important;
   }
 }
@@ -686,6 +686,29 @@ code {
 
 /* Apps Custom Styles
 -------------------------------------------------- */
+
+.c-model-header-with-action {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  margin: auto;
+
+  @media screen and (min-width: 564px) {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.c-model-title {
+  font-size: 1.5rem;
+  font-weight: 700 !important;
+  margin-bottom: 5px;
+
+  @media screen and (min-width: 564px) {
+    margin-bottom: auto;
+  }
+}
 
 .trailblazer-view {
   .base-tile {
@@ -825,5 +848,5 @@ code {
 }
 
 .fontsize-sm {
-  font-size: .9rem !important;
+  font-size: 0.9rem !important;
 }
