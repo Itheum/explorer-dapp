@@ -5,7 +5,6 @@ import { ModalBody, Table } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import imgBlurChart from "assets/img/blur-chart.png";
 import { DataNftCard, ElrondAddressLink, Loader } from "components";
 import { GAMER_PASSPORT_GAMER_NONCES, MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
@@ -292,7 +291,6 @@ export const GamerPassportGamer = () => {
         <ModalBody>
           {!owned ? (
             <div className="d-flex flex-column align-items-center justify-content-center">
-              <img src={imgBlurChart} style={{ width: "90%", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>

@@ -7,7 +7,6 @@ import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { Radar } from "react-chartjs-2";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import imgBlurChart from "assets/img/blur-chart.png";
 import { DataNftCard, ElrondAddressLink, Loader } from "components";
 import { CANTINA_CORNER_NONCES, CC_SHOW_SIZE } from "config";
 import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
@@ -255,7 +254,6 @@ export const CantinaCorner = () => {
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}>
-              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
