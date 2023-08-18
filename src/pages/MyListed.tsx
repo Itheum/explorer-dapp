@@ -29,7 +29,6 @@ export const MyListed = () => {
     setOfferCount(_totalOfferCount);
 
     const _offers = await dataNftMarket.viewAddressListedOffers(new Address(address));
-    console.log("_offers", _offers);
     setOffers(_offers);
 
     setIsLoading(false);
@@ -39,7 +38,6 @@ export const MyListed = () => {
     setIsNftLoading(true);
     const nonces: number[] = offers.map((offer) => offer.offeredTokenNonce);
     const _dataNfts: DataNft[] = await DataNft.createManyFromApi(nonces);
-    console.log("_dataNfts", _dataNfts);
     setDataNfts(_dataNfts);
 
     setIsNftLoading(false);
