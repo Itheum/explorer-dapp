@@ -13,6 +13,16 @@ import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
 import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "../../libComponents/NavigationMenu";
+import { cn } from "../../libs/utils";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -35,28 +45,50 @@ export const Navbar = () => {
           </Link>
         </div>
 
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>App Marketplace</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
+                    <ListItem href={returnRoute(item.routeKey)} key={item.routeKey} title={item.appName}>
+                      {item.appName}
+                    </ListItem>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            {isLoggedIn && (
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Account</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    <ListItem href={routeNames.mylisted} title={"My Listed"}>
+                      Listed Data NFT's
+                    </ListItem>
+                    <ListItem href={routeNames.mylisted} title={"My Wallet"}>
+                      My Wallet Data NFT's
+                    </ListItem>
+                    <div className="flex flex-col p-3">
+                      <p className="text-sm font-medium leading-none dark:text-slate-100">My Address Quick Copy</p>
+                      <CopyAddress address={address} precision={6} />
+                    </div>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            )}
+          </NavigationMenuList>
+        </NavigationMenu>
+
         <div>
-          <BsNavbar.Toggle aria-controls="responsive-navbar-nav">
-            <IoMenu />
-          </BsNavbar.Toggle>
           <BsNavbar.Collapse id="responsive-navbar-nav" className="nav-menu-wrap">
             <Nav className="flex items-center">
-              <NavItem>
-                <Link to={isLoggedIn ? routeNames.home : routeNames.home} className="nav-link">
-                  Home
-                </Link>
-              </NavItem>
-
-              <NavDropdown title="App Marketplace">
-                {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
-                  <NavDropdown.Item key={item.routeKey} as="div">
-                    <Link to={returnRoute(item.routeKey)} className="nav-link">
-                      {item.appName}
-                    </Link>
-                  </NavDropdown.Item>
-                ))}
-              </NavDropdown>
-
               {isLoggedIn ? (
                 <>
                   <NavDropdown title="Account">
@@ -113,3 +145,23 @@ export const Navbar = () => {
     </BsNavbar>
   );
 };
+
+const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}>
+          <div className="text-sm font-medium leading-none dark:text-slate-100">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";

@@ -23,7 +23,7 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
           <h4 className="my-4 text-center text-2xl">
             {pageSubtitle}: {dataNftCount}
           </h4>
-          <div className="flex flex-wrap justify-center md:justify-normal gap-5 ">{children}</div>
+          <div className="flex flex-wrap justify-center md:justify-normal gap-x-20 ">{children}</div>
         </div>
       </div>
     </div>
