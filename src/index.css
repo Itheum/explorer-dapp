@@ -98,7 +98,7 @@ h5, h6 {
         @apply border-border;
     }
     body {
-        @apply bg-background text-foreground;
+        @apply dark:bg-black bg-slate-50 text-foreground !important;
         font-feature-settings: "rlig" 1, "calt" 1;
     }
 }
