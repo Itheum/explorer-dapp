@@ -13,7 +13,6 @@ import Modal from "react-modal";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import { useNavigate, useParams } from "react-router-dom";
-import imgBlurChart from "assets/img/blur-chart.png";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
@@ -317,7 +316,6 @@ export const MultiversxInfographics = () => {
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}>
-              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>

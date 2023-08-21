@@ -11,7 +11,6 @@ import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
 import { useNavigate, useParams } from "react-router-dom";
-import imgBlurChart from "assets/img/blur-chart.png";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_BUBBLE_NONCES } from "config";
@@ -298,7 +297,6 @@ export const MultiversxBubbles = () => {
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}>
-              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>

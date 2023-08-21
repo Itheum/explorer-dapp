@@ -21,7 +21,9 @@ const HomePage = () => {
                 <div className="card shadow-sm border">
                   <div className="card-body p-3">
                     <div className="mb-4">
-                      <img className="data-app-image" src={item.img} />
+                      <Link to={returnRoute(item.routeKey)}>
+                        <img className="data-app-image" src={item.img} />
+                      </Link>
                     </div>
                     <h5 className="card-title">{item.appName}</h5>
                     <p className="card-text">{item.desc}</p>
