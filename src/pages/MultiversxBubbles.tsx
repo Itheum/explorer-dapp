@@ -12,7 +12,7 @@ import SVG from "react-inlinesvg";
 import Modal from "react-modal";
 import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
-import { DataNftCard, Loader } from "components";
+import { DataNftCard, Loader, ZoomableSvg } from "components";
 import { MULTIVERSX_BUBBLE_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
@@ -320,7 +320,11 @@ export const MultiversxBubbles = () => {
                 (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
                   <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
                 ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                  <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
+                  // <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
+                  <ZoomableSvg
+                    data={viewDataRes.data}
+                    preProcess={preProcess}
+                  />
                 ) : (
                   <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
                     {viewDataRes.data}
