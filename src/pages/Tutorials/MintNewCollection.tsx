@@ -50,21 +50,21 @@ export const MintNewCollection = () => {
     setLoading(false);
   }
 
-  async function _mintStandard() {
+  async function _mintStandardDataNFT() {
     setLoading(true);
     setSdkResponses(null);
 
     try {
       const mintTransaction: Transaction = await dataNftMinter.mint(
         new Address(address),
-        "HELLOWORLDSDK1",
+        "DATA_NFT_TOKEN_NAME",
         "https://api.itheumcloud-stg.com/datamarshalapi/achilles/v1",
         "https://api.itheumcloud-stg.com/datadexapi/bespoke/dynamicSecureDataStreamDemo",
         "https://raw.githubusercontent.com/Itheum/data-assets/main/Misc/M1__FBI_Firearm_Background_Check_Data/pdf/preview.pdf",
         15,
         1000,
-        "Hello World SDK Mint 1",
-        "Hello World SDK Mint 1 Description",
+        "SDK Mint 1 - Standard",
+        "SDK Mint 1 Description - Using the default, built in image and trait generation feature",
         antiSpamTax || 0,
         {
           nftStorageToken: REACT_APP_ENV_NFT_STORAGE_KEY,
@@ -89,8 +89,55 @@ export const MintNewCollection = () => {
 
       setSdkResponses(`Mint session ID is : ${sessionId}`);
     } catch (e) {
-      setSdkResponses(`_mintStandard has FAILED - see console for error`);
-      console.log("_mintStandard has FAILED");
+      setSdkResponses(`_mintStandardDataNFT has FAILED - see console for error`);
+      console.log("_mintStandardDataNFT has FAILED");
+      console.error(e);
+    }
+    setLoading(false);
+  }
+
+  async function _mintCustomDataNFT() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    try {
+      const mintTransaction: Transaction = await dataNftMinter.mint(
+        new Address(address),
+        "HELLOWORLDSDK2",
+        "https://api.itheumcloud-stg.com/datamarshalapi/achilles/v1",
+        "https://api.itheumcloud-stg.com/datadexapi/bespoke/dynamicSecureDataStreamDemo",
+        "https://raw.githubusercontent.com/Itheum/data-assets/main/Misc/M1__FBI_Firearm_Background_Check_Data/pdf/preview.pdf",
+        15,
+        1000,
+        "SDK Mint 2 - Custom",
+        "SDK Mint 2 Description - Using a custom image URL and trait file",
+        antiSpamTax || 0,
+        {
+          imageUrl: "https://dataassets.markpaul.name/itheum_giftx_card_demo/itheum-giftx-card-edition-1.png",
+          traitsUrl: "https://dataassets.markpaul.name/itheum_giftx_card_demo/metadata.json",
+        }
+      );
+
+      await refreshAccount();
+
+      const { sessionId, error } = await sendTransactions({
+        transactions: mintTransaction,
+        transactionsDisplayInfo: {
+          processingMessage: "Minting Data NFT",
+          errorMessage: "Data NFT minting error",
+          successMessage: "Data NFT minted successfully",
+        },
+        redirectAfterSign: false,
+      });
+
+      console.log("mintTransaction", mintTransaction);
+      console.log("sessionId", sessionId);
+      console.log("error", error);
+
+      setSdkResponses(`Mint session ID is : ${sessionId}`);
+    } catch (e) {
+      setSdkResponses(`_mintStandardDataNFT has FAILED - see console for error`);
+      console.log("_mintStandardDataNFT has FAILED");
       console.error(e);
     }
     setLoading(false);
@@ -137,8 +184,11 @@ export const MintNewCollection = () => {
             </div>
             <div className="p-2">
               Mint a new Standard Data NFT Collection (Anti Spam Tax is {antiSpamTax}):{" "}
-              <button className="btn btn-outline-primary" disabled={antiSpamTax === -1} onClick={_mintStandard}>
-                Mint Standard
+              <button className="btn btn-outline-primary" disabled={antiSpamTax === -1} onClick={_mintStandardDataNFT}>
+                Mint Standard Data NFT
+              </button>
+              <button className="btn btn-outline-primary" disabled={antiSpamTax === -1} onClick={_mintCustomDataNFT}>
+                Mint Custom Data NFT
               </button>
             </div>
 

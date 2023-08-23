@@ -103,8 +103,8 @@ export const MyWallet = () => {
   }
 
   async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
-    const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true, false, "Authorization", {
-      "Authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+    const res: ViewDataReturnType = await dataNft.viewData(messageToBeSigned, signedMessage, true, false, "authorization", {
+      "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
     });
 
     let blobDataType = BlobDataType.TEXT;
@@ -263,18 +263,6 @@ export const MyWallet = () => {
             maxHeight: "80vh",
             overflowY: "auto",
           }}>
-          {isDomPurified && (
-            <div className="alert alert-warning" role="alert">
-              <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential common
-              security risks; unfortunately, this may mean that even valid and safe content may appear different from the original format.{" "}
-              <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the original
-              file (at your own risk). <br />
-              <br />
-              Alternatively, <strong>as the safest option, only use official apps in the App Marketplace</strong> (accessible via the Header Menu in this
-              Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
-            </div>
-          )}
-
           {isFetchingDataMarshal ? (
             <div
               className="d-flex flex-column align-items-center justify-content-center"
