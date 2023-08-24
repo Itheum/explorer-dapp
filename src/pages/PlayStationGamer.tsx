@@ -7,7 +7,6 @@ import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import imgBlurChart from "assets/img/blur-chart.png";
 import { DataNftCard, Loader } from "components";
 import { PLAYSTATION_GAMER_PASSPORT_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -314,7 +313,6 @@ export const PlayStationGamer = () => {
         <ModalBody>
           {!owned ? (
             <div className="d-flex flex-column align-items-center justify-content-center">
-              <img src={imgBlurChart} style={{ width: "90%", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
