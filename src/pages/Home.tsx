@@ -19,11 +19,11 @@ const HomePage = () => {
           <div className=" mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
             <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
           </div>
-          <h3 className="text-white !font-[Clash-Medium]">{item.appName}</h3>
-          <p className="h-[100px] text-slate-100/90 font-[Satoshi-Light] mt-1">{item.desc}</p>
+          <h3 className=" !font-[Clash-Medium]">{item.appName}</h3>
+          <p className="h-[100px] dark:text-slate-100/90 text-slate-500 font-[Satoshi-Light] mt-1">{item.desc}</p>
           <Link to={returnRoute(item.routeKey)} className="text-base hover:!no-underline hover:text-black">
             <div className="w-[121px] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center ">
-              <div className="bg-black rounded-md ">
+              <div className="dark:bg-black bg-slate-50 rounded-md ">
                 <Button className="relative left-2 bottom-1.5 text-base bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[6px] hover:scale-100">
                   Launch App
                 </Button>

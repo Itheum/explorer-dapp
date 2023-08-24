@@ -81,7 +81,7 @@ export const MyListed = () => {
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Identifier:</span>
-                      <span className="col-span-8 text-center">
+                      <span className="col-span-8 text-left">
                         <div className="flex flex-row items-center gap-1">
                           <span className="xl:text-base text-sm">{nftId}</span>
                           <a
@@ -95,7 +95,7 @@ export const MyListed = () => {
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Listed:</span>
-                      <span className="col-span-8 text-center">{offer.quantity}</span>
+                      <span className="col-span-8 text-left">{offer.quantity}</span>
                     </div>
                     {/* <div className="mb-1 row">
                 const dataNft = dataNfts.find((nft) => nft.tokenIdentifier == nftId);
@@ -140,32 +140,32 @@ export const MyListed = () => {
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Title:</span>
-                      <span className="col-span-8 text-center">{isDataNftLoaded && dataNfts[index].title}</span>
+                      <span className="col-span-8 text-left">{isDataNftLoaded && dataNfts[index].title}</span>
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Description:</span>
-                      <span className="col-span-8 text-center">
+                      <span className="col-span-8 text-left">
                         {isDataNftLoaded &&
                           (dataNfts[index].description.length > 20 ? dataNfts[index].description.slice(0, 20) + " ..." : dataNfts[index].description)}
                       </span>
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Creator:</span>
-                      <span className="col-span-8 text-center">
+                      <span className="col-span-8 text-left">
                         {isDataNftLoaded && <ElrondAddressLink explorerAddress={explorerAddress} address={dataNfts[index].creator} precision={6} />}
                       </span>
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Created At:</span>
-                      <span className="col-span-8 text-center">{isDataNftLoaded && dataNfts[index].creationTime.toLocaleString()}</span>
+                      <span className="col-span-8 text-left">{isDataNftLoaded && dataNfts[index].creationTime.toLocaleString()}</span>
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Total Supply:</span>
-                      <span className="col-span-8 text-center">{isDataNftLoaded && dataNfts[index].supply}</span>
+                      <span className="col-span-8 text-left">{isDataNftLoaded && dataNfts[index].supply}</span>
                     </div>
                     <div className="grid grid-cols-12 mb-1">
                       <span className="col-span-4 opacity-6">Royalties:</span>
-                      <span className="col-span-8 text-center">{isDataNftLoaded && `${convertToLocalString(dataNfts[index].royalties * 100, 2)}%`}</span>
+                      <span className="col-span-8 text-left">{isDataNftLoaded && `${convertToLocalString(dataNfts[index].royalties * 100, 2)}%`}</span>
                     </div>
                   </div>
                 </CardContent>
