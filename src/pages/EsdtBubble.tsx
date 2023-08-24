@@ -12,7 +12,6 @@ import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
 import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import imgBlurChart from "assets/img/blur-chart.png";
 import { CustomPagination, DataNftCard, ElrondAddressLink, Loader } from "components";
 import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
 import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
@@ -371,7 +370,6 @@ export const EsdtBubble = () => {
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}>
-              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
