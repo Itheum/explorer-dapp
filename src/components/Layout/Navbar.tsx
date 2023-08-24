@@ -135,7 +135,7 @@ export const Navbar = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuGroup>
-              <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
+              <Link to={routeNames.home}>
                 <DropdownMenuItem>
                   <Home className="mr-2 h-4 w-4" />
                   <span>Home</span>

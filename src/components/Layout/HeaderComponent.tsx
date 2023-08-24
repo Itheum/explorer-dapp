@@ -6,8 +6,8 @@ type HeaderProps = {
   hasImage: boolean;
   imgSrc?: string;
   altImageAttribute?: string;
-  pageSubtitle: string;
-  dataNftCount: number;
+  pageSubtitle?: string;
+  dataNftCount?: number;
   children: React.ReactNode;
 };
 export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
@@ -20,10 +20,14 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
           <img className="rounded-[3rem] w-full 2xl:h-[375px]" src={imgSrc} alt={altImageAttribute} />
         </div>
         <div>
-          <h4 className="my-4 text-center text-2xl">
-            {pageSubtitle}: {dataNftCount}
-          </h4>
-          <div className="flex flex-wrap justify-center md:justify-normal gap-x-20 ">{children}</div>
+          {pageSubtitle && dataNftCount ? (
+            <h4 className="my-4 text-center text-2xl">
+              {pageSubtitle}: {dataNftCount}
+            </h4>
+          ) : (
+            <></>
+          )}
+          <div className="flex flex-wrap base:flex-row flex-col justify-center md:justify-normal gap-x-20 ">{children}</div>
         </div>
       </div>
     </div>
