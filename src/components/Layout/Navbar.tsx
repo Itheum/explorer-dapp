@@ -128,11 +128,14 @@ export const Navbar = () => {
 
       <div className="md:!hidden !visible">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost">
-              <Menu />
-            </Button>
-          </DropdownMenuTrigger>
+          <div className="flex flex-row">
+            <SwitchButton />
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost">
+                <Menu />
+              </Button>
+            </DropdownMenuTrigger>
+          </div>
           <DropdownMenuContent className="w-56">
             <DropdownMenuGroup>
               <Link to={routeNames.home}>
