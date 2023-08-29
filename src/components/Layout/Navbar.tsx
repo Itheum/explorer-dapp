@@ -48,8 +48,8 @@ export const Navbar = () => {
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
           <img src={theme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
-          <span className="text-black dark:text-white pl-2">Itheum</span>
-          <span className="text-black dark:text-white font-semibold">Explorer</span>
+          <span className="text-black dark:text-white pl-2 md:text-xl text-base">Itheum</span>
+          <span className="text-black dark:text-white font-semibold md:text-xl text-base">Explorer</span>
         </Link>
       </div>
 
@@ -129,6 +129,29 @@ export const Navbar = () => {
       <div className="md:!hidden !visible">
         <DropdownMenu>
           <div className="flex flex-row">
+            {isLoggedIn ? (
+              <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                  <Button
+                    className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </div>
+              </Link>
+            ) : (
+              <Link to={routeNames.unlock}>
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                  <Button
+                    className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    variant="outline">
+                    Login
+                  </Button>
+                </div>
+              </Link>
+            )}
             <SwitchButton />
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
