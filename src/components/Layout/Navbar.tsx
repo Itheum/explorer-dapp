@@ -84,7 +84,7 @@ export const Navbar = () => {
                     <ListItem href={routeNames.mylisted} title={"My Listed"} className="!hover:no-underline !focus:no-underline">
                       Listed Data NFT's
                     </ListItem>
-                    <ListItem href={routeNames.mylisted} title={"My Wallet"}>
+                    <ListItem href={routeNames.mywallet} title={"My Wallet"}>
                       My Wallet Data NFT's
                     </ListItem>
                     <div className="flex flex-col p-3">
