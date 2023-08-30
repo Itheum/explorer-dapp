@@ -3,7 +3,7 @@ import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
-import { useGetSignMessageInfoStatus } from '@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus';
+import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -11,7 +11,6 @@ import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
 import { useNavigate, useParams } from "react-router-dom";
-import imgBlurChart from "assets/img/blur-chart.png";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_BUBBLE_NONCES } from "config";
@@ -21,6 +20,7 @@ import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -33,8 +33,6 @@ export const MultiversxBubbles = () => {
   const { signMessage } = useSignMessage();
   const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
-  console.log('lastSignedMessageSession', lastSignedMessageSession);
-
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +43,7 @@ export const MultiversxBubbles = () => {
   const navigate = useNavigate();
   const isWebWallet = loginMethod === "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
+  const [file, setFile] = useState<string | null>(null);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -64,13 +63,13 @@ export const MultiversxBubbles = () => {
       try {
         let signature = "";
 
-        if (lastSignedMessageSession && lastSignedMessageSession.status == 'signed' && lastSignedMessageSession.signature) {
+        if (lastSignedMessageSession && lastSignedMessageSession.status == "signed" && lastSignedMessageSession.signature) {
           signature = lastSignedMessageSession.signature;
         } else {
           let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
           signSessions = JSON.parse(signSessions.signedSessions);
           console.log("signSessions", signSessions);
-          
+
           // find the first 'signed' session
           for (const session of Object.values(signSessions) as any[]) {
             if (session.status && session.status == "signed" && session.signature) {
@@ -79,7 +78,7 @@ export const MultiversxBubbles = () => {
             }
           }
         }
-        
+
         if (!signature) {
           throw Error("Signature is empty");
         }
@@ -109,6 +108,7 @@ export const MultiversxBubbles = () => {
   function closeModal() {
     setIsModalOpened(false);
     setViewDataRes(undefined);
+    setFile(null);
   }
 
   async function fetchDataNfts() {
@@ -186,16 +186,16 @@ export const MultiversxBubbles = () => {
         if (res.contentType == "image/svg+xml") {
           blobDataType = BlobDataType.SVG;
           res.data = await (res.data as Blob).text();
+
+          // create a file so it can also be loaded in a new window
+          const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+          setFile(pdfObject);
         } else {
           blobDataType = BlobDataType.IMAGE;
           res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         }
-      } else if (res.contentType.search("audio") >= 0) {
-        res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-        blobDataType = BlobDataType.AUDIO;
       } else {
-        res.data = await (res.data as Blob).text();
-        res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+        toastError("This content type is not supported");
       }
     } else {
       console.error(res.error);
@@ -238,30 +238,20 @@ export const MultiversxBubbles = () => {
   }
 
   return (
-    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h1 className="app-title">MultiversX Bubbles</h1>
-          <div className="hero">
-            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
-          </div>
-
-          <div className="body">
-            <h4 className="mt-5 text-center nfts-unlocks">Data NFTs that Unlock this App: {dataNfts.length}</h4>
-
-            <div className="row mt-5">
-              {dataNfts.length > 0 ? (
-                dataNfts.map((dataNft, index) => (
-                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-                ))
-              ) : (
-                <h3 className="text-center text-white">No DataNFT</h3>
-              )}
-            </div>
-          </div>
-          <div className="footer"></div>
-        </div>
-      </div>
+    <HeaderComponent
+      pageTitle={"MultiversX Bubbles"}
+      hasImage={true}
+      imgSrc={headerHero}
+      altImageAttribute={"bubbleMap"}
+      pageSubtitle={"Data NFTs that Unlock this App"}
+      dataNftCount={dataNfts.length}>
+      {dataNfts.length > 0 ? (
+        dataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No DataNFT</h3>
+      )}
 
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
         <div style={{ height: "3rem" }}>
@@ -276,7 +266,20 @@ export const MultiversxBubbles = () => {
           </div>
         </div>
         <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">MultiversX Bubbles</h4>
+          <div className="c-model-header-with-action">
+            <h4 className="text-center font-title font-weight-bold c-model-title">MultiversX Bubbles</h4>
+            {file && (
+              <button
+                className="btn btn-outline-primary"
+                onClick={() => {
+                  if (file) {
+                    window.open(file as string, "_blank");
+                  }
+                }}>
+                Open this file in full screen mode
+              </button>
+            )}
+          </div>
         </ModalHeader>
         <ModalBody
           style={{
@@ -294,7 +297,6 @@ export const MultiversxBubbles = () => {
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}>
-              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
@@ -317,10 +319,6 @@ export const MultiversxBubbles = () => {
                 !viewDataRes.error &&
                 (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
                   <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-                ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-                  <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
-                    <audio controls autoPlay src={viewDataRes.data} />
-                  </div>
                 ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
                   <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
                 ) : (
@@ -332,6 +330,6 @@ export const MultiversxBubbles = () => {
           )}
         </ModalBody>
       </Modal>
-    </div>
+    </HeaderComponent>
   );
 };

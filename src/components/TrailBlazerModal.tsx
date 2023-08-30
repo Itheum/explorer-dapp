@@ -4,11 +4,10 @@ import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshak
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
-import imgBlurChart from "assets/img/blur-chart.png";
 import { Loader } from "components";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { IFrameModal } from "./iFrameModal";
-import TwModal from "./Modal/TwModal";
+import { TwModal } from "./Modal/TwModal";
 import { createPortal } from "react-dom";
 
 const customStyles = {
@@ -99,7 +98,7 @@ export const TrailBlazerModal = ({
               </a>
             </div>
             <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
+              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
               <div className="platform">
                 Claimable On:{" "}
                 <span className="icon">
@@ -131,7 +130,7 @@ export const TrailBlazerModal = ({
               </button>
             </div>
             <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
+              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
             </div>
           </div>
         );
@@ -170,7 +169,7 @@ export const TrailBlazerModal = ({
               )}
             </div>
             <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toUTCString()}</div>
+              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
             </div>
           </div>
         );
@@ -179,7 +178,7 @@ export const TrailBlazerModal = ({
         tileCode = (
           <div className="news-tile">
             <h2>
-              {dataItem.category} - {new Date(dataItem.date).toUTCString()}
+              {dataItem.category} - {new Date(dataItem.date).toDateString()}
             </h2>
             <h3>{dataItem.title}</h3>
             <a href={dataItem.link} target="_blank">
@@ -248,7 +247,6 @@ export const TrailBlazerModal = ({
       <ModalBody>
         {!owned ? (
           <div className="d-flex flex-column align-items-center justify-content-center">
-            <img src={imgBlurChart} style={{ width: "90%", height: "auto" }} />
             <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
             <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
           </div>

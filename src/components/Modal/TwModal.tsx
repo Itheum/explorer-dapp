@@ -8,7 +8,7 @@ type ModalProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function MyModal(props: ModalProps) {
+export const TwModal = (props: ModalProps) => {
   const { isModalOpen = false, content, setIsModalOpen } = props;
   let [isOpen, setIsOpen] = useState(isModalOpen);
 
@@ -30,7 +30,7 @@ export default function MyModal(props: ModalProps) {
         type="button"
         onClick={openModal}
         className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-        Join quest!
+        Launch Quest
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -72,4 +72,4 @@ export default function MyModal(props: ModalProps) {
       </Transition>
     </>
   );
-}
+};
