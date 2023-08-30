@@ -50,6 +50,9 @@ export const ZoomableSvg = ({
       initialPositionX={0}
       initialPositionY={0}
       ref={transformComponentRef}
+      wheel={{
+        step: 1,
+      }}
     >
       <React.Fragment>
         <TransformComponent
