@@ -126,10 +126,11 @@ export const MyWallet = () => {
         res.data = pdfObject;
         blobDataType = BlobDataType.PDF;
         window.open(pdfObject, "_blank");
-        setIsAutoOpenFormat(true);        
+        setIsAutoOpenFormat(true);
       } else if (res.contentType.search("application/json") >= 0) {
-        // res.data = DOMPurify.sanitize(await (res.data as Blob).text());
-        res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+        const purifiedJSONStr = DOMPurify.sanitize(await (res.data as Blob).text());
+        res.data = JSON.stringify(JSON.parse(purifiedJSONStr), null, 4);
+        setIsDomPurified(true);
       } else if (res.contentType.search("text/plain") >= 0) {
         res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         setIsDomPurified(true);
