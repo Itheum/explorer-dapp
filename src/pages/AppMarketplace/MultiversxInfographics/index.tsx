@@ -13,7 +13,6 @@ import Modal from "react-modal";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import { useNavigate, useParams } from "react-router-dom";
-import imgBlurChart from "assets/img/blur-chart.png";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
@@ -26,6 +25,7 @@ import { routeNames } from "routes";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "./MultiversxInfographics.scss";
+import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -258,32 +258,20 @@ export const MultiversxInfographics = () => {
   }
 
   return (
-    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h1 className="app-title">MultiversX Infographics</h1>
-
-          <div className="hero">
-            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
-          </div>
-
-          <div className="body">
-            <h4 className="mt-5 text-center nfts-unlocks">Data NFTs that Unlock this App: {dataNfts.length}</h4>
-
-            <div className="row mt-5">
-              {dataNfts.length > 0 ? (
-                dataNfts.map((dataNft, index) => (
-                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-                ))
-              ) : (
-                <h3 className="text-center text-white">No DataNFT</h3>
-              )}
-            </div>
-          </div>
-          <div className="footer"></div>
-        </div>
-      </div>
-
+    <HeaderComponent
+      pageTitle={"MultiversX Infographics"}
+      hasImage={true}
+      imgSrc={headerHero}
+      altImageAttribute={"mvxInfographics"}
+      pageSubtitle={"Data NFTs that Unlock this App"}
+      dataNftCount={dataNfts.length}>
+      {dataNfts.length > 0 ? (
+        dataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No DataNFT</h3>
+      )}
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
         <div style={{ height: "3rem" }}>
           <div
@@ -328,7 +316,6 @@ export const MultiversxInfographics = () => {
                 minHeight: "40rem",
                 maxHeight: "80vh",
               }}>
-              <img src={imgBlurChart} style={{ width: "24rem", height: "auto" }} />
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
@@ -380,6 +367,6 @@ export const MultiversxInfographics = () => {
           )}
         </ModalBody>
       </Modal>
-    </div>
+    </HeaderComponent>
   );
 };
