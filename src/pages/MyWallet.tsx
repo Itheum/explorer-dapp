@@ -127,10 +127,16 @@ export const MyWallet = () => {
         blobDataType = BlobDataType.PDF;
         window.open(pdfObject, "_blank");
         setIsAutoOpenFormat(true);
-      } else {
-        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
-        res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+      } else if (res.contentType.search("application/json") >= 0) {
+        const purifiedJSONStr = DOMPurify.sanitize(await (res.data as Blob).text());
+        res.data = JSON.stringify(JSON.parse(purifiedJSONStr), null, 4);
         setIsDomPurified(true);
+      } else if (res.contentType.search("text/plain") >= 0) {
+        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
+        setIsDomPurified(true);
+      } else {
+        // we don't support that format
+        res.data = "Sorry, this file type is currently not supported by the Explorer File Viewer. The file type is: " + res.contentType;
       }
     } else {
       console.error(res.error);
