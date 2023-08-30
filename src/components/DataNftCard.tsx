@@ -42,21 +42,19 @@ export function DataNftCard({
           <div className="h-[220px]">
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Title:</span>
-              <span className="col-span-8 text-center">{dataNft.title}</span>
+              <span className="col-span-8 text-left">{dataNft.title}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Description:</span>
-              <span className="col-span-8 text-center">
-                {dataNft.description.length > 20 ? dataNft.description.slice(0, 25) + " ..." : dataNft.description}
-              </span>
+              <span className="col-span-8 text-left">{dataNft.description.length > 20 ? dataNft.description.slice(0, 25) + " ..." : dataNft.description}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Creator:</span>
-              <span className="col-span-8 text-center ">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
+              <span className="col-span-8 text-left ">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Created At:</span>
-              <span className="col-span-8 text-center">{dataNft.creationTime.toLocaleString()}</span>
+              <span className="col-span-8 text-left">{dataNft.creationTime.toLocaleString()}</span>
             </div>
 
             <div className="grid grid-cols-12 mb-1">
@@ -73,16 +71,16 @@ export function DataNftCard({
             {showBalance && (
               <div className="grid grid-cols-12 mb-1">
                 <span className="col-span-4 opacity-6">Balance:</span>
-                <span className="col-span-8 text-center">{dataNft.balance}</span>
+                <span className="col-span-8 text-left">{dataNft.balance}</span>
               </div>
             )}
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Total Supply:</span>
-              <span className="col-span-8 text-center">{dataNft.supply}</span>
+              <span className="col-span-8 text-left">{dataNft.supply}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Royalties:</span>
-              <span className="col-span-8 text-center">{isNaN(dataNft.royalties) ? "0%" : convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
+              <span className="col-span-8 text-left">{isNaN(dataNft.royalties) ? "0%" : convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
             </div>
           </div>
 
@@ -97,18 +95,16 @@ export function DataNftCard({
 
             <CardFooter className="flex w-full justify-center mt-3 pb-2 text-center">
               {owned ? (
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
-                  <Button
-                    className="dark:bg-[#0f0f0f] border-0 rounded-lg font-medium tracking-wide !text-lg"
-                    variant="outline"
-                    onClick={() => viewData(index)}>
-                    View Data
-                  </Button>
-                </div>
+                <Button
+                  className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-black rounded-lg font-medium tracking-wide !text-lg hover:opacity-80 hover:text-black"
+                  variant="ghost"
+                  onClick={() => viewData(index)}>
+                  View Data
+                </Button>
               ) : (
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
                   <Button
-                    className="dark:bg-[#0f0f0f] border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="dark:bg-[#0f0f0f] border-0 rounded-lg font-medium tracking-wide !text-lg hover:opacity-90"
                     variant="outline"
                     onClick={() => goToMarketplace(dataNft.tokenIdentifier)}>
                     View in Marketplace

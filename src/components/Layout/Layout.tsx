@@ -10,7 +10,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { search } = useLocation();
 
   return (
-    <div className="flex flex-column flex-fill wrapper">
+    <div className="flex flex-column flex-auto min-h-[100dvh]">
       <Navbar />
       <main className="flex flex-column flex-grow-1 2xl:mx-[20rem] xl:mx-[8rem] md:mx-[4rem] base:mx-[1.5rem]">
         <AuthenticatedRoutesWrapper routes={routes} unlockRoute={`${routeNames.unlock}${search}`}>
@@ -22,8 +22,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         toastOptions={{
           // Default options for specific types
           error: {
-            duration: 30000
-          }
+            duration: 30000,
+          },
         }}
       />
     </div>
