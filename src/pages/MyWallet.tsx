@@ -103,9 +103,20 @@ export const MyWallet = () => {
   }
 
   async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
-    const res: ViewDataReturnType = await dataNft.viewData(messageToBeSigned, signedMessage, true, false, "authorization", {
-      "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
-    });
+    const res: ViewDataReturnType = await dataNft.viewDataViaMVXNativeAuth(
+      ["http://localhost:3000"],
+      300,
+      "authorization",
+      {
+        "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+      },
+      false,
+      true
+    );
+
+    // const res: ViewDataReturnType = await dataNft.viewData(messageToBeSigned, signedMessage, true, false, "authorization", {
+    //   "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+    // });
 
     let blobDataType = BlobDataType.TEXT;
 

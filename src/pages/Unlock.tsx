@@ -32,7 +32,7 @@ const UnlockPage = () => {
     callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
     nativeAuth: {
       apiAddress: "https://devnet-api.multiversx.com",
-      expirySeconds: 3600,
+      expirySeconds: 300,
       origin: "http://localhost:3000",
     },
   };
