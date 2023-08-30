@@ -38,11 +38,11 @@ const UnlockPage = () => {
   };
 
   return (
-    <div className="home d-flex flex-fill align-items-center c-unlock">
+    <div className="flex flex-auto items-center">
       <div className="m-auto" data-testid="unlockPage">
-        <div className="card my-4 text-center">
-          <div className="card-body py-5 px-2 px-sm-2 mx-lg-4">
-            <h4 className="mb-4 font-title font-weight-bold login-title">Login</h4>
+        <div className=" rounded-2xl my-4 text-center dark:bg-[#0a0a0a] bg-slate-100 drop-shadow-2xl">
+          <div className=" py-5 px-2 px-sm-2 mx-lg-4">
+            <h4 className="mb-4 font-weight-bold">Login</h4>
 
             <div className="d-flex flex-column" style={{ minWidth: "20rem", gap: "1rem" }}>
               <WalletConnectLoginButton loginButtonText="xPortal App" {...commonProps} {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})} />
