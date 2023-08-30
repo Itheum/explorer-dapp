@@ -284,9 +284,9 @@ export const MultiversxBubbles = () => {
         <ModalBody
           style={{
             minWidth: "26rem",
-            minHeight: "36rem",
-            maxHeight: "80vh",
-            overflowY: "scroll",
+            height: "80vh",
+            // maxHeight: "80vh",
+            // overflowY: "scroll",
           }}>
           {!owned ? (
             <div
