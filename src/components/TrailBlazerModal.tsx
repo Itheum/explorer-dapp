@@ -8,7 +8,6 @@ import { Loader } from "components";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { IFrameModal } from "./iFrameModal";
 import { TwModal } from "./Modal/TwModal";
-import { createPortal } from "react-dom";
 
 const customStyles = {
   overlay: {
@@ -25,6 +24,7 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
     maxHeight: "80vh",
     backgroundColor: "var(--light)",
+    color: "var(--dark)",
   },
 };
 
@@ -230,14 +230,8 @@ export const TrailBlazerModal = ({
 
   return (
     <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={customStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
-      <div style={{ height: "3rem" }}>
-        <div
-          style={{
-            float: "right",
-            cursor: "pointer",
-            fontSize: "2rem",
-          }}
-          onClick={closeModal}>
+      <div className="h-[3rem]">
+        <div className="flex justify-end cursor-pointer text-[2rem]" onClick={closeModal}>
           <IoClose />
         </div>
       </div>

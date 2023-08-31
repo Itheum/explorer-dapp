@@ -102,3 +102,13 @@ h5, h6 {
         font-feature-settings: "rlig" 1, "calt" 1;
     }
 }
+
+.dapp-core-component__scamPhishingStyles__scam-phishing-alert .dapp-core-component__scamPhishingStyles__scam-phishing-alert-text,
+.dapp-core-component__walletConnectLoginContainerStyles__xPortal-content,
+.dapp-core-component__ledgerConnectStyles__login-connect-container .dapp-core-component__ledgerConnectStyles__login-connect-container-content {
+    @apply text-black !important;
+}
+
+.ReactModal__Content ReactModal__Content--after-open {
+    @apply dark:bg-black bg-slate-200 !important;
+}

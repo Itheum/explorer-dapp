@@ -53,7 +53,7 @@ export const Navbar = () => {
         </Link>
       </div>
 
-      <NavigationMenu className="md:!inline !hidden">
+      <NavigationMenu className="md:!inline !hidden z-0">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
