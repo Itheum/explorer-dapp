@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import lightLogo from "assets/img/logo-icon-b.png";
 import darkLogo from "assets/img/logo-sml-d.png";
@@ -37,6 +37,20 @@ export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
   const { address } = useGetAccount();
   const { theme } = useTheme();
+  const [systemTheme, setSystemTheme] = useState<string>();
+  const getSystemTheme = () => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    } else {
+      return "light";
+    }
+  };
+
+  useEffect(() => {
+    if (theme === "system") {
+      setSystemTheme(getSystemTheme());
+    }
+  }, [theme]);
 
   const handleLogout = () => {
     // logout(`${window.location.origin}/unlock`);
@@ -47,13 +61,13 @@ export const Navbar = () => {
     <div className="flex flex-row justify-between items-center 2xl:mx-[19.5rem] xl:mx-[7.5rem] md:mx-[3.5rem] h-20">
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
-          <img src={theme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
+          <img src={theme === "dark" ? darkLogo : theme === "system" && systemTheme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
           <span className="text-black dark:text-white pl-2 md:text-xl text-base">Itheum</span>
           <span className="text-black dark:text-white font-semibold md:text-xl text-base">Explorer</span>
         </Link>
       </div>
 
-      <NavigationMenu className="md:!inline !hidden">
+      <NavigationMenu className="md:!inline !hidden z-0">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
@@ -154,7 +168,7 @@ export const Navbar = () => {
             )}
             <SwitchButton />
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
+              <Button variant="ghost" className="!pl-0">
                 <Menu />
               </Button>
             </DropdownMenuTrigger>
