@@ -147,14 +147,14 @@ export const TrailBlazerModal = ({
                 <div className="process-error">{normalizeLeaderboardData(dataItem.link).processMsg}</div>
               )) || (
                 <table className="table">
-                  <thead>
+                  <thead className="!text-black">
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Address</th>
                       <th scope="col">Points</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="!text-black">
                     {normalizeLeaderboardData(dataItem.link).tableData.map((rowData: any, idx: number) => {
                       return (
                         <tr>
@@ -181,7 +181,7 @@ export const TrailBlazerModal = ({
               {dataItem.category} - {new Date(dataItem.date).toDateString()}
             </h2>
             <h3>{dataItem.title}</h3>
-            <a href={dataItem.link} target="_blank">
+            <a href={dataItem.link} target="_blank" className="!text-blue-500">
               See more...
             </a>
           </div>
