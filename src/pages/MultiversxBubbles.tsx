@@ -177,7 +177,7 @@ export const MultiversxBubbles = () => {
   }
 
   async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
-    const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true);
+    const res = await dataNft.viewData({ signedMessage: messageToBeSigned, signableMessage: signedMessage as any });
 
     let blobDataType = BlobDataType.TEXT;
 

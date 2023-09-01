@@ -107,7 +107,7 @@ export const GamerPassportGamer = () => {
         return;
       }
 
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
+      const res = await dataNft.viewData({ signedMessage: messageToBeSigned, signableMessage: signedMessage as any });
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
       console.log("viewData", res);

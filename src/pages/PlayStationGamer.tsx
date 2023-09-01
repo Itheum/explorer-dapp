@@ -94,7 +94,7 @@ export const PlayStationGamer = () => {
       // console.log('messageToBeSigned', messageToBeSigned);
       const signedMessage = await signMessage({ message: messageToBeSigned });
       // console.log('signedMessage', signedMessage);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
+      const res = await dataNft.viewData({ signedMessage: messageToBeSigned, signableMessage: signedMessage as any });
       if (!signedMessage) {
         toastError("Wallet signing failed.");
         return;

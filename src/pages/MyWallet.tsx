@@ -11,6 +11,7 @@ import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
 import { useNavigate, useParams } from "react-router-dom";
+import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions, useSignMessage } from "hooks";
@@ -19,7 +20,6 @@ import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
-import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -103,20 +103,44 @@ export const MyWallet = () => {
     setIsFetchingDataMarshal(false);
   }
 
-  async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
-    const res: ViewDataReturnType = await dataNft.viewDataViaMVXNativeAuth(
-      ["http://localhost:3000"],
-      300,
-      "authorization",
-      {
+  async function viewNormalData_NativeAuth(index: number) {
+    if (!(index >= 0 && index < dataNfts.length)) {
+      toastError("Data is not loaded");
+      return;
+    }
+
+    setIsFetchingDataMarshal(true);
+    setViewDataRes(undefined);
+    openModal();
+
+    const dataNft = dataNfts[index];
+    const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft);
+
+    setViewDataRes(viewDataPayload);
+    setIsFetchingDataMarshal(false);
+  }
+
+  async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned?: string, signedMessage?: SignableMessage) {
+    const res: ViewDataReturnType = await dataNft.viewDataViaMVXNativeAuth({
+      mvxNativeAuthOrigins: ["http://localhost:3000"],
+      mvxNativeAuthMaxExpirySeconds: 300,
+      fwdHeaderKeys: "authorization",
+      fwdHeaderMapLookup: {
         "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
       },
-      false,
-      true
-    );
+      fwdAllHeaders: false,
+      stream: true,
+    });
 
-    // const res: ViewDataReturnType = await dataNft.viewData(messageToBeSigned, signedMessage, true, false, "authorization", {
-    //   "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+    // const res: ViewDataReturnType = await dataNft.viewData({
+    //   signedMessage: messageToBeSigned,
+    //   signableMessage: signedMessage,
+    //   stream: true,
+    //   fwdAllHeaders: false,
+    //   fwdHeaderKeys: "authorization",
+    //   fwdHeaderMapLookup: {
+    //     "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+    //   },
     // });
 
     let blobDataType = BlobDataType.TEXT;
@@ -235,7 +259,7 @@ export const MyWallet = () => {
             dataNft={dataNft}
             isLoading={isLoading}
             owned={true}
-            viewData={viewNormalData}
+            viewData={viewNormalData_NativeAuth}
             isWallet={true}
             showBalance={true}
           />
@@ -272,6 +296,18 @@ export const MyWallet = () => {
             maxHeight: "80vh",
             overflowY: "auto",
           }}>
+          {isDomPurified && (
+            <div className="alert alert-warning" role="alert">
+              <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential common
+              security risks; unfortunately, this may mean that even valid and safe content may appear different from the original format.{" "}
+              <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the original
+              file (at your own risk). <br />
+              <br />
+              Alternatively, <strong>as the safest option, only use official apps in the App Marketplace</strong> (accessible via the Header Menu in this
+              Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
+            </div>
+          )}
+
           {isFetchingDataMarshal ? (
             <div
               className="d-flex flex-column align-items-center justify-content-center"

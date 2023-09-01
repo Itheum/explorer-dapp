@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
+import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
@@ -20,7 +20,7 @@ export const ItheumTrailblazer = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { signMessage } = useSignMessage();
-  const { loginMethod } = useGetLoginInfo();
+  const { loginMethod, tokenLogin } = useGetLoginInfo();
   const navigate = useNavigate();
   const isWebWallet = loginMethod == "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
@@ -36,6 +36,7 @@ export const ItheumTrailblazer = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchAppNfts();
@@ -151,7 +152,51 @@ export const ItheumTrailblazer = () => {
           return;
         }
 
-        const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
+        const res = await dataNft.viewData({ signedMessage: messageToBeSigned, signableMessage: signedMessage as any });
+        res.data = await (res.data as Blob).text();
+        res.data = JSON.parse(res.data);
+
+        setData(res.data.data.reverse());
+        setIsFetchingDataMarshal(false);
+      } else {
+        openModal();
+      }
+    } catch (err) {
+      console.error(err);
+      toastError((err as Error).message);
+      closeModal();
+      setIsFetchingDataMarshal(false);
+    }
+  }
+
+  async function viewData_NativeAuth(index: number) {
+    try {
+      if (!(index >= 0 && index < itDataNfts.length)) {
+        toastError("Data is not loaded");
+        return;
+      }
+
+      const _owned = flags[index];
+      setOwned(_owned);
+
+      if (_owned) {
+        setIsFetchingDataMarshal(true);
+        openModal();
+
+        const dataNft = itDataNfts[index];
+
+        // const res = await dataNft.viewData({ signedMessage: messageToBeSigned, signableMessage: signedMessage as any });
+
+        const res: ViewDataReturnType = await dataNft.viewDataViaMVXNativeAuth({
+          mvxNativeAuthOrigins: ["http://localhost:3000"],
+          mvxNativeAuthMaxExpirySeconds: 300,
+          fwdHeaderMapLookup: {
+            "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+          },
+        });
+
+        console.log(res);
+
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
 
@@ -175,7 +220,7 @@ export const ItheumTrailblazer = () => {
       openModal();
 
       const dataNft = await DataNft.createFromApi(nonce);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
+      const res = await dataNft.viewData({ signedMessage: messageToBeSigned, signableMessage: signedMessage as any });
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
 
@@ -200,7 +245,7 @@ export const ItheumTrailblazer = () => {
       dataNftCount={itDataNfts.length}>
       {itDataNfts.length > 0 ? (
         itDataNfts.map((dataNft, index) => (
-          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData_NativeAuth} />
         ))
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>

@@ -87,6 +87,9 @@ export const Navbar = () => {
                     <ListItem href={routeNames.mywallet} title={"My Wallet"}>
                       My Wallet Data NFT's
                     </ListItem>
+                    <ListItem href={routeNames.tutorials} title={"Tutorials"}>
+                      Tutorials
+                    </ListItem>
                     <div className="flex flex-col p-3">
                       <p className="text-sm font-medium leading-none dark:text-slate-100">My Address Quick Copy</p>
                       <CopyAddress address={address} precision={6} />
