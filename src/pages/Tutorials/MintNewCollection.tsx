@@ -57,14 +57,15 @@ export const MintNewCollection = () => {
     try {
       const mintTransaction: Transaction = await dataNftMinter.mint(
         new Address(address),
+        // new Address("erd1d79z3ksc2rxpfm3ftj66szrzkcuf35q6pkwgh7j5ftezrk7qgkcqtyg653"),
         "DATA_NFT_TOKEN_NAME",
         "https://api.itheumcloud-stg.com/datamarshalapi/achilles/v1",
         "https://api.itheumcloud-stg.com/datadexapi/bespoke/dynamicSecureDataStreamDemo",
         "https://raw.githubusercontent.com/Itheum/data-assets/main/Misc/M1__FBI_Firearm_Background_Check_Data/pdf/preview.pdf",
         15,
         1000,
-        "SDK Mint 1 - Standard",
-        "SDK Mint 1 Description - Using the default, built in image and trait generation feature",
+        "SDK Mint 1a - CopyPasteHackGood",
+        "SDK Mint 1a CopyPasteHackGood - Using the default, built in image and trait generation feature",
         antiSpamTax || 0,
         {
           nftStorageToken: REACT_APP_ENV_NFT_STORAGE_KEY,
@@ -103,14 +104,15 @@ export const MintNewCollection = () => {
     try {
       const mintTransaction: Transaction = await dataNftMinter.mint(
         new Address(address),
+        // new Address("erd1d79z3ksc2rxpfm3ftj66szrzkcuf35q6pkwgh7j5ftezrk7qgkcqtyg653"),
         "HELLOWORLDSDK2",
         "https://api.itheumcloud-stg.com/datamarshalapi/achilles/v1",
         "https://api.itheumcloud-stg.com/datadexapi/bespoke/dynamicSecureDataStreamDemo",
         "https://raw.githubusercontent.com/Itheum/data-assets/main/Misc/M1__FBI_Firearm_Background_Check_Data/pdf/preview.pdf",
         15,
         1000,
-        "SDK Mint 2 - Custom",
-        "SDK Mint 2 Description - Using a custom image URL and trait file",
+        "SDK Mint 2a - CopyPasteHackGood",
+        "SDK Mint 2a CopyPasteHackGood - Using a custom image URL and trait file",
         antiSpamTax || 0,
         {
           imageUrl: "https://dataassets.markpaul.name/itheum_giftx_card_demo/itheum-giftx-card-edition-1.png",
@@ -152,6 +154,8 @@ export const MintNewCollection = () => {
   //   console.log("tokenLogin.nativeAuthToken");
   //   console.log(tokenLogin?.nativeAuthToken);
   // }
+
+  console.log(address);
 
   return (
     <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">

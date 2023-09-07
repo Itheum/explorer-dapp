@@ -197,11 +197,24 @@ export const ItheumTrailblazer = () => {
 
         console.log(res);
 
-        res.data = await (res.data as Blob).text();
-        res.data = JSON.parse(res.data);
+        if (!res.error) {
+          res.data = await (res.data as Blob).text();
+          res.data = JSON.parse(res.data);
 
-        setData(res.data.data.reverse());
-        setIsFetchingDataMarshal(false);
+          // the marshal will return error here as well, so we check if we have the data we want...
+          // ... or else we show a UI error
+          if (res.data?.data && Array.isArray(res.data.data)) {
+            setData(res.data.data.reverse());
+          } else {
+            console.error(res.data);
+            toastError(JSON.stringify(res.data));
+          }
+
+          setIsFetchingDataMarshal(false);
+        } else {
+          console.error(res.error);
+          toastError(res.error);
+        }
       } else {
         openModal();
       }

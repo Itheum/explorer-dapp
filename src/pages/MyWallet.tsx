@@ -60,6 +60,9 @@ export const MyWallet = () => {
     setIsLoading(true);
 
     const _dataNfts = await DataNft.ownedByAddress(address);
+
+    console.log("_dataNfts", _dataNfts);
+
     setDataNftCount(_dataNfts.length);
     setDataNfts(_dataNfts);
 
@@ -128,7 +131,6 @@ export const MyWallet = () => {
       fwdHeaderMapLookup: {
         "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
       },
-      fwdAllHeaders: false,
       stream: true,
     });
 
