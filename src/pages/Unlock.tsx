@@ -30,7 +30,7 @@ const UnlockPage = () => {
 
   const commonProps = {
     callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
-    // nativeAuth: true, // optional
+    nativeAuth: true, // optional
   };
 
   return (
