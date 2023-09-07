@@ -1,0 +1,70 @@
+/**
+ * @license
+ *
+ * Font Family: Clash Display
+ * Designed by: Indian Type Foundry
+ * URL: https://www.fontshare.com/fonts/clash-display
+ * © 2023 Indian Type Foundry
+ *
+ * Font Styles:
+ * Clash Display Variable(Variable font)
+ * Clash Display Extralight
+ * Clash Display Light
+ * Clash Display Regular
+ * Clash Display Medium
+ * Clash Display Semibold
+ * Clash Display Bold
+ *
+*/
+
+
+/**
+* This is a variable font
+* You can controll variable axes as shown below:
+* font-variation-settings: 'wght' 700.0;
+*
+* available axes:
+
+* 'wght' (range from 200.0 to 700.0)
+
+*/
+
+@font-face {
+  font-family: 'Clash-Variable';
+  src: url(./fonts/ClashDisplay-Variable.woff2) format('woff2');
+       font-weight: 200 700;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Clash-Light';
+  src: url(./fonts/ClashDisplay-Light.woff2) format('woff2');
+       font-weight: 300;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Clash-Regular';
+  src: url(./fonts/ClashDisplay-Regular.woff2) format('woff2');
+       font-weight: 400;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Clash-Medium';
+  src: url(./fonts/ClashDisplay-Medium.woff2) format('woff2');
+       font-weight: 500;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Clash-Bold';
+  src: url(./fonts/ClashDisplay-Bold.woff2) format('woff2');
+       font-weight: 600;
+       font-style: normal;
+}
+

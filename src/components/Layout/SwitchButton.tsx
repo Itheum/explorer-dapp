@@ -1,78 +1,26 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import { Moon, Sun } from "lucide-react";
 
-const SwitchButtonStyle = styled.label<{ $isDarkMode?: boolean; }>`
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  span {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: ${(props: any) => props.isDarkMode ? '#111827' : '#374151'};
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    border-radius: 34px;
-  }
-
-  span:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: ${(props: any) => props.isDarkMode ? '#E5E7EB' : '#E5E7EB'};
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    border-radius: 50%;
-  }
-
-  input:checked + span {
-    background-color: ${(props: any) => props.isDarkMode ? '#E5E7EB' : '#374151'};
-  }
-
-  input:focus + span {
-    box-shadow: 0 0 1px #2196f3;
-  }
-
-  input:checked + span:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-`;
+import { Button } from "../../libComponents/Button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../libComponents/DropdownMenu";
+import { useTheme } from "../../libComponents/ThemeProvider";
 
 export function SwitchButton() {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsDarkMode(localStorage.getItem('is-dark-mode') == 'true');
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDarkMode);
-    localStorage.setItem('is-dark-mode', isDarkMode ? 'true' : 'false');
-  },[isDarkMode]);
+  const { setTheme } = useTheme();
 
   return (
-    <SwitchButtonStyle $isDarkMode={isDarkMode}>
-      <input
-        type="checkbox"
-        onChange={() => setIsDarkMode(!isDarkMode)}
-      />
-      <span></span>
-    </SwitchButtonStyle>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

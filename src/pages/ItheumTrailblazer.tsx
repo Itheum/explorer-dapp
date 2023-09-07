@@ -14,6 +14,7 @@ import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 export const ItheumTrailblazer = () => {
   const { address } = useGetAccount();
@@ -190,31 +191,22 @@ export const ItheumTrailblazer = () => {
   }
 
   return (
-    <div className="container d-flex flex-fill justify-content-center py-4 c-marketplace-app">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          <h1 className="app-title">Trailblazer</h1>
-          <div className="hero">
-            <img className="img-fluid" src={headerHero} style={{ width: "100%", height: "auto" }} />
-          </div>
-          <div className="body">
-            <h4 className="text-center nfts-unlocks">Data NFTs that Unlock this App: {itDataNfts.length}</h4>
-
-            <div className="row mt-5">
-              {itDataNfts.length > 0 ? (
-                itDataNfts.map((dataNft, index) => (
-                  <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
-                ))
-              ) : (
-                <h3 className="text-center text-white">No Data NFTs</h3>
-              )}
-            </div>
-          </div>
-          <div className="footer"></div>
-        </div>
-      </div>
+    <HeaderComponent
+      pageTitle={"Trailblazer"}
+      hasImage={true}
+      imgSrc={headerHero}
+      altImageAttribute={"itheumTrailblazer"}
+      pageSubtitle={"Data NFTs that Unlock this App"}
+      dataNftCount={itDataNfts.length}>
+      {itDataNfts.length > 0 ? (
+        itDataNfts.map((dataNft, index) => (
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+        ))
+      ) : (
+        <h3 className="text-center text-white">No Data NFTs</h3>
+      )}
 
       <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
-    </div>
+    </HeaderComponent>
   );
 };
