@@ -51,8 +51,12 @@ export const ZoomableSvg = ({
       initialPositionY={0}
       ref={transformComponentRef}
       wheel={{
-        step: 1,
+        // step: 0.5,
+        smoothStep: 0.004,
       }}
+      // pinch={{
+      //   step: 0.5,
+      // }}
     >
       <React.Fragment>
         <TransformComponent
