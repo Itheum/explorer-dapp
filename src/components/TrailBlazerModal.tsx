@@ -240,7 +240,7 @@ export const TrailBlazerModal = ({
       ariaHideApp={false}
       shouldCloseOnOverlayClick={false}>
       <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
-        <ModalHeader className=" border-0">
+        <ModalHeader className="border-0">
           <h2 className="text-center p-3 text-card-foreground">Trailblazer</h2>
         </ModalHeader>
         <div className="flex items-center h-[6rem]">
