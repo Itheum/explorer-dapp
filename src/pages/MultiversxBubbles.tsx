@@ -21,6 +21,7 @@ import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { Button } from "../libComponents/Button";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -253,44 +254,40 @@ export const MultiversxBubbles = () => {
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
 
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
-        <div style={{ height: "3rem" }}>
-          <div
-            style={{
-              float: "right",
-              cursor: "pointer",
-              fontSize: "2rem",
-            }}
-            onClick={closeModal}>
-            <IoClose />
+      <Modal
+        isOpen={isModalOpened}
+        onRequestClose={closeModal}
+        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
+        style={modalStylesFull}
+        ariaHideApp={false}
+        shouldCloseOnOverlayClick={false}>
+        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
+          <ModalHeader className="border-0">
+            <h2 className="text-center p-3 text-foreground">MultiversX Bubbles</h2>
+          </ModalHeader>
+          <div className="flex flex-col items-end gap-6 h-[6rem]">
+            <div className="flex justify-center cursor-pointer text-[2rem] text-foreground mr-3 mt-1" onClick={closeModal}>
+              <IoClose />
+            </div>
+            <div className="mr-3 mb-2">
+              {file && (
+                <Button
+                  className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
+                  onClick={() => {
+                    if (file) {
+                      window.open(file as string, "_blank");
+                    }
+                  }}>
+                  Open in full screen
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-        <ModalHeader>
-          <div className="c-model-header-with-action">
-            <h4 className="text-center font-title font-weight-bold c-model-title">MultiversX Bubbles</h4>
-            {file && (
-              <button
-                className="btn btn-outline-primary"
-                onClick={() => {
-                  if (file) {
-                    window.open(file as string, "_blank");
-                  }
-                }}>
-                Open this file in full screen mode
-              </button>
-            )}
-          </div>
-        </ModalHeader>
-        <ModalBody
-          style={{
-            minWidth: "26rem",
-            minHeight: "36rem",
-            maxHeight: "80vh",
-            overflowY: "scroll",
-          }}>
+        <ModalBody className="max-h-[80vh] min-h-[36rem] min-w-[26rem] p-0.5">
           {!owned ? (
             <div
-              className="d-flex flex-column align-items-center justify-content-center"
+              className="flex flex-col items-center justify-center"
               style={{
                 minWidth: "24rem",
                 maxWidth: "50vw",
@@ -301,14 +298,10 @@ export const MultiversxBubbles = () => {
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
           ) : isFetchingDataMarshal ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minHeight: "40rem",
-              }}>
+            <div className="flex flex-col items-center justify-center min-h-[40rem]">
               <div>
                 <Loader noText />
-                <p className="text-center font-weight-bold">
+                <p className="text-center text-foreground ">
                   {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
                 </p>
               </div>
@@ -318,9 +311,9 @@ export const MultiversxBubbles = () => {
               {viewDataRes &&
                 !viewDataRes.error &&
                 (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                  <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                  <img src={viewDataRes.data} className="w-full h-auto" />
                 ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                  <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
+                  <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} className="w-full h-auto" />
                 ) : (
                   <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
                     {viewDataRes.data}
