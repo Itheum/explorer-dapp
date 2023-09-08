@@ -5,13 +5,11 @@ import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
 import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
-import type { PDFDocumentProxy } from "pdfjs-dist";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
+import SVG from "react-inlinesvg";
 import Modal from "react-modal";
-import { Document, Page } from "react-pdf";
-import { pdfjs } from "react-pdf";
 import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
@@ -22,25 +20,11 @@ import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
-import "./MultiversxInfographics.scss";
-import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-
-const options = {
-  cMapUrl: "/cmaps/",
-  standardFontDataUrl: "/standard_fonts/",
-};
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
 }
-
-type PDFFile = string | File | null;
-
-// we are using react-pdf : https://levelup.gitconnected.com/displaying-pdf-in-react-app-6e9d1fffa1a9
 
 export const MultiversxInfographics = () => {
   const { address } = useGetAccount();
@@ -49,6 +33,7 @@ export const MultiversxInfographics = () => {
   const { signMessage } = useSignMessage();
   const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
+  console.log("lastSignedMessageSession", lastSignedMessageSession);
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -60,10 +45,6 @@ export const MultiversxInfographics = () => {
   const navigate = useNavigate();
   const isWebWallet = loginMethod === "wallet";
   const { targetNonce, targetMessageToBeSigned } = useParams();
-
-  const [file, setFile] = useState<PDFFile>(null);
-  const [numPages, setNumPages] = useState<number>(0);
-  const [pageNumber, setPageNumber] = useState(1); //setting 1 to show first page
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -88,6 +69,7 @@ export const MultiversxInfographics = () => {
         } else {
           let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
           signSessions = JSON.parse(signSessions.signedSessions);
+          console.log("signSessions", signSessions);
 
           // find the first 'signed' session
           for (const session of Object.values(signSessions) as any[]) {
@@ -127,9 +109,6 @@ export const MultiversxInfographics = () => {
   function closeModal() {
     setIsModalOpened(false);
     setViewDataRes(undefined);
-    setFile(null);
-    setNumPages(0);
-    setPageNumber(1);
   }
 
   async function fetchDataNfts() {
@@ -203,12 +182,27 @@ export const MultiversxInfographics = () => {
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {
-      const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-      res.data = "PDF opened in new tab";
-      blobDataType = BlobDataType.PDF;
-      // window.open(pdfObject, "_blank");
-
-      setFile(pdfObject);
+      if (res.contentType.search("image") >= 0) {
+        if (res.contentType == "image/svg+xml") {
+          blobDataType = BlobDataType.SVG;
+          res.data = await (res.data as Blob).text();
+        } else {
+          blobDataType = BlobDataType.IMAGE;
+          res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        }
+      } else if (res.contentType.search("audio") >= 0) {
+        res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        blobDataType = BlobDataType.AUDIO;
+      } else if (res.contentType.search("application/pdf") >= 0) {
+        const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        res.data = "PDF opened in new tab";
+        blobDataType = BlobDataType.PDF;
+        window.open(pdfObject, "_blank");
+        closeModal();
+      } else {
+        res.data = await (res.data as Blob).text();
+        res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+      }
     } else {
       console.error(res.error);
       toastError(res.error);
@@ -236,21 +230,13 @@ export const MultiversxInfographics = () => {
     }
   }
 
-  function onDocumentLoadSuccess({ numPages: totalPages }: PDFDocumentProxy): void {
-    setNumPages(totalPages);
-    setPageNumber(1);
-  }
+  function preProcess(code: any) {
+    // let newCode = code.replace(/fill=".*?"/g, 'fill="red"');
+    let newCode = code.replace(/height="1080pt"/, 'height="100%"');
+    newCode = newCode.replace(/width="1080pt"/, 'width="100%"');
+    newCode = newCode.replace(/<a/g, '<a xlink:show="new"'); // makes all link open in new tab
 
-  function changePage(offset: number) {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset);
-  }
-
-  function previousPage() {
-    changePage(-1);
-  }
-
-  function nextPage() {
-    changePage(1);
+    return newCode;
   }
 
   if (isLoading) {
@@ -272,6 +258,7 @@ export const MultiversxInfographics = () => {
       ) : (
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
+
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
         <div style={{ height: "3rem" }}>
           <div
@@ -285,20 +272,7 @@ export const MultiversxInfographics = () => {
           </div>
         </div>
         <ModalHeader>
-          <div className="c-model-header-with-action">
-            <h4 className="text-center font-title font-weight-bold c-model-title">MultiversX Infographics</h4>
-            {file && (
-              <button
-                className="btn btn-outline-primary"
-                onClick={() => {
-                  if (file) {
-                    window.open(file as string, "_blank");
-                  }
-                }}>
-                Open this PDF in full screen mode
-              </button>
-            )}
-          </div>
+          <h4 className="text-center font-title font-weight-bold">MultiversX Infographics</h4>
         </ModalHeader>
         <ModalBody
           style={{
@@ -334,35 +308,21 @@ export const MultiversxInfographics = () => {
             </div>
           ) : (
             <>
-              {viewDataRes && !viewDataRes.error && (
-                <div>
-                  <div className="d-flex justify-content-center c-container-paging">
-                    <button className="btn btn-outline-primary mr-3" type="button" disabled={pageNumber <= 1} onClick={previousPage}>
-                      Previous
-                    </button>
-                    <p className="c-pagecount">
-                      Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
-                    </p>
-                    <button className="btn btn-outline-primary ml-3" type="button" disabled={pageNumber >= numPages} onClick={nextPage}>
-                      Next
-                    </button>
+              {viewDataRes &&
+                !viewDataRes.error &&
+                (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                  <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
+                  <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
+                    <audio controls autoPlay src={viewDataRes.data} />
                   </div>
-
-                  <div className="c-container-document">
-                    <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-                      <Page pageNumber={pageNumber} />
-                    </Document>
-                  </div>
-
-                  {/* <div className="c-container-document">
-                      <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-                        {Array.from(new Array(numPages), (el, index) => (
-                          <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                        ))}
-                      </Document>
-                    </div> */}
-                </div>
-              )}
+                ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                  <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
+                ) : (
+                  <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                    {viewDataRes.data}
+                  </p>
+                ))}
             </>
           )}
         </ModalBody>

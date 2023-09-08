@@ -1,10 +1,11 @@
 import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
-import { FaExternalLinkAlt } from "react-icons/fa";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { convertToLocalString } from "libs/utils";
 import { ElrondAddressLink } from "./ElrondAddressLink";
+import { Button } from "../libComponents/Button";
+import { Card, CardContent, CardFooter } from "../libComponents/Card";
 
 export function DataNftCard({
   index,
@@ -26,83 +27,94 @@ export function DataNftCard({
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
-
   function goToMarketplace(tokenIdentifier: string) {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
 
   return (
-    <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-nft-tile">
-      <div className="card shadow-sm border">
-        <div className="card-body p-3">
+    <div className="mb-3 ">
+      <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px]">
+        <CardContent className="flex flex-col p-3">
           <div className="mb-4">
-            <img className="data-nft-image" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
+            <img className="" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
           </div>
 
-          <div className="mb-1 row">
-            <span className="col-4 opacity-6 fontsize-sm">Title:</span>
-            <span className="col-8">{dataNft.title}</span>
-          </div>
-          <div className="mb-1 row">
-            <span className="col-4 opacity-6 fontsize-sm">Description:</span>
-            <span className="col-8">{dataNft.description.length > 20 ? dataNft.description.slice(0, 20) + " ..." : dataNft.description}</span>
-          </div>
-          <div className="mb-1 row">
-            <span className="col-4 opacity-6 fontsize-sm">Creator:</span>
-            <span className="col-8 cs-creator-link">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
-          </div>
-          <div className="mb-1 row">
-            <span className="col-4 opacity-6 fontsize-sm">Created At:</span>
-            <span className="col-8">{dataNft.creationTime.toLocaleString()}</span>
-          </div>
-
-          <div className="mb-1 row">
-            <span className="col-4 opacity-6 fontsize-sm">Identifier:</span>
-            <span className="col-8 c-identifier-link">
-              <span>{dataNft.tokenIdentifier}</span>
-              <a href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`} className="ml-2 address-link text-decoration-none" target="_blank">
-                <FaExternalLinkAlt />
-              </a>
-            </span>
-          </div>
-          {showBalance && (
-            <div className="mb-1 row">
-              <span className="col-4 opacity-6 fontsize-sm">Balance:</span>
-              <span className="col-8">{dataNft.balance}</span>
+          <div className="h-[220px]">
+            <div className="grid grid-cols-12 mb-1">
+              <span className="col-span-4 opacity-6">Title:</span>
+              <span className="col-span-8 text-left">{dataNft.title}</span>
             </div>
-          )}
-          <div className="mb-1 row">
-            <span className="col-4 opacity-6 fontsize-sm">Total Supply:</span>
-            <span className="col-8">{dataNft.supply}</span>
-          </div>
-          <div className="mb-1 row">
-            <span className="col-4 opacity-6 fontsize-sm">Royalties:</span>
-            <span className="col-8">{isNaN(dataNft.royalties) ? "0%" : convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
+            <div className="grid grid-cols-12 mb-1">
+              <span className="col-span-4 opacity-6">Description:</span>
+              <span className="col-span-8 text-left">{dataNft.description.length > 20 ? dataNft.description.slice(0, 25) + " ..." : dataNft.description}</span>
+            </div>
+            <div className="grid grid-cols-12 mb-1">
+              <span className="col-span-4 opacity-6">Creator:</span>
+              <span className="col-span-8 text-left ">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
+            </div>
+            <div className="grid grid-cols-12 mb-1">
+              <span className="col-span-4 opacity-6">Created At:</span>
+              <span className="col-span-8 text-left">{dataNft.creationTime.toLocaleString()}</span>
+            </div>
+
+            <div className="grid grid-cols-12 mb-1">
+              <span className="col-span-4 opacity-6">Identifier:</span>
+              <div className="col-span-8 w-full items-center justify-center">
+                <a
+                  href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
+                  className="flex flex-row items-center text-decoration-none !text-blue-500"
+                  target="_blank">
+                  <p className="flex flex-row w-full items-center mb-0 text-sm xl:text-base">{dataNft.tokenIdentifier}</p>
+                </a>
+              </div>
+            </div>
+            {showBalance && (
+              <div className="grid grid-cols-12 mb-1">
+                <span className="col-span-4 opacity-6">Balance:</span>
+                <span className="col-span-8 text-left">{dataNft.balance}</span>
+              </div>
+            )}
+            <div className="grid grid-cols-12 mb-1">
+              <span className="col-span-4 opacity-6">Total Supply:</span>
+              <span className="col-span-8 text-left">{dataNft.supply}</span>
+            </div>
+            <div className="grid grid-cols-12 mb-1">
+              <span className="col-span-4 opacity-6">Royalties:</span>
+              <span className="col-span-8 text-left">{isNaN(dataNft.royalties) ? "0%" : convertToLocalString(dataNft.royalties * 100, 2) + "%"}</span>
+            </div>
           </div>
 
-          <div className="c-actions">
+          <div className="">
             {!isWallet && (
               <div className="mt-3 text-center">
-                <h6 className="font-title font-weight-bold" style={{ visibility: owned ? "visible" : "hidden" }}>
+                <h6 className="font-weight-bold" style={{ visibility: owned ? "visible" : "hidden" }}>
                   You have this Data NFT
                 </h6>
               </div>
             )}
 
-            <div className="mt-3 text-center">
+            <CardFooter className="flex w-full justify-center mt-3 pb-2 text-center">
               {owned ? (
-                <button className="btn btn-primary" onClick={() => viewData(index)}>
+                <Button
+                  className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-black rounded-lg font-medium tracking-wide !text-lg hover:opacity-80 hover:text-black"
+                  variant="ghost"
+                  onClick={() => viewData(index)}>
                   View Data
-                </button>
+                </Button>
               ) : (
-                <button className="btn btn-outline-primary" onClick={() => goToMarketplace(dataNft.tokenIdentifier)}>
-                  View in the Data NFT Marketplace
-                </button>
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
+                  <Button
+                    className="dark:bg-[#0f0f0f] border-0 rounded-lg font-medium tracking-wide !text-lg hover:opacity-90"
+                    variant="outline"
+                    onClick={() => goToMarketplace(dataNft.tokenIdentifier)}>
+                    View in Marketplace
+                  </Button>
+                </div>
               )}
-            </div>
+            </CardFooter>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

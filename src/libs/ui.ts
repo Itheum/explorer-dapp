@@ -14,6 +14,7 @@ export const modalStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "var(--light)",
+    color: "var(--dark)",
   },
 };
 
@@ -31,5 +32,6 @@ export const modalStylesFull = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "var(--light)",
+    color: "var(--dark)",
   },
 };

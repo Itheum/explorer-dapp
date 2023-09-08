@@ -20,6 +20,7 @@ import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -126,10 +127,16 @@ export const MyWallet = () => {
         blobDataType = BlobDataType.PDF;
         window.open(pdfObject, "_blank");
         setIsAutoOpenFormat(true);
-      } else {
-        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
-        res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+      } else if (res.contentType.search("application/json") >= 0) {
+        const purifiedJSONStr = DOMPurify.sanitize(await (res.data as Blob).text());
+        res.data = JSON.stringify(JSON.parse(purifiedJSONStr), null, 4);
         setIsDomPurified(true);
+      } else if (res.contentType.search("text/plain") >= 0) {
+        res.data = DOMPurify.sanitize(await (res.data as Blob).text());
+        setIsDomPurified(true);
+      } else {
+        // we don't support that format
+        res.data = "Sorry, this file type is currently not supported by the Explorer File Viewer. The file type is: " + res.contentType;
       }
     } else {
       console.error(res.error);
@@ -206,39 +213,30 @@ export const MyWallet = () => {
   }
 
   return (
-    <div className="d-flex flex-fill justify-content-center container py-4 c-my-wallet">
-      <div className="row w-100">
-        <div className="col-12 mx-auto">
-          {dataNftCount > 0 && <h4 className="mt-5 text-center count-title">My Data NFTs: {dataNftCount}</h4>}
-
-          <div className="row mt-5">
-            {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => (
-                <DataNftCard
-                  key={index}
-                  index={index}
-                  dataNft={dataNft}
-                  isLoading={isLoading}
-                  owned={true}
-                  viewData={viewNormalData}
-                  isWallet={true}
-                  showBalance={true}
-                />
-              ))
-            ) : (
-              <h4 className="no-items">
-                <div>
-                  You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting the
-                  <a href={`${MARKETPLACE_DETAILS_PAGE}`} className="ml-2 address-link text-decoration-none" target="_blank">
-                    Data DEX
-                  </a>
-                </div>
-              </h4>
-            )}
+    <HeaderComponent pageTitle={"My Data NFT's"} hasImage={false} pageSubtitle={"My Data NFTs"} dataNftCount={dataNftCount}>
+      {dataNfts.length > 0 ? (
+        dataNfts.map((dataNft, index) => (
+          <DataNftCard
+            key={index}
+            index={index}
+            dataNft={dataNft}
+            isLoading={isLoading}
+            owned={true}
+            viewData={viewNormalData}
+            isWallet={true}
+            showBalance={true}
+          />
+        ))
+      ) : (
+        <h4 className="no-items">
+          <div>
+            You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting the
+            <a href={`${MARKETPLACE_DETAILS_PAGE}`} className="ml-2 address-link text-decoration-none" target="_blank">
+              Data DEX
+            </a>
           </div>
-        </div>
-      </div>
-
+        </h4>
+      )}
       <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
         <div style={{ height: "3rem" }}>
           <div
@@ -329,6 +327,6 @@ export const MyWallet = () => {
           )}
         </ModalBody>
       </Modal>
-    </div>
+    </HeaderComponent>
   );
 };
