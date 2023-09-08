@@ -240,7 +240,7 @@ export const MyWallet = () => {
       <Modal
         isOpen={isModalOpened}
         onRequestClose={closeModal}
-        className="absolute overflow-y-scroll !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background rounded-2xl"
+        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background rounded-2xl"
         style={modalStyles}
         ariaHideApp={false}
         shouldCloseOnOverlayClick={false}>
@@ -254,14 +254,7 @@ export const MyWallet = () => {
             </div>
           </div>
         </div>
-        <ModalBody
-          className="text-foreground"
-          style={{
-            minWidth: "26rem",
-            minHeight: "36rem",
-            maxHeight: "80vh",
-            overflowY: "auto",
-          }}>
+        <ModalBody className="text-foreground max-h-[80vh] min-h-[36rem] min-w-[26rem] p-0.5">
           {isDomPurified && (
             <div className="alert alert-warning" role="alert">
               <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential common
