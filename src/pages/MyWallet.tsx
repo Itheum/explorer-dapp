@@ -237,22 +237,25 @@ export const MyWallet = () => {
           </div>
         </h4>
       )}
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
-        <div style={{ height: "3rem" }}>
-          <div
-            style={{
-              float: "right",
-              cursor: "pointer",
-              fontSize: "2rem",
-            }}
-            onClick={closeModal}>
-            <IoClose />
+      <Modal
+        isOpen={isModalOpened}
+        onRequestClose={closeModal}
+        className="absolute overflow-y-scroll !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background rounded-2xl"
+        style={modalStyles}
+        ariaHideApp={false}
+        shouldCloseOnOverlayClick={false}>
+        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
+          <ModalHeader className="border-0">
+            <h2 className="text-center p-3 text-card-foreground">File Viewer</h2>
+          </ModalHeader>
+          <div className="flex items-center h-[6rem]">
+            <div className="flex justify-center cursor-pointer text-[2rem] text-card-foreground" onClick={closeModal}>
+              <IoClose />
+            </div>
           </div>
         </div>
-        <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">File Viewer</h4>
-        </ModalHeader>
         <ModalBody
+          className="text-foreground"
           style={{
             minWidth: "26rem",
             minHeight: "36rem",

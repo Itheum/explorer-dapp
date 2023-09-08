@@ -60,7 +60,7 @@ h5, h6 {
     }
 
     .dark {
-        --background: 224 71% 4%;
+        --background: 0 0% 9%;
         --foreground: 213 31% 91%;
 
         --muted: 223 47% 11%;
@@ -91,6 +91,32 @@ h5, h6 {
 
         --radius: 0.5rem;
     }
+}
+
+@layer utilities {
+    .scrollbar::-webkit-scrollbar {
+        @apply w-5;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+        @apply rounded-md bg-[#f7f4ed];
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-orange-400/90 rounded-lg;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+        @apply bg-orange-400/70;
+    }
+}
+
+.vertical-timeline-element-icon {
+    @apply bg-orange-400;
+}
+
+.vertical-timeline::before {
+    @apply bg-black dark:bg-white !important;
 }
 
 @layer base {

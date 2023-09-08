@@ -14,18 +14,21 @@ const customStyles = {
     backgroundColor: "var(--light-20) !important",
     backdropFilter: "blur(10px)",
   },
-  content: {
-    width: "80%",
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    maxHeight: "80vh",
-    backgroundColor: "var(--light)",
-    color: "var(--dark)",
-  },
+  // dark: {
+  //   backgroundColor: "var(--background)",
+  // },
+  // content: {
+  //   width: "80%",
+  //   top: "50%",
+  //   left: "50%",
+  //   right: "auto",
+  //   bottom: "auto",
+  //   marginRight: "-50%",
+  //   transform: "translate(-50%, -50%)",
+  //   maxHeight: "80vh",
+  //   backgroundColor: "var(--light)",
+  //   color: "var(--dark)",
+  // },
 };
 
 export const TrailBlazerModal = ({
@@ -93,7 +96,7 @@ export const TrailBlazerModal = ({
                 <FaShoppingCart />
               </div>
               <div className="item">{dataItem.title}</div>
-              <a className="action" href={dataItem.link} target="_blank">
+              <a className="bg-yellow-300 px-1.5 py-2 rounded-lg" href={dataItem.link} target="_blank">
                 <div>Grab your offer now!</div>
               </a>
             </div>
@@ -229,24 +232,32 @@ export const TrailBlazerModal = ({
   }
 
   return (
-    <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={customStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
-      <div className="h-[3rem]">
-        <div className="flex justify-end cursor-pointer text-[2rem]" onClick={closeModal}>
-          <IoClose />
+    <Modal
+      isOpen={isModalOpened}
+      onRequestClose={closeModal}
+      className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
+      style={customStyles}
+      ariaHideApp={false}
+      shouldCloseOnOverlayClick={false}>
+      <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
+        <ModalHeader className=" border-0">
+          <h2 className="text-center p-3 text-card-foreground">Trailblazer</h2>
+        </ModalHeader>
+        <div className="flex items-center h-[6rem]">
+          <div className="flex justify-center cursor-pointer text-[2rem] text-card-foreground" onClick={closeModal}>
+            <IoClose />
+          </div>
         </div>
       </div>
-      <ModalHeader>
-        <h4 className="text-center font-title font-weight-bold">Trailblazer</h4>
-      </ModalHeader>
       <ModalBody>
         {!owned ? (
-          <div className="d-flex flex-column align-items-center justify-content-center">
+          <div className="flex flex-col items-center justify-center">
             <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
             <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
           </div>
         ) : isFetchingDataMarshal || !data ? (
           <div
-            className="d-flex flex-column align-items-center justify-content-center"
+            className="flex flex-col items-center justify-center"
             style={{
               minWidth: "24rem",
               maxWidth: "100%",
@@ -261,7 +272,7 @@ export const TrailBlazerModal = ({
             </div>
           </div>
         ) : (
-          <div className="trailblazer-view">
+          <div className="trailblazer-view text-black">
             <VerticalTimeline>
               {data?.map((_dataItem: any, _index: any) => {
                 return (
