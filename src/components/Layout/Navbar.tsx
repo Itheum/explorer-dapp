@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import lightLogo from "assets/img/logo-icon-b.png";
 import darkLogo from "assets/img/logo-sml-d.png";
@@ -9,18 +10,7 @@ import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
-import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "../../libComponents/NavigationMenu";
-import { cn } from "../../libs/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,8 +20,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../libComponents/DropdownMenu";
-import { Home, Menu, Store, Wallet } from "lucide-react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
+import { cn } from "../../libs/utils";
+import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -123,7 +123,7 @@ export const Navbar = () => {
             </>
           ) : (
             <NavigationMenuItem>
-              <Link to={routeNames.unlock}>
+              <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
                   <Button
                     className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
@@ -156,7 +156,7 @@ export const Navbar = () => {
                 </div>
               </Link>
             ) : (
-              <Link to={routeNames.unlock}>
+              <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
                   <Button
                     className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
