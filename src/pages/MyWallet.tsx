@@ -20,6 +20,7 @@ import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
+import { AudioPlayer1 } from "components/AudioPlayer";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -284,9 +285,8 @@ export const MyWallet = () => {
             (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
               <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
             ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-              <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
-                <audio controls autoPlay src={viewDataRes.data} />
-              </div>
+              ///change this with Json
+              <AudioPlayer1></AudioPlayer1>
             ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
               <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
             ) : (
