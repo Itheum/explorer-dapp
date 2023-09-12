@@ -57,174 +57,174 @@ body {
   background-color: #fff;
 }
 
-.dark {
-  $custom-bg: #0f0f0f;
-  $teal50: #e6fffa;
-  $teal100: #b2f5ea;
-  $teal200: #00c797;
-  $orangeA: #ff7201;
-  $mxDefiWalBG: #242527;
-
-  /* redefine theme colors for dark theme */
-  $primary: $orangeA;
-  // $secondary: red;
-  // $success: #222222;
-  // $dark: $light;
-
-  $theme-colors: (
-    "primary": $orangeA,
-    "secondary": $orangeB,
-    "success": $success,
-    "danger": $danger,
-    "info": $indigo,
-    "dark": $teal50,
-    "light": $custom-bg,
-  );
-
-  /* redefine theme color variables */
-  // @each $color, $value in $theme-colors {
-  //     --#{$variable-prefix}#{$color}: #{$value};
-  // }
-
-  /* redefine theme color rgb vars (used for bg- colors) */
-  // $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
-  // @each $color, $value in $theme-colors-rgb {
-  //     --#{$variable-prefix}#{$color}-rgb: #{$value};
-  // }
-
-  $body-color: $teal50;
-  $body-bg: $custom-bg;
-  $navbar-light-color: $teal50;
-  $navbar-light-hover-color: $orangeB;
-  $navbar-light-active-color: $teal50;
-
-  $card-bg: $custom-bg;
-  $border-color: $teal50;
-
-  $dropdown-bg: $custom-bg;
-  $dropdown-border-color: $orangeB;
-  $dropdown-link-hover-bg: transparent;
-
-  --light: #0f0f0f;
-  --light-20: #0f0f0f88;
-
-  // --#{$variable-prefix}body-color: #{$body-color};
-  // --#{$variable-prefix}body-bg: #{$body-bg};
-  @import "bootstrap";
-
-  body {
-    font-family: $font-inter;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .cs-made-with-love {
-    color: #fafafa;
-  }
-
-  .cs-made-with-love:hover {
-    color: #fafafa;
-    opacity: 0.8;
-    text-decoration: none;
-  }
-
-  .dapp-name,
-  .dapp-name-mute {
-    color: #fafafa !important;
-  }
-
-  .lightLogo {
-    display: none !important;
-  }
-
-  .darkLogo {
-    display: block !important;
-  }
-
-  .cs-creator-link a {
-    color: $orangeB !important;
-  }
-
-  // S: App : Trailblazer
-  .vertical-timeline-element-content h2 {
-    color: #0f0f0f;
-  }
-
-  .vertical-timeline-element-content {
-    background-color: transparent;
-    border: solid 1px $orangeA;
-    box-shadow: 0 3px 0 $orangeA;
-  }
-
-  .vertical-timeline-element-icon {
-    background-color: $orangeA !important;
-    color: #000;
-  }
-
-  .vertical-timeline-element-content a h6 {
-    color: #0f0f0f;
-  }
-
-  .table {
-    color: $orangeA;
-  }
-
-  .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .btn-primary {
-    color: $custom-bg;
-  }
-
-  .btn-outline-primary:hover {
-    color: $custom-bg;
-  }
-
-  .text-info {
-    color: #fff !important;
-    font-weight: bold !important;
-  }
-
-  .c-actions {
-    border-color: #e6fffa;
-  }
-
-  // Bootstrap overide
-  .btn-primary {
-    color: #fff;
-  }
-
-  .btn-outline-primary {
-    color: #fff;
-  }
+//.dark {
+//  $custom-bg: #0f0f0f;
+//  $teal50: #e6fffa;
+//  $teal100: #b2f5ea;
+//  $teal200: #00c797;
+//  $orangeA: #ff7201;
+//  $mxDefiWalBG: #242527;
+//
+//  /* redefine theme colors for dark theme */
+//  $primary: $orangeA;
+//  // $secondary: red;
+//  // $success: #222222;
+//  // $dark: $light;
+//
+//  $theme-colors: (
+//    "primary": $orangeA,
+//    "secondary": $orangeB,
+//    "success": $success,
+//    "danger": $danger,
+//    "info": $indigo,
+//    "dark": $teal50,
+//    "light": $custom-bg,
+//  );
+//
+//  /* redefine theme color variables */
+//  // @each $color, $value in $theme-colors {
+//  //     --#{$variable-prefix}#{$color}: #{$value};
+//  // }
+//
+//  /* redefine theme color rgb vars (used for bg- colors) */
+//  // $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+//  // @each $color, $value in $theme-colors-rgb {
+//  //     --#{$variable-prefix}#{$color}-rgb: #{$value};
+//  // }
+//
+//  $body-color: $teal50;
+//  $body-bg: $custom-bg;
+//  $navbar-light-color: $teal50;
+//  $navbar-light-hover-color: $orangeB;
+//  $navbar-light-active-color: $teal50;
+//
+//  $card-bg: $custom-bg;
+//  $border-color: $teal50;
+//
+//  $dropdown-bg: $custom-bg;
+//  $dropdown-border-color: $orangeB;
+//  $dropdown-link-hover-bg: transparent;
+//
+//  --light: #0f0f0f;
+//--light-20: #0f0f0f88;
+//
+//  // --#{$variable-prefix}body-color: #{$body-color};
+//  // --#{$variable-prefix}body-bg: #{$body-bg};
+//  @import "bootstrap";
+//
+//  body {
+//    font-family: $font-inter;
+//    -webkit-font-smoothing: antialiased;
+//    -moz-osx-font-smoothing: grayscale;
+//  }
+//
+//  .cs-made-with-love {
+//    color: #fafafa;
+//  }
+//
+//  .cs-made-with-love:hover {
+//    color: #fafafa;
+//    opacity: 0.8;
+//    text-decoration: none;
+//  }
+//
+//  .dapp-name,
+//  .dapp-name-mute {
+//    color: #fafafa !important;
+//  }
+//
+//  .lightLogo {
+//    display: none !important;
+//  }
+//
+//  .darkLogo {
+//    display: block !important;
+//  }
+//
+//  .cs-creator-link a {
+//    color: $orangeB !important;
+//  }
+//
+//  // S: App : Trailblazer
+//  .vertical-timeline-element-content h2 {
+//    color: #0f0f0f;
+//  }
+//
+//  .vertical-timeline-element-content {
+//    background-color: transparent;
+//    border: solid 1px $orangeA;
+//    box-shadow: 0 3px 0 $orangeA;
+//  }
+//
+//  .vertical-timeline-element-icon {
+//    background-color: $orangeA !important;
+//    color: #000;
+//  }
+//
+//  .vertical-timeline-element-content a h6 {
+//    color: #0f0f0f;
+//  }
+//
+//  .table {
+//    color: $orangeA;
+//  }
+//
+//  .table-striped tbody tr:nth-of-type(odd) {
+//    background-color: rgba(255, 255, 255, 0.05);
+//  }
+//
+//  .btn-primary {
+//    color: $custom-bg;
+//  }
+//
+//  .btn-outline-primary:hover {
+//    color: $custom-bg;
+//  }
+//
+//  .text-info {
+//    color: #fff !important;
+//    font-weight: bold !important;
+//  }
+//
+//  .c-actions {
+//    border-color: #e6fffa;
+//  }
+//
+//  // Bootstrap overide
+//  .btn-primary {
+//    color: #fff;
+//  }
+//
+//  .btn-outline-primary {
+//    color: #fff;
+//  }
 
   // Dapp Core
-  .dapp-core-component__dappModalStyles__dappModalContent {
-    background-color: $mxDefiWalBG;
-  }
+  //.dapp-core-component__dappModalStyles__dappModalContent {
+  //  background-color: $mxDefiWalBG;
+  //}
+  //
+  //.dapp-core-component__dappModalStyles__dappModalCloseButton {
+  //  background-color: $mxDefiWalBG;
+  //  color: #fff;
+  //}
+  //
+  //.dapp-core-component__dappModalStyles__dappModalBody {
+  //  padding: 30px !important;
+  //}
+  //
+  //.dapp-core-component__addressTableStyles__ledger-address-table-header {
+  //  background-color: #343a40 !important;
+  //}
+  //
+  //.dapp-core-component__addressTableStyles__ledger-address-table-navigation button {
+  //  color: #fff !important;
+  //}
 
-  .dapp-core-component__dappModalStyles__dappModalCloseButton {
-    background-color: $mxDefiWalBG;
-    color: #fff;
-  }
-
-  .dapp-core-component__dappModalStyles__dappModalBody {
-    padding: 30px !important;
-  }
-
-  .dapp-core-component__addressTableStyles__ledger-address-table-header {
-    background-color: #343a40 !important;
-  }
-
-  .dapp-core-component__addressTableStyles__ledger-address-table-navigation button {
-    color: #fff !important;
-  }
-
-  .custom-box-border {
-    border: 1px solid #939da7;
-  }
-}
+  //.custom-box-border {
+  //  border: 1px solid #939da7;
+  //}
+//}
 
 .custom-classname.btn-primary {
   background-color: green;
@@ -668,7 +668,7 @@ code {
 
   .nfts-unlocks {
     font-size: 1.5rem;
-    margin-top: 1rem !important;
+    margin-top: 2rem !important;
     margin-bottom: 1rem !important;
   }
 }
@@ -686,6 +686,29 @@ code {
 
 /* Apps Custom Styles
 -------------------------------------------------- */
+
+.c-model-header-with-action {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  margin: auto;
+
+  @media screen and (min-width: 564px) {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.c-model-title {
+  font-size: 1.5rem;
+  font-weight: 700 !important;
+  margin-bottom: 5px;
+
+  @media screen and (min-width: 564px) {
+    margin-bottom: auto;
+  }
+}
 
 .trailblazer-view {
   .base-tile {
@@ -825,5 +848,5 @@ code {
 }
 
 .fontsize-sm {
-  font-size: .9rem !important;
+  font-size: 0.9rem !important;
 }
