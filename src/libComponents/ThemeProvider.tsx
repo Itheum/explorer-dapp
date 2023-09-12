@@ -40,9 +40,9 @@ export function ThemeProvider({ children, defaultTheme = "system", storageKey = 
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
+    setTheme: (_theme: Theme) => {
+      localStorage.setItem(storageKey, _theme);
+      setTheme(_theme);
     },
   };
 

@@ -3,10 +3,7 @@ import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
 import {
-  CantinaCorner,
   GamerPassportGamer,
-  PlayStationGamer,
-  Dashboard,
   Home,
   MyListed,
   MyWallet,
@@ -21,7 +18,6 @@ export const routeNames = {
   unlock: "/unlock",
   mylisted: "/my-listed",
   mywallet: "/my-wallet",
-  cantinacorner: "/cantina-corner-poc",
   gamerpassportgamer: "/gamer-passport-gamer-poc",
   playstationgamerpassport: "/gamer-passport",
   itheumtrailblazer: "/project-trailblazer",
@@ -59,21 +55,9 @@ export const routes: RouteWithTitleType[] = [
     authenticatedRoute: true,
   },
   {
-    path: routeNames.cantinacorner,
-    title: "Cantina Corner",
-    component: CantinaCorner,
-    authenticatedRoute: false,
-  },
-  {
     path: routeNames.gamerpassportgamer,
     title: "Web3 Gamer Passport",
     component: GamerPassportGamer,
-    authenticatedRoute: false,
-  },
-  {
-    path: routeNames.playstationgamerpassport,
-    title: "PlayStation Gamer Passport",
-    component: PlayStationGamer,
     authenticatedRoute: false,
   },
   {

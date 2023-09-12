@@ -8,8 +8,8 @@ import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "h
 import { dataNftMarket } from "libs/mvx";
 import { convertToLocalString } from "libs/utils";
 import { createNftId } from "libs/utils/token";
-import { Card, CardContent } from "../libComponents/Card";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { Card, CardContent } from "../libComponents/Card";
 
 export const MyListed = () => {
   const {
@@ -39,7 +39,7 @@ export const MyListed = () => {
   async function fetchDataNfts() {
     setIsNftLoading(true);
     const nonces: number[] = offers.map((offer) => offer.offeredTokenNonce);
-    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(nonces);
+    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(nonces.map(v => ({ nonce: v })));
     setDataNfts(_dataNfts);
 
     setIsNftLoading(false);

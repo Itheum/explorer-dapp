@@ -21,6 +21,7 @@ interface PropsType {
 export const CustomPagination: FC<PropsType> = ({
   pageCount,
   pageIndex,
+  // eslint-disable-next-line
   pageSize,
   gotoPage,
   disabled = false,

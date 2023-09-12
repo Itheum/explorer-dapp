@@ -1,35 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { SignableMessage } from "@multiversx/sdk-core/out";
-import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
-import { ModalBody, Table } from "react-bootstrap";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import { DataNftCard, ElrondAddressLink, Loader } from "components";
-import { GAMER_PASSPORT_GAMER_NONCES, MARKETPLACE_DETAILS_PAGE } from "config";
-import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
+import { DataNftCard, Loader } from "components";
+import { GAMER_PASSPORT_GAMER_NONCES } from "config";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
 import { onChainDataInsights_LIB, thirdPartyDataInsights_LIB } from "libs/utils/core";
 import GamerInsights from "./GamerInsights";
-import { modalStyles } from "libs/ui";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 
 export const GamerPassportGamer = () => {
-  const {
-    network: { explorerAddress },
-  } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
-  const { loginMethod } = useGetLoginInfo();
-  const { signMessage } = useSignMessage();
+  const { tokenLogin } = useGetLoginInfo();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isNftLoading, setIsNftLoading] = useState(false);
 
-  const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
 
@@ -48,7 +40,7 @@ export const GamerPassportGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(GAMER_PASSPORT_GAMER_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(GAMER_PASSPORT_GAMER_NONCES.map(v => ({ nonce: v })));
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
@@ -56,8 +48,6 @@ export const GamerPassportGamer = () => {
   }
 
   async function fetchMyNfts() {
-    setIsNftLoading(true);
-
     const _dataNfts = await DataNft.ownedByAddress(address);
 
     const _flags = [];
@@ -67,8 +57,6 @@ export const GamerPassportGamer = () => {
     }
     console.log("_flags", _flags);
     setFlags(_flags);
-
-    setIsNftLoading(false);
   }
 
   useEffect(() => {
@@ -94,30 +82,30 @@ export const GamerPassportGamer = () => {
 
     if (_owned) {
       setIsFetchingDataMarshal(true);
-      setDataMarshalRes("");
       openModal();
 
       const dataNft = ccDataNfts[index];
-      const messageToBeSigned = await dataNft.getMessageToSign();
-      console.log("messageToBeSigned", messageToBeSigned);
-      const signedMessage = await signMessage({ message: messageToBeSigned });
-      console.log("signedMessage", signedMessage);
-      if (!signedMessage) {
-        toastError("Wallet signing failed.");
-        return;
+      let res: any;
+      if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
+        throw Error("No nativeAuth token");
       }
 
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
+      const arg = {
+        mvxNativeAuthOrigins: [window.location.origin],
+        mvxNativeAuthMaxExpirySeconds: 3000,
+        fwdHeaderMapLookup: {
+          "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+        },
+      };
+      console.log('arg', arg);
+
+      res = await dataNft.viewDataViaMVXNativeAuth(arg);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
-      console.log("viewData", res);
-      setDataMarshalRes(JSON.stringify(res.data, null, 4));
+      console.log('res', res);
 
       fixData(res.data);
-
       setData(res.data);
-
-      console.log(res.data);
 
       setIsFetchingDataMarshal(false);
     } else {
@@ -306,7 +294,7 @@ export const GamerPassportGamer = () => {
               <div>
                 <Loader noText />
                 <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
+                  {"Loading..."}
                 </p>
               </div>
             </div>

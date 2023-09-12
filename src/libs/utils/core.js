@@ -13,9 +13,9 @@ export function onChainDataInsights_LIB({rawReadings, userTz}) {
   }
 
   let scoreGroup = '';
-  let totalScore = 0;
+  // let totalScore = 0;
 
-  let workOnReadings = rawReadings.reverse().map((i, idx) => {
+  let workOnReadings = rawReadings.reverse().map((i) => {
     let newObj = { ...i };
     let thisReadingTs = moment.utc(newObj.createdAt);
     let readingDataPoints = [];
@@ -207,10 +207,10 @@ export function thirdPartyDataInsights_LIB({rawReadings, userTz}) {
     userTz = 'Australia/Sydney'; 
   }
 
-  let scoreGroup = '';
-  let totalScore = 0;
+  // let scoreGroup = '';
+  // let totalScore = 0;
 
-  let workOnReadings = rawReadings.reverse().map((i, idx) => {
+  let workOnReadings = rawReadings.reverse().map((i) => {
     let newObj = { ...i };
     let thisReadingTs = moment.utc(newObj.createdAt);
     let readingDataPoints = [];

@@ -1,4 +1,5 @@
 import React from "react";
+import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useLocation } from "react-router-dom";
 import {
   AuthRedirectWrapper,
@@ -27,10 +28,15 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
 
 const UnlockPage = () => {
   const location = useLocation();
+  const { network: { apiAddress } } = useGetNetworkConfig();
 
   const commonProps = {
     callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
-    nativeAuth: true, // optional
+    nativeAuth: {
+      apiAddress,
+      expirySeconds: 3000,
+      // origin: window.location.origin,
+    },
   };
 
   return (
