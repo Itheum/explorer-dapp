@@ -126,7 +126,7 @@ export const MyWallet = () => {
   async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned?: string, signedMessage?: SignableMessage) {
     const res: ViewDataReturnType = await dataNft.viewDataViaMVXNativeAuth({
       mvxNativeAuthOrigins: ["http://localhost:3000"],
-      mvxNativeAuthMaxExpirySeconds: 300,
+      mvxNativeAuthMaxExpirySeconds: 3000,
       fwdHeaderKeys: "authorization",
       fwdHeaderMapLookup: {
         "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,

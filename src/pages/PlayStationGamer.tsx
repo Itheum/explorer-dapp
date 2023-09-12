@@ -44,7 +44,7 @@ export const PlayStationGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES.map((nonce) => ({ nonce })));
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 

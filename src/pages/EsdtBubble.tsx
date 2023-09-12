@@ -193,7 +193,7 @@ export const EsdtBubble = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES.map((nonce) => ({ nonce })));
     setDataNfts(_nfts);
 
     setIsLoading(false);

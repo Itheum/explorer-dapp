@@ -48,7 +48,7 @@ export const GamerPassportGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(GAMER_PASSPORT_GAMER_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(GAMER_PASSPORT_GAMER_NONCES.map((nonce) => ({ nonce })));
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 

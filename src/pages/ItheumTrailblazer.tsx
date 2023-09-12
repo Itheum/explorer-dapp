@@ -105,7 +105,7 @@ export const ItheumTrailblazer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_NONCES.map((nonce) => ({ nonce })));
 
     setItDataNfts(_nfts);
     setIsLoading(false);
@@ -189,7 +189,7 @@ export const ItheumTrailblazer = () => {
 
         const res: ViewDataReturnType = await dataNft.viewDataViaMVXNativeAuth({
           mvxNativeAuthOrigins: ["http://localhost:3000"],
-          mvxNativeAuthMaxExpirySeconds: 300,
+          mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
           },

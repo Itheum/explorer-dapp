@@ -5,6 +5,7 @@ import { Address, Transaction } from "@multiversx/sdk-core/out";
 import { sendTransactions } from "@multiversx/sdk-dapp/services";
 import { refreshAccount } from "@multiversx/sdk-dapp/utils/account";
 // import { useGetAccountInfo, useGetLoginInfo } from "@multiversx/sdk-dapp/hooks/account";
+import { toastError } from "libs/utils";
 
 import { DataNftMinter } from "@itheum/sdk-mx-data-nft";
 
@@ -58,14 +59,14 @@ export const MintNewCollection = () => {
       const mintTransaction: Transaction = await dataNftMinter.mint(
         new Address(address),
         // new Address("erd1d79z3ksc2rxpfm3ftj66szrzkcuf35q6pkwgh7j5ftezrk7qgkcqtyg653"),
-        "DATA_NFT_TOKEN_NAME",
+        "SDKV1TestMint2",
         "https://api.itheumcloud-stg.com/datamarshalapi/achilles/v1",
         "https://api.itheumcloud-stg.com/datadexapi/bespoke/dynamicSecureDataStreamDemo",
         "https://raw.githubusercontent.com/Itheum/data-assets/main/Misc/M1__FBI_Firearm_Background_Check_Data/pdf/preview.pdf",
-        15,
-        1000,
-        "SDK Mint 1a - CopyPasteHackGood",
-        "SDK Mint 1a CopyPasteHackGood - Using the default, built in image and trait generation feature",
+        2,
+        22,
+        "SDK V1 Test Mint2",
+        "SDK V1 Test Mint2 Desc CopyPasteHackGood Using the default built in image and trait generation feature",
         antiSpamTax || 0,
         {
           nftStorageToken: REACT_APP_ENV_NFT_STORAGE_KEY,
@@ -93,6 +94,7 @@ export const MintNewCollection = () => {
       setSdkResponses(`_mintStandardDataNFT has FAILED - see console for error`);
       console.log("_mintStandardDataNFT has FAILED");
       console.error(e);
+      toastError(e?.toString() ?? "");
     }
     setLoading(false);
   }
@@ -105,14 +107,14 @@ export const MintNewCollection = () => {
       const mintTransaction: Transaction = await dataNftMinter.mint(
         new Address(address),
         // new Address("erd1d79z3ksc2rxpfm3ftj66szrzkcuf35q6pkwgh7j5ftezrk7qgkcqtyg653"),
-        "HELLOWORLDSDK2",
+        "SDKV1TestMint1",
         "https://api.itheumcloud-stg.com/datamarshalapi/achilles/v1",
         "https://api.itheumcloud-stg.com/datadexapi/bespoke/dynamicSecureDataStreamDemo",
         "https://raw.githubusercontent.com/Itheum/data-assets/main/Misc/M1__FBI_Firearm_Background_Check_Data/pdf/preview.pdf",
-        15,
-        1000,
-        "SDK Mint 2a - CopyPasteHackGood",
-        "SDK Mint 2a CopyPasteHackGood - Using a custom image URL and trait file",
+        1,
+        11,
+        "SDK V1 Test Mint1",
+        "SDK V1 Test Mint1 Desc CopyPasteHackGood Using a custom image URL and trait file",
         antiSpamTax || 0,
         {
           imageUrl: "https://dataassets.markpaul.name/itheum_giftx_card_demo/itheum-giftx-card-edition-1.png",
@@ -141,6 +143,7 @@ export const MintNewCollection = () => {
       setSdkResponses(`_mintStandardDataNFT has FAILED - see console for error`);
       console.log("_mintStandardDataNFT has FAILED");
       console.error(e);
+      toastError(e?.toString() ?? "");
     }
     setLoading(false);
   }

@@ -114,7 +114,7 @@ export const MultiversxInfographics = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map((nonce) => ({ nonce })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
