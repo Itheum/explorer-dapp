@@ -82,9 +82,17 @@ export const Navbar = () => {
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
-                  <ListItem href={returnRoute(item.routeKey)} key={item.routeKey} title={item.appName}>
-                    {item?.appDescription}
-                  </ListItem>
+                  <Link
+                    to={returnRoute(item.routeKey)}
+                    key={item.routeKey}
+                    className={
+                      "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                    }>
+                    <NavigationMenuLink>
+                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">{item.appName}</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">{item?.appDescription}</p>
+                    </NavigationMenuLink>
+                  </Link>
                 ))}
               </ul>
             </NavigationMenuContent>
@@ -95,14 +103,29 @@ export const Navbar = () => {
                 <NavigationMenuTrigger>Account</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    <ListItem href={routeNames.mylisted} title={"My Listed"} className="!hover:no-underline !focus:no-underline">
-                      Listed Data NFT's
-                    </ListItem>
-                    <ListItem href={routeNames.mywallet} title={"My Wallet"}>
-                      My Wallet Data NFT's
-                    </ListItem>
+                    <Link
+                      to={routeNames.mylisted}
+                      className={
+                        "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      }>
+                      <NavigationMenuLink>
+                        <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
+                      </NavigationMenuLink>
+                    </Link>
+                    <Link
+                      to={routeNames.mywallet}
+                      title={"My Wallet"}
+                      className={
+                        "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      }>
+                      <NavigationMenuLink>
+                        <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">My Wallet Data NFT's</p>
+                      </NavigationMenuLink>
+                    </Link>
                     <div className="flex flex-col p-3">
-                      <p className="text-sm font-medium leading-none dark:text-slate-100">My Address Quick Copy</p>
+                      <p className="text-sm font-medium leading-none dark:text-slate-100 pb-0.5">My Address Quick Copy</p>
                       <CopyAddress address={address} precision={6} />
                     </div>
                   </ul>
@@ -222,23 +245,3 @@ export const Navbar = () => {
     </div>
   );
 };
-
-const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}>
-          <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted">{children}</p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
-ListItem.displayName = "ListItem";

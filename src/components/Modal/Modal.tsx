@@ -1,6 +1,6 @@
 import React from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../libComponents/Dialog";
-import { cn } from "../../libs/utils";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "libComponents/Dialog";
+import { cn } from "libs/utils";
 
 type ModalProps = {
   openTrigger: JSX.Element;
