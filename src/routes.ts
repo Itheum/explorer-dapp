@@ -3,7 +3,7 @@ import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
 import {
-  GamerPassportGamer,
+  PlayStationGamer,
   Home,
   MyListed,
   MyWallet,
@@ -18,7 +18,6 @@ export const routeNames = {
   unlock: "/unlock",
   mylisted: "/my-listed",
   mywallet: "/my-wallet",
-  gamerpassportgamer: "/gamer-passport-gamer-poc",
   playstationgamerpassport: "/gamer-passport",
   itheumtrailblazer: "/project-trailblazer",
   esdtBubble: "/esdt-bubbles",
@@ -55,9 +54,9 @@ export const routes: RouteWithTitleType[] = [
     authenticatedRoute: true,
   },
   {
-    path: routeNames.gamerpassportgamer,
-    title: "Web3 Gamer Passport",
-    component: GamerPassportGamer,
+    path: routeNames.playstationgamerpassport,
+    title: "PlayStation Gamer Passport",
+    component: PlayStationGamer,
     authenticatedRoute: false,
   },
   {
