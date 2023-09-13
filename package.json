@@ -20,6 +20,7 @@
     "@types/react-modal": "3.16.0",
     "axios": "0.24.0",
     "bootstrap": "4.6.2",
+    "chart.js": "^4.4.0",
     "chartjs-plugin-zoom": "2.0.1",
     "class-variance-authority": "0.7.0",
     "clsx": "2.0.0",
@@ -42,6 +43,7 @@
     "react-tooltip": "5.11.1",
     "react-vertical-timeline-component": "3.6.0",
     "styled-components": "5.3.11",
+    "swiper": "^10.2.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss-animate": "1.0.6",
     "web-vitals": "1.0.1"
