@@ -112,7 +112,7 @@ h5, h6 {
 }
 
 .vertical-timeline-element-icon {
-    @apply bg-orange-400;
+    @apply bg-gradient-to-r from-yellow-300 to-orange-500;
 }
 
 .vertical-timeline::before {

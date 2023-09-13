@@ -268,103 +268,74 @@ export const MultiversxInfographics = () => {
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (
-          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+          <DataNftCard
+            key={index}
+            index={index}
+            dataNft={dataNft}
+            isLoading={isLoading}
+            owned={flags[index]}
+            viewData={viewData}
+            modalContent={
+              !owned ? (
+                <div className="d-flex flex-column align-items-center justify-content-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80dvh]">
+                  <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+                  <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+                </div>
+              ) : isFetchingDataMarshal ? (
+                <div className="d-flex flex-column align-items-center justify-content-center min-h-[40rem]">
+                  <div>
+                    <Loader noText />
+                    <p className="text-center text-foreground">
+                      {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-end mr-3 mb-2">
+                    {file && (
+                      <Button
+                        className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
+                        onClick={() => {
+                          if (file) {
+                            window.open(file as string, "_blank");
+                          }
+                        }}>
+                        Open in full screen
+                      </Button>
+                    )}
+                  </div>
+                  {viewDataRes && !viewDataRes.error && (
+                    <div>
+                      <div className="flex justify-center items-center">
+                        <Button className="text-foreground mr-3" variant="outline" disabled={pageNumber <= 1} onClick={previousPage}>
+                          Previous
+                        </Button>
+                        <p className="text-foreground">
+                          Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+                        </p>
+                        <Button className="text-foreground ml-3" variant="outline" disabled={pageNumber >= numPages} onClick={nextPage}>
+                          Next
+                        </Button>
+                      </div>
+
+                      <div className="c-container-document">
+                        <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                          <Page pageNumber={pageNumber} />
+                        </Document>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )
+            }
+            modalTitle={"MultiversX Infographics"}
+            modalTitleStyle="p-4"
+          />
         ))
       ) : (
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
-
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
-        style={modalStylesFull}
-        ariaHideApp={false}
-        shouldCloseOnOverlayClick={false}>
-        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
-          <ModalHeader className="border-0">
-            <h2 className="text-foreground p-3 text-center">MultiversX Infographics</h2>
-          </ModalHeader>
-          <div className="flex flex-col items-end gap-6 h-[6rem]">
-            <div className="flex justify-center cursor-pointer text-[2rem] text-foreground mr-3 mt-1" onClick={closeModal}>
-              <IoClose />
-            </div>
-            <div className="mr-3 mb-2">
-              {file && (
-                <Button
-                  className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
-                  onClick={() => {
-                    if (file) {
-                      window.open(file as string, "_blank");
-                    }
-                  }}>
-                  Open in full screen
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-        <ModalBody className="max-h-[80vh] min-h-[36rem] min-w-[26rem] p-0.5">
-          {!owned ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "50vw",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
-              <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
-            </div>
-          ) : isFetchingDataMarshal ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minHeight: "40rem",
-              }}>
-              <div>
-                <Loader noText />
-                <p className="text-center text-foreground">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <>
-              {viewDataRes && !viewDataRes.error && (
-                <div>
-                  <div className="flex justify-center items-center">
-                    <Button className="text-foreground mr-3" variant="outline" disabled={pageNumber <= 1} onClick={previousPage}>
-                      Previous
-                    </Button>
-                    <p className="text-foreground">
-                      Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
-                    </p>
-                    <Button className="text-foreground ml-3" variant="outline" disabled={pageNumber >= numPages} onClick={nextPage}>
-                      Next
-                    </Button>
-                  </div>
-
-                  <div className="c-container-document">
-                    <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-                      <Page pageNumber={pageNumber} />
-                    </Document>
-                  </div>
-
-                  {/* <div className="c-container-document">
-                      <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-                        {Array.from(new Array(numPages), (el, index) => (
-                          <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                        ))}
-                      </Document>
-                    </div> */}
-                </div>
-              )}
-            </>
-          )}
-        </ModalBody>
-      </Modal>
     </HeaderComponent>
   );
 };
