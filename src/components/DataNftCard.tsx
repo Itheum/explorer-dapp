@@ -6,6 +6,7 @@ import { convertToLocalString } from "libs/utils";
 import { ElrondAddressLink } from "./ElrondAddressLink";
 import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
+import { Modal } from "./Modal/Modal";
 
 export function DataNftCard({
   index,
@@ -15,6 +16,9 @@ export function DataNftCard({
   isWallet,
   viewData,
   showBalance = false,
+  modalContent,
+  modalTitle,
+  modalTitleStyle,
 }: {
   index: number;
   dataNft: DataNft;
@@ -23,6 +27,9 @@ export function DataNftCard({
   isWallet?: boolean;
   viewData: (e: number) => void;
   showBalance?: boolean;
+  modalContent?: JSX.Element;
+  modalTitle?: string;
+  modalTitleStyle?: string;
 }) {
   const {
     network: { explorerAddress },
@@ -95,12 +102,19 @@ export function DataNftCard({
 
             <CardFooter className="flex w-full justify-center mt-3 pb-2 text-center">
               {owned ? (
-                <Button
-                  className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-black rounded-lg font-medium tracking-wide !text-lg hover:opacity-80 hover:text-black"
-                  variant="ghost"
-                  onClick={() => viewData(index)}>
-                  View Data
-                </Button>
+                <Modal
+                  openTrigger={
+                    <Button
+                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-black rounded-lg font-medium tracking-wide !text-lg hover:opacity-80 hover:text-black"
+                      variant="ghost"
+                      onClick={() => viewData(index)}>
+                      View Data
+                    </Button>
+                  }
+                  title={modalTitle ?? ""}
+                  titleClassName={modalTitleStyle}>
+                  {modalContent}
+                </Modal>
               ) : (
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
                   <Button
