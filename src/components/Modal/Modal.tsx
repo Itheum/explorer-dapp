@@ -19,7 +19,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
       <DialogTrigger asChild>{openTrigger}</DialogTrigger>
       <DialogContent
         className={cn("overflow-y-scroll overflow-x-hidden scrollbar max-w-[80%] max-h-[79dvh] !pt-0 rounded-xl border-foreground", modalClassName)}>
-        <DialogHeader className="text-left sticky-top flex flex-row justify-between backdrop-blur bg-background/60 w-full">
+        <DialogHeader className="text-left sticky-top flex flex-row justify-between backdrop-blur bg-background/60 w-full border-b border-foreground">
           {title ? <DialogTitle className={titleClassName}>{title}</DialogTitle> : <></>}
           {description ? <DialogDescription className={descriptionClassName}>{description}</DialogDescription> : <></>}
         </DialogHeader>

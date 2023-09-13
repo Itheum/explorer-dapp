@@ -1,32 +1,12 @@
 import React, { useState } from "react";
-import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
+import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaTrophy } from "react-icons/fa";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { Button } from "../libComponents/Button";
 import { Modal } from "./Modal/Modal";
-
-const customStyles = {
-  overlay: {
-    backgroundColor: "var(--light-20) !important",
-    backdropFilter: "blur(10px)",
-  },
-  // dark: {
-  //   backgroundColor: "var(--background)",
-  // },
-  // content: {
-  //   width: "80%",
-  //   top: "50%",
-  //   left: "50%",
-  //   right: "auto",
-  //   bottom: "auto",
-  //   marginRight: "-50%",
-  //   transform: "translate(-50%, -50%)",
-  //   maxHeight: "80vh",
-  //   backgroundColor: "var(--light)",
-  //   color: "var(--dark)",
-  // },
-};
+import { Card, CardHeader } from "../libComponents/Card";
+import { ShoppingCart } from "lucide-react";
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
   const { loginMethod } = useGetLoginInfo();
@@ -60,103 +40,126 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
     switch (dataItem.category) {
       case "Offer":
         tileCode = (
-          <div className="base-tile offer">
-            <div className="header">
-              <div className="title">Congratulations! You've unlocked a special offer.</div>
-            </div>
-            <div className="body">
-              <div className="icon">
-                <FaShoppingCart />
+          <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
+            <Card className="flex flex-col items-center justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
+              <div className="flex flex-row justify-between items-center w-full">
+                <span className="text-2xl text-uppercase font-[Satoshi-Medium]">Offer</span>
+                <span className="text-muted-foreground text-sm">{new Date(dataItem.date).toDateString()}</span>
               </div>
-              <div className="item">{dataItem.title}</div>
-              <a className="bg-yellow-300 px-1.5 py-2 rounded-lg" href={dataItem.link} target="_blank">
-                <div>Grab your offer now!</div>
-              </a>
-            </div>
-            <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
-              <div className="platform">
-                Claimable On:{" "}
-                <span className="icon">
-                  <FaShopify />
-                </span>
+              <hr className="border border-muted-foreground w-full my-2" />
+              <div className="text-xl pt-1">Congratulations! You've unlocked a special offer.</div>
+              <div className="flex md:flex-row flex-col w-full justify-around items-center py-4 gap-3">
+                <div className="">
+                  <ShoppingCart className="w-12 h-12" />
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <span>{dataItem.title}</span>
+                  <div className="flex flex-row items-center">
+                    <span>Claimable On:</span>
+                    <div className="pl-2">
+                      <FaShopify className="h-5 w-5" />
+                    </div>
+                  </div>
+                </div>
+                <a className=" !no-underline" href={dataItem.link} target="_blank">
+                  <Button
+                    className="bg-gradient-to-r from-yellow-300 to-orange-500 px-3 border-0 text-black rounded-lg font-medium tracking-tight hover:opacity-80 hover:text-black"
+                    variant="ghost">
+                    Grab now!
+                  </Button>
+                </a>
               </div>
-            </div>
+              <div className="footer"></div>
+            </Card>
           </div>
         );
         break;
       case "Quest":
         tileCode = (
-          <div className="base-tile quest">
-            <div className="header">
-              <div className="title">Psst! A secret quest is underway.</div>
-            </div>
-            <div className="body">
-              <div className="icon">
-                <FaFlagCheckered />
+          <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
+            <Card className="flex flex-col items-center justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
+              <div className="flex flex-row justify-between items-center w-full">
+                <span className="text-2xl text-uppercase font-[Satoshi-Medium]">Quest</span>
+                <span className="text-muted-foreground text-sm">{new Date(dataItem.date).toDateString()}</span>
               </div>
-              <div className="item">{dataItem.title}</div>
-              <Modal openTrigger={<Button className="bg-[#ff7201] rounded-lg">Launch Quest</Button>}>
-                <div className="bg-background p-5 rounded shadow-lg">
-                  <iframe title="Modal Content" src={dataItem.link} className="w-full h-[85dvh]" />
+              <hr className="border border-muted-foreground w-full my-2" />
+              <div className="text-xl pt-1">Psst! A secret quest is underway.</div>
+              <div className="flex md:flex-row flex-col w-full justify-around items-center py-4 gap-3">
+                <div className="">
+                  <FaFlagCheckered className="w-12 h-12" />
                 </div>
-              </Modal>
-            </div>
-            <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
-            </div>
+                <div className="flex flex-col space-y-2">
+                  <div className="w-48 leading-relaxed text-[14px]">{dataItem.title}</div>
+                </div>
+                <Modal
+                  openTrigger={
+                    <Button
+                      className="bg-gradient-to-r from-yellow-300 to-orange-500 px-3 border-0 text-black rounded-lg font-se tracking-normal hover:opacity-80 hover:text-black"
+                      variant="ghost">
+                      Join quest!
+                    </Button>
+                  }>
+                  <div className="bg-background p-5 rounded shadow-lg">
+                    <iframe title="Modal Content" src={dataItem.link} className="w-full h-[85dvh]" />
+                  </div>
+                </Modal>
+              </div>
+            </Card>
           </div>
         );
         break;
       case "Leaderboard":
         tileCode = (
-          <div className="base-tile leaderboard">
-            <div className="header">
-              <div className="title">Secret Leaderboard</div>
-              <div className="sub-title">{dataItem.title}</div>
-            </div>
-            <div className="body">
-              {(normalizeLeaderboardData(dataItem.link).processedSuccess === false && (
-                <div className="process-error">{normalizeLeaderboardData(dataItem.link).processMsg}</div>
-              )) || (
-                <table className="table">
-                  <thead className="!text-black">
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Points</th>
-                    </tr>
-                  </thead>
-                  <tbody className="!text-black">
-                    {normalizeLeaderboardData(dataItem.link).tableData.map((rowData: any, idx: number) => {
-                      return (
-                        <tr>
-                          <th scope="row">{++idx}</th>
-                          <td>{rowData.leaderAddress}</td>
-                          <td>{rowData.points}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              )}
-            </div>
-            <div className="footer">
-              <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
-            </div>
+          <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
+            <Card className="flex flex-col items-center justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
+              <CardHeader className="flex flex-row justify-between items-center w-full">
+                <span className="text-2xl text-uppercase font-[Satoshi-Medium]">Secret Leaderboard</span>
+                <span className="text-muted-foreground text-sm">{new Date(dataItem.date).toDateString()}</span>
+              </CardHeader>
+              <hr className="border border-muted-foreground w-full my-2" />
+              <div className="w-full text-xl pt-1 pb-2 text-center">{dataItem.title}</div>
+              <div className="w-full">
+                {(!normalizeLeaderboardData(dataItem.link).processedSuccess && (
+                  <div className="process-error">{normalizeLeaderboardData(dataItem.link).processMsg}</div>
+                )) || (
+                  <table className="w-full">
+                    <thead className="text-muted-foreground border-b border-muted-foreground">
+                      <tr>
+                        <th>#</th>
+                        <th>Address</th>
+                        <th>Points</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {normalizeLeaderboardData(dataItem.link).tableData.map((rowData: any, idx: number) => {
+                        return (
+                          <tr className="border-b border-muted-foreground">
+                            <th>{++idx}</th>
+                            <td>{rowData.leaderAddress}</td>
+                            <td>{rowData.points}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </Card>
           </div>
         );
         break;
       default:
         tileCode = (
-          <div className="news-tile">
-            <h2>
-              {dataItem.category} - {new Date(dataItem.date).toDateString()}
-            </h2>
-            <h3>{dataItem.title}</h3>
-            <a href={dataItem.link} target="_blank" className="!text-blue-500">
-              See more...
-            </a>
+          <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
+            <Card className="flex flex-col items-start justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
+              <h2>
+                {dataItem.category} - {new Date(dataItem.date).toDateString()}
+              </h2>
+              <h3>{dataItem.title}</h3>
+              <a href={dataItem.link} target="_blank" className="!text-blue-500">
+                See more...
+              </a>
+            </Card>
           </div>
         );
         break;
@@ -225,7 +228,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
           </div>
         </div>
       ) : (
-        <div className="trailblazer-view text-black">
+        <div className="trailblazer-view">
           <VerticalTimeline>
             {data?.map((_dataItem: any, _index: any) => {
               return (

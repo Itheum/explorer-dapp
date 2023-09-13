@@ -9,15 +9,15 @@ body {
 }
 
 h1, h2 {
-    @apply font-[Clash-Medium] text-4xl !important;
+    @apply font-[Clash-Medium] text-4xl text-foreground !important;
 }
 
 h3, h4 {
-    @apply font-[Clash-Regular] text-2xl !important;
+    @apply font-[Clash-Regular] text-2xl text-foreground !important;
 }
 
 h5, h6 {
-    @apply font-[Clash-Regular] text-lg !important;
+    @apply font-[Clash-Regular] text-lg text-foreground !important;
 }
 
 .filter::placeholder {
@@ -111,8 +111,20 @@ h5, h6 {
     }
 }
 
+.vertical-timeline {
+    @apply text-foreground !important;
+}
+
+.vertical-timeline-element-content {
+    @apply bg-background shadow-none text-foreground !important;
+}
+
 .vertical-timeline-element-icon {
-    @apply bg-gradient-to-r from-yellow-300 to-orange-500;
+    @apply bg-gradient-to-r from-yellow-300 to-orange-500 text-background;
+}
+
+.vertical-timeline-element-content-arrow {
+    @apply border-r-[7px] border-r-foreground !important;
 }
 
 .vertical-timeline::before {

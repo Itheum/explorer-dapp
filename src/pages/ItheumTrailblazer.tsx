@@ -209,7 +209,7 @@ export const ItheumTrailblazer = () => {
             viewData={viewData}
             modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
             modalTitle={"Trailblazer"}
-            modalTitleStyle="p-4"
+            modalTitleStyle="p-5"
           />
         ))
       ) : (
