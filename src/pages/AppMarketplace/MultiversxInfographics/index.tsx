@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
-import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
-import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
-import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
@@ -12,7 +8,6 @@ import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
-import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
@@ -20,8 +15,6 @@ import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
-import { sleep } from "libs/utils/legacyUtil";
-import { routeNames } from "routes";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "./MultiversxInfographics.scss";
@@ -45,11 +38,8 @@ type PDFFile = string | File | null;
 
 export const MultiversxInfographics = () => {
   const { address } = useGetAccount();
-  const { loginMethod } = useGetLoginInfo();
+  const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
-  const { signMessage } = useSignMessage();
-  const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
-  const lastSignedMessageSession = useGetLastSignedMessageSession();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -58,9 +48,6 @@ export const MultiversxInfographics = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const isWebWallet = loginMethod === "wallet";
-  const { targetNonce, targetMessageToBeSigned } = useParams();
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -78,49 +65,6 @@ export const MultiversxInfographics = () => {
     }
   }, [isLoading, address]);
 
-  useEffect(() => {
-    const asyncFnc = async () => {
-      await sleep(1); //temporary solution until we find out racing condition
-      try {
-        let signature = "";
-
-        if (lastSignedMessageSession && lastSignedMessageSession.status == "signed" && lastSignedMessageSession.signature) {
-          signature = lastSignedMessageSession.signature;
-        } else {
-          let signSessions = JSON.parse(sessionStorage.getItem("persist:sdk-dapp-signedMessageInfo") ?? "{'signedSessions':{}}");
-          signSessions = JSON.parse(signSessions.signedSessions);
-
-          // find the first 'signed' session
-          for (const session of Object.values(signSessions) as any[]) {
-            if (session.status && session.status == "signed" && session.signature) {
-              signature = session.signature;
-              break;
-            }
-          }
-        }
-
-        if (!signature) {
-          throw Error("Signature is empty");
-        }
-
-        const signedMessage = new SignableMessage({
-          address: new Address(address),
-          message: Buffer.from(targetMessageToBeSigned || "", "ascii"),
-          signature: Buffer.from(signature, "hex"),
-          signer: loginMethod,
-        });
-        await processSignature(Number(targetNonce), targetMessageToBeSigned || "", signedMessage);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        navigate(routeNames.multiversxinfographics);
-      }
-    };
-    if (isWebWallet && !!targetNonce && !!targetMessageToBeSigned && !isSignMessagePending) {
-      asyncFnc();
-    }
-  }, [isWebWallet, isSignMessagePending]);
-
   function openModal() {
     setIsModalOpened(true);
   }
@@ -136,7 +80,7 @@ export const MultiversxInfographics = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -169,21 +113,56 @@ export const MultiversxInfographics = () => {
         openModal();
 
         const dataNft = dataNfts[index];
-        const messageToBeSigned = await dataNft.getMessageToSign();
-
-        const callbackRoute = `${window.location.href}/${dataNft.nonce}/${messageToBeSigned}`;
-        const signedMessage = await signMessage({
-          message: messageToBeSigned,
-          callbackRoute: isWebWallet ? callbackRoute : undefined,
-        });
-
-        if (isWebWallet) return;
-        if (!signedMessage) {
-          toastError("Wallet signing failed.");
-          return;
+        let res: any;
+        if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
+          throw Error("No nativeAuth token");
         }
 
-        const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage as any);
+        const arg = {
+          mvxNativeAuthOrigins: [window.location.origin],
+          mvxNativeAuthMaxExpirySeconds: 3000,
+          fwdHeaderMapLookup: {
+            "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+          },
+        };
+        console.log("arg", arg);
+
+        res = await dataNft.viewDataViaMVXNativeAuth(arg);
+        console.log("res", res);
+
+        let blobDataType = BlobDataType.TEXT;
+
+        if (!res.error) {
+          if (res.contentType.search("image") >= 0) {
+            if (res.contentType == "image/svg+xml") {
+              blobDataType = BlobDataType.SVG;
+              res.data = await (res.data as Blob).text();
+            } else {
+              blobDataType = BlobDataType.IMAGE;
+              res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+            }
+          } else if (res.contentType.search("audio") >= 0) {
+            res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+            blobDataType = BlobDataType.AUDIO;
+          } else if (res.contentType.search("application/pdf") >= 0) {
+            const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+            res.data = "PDF opened in new tab";
+            blobDataType = BlobDataType.PDF;
+            window.open(pdfObject, "_blank");
+            closeModal();
+          } else {
+            res.data = await (res.data as Blob).text();
+            res.data = JSON.stringify(JSON.parse(res.data), null, 4);
+          }
+        } else {
+          console.error(res.error);
+          toastError(res.error);
+        }
+
+        const viewDataPayload: ExtendedViewDataReturnType = {
+          ...res,
+          blobDataType,
+        };
 
         setViewDataRes(viewDataPayload);
         setIsFetchingDataMarshal(false);
@@ -195,45 +174,6 @@ export const MultiversxInfographics = () => {
       toastError((err as Error).message);
       closeModal();
       setIsFetchingDataMarshal(false);
-    }
-  }
-
-  async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
-    const res = await dataNft.viewData(messageToBeSigned, signedMessage as any, true);
-
-    let blobDataType = BlobDataType.TEXT;
-
-    if (!res.error) {
-      const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-      res.data = "PDF opened in new tab";
-      blobDataType = BlobDataType.PDF;
-      // window.open(pdfObject, "_blank");
-
-      setFile(pdfObject);
-    } else {
-      console.error(res.error);
-      toastError(res.error);
-    }
-
-    return {
-      ...res,
-      blobDataType,
-    };
-  }
-
-  async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
-    try {
-      setIsFetchingDataMarshal(true);
-      setOwned(true);
-      openModal();
-
-      const dataNft = await DataNft.createFromApi(nonce);
-      const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage);
-
-      setViewDataRes(viewDataPayload);
-      setIsFetchingDataMarshal(false);
-    } catch (err) {
-      console.error(err);
     }
   }
 

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { ModalBody, ModalHeader } from "react-bootstrap";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
+import { IFrameModal } from "./iFrameModal";
+import { TwModal } from "./Modal/TwModal";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { Button } from "../libComponents/Button";
 import { Modal } from "./Modal/Modal";
@@ -30,6 +33,18 @@ const customStyles = {
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
   const { loginMethod } = useGetLoginInfo();
+  const [content, setContent] = useState<React.ReactElement>(<></>);
+  // const [title, setTitle] = useState<string>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleIFrameModal = (link: string) => {
+    setContent(<IFrameModal link={link} />);
+    setIsModalOpen(true);
+  };
+
+  // const handleCloseModal = () => {
+  //   setContent(<></>);
+  // };
 
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
