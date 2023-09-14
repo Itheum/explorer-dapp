@@ -20,7 +20,7 @@ import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
 
-import { AudioPlayer1 } from "components/AudioPlayer";
+import { AudioPlayer } from "components/AudioPlayer";
 
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
@@ -122,8 +122,11 @@ export const MyWallet = () => {
           res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         }
       } else if (res.contentType.search("audio") >= 0) {
-        res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-        blobDataType = BlobDataType.AUDIO;
+        // res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        // blobDataType = BlobDataType.AUDIO;
+        const purifiedJSONStr = DOMPurify.sanitize(await (res.data as Blob).text());
+        res.data = JSON.stringify(JSON.parse(purifiedJSONStr), null, 4);
+        setIsDomPurified(true);
       } else if (res.contentType.search("application/pdf") >= 0) {
         const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         res.data = pdfObject;
@@ -243,7 +246,7 @@ export const MyWallet = () => {
       <Modal
         isOpen={isModalOpened}
         onRequestClose={closeModal}
-        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background rounded-2xl"
+        className="absolute overflow-y-auto scrollbar  !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background rounded-2xl"
         style={modalStyles}
         ariaHideApp={false}
         shouldCloseOnOverlayClick={false}>
@@ -290,10 +293,12 @@ export const MyWallet = () => {
             viewDataRes &&
             !viewDataRes.error &&
             (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+              //<AudioPlayer></AudioPlayer>
               <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
             ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-              ///change this with Json
-              <AudioPlayer1></AudioPlayer1>
+              <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                {viewDataRes.data}
+              </p>
             ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
               <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
             ) : (

@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import { toastError } from "libs/utils";
+import { ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
 
 const data_marshal = {
   "data_stream": {
@@ -61,14 +62,16 @@ const data_marshal = {
 // add a songs props here // maybe add an object of data_stream and an array with songs
 ///add lucide react icons
 
-export const AudioPlayer = () => {
+export const AudioPlayer = (dataNftToOpen: any, data_marshal: any, mvxNativeAuthOrigins: any, mvxNativeAuthMaxExpirySeconds: any, tokenLogin: any) => {
+  ///TODO PROPS or get just the tokenLogin?.nativeAuthToken directly
+
   ///TODO https://developer.chrome.com/blog/play-request-was-interrupted/
   ///some problems with the audio player, sometimes it gets stuck bcs the auudio does not get loaded
   ///When fetching the urls use a try catch and show an error if not fetched - maybe as in the above link
   let songs: any;
   let dataStream: any;
   dataStream = data_marshal.data_stream;
-  songs = data_marshal.data;
+  songs = data_marshal.data; // songs without the actual song
   useEffect(() => {
     dataStream = data_marshal.data_stream;
     songs = data_marshal.data;
@@ -128,15 +131,29 @@ export const AudioPlayer = () => {
     return `${formattedMinutes}:${formattedSeconds}`;
   };
 
+  const fetchMarshalForSong = async () => {
+    try {
+      const res: ViewDataReturnType = await dataNftToOpen.viewDataViaMVXNativeAuth({
+        mvxNativeAuthOrigins: ["http://localhost:3000"],
+        mvxNativeAuthMaxExpirySeconds: 3000,
+        fwdHeaderMapLookup: {
+          "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+        },
+        nestedIdxToStream: currentTrackIndex, /// get the song for the current index
+      });
+    } catch (err) {
+      console.error(err);
+      //toastError(err.message);
+      // ALL SDK error appear here
+    }
+  };
+
   const updateProgress = () => {
     setCurrentTime(audio.currentTime ? formatTime(audio.currentTime) : "00:00");
     setDuration(audio.duration ? formatTime(audio.duration) : "00:00");
     let _percentage = (audio.currentTime / audio.duration) * 100;
     if (isNaN(_percentage)) _percentage = 0;
     setProgress(_percentage);
-  };
-  const playAudio = () => {
-    audio.play();
   };
 
   useEffect(() => {
@@ -209,6 +226,8 @@ export const AudioPlayer = () => {
   };
 
   useEffect(() => {
+    //fetchMarshalForSong(); hhere get the song ftom marshal wiht index..
+
     audio.pause();
     console.log("START FROM BEGINNING : ", currentTrackIndex, "index  ", songs[currentTrackIndex].file);
     setAudio(new Audio(songs[currentTrackIndex].file));
@@ -238,9 +257,9 @@ export const AudioPlayer = () => {
   }
 
   return (
-    <div>
+    <div className="h-full p-12 relative overflow-hidden">
       {displayPlaylist ? (
-        <div className="w-full h-full overflow-auto">
+        <div className="w-full h-screen overflow-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
             {songs.map((song: any, index: number) => {
               return (
@@ -250,7 +269,7 @@ export const AudioPlayer = () => {
                     setCurrentTrackIndex(index);
                     setDisplayPlaylist(false);
                   }}
-                  className={`select-none flex flex-col items-center justify-center md:flex-row bg-slate-300 dark:bg-[rgba(15,15,15,0.5)]  p-2 gap-2 text-xs relative cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-sky-400 bg-[#27293d] rounded-2xl overflow-hidden text-white border-1 border-sky-700`}>
+                  className={`select-none flex flex-col items-center justify-center md:flex-row bg-slate-300 dark:bg-[rgba(15,15,15,0.5)]  p-2 gap-2 text-xs relative cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-sky-500/20  bg-[#27293d] rounded-2xl overflow-hidden text-white border-1 border-sky-700`}>
                   <div className="w-[60%] h-32 flex items-center justify-center">
                     <img
                       src={song.cover_art_url}
@@ -264,25 +283,23 @@ export const AudioPlayer = () => {
                   </div>
 
                   <div className="w-8/12 flex flex-col items-center justify-center">
-                    <h6 className="font-semibold text-sm">{song.title}</h6>
-                    <p className="text-xs text-gray-400">
+                    <h6 className=" text-center font-semibold text-sm">{song.title}</h6>
+                    {/* <p className="text-xs text-gray-400">
                       {
                         song.date.split("T")[0] // Splits the string at "T" and takes the first part
                       }
-                    </p>
-                    <p className="text-sm ">{song.artist}</p>
-                    <p className="text-xs text-gray-400">{song.album}</p>
+                    </p> */}
+                    <p className="text-sm text-center ">{song.artist}</p>
+                    <p className="text-xs text-center text-gray-400">{song.album}</p>
                   </div>
                 </div>
               );
             })}
           </div>
-          <div className="ml-[-30%] mt-[25%] h-[45%] w-[55%] opacity-1 blur-[350px] absolute bg-[#00C797]   rounded-full "> </div>
-          <div className="ml-[30%] mt-[30%] h-[45%] w-[55%] opacity-1 blur-[350px] absolute bg-[#3D00EA]  rounded-full "> </div>
         </div>
       ) : (
-        <div className="overflow-hidden w-full  flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
-          <div className="mt-4 h-[30%] bg-slate-300 dark:bg-[#0F0F0F]/20  border border-white relative md:w-[60%] flex flex-col rounded-xl">
+        <div className="overflow-hidden  w-full h-[60%] flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
+          <div className="  h-[30%] bg-slate-300 dark:bg-[#0F0F0F]/20  border border-white relative md:w-[60%] flex flex-col rounded-xl">
             <div className="px-10 pt-10 pb-4 flex items-center">
               <img
                 src={songs[currentTrackIndex].cover_art_url}
@@ -336,7 +353,7 @@ export const AudioPlayer = () => {
                 <SkipBack />
               </button>
               <div className="w-16 h-16 rounded-full  border border-grey-300 shadow-xl flex items-center justify-center">
-                <button onClick={togglePlay} className="focus:outline-none  ">
+                <button onClick={togglePlay} className="focus:outline-none">
                   {isPlaying ? ( // add a loading here until the song is fetched
                     <Pause />
                   ) : (
@@ -355,9 +372,9 @@ export const AudioPlayer = () => {
               </button>
             </div>
           </div>
-
+          <h4 className="select-none mt-4 md:ml-[-65%] ">{`Tracklist   ${songs.length} songs`} </h4>
           {songs.length > 1 && (
-            <Swiper className="w-full select-none mt-16  my-swiper">
+            <Swiper className="w-[90%] ml-[5%] mt-2  my-swiper">
               {songs.map((song: any, index: number) => {
                 return (
                   <SwiperSlide
@@ -373,14 +390,14 @@ export const AudioPlayer = () => {
                         <img
                           src={song.cover_art_url}
                           alt="Album Cover"
-                          className=" select-none p-2 md:h-24 rounded-md mr-2 "
+                          className="  p-2 md:h-24 rounded-md "
                           onLoad={handleImageLoad}
                           onError={({ currentTarget }) => {
                             currentTarget.src = DEFAULT_SONG_IMAGE;
                           }}
                         />
                       </div>
-                      <div className="w-[60%] flex flex-col gap-2 justify-center">
+                      <div className=" md:w-[60%] flex flex-col   justify-center">
                         <h6 className="font-semibold truncate text-center">{song.title}</h6>
                         <p className="text-gray-400 truncate text-center">{song.artist}</p>
                       </div>
@@ -393,21 +410,26 @@ export const AudioPlayer = () => {
               <div className="swiper-button-next scale-50"> </div>
               <style>
                 {`
-          /* CSS styles for Swiper navigation arrows */
+          /* CSS styles for Swiper navigation arrows set light theme  */
           .swiper-button-next,
-          .swiper-button-prev {
+          .swiper-button-prev { 
             color: white;
-             
           }
+          .swiper-button-prev{
+              margin-left: -15px;
+          }
+          .swiper-button-next{
+              margin-right: -15px  
+          }
+          
         `}
               </style>
             </Swiper>
           )}
-
-          <div className="ml-[-30%] mt-[45%] h-[45%] w-[55%] opacity-1 blur-[350px] absolute bg-[#00C797]   rounded-full "> </div>
-          <div className="ml-[30%] mt-[60%] h-[45%] w-[55%] opacity-1 blur-[350px] absolute bg-[#3D00EA]  rounded-full "> </div>
         </div>
       )}
+      <div className="   h-[45%] w-[55%] opacity-1 blur-[350px] absolute bg-[#00C797]   rounded-full "> </div>
+      <div className=" mt-16 ml-[40%]  h-[45%] w-[55%] opacity-1 blur-[350px] absolute bg-[#3D00EA]  rounded-full "> </div>
     </div>
   );
 };
