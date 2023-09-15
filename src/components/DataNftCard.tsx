@@ -3,9 +3,9 @@ import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { convertToLocalString } from "libs/utils";
-import { ElrondAddressLink } from "./ElrondAddressLink";
 import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
+import { ElrondAddressLink } from "./ElrondAddressLink";
 
 export function DataNftCard({
   index,
