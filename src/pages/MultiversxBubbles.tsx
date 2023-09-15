@@ -59,7 +59,7 @@ export const MultiversxBubbles = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_NONCES.map(v => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -92,7 +92,7 @@ export const MultiversxBubbles = () => {
         openModal();
 
         const dataNft = dataNfts[index];
-        
+
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
           throw Error("No nativeAuth token");
@@ -106,10 +106,8 @@ export const MultiversxBubbles = () => {
           },
           stream: true,
         };
-        console.log('arg', arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log('res', res);
 
         let blobDataType = BlobDataType.TEXT;
         if (!res.error) {
@@ -224,9 +222,7 @@ export const MultiversxBubbles = () => {
             <div className="flex flex-col items-center justify-center min-h-[40rem]">
               <div>
                 <Loader noText />
-                <p className="text-center text-foreground ">
-                  {"Loading..."}
-                </p>
+                <p className="text-center text-foreground ">{"Loading..."}</p>
               </div>
             </div>
           ) : (
@@ -237,10 +233,7 @@ export const MultiversxBubbles = () => {
                   <img src={viewDataRes.data} className="w-full h-auto" />
                 ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
                   // <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
-                  <ZoomableSvg
-                    data={viewDataRes.data}
-                    preProcess={preProcess}
-                  />
+                  <ZoomableSvg data={viewDataRes.data} preProcess={preProcess} />
                 ) : (
                   <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
                     {viewDataRes.data}

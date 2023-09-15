@@ -45,7 +45,7 @@ export const ItheumTrailblazer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_NONCES.map(v => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_NONCES.map((v) => ({ nonce: v })));
 
     setItDataNfts(_nfts);
     setIsLoading(false);
@@ -90,12 +90,10 @@ export const ItheumTrailblazer = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log('arg', arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
-        console.log('res', res);
 
         setData(res.data.data.reverse());
         setIsFetchingDataMarshal(false);
@@ -130,13 +128,7 @@ export const ItheumTrailblazer = () => {
         <h3 className="text-center text-white">No Data NFTs</h3>
       )}
 
-      <TrailBlazerModal
-        isModalOpened={isModalOpened}
-        closeModal={closeModal}
-        owned={owned}
-        isFetchingDataMarshal={isFetchingDataMarshal}
-        data={data}
-      />
+      <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
     </HeaderComponent>
   );
 };

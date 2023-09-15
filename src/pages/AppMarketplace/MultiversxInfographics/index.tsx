@@ -125,10 +125,8 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log("arg", arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log("res", res);
 
         let blobDataType = BlobDataType.TEXT;
 
