@@ -184,7 +184,7 @@ export const EsdtBubble = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES.map(v => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -227,7 +227,7 @@ export const EsdtBubble = () => {
 
       const dataNft = dataNfts[index];
       setSelectedDataNft(dataNft);
-      
+
       let res: any;
       if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
         throw Error("No nativeAuth token");
@@ -240,12 +240,10 @@ export const EsdtBubble = () => {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
         },
       };
-      console.log('arg', arg);
 
       res = await dataNft.viewDataViaMVXNativeAuth(arg);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
-      console.log('res', res);
 
       processData(res.data);
     } else {
@@ -375,9 +373,7 @@ export const EsdtBubble = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center font-weight-bold">
-                  {"Loading..."}
-                </p>
+                <p className="text-center font-weight-bold">{"Loading..."}</p>
               </div>
             </div>
           ) : (

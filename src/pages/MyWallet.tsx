@@ -24,7 +24,6 @@ export const MyWallet = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
-
   const [dataNftCount, setDataNftCount] = useState<number>(0);
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +32,12 @@ export const MyWallet = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
   const [isAutoOpenFormat, setIsAutoOpenFormat] = useState<boolean>(false);
   const [isDomPurified, setIsDomPurified] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!hasPendingTransactions) {
+      fetchData();
+    }
+  }, [hasPendingTransactions]);
 
   function openModal() {
     setIsModalOpened(true);
@@ -54,12 +59,6 @@ export const MyWallet = () => {
 
     setIsLoading(false);
   }
-
-  useEffect(() => {
-    if (!hasPendingTransactions) {
-      fetchData();
-    }
-  }, [hasPendingTransactions]);
 
   async function viewNormalData(index: number) {
     if (!(index >= 0 && index < dataNfts.length)) {
@@ -84,7 +83,6 @@ export const MyWallet = () => {
         "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
       },
     };
-    console.log('arg', arg);
 
     res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
@@ -204,9 +202,7 @@ export const MyWallet = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center font-weight-bold">
-                  {"Loading..."}
-                </p>
+                <p className="text-center font-weight-bold">{"Loading..."}</p>
               </div>
             </div>
           ) : (

@@ -52,7 +52,7 @@ export const MultiversxInfographics = () => {
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1); //setting 1 to show first page
-  
+
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchDataNfts();
@@ -80,7 +80,7 @@ export const MultiversxInfographics = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map(v => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -125,10 +125,8 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log('arg', arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log('res', res);
 
         let blobDataType = BlobDataType.TEXT;
 
@@ -265,9 +263,7 @@ export const MultiversxInfographics = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center text-foreground">
-                  {"Loading..."}
-                </p>
+                <p className="text-center text-foreground">{"Loading..."}</p>
               </div>
             </div>
           ) : (
