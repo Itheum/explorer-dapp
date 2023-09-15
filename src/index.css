@@ -96,6 +96,32 @@ h6 {
   }
 }
 
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    @apply w-5;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply rounded-md bg-[#f7f4ed];
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-orange-400/90 rounded-lg;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-orange-400/70;
+  }
+}
+
+.vertical-timeline-element-icon {
+  @apply bg-orange-400;
+}
+
+.vertical-timeline::before {
+  @apply bg-black dark:bg-white !important;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -117,4 +143,10 @@ h6 {
 
 .dark .dapp-core-component__customToast-styles__close {
   @apply text-white;
+}
+
+.dapp-core-component__scamPhishingStyles__scam-phishing-alert .dapp-core-component__scamPhishingStyles__scam-phishing-alert-text,
+.dapp-core-component__walletConnectLoginContainerStyles__xPortal-content,
+.dapp-core-component__ledgerConnectStyles__login-connect-container .dapp-core-component__ledgerConnectStyles__login-connect-container-content {
+  @apply text-black !important;
 }

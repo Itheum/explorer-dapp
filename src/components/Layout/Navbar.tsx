@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import lightLogo from "assets/img/logo-icon-b.png";
 import darkLogo from "assets/img/logo-sml-d.png";
@@ -9,18 +10,7 @@ import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
-import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "../../libComponents/NavigationMenu";
-import { cn } from "../../libs/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,13 +20,37 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../libComponents/DropdownMenu";
-import { Home, Menu, Store, Wallet } from "lucide-react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
+import { cn } from "../../libs/utils";
+import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
   const { address } = useGetAccount();
   const { theme } = useTheme();
+  const [systemTheme, setSystemTheme] = useState<string>();
+  const getSystemTheme = () => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    } else {
+      return "light";
+    }
+  };
+
+  useEffect(() => {
+    if (theme === "system") {
+      setSystemTheme(getSystemTheme());
+    }
+  }, [theme]);
 
   const handleLogout = () => {
     // logout(`${window.location.origin}/unlock`);
@@ -47,13 +61,13 @@ export const Navbar = () => {
     <div className="flex flex-row justify-between items-center 2xl:mx-[19.5rem] xl:mx-[7.5rem] md:mx-[3.5rem] h-20">
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
-          <img src={theme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
+          <img src={theme === "dark" ? darkLogo : theme === "system" && systemTheme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
           <span className="text-black dark:text-white pl-2 md:text-xl text-base">Itheum</span>
           <span className="text-black dark:text-white font-semibold md:text-xl text-base">Explorer</span>
         </Link>
       </div>
 
-      <NavigationMenu className="md:!inline !hidden">
+      <NavigationMenu className="md:!inline !hidden z-0">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
@@ -112,7 +126,7 @@ export const Navbar = () => {
             </>
           ) : (
             <NavigationMenuItem>
-              <Link to={routeNames.unlock}>
+              <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
                   <Button
                     className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
@@ -145,7 +159,7 @@ export const Navbar = () => {
                 </div>
               </Link>
             ) : (
-              <Link to={routeNames.unlock}>
+              <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
                   <Button
                     className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
@@ -157,7 +171,7 @@ export const Navbar = () => {
             )}
             <SwitchButton />
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
+              <Button variant="ghost" className="!pl-0">
                 <Menu />
               </Button>
             </DropdownMenuTrigger>

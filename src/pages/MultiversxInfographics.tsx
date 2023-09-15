@@ -220,7 +220,7 @@ export const MultiversxInfographics = () => {
       setOwned(true);
       openModal();
 
-      const dataNft = await DataNft.createFromApi(nonce);
+      const dataNft = await DataNft.createFromApi({ nonce });
       const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage);
 
       setViewDataRes(viewDataPayload);

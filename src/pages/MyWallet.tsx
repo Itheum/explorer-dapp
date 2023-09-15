@@ -106,44 +106,71 @@ export const MyWallet = () => {
     setIsFetchingDataMarshal(false);
   }
 
-  async function viewNormalData_NativeAuth(index: number) {
-    if (!(index >= 0 && index < dataNfts.length)) {
-      toastError("Data is not loaded");
-      return;
+  // async function viewNormalData_NativeAuth(index: number) {
+  //   if (!(index >= 0 && index < dataNfts.length)) {
+  //     toastError("Data is not loaded");
+  //     return;
+  //   }
+
+  //   setIsFetchingDataMarshal(true);
+  //   setViewDataRes(undefined);
+  //   openModal();
+
+  //   const dataNft = dataNfts[index];
+  //   const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft);
+
+  //   setViewDataRes(viewDataPayload);
+  //   setIsFetchingDataMarshal(false);
+  // }
+
+  async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned: string, signedMessage: SignableMessage) {
+    console.log("dataNft", dataNft);
+
+    let res: ViewDataReturnType | undefined = undefined;
+
+    if (dataNft.nonce === 525 || dataNft.nonce === 524) {
+      // res = await dataNft.viewDataViaMVXNativeAuth({
+      //   mvxNativeAuthOrigins: ["http://localhost:3000"],
+      //   mvxNativeAuthMaxExpirySeconds: 3000,
+      //   fwdHeaderMapLookup: {
+      //     "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+      //   },
+      //   stream: true,
+      //   nestedIdxToStream: 1,
+      // });
+
+      res = await dataNft.viewData({
+        signedMessage: messageToBeSigned,
+        signableMessage: signedMessage,
+        stream: true,
+        fwdAllHeaders: false,
+        fwdHeaderMapLookup: {
+          "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+        },
+        nestedIdxToStream: 1,
+      });
+    } else {
+      // res = await dataNft.viewDataViaMVXNativeAuth({
+      //   mvxNativeAuthOrigins: ["http://localhost:3000"],
+      //   mvxNativeAuthMaxExpirySeconds: 3000,
+      //   fwdHeaderKeys: "authorization",
+      //   fwdHeaderMapLookup: {
+      //     "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+      //   },
+      //   stream: true,
+      // });
+
+      res = await dataNft.viewData({
+        signedMessage: messageToBeSigned,
+        signableMessage: signedMessage,
+        stream: true,
+        fwdAllHeaders: false,
+        fwdHeaderKeys: "authorization",
+        fwdHeaderMapLookup: {
+          "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
+        },
+      });
     }
-
-    setIsFetchingDataMarshal(true);
-    setViewDataRes(undefined);
-    openModal();
-
-    const dataNft = dataNfts[index];
-    const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft);
-
-    setViewDataRes(viewDataPayload);
-    setIsFetchingDataMarshal(false);
-  }
-
-  async function obtainDataNFTData(dataNft: DataNft, messageToBeSigned?: string, signedMessage?: SignableMessage) {
-    const res: ViewDataReturnType = await dataNft.viewDataViaMVXNativeAuth({
-      mvxNativeAuthOrigins: ["http://localhost:3000"],
-      mvxNativeAuthMaxExpirySeconds: 3000,
-      fwdHeaderKeys: "authorization",
-      fwdHeaderMapLookup: {
-        "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
-      },
-      stream: true,
-    });
-
-    // const res: ViewDataReturnType = await dataNft.viewData({
-    //   signedMessage: messageToBeSigned,
-    //   signableMessage: signedMessage,
-    //   stream: true,
-    //   fwdAllHeaders: false,
-    //   fwdHeaderKeys: "authorization",
-    //   fwdHeaderMapLookup: {
-    //     "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
-    //   },
-    // });
 
     let blobDataType = BlobDataType.TEXT;
 
@@ -193,7 +220,7 @@ export const MyWallet = () => {
       setIsFetchingDataMarshal(true);
       openModal();
 
-      const dataNft = await DataNft.createFromApi(nonce);
+      const dataNft = await DataNft.createFromApi({ nonce });
       const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage);
 
       setViewDataRes(viewDataPayload);
@@ -261,7 +288,7 @@ export const MyWallet = () => {
             dataNft={dataNft}
             isLoading={isLoading}
             owned={true}
-            viewData={viewNormalData_NativeAuth}
+            viewData={viewNormalData}
             isWallet={true}
             showBalance={true}
           />
@@ -276,28 +303,24 @@ export const MyWallet = () => {
           </div>
         </h4>
       )}
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
-        <div style={{ height: "3rem" }}>
-          <div
-            style={{
-              float: "right",
-              cursor: "pointer",
-              fontSize: "2rem",
-            }}
-            onClick={closeModal}>
-            <IoClose />
+      <Modal
+        isOpen={isModalOpened}
+        onRequestClose={closeModal}
+        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background rounded-2xl"
+        style={modalStyles}
+        ariaHideApp={false}
+        shouldCloseOnOverlayClick={false}>
+        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
+          <ModalHeader className="border-0">
+            <h2 className="text-center p-3 text-card-foreground">File Viewer</h2>
+          </ModalHeader>
+          <div className="flex items-center h-[6rem]">
+            <div className="flex justify-center cursor-pointer text-[2rem] text-card-foreground" onClick={closeModal}>
+              <IoClose />
+            </div>
           </div>
         </div>
-        <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">File Viewer</h4>
-        </ModalHeader>
-        <ModalBody
-          style={{
-            minWidth: "26rem",
-            minHeight: "36rem",
-            maxHeight: "80vh",
-            overflowY: "auto",
-          }}>
+        <ModalBody className="text-foreground max-h-[80vh] min-h-[36rem] min-w-[26rem] p-0.5">
           {isDomPurified && (
             <div className="alert alert-warning" role="alert">
               <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential common

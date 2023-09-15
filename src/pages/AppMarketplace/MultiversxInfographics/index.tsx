@@ -26,6 +26,7 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "./MultiversxInfographics.scss";
 import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
+import { Button } from "../../../libComponents/Button";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -226,7 +227,7 @@ export const MultiversxInfographics = () => {
       setOwned(true);
       openModal();
 
-      const dataNft = await DataNft.createFromApi(nonce);
+      const dataNft = await DataNft.createFromApi({ nonce });
       const viewDataPayload: ExtendedViewDataReturnType = await obtainDataNFTData(dataNft, messageToBeSigned, signedMessage);
 
       setViewDataRes(viewDataPayload);
@@ -272,41 +273,38 @@ export const MultiversxInfographics = () => {
       ) : (
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
-        <div style={{ height: "3rem" }}>
-          <div
-            style={{
-              float: "right",
-              cursor: "pointer",
-              fontSize: "2rem",
-            }}
-            onClick={closeModal}>
-            <IoClose />
+
+      <Modal
+        isOpen={isModalOpened}
+        onRequestClose={closeModal}
+        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
+        style={modalStylesFull}
+        ariaHideApp={false}
+        shouldCloseOnOverlayClick={false}>
+        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
+          <ModalHeader className="border-0">
+            <h2 className="text-foreground p-3 text-center">MultiversX Infographics</h2>
+          </ModalHeader>
+          <div className="flex flex-col items-end gap-6 h-[6rem]">
+            <div className="flex justify-center cursor-pointer text-[2rem] text-foreground mr-3 mt-1" onClick={closeModal}>
+              <IoClose />
+            </div>
+            <div className="mr-3 mb-2">
+              {file && (
+                <Button
+                  className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
+                  onClick={() => {
+                    if (file) {
+                      window.open(file as string, "_blank");
+                    }
+                  }}>
+                  Open in full screen
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-        <ModalHeader>
-          <div className="c-model-header-with-action">
-            <h4 className="text-center font-title font-weight-bold c-model-title">MultiversX Infographics</h4>
-            {file && (
-              <button
-                className="btn btn-outline-primary"
-                onClick={() => {
-                  if (file) {
-                    window.open(file as string, "_blank");
-                  }
-                }}>
-                Open this PDF in full screen mode
-              </button>
-            )}
-          </div>
-        </ModalHeader>
-        <ModalBody
-          style={{
-            minWidth: "26rem",
-            minHeight: "36rem",
-            maxHeight: "80vh",
-            overflowY: "scroll",
-          }}>
+        <ModalBody className="max-h-[80vh] min-h-[36rem] min-w-[26rem] p-0.5">
           {!owned ? (
             <div
               className="d-flex flex-column align-items-center justify-content-center"
@@ -327,7 +325,7 @@ export const MultiversxInfographics = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center font-weight-bold">
+                <p className="text-center text-foreground">
                   {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
                 </p>
               </div>
@@ -336,16 +334,16 @@ export const MultiversxInfographics = () => {
             <>
               {viewDataRes && !viewDataRes.error && (
                 <div>
-                  <div className="d-flex justify-content-center c-container-paging">
-                    <button className="btn btn-outline-primary mr-3" type="button" disabled={pageNumber <= 1} onClick={previousPage}>
+                  <div className="flex justify-center items-center">
+                    <Button className="text-foreground mr-3" variant="outline" disabled={pageNumber <= 1} onClick={previousPage}>
                       Previous
-                    </button>
-                    <p className="c-pagecount">
+                    </Button>
+                    <p className="text-foreground">
                       Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
                     </p>
-                    <button className="btn btn-outline-primary ml-3" type="button" disabled={pageNumber >= numPages} onClick={nextPage}>
+                    <Button className="text-foreground ml-3" variant="outline" disabled={pageNumber >= numPages} onClick={nextPage}>
                       Next
-                    </button>
+                    </Button>
                   </div>
 
                   <div className="c-container-document">
