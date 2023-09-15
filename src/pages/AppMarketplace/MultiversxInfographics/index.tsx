@@ -52,7 +52,7 @@ export const MultiversxInfographics = () => {
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1); //setting 1 to show first page
-  
+
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchDataNfts();
@@ -80,7 +80,7 @@ export const MultiversxInfographics = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map(v => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -125,35 +125,20 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log('arg', arg);
+        console.log("arg", arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log('res', res);
+        console.log("res", res);
 
         let blobDataType = BlobDataType.TEXT;
 
         if (!res.error) {
-          if (res.contentType.search("image") >= 0) {
-            if (res.contentType == "image/svg+xml") {
-              blobDataType = BlobDataType.SVG;
-              res.data = await (res.data as Blob).text();
-            } else {
-              blobDataType = BlobDataType.IMAGE;
-              res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-            }
-          } else if (res.contentType.search("audio") >= 0) {
-            res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-            blobDataType = BlobDataType.AUDIO;
-          } else if (res.contentType.search("application/pdf") >= 0) {
-            const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-            res.data = "PDF opened in new tab";
-            blobDataType = BlobDataType.PDF;
-            window.open(pdfObject, "_blank");
-            closeModal();
-          } else {
-            res.data = await (res.data as Blob).text();
-            res.data = JSON.stringify(JSON.parse(res.data), null, 4);
-          }
+          const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+          res.data = "PDF opened in new tab";
+          blobDataType = BlobDataType.PDF;
+          // window.open(pdfObject, "_blank");
+
+          setFile(pdfObject);
         } else {
           console.error(res.error);
           toastError(res.error);
@@ -265,9 +250,7 @@ export const MultiversxInfographics = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center text-foreground">
-                  {"Loading..."}
-                </p>
+                <p className="text-center text-foreground">{"Loading..."}</p>
               </div>
             </div>
           ) : (
