@@ -17,17 +17,10 @@ function GamerInsights({ gamerId, gamerData }) {
   const [userId, setUserId] = useState(null);
   // const { colorMode, toggleColorMode } = useColorMode();
 
-  const [
-    readingsDiscordBotUserOnGuildActivity,
-    setReadingsDiscordBotUserOnGuildActivity,
-  ] = useState([]);
-  const [readingsTrdPtyWonderHeroGameApi, setReadingsTrdPtyWonderHeroGameApi] =
-    useState([]);
-  const [readingsOnChainAddrTxOnCon, setReadingsOnChainAddrTxOnCon] = useState(
-    []
-  );
-  const [readingsOnChainAddrTxOnConErd, setReadingsOnChainAddrTxOnConErd] =
-    useState([]);
+  const [readingsDiscordBotUserOnGuildActivity, setReadingsDiscordBotUserOnGuildActivity] = useState([]);
+  const [readingsTrdPtyWonderHeroGameApi, setReadingsTrdPtyWonderHeroGameApi] = useState([]);
+  const [readingsOnChainAddrTxOnCon, setReadingsOnChainAddrTxOnCon] = useState([]);
+  const [readingsOnChainAddrTxOnConErd, setReadingsOnChainAddrTxOnConErd] = useState([]);
   const [gamingActivityAllData, setGamingActivityAllData] = useState([]);
   const [socialActivityAllData, setSocialActivityAllData] = useState([]);
 
@@ -36,29 +29,16 @@ function GamerInsights({ gamerId, gamerData }) {
       setUserId(gamerId);
       setReadingsOnChainAddrTxOnCon(gamerData.readingsOnChainAddrTxOnCon);
       setReadingsOnChainAddrTxOnConErd(gamerData.readingsOnChainAddrTxOnConErd);
-      setReadingsDiscordBotUserOnGuildActivity(
-        gamerData.readingsDiscordBotUserOnGuildActivity
-      );
-      setReadingsTrdPtyWonderHeroGameApi(
-        gamerData.readingsTrdPtyWonderHeroGameApi
-      );
+      setReadingsDiscordBotUserOnGuildActivity(gamerData.readingsDiscordBotUserOnGuildActivity);
+      setReadingsTrdPtyWonderHeroGameApi(gamerData.readingsTrdPtyWonderHeroGameApi);
       setSocialActivityAllData(gamerData.socialActivityAllData);
       setGamingActivityAllData(gamerData.gamingActivityAllData);
     }
   }, [gamerData]);
 
-  // useEffect(() => {
-  //   console.log('colorMode', colorMode);
-  // }, [colorMode]);
-
   return (
     <>
-      <ActivityHeatmap
-        startDate="2022-04-01"
-        endDateIsToday={true}
-        activityAllData={gamingActivityAllData}
-        showToolTips={true}
-      />
+      <ActivityHeatmap startDate="2022-04-01" endDateIsToday={true} activityAllData={gamingActivityAllData} showToolTips={true} />
     </>
   );
 }

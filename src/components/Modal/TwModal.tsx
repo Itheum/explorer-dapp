@@ -1,5 +1,5 @@
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
 import { MdOutlineClose } from "react-icons/md";
 
 type ModalProps = {
@@ -9,7 +9,7 @@ type ModalProps = {
 };
 
 export const TwModal = (props: ModalProps) => {
-  const { isModalOpen = false, content, setIsModalOpen } = props;
+  const { isModalOpen = false, content } = props;
   let [isOpen, setIsOpen] = useState(isModalOpen);
 
   function closeModal() {

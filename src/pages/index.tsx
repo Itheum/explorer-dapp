@@ -1,5 +1,3 @@
-export * from "./CantinaCorner";
-export * from "./GamerPassportGamer";
 export * from "./PlayStationGamer";
 export * from "./Dashboard";
 export * from "./EsdtBubble";

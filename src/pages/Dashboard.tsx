@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MarketplaceRequirements } from "@itheum/sdk-mx-data-nft";
+import { useGetNetworkConfig, useGetPendingTransactions } from "@multiversx/sdk-dapp/hooks";
 import { Loader } from "components";
 import { dataNftMarket } from "libs/mvx";
-import { useGetNetworkConfig, useGetPendingTransactions } from "hooks";
-import { MarketplaceRequirements } from "@itheum/sdk-mx-data-nft";
 import { convertWeiToEsdt } from "libs/utils";
 
 export const Dashboard = () => {
