@@ -20,8 +20,8 @@ import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { Button } from "../libComponents/Button";
+import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
+import { Button } from "../../../libComponents/Button";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;

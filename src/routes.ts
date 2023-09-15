@@ -1,6 +1,6 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
-import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
+import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
 import {
   CantinaCorner,

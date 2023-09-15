@@ -103,11 +103,11 @@ h5, h6 {
     }
 
     .scrollbar::-webkit-scrollbar-thumb {
-        @apply bg-orange-400/90 rounded-lg;
+        @apply bg-neutral-400/90 rounded-lg;
     }
 
     .scrollbar::-webkit-scrollbar-thumb:hover {
-        @apply bg-orange-400/70;
+        @apply bg-neutral-400/70;
     }
 }
 

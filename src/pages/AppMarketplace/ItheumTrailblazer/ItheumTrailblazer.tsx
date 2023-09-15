@@ -7,14 +7,15 @@ import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMess
 import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { useNavigate, useParams } from "react-router-dom";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
-import { DataNftCard, Loader, TrailBlazerModal } from "components";
+import { DataNftCard, Loader } from "components";
 import { TRAILBLAZER_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { sleep } from "libs/utils/legacyUtil";
 import { routeNames } from "routes";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
+import { TrailBlazerModal } from "./components/TrailBlazerModal";
 
 export const ItheumTrailblazer = () => {
   const { address } = useGetAccount();
