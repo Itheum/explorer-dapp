@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import { ElrondAddressLink, Loader } from "components";
+import { MXAddressLink, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
 import { dataNftMarket } from "libs/mvx";
 import { convertToLocalString } from "libs/utils";
 import { createNftId } from "libs/utils/token";
-import { Card, CardContent } from "../libComponents/Card";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { Card, CardContent } from "../libComponents/Card";
 
 export const MyListed = () => {
   const {
@@ -39,7 +39,7 @@ export const MyListed = () => {
   async function fetchDataNfts() {
     setIsNftLoading(true);
     const nonces: number[] = offers.map((offer) => offer.offeredTokenNonce);
-    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(nonces);
+    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(nonces.map((v) => ({ nonce: v })));
     setDataNfts(_dataNfts);
 
     setIsNftLoading(false);
@@ -153,7 +153,7 @@ export const MyListed = () => {
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Creator:</span>
                         <span className="col-span-8 text-left">
-                          {isDataNftLoaded && <ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}
+                          {isDataNftLoaded && <MXAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}
                         </span>
                       </div>
                       <div className="grid grid-cols-12 mb-1">

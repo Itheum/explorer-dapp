@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { Button } from "../libComponents/Button";
 import { Modal } from "./Modal/Modal";
 
@@ -29,8 +28,6 @@ const customStyles = {
 };
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
-  const { loginMethod } = useGetLoginInfo();
-
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
       case "Partnership":
@@ -219,9 +216,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
           }}>
           <div>
             <Loader noText />
-            <p className="text-center font-weight-bold">
-              {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-            </p>
+            <p className="text-center font-weight-bold">{"Loading..."}</p>
           </div>
         </div>
       ) : (
