@@ -28,13 +28,15 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
 
 const UnlockPage = () => {
   const location = useLocation();
-  const { network: { apiAddress } } = useGetNetworkConfig();
+  const {
+    network: { apiAddress },
+  } = useGetNetworkConfig();
 
   const commonProps = {
     callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
     nativeAuth: {
       apiAddress,
-      expirySeconds: 3000,
+      expirySeconds: 300,
       // origin: window.location.origin,
     },
   };
