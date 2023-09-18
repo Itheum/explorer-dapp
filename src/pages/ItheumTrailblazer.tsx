@@ -85,7 +85,7 @@ export const ItheumTrailblazer = () => {
 
         const arg = {
           mvxNativeAuthOrigins: [window.location.origin],
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
@@ -124,23 +124,12 @@ export const ItheumTrailblazer = () => {
       dataNftCount={itDataNfts.length}>
       {itDataNfts.length > 0 ? (
         itDataNfts.map((dataNft, index) => (
-          <DataNftCard
-            key={index}
-            index={index}
-            dataNft={dataNft}
-            isLoading={isLoading}
-            owned={flags[index]}
-            viewData={viewData}
-            modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
-            modalTitle={"Trailblazer"}
-            modalTitleStyle="p-4"
-          />
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
         ))
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>
       )}
 
-      {/*<TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />*/}
       <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
     </HeaderComponent>
   );

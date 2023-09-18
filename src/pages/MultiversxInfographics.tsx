@@ -56,7 +56,7 @@ export const MultiversxInfographics = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map(v => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -96,15 +96,15 @@ export const MultiversxInfographics = () => {
 
         const arg = {
           mvxNativeAuthOrigins: [window.location.origin],
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log('arg', arg);
+        console.log("arg", arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log('res', res);
+        console.log("res", res);
 
         let blobDataType = BlobDataType.TEXT;
 
@@ -224,9 +224,7 @@ export const MultiversxInfographics = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center font-weight-bold">
-                  {"Loading..."}
-                </p>
+                <p className="text-center font-weight-bold">{"Loading..."}</p>
               </div>
             </div>
           ) : (

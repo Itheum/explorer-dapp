@@ -8,18 +8,14 @@ import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
+
 import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStyles } from "libs/ui";
 import { toastError } from "libs/utils";
-import { sleep } from "libs/utils/legacyUtil";
-import { routeNames } from "routes";
 
-import { AudioPlayer } from "components/AudioPlayer";
-
-import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -85,7 +81,7 @@ export const MyWallet = () => {
 
     const arg = {
       mvxNativeAuthOrigins: [window.location.origin],
-      mvxNativeAuthMaxExpirySeconds: 3000,
+      mvxNativeAuthMaxExpirySeconds: 3600,
       fwdHeaderMapLookup: {
         "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
       },

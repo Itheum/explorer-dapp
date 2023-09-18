@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import { ModalBody } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { IoClose } from "react-icons/io5";
-import Modal from "react-modal";
+
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import headerHero from "assets/img/custom-app-header-infographs.png";
@@ -13,7 +10,6 @@ import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { modalStylesFull } from "libs/ui";
 import { toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -120,7 +116,7 @@ export const MultiversxInfographics = () => {
 
         const arg = {
           mvxNativeAuthOrigins: [window.location.origin],
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
@@ -222,12 +218,14 @@ export const MultiversxInfographics = () => {
                   <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                 </div>
               ) : isFetchingDataMarshal ? (
-                <div className="d-flex flex-column align-items-center justify-content-center min-h-[40rem]">
+                <div
+                  className="d-flex flex-column align-items-center justify-content-center"
+                  style={{
+                    minHeight: "40rem",
+                  }}>
                   <div>
                     <Loader noText />
-                    <p className="text-center text-foreground">
-                      {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                    </p>
+                    <p className="text-center text-foreground">{"Loading..."}</p>
                   </div>
                 </div>
               ) : (
