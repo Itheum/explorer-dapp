@@ -12,7 +12,7 @@ import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
 import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import { CustomPagination, DataNftCard, ElrondAddressLink, Loader } from "components";
+import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
 import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
 import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
@@ -419,7 +419,7 @@ export const EsdtBubble = () => {
                       <td>{pageSize * pageIndex + index + 1}</td>
                       <td>
                         {<FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? "visible" : "hidden"} />}
-                        <ElrondAddressLink explorerAddress={MAINNET_EXPLORER_ADDRESS} address={row.address} precision={9} />
+                        <MXAddressLink explorerAddress={MAINNET_EXPLORER_ADDRESS} address={row.address} precision={9} />
                       </td>
                       <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
                       <td>{row.percent.toFixed(4)}%</td>

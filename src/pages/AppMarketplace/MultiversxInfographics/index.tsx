@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import headerHero from "assets/img/custom-app-header-infographs.png";
@@ -121,35 +120,18 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log("arg", arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log("res", res);
 
         let blobDataType = BlobDataType.TEXT;
 
         if (!res.error) {
-          if (res.contentType.search("image") >= 0) {
-            if (res.contentType == "image/svg+xml") {
-              blobDataType = BlobDataType.SVG;
-              res.data = await (res.data as Blob).text();
-            } else {
-              blobDataType = BlobDataType.IMAGE;
-              res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-            }
-          } else if (res.contentType.search("audio") >= 0) {
-            res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-            blobDataType = BlobDataType.AUDIO;
-          } else if (res.contentType.search("application/pdf") >= 0) {
-            const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
-            res.data = "PDF opened in new tab";
-            blobDataType = BlobDataType.PDF;
-            window.open(pdfObject, "_blank");
-            closeModal();
-          } else {
-            res.data = await (res.data as Blob).text();
-            res.data = JSON.stringify(JSON.parse(res.data), null, 4);
-          }
+          const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+          res.data = "PDF opened in new tab";
+          blobDataType = BlobDataType.PDF;
+          // window.open(pdfObject, "_blank");
+
+          setFile(pdfObject);
         } else {
           console.error(res.error);
           toastError(res.error);

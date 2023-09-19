@@ -130,7 +130,7 @@ export const ItheumTrailblazer = () => {
         <h3 className="text-center text-white">No Data NFTs</h3>
       )}
 
-      <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
+      {/*<TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />*/}
     </HeaderComponent>
   );
 };
