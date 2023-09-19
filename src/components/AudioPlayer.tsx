@@ -18,10 +18,6 @@ type AudioPlayerProps = {
 };
 
 export const AudioPlayer = (props: AudioPlayerProps) => {
-  ///TODO https://developer.chrome.com/blog/play-request-was-interrupted/
-  ///some problems with the audio player, sometimes it gets stuck bcs the auudio does not get loaded
-  ///When fetching the urls use a try catch and show an error if not fetched - maybe as in the above link
-
   useEffect(() => {
     audio.onended = function () {
       setIsPlaying(false);
@@ -31,6 +27,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       // Audio is ready to be played
       setIsLoaded(true);
       updateProgress();
+      // play the song
       if (audio.currentTime == 0) togglePlay();
     });
     updateProgress();
@@ -39,7 +36,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       audio.removeEventListener("timeupdate", updateProgress);
       audio.removeEventListener("canplaythrough", function () {
         setIsLoaded(false);
-        console.log("removed");
       });
     };
   }, []);
@@ -70,7 +66,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       },
 
       {
-        breakpoint: 480,
+        breakpoint: 520,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -105,7 +101,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
     return `${formattedMinutes}:${formattedSeconds}`;
   };
-  console.log(songSource);
 
   /// fetch song from Marshal
   const fetchMarshalForSong = async (index: number) => {
@@ -138,8 +133,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       }
     } catch (err) {
       setSongSource((prevState) => ({
-        ...prevState, // keep all other key-value pairs
-        [index]: "Error: " + (err as Error).message, // update the value of specific key
+        ...prevState,
+        [index]: "Error: " + (err as Error).message,
       }));
       console.error("error : ", err);
     }
@@ -156,10 +151,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   useEffect(() => {
     updateProgress();
   }, [audio.src]);
-
-  useEffect(() => {
-    //if (displayPlaylist === false) swiper.init();
-  }, [displayPlaylist]);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -193,7 +184,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       setCurrentTrackIndex(0);
       return;
     }
-
     setCurrentTrackIndex((prevCurrentTrackIndex) => prevCurrentTrackIndex + 1);
   };
 
@@ -211,16 +201,13 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   const handleChangeSong = () => {
-    const index = props.songs[currentTrackIndex].idx;
-    console.log("handle change... ");
-    console.log("handel", songSource);
+    const index = props.songs[currentTrackIndex]?.idx;
+
     if (songSource[index]) {
-      console.log("We have something ");
       // if we previously fetched the song and it was an error, show again the exact error.
       if (songSource[index].includes("Error:")) {
         toastError(songSource[index]);
       } else if (!(songSource[index] === "Fetching")) {
-        console.log(index, "changed ");
         audio.src = songSource[index];
         audio.load();
         updateProgress();
@@ -236,28 +223,37 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   useEffect(() => {
     handleChangeSong();
-  }, [songSource[props.songs[currentTrackIndex].idx]]);
+  }, [songSource[props.songs[currentTrackIndex]?.idx]]);
 
   useEffect(() => {
     audio.pause();
     setIsPlaying(false);
     audio.src = "";
     setIsLoaded(false);
-    const songIdx = props.songs[currentTrackIndex].idx;
+    const songIdx = props.songs[currentTrackIndex]?.idx;
     try {
       //if the song has not been previously fetched
       if (!handleChangeSong() && !(songSource[songIdx] === "Fetching")) {
+        // set state to fetching so if another fetch is in progress to not call it again
         setSongSource((prevState) => ({
-          ...prevState, // keep all other key-value pairs
-          [songIdx]: "Fetching", // update the value of specific key
+          ...prevState,
+          [songIdx]: "Fetching",
         }));
+
         (async () => {
           try {
-            console.log("fetching from current track index effect..");
             await fetchMarshalForSong(songIdx);
           } catch (err) {
             ///should not get here because of error handling in fetchMarshalForSong
             console.log("Error occured when fetching songs");
+          }
+          if (props.songs.length > currentTrackIndex + 1) {
+            const nextSongIdx = props.songs[currentTrackIndex + 1]?.idx;
+            setSongSource((prevState) => ({
+              ...prevState,
+              [nextSongIdx]: "Fetching",
+            }));
+            fetchMarshalForSong(nextSongIdx);
           }
         })();
       }
@@ -270,18 +266,11 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     setDisplayPlaylist(true);
   };
 
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-  const handleImageLoad = () => {
-    setIsImageLoaded(true);
-  };
-
-  //add light mode img default
   return (
     <div className="p-12 relative overflow-hidden">
       {displayPlaylist ? (
         <div className="w-full h-[500px] overflow-hidden">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
             {props.songs.map((song: any, index: number) => {
               return (
                 <div
@@ -296,7 +285,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                       src={song.cover_art_url}
                       alt={"Not Loaded"}
                       className={`flex items-center justify-center w-24 h-24 rounded-md border border-grey-900 `}
-                      onLoad={handleImageLoad}
                       onError={({ currentTarget }) => {
                         currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                       }}
@@ -315,14 +303,13 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden  w-full h-[60%] flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
+        <div className="overflow-hidden  w-full   flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
           <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25  border border-slate-300 dark:border-white relative md:w-[60%] flex flex-col rounded-xl">
             <div className="px-10 pt-10 pb-4 flex items-center">
               <img
-                src={props.songs[currentTrackIndex].cover_art_url}
+                src={props.songs[currentTrackIndex]?.cover_art_url}
                 alt="Album Cover"
                 className=" select-none w-24 h-24 rounded-md mr-6 border border-grey-900"
-                onLoad={handleImageLoad}
                 onError={({ currentTarget }) => {
                   currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                 }}
@@ -330,15 +317,15 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
               <div className="flex flex-col select-text">
                 <div>
-                  <span className="font-sans text-lg font-medium leading-7 text-slate-900 dark:text-white">{props.songs[currentTrackIndex].title}</span>{" "}
+                  <span className="font-sans text-lg font-medium leading-7 text-slate-900 dark:text-white">{props.songs[currentTrackIndex]?.title}</span>{" "}
                   <span className="ml-2 font-sans text-base font-medium   text-gray-500 dark:text-gray-400">
-                    {props.songs[currentTrackIndex].date.split("T")[0]}
+                    {props.songs[currentTrackIndex]?.date.split("T")[0]}
                   </span>
                 </div>
 
-                <span className="font-sans text-base font-medium   text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex].category}</span>
-                <span className="font-sans text-lg font-medium leading-6 text-slate-900 dark:text-white">{props.songs[currentTrackIndex].artist}</span>
-                <span className="font-sans text-base font-medium leading-6 text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex].album}</span>
+                <span className="font-sans text-base font-medium   text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex]?.category}</span>
+                <span className="font-sans text-lg font-medium leading-6 text-slate-900 dark:text-white">{props.songs[currentTrackIndex]?.artist}</span>
+                <span className="font-sans text-base font-medium leading-6 text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex]?.album}</span>
               </div>
             </div>
 
@@ -371,7 +358,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               <button className="cursor-pointer" onClick={handlePrevButton}>
                 <SkipBack />
               </button>
-              <div className="w-16 h-16 rounded-full bg-slate-100 border border-grey-300 shadow-xl flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-900/0 border border-grey-300 shadow-xl flex items-center justify-center">
                 <button onClick={togglePlay} className="focus:outline-none" disabled={!isLoaded}>
                   {!isLoaded ? (
                     <Loader2 className="animate-spin " />
@@ -411,7 +398,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                           src={song.cover_art_url}
                           alt="Album Cover"
                           className="h-24 p-2 rounded-md"
-                          onLoad={handleImageLoad}
                           onError={({ currentTarget }) => {
                             currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                           }}
@@ -427,7 +413,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               })}
             </Slider>
             <style>
-              {" "}
               {`
                 /* CSS styles for Swiper navigation arrows  */
 
@@ -439,7 +424,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           </div>
         </div>
       )}
-      <div className="z-[-1]  ml-[-10%] dark:mt-[-20%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#00C797] rounded-full"> </div>
+      <div className="z-[-1]   ml-[-10%] dark:mt-[-20%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#00C797] rounded-full"> </div>
       <div className="z-[-1]  dark:mt-[-10%] ml-[40%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#3D00EA] rounded-full "> </div>
     </div>
   );

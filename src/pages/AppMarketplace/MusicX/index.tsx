@@ -151,21 +151,52 @@ export const MusicX = () => {
 
   return (
     <HeaderComponent
-      pageTitle={"MusicX"}
+      pageTitle={"NF-Tunes"}
       hasImage={true}
       imgSrc={musicXBanner}
-      altImageAttribute={"MusicX application"}
+      altImageAttribute={"NF-Tunes application"}
       pageSubtitle={"Data NFTs that Unlock this App"}
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (
-          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+          <DataNftCard
+            key={index}
+            index={index}
+            dataNft={dataNft}
+            isLoading={isLoading}
+            owned={flags[index]}
+            viewData={viewData}
+            modalContent={
+              isFetchingDataMarshal ? (
+                <div
+                  className="d-flex flex-column align-items-center justify-content-center"
+                  style={{
+                    minHeight: "40rem",
+                  }}>
+                  <div>
+                    <Loader noText />
+                    <p className="text-center text-foreground">
+                      {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                    <AudioPlayer dataNftToOpen={dataNfts[currentIndex]} songs={dataMarshalResponse ? dataMarshalResponse.data : []} tokenLogin={tokenLogin} />
+                  )}
+                </>
+              )
+            }
+            modalTitle={"NF-Tunes"}
+            modalTitleStyle="p-4"
+          />
         ))
       ) : (
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
 
-      <Modal
+      {/* <Modal
         isOpen={isModalOpened}
         onRequestClose={closeModal}
         className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
@@ -216,7 +247,7 @@ export const MusicX = () => {
             </>
           )}
         </ModalBody>
-      </Modal>
+      </Modal> */}
     </HeaderComponent>
   );
 };
