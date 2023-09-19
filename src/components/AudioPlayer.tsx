@@ -222,10 +222,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   useEffect(() => {
-    handleChangeSong();
-  }, [songSource[props.songs[currentTrackIndex]?.idx]]);
-
-  useEffect(() => {
     audio.pause();
     setIsPlaying(false);
     audio.src = "";
@@ -233,34 +229,33 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     const songIdx = props.songs[currentTrackIndex]?.idx;
     try {
       //if the song has not been previously fetched
+
       if (!handleChangeSong() && !(songSource[songIdx] === "Fetching")) {
         // set state to fetching so if another fetch is in progress to not call it again
         setSongSource((prevState) => ({
           ...prevState,
           [songIdx]: "Fetching",
         }));
+        fetchMarshalForSong(songIdx);
 
-        (async () => {
-          try {
-            await fetchMarshalForSong(songIdx);
-          } catch (err) {
-            ///should not get here because of error handling in fetchMarshalForSong
-            console.log("Error occured when fetching songs");
-          }
-          if (props.songs.length > currentTrackIndex + 1) {
-            const nextSongIdx = props.songs[currentTrackIndex + 1]?.idx;
+        //fetch the next song only after the current one is fetched
+        if (props.songs.length > currentTrackIndex + 1) {
+          const nextSongIdx = props.songs[currentTrackIndex + 1]?.idx;
+          if (!handleChangeSong() && !(songSource[nextSongIdx] === "Fetching")) {
             setSongSource((prevState) => ({
               ...prevState,
               [nextSongIdx]: "Fetching",
             }));
+
+            // Fetch the next song
             fetchMarshalForSong(nextSongIdx);
           }
-        })();
+        }
       }
     } catch (err) {
-      console.log(err);
+      console.log("Error when Change the song: ", err);
     }
-  }, [currentTrackIndex]);
+  }, [currentTrackIndex, songSource[props.songs[currentTrackIndex]?.idx]]);
 
   const showPlaylist = () => {
     setDisplayPlaylist(true);
@@ -385,7 +380,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             <Slider {...settings}>
               {props.songs.map((song: any, index: number) => {
                 return (
-                  <div>
+                  <div key={index}>
                     <div
                       onClick={() => {
                         setCurrentTrackIndex(index);
