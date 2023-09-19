@@ -43,3 +43,6 @@ export const APP_MAPPINGS = [
     img: iconInfrographics,
   },
 ];
+
+export const ITHEUM_EXPLORER_URL = "https://explorer.itheum.io";
+export const ITHEUM_DATADEX_URL = "https://datadex.itheum.io";

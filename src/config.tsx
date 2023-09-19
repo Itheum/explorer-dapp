@@ -29,7 +29,7 @@ export const EB_SHOW_SIZE = 10;
 
 export const MARKETPLACE_DETAILS_PAGE =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
-    ? "https://stg.datadex.itheum.io/datanfts/marketplace/"
+    ? "https://test.datadex.itheum.io/datanfts/marketplace/"
     : "https://datadex.itheum.io/datanfts/marketplace/";
 
 export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
