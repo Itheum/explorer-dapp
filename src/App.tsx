@@ -28,7 +28,7 @@ export const App = () => {
             dappConfig={{
               shouldUseWebViewProvider: true,
             }}>
-            <ThemeProvider defaultTheme="dark" storageKey="explorer-ui-theme">
+            <ThemeProvider defaultTheme="system" storageKey="explorer-ui-theme">
               <Layout>
                 <AxiosInterceptorContext.Listener />
                 <TransactionsToastList />

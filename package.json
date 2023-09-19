@@ -48,7 +48,6 @@
     "react-zoom-pan-pinch": "^3.1.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "5.3.11",
-    "swiper": "^10.2.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss-animate": "1.0.6",
     "web-vitals": "1.0.1"

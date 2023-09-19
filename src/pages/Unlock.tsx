@@ -36,7 +36,7 @@ const UnlockPage = () => {
     callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
     nativeAuth: {
       apiAddress,
-      expirySeconds: 3600,
+      expirySeconds: 86400,
       // origin: window.location.origin,
     },
   };

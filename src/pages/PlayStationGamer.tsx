@@ -92,7 +92,7 @@ export const PlayStationGamer = () => {
 
       const arg = {
         mvxNativeAuthOrigins: [window.location.origin],
-        mvxNativeAuthMaxExpirySeconds: 3600,
+        mvxNativeAuthMaxExpirySeconds: 86400,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
         },

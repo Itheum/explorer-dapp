@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
-import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
-import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import { useNavigate, useParams } from "react-router-dom";
 import { DataNftCard, Loader } from "components";
 import { MUSICX_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -18,12 +15,9 @@ import { toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
-import { Button } from "../../../libComponents/Button";
 
-import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
+import musicXBanner from "assets/img/nf-tunesb-banner.png";
 import { AudioPlayer } from "components/AudioPlayer";
-import { index } from "d3";
-import toast from "react-hot-toast";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -116,7 +110,7 @@ export const MusicX = () => {
 
         const arg = {
           mvxNativeAuthOrigins: [window.location.origin],
-          mvxNativeAuthMaxExpirySeconds: 3600,
+          mvxNativeAuthMaxExpirySeconds: 86400,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
@@ -159,7 +153,7 @@ export const MusicX = () => {
     <HeaderComponent
       pageTitle={"MusicX"}
       hasImage={true}
-      imgSrc={DEFAULT_SONG_IMAGE}
+      imgSrc={musicXBanner}
       altImageAttribute={"MusicX application"}
       pageSubtitle={"Data NFTs that Unlock this App"}
       dataNftCount={dataNfts.length}>
