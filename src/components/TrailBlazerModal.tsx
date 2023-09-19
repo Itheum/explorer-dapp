@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
-import Modal from "react-modal";
-import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
+ import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
 import { Button } from "../libComponents/Button";
 import { Modal } from "./Modal/Modal";
@@ -95,14 +93,11 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                 <FaFlagCheckered />
               </div>
               <div className="item">{dataItem.title}</div>
-
-              <button
-                className="bg-[#ff7201] rounded-lg"
-                onClick={() => {
-                  handleIFrameModal(dataItem.link);
-                }}>
-                <TwModal isModalOpen={isModalOpen} content={content} setIsModalOpen={setIsModalOpen} />
-              </button>
+              <Modal openTrigger={<Button className="bg-[#ff7201] rounded-lg">Launch Quest</Button>}>
+                <div className="bg-background p-5 rounded shadow-lg">
+                  <iframe title="Modal Content" src={dataItem.link} className="w-full h-[85dvh]" />
+                </div>
+              </Modal>
             </div>
             <div className="footer">
               <div className="added">Added on: {new Date(dataItem.date).toDateString()}</div>
