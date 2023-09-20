@@ -117,6 +117,7 @@ export function DataNftCard({
                       View Data
                     </Button>
                   }
+                  closeOnOverlayClick={false}
                   title={modalTitle ?? ""}
                   titleClassName={modalTitleStyle}>
                   {modalContent}

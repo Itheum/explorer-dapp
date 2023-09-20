@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import * as DOMPurify from "dompurify";
-import { ModalBody } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
-import Modal from "react-modal";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
@@ -149,6 +145,76 @@ export const MyWallet = () => {
             viewData={viewNormalData}
             isWallet={true}
             showBalance={true}
+            modalContent={
+              <>
+                {isDomPurified && (
+                  <div className="alert alert-warning" role="alert">
+                    <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential
+                    common security risks; unfortunately, this may mean that even valid and safe content may appear different from the original format.{" "}
+                    <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
+                    original file (at your own risk). <br />
+                    <br />
+                    Alternatively, <strong>as the safest option, only use official apps in the App Marketplace</strong> (accessible via the Header Menu in this
+                    Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
+                  </div>
+                )}
+
+                {isFetchingDataMarshal ? (
+                  <div
+                    className="d-flex flex-column align-items-center justify-content-center"
+                    style={{
+                      minWidth: "24rem",
+                      maxWidth: "100% !important",
+                      minHeight: "40rem",
+                      maxHeight: "80vh",
+                    }}>
+                    <div>
+                      <Loader noText />
+                      <p className="text-center font-weight-bold">{"Loading..."}</p>
+                    </div>
+                  </div>
+                ) : (
+                  viewDataRes &&
+                  !viewDataRes.error &&
+                  (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                    <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                  ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
+                    <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
+                      <audio controls autoPlay src={viewDataRes.data} />
+                    </div>
+                  ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                    <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                  ) : (
+                    <div className="p-2">
+                      {(isAutoOpenFormat && (
+                        <>
+                          <p className="p-2">
+                            This Data NFT content was automatically opened in a new browser window. If your browser is prompting you to allow popups, please
+                            select <b>Always allow pop-ups</b> and then close this and click on <b>View Data</b> again.
+                          </p>
+                          <img src={imgGuidePopup} style={{ width: "250px", height: "auto", borderRadius: "5px" }} />
+                          <button
+                            className="btn btn-outline-primary mt-3"
+                            onClick={() => {
+                              if (viewDataRes.data) {
+                                window.open(viewDataRes.data as string, "_blank");
+                              }
+                            }}>
+                            Or, manually open the file by clicking here
+                          </button>
+                        </>
+                      )) || (
+                        <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                          {viewDataRes.data}
+                        </p>
+                      )}
+                    </div>
+                  ))
+                )}
+              </>
+            }
+            modalTitle={"File Viewer"}
+            modalTitleStyle="p-4"
           />
         ))
       ) : (
@@ -161,90 +227,6 @@ export const MyWallet = () => {
           </div>
         </h4>
       )}
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background rounded-2xl"
-        style={modalStyles}
-        ariaHideApp={false}
-        shouldCloseOnOverlayClick={false}>
-        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
-          <ModalHeader className="border-0">
-            <h2 className="text-center p-3 text-card-foreground">File Viewer</h2>
-          </ModalHeader>
-          <div className="flex items-center h-[6rem]">
-            <div className="flex justify-center cursor-pointer text-[2rem] text-card-foreground" onClick={closeModal}>
-              <IoClose />
-            </div>
-          </div>
-        </div>
-        <ModalBody className="text-foreground max-h-[80vh] min-h-[36rem] min-w-[26rem] p-0.5">
-          {isDomPurified && (
-            <div className="alert alert-warning" role="alert">
-              <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential common
-              security risks; unfortunately, this may mean that even valid and safe content may appear different from the original format.{" "}
-              <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the original
-              file (at your own risk). <br />
-              <br />
-              Alternatively, <strong>as the safest option, only use official apps in the App Marketplace</strong> (accessible via the Header Menu in this
-              Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
-            </div>
-          )}
-
-          {isFetchingDataMarshal ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "100% !important",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
-              <div>
-                <Loader noText />
-                <p className="text-center font-weight-bold">{"Loading..."}</p>
-              </div>
-            </div>
-          ) : (
-            viewDataRes &&
-            !viewDataRes.error &&
-            (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-              <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-            ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-              <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
-                <audio controls autoPlay src={viewDataRes.data} />
-              </div>
-            ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-              <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-            ) : (
-              <div className="p-2">
-                {(isAutoOpenFormat && (
-                  <>
-                    <p className="p-2">
-                      This Data NFT content was automatically opened in a new browser window. If your browser is prompting you to allow popups, please select{" "}
-                      <b>Always allow pop-ups</b> and then close this and click on <b>View Data</b> again.
-                    </p>
-                    <img src={imgGuidePopup} style={{ width: "250px", height: "auto", borderRadius: "5px" }} />
-                    <button
-                      className="btn btn-outline-primary mt-3"
-                      onClick={() => {
-                        if (viewDataRes.data) {
-                          window.open(viewDataRes.data as string, "_blank");
-                        }
-                      }}>
-                      Or, manually open the file by clicking here
-                    </button>
-                  </>
-                )) || (
-                  <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                    {viewDataRes.data}
-                  </p>
-                )}
-              </div>
-            ))
-          )}
-        </ModalBody>
-      </Modal>
     </HeaderComponent>
   );
 };
