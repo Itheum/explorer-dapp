@@ -121,13 +121,13 @@ h5, h6 {
 
 .dapp-core-component__transactionToast-styles__content,
 .dapp-core-component__customToast-styles__close {
-    @apply text-foreground bg-background fill-black !important;
+    @apply text-white bg-ring fill-black !important;
 }
 
 .dapp-core-component__transactionsToastList-styles__toasts,
 .dapp-custom-toast,
 .dapp-core-component__transactionsToastList-styles__toastWrapper {
-    @apply bg-background fill-black text-foreground fixed bottom-14 right-10 !important;
+    @apply bg-ring fill-black fixed bottom-14 right-10 !important;
 }
 
 @layer base {
