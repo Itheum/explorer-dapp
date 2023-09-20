@@ -7,6 +7,7 @@ import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { MXAddressLink } from "./MXAddressLink";
 import { Modal } from "./Modal/Modal";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 
 export function DataNftCard({
   index,
@@ -34,8 +35,13 @@ export function DataNftCard({
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
+  const { tokenLogin } = useGetLoginInfo();
   function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
+    if (tokenLogin && tokenLogin.nativeAuthToken) {
+      window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}/?accessToken=${tokenLogin?.nativeAuthToken}`)?.focus();
+    } else {
+      window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
+    }
   }
 
   return (
@@ -111,6 +117,7 @@ export function DataNftCard({
                       View Data
                     </Button>
                   }
+                  closeOnOverlayClick={false}
                   title={modalTitle ?? ""}
                   titleClassName={modalTitleStyle}>
                   {modalContent}

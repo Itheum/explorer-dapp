@@ -51,3 +51,6 @@ export const APP_MAPPINGS = [
     img: iconNFTunes,
   },
 ];
+
+export const ITHEUM_EXPLORER_URL = "https://explorer.itheum.io";
+export const ITHEUM_DATADEX_URL = "https://datadex.itheum.io";

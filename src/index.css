@@ -122,6 +122,17 @@ h6 {
   @apply bg-black dark:bg-white !important;
 }
 
+.dapp-core-component__transactionToast-styles__content,
+.dapp-core-component__customToast-styles__close {
+    @apply text-white bg-ring fill-black !important;
+}
+
+.dapp-core-component__transactionsToastList-styles__toasts,
+.dapp-custom-toast,
+.dapp-core-component__transactionsToastList-styles__toastWrapper {
+    @apply bg-ring fill-black fixed bottom-14 right-10 !important;
+}
+
 @layer base {
   * {
     @apply border-border;

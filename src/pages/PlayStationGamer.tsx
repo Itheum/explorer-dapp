@@ -9,7 +9,7 @@ import { DataNftCard, Loader } from "components";
 import { PLAYSTATION_GAMER_PASSPORT_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
-import { toastError } from "libs/utils";
+import { ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import PlaystationGamerInsights from "./PlaystationGamerInsights";
 
@@ -91,8 +91,8 @@ export const PlayStationGamer = () => {
       }
 
       const arg = {
-        mvxNativeAuthOrigins: [window.location.origin],
-        mvxNativeAuthMaxExpirySeconds: 86400,
+        mvxNativeAuthOrigins: [ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL],
+        mvxNativeAuthMaxExpirySeconds: 3000,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
         },
