@@ -1,7 +1,7 @@
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
-import iconMusicX from "assets/img/nf-tunes-logo.png";
+import iconNFTunes from "assets/img/nf-tunes-logo.png";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
@@ -44,10 +44,10 @@ export const APP_MAPPINGS = [
     img: iconInfrographics,
   },
   {
-    appName: "MusicX",
+    appName: "NF-Tunes",
     appDescription: "MultiversX Music Data NFT",
-    routeKey: "musicx",
+    routeKey: "nftunes",
     desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
-    img: iconMusicX,
+    img: iconNFTunes,
   },
 ];

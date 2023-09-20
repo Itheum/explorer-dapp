@@ -3,7 +3,7 @@ import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
 import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
-import { MusicX } from "pages/AppMarketplace/MusicX";
+import { NFTunes } from "pages/AppMarketplace/NFTunes";
 
 export const routeNames = {
   home: "/",
@@ -16,7 +16,7 @@ export const routeNames = {
   esdtBubble: "/esdt-bubbles",
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
-  musicx: "/musicx",
+  nftunes: "/nftunes",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -78,9 +78,9 @@ export const routes: RouteWithTitleType[] = [
     authenticatedRoute: false,
   },
   {
-    path: routeNames.musicx,
-    title: "MusicX",
-    component: MusicX,
+    path: routeNames.nftunes,
+    title: "NFTunes",
+    component: NFTunes,
     authenticatedRoute: false,
   },
 ];

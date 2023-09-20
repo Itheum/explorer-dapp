@@ -7,7 +7,7 @@ import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { DataNftCard, Loader } from "components";
-import { MUSICX_NONCES } from "config";
+import { NF_TUNES_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
@@ -16,14 +16,14 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
 
-import musicXBanner from "assets/img/nf-tunesb-banner.png";
+import nfTunesBanner from "assets/img/nf-tunesb-banner.png";
 import { AudioPlayer } from "components/AudioPlayer";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
 }
 
-export const MusicX = () => {
+export const NFTunes = () => {
   const { address } = useGetAccount();
   const { loginMethod } = useGetLoginInfo();
 
@@ -63,11 +63,11 @@ export const MusicX = () => {
     setViewDataRes(undefined);
   }
 
-  ///get the nfts that are able to open musicX app
+  ///get the nfts that are able to open nfTunes app
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MUSICX_NONCES.map((v) => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(NF_TUNES_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -153,7 +153,7 @@ export const MusicX = () => {
     <HeaderComponent
       pageTitle={"NF-Tunes"}
       hasImage={true}
-      imgSrc={musicXBanner}
+      imgSrc={nfTunesBanner}
       altImageAttribute={"NF-Tunes application"}
       pageSubtitle={"Data NFTs that Unlock this App"}
       dataNftCount={dataNfts.length}>

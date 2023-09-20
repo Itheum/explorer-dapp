@@ -11,7 +11,7 @@ import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlo
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./libComponents/ThemeProvider";
-import { MusicX } from "pages/AppMarketplace/MusicX";
+import { NFTunes } from "pages/AppMarketplace/NFTunes";
 
 export const App = () => {
   return (
@@ -43,7 +43,7 @@ export const App = () => {
                   <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
                   <Route path={`${routeNames.multiversxbubbles}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxBubbles />} />
                   <Route path={`${routeNames.multiversxinfographics}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxInfographics />} />
-                  <Route path={`${routeNames.musicx}/:targetNonce/:targetMessageToBeSigned`} element={<MusicX />} />
+                  <Route path={`${routeNames.nftunes}/:targetNonce/:targetMessageToBeSigned`} element={<NFTunes />} />
 
                   <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                   <Route path="*" element={<PageNotFound />} />
