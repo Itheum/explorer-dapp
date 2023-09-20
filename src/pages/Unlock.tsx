@@ -10,7 +10,9 @@ import {
   WebWalletLoginButton,
 } from "components";
 import { walletConnectV2ProjectId } from "config";
+import { getApi } from "libs/utils";
 import { routeNames } from "routes";
+import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 
 // find a route name based on a pathname that comes in via React Router Link params
 function getRouteNameBasedOnPathNameParam(pathname: string) {
@@ -28,16 +30,17 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
 
 const UnlockPage = () => {
   const location = useLocation();
-  const {
-    network: { apiAddress },
-  } = useGetNetworkConfig();
+  const { chainID } = useGetNetworkConfig();
 
+  const nativeAuthProps: NativeAuthConfigType = {
+    apiAddress: `https://${getApi(chainID)}`,
+    origin: "https://explorer.itheum.io",
+    expirySeconds: 3000,
+  };
   const commonProps = {
     callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
     nativeAuth: {
-      apiAddress,
-      expirySeconds: 3000,
-      // origin: window.location.origin,
+      ...nativeAuthProps,
     },
   };
 

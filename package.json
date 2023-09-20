@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer is a DApp for the public to explore and visualize data within the Itheum protocol",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -67,6 +67,7 @@
     }
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
@@ -104,5 +105,8 @@
   },
   "resolutions": {
     "**/*/nth-check": "2.0.1"
+  },
+  "engines": {
+    "node": "18.17.1"
   }
 }
