@@ -6,10 +6,12 @@ import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { Button } from "../../../../libComponents/Button";
 import { Modal } from "../../../../components/Modal/Modal";
 import { Card, CardHeader } from "../../../../libComponents/Card";
-import { ShoppingCart } from "lucide-react";
+import { ChevronDown, ShoppingCart } from "lucide-react";
+import { Input } from "../../../../libComponents/Input";
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
   const { loginMethod } = useGetLoginInfo();
+  const [isFilterShown, setIsFilterShown] = useState<boolean>(false);
 
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
@@ -63,7 +65,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                 </div>
                 <a className=" !no-underline" href={dataItem.link} target="_blank">
                   <Button
-                    className="bg-gradient-to-r from-yellow-300 to-orange-500 px-3 border-0 text-black rounded-lg font-medium tracking-tight hover:opacity-80 hover:text-black"
+                    className="bg-gradient-to-r from-yellow-300 to-orange-500 h-auto px-3 border-0 text-black rounded-lg font-medium tracking-tight hover:opacity-80 hover:text-black"
                     variant="ghost">
                     Grab now!
                   </Button>
@@ -94,7 +96,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                 <Modal
                   openTrigger={
                     <Button
-                      className="bg-gradient-to-r from-yellow-300 to-orange-500 px-3 border-0 text-black rounded-lg font-se tracking-normal hover:opacity-80 hover:text-black"
+                      className="bg-gradient-to-r from-yellow-300 to-orange-500 h-auto px-3 border-0 text-black rounded-lg font-se tracking-normal hover:opacity-80 hover:text-black"
                       variant="ghost">
                       Join quest!
                     </Button>
@@ -228,7 +230,22 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
           </div>
         </div>
       ) : (
-        <div className="trailblazer-view">
+        <div className="">
+          <div className="relative right-[2rem]">
+            <span className="absolute z-[9999]">Filter timeline</span>
+            <Button
+              variant="outline"
+              className="absolute -top-20 right-[21rem] z-[9999] border-[1px] border-slate-100/20 text-foreground"
+              onClick={() => setIsFilterShown(!isFilterShown)}>
+              All Categories
+              <ChevronDown className="w-5 h-5 " />
+            </Button>
+            {isFilterShown && (
+              <Card className="absolute z-[9999]">
+                <CardHeader>Filter by</CardHeader>
+              </Card>
+            )}
+          </div>
           <VerticalTimeline>
             {data?.map((_dataItem: any, _index: any) => {
               return (
