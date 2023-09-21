@@ -110,7 +110,8 @@ export const NFTunes = () => {
 
         const arg = {
           mvxNativeAuthOrigins: [window.location.origin],
-          mvxNativeAuthMaxExpirySeconds: 86400,
+          origin: "https://explorer.itheum.io",
+          mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
@@ -195,59 +196,6 @@ export const NFTunes = () => {
       ) : (
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
-
-      {/* <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
-        style={modalStylesFull}
-        ariaHideApp={false}
-        shouldCloseOnOverlayClick={false}>
-        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
-          <ModalHeader className="border-0">
-            <h2 className="text-foreground p-3 text-center">MusicX</h2>
-          </ModalHeader>
-          <div className="flex flex-col items-end gap-6 h-[6rem]">
-            <div className="flex justify-center cursor-pointer text-[2rem] text-foreground mr-3 mt-1" onClick={closeModal}>
-              <IoClose />
-            </div>
-          </div>
-        </div>
-        <ModalBody className="max-h-[80vh] min-h-[36rem] min-w-[26rem] p-0.5">
-          {!owned ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "50vw",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
-              <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
-            </div>
-          ) : isFetchingDataMarshal ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minHeight: "40rem",
-              }}>
-              <div>
-                <Loader noText />
-                <p className="text-center text-foreground">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <>
-              {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-                <AudioPlayer dataNftToOpen={dataNfts[currentIndex]} songs={dataMarshalResponse ? dataMarshalResponse.data : []} tokenLogin={tokenLogin} />
-              )}
-            </>
-          )}
-        </ModalBody>
-      </Modal> */}
     </HeaderComponent>
   );
 };

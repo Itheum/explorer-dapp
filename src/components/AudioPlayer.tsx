@@ -108,19 +108,19 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       /// if not previously fetched, fetch now and save the url of the blob
       const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
         mvxNativeAuthOrigins: [window.location.origin],
-        mvxNativeAuthMaxExpirySeconds: 86400,
+        mvxNativeAuthMaxExpirySeconds: 3000,
+
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,
         },
+
         stream: true,
         nestedIdxToStream: index, ///   get the song for the current index
       });
 
       if (!res.error) {
         const blobUrl = URL.createObjectURL(res.data);
-        // audio.src = blobUrl;
-        // audio.load();
-        //_songSource[index] = blobUrl;
+
         setSongSource((prevState) => ({
           ...prevState, // keep all other key-value pairs
           [index]: blobUrl, // update the value of specific key
@@ -229,7 +229,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     const songIdx = props.songs[currentTrackIndex]?.idx;
     try {
       //if the song has not been previously fetched
-
       if (!handleChangeSong() && !(songSource[songIdx] === "Fetching")) {
         // set state to fetching so if another fetch is in progress to not call it again
         setSongSource((prevState) => ({
@@ -238,7 +237,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         }));
         fetchMarshalForSong(songIdx);
 
-        //fetch the next song only after the current one is fetched
+        //fetch the next song
         if (props.songs.length > currentTrackIndex + 1) {
           const nextSongIdx = props.songs[currentTrackIndex + 1]?.idx;
           if (!handleChangeSong() && !(songSource[nextSongIdx] === "Fetching")) {
@@ -247,7 +246,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               [nextSongIdx]: "Fetching",
             }));
 
-            // Fetch the next song
             fetchMarshalForSong(nextSongIdx);
           }
         }
@@ -299,7 +297,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         </div>
       ) : (
         <div className="overflow-hidden  w-full   flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
-          <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25  border border-slate-300 dark:border-white relative md:w-[60%] flex flex-col rounded-xl">
+          <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-x border-t border-gray-400 dark:border-white  relative md:w-[60%] flex flex-col rounded-xl">
             <div className="px-10 pt-10 pb-4 flex items-center">
               <img
                 src={props.songs[currentTrackIndex]?.cover_art_url}
@@ -318,7 +316,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                   </span>
                 </div>
 
-                <span className="font-sans text-base font-medium   text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex]?.category}</span>
+                <span className="font-sans text-base font-medium text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex]?.category}</span>
                 <span className="font-sans text-lg font-medium leading-6 text-slate-900 dark:text-white">{props.songs[currentTrackIndex]?.artist}</span>
                 <span className="font-sans text-base font-medium leading-6 text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex]?.album}</span>
               </div>
@@ -355,13 +353,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               </button>
               <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-900/0 border border-grey-300 shadow-xl flex items-center justify-center">
                 <button onClick={togglePlay} className="focus:outline-none" disabled={!isLoaded}>
-                  {!isLoaded ? (
-                    <Loader2 className="animate-spin " />
-                  ) : isPlaying ? ( // add a loading here until the song is fetched
-                    <Pause />
-                  ) : (
-                    <Play className="ml-1" />
-                  )}
+                  {!isLoaded ? <Loader2 className="animate-spin " /> : isPlaying ? <Pause /> : <Play className="ml-1" />}
                 </button>
               </div>
               <button className="cursor-pointer" onClick={handleNextButton}>
@@ -410,7 +402,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             <style>
               {`
                 /* CSS styles for Swiper navigation arrows  */
-
                 .slick-prev:before,
                 .slick-next:before {
                   color: black;

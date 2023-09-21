@@ -34,7 +34,7 @@ const UnlockPage = () => {
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
-    origin: "https://explorer.itheum.io",
+    //origin: "https://explorer.itheum.io", // add this when in mainnet
     expirySeconds: 3000,
   };
   const commonProps = {
