@@ -1,13 +1,13 @@
 import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { convertToLocalString } from "libs/utils";
 import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
-import { MXAddressLink } from "./MXAddressLink";
 import { Modal } from "./Modal/Modal";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { MXAddressLink } from "./MXAddressLink";
 
 export function DataNftCard({
   index,
@@ -74,7 +74,11 @@ export function DataNftCard({
               <span className="col-span-4 opacity-6">Identifier:</span>
               <div className="col-span-8 w-full items-center justify-center">
                 <a
-                  href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
+                  href={
+                    `${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}` + (tokenLogin && tokenLogin.nativeAuthToken)
+                      ? `/?accessToken=${tokenLogin?.nativeAuthToken}`
+                      : ""
+                  }
                   className="flex flex-row items-center text-decoration-none !text-blue-500"
                   target="_blank">
                   <p className="flex flex-row w-full items-center mb-0 text-sm xl:text-base">{dataNft.tokenIdentifier}</p>

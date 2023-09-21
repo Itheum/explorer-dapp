@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { MXAddressLink, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
@@ -16,6 +17,7 @@ export const MyListed = () => {
     network: { explorerAddress },
   } = useGetNetworkConfig();
   const { address } = useGetAccount();
+  const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [offerCount, setOfferCount] = useState<number>(0);
@@ -87,7 +89,11 @@ export const MyListed = () => {
                           <div className="flex flex-row items-center gap-1">
                             <span className="xl:text-base text-sm">{nftId}</span>
                             <a
-                              href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`}
+                              href={
+                                `${MARKETPLACE_DETAILS_PAGE}${nftId}` + (tokenLogin && tokenLogin.nativeAuthToken)
+                                  ? `/?accessToken=${tokenLogin?.nativeAuthToken}`
+                                  : ""
+                              }
                               className="!text-blue-500 text-decoration-none hover:!text-blue-500/80"
                               target="_blank">
                               <FaExternalLinkAlt />
