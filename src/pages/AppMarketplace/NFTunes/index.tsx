@@ -110,7 +110,6 @@ export const NFTunes = () => {
 
         const arg = {
           mvxNativeAuthOrigins: [window.location.origin],
-          origin: "https://explorer.itheum.io",
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,

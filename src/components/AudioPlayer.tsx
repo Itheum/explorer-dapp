@@ -30,7 +30,12 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       // play the song
       if (audio.currentTime == 0) togglePlay();
     });
+    props.songs?.forEach((song: any) => {
+      ///TODO if there are more than 10 songs, analyze this
+      fetchMarshalForSong(song.idx);
+    });
     updateProgress();
+
     return () => {
       audio.pause();
       audio.removeEventListener("timeupdate", updateProgress);
@@ -104,39 +109,45 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   /// fetch song from Marshal
   const fetchMarshalForSong = async (index: number) => {
-    try {
-      /// if not previously fetched, fetch now and save the url of the blob
-      const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
-        mvxNativeAuthOrigins: [window.location.origin],
-        mvxNativeAuthMaxExpirySeconds: 3000,
-
-        fwdHeaderMapLookup: {
-          "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,
-        },
-
-        stream: true,
-        nestedIdxToStream: index, ///   get the song for the current index
-      });
-
-      if (!res.error) {
-        const blobUrl = URL.createObjectURL(res.data);
-
+    if (songSource[index] === undefined) {
+      try {
         setSongSource((prevState) => ({
           ...prevState, // keep all other key-value pairs
-          [index]: blobUrl, // update the value of specific key
+          [index]: "Fetching", // update the value of specific key
         }));
-      } else {
+        /// if not previously fetched, fetch now and save the url of the blob
+        const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
+          mvxNativeAuthOrigins: [window.location.origin],
+          mvxNativeAuthMaxExpirySeconds: 3000,
+
+          fwdHeaderMapLookup: {
+            "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,
+          },
+
+          stream: true,
+          nestedIdxToStream: index, ///   get the song for the current index
+        });
+
+        if (!res.error) {
+          const blobUrl = URL.createObjectURL(res.data);
+
+          setSongSource((prevState) => ({
+            ...prevState, // keep all other key-value pairs
+            [index]: blobUrl, // update the value of specific key
+          }));
+        } else {
+          setSongSource((prevState) => ({
+            ...prevState,
+            [index]: "Error: " + res.error,
+          }));
+        }
+      } catch (err) {
         setSongSource((prevState) => ({
           ...prevState,
-          [index]: "Error: " + res.error,
+          [index]: "Error: " + (err as Error).message,
         }));
+        console.error("error : ", err);
       }
-    } catch (err) {
-      setSongSource((prevState) => ({
-        ...prevState,
-        [index]: "Error: " + (err as Error).message,
-      }));
-      console.error("error : ", err);
     }
   };
 
@@ -224,35 +235,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   useEffect(() => {
     audio.pause();
     setIsPlaying(false);
-    audio.src = "";
     setIsLoaded(false);
-    const songIdx = props.songs[currentTrackIndex]?.idx;
-    try {
-      //if the song has not been previously fetched
-      if (!handleChangeSong() && !(songSource[songIdx] === "Fetching")) {
-        // set state to fetching so if another fetch is in progress to not call it again
-        setSongSource((prevState) => ({
-          ...prevState,
-          [songIdx]: "Fetching",
-        }));
-        fetchMarshalForSong(songIdx);
-
-        //fetch the next song
-        if (props.songs.length > currentTrackIndex + 1) {
-          const nextSongIdx = props.songs[currentTrackIndex + 1]?.idx;
-          if (!handleChangeSong() && !(songSource[nextSongIdx] === "Fetching")) {
-            setSongSource((prevState) => ({
-              ...prevState,
-              [nextSongIdx]: "Fetching",
-            }));
-
-            fetchMarshalForSong(nextSongIdx);
-          }
-        }
-      }
-    } catch (err) {
-      console.log("Error when Change the song: ", err);
-    }
+    handleChangeSong();
   }, [currentTrackIndex, songSource[props.songs[currentTrackIndex]?.idx]]);
 
   const showPlaylist = () => {
@@ -263,7 +247,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     <div className="p-12 relative overflow-hidden">
       {displayPlaylist ? (
         <div className="w-full h-[500px] overflow-hidden">
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
+          <div className=" grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
             {props.songs.map((song: any, index: number) => {
               return (
                 <div
@@ -272,8 +256,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                     setCurrentTrackIndex(index);
                     setDisplayPlaylist(false);
                   }}
-                  className={`select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-sky-500/20  bg-[#27293d] rounded-2xl overflow-hidden text-white border-1 border-sky-700`}>
-                  <div className="w-[60%] h-32 flex items-center justify-center">
+                  className={`border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden text-white border-1 border-sky-700`}>
+                  <div className="w-[80%] md:w-[60%] h-32 flex items-center justify-center">
                     <img
                       src={song.cover_art_url}
                       alt={"Not Loaded"}
@@ -297,7 +281,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         </div>
       ) : (
         <div className="overflow-hidden  w-full   flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
-          <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-x border-t border-gray-400 dark:border-white  relative md:w-[60%] flex flex-col rounded-xl">
+          <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-[1px] border-foreground/40  relative md:w-[60%] flex flex-col rounded-xl">
             <div className="px-10 pt-10 pb-4 flex items-center">
               <img
                 src={props.songs[currentTrackIndex]?.cover_art_url}
@@ -379,7 +363,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                       }}
                       className={`ml-[15%] w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center
                      bg-[#fafafa]/25 dark:bg-[#0f0f0f]/25
-                     cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-sky-200   rounded-2xl text dark:text-white border  border-white`}>
+                     cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200   rounded-2xl text dark:text-white border-[1px] border-foreground/40  `}>
                       <div className="w-[80%] xl:w-[40%] justify-center">
                         <img
                           src={song.cover_art_url}
@@ -410,8 +394,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           </div>
         </div>
       )}
-      <div className="z-[-1]   ml-[-10%] dark:mt-[-20%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#00C797] rounded-full"> </div>
-      <div className="z-[-1]  dark:mt-[-10%] ml-[40%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#3D00EA] rounded-full "> </div>
+      <div className="z-[-1]   ml-[-10%]  mt-[-25%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#00C797] rounded-full"> </div>
+      <div className="z-[-1]   mt-[-15%] ml-[40%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#3D00EA] rounded-full "> </div>
     </div>
   );
 };
