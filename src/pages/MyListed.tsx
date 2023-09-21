@@ -99,43 +99,6 @@ export const MyListed = () => {
                         <span className="col-span-4 opacity-6">Listed:</span>
                         <span className="col-span-8 text-left">{offer.quantity}</span>
                       </div>
-                      {/* <div className="mb-1 row">
-                const dataNft = dataNfts.find((nft) => nft.tokenIdentifier == nftId);
-
-                if (dataNft) {
-                  return (
-                    <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex justify-content-center c-nft-tile" key={`o-c-${index}`}>
-                      <div className="card shadow-sm border">
-                        <div className="card-body p-3">
-                          <div className="mb-4">
-                            <img src={isDataNftLoaded ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} className="data-nft-image" />
-                          </div>
-
-                          <div className="mb-1">
-                            <h5 className="text-center text-info">Offer Detail</h5>
-                          </div>
-                          <div className="mb-1 row">
-                            <span className="col-4 opacity-6">Identifier:</span>
-                            <span className="col-8 c-identifier-link">
-                              <span>{nftId}</span>
-                              <a href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`} className="ml-2 address-link text-decoration-none" target="_blank">
-                                <FaExternalLinkAlt />
-                              </a>
-                            </span>
-                          </div>
-                          <div className="mb-1 row">
-                            <span className="col-4 opacity-6">Listed:</span>
-                            <span className="col-8">{offer.quantity}</span>
-                          </div>
-                          {/* <div className="mb-1 row">
-                          <span className="col-4 opacity-6">Wanting:</span>
-                          <span className="col-8">
-                            {convertWeiToEsdt(
-                              offer.wantedTokenAmount
-                            ).toNumber()}{" "}
-                            {offer.wantedTokenIdentifier.split("-")[0]}
-                          </span>
-                        </div> */}
 
                       <div className="mt-4 mb-1">
                         <h5 className="text-center !text-xl !font-[Clash-Medium] pb-2">Data NFT Detail</h5>
