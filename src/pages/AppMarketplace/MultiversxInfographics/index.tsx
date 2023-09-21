@@ -200,7 +200,11 @@ export const MultiversxInfographics = () => {
                   <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                 </div>
               ) : isFetchingDataMarshal ? (
-                <div className="d-flex flex-column align-items-center justify-content-center min-h-[40rem]">
+                <div
+                  className="d-flex flex-column align-items-center justify-content-center"
+                  style={{
+                    minHeight: "40rem",
+                  }}>
                   <div>
                     <Loader noText />
                     <p className="text-center text-foreground">{"Loading..."}</p>

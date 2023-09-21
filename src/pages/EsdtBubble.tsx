@@ -240,10 +240,12 @@ export const EsdtBubble = () => {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
         },
       };
+      console.log("arg", arg);
 
       res = await dataNft.viewDataViaMVXNativeAuth(arg);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
+      console.log("res", res);
 
       processData(res.data);
     } else {

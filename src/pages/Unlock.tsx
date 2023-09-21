@@ -1,5 +1,6 @@
 import React from "react";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 import { useLocation } from "react-router-dom";
 import {
   AuthRedirectWrapper,
@@ -12,7 +13,6 @@ import {
 import { walletConnectV2ProjectId } from "config";
 import { getApi } from "libs/utils";
 import { routeNames } from "routes";
-import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 
 // find a route name based on a pathname that comes in via React Router Link params
 function getRouteNameBasedOnPathNameParam(pathname: string) {

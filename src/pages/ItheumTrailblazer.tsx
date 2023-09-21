@@ -90,11 +90,12 @@ export const ItheumTrailblazer = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log(arg);
+
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
         console.log(res);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
+        console.log("res", res);
 
         setData(res.data.data.reverse());
         setIsFetchingDataMarshal(false);
@@ -123,17 +124,7 @@ export const ItheumTrailblazer = () => {
       dataNftCount={itDataNfts.length}>
       {itDataNfts.length > 0 ? (
         itDataNfts.map((dataNft, index) => (
-          <DataNftCard
-            key={index}
-            index={index}
-            dataNft={dataNft}
-            isLoading={isLoading}
-            owned={flags[index]}
-            viewData={viewData}
-            modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
-            modalTitle={"Trailblazer"}
-            modalTitleStyle="p-4"
-          />
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
         ))
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>

@@ -3,6 +3,7 @@ export * from "./Dashboard";
 export * from "./EsdtBubble";
 export * from "./MultiversxBubbles";
 export * from "./AppMarketplace/MultiversxInfographics";
+export * from "./AppMarketplace/NFTunes";
 export * from "./Home";
 export * from "./MyListed";
 export * from "./MyWallet";
