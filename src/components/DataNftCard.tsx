@@ -5,7 +5,9 @@ import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { convertToLocalString } from "libs/utils";
 import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
-import { ElrondAddressLink } from "./ElrondAddressLink";
+import { MXAddressLink } from "./MXAddressLink";
+import { Modal } from "./Modal/Modal";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 
 export function DataNftCard({
   index,
@@ -15,6 +17,9 @@ export function DataNftCard({
   isWallet,
   viewData,
   showBalance = false,
+  modalContent,
+  modalTitle,
+  modalTitleStyle,
 }: {
   index: number;
   dataNft: DataNft;
@@ -23,12 +28,20 @@ export function DataNftCard({
   isWallet?: boolean;
   viewData: (e: number) => void;
   showBalance?: boolean;
+  modalContent?: JSX.Element;
+  modalTitle?: string;
+  modalTitleStyle?: string;
 }) {
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
+  const { tokenLogin } = useGetLoginInfo();
   function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
+    if (tokenLogin && tokenLogin.nativeAuthToken) {
+      window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}/?accessToken=${tokenLogin?.nativeAuthToken}`)?.focus();
+    } else {
+      window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
+    }
   }
 
   return (
@@ -50,7 +63,7 @@ export function DataNftCard({
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Creator:</span>
-              <span className="col-span-8 text-left ">{<ElrondAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
+              <span className="col-span-8 text-left ">{<MXAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Created At:</span>
@@ -95,12 +108,20 @@ export function DataNftCard({
 
             <CardFooter className="flex w-full justify-center mt-3 pb-2 text-center">
               {owned ? (
-                <Button
-                  className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-black rounded-lg font-medium tracking-wide !text-lg hover:opacity-80 hover:text-black"
-                  variant="ghost"
-                  onClick={() => viewData(index)}>
-                  View Data
-                </Button>
+                <Modal
+                  openTrigger={
+                    <Button
+                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-black rounded-lg font-medium tracking-wide !text-lg hover:opacity-80 hover:text-black"
+                      variant="ghost"
+                      onClick={() => viewData(index)}>
+                      View Data
+                    </Button>
+                  }
+                  closeOnOverlayClick={false}
+                  title={modalTitle ?? ""}
+                  titleClassName={modalTitleStyle}>
+                  {modalContent}
+                </Modal>
               ) : (
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
                   <Button

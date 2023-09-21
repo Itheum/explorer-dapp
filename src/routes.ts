@@ -2,15 +2,8 @@ import { dAppName } from "config";
 import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
-import {
-  PlayStationGamer,
-  Home,
-  MyListed,
-  MyWallet,
-  EsdtBubble,
-  MultiversxBubbles,
-  MultiversxInfographics,
-} from "./pages";
+import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
+import { NFTunes } from "pages/AppMarketplace/NFTunes";
 
 export const routeNames = {
   home: "/",
@@ -23,6 +16,7 @@ export const routeNames = {
   esdtBubble: "/esdt-bubbles",
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
+  nftunes: "/nftunes",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -81,6 +75,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.multiversxinfographics,
     title: "MultiversX Infographics",
     component: MultiversxInfographics,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.nftunes,
+    title: "NFTunes",
+    component: NFTunes,
     authenticatedRoute: false,
   },
 ];

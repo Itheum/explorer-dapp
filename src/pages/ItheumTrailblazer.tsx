@@ -5,7 +5,7 @@ import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
 import { TRAILBLAZER_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { toastError } from "libs/utils";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
@@ -84,7 +84,7 @@ export const ItheumTrailblazer = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: [window.location.origin],
+          mvxNativeAuthOrigins: nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
@@ -92,8 +92,10 @@ export const ItheumTrailblazer = () => {
         };
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
+        console.log(res);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
+        console.log("res", res);
 
         setData(res.data.data.reverse());
         setIsFetchingDataMarshal(false);
@@ -128,7 +130,7 @@ export const ItheumTrailblazer = () => {
         <h3 className="text-center text-white">No Data NFTs</h3>
       )}
 
-      <TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />
+      {/*<TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />*/}
     </HeaderComponent>
   );
 };

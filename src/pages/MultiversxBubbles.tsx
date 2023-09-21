@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { ModalBody } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { IoClose } from "react-icons/io5";
-// import SVG from "react-inlinesvg";
-import Modal from "react-modal";
+import SVG from "react-inlinesvg";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader, ZoomableSvg } from "components";
 import { MULTIVERSX_BUBBLE_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { modalStylesFull } from "libs/ui";
-import { toastError } from "libs/utils";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
 
@@ -99,7 +94,7 @@ export const MultiversxBubbles = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: [window.location.origin],
+          mvxNativeAuthOrigins: nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
@@ -169,80 +164,62 @@ export const MultiversxBubbles = () => {
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (
-          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+          <DataNftCard
+            key={index}
+            index={index}
+            dataNft={dataNft}
+            isLoading={isLoading}
+            owned={flags[index]}
+            viewData={viewData}
+            modalContent={
+              !owned ? (
+                <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80dvh]">
+                  <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+                  <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+                </div>
+              ) : isFetchingDataMarshal ? (
+                <div className="flex flex-col items-center justify-center min-h-[40rem]">
+                  <div>
+                    <Loader noText />
+                    <p className="text-center text-foreground ">{"Loading..."}</p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-end mr-3 mb-2">
+                    {file && (
+                      <Button
+                        className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
+                        onClick={() => {
+                          if (file) {
+                            window.open(file as string, "_blank");
+                          }
+                        }}>
+                        Open in full screen
+                      </Button>
+                    )}
+                  </div>
+                  {viewDataRes &&
+                    !viewDataRes.error &&
+                    (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                      <img src={viewDataRes.data} className="w-full h-auto p-4" />
+                    ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                      <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} className="w-full h-auto p-4" />
+                    ) : (
+                      <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                        {viewDataRes.data}
+                      </p>
+                    ))}
+                </>
+              )
+            }
+            modalTitle={"MultiversX Bubbles"}
+            modalTitleStyle="p-4"
+          />
         ))
       ) : (
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
-
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        className="absolute overflow-hidden !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] h-[89vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
-        style={modalStylesFull}
-        ariaHideApp={false}
-        shouldCloseOnOverlayClick={false}>
-        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
-          <ModalHeader className="border-0">
-            <h2 className="text-center p-3 text-foreground">MultiversX Bubbles</h2>
-          </ModalHeader>
-          <div className="flex flex-col items-end gap-4 h-[6rem]">
-            <div className="flex justify-center cursor-pointer text-[2rem] text-foreground mr-3 mt-1" onClick={closeModal}>
-              <IoClose />
-            </div>
-            <div className="mr-3 mb-2">
-              {file && (
-                <Button
-                  className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
-                  onClick={() => {
-                    if (file) {
-                      window.open(file as string, "_blank");
-                    }
-                  }}>
-                  Open in full screen
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-        <ModalBody className="h-full min-w-[26rem] p-0.5">
-          {!owned ? (
-            <div
-              className="flex flex-col items-center justify-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "50vw",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
-              <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
-            </div>
-          ) : isFetchingDataMarshal ? (
-            <div className="flex flex-col items-center justify-center min-h-[40rem]">
-              <div>
-                <Loader noText />
-                <p className="text-center text-foreground ">{"Loading..."}</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              {viewDataRes &&
-                !viewDataRes.error &&
-                (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                  <img src={viewDataRes.data} className="w-full h-auto" />
-                ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                  // <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
-                  <ZoomableSvg data={viewDataRes.data} preProcess={preProcess} />
-                ) : (
-                  <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                    {viewDataRes.data}
-                  </p>
-                ))}
-            </>
-          )}
-        </ModalBody>
-      </Modal>
     </HeaderComponent>
   );
 };
