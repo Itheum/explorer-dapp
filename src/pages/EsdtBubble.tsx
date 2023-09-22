@@ -15,7 +15,7 @@ import Modal from "react-modal";
 import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
 import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
 import { modalStyles } from "libs/ui";
-import { ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL, convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
+import { convertWeiToEsdt, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
@@ -234,16 +234,18 @@ export const EsdtBubble = () => {
       }
 
       const arg = {
-        mvxNativeAuthOrigins: [ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL],
+        mvxNativeAuthOrigins: nativeAuthOrigins(),
         mvxNativeAuthMaxExpirySeconds: 3000,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
         },
       };
+      console.log("arg", arg);
 
       res = await dataNft.viewDataViaMVXNativeAuth(arg);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
+      console.log("res", res);
 
       processData(res.data);
     } else {

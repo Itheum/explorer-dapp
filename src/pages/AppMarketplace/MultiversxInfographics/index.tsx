@@ -9,7 +9,7 @@ import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL, toastError } from "libs/utils";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "./MultiversxInfographics.scss";
@@ -114,7 +114,7 @@ export const MultiversxInfographics = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: [ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL],
+          mvxNativeAuthOrigins: nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
@@ -200,7 +200,11 @@ export const MultiversxInfographics = () => {
                   <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                 </div>
               ) : isFetchingDataMarshal ? (
-                <div className="d-flex flex-column align-items-center justify-content-center min-h-[40rem]">
+                <div
+                  className="d-flex flex-column align-items-center justify-content-center"
+                  style={{
+                    minHeight: "40rem",
+                  }}>
                   <div>
                     <Loader noText />
                     <p className="text-center text-foreground">{"Loading..."}</p>

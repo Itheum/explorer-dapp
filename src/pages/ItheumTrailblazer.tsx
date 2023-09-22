@@ -5,7 +5,7 @@ import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
 import { TRAILBLAZER_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL, toastError } from "libs/utils";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
@@ -72,9 +72,9 @@ export const ItheumTrailblazer = () => {
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
           throw Error("No nativeAuth token");
         }
-        console.log(tokenLogin);
+
         const arg = {
-          mvxNativeAuthOrigins: [ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL],
+          mvxNativeAuthOrigins: nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
@@ -82,8 +82,10 @@ export const ItheumTrailblazer = () => {
         };
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
+        console.log(res);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
+        console.log("res", res);
 
         setData(res.data.data.reverse());
         setIsFetchingDataMarshal(false);
@@ -109,17 +111,7 @@ export const ItheumTrailblazer = () => {
       dataNftCount={itDataNfts.length}>
       {itDataNfts.length > 0 ? (
         itDataNfts.map((dataNft, index) => (
-          <DataNftCard
-            key={index}
-            index={index}
-            dataNft={dataNft}
-            isLoading={isLoading}
-            owned={flags[index]}
-            viewData={viewData}
-            modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
-            modalTitle={"Trailblazer"}
-            modalTitleStyle="p-4"
-          />
+          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
         ))
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>

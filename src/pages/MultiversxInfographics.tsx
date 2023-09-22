@@ -12,7 +12,7 @@ import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
-import { ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL, toastError } from "libs/utils";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -95,14 +95,16 @@ export const MultiversxInfographics = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: [ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL],
+          mvxNativeAuthOrigins: nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
+        console.log("arg", arg);
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
+        console.log("res", res);
 
         let blobDataType = BlobDataType.TEXT;
 

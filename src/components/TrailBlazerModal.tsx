@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
-import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
+ import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
 import { Button } from "../libComponents/Button";
 import { Modal } from "./Modal/Modal";
