@@ -130,7 +130,7 @@ h6 {
 .dapp-core-component__transactionsToastList-styles__toasts,
 .dapp-custom-toast,
 .dapp-core-component__transactionsToastList-styles__toastWrapper {
-    @apply bg-ring fill-black fixed bottom-14 right-10 !important;
+    @apply bg-ring fixed bottom-14 right-10 !important;
 }
 
 @layer base {
