@@ -43,7 +43,6 @@ export function DataNftCard({
       window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
     }
   }
-
   return (
     <div className="mb-3 ">
       <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px]">
@@ -75,9 +74,8 @@ export function DataNftCard({
               <div className="col-span-8 w-full items-center justify-center">
                 <a
                   href={
-                    `${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}` + (tokenLogin && tokenLogin.nativeAuthToken)
-                      ? `/?accessToken=${tokenLogin?.nativeAuthToken}`
-                      : ""
+                    `${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}` +
+                    (tokenLogin && tokenLogin.nativeAuthToken ? `/?accessToken=${tokenLogin?.nativeAuthToken}` : "")
                   }
                   className="flex flex-row items-center text-decoration-none !text-blue-500"
                   target="_blank">
