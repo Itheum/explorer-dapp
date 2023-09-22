@@ -5,7 +5,7 @@ import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader, TrailBlazerModal } from "components";
 import { TRAILBLAZER_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { toastError } from "libs/utils";
+import { ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
@@ -72,9 +72,9 @@ export const ItheumTrailblazer = () => {
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
           throw Error("No nativeAuth token");
         }
-
+        console.log(tokenLogin);
         const arg = {
-          mvxNativeAuthOrigins: [window.location.origin],
+          mvxNativeAuthOrigins: [ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL],
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,

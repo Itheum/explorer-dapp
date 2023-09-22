@@ -15,7 +15,7 @@ import Modal from "react-modal";
 import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
 import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
 import { modalStyles } from "libs/ui";
-import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
+import { ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL, convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
@@ -234,7 +234,7 @@ export const EsdtBubble = () => {
       }
 
       const arg = {
-        mvxNativeAuthOrigins: [window.location.origin],
+        mvxNativeAuthOrigins: [ITHEUM_DATADEX_URL, ITHEUM_EXPLORER_URL],
         mvxNativeAuthMaxExpirySeconds: 3000,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
