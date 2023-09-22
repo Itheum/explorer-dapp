@@ -388,9 +388,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                           }}
                         />
                       </div>
-                      <div className=" xl:w-[60%] flex flex-col justify-center">
-                        <h6 className="font-semibold truncate text-left">{song.title}</h6>
-                        <p className="aray-400 truncate text-left">{song.artist}</p>
+                      <div className=" xl:w-[60%] flex flex-col justify-center text-center  ">
+                        <h6 className="font-semibold truncate ">{song.title}</h6>
+                        <p className="aray-400 truncate">{song.artist}</p>
                       </div>
                     </div>
                   </div>
