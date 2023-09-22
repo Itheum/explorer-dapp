@@ -109,13 +109,24 @@ export const ItheumTrailblazer = () => {
       altImageAttribute={"itheumTrailblazer"}
       pageSubtitle={"Data NFTs that Unlock this App"}
       dataNftCount={itDataNfts.length}>
+      {" "}
       {itDataNfts.length > 0 ? (
         itDataNfts.map((dataNft, index) => (
-          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+          <DataNftCard
+            key={index}
+            index={index}
+            dataNft={dataNft}
+            isLoading={isLoading}
+            owned={flags[index]}
+            viewData={viewData}
+            modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
+            modalTitle={"Trailblazer"}
+            modalTitleStyle="p-4"
+          />
         ))
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>
-      )}
+      )}{" "}
     </HeaderComponent>
   );
 };
