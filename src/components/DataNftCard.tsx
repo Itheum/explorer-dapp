@@ -7,6 +7,8 @@ import { ElrondAddressLink } from "./ElrondAddressLink";
 import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { Modal } from "./Modal/Modal";
+import { util } from "prettier";
+import hasNewline = util.hasNewline;
 
 export function DataNftCard({
   index,
@@ -19,6 +21,7 @@ export function DataNftCard({
   modalContent,
   modalTitle,
   modalTitleStyle,
+  hasFilter,
 }: {
   index: number;
   dataNft: DataNft;
@@ -30,6 +33,7 @@ export function DataNftCard({
   modalContent?: JSX.Element;
   modalTitle?: string;
   modalTitleStyle?: string;
+  hasFilter?: boolean;
 }) {
   const {
     network: { explorerAddress },
@@ -112,6 +116,7 @@ export function DataNftCard({
                     </Button>
                   }
                   title={modalTitle ?? ""}
+                  hasFilter={hasFilter ?? false}
                   titleClassName={modalTitleStyle}>
                   {modalContent}
                 </Modal>

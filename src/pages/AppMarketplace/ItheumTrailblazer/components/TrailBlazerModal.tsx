@@ -231,21 +231,6 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         </div>
       ) : (
         <div className="">
-          <div className="relative right-[2rem]">
-            <span className="absolute z-[9999]">Filter timeline</span>
-            <Button
-              variant="outline"
-              className="absolute -top-20 right-[21rem] z-[9999] border-[1px] border-slate-100/20 text-foreground"
-              onClick={() => setIsFilterShown(!isFilterShown)}>
-              All Categories
-              <ChevronDown className="w-5 h-5 " />
-            </Button>
-            {isFilterShown && (
-              <Card className="absolute z-[9999]">
-                <CardHeader>Filter by</CardHeader>
-              </Card>
-            )}
-          </div>
           <VerticalTimeline>
             {data?.map((_dataItem: any, _index: any) => {
               return (

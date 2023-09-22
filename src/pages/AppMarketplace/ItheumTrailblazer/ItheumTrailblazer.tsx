@@ -211,6 +211,7 @@ export const ItheumTrailblazer = () => {
             modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
             modalTitle={"Trailblazer"}
             modalTitleStyle="p-5"
+            hasFilter={true}
           />
         ))
       ) : (
