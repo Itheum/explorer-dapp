@@ -50,14 +50,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     speed: 1000,
     slidesToShow: 4,
     slidesToScroll: 4,
-    initialSlide: 3,
+    initialSlide: 0,
     responsive: [
       {
         breakpoint: 1800,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          initialSlide: 2,
+          initialSlide:0,
         },
       },
       {
@@ -65,7 +65,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          initialSlide: 2,
+          initialSlide: 0,
         },
       },
 
@@ -73,14 +73,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         breakpoint: 730,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToScroll:2,
         },
       },
       {
         breakpoint: 550,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
+          slidesToScroll:1,
         },
       },
     ],
