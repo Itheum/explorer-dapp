@@ -169,6 +169,8 @@ export const ItheumTrailblazer = () => {
     }
   }
 
+  const filterData = ["Partnership", "Achievement", "Offer", "Quest", "Leaderboard", "Calendar"];
+
   async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
     try {
       setIsFetchingDataMarshal(true);
@@ -212,6 +214,7 @@ export const ItheumTrailblazer = () => {
             modalTitle={"Trailblazer"}
             modalTitleStyle="p-5"
             hasFilter={true}
+            filterData={filterData}
           />
         ))
       ) : (

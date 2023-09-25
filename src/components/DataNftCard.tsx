@@ -22,6 +22,7 @@ export function DataNftCard({
   modalTitle,
   modalTitleStyle,
   hasFilter,
+  filterData,
 }: {
   index: number;
   dataNft: DataNft;
@@ -34,6 +35,7 @@ export function DataNftCard({
   modalTitle?: string;
   modalTitleStyle?: string;
   hasFilter?: boolean;
+  filterData?: Array<string>;
 }) {
   const {
     network: { explorerAddress },
@@ -117,6 +119,7 @@ export function DataNftCard({
                   }
                   title={modalTitle ?? ""}
                   hasFilter={hasFilter ?? false}
+                  filterData={filterData ?? []}
                   titleClassName={modalTitleStyle}>
                   {modalContent}
                 </Modal>

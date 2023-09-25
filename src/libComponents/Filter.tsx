@@ -30,10 +30,9 @@ export const Filter: React.FC<FilterProps> = (props) => {
                   <X className="w-5 h-5 cursor-pointer" />
                 </CardHeader>
                 <CardContent className="flex flex-wrap gap-3 w-[20rem]">
-                  <Badge>Quest</Badge>
-                  <Badge>Community</Badge>
-                  <Badge>Community</Badge>
-                  <Badge>Community</Badge>
+                  {filterData?.map((item, index) => (
+                    <Badge className="cursor-pointer">{item}</Badge>
+                  ))}
                 </CardContent>
               </Card>
             </div>
