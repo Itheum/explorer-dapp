@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { Loader2, Play, Pause, Library, RefreshCcwDot, Volume2, Volume1, VolumeX, SkipBack, SkipForward } from "lucide-react";
+import { ArrowBigLeft, Loader2, Play, Pause, Library, RefreshCcwDot, Volume2, Volume1, VolumeX, SkipBack, SkipForward } from "lucide-react";
 
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
@@ -50,15 +50,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     speed: 1000,
     slidesToShow: 4,
     slidesToScroll: 4,
-
     initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1554,
+        breakpoint: 1800,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          infinite: true,
+          initialSlide:0,
         },
       },
       {
@@ -66,15 +65,22 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          initialSlide: 2,
+          initialSlide: 0,
         },
       },
 
       {
-        breakpoint: 520,
+        breakpoint: 730,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToScroll:2,
+        },
+      },
+      {
+        breakpoint: 550,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll:1,
         },
       },
     ],
@@ -186,7 +192,10 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   const handlePrevButton = () => {
-    if (currentTrackIndex <= 0) return;
+    if (currentTrackIndex <= 0) {
+      setCurrentTrackIndex(props.songs.length - 1);
+      return;
+    }
     setCurrentTrackIndex((prevCurrentTrackIndex) => prevCurrentTrackIndex - 1);
   };
 
@@ -247,6 +256,11 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     <div className="p-12 relative overflow-hidden">
       {displayPlaylist ? (
         <div className="w-full h-[500px] overflow-hidden">
+          <button
+            className="border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-sky-200 dark:hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden   "
+            onClick={() => setDisplayPlaylist(false)}>
+            <ArrowBigLeft />
+          </button>
           <div className=" grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
             {props.songs.map((song: any, index: number) => {
               return (
@@ -256,7 +270,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                     setCurrentTrackIndex(index);
                     setDisplayPlaylist(false);
                   }}
-                  className={`border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden text-white border-1 border-sky-700`}>
+                  className={`border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-sky-200 dark:hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden text-white `}>
                   <div className="w-[80%] md:w-[60%] h-32 flex items-center justify-center">
                     <img
                       src={song.cover_art_url}
@@ -351,17 +365,17 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               </button>
             </div>
           </div>
-          <div className="w-[100%] 2xl:w-[80%] mt-8 mx-auto">
-            <h4 className="ml-[10%] select-none flex justify-start font-semibold dark:text-white mt-4 mb-2   ">{`Tracklist ${props.songs.length} songs`} </h4>
+          <div className="w-[80%] 2xl:w-[70%] mt-8 mx-auto">
+            <h4 className="select-none flex justify-start font-semibold dark:text-white mt-4 mb-2   ">{`Tracklist ${props.songs.length} songs`} </h4>
             <Slider {...settings}>
               {props.songs.map((song: any, index: number) => {
                 return (
-                  <div key={index}>
+                  <div key={index} className=" w-32 xl:w-64 shadow-none flex items-center justify-center">
                     <div
                       onClick={() => {
                         setCurrentTrackIndex(index);
                       }}
-                      className={`ml-[15%] w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center
+                      className={`mx-auto w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center
                      bg-[#fafafa]/25 dark:bg-[#0f0f0f]/25
                      cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200   rounded-2xl text dark:text-white border-[1px] border-foreground/40  `}>
                       <div className="w-[80%] xl:w-[40%] justify-center">
@@ -374,9 +388,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                           }}
                         />
                       </div>
-                      <div className=" xl:w-[60%] flex flex-col justify-center">
-                        <h6 className="font-semibold truncate text-left">{song.title}</h6>
-                        <p className="aray-400 truncate text-left">{song.artist}</p>
+                      <div className=" xl:w-[60%] flex flex-col justify-center text-center  ">
+                        <h6 className="font-semibold truncate ">{song.title}</h6>
+                        <p className="aray-400 truncate">{song.artist}</p>
                       </div>
                     </div>
                   </div>
@@ -385,10 +399,11 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             </Slider>
             <style>
               {`
+              
                 /* CSS styles for Swiper navigation arrows  */
                 .slick-prev:before,
                 .slick-next:before {
-                  color: black;
+                color: ${theme === "light" ? "black;" : "white;"},
                     }`}
             </style>
           </div>
