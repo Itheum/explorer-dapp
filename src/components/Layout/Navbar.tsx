@@ -53,7 +53,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     // logout(`${window.location.origin}/unlock`);
-    logout(`${window.location.origin}`);
+    logout(`${window.location.origin}`, undefined, false);
   };
 
   return (
