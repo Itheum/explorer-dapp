@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import SVG from "react-inlinesvg";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader, ZoomableSvg } from "components";
 import { MULTIVERSX_BUBBLE_NONCES } from "config";
@@ -204,7 +203,7 @@ export const MultiversxBubbles = () => {
                     (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
                       <img src={viewDataRes.data} className="w-full h-auto p-4" />
                     ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                      <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} className="w-full h-auto p-4" />
+                      <ZoomableSvg data={viewDataRes.data} preProcess={preProcess} />
                     ) : (
                       <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
                         {viewDataRes.data}
