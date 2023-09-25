@@ -89,11 +89,7 @@ export const MyListed = () => {
                           <div className="flex flex-row items-center gap-1">
                             <span className="xl:text-base text-sm">{nftId}</span>
                             <a
-                              href={
-                                `${MARKETPLACE_DETAILS_PAGE}${nftId}` + (tokenLogin && tokenLogin.nativeAuthToken)
-                                  ? `/?accessToken=${tokenLogin?.nativeAuthToken}`
-                                  : ""
-                              }
+                              href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`}
                               className="!text-blue-500 text-decoration-none hover:!text-blue-500/80"
                               target="_blank">
                               <FaExternalLinkAlt />

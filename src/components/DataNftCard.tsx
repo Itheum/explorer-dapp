@@ -37,11 +37,7 @@ export function DataNftCard({
   } = useGetNetworkConfig();
   const { tokenLogin } = useGetLoginInfo();
   function goToMarketplace(tokenIdentifier: string) {
-    if (tokenLogin && tokenLogin.nativeAuthToken) {
-      window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}/?accessToken=${tokenLogin?.nativeAuthToken}`)?.focus();
-    } else {
-      window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
-    }
+    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
   return (
     <div className="mb-3 ">
@@ -73,10 +69,7 @@ export function DataNftCard({
               <span className="col-span-4 opacity-6">Identifier:</span>
               <div className="col-span-8 w-full items-center justify-center">
                 <a
-                  href={
-                    `${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}` +
-                    (tokenLogin && tokenLogin.nativeAuthToken ? `/?accessToken=${tokenLogin?.nativeAuthToken}` : "")
-                  }
+                  href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
                   className="flex flex-row items-center text-decoration-none !text-blue-500"
                   target="_blank">
                   <p className="flex flex-row w-full items-center mb-0 text-sm xl:text-base">{dataNft.tokenIdentifier}</p>
