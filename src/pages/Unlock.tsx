@@ -34,7 +34,7 @@ const UnlockPage = () => {
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
-    origin: window.location.origin,
+    // origin: window.location.origin,
     expirySeconds: 3000,
   };
   const commonProps = {

@@ -8,10 +8,10 @@ import {
 import { TransactionsToastList, NotificationModal, SignTransactionsModals } from "components";
 import { apiTimeout, walletConnectV2ProjectId, sampleAuthenticatedDomains, ELROND_NETWORK } from "config";
 import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock } from "pages";
+import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./libComponents/ThemeProvider";
-import { NFTunes } from "pages/AppMarketplace/NFTunes";
 
 export const App = () => {
   return (

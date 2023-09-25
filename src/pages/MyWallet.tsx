@@ -96,11 +96,12 @@ export const MyWallet = () => {
           res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         }
       } else if (res.contentType.search("audio") >= 0) {
-        // res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        res.data = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        blobDataType = BlobDataType.AUDIO;
+        // const purifiedStr = DOMPurify.sanitize(await (res.data as Blob).text());
+        // res.data = window.URL.createObjectURL(new Blob([purifiedStr], { type: res.contentType }));
         // blobDataType = BlobDataType.AUDIO;
-        const purifiedJSONStr = DOMPurify.sanitize(await (res.data as Blob).text());
-        res.data = JSON.stringify(JSON.parse(purifiedJSONStr), null, 4);
-        setIsDomPurified(true);
+        // setIsDomPurified(true);
       } else if (res.contentType.search("application/pdf") >= 0) {
         const pdfObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         res.data = pdfObject;
@@ -225,7 +226,10 @@ export const MyWallet = () => {
         <h4 className="no-items">
           <div>
             You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting the
-            <a href={`${MARKETPLACE_DETAILS_PAGE}`} className="ml-2 address-link text-decoration-none" target="_blank">
+            <a
+              href={`${MARKETPLACE_DETAILS_PAGE}` + (tokenLogin && tokenLogin.nativeAuthToken) ? `/?accessToken=${tokenLogin?.nativeAuthToken}` : ""}
+              className="ml-2 address-link text-decoration-none"
+              target="_blank">
               Data DEX
             </a>
           </div>

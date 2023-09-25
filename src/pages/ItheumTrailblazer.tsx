@@ -20,7 +20,6 @@ export const ItheumTrailblazer = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -33,14 +32,6 @@ export const ItheumTrailblazer = () => {
       fetchMyNfts();
     }
   }, [isLoading, address]);
-
-  function openModal() {
-    setIsModalOpened(true);
-  }
-
-  function closeModal() {
-    setIsModalOpened(false);
-  }
 
   async function fetchAppNfts() {
     setIsLoading(true);
@@ -76,7 +67,6 @@ export const ItheumTrailblazer = () => {
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
-        openModal();
 
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -99,13 +89,10 @@ export const ItheumTrailblazer = () => {
 
         setData(res.data.data.reverse());
         setIsFetchingDataMarshal(false);
-      } else {
-        openModal();
       }
     } catch (err) {
       console.error(err);
       toastError((err as Error).message);
-      closeModal();
       setIsFetchingDataMarshal(false);
     }
   }
@@ -122,15 +109,24 @@ export const ItheumTrailblazer = () => {
       altImageAttribute={"itheumTrailblazer"}
       pageSubtitle={"Data NFTs that Unlock this App"}
       dataNftCount={itDataNfts.length}>
+      {" "}
       {itDataNfts.length > 0 ? (
         itDataNfts.map((dataNft, index) => (
-          <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
+          <DataNftCard
+            key={index}
+            index={index}
+            dataNft={dataNft}
+            isLoading={isLoading}
+            owned={flags[index]}
+            viewData={viewData}
+            modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
+            modalTitle={"Trailblazer"}
+            modalTitleStyle="p-4"
+          />
         ))
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>
-      )}
-
-      {/*<TrailBlazerModal isModalOpened={isModalOpened} closeModal={closeModal} owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />*/}
+      )}{" "}
     </HeaderComponent>
   );
 };
