@@ -232,61 +232,59 @@ export const TrailBlazerModal = ({
   }
 
   return (
-    <>
-      <Modal
-        isOpen={isModalOpened}
-        onRequestClose={closeModal}
-        className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
-        style={customStyles}
-        ariaHideApp={false}
-        shouldCloseOnOverlayClick={false}>
-        <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
-          <ModalHeader className="border-0">
-            <h2 className="text-center p-3 text-card-foreground">Trailblazer</h2>
-          </ModalHeader>
-          <div className="flex items-center h-[6rem]">
-            <div className="flex justify-center cursor-pointer text-[2rem] text-card-foreground" onClick={closeModal}>
-              <IoClose />
-            </div>
+    <Modal
+      isOpen={isModalOpened}
+      onRequestClose={closeModal}
+      className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
+      style={customStyles}
+      ariaHideApp={false}
+      shouldCloseOnOverlayClick={false}>
+      <div className="sticky-top flex flex-row justify-between backdrop-blur bg-background/60">
+        <ModalHeader className="border-0">
+          <h2 className="text-center p-3 text-card-foreground">Trailblazer</h2>
+        </ModalHeader>
+        <div className="flex items-center h-[6rem]">
+          <div className="flex justify-center cursor-pointer text-[2rem] text-card-foreground" onClick={closeModal}>
+            <IoClose />
           </div>
         </div>
-        <ModalBody>
-          {!owned ? (
-            <div className="flex flex-col items-center justify-center">
-              <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+      </div>
+      <ModalBody>
+        {!owned ? (
+          <div className="flex flex-col items-center justify-center">
+            <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+            <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+          </div>
+        ) : isFetchingDataMarshal || !data ? (
+          <div
+            className="flex flex-col items-center justify-center"
+            style={{
+              minWidth: "24rem",
+              maxWidth: "100%",
+              minHeight: "40rem",
+              maxHeight: "80vh",
+            }}>
+            <div>
+              <Loader noText />
+              <p className="text-center font-weight-bold">
+                {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
+              </p>
             </div>
-          ) : isFetchingDataMarshal || !data ? (
-            <div
-              className="flex flex-col items-center justify-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "100%",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
-              <div>
-                <Loader noText />
-                <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="trailblazer-view text-black">
-              <VerticalTimeline>
-                {data?.map((_dataItem: any, _index: any) => {
-                  return (
-                    <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
-                      {getTileForCategory(_dataItem)}
-                    </VerticalTimelineElement>
-                  );
-                })}
-              </VerticalTimeline>
-            </div>
-          )}
-        </ModalBody>
-      </Modal>
-    </>
+          </div>
+        ) : (
+          <div className="trailblazer-view text-black">
+            <VerticalTimeline>
+              {data?.map((_dataItem: any, _index: any) => {
+                return (
+                  <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
+                    {getTileForCategory(_dataItem)}
+                  </VerticalTimelineElement>
+                );
+              })}
+            </VerticalTimeline>
+          </div>
+        )}
+      </ModalBody>
+    </Modal>
   );
 };
