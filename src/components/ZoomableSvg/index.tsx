@@ -1,10 +1,6 @@
 import React, { useRef } from "react";
 import SVG from "react-inlinesvg";
-import {
-  TransformWrapper,
-  TransformComponent,
-  ReactZoomPanPinchRef,
-} from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 import svgReset from "./Reset.svg";
 import svgZoomIn from "./ZoomIn.svg";
 import svgZoomOut from "./ZoomOut.svg";
@@ -12,13 +8,7 @@ import "./index.scss";
 
 const INITIAL_SCALE = 2;
 
-export const ZoomableSvg = ({
-  data,
-  preProcess,
-} : {
-  data: any,
-  preProcess: any,
-}) => {
+export const ZoomableSvg = ({ data, preProcess }: { data: any; preProcess: any }) => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
 
   const actionZoomIn = () => {
@@ -61,26 +51,24 @@ export const ZoomableSvg = ({
       <React.Fragment>
         <TransformComponent
           wrapperStyle={{
-            width: '100%',
-            height: '100%',
+            width: "100%",
+            height: "100%",
           }}
           contentStyle={{
             height: "100%",
-            // width: "auto",
-          }}
-        >
+            width: "auto",
+          }}>
           <SVG
             id="zoomable-svg"
             src={data}
-            preProcessor={(code) => preProcess(code)}
-            // style={{ width: "100%", height: "auto" }}
+            preProcessor={(code) => preProcess(code)} //style={{ width: "100%", height: "auto" }}
           />
         </TransformComponent>
 
         <div
           style={{
             position: "absolute",
-            top: "1rem",
+            top: "12rem",
             left: "unset",
             right: "1rem",
             bottom: "unset",
@@ -89,24 +77,14 @@ export const ZoomableSvg = ({
             display: "flex",
             flexDirection: "column",
             padding: "2px 1px",
-          }}
-        >
-          <button
-            className="zoomable-toolbar-button"
-            onClick={actionZoomIn}
-          >
+          }}>
+          <button className="zoomable-toolbar-button" onClick={actionZoomIn}>
             <img src={svgZoomIn} style={{ width: "100%", height: "100%" }} />
           </button>
-          <button
-            className="zoomable-toolbar-button"
-            onClick={actionZoomOut}
-          >
+          <button className="zoomable-toolbar-button" onClick={actionZoomOut}>
             <img src={svgZoomOut} style={{ width: "100%", height: "100%" }} />
           </button>
-          <button
-            className="zoomable-toolbar-button"
-            onClick={actionReset}
-          >
+          <button className="zoomable-toolbar-button" onClick={actionReset}>
             <img src={svgReset} style={{ width: "100%", height: "100%" }} />
           </button>
         </div>
