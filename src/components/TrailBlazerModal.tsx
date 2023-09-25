@@ -1,4 +1,4 @@
-import React, { useState, ComponentType } from "react";
+import React, { useState } from "react";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { ModalBody, ModalHeader } from "react-bootstrap";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaShoppingCart, FaTrophy } from "react-icons/fa";
@@ -8,9 +8,6 @@ import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeli
 import { Loader } from "components";
 import { IFrameModal } from "./iFrameModal";
 import { TwModal } from "./Modal/TwModal";
-import ReactModal from "react-modal";
-
-const ModelR18 = Modal as ComponentType<ReactModal['props']>;
 
 const customStyles = {
   overlay: {
@@ -236,7 +233,7 @@ export const TrailBlazerModal = ({
 
   return (
     <>
-      <ModelR18
+      <Modal
         isOpen={isModalOpened}
         onRequestClose={closeModal}
         className="absolute overflow-y-scroll scrollbar !w-[80%] !top-[50%] !left-[50%] !right-auto !bottom-auto !-mr-[50%] !-translate-x-[50%] !-translate-y-[50%] !max-h-[79vh] !bg-background !shadow-md  !shadow-foreground rounded-2xl"
@@ -289,7 +286,7 @@ export const TrailBlazerModal = ({
             </div>
           )}
         </ModalBody>
-      </ModelR18>
+      </Modal>
     </>
   );
 };
