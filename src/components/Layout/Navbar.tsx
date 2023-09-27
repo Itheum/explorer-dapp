@@ -30,7 +30,6 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
-import { cn } from "../../libs/utils";
 import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
@@ -54,7 +53,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     // logout(`${window.location.origin}/unlock`);
-    logout(`${window.location.origin}`);
+    logout(`${window.location.origin}`, undefined, false);
   };
 
   return (
@@ -82,9 +81,17 @@ export const Navbar = () => {
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
-                  <ListItem href={returnRoute(item.routeKey)} key={item.routeKey} title={item.appName}>
-                    {item?.appDescription}
-                  </ListItem>
+                  <Link
+                    to={returnRoute(item.routeKey)}
+                    key={item.routeKey}
+                    className={
+                      "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                    }>
+                    <NavigationMenuLink>
+                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">{item.appName}</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">{item?.appDescription}</p>
+                    </NavigationMenuLink>
+                  </Link>
                 ))}
               </ul>
             </NavigationMenuContent>
@@ -95,14 +102,29 @@ export const Navbar = () => {
                 <NavigationMenuTrigger>Account</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    <ListItem href={routeNames.mylisted} title={"My Listed"} className="!hover:no-underline !focus:no-underline">
-                      Listed Data NFT's
-                    </ListItem>
-                    <ListItem href={routeNames.mywallet} title={"My Wallet"}>
-                      My Wallet Data NFT's
-                    </ListItem>
+                    <Link
+                      to={routeNames.mylisted}
+                      className={
+                        "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      }>
+                      <NavigationMenuLink>
+                        <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
+                      </NavigationMenuLink>
+                    </Link>
+                    <Link
+                      to={routeNames.mywallet}
+                      title={"My Wallet"}
+                      className={
+                        "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      }>
+                      <NavigationMenuLink>
+                        <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">My Wallet Data NFT's</p>
+                      </NavigationMenuLink>
+                    </Link>
                     <div className="flex flex-col p-3">
-                      <p className="text-sm font-medium leading-none dark:text-slate-100">My Address Quick Copy</p>
+                      <p className="text-sm font-medium leading-none dark:text-slate-100 pb-0.5">My Address Quick Copy</p>
                       <CopyAddress address={address} precision={6} />
                     </div>
                   </ul>
@@ -126,7 +148,7 @@ export const Navbar = () => {
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
                   <Button
-                    className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-lg font-medium tracking-wide !text-lg"
                     variant="outline">
                     Login
                   </Button>
@@ -222,23 +244,3 @@ export const Navbar = () => {
     </div>
   );
 };
-
-const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}>
-          <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted">{children}</p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
-ListItem.displayName = "ListItem";

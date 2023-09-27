@@ -4,7 +4,7 @@ export * from "./AuthRedirectWrapper";
 export * from "./CopyAddress";
 export * from "./CustomPagination";
 export * from "./DataNftCard";
-export * from "./ElrondAddressLink";
+export * from "./MXAddressLink";
 export * from "./sdkDappComponents";
 export * from "./TrailBlazerModal";
 export * from "./ZoomableSvg";
