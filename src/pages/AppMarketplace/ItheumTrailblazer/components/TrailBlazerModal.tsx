@@ -8,11 +8,12 @@ import { Modal } from "../../../../components/Modal/Modal";
 import { Card, CardHeader } from "../../../../libComponents/Card";
 import { ChevronDown, ShoppingCart } from "lucide-react";
 import { Input } from "../../../../libComponents/Input";
+import { useFilterStore } from "../../../../store/FilterStore";
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
+  const { filter } = useFilterStore();
   const { loginMethod } = useGetLoginInfo();
-  const [isFilterShown, setIsFilterShown] = useState<boolean>(false);
-
+  console.log(data);
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
       case "Partnership":
@@ -232,13 +233,23 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
       ) : (
         <div className="">
           <VerticalTimeline>
-            {data?.map((_dataItem: any, _index: any) => {
-              return (
-                <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
-                  {getTileForCategory(_dataItem)}
-                </VerticalTimelineElement>
-              );
-            })}
+            {filter === null || filter === undefined
+              ? data?.map((_dataItem: any, _index: any) => {
+                  return (
+                    <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
+                      {getTileForCategory(_dataItem)}
+                    </VerticalTimelineElement>
+                  );
+                })
+              : data
+                  ?.filter((newValues: any) => newValues.category === filter)
+                  .map((_dataItem: any, _index: any) => {
+                    return (
+                      <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
+                        {getTileForCategory(_dataItem)}
+                      </VerticalTimelineElement>
+                    );
+                  })}
           </VerticalTimeline>
         </div>
       )}

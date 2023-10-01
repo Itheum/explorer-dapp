@@ -169,7 +169,19 @@ export const ItheumTrailblazer = () => {
     }
   }
 
-  const filterData = ["Partnership", "Achievement", "Offer", "Quest", "Leaderboard", "Calendar"];
+  const filterData = [
+    { id: 1, value: "Partnership" },
+    { id: 2, value: "Achievement" },
+    { id: 3, value: "Offer" },
+    { id: 4, value: "Quest" },
+    { id: 5, value: "Leaderboard" },
+    { id: 6, value: "Calendar" },
+    { id: 7, value: "Ecosystem" },
+    { id: 8, value: "Community" },
+    { id: 9, value: "Event" },
+    { id: 10, value: "Tech Team" },
+    { id: 11, value: "Feature" },
+  ];
 
   async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
     try {

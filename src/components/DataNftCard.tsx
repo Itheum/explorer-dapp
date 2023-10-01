@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { Modal } from "./Modal/Modal";
 import { util } from "prettier";
 import hasNewline = util.hasNewline;
+import { IFilterData } from "../libComponents/Filter";
 
 export function DataNftCard({
   index,
@@ -35,7 +36,7 @@ export function DataNftCard({
   modalTitle?: string;
   modalTitleStyle?: string;
   hasFilter?: boolean;
-  filterData?: Array<string>;
+  filterData?: Array<IFilterData>;
 }) {
   const {
     network: { explorerAddress },
