@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaTrophy } from "react-icons/fa";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
@@ -7,13 +7,32 @@ import { Button } from "../../../../libComponents/Button";
 import { Modal } from "../../../../components/Modal/Modal";
 import { Card, CardHeader } from "../../../../libComponents/Card";
 import { ChevronDown, ShoppingCart } from "lucide-react";
-import { Input } from "../../../../libComponents/Input";
 import { useFilterStore } from "../../../../store/FilterStore";
+import { NoDataFound } from "../../../../components/NoDataFound";
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
   const { filter } = useFilterStore();
   const { loginMethod } = useGetLoginInfo();
-  console.log(data);
+  const [filteredData, setFilteredData] = useState<number>(0);
+
+  useEffect(() => {
+    const filteredData = new Set();
+    const allData = new Set(data);
+    allData.forEach((data: any) => {
+      // console.log(data.category);
+      if (data.category === filter) {
+        filteredData.add(data);
+        console.log("da");
+      } else {
+        console.log("nu");
+        setFilteredData(0);
+      }
+      setFilteredData(filteredData.size);
+    });
+  }, [filter]);
+
+  // console.log(allData);
+
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
       case "Partnership":
@@ -235,6 +254,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
           <VerticalTimeline>
             {filter === null || filter === undefined
               ? data?.map((_dataItem: any, _index: any) => {
+                  console.log(filteredData);
                   return (
                     <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
                       {getTileForCategory(_dataItem)}
@@ -244,10 +264,17 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
               : data
                   ?.filter((newValues: any) => newValues.category === filter)
                   .map((_dataItem: any, _index: any) => {
+                    console.log(filteredData);
                     return (
-                      <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
-                        {getTileForCategory(_dataItem)}
-                      </VerticalTimelineElement>
+                      <>
+                        {filteredData === 0 ? (
+                          <NoDataFound />
+                        ) : (
+                          <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
+                            {getTileForCategory(_dataItem)}
+                          </VerticalTimelineElement>
+                        )}
+                      </>
                     );
                   })}
           </VerticalTimeline>

@@ -27,8 +27,6 @@ export const ItheumTrailblazer = () => {
   const { targetNonce, targetMessageToBeSigned } = useParams();
   const { isPending: isSignMessagePending } = useGetSignMessageInfoStatus();
   const lastSignedMessageSession = useGetLastSignedMessageSession();
-  console.log("isSignMessagePending", isSignMessagePending);
-  console.log("lastSignedMessageSession", lastSignedMessageSession);
 
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -170,12 +168,10 @@ export const ItheumTrailblazer = () => {
   }
 
   const filterData = [
-    { id: 1, value: "Partnership" },
     { id: 2, value: "Achievement" },
     { id: 3, value: "Offer" },
     { id: 4, value: "Quest" },
     { id: 5, value: "Leaderboard" },
-    { id: 6, value: "Calendar" },
     { id: 7, value: "Ecosystem" },
     { id: 8, value: "Community" },
     { id: 9, value: "Event" },

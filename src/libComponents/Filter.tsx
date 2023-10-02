@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Card, CardContent, CardHeader } from "./Card";
 import { ChevronDown, RotateCcw, X } from "lucide-react";
 import { Badge } from "./Badge";
@@ -18,8 +18,6 @@ type FilterProps = {
 export const Filter: React.FC<FilterProps> = (props) => {
   const { filter, setFilter } = useFilterStore();
   const [isFilterShown, setIsFilterShown] = useState<boolean>(false);
-  // const [selectedFilter, setSelectedFilter] = useState<Array<string> | string | null>(null);
-  // console.log(filter);
 
   const { filterData } = props;
 
@@ -37,7 +35,6 @@ export const Filter: React.FC<FilterProps> = (props) => {
               <Card className="absolute top-full bg-background text-foreground border-[1px] border-slate-300/40 max-w-[22rem] min-w-[16rem] rounded-xl">
                 <CardHeader className="flex flex-row justify-between">
                   <span className="bg-gradient-to-r from-yellow-300 to-orange-500 bg-clip-text text-transparent text-xl">Filter by:</span>
-                  {/*<Button variant="ghost" className="mt-0 !pt-0">*/}
                   <RotateCcw
                     className="w-6 h-6 cursor-pointer hover:text-muted-foreground"
                     onClick={() => {
@@ -45,14 +42,11 @@ export const Filter: React.FC<FilterProps> = (props) => {
                       setIsFilterShown(!isFilterShown);
                     }}
                   />
-                  {/*</Button>*/}
-                  {/*<Button variant="ghost" onClick={() => setIsFilterShown(!isFilterShown)} className="mt-0 !pt-0">*/}
                   <X className="w-6 h-6 cursor-pointer hover:text-muted-foreground" onClick={() => setIsFilterShown(!isFilterShown)} />
-                  {/*</Button>*/}
                 </CardHeader>
                 <CardContent className="flex flex-wrap gap-3 w-[20rem]">
                   {filterData?.map((item, index) => (
-                    <>
+                    <Fragment key={index}>
                       {item.value !== filter ? (
                         <Badge
                           className="cursor-pointer"
@@ -74,7 +68,7 @@ export const Filter: React.FC<FilterProps> = (props) => {
                           {item.value}
                         </Badge>
                       )}
-                    </>
+                    </Fragment>
                   ))}
                 </CardContent>
               </Card>

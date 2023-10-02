@@ -23,8 +23,8 @@ export const Modal: React.FC<ModalProps> = (props) => {
     <Dialog>
       <DialogTrigger asChild>{openTrigger}</DialogTrigger>
       <DialogContent
-        className={cn("overflow-y-scroll overflow-x-hidden scrollbar max-w-[80%] max-h-[79dvh] !pt-0 rounded-xl border-foreground", modalClassName)}>
-        <DialogHeader className="text-left sticky-top flex flex-row justify-between items-center backdrop-blur bg-background/60 w-full border-b border-foreground">
+        className={cn("overflow-y-scroll overflow-x-hidden scrollbar max-w-[80%] min-h-[40%] max-h-[85%] !pt-0 rounded-xl border-foreground", modalClassName)}>
+        <DialogHeader className="text-left sticky-top flex flex-row justify-between items-center backdrop-blur bg-background/60 w-full border-b border-foreground max-h-[20dvh]">
           <div className="flex flex-col">
             {title ? <DialogTitle className={titleClassName}>{title}</DialogTitle> : <></>}
             {description ? <DialogDescription className={descriptionClassName}>{description}</DialogDescription> : <></>}
@@ -32,7 +32,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
           {hasFilter ? <Filter filterData={filterData ?? []} /> : <></>}
           <div></div>
         </DialogHeader>
-        {children}
+        <div className="max-h-[70dvh]">{children}</div>
       </DialogContent>
     </Dialog>
   );
