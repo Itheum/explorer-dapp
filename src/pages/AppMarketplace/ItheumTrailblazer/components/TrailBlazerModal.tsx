@@ -250,35 +250,33 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
           </div>
         </div>
       ) : (
-        <div className="">
-          <VerticalTimeline>
-            {filter === null || filter === undefined
-              ? data?.map((_dataItem: any, _index: any) => {
-                  console.log(filteredData);
-                  return (
-                    <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
-                      {getTileForCategory(_dataItem)}
-                    </VerticalTimelineElement>
-                  );
-                })
-              : data
-                  ?.filter((newValues: any) => newValues.category === filter)
-                  .map((_dataItem: any, _index: any) => {
-                    console.log(filteredData);
+        <>
+          {filteredData === 0 && filter !== null ? (
+            <NoDataFound />
+          ) : (
+            <VerticalTimeline>
+              {filter === null || filter === undefined
+                ? data?.map((_dataItem: any, _index: any) => {
+                    console.log(_dataItem);
                     return (
-                      <>
-                        {filteredData === 0 ? (
-                          <NoDataFound />
-                        ) : (
-                          <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
-                            {getTileForCategory(_dataItem)}
-                          </VerticalTimelineElement>
-                        )}
-                      </>
+                      <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
+                        {getTileForCategory(_dataItem)}
+                      </VerticalTimelineElement>
                     );
-                  })}
-          </VerticalTimeline>
-        </div>
+                  })
+                : data
+                    ?.filter((newValues: any) => newValues.category === filter)
+                    .map((_dataItem: any, _index: any) => {
+                      console.log(_dataItem);
+                      return (
+                        <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
+                          {getTileForCategory(_dataItem)}
+                        </VerticalTimelineElement>
+                      );
+                    })}
+            </VerticalTimeline>
+          )}
+        </>
       )}
     </>
   );
