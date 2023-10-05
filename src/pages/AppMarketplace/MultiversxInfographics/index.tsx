@@ -42,7 +42,6 @@ export const MultiversxInfographics = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -59,18 +58,6 @@ export const MultiversxInfographics = () => {
       fetchMyNfts();
     }
   }, [isLoading, address]);
-
-  function openModal() {
-    setIsModalOpened(true);
-  }
-
-  function closeModal() {
-    setIsModalOpened(false);
-    setViewDataRes(undefined);
-    setFile(null);
-    setNumPages(0);
-    setPageNumber(1);
-  }
 
   async function fetchDataNfts() {
     setIsLoading(true);
@@ -105,7 +92,6 @@ export const MultiversxInfographics = () => {
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
-        openModal();
 
         const dataNft = dataNfts[index];
         let res: any;
@@ -144,13 +130,10 @@ export const MultiversxInfographics = () => {
 
         setViewDataRes(viewDataPayload);
         setIsFetchingDataMarshal(false);
-      } else {
-        openModal();
       }
     } catch (err) {
       console.error(err);
       toastError((err as Error).message);
-      closeModal();
       setIsFetchingDataMarshal(false);
     }
   }

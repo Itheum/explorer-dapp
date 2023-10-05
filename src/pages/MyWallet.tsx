@@ -9,7 +9,6 @@ import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { modalStyles } from "libs/ui";
 import { nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
@@ -26,7 +25,6 @@ export const MyWallet = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
   const [isAutoOpenFormat, setIsAutoOpenFormat] = useState<boolean>(false);
   const [isDomPurified, setIsDomPurified] = useState<boolean>(false);
 
@@ -35,17 +33,6 @@ export const MyWallet = () => {
       fetchData();
     }
   }, [hasPendingTransactions]);
-
-  function openModal() {
-    setIsModalOpened(true);
-  }
-
-  function closeModal() {
-    setIsModalOpened(false);
-    setViewDataRes(undefined);
-    setIsAutoOpenFormat(false);
-    setIsDomPurified(false);
-  }
 
   async function fetchData() {
     setIsLoading(true);
@@ -65,7 +52,6 @@ export const MyWallet = () => {
 
     setIsFetchingDataMarshal(true);
     setViewDataRes(undefined);
-    openModal();
 
     const dataNft = dataNfts[index];
     let res: any;

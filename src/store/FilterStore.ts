@@ -6,6 +6,6 @@ interface FilterStore {
 }
 
 export const useFilterStore = create<FilterStore>((set) => ({
-  filter: "Quest",
+  filter: null,
   setFilter: (newFilter) => set({ filter: newFilter }),
 }));

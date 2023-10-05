@@ -13,7 +13,7 @@ import { NoDataFound } from "../../../../components/NoDataFound";
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
   const { filter } = useFilterStore();
   const { loginMethod } = useGetLoginInfo();
-  const [filteredData, setFilteredData] = useState<number>(0);
+  const [filteredData, setFilteredData] = useState<number>(1000);
 
   useEffect(() => {
     const filteredData = new Set();

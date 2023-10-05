@@ -8,6 +8,7 @@ import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
+import { IFilterData } from "../libComponents/Filter";
 
 export function DataNftCard({
   index,

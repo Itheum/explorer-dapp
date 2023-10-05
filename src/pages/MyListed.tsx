@@ -17,7 +17,6 @@ export const MyListed = () => {
     network: { explorerAddress },
   } = useGetNetworkConfig();
   const { address } = useGetAccount();
-  const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [offerCount, setOfferCount] = useState<number>(0);

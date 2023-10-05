@@ -1,8 +1,8 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
-import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
-import { withPageTitle } from "./components/PageTitle";
+import { NFTunes } from "pages/AppMarketplace/NFTunes";
+import { withPageTitle } from "./components";
 import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
 
 export const routeNames = {
