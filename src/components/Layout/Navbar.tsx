@@ -79,7 +79,7 @@ export const Navbar = () => {
           <NavigationMenuItem>
             <NavigationMenuTrigger>App Marketplace</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <ul className="z-8 grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                   <Link
                     to={returnRoute(item.routeKey)}
@@ -101,7 +101,8 @@ export const Navbar = () => {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Account</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                <div className="flex justify-center items-center min-h-screen">  
+                  <ul className="justify-center  items-center grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     <Link
                       to={routeNames.mylisted}
                       className={
@@ -128,6 +129,7 @@ export const Navbar = () => {
                       <CopyAddress address={address} precision={6} />
                     </div>
                   </ul>
+                  </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>

@@ -6,6 +6,8 @@ import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
+import disk  from "../assets/img/nf-tunes-logo-disk.png";
+import stick from "../assets/img/nf-tunes-logo-stick.png";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
@@ -16,7 +18,18 @@ const HomePage = () => {
     <HeaderComponent pageTitle={"App Marketplace"} hasImage={false}>
       {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
         <div key={item.routeKey} className="mb-3 w-[341px]">
-          <div className=" mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
+          <div className="  mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
+            
+            {item.routeKey == "nftunes" &&
+               <div className="relative">
+              <img className="absolute  top-[60px] left-[60%] transform-translate-x-1/2 z-2 w-28 h-40" src={stick} alt="stick"/>
+              <img 
+                  className="absolute animate-spin-slow top-24 left-[30%] transform-translate-x-1/2 z-1 w-40 h-40"
+                  src={disk} 
+                  alt="disk"
+               />
+            </div>
+            }
             <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
           </div>
           <h3 className=" !font-[Clash-Medium]">{item.appName}</h3>
