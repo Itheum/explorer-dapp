@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { Address, SignableMessage } from "@multiversx/sdk-core/out";
-import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import { Address } from "@multiversx/sdk-core/out";
+import { useGetAccount, useGetLoginInfo, useGetPendingTransactions } from "@multiversx/sdk-dapp/hooks";
 import BigNumber from "bignumber.js";
 import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
@@ -12,12 +12,10 @@ import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
 import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import { CustomPagination, DataNftCard, ElrondAddressLink, Loader } from "components";
+import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
 import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
-import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
-import { convertWeiToEsdt, shortenAddress, toastError } from "libs/utils";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { convertWeiToEsdt, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
@@ -151,21 +149,15 @@ export const ChartDescription = () => (
 );
 
 export const EsdtBubble = () => {
-  const {
-    network: { explorerAddress },
-  } = useGetNetworkConfig();
   const { address } = useGetAccount();
-  const { loginMethod } = useGetLoginInfo();
+  const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
-  const { signMessage } = useSignMessage();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [selectedDataNft, setSelectedDataNft] = useState<DataNft>();
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPendingMessageSigned, setIsPendingMessageSigned] = useState(false);
 
-  const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
 
   const [data, setData] = useState<any>();
@@ -192,7 +184,7 @@ export const EsdtBubble = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES.map((v) => ({ nonce: v })));
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -231,29 +223,31 @@ export const EsdtBubble = () => {
     setOwned(_owned);
 
     if (_owned) {
-      setIsFetchingDataMarshal(true);
       openModal();
 
       const dataNft = dataNfts[index];
       setSelectedDataNft(dataNft);
-      const messageToBeSigned = await dataNft.getMessageToSign();
-      setIsPendingMessageSigned(true);
-      const signedMessage = await signMessage({ message: messageToBeSigned });
-      setIsPendingMessageSigned(false);
 
-      console.log("signedMessage", signedMessage);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-      if (!signedMessage) {
-        toastError("Wallet signing failed.");
-        return;
+      let res: any;
+      if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
+        throw Error("No nativeAuth token");
       }
 
+      const arg = {
+        mvxNativeAuthOrigins: nativeAuthOrigins(),
+        mvxNativeAuthMaxExpirySeconds: 3000,
+        fwdHeaderMapLookup: {
+          "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+        },
+      };
+      console.log("arg", arg);
+
+      res = await dataNft.viewDataViaMVXNativeAuth(arg);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
+      console.log("res", res);
 
       processData(res.data);
-
-      setIsFetchingDataMarshal(false);
     } else {
       openModal();
     }
@@ -373,7 +367,7 @@ export const EsdtBubble = () => {
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
-          ) : isFetchingDataMarshal || !data ? (
+          ) : !data ? (
             <div
               className="d-flex flex-column align-items-center justify-content-center"
               style={{
@@ -381,9 +375,7 @@ export const EsdtBubble = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                </p>
+                <p className="text-center font-weight-bold">{"Loading..."}</p>
               </div>
             </div>
           ) : (
@@ -427,7 +419,7 @@ export const EsdtBubble = () => {
                       <td>{pageSize * pageIndex + index + 1}</td>
                       <td>
                         {<FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? "visible" : "hidden"} />}
-                        <ElrondAddressLink explorerAddress={MAINNET_EXPLORER_ADDRESS} address={row.address} precision={9} />
+                        <MXAddressLink explorerAddress={MAINNET_EXPLORER_ADDRESS} address={row.address} precision={9} />
                       </td>
                       <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
                       <td>{row.percent.toFixed(4)}%</td>

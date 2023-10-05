@@ -1,19 +1,9 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
+import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
-import {
-  CantinaCorner,
-  GamerPassportGamer,
-  PlayStationGamer,
-  Dashboard,
-  Home,
-  MyListed,
-  MyWallet,
-  EsdtBubble,
-  MultiversxBubbles,
-  MultiversxInfographics,
-} from "./pages";
+import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -21,13 +11,12 @@ export const routeNames = {
   unlock: "/unlock",
   mylisted: "/my-listed",
   mywallet: "/my-wallet",
-  cantinacorner: "/cantina-corner-poc",
-  gamerpassportgamer: "/gamer-passport-gamer-poc",
   playstationgamerpassport: "/gamer-passport",
   itheumtrailblazer: "/project-trailblazer",
   esdtBubble: "/esdt-bubbles",
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
+  nftunes: "/nftunes",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -59,18 +48,6 @@ export const routes: RouteWithTitleType[] = [
     authenticatedRoute: true,
   },
   {
-    path: routeNames.cantinacorner,
-    title: "Cantina Corner",
-    component: CantinaCorner,
-    authenticatedRoute: false,
-  },
-  {
-    path: routeNames.gamerpassportgamer,
-    title: "Web3 Gamer Passport",
-    component: GamerPassportGamer,
-    authenticatedRoute: false,
-  },
-  {
     path: routeNames.playstationgamerpassport,
     title: "PlayStation Gamer Passport",
     component: PlayStationGamer,
@@ -98,6 +75,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.multiversxinfographics,
     title: "MultiversX Infographics",
     component: MultiversxInfographics,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.nftunes,
+    title: "NFTunes",
+    component: NFTunes,
     authenticatedRoute: false,
   },
 ];

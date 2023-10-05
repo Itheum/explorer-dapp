@@ -1,5 +1,4 @@
 import React from "react";
-import headerHero from "../../assets/img/custom-app-header-trailblazer.png";
 
 type HeaderProps = {
   pageTitle: string;

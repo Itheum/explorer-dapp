@@ -30,7 +30,6 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
-import { cn } from "../../libs/utils";
 import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
@@ -54,7 +53,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     // logout(`${window.location.origin}/unlock`);
-    logout(`${window.location.origin}`);
+    logout(`${window.location.origin}`, undefined, false);
   };
 
   return (
@@ -149,7 +148,7 @@ export const Navbar = () => {
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
                   <Button
-                    className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-lg font-medium tracking-wide !text-lg"
                     variant="outline">
                     Login
                   </Button>

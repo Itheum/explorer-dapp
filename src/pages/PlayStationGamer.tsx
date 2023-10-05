@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { SignableMessage } from "@multiversx/sdk-core/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
 import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
@@ -11,21 +9,19 @@ import { DataNftCard, Loader } from "components";
 import { PLAYSTATION_GAMER_PASSPORT_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
-import { toastError } from "libs/utils";
-import PlaystationGamerInsights from "./PlaystationGamerInsights";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import PlaystationGamerInsights from "./PlaystationGamerInsights";
 
 export const PlayStationGamer = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
-  const { loginMethod } = useGetLoginInfo();
-  const { signMessage } = useSignMessage();
+  const { tokenLogin } = useGetLoginInfo();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [dataMarshalRes, setDataMarshalRes] = useState<string>("");
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
 
@@ -44,7 +40,7 @@ export const PlayStationGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES.map((nonce) => ({ nonce })));
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 
@@ -86,29 +82,29 @@ export const PlayStationGamer = () => {
 
     if (_owned) {
       setIsFetchingDataMarshal(true);
-      setDataMarshalRes("");
       openModal();
 
       const dataNft = ccDataNfts[index];
-      const messageToBeSigned = await dataNft.getMessageToSign();
-      // console.log('messageToBeSigned', messageToBeSigned);
-      const signedMessage = await signMessage({ message: messageToBeSigned });
-      // console.log('signedMessage', signedMessage);
-      const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-      if (!signedMessage) {
-        toastError("Wallet signing failed.");
-        return;
+      let res: any;
+      if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
+        throw Error("No nativeAuth token");
       }
+
+      const arg = {
+        mvxNativeAuthOrigins: nativeAuthOrigins(),
+        mvxNativeAuthMaxExpirySeconds: 3000,
+        fwdHeaderMapLookup: {
+          "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+        },
+      };
+      console.log("arg", arg);
+
+      res = await dataNft.viewDataViaMVXNativeAuth(arg);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
-      // console.log('viewData', res);
-      setDataMarshalRes(JSON.stringify(res.data, null, 4));
 
       fixData(res.data);
-
       setData(res.data);
-
-      console.log(res.data);
 
       setIsFetchingDataMarshal(false);
     } else {
@@ -327,9 +323,7 @@ export const PlayStationGamer = () => {
               }}>
               <div>
                 <Loader noText />
-                <p className="text-center font-weight-bold">
-                  {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                </p>
+                <p className="text-center font-weight-bold">{"Loading..."}</p>
               </div>
             </div>
           ) : (
