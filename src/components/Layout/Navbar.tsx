@@ -104,6 +104,9 @@ export const Navbar = () => {
                     <ListItem href={routeNames.tutorials} title={"Tutorials"}>
                       Tutorials
                     </ListItem>
+                    <ListItem href={routeNames.tutorialsenterprise} title={"Tutorials"}>
+                      Tutorials - Enterprise
+                    </ListItem>
                     <div className="flex flex-col p-3">
                       <p className="text-sm font-medium leading-none dark:text-slate-100">My Address Quick Copy</p>
                       <CopyAddress address={address} precision={6} />

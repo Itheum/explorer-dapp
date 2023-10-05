@@ -7,9 +7,9 @@ import { refreshAccount } from "@multiversx/sdk-dapp/utils/account";
 // import { useGetAccountInfo, useGetLoginInfo } from "@multiversx/sdk-dapp/hooks/account";
 import { toastError } from "libs/utils";
 
-import { DataNftMinter } from "@itheum/sdk-mx-data-nft";
+import { SftMinter } from "@itheum/sdk-mx-data-nft";
 
-const dataNftMinter = new DataNftMinter("devnet");
+const dataSftMinter = new SftMinter("devnet");
 
 const REACT_APP_ENV_NFT_STORAGE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEFiZGVCMDhhZmREOEM0ZjJhRUFiQzhFNDVFMzA4ZjNjQjFjZTE0NTMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4NDgxMjk1MTgwOCwibmFtZSI6ImRhdGEtZGV4LWRldiJ9.0Mu_tMqTJxT4dALwFGBvW9LnOwcFLcAVuFb6iWm6OaQ";
@@ -27,7 +27,7 @@ export const MintNewCollection = () => {
     setLoading(true);
     setSdkResponses(null);
     // View minter smart contract requirements
-    const requirements = await dataNftMinter.viewMinterRequirements(new Address(address));
+    const requirements = await dataSftMinter.viewMinterRequirements(new Address(address));
     setSdkResponses(`Minter pause state is : ${JSON.stringify(requirements)}`);
     setLoading(false);
   }
@@ -36,7 +36,7 @@ export const MintNewCollection = () => {
     setLoading(true);
     setSdkResponses(null);
     // View minter smart contract requirements
-    const requirements = await dataNftMinter.viewMinterRequirements(new Address(address));
+    const requirements = await dataSftMinter.viewMinterRequirements(new Address(address));
     setAntiSpamTax(requirements?.antiSpamTaxValue);
     setSdkResponses(`Anti Spam TAX is : ${requirements?.antiSpamTaxValue}`);
     setLoading(false);
@@ -46,7 +46,7 @@ export const MintNewCollection = () => {
     setLoading(true);
     setSdkResponses(null);
     // View contract pause state
-    const result = await dataNftMinter.viewContractPauseState();
+    const result = await dataSftMinter.viewContractPauseState();
     setSdkResponses(`Minter pause state is : ${result}`);
     setLoading(false);
   }
@@ -56,7 +56,7 @@ export const MintNewCollection = () => {
     setSdkResponses(null);
 
     try {
-      const mintTransaction: Transaction = await dataNftMinter.mint(
+      const mintTransaction: Transaction = await dataSftMinter.mint(
         new Address(address),
         // new Address("erd1d79z3ksc2rxpfm3ftj66szrzkcuf35q6pkwgh7j5ftezrk7qgkcqtyg653"),
         "SDKV1TestMint2",
@@ -104,7 +104,7 @@ export const MintNewCollection = () => {
     setSdkResponses(null);
 
     try {
-      const mintTransaction: Transaction = await dataNftMinter.mint(
+      const mintTransaction: Transaction = await dataSftMinter.mint(
         new Address(address),
         // new Address("erd1d79z3ksc2rxpfm3ftj66szrzkcuf35q6pkwgh7j5ftezrk7qgkcqtyg653"),
         "SDKV1TestMint1",

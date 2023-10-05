@@ -11,3 +11,4 @@ export * from "./MyWallet";
 export * from "./PageNotFound";
 export * from "./Unlock";
 export * from "./Tutorials/MintNewCollection";
+export * from "./Tutorials/TutorialsEnterprise";

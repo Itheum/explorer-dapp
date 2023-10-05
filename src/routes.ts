@@ -14,6 +14,7 @@ import {
   MultiversxBubbles,
   MultiversxInfographics,
   MintNewCollection,
+  TutorialsEnterprise,
 } from "./pages";
 
 export const routeNames = {
@@ -30,6 +31,7 @@ export const routeNames = {
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
   tutorials: "/tutorials",
+  tutorialsenterprise: "/tutorialsenterprise",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -106,6 +108,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.tutorials,
     title: "SDK Tutorials",
     component: MintNewCollection,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.tutorialsenterprise,
+    title: "SDK Tutorials - Enterprise",
+    component: TutorialsEnterprise,
     authenticatedRoute: false,
   },
 ];
