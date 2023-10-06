@@ -26,11 +26,11 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
                 src={disk} 
                 alt="disk"
                
-            /><img className="rotate-[20deg] absolute top-[-15px] max-w-[200px] left-[52%]  w-[15%] " src={stick} alt="stick"/>
-           
+            /><img className="rotate-[20deg] absolute top-[-10px] md:top-[-15px] max-w-[200px] left-[52%] 3xl:left-[50%] w-[15%] " src={stick} alt="stick"/>
+
             </div>
           }
-          <img className="rounded-[3rem] w-full 2xl:h-[375px]" src={imgSrc} alt={altImageAttribute} />
+          <img className="rounded-[3rem] 3xl:h-[375px] w-full " src={imgSrc} alt={altImageAttribute} />
 
         </div>
         <div>

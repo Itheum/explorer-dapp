@@ -12,6 +12,8 @@ import "react-pdf/dist/Page/TextLayer.css";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 
 import nfTunesBanner from "assets/img/nf-tunes-banner.png";
+import disk from "assets/img/nf-tunes-logo-disk.png";
+
 import { AudioPlayer } from "components/AudioPlayer";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
