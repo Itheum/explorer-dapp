@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
- 
+
 import { DataNftCard, Loader } from "components";
 import { NF_TUNES_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -15,6 +15,7 @@ import nfTunesBanner from "assets/img/nf-tunes-banner.png";
 import disk from "assets/img/nf-tunes-logo-disk.png";
 
 import { AudioPlayer } from "components/AudioPlayer";
+import stick from "../../../assets/img/nf-tunes-logo-stick.png";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -35,9 +36,18 @@ export const NFTunes = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
+
+  const imgAnimation = useMemo(
+    () => (
+      <div className="relative  top-[15%]">
+        <img className="animate-spin-slow w-[20%] left-[40%] max-w-[300px] absolute" src={disk} alt="disk" />
+        <img className="rotate-[20deg] absolute top-[-10px] md:top-[-15px] max-w-[200px] left-[52%] 3xl:left-[50%] w-[15%] " src={stick} alt="stick" />
+      </div>
+    ),
+    []
+  );
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -50,15 +60,6 @@ export const NFTunes = () => {
       fetchMyNfts();
     }
   }, [isLoading, address]);
-
-  function openModal() {
-    setIsModalOpened(true);
-  }
-
-  function closeModal() {
-    setIsModalOpened(false);
-    setViewDataRes(undefined);
-  }
 
   ///get the nfts that are able to open nfTunes app
   async function fetchDataNfts() {
@@ -97,7 +98,6 @@ export const NFTunes = () => {
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
-        openModal();
 
         const dataNft = dataNfts[index];
         let res: any;
@@ -135,13 +135,10 @@ export const NFTunes = () => {
 
         setViewDataRes(viewDataPayload);
         setIsFetchingDataMarshal(false);
-      } else {
-        openModal();
       }
     } catch (err) {
       console.error(err);
       toastError((err as Error).message);
-      closeModal();
       setIsFetchingDataMarshal(false);
     }
   }
@@ -149,8 +146,10 @@ export const NFTunes = () => {
   return (
     <HeaderComponent
       pageTitle={"NF-Tunes"}
+      isAnimated
       hasImage={true}
       imgSrc={nfTunesBanner}
+      animation={imgAnimation}
       altImageAttribute={"NF-Tunes application"}
       pageSubtitle={"Data NFTs that Unlock this App"}
       dataNftCount={dataNfts.length}>

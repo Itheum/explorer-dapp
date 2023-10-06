@@ -71,7 +71,7 @@ export const Navbar = () => {
           <NavigationMenuItem>
             <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
               <NavigationMenuLink
-                className={navigationMenuTriggerStyle() + "dark:!text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+                className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
                 Home
               </NavigationMenuLink>
             </Link>
@@ -88,8 +88,8 @@ export const Navbar = () => {
                       "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     }>
                     <NavigationMenuLink>
-                      <div className="text-md font-medium leading-none dark:!text-white text-muted-foreground">{item.appName}</div>
-                      <p className="dark:!text-slate-500 line-clamp-2 text-sm leading-snug text-muted pt-0.5 da  ">{item?.appDescription}</p>
+                      <div className="text-md font-medium leading-none text-muted-foreground">{item.appName}</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5 ">{item?.appDescription}</p>
                     </NavigationMenuLink>
                   </Link>
                 ))}
@@ -101,7 +101,6 @@ export const Navbar = () => {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Account</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     <Link
                       to={routeNames.mylisted}
@@ -110,7 +109,7 @@ export const Navbar = () => {
                       }>
                       <NavigationMenuLink>
                         <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
-                        <p className="dark:!text-slate-500 line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
                       </NavigationMenuLink>
                     </Link>
                     <Link
@@ -121,7 +120,7 @@ export const Navbar = () => {
                       }>
                       <NavigationMenuLink>
                         <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                        <p className="dark:!text-slate-500 line-clamp-2 text-sm leading-snug text-muted pt-0.5">My Wallet Data NFT's</p>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">My Wallet Data NFT's</p>
                       </NavigationMenuLink>
                     </Link>
                     <div className="flex flex-col p-3">
