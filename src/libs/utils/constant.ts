@@ -1,7 +1,7 @@
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
-import iconNFTunes from "assets/img/nf-tunes-logo-background.png";
+import iconNFTunes from "assets/img/nf-tunes-logo.png";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
