@@ -10,6 +10,7 @@ module.exports = {
       "md": "768px",
       "xl": "1200px",
       "2xl": "1500px",
+      "3xl": "2300px",
     },
     container: {
       center: true,
@@ -54,6 +55,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        
       },
       borderRadius: {
         lg: `var(--radius)`,
@@ -76,6 +78,7 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'spin-slow': 'spin 4s linear infinite',
       },
     },
   },
