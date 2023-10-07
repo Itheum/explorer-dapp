@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-
 import { DataNftCard, Loader } from "components";
 import { NF_TUNES_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -10,10 +9,8 @@ import { toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
-
 import nfTunesBanner from "assets/img/nf-tunes-banner.png";
 import disk from "assets/img/nf-tunes-logo-disk.png";
-
 import { AudioPlayer } from "components/AudioPlayer";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
 

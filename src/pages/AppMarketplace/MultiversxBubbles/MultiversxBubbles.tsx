@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
-import { DataNftCard, Loader, ZoomableSvg } from "components";
+import { DataNftCard, Loader } from "components";
 import { MULTIVERSX_BUBBLE_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { nativeAuthOrigins, toastError } from "libs/utils";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { Button } from "../libComponents/Button";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Button } from "libComponents/Button";
+import { ZoomableSvg } from "components/ZoomableSvg";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -25,7 +26,6 @@ export const MultiversxBubbles = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
   const [file, setFile] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,16 +39,6 @@ export const MultiversxBubbles = () => {
       fetchMyNfts();
     }
   }, [isLoading, address]);
-
-  function openModal() {
-    setIsModalOpened(true);
-  }
-
-  function closeModal() {
-    setIsModalOpened(false);
-    setViewDataRes(undefined);
-    setFile(null);
-  }
 
   async function fetchDataNfts() {
     setIsLoading(true);
@@ -83,7 +73,6 @@ export const MultiversxBubbles = () => {
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
-        openModal();
 
         const dataNft = dataNfts[index];
 
@@ -129,13 +118,10 @@ export const MultiversxBubbles = () => {
           blobDataType,
         });
         setIsFetchingDataMarshal(false);
-      } else {
-        openModal();
       }
     } catch (err) {
       console.error(err);
       toastError((err as Error).message);
-      closeModal();
       setIsFetchingDataMarshal(false);
     }
   }

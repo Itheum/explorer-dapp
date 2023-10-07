@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
-import { DataNftCard, Loader, TrailBlazerModal } from "components";
+import { DataNftCard, Loader } from "components";
 import { TRAILBLAZER_NONCES } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { nativeAuthOrigins, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { TrailBlazerModal } from "./components/TrailBlazerModal";
 
 export const ItheumTrailblazer = () => {
   const { address } = useGetAccount();
@@ -97,6 +98,36 @@ export const ItheumTrailblazer = () => {
     }
   }
 
+  const filterData = [
+    { id: 2, value: "Achievement" },
+    { id: 3, value: "Offer" },
+    { id: 4, value: "Quest" },
+    { id: 5, value: "Leaderboard" },
+    { id: 7, value: "Ecosystem" },
+    { id: 8, value: "Community" },
+    { id: 9, value: "Event" },
+    { id: 10, value: "Tech Team" },
+    { id: 11, value: "Feature" },
+  ];
+
+  // async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
+  //   try {
+  //     setIsFetchingDataMarshal(true);
+  //     setOwned(true);
+  //     openModal();
+  //
+  //     const dataNft = await DataNft.createFromApi(nonce);
+  //     const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
+  //     res.data = await (res.data as Blob).text();
+  //     res.data = JSON.parse(res.data);
+  //
+  //     setData(res.data.data.reverse());
+  //     setIsFetchingDataMarshal(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
+
   if (isLoading) {
     return <Loader />;
   }
@@ -109,7 +140,6 @@ export const ItheumTrailblazer = () => {
       altImageAttribute={"itheumTrailblazer"}
       pageSubtitle={"Data NFTs that Unlock this App"}
       dataNftCount={itDataNfts.length}>
-      {" "}
       {itDataNfts.length > 0 ? (
         itDataNfts.map((dataNft, index) => (
           <DataNftCard
@@ -121,12 +151,14 @@ export const ItheumTrailblazer = () => {
             viewData={viewData}
             modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
             modalTitle={"Trailblazer"}
-            modalTitleStyle="p-4"
+            modalTitleStyle="p-5"
+            hasFilter={true}
+            filterData={filterData}
           />
         ))
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>
-      )}{" "}
+      )}
     </HeaderComponent>
   );
 };
