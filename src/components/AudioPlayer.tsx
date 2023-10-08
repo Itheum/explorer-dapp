@@ -57,7 +57,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          initialSlide:0,
+          initialSlide: 0,
         },
       },
       {
@@ -73,14 +73,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         breakpoint: 730,
         settings: {
           slidesToShow: 2,
-          slidesToScroll:2,
+          slidesToScroll: 2,
         },
       },
       {
         breakpoint: 550,
         settings: {
           slidesToShow: 1,
-          slidesToScroll:1,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -253,15 +253,15 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   return (
-    <div className="p-12 relative overflow-hidden">
+    <div className="p-2 md:p-12 relative overflow-hidden">
       {displayPlaylist ? (
-        <div className="w-full h-[500px] overflow-hidden">
+        <div className="w-full h-[500px] ">
           <button
             className="border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-sky-200 dark:hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden   "
             onClick={() => setDisplayPlaylist(false)}>
             <ArrowBigLeft />
           </button>
-          <div className=" grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
+          <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
             {props.songs.map((song: any, index: number) => {
               return (
                 <div
@@ -294,7 +294,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden  w-full   flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
+        <div className="overflow-hidden  w-full flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
           <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-[1px] border-foreground/40  relative md:w-[60%] flex flex-col rounded-xl">
             <div className="px-10 pt-10 pb-4 flex items-center">
               <img
@@ -357,7 +357,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               <button className="cursor-pointer" onClick={handleNextButton}>
                 <SkipForward />
               </button>
-              <button className="cursor-pointer   " onClick={repeatTrack}>
+              <button className="cursor-pointer" onClick={repeatTrack}>
                 <RefreshCcwDot />
               </button>
               <button className="mr-2  xl:pr-8" onClick={showPlaylist}>
@@ -389,8 +389,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                         />
                       </div>
                       <div className=" xl:w-[60%] flex flex-col justify-center text-center  ">
-                        <h6 className="font-semibold truncate ">{song.title}</h6>
-                        <p className="aray-400 truncate">{song.artist}</p>
+                        <h6 className=" text-base text-gray-700 dark:text-slate-300 truncate ">{song.title}</h6>
+                        <p className="font-sans text-base font-medium leading-6 text-gray-500 dark:text-gray-400 truncate">{song.artist}</p>
                       </div>
                     </div>
                   </div>
@@ -399,7 +399,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             </Slider>
             <style>
               {`
-              
                 /* CSS styles for Swiper navigation arrows  */
                 .slick-prev:before,
                 .slick-next:before {
