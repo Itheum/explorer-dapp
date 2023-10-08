@@ -23,21 +23,26 @@ export const TutorialsEnterprise = () => {
 
   // itheum enterprise sdk
   const [minterVersion, setMinterVersion] = useState<string>("n/a");
+  const [minterVersionUpgrade, setMinterVersionUpgrade] = useState<string>("n/a");
 
   // data nft sdk
   const [minterSCAddressToWorkWith, setMinterSCAddressToWorkWith] = useState<string>("");
+  const [newClaimsAddress, setNewClaimsAddress] = useState<string>("");
   const [nftMinter, setNftMinter] = useState<any>(null);
+  const [contractConfig, setContractConfig] = useState<any>(null);
   const [newCollectionName, setNewCollectionName] = useState<string>("");
   const [newCollectionTicker, setNewCollectionTicker] = useState<string>("");
   const [addressesToWhitelist, setAddressesToWhitelist] = useState<string>("");
   const [nftBatchMintStartIndex, setNftBatchMintStartIndex] = useState<number>(-1);
   const [addressesToSetUnsetTransferRole, setAddressesToSetUnsetTransferRole] = useState<string>("");
+  const [tokenRoyaltyToClaim, setTokenRoyaltyToClaim] = useState<string>("");
+  const [tokenNonceToBurn, setTokenNonceToBurn] = useState<number>(-1);
 
   async function _enterpriseIsWhitelistEnabled() {
     setLoading(true);
     setSdkResponses(null);
 
-    const requireWhitelisting = await factory.viewWhitelistEnabledState();
+    const requireWhitelisting = await factory.viewWhitelistState();
     console.log("Whitelisting required: ", requireWhitelisting);
 
     setSdkResponses(`Is Whitelisting required: ${requireWhitelisting}`);
@@ -115,6 +120,41 @@ export const TutorialsEnterprise = () => {
     setLoading(false);
   }
 
+  async function _enterpriseUpgradeMinterContract() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    debugger;
+
+    try {
+      const txToIssue: Transaction = factory.upgradeChildContract(new Address(address), new Address(minterSCAddressToWorkWith), minterVersionUpgrade);
+
+      await refreshAccount();
+
+      const { sessionId, error } = await sendTransactions({
+        transactions: txToIssue,
+        transactionsDisplayInfo: {
+          processingMessage: "Upgrading Enterprise Minter",
+          errorMessage: "Minter upgrade error",
+          successMessage: "Minter upgrade success",
+        },
+        redirectAfterSign: false,
+      });
+
+      console.log("mintTransaction", txToIssue);
+      console.log("sessionId", sessionId);
+      console.log("error", error);
+
+      setSdkResponses(`TX session ID is : ${sessionId}`);
+    } catch (e) {
+      setSdkResponses(`_enterpriseUpgradeMinterContract has FAILED - see console for error`);
+      console.log("_enterpriseUpgradeMinterContract has FAILED");
+      console.error(e);
+      toastError(e?.toString() ?? "");
+    }
+    setLoading(false);
+  }
+
   // ************************************************************
 
   async function _dataNftInitializeCollection() {
@@ -178,8 +218,8 @@ export const TutorialsEnterprise = () => {
 
       setSdkResponses(`TX session ID is : ${sessionId}`);
     } catch (e) {
-      setSdkResponses(`_enterpriseDeployNewMinterContract has FAILED - see console for error`);
-      console.log("_enterpriseDeployNewMinterContract has FAILED");
+      setSdkResponses(`_dataNftInitializeCollection has FAILED - see console for error`);
+      console.log("_dataNftInitializeCollection has FAILED");
       console.error(e);
       toastError(e?.toString() ?? "");
     }
@@ -203,6 +243,40 @@ export const TutorialsEnterprise = () => {
     setLoading(false);
   }
 
+  async function _dataNftSetNewClaimsAddress() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    try {
+      const txToIssue: Transaction = nftMinter.setClaimsAddress(new Address(address), new Address(newClaimsAddress));
+
+      await refreshAccount();
+
+      const { sessionId, error } = await sendTransactions({
+        transactions: txToIssue,
+        transactionsDisplayInfo: {
+          processingMessage: "Update claims address",
+          errorMessage: "Update claims address error",
+          successMessage: "Update claims address success",
+        },
+        redirectAfterSign: false,
+      });
+
+      console.log("mintTransaction", txToIssue);
+      console.log("sessionId", sessionId);
+      console.log("error", error);
+
+      setSdkResponses(`TX session ID is : ${sessionId}`);
+    } catch (e) {
+      setSdkResponses(`_dataNftSetNewClaimsAddress has FAILED - see console for error`);
+      console.log("_dataNftSetNewClaimsAddress has FAILED");
+      console.error(e);
+      toastError(e?.toString() ?? "");
+    }
+
+    setLoading(false);
+  }
+
   async function _dataNftViewContractConfig() {
     setLoading(true);
     setSdkResponses(null);
@@ -210,10 +284,29 @@ export const TutorialsEnterprise = () => {
     try {
       // Check smart contract configuration
       const viewConfigurations: ContractConfiguration = await nftMinter.viewContractConfiguration();
+      setContractConfig(viewConfigurations);
       setSdkResponses(`My minter configuration is: ${JSON.stringify(viewConfigurations)}`);
     } catch (e) {
       setSdkResponses(`_dataNftViewContractConfig has FAILED - see console for error`);
       console.log("_dataNftViewContractConfig has FAILED");
+      console.error(e);
+      toastError(e?.toString() ?? "");
+    }
+
+    setLoading(false);
+  }
+
+  async function _dataNftRandomViewMethod(method: string) {
+    setLoading(true);
+    setSdkResponses(null);
+
+    try {
+      // Check smart contract configuration
+      const response = await nftMinter[method]();
+      setSdkResponses(`${method} call returned: ${response}`);
+    } catch (e) {
+      setSdkResponses(`_dataNftRandomViewMethod has FAILED - see console for error`);
+      console.log("_dataNftRandomViewMethod has FAILED");
       console.error(e);
       toastError(e?.toString() ?? "");
     }
@@ -408,13 +501,20 @@ export const TutorialsEnterprise = () => {
     setLoading(false);
   }
 
-  async function _dataNftViewWhitelistUpdate() {
+  async function _dataNftViewWhitelistUpdate(isWhitelist: boolean) {
     setLoading(true);
     setSdkResponses(null);
 
     try {
       const addressStringsToArray = addressesToWhitelist.split(",").map((i) => i.toLowerCase().trim());
-      const txToIssue: Transaction = nftMinter.whitelist(new Address(address), addressStringsToArray);
+
+      let txToIssue: Transaction | null = null;
+
+      if (isWhitelist) {
+        txToIssue = nftMinter.whitelist(new Address(address), addressStringsToArray);
+      } else {
+        txToIssue = nftMinter.removeWhitelist(new Address(address), addressStringsToArray);
+      }
 
       await refreshAccount();
 
@@ -492,6 +592,108 @@ export const TutorialsEnterprise = () => {
     } catch (e) {
       setSdkResponses(`_dataNftMintBatchOfItems has FAILED - see console for error`);
       console.log("_dataNftMintBatchOfItems has FAILED");
+      console.error(e);
+      toastError(e?.toString() ?? "");
+    }
+
+    setLoading(false);
+  }
+
+  async function _dataNftViewTokenBalancesForPossibleRoyaltyClaiming() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    const accountRes = await fetch(`https://devnet-api.multiversx.com/accounts/${minterSCAddressToWorkWith}`);
+    const accountDetails = await accountRes.json();
+    let tokenBalanceFullString = `EGLD: ${accountDetails.balance}`;
+
+    const esdtTokensRes = await fetch(`https://devnet-api.multiversx.com/accounts/${minterSCAddressToWorkWith}/tokens`);
+    const esdtTokens = await esdtTokensRes.json();
+
+    esdtTokens.map((token: any) => {
+      tokenBalanceFullString += ` - ${token.identifier}: ${token.balance}`;
+    });
+
+    setSdkResponses(`Your token balances are: ${tokenBalanceFullString}`);
+    setLoading(false);
+  }
+
+  async function _dataNftRoyaltyClaiming() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    try {
+      const txToIssue: Transaction = nftMinter.claimRoyalties(new Address(address), tokenRoyaltyToClaim, 0);
+
+      await refreshAccount();
+
+      // Note: if the transaction fails due to gas limit you can apply your own gas limit before signing.
+      // txToIssue.setGasLimit(100000000);
+
+      const { sessionId, error } = await sendTransactions({
+        transactions: txToIssue,
+        transactionsDisplayInfo: {
+          processingMessage: `claim ${tokenRoyaltyToClaim} royalty`,
+          errorMessage: "Royalty claim error",
+          successMessage: "Royalty claim success",
+        },
+        redirectAfterSign: false,
+      });
+
+      setSdkResponses(`TX session ID is : ${sessionId}`);
+    } catch (e) {
+      setSdkResponses(`_dataNftRoyaltyClaiming has FAILED - see console for error`);
+      console.log("_dataNftRoyaltyClaiming has FAILED");
+      console.error(e);
+      toastError(e?.toString() ?? "");
+    }
+
+    setLoading(false);
+  }
+
+  async function _dataNftViewTokensFromChain() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    const TokensRes = await fetch(`https://devnet-api.multiversx.com/collections/${contractConfig.tokenIdentifier}/nfts`);
+    const tokens = await TokensRes.json();
+
+    let tokenBalanceFullString = "";
+
+    tokens.map((token: any) => {
+      tokenBalanceFullString += `, ${token.name} (${token.nonce})`;
+    });
+
+    setSdkResponses(`NFT tokens are: ${tokenBalanceFullString}`);
+    setLoading(false);
+  }
+
+  async function _dataNftBurn() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    try {
+      const txToIssue: Transaction = nftMinter.burn(new Address(address), tokenNonceToBurn, 1, contractConfig.tokenIdentifier);
+
+      await refreshAccount();
+
+      // Note: if the transaction fails due to gas limit you can apply your own gas limit before signing.
+      // txToIssue.setGasLimit(100000000);
+
+      const { sessionId, error } = await sendTransactions({
+        transactions: txToIssue,
+        transactionsDisplayInfo: {
+          processingMessage: `Burning token`,
+          errorMessage: "Token burn error",
+          successMessage: "Token burn success",
+        },
+        redirectAfterSign: false,
+      });
+
+      setSdkResponses(`TX session ID is : ${sessionId}`);
+    } catch (e) {
+      setSdkResponses(`_dataNftBurn has FAILED - see console for error`);
+      console.log("_dataNftBurn has FAILED");
       console.error(e);
       toastError(e?.toString() ?? "");
     }
@@ -761,6 +963,27 @@ main()
                   }}
                 />
               </div>
+
+              <div className="p-2">
+                <button
+                  className="btn btn-outline-primary mr-3"
+                  onClick={_enterpriseUpgradeMinterContract}
+                  disabled={minterSCAddressToWorkWith.trim().length < 5 || minterVersionUpgrade === "n/a" || minterVersionUpgrade.trim().length < 5}>
+                  Upgrade
+                </button>
+                <Tooltip anchorSelect=".my-ptr-5" place="top">
+                  New versions of the Data NFT Minter may be available for you to upgrade. Pick your version and then upgrade.
+                </Tooltip>
+                <span className="my-ptr-5">Upgrade your existing Minter to a new version.</span>
+                <input
+                  type="text"
+                  className="form-control form-control-lg"
+                  placeholder="Minter version number to upgrade to"
+                  onChange={(event) => {
+                    setMinterVersionUpgrade(event.target.value);
+                  }}
+                />
+              </div>
             </div>
 
             <div className="mb-5">
@@ -840,6 +1063,27 @@ main()
               <div className="p-2">
                 <button
                   className="btn btn-outline-primary mr-3"
+                  disabled={newClaimsAddress.trim().length < 5 || minterSCAddressToWorkWith.trim().length < 5 || !nftMinter}
+                  onClick={_dataNftSetNewClaimsAddress}>
+                  Update
+                </button>
+                <Tooltip anchorSelect=".my-ptr-7" place="top">
+                  Change the address that can get the royalties (claimsAddress)
+                </Tooltip>
+                <span className="my-ptr-7">Change the address that can get the royalties (claimsAddress)</span>
+                <input
+                  type="text"
+                  className="form-control form-control-lg"
+                  placeholder="New claims address"
+                  onChange={(event) => {
+                    setNewClaimsAddress(event.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="p-2">
+                <button
+                  className="btn btn-outline-primary mr-3"
                   disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter}
                   onClick={_dataNftViewContractConfig}>
                   Check
@@ -847,7 +1091,19 @@ main()
                 <Tooltip anchorSelect=".my-ptr-8" place="top">
                   Lookup a minter contract's configuration
                 </Tooltip>
-                <span className="my-ptr-8">Check minter's configuration as found on-chain (anyone can call it)</span>
+                <span className="my-ptr-8">
+                  Check minter's configuration as found on-chain (anyone can call it). Only works after you initializeContract by minting a collection
+                </span>
+              </div>
+
+              <div className="p-2">
+                <button
+                  className="btn btn-outline-primary mr-3"
+                  disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter}
+                  onClick={() => _dataNftRandomViewMethod("getContractAddress")}>
+                  Check
+                </button>
+                <span className="my-ptr-8">call getContractAddress</span>
               </div>
 
               <br />
@@ -983,8 +1239,14 @@ main()
                 <button
                   className="btn btn-outline-primary mr-3"
                   disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter || addressesToWhitelist.length < 10}
-                  onClick={_dataNftViewWhitelistUpdate}>
+                  onClick={() => _dataNftViewWhitelistUpdate(true)}>
                   Whitelist
+                </button>
+                <button
+                  className="btn btn-outline-primary mr-3"
+                  disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter || addressesToWhitelist.length < 10}
+                  onClick={() => _dataNftViewWhitelistUpdate(false)}>
+                  Remove Whitelist
                 </button>
                 <Tooltip anchorSelect=".my-ptr-7" place="top">
                   Whitelist a bunch of addresses to mint
@@ -1003,7 +1265,7 @@ main()
               <br />
 
               <div className="p-2 mt-3">
-                <h4>Mint Batch of 10 NFTs:</h4>
+                <h4>Mint a NFT:</h4>
 
                 <button
                   className="btn btn-outline-primary mr-3"
@@ -1012,9 +1274,9 @@ main()
                   Mint
                 </button>
                 <Tooltip anchorSelect=".my-ptr-11" place="top">
-                  Mint 10 NFTs using the following dynamic metadata
+                  Mint a NFT using dynamic metadata
                 </Tooltip>
-                <span className="my-ptr-11">Mint 10 NFTs using the following dynamic metadata. (only "whitelisted" address can call it)</span>
+                <span className="my-ptr-11">Mint a NFT using dynamic metadata. (only "whitelisted" address can call it)</span>
                 <input
                   type="number"
                   className="form-control form-control-lg"
@@ -1023,7 +1285,71 @@ main()
                     setNftBatchMintStartIndex(parseInt(event.target.value, 10));
                   }}
                 />
-                <span>We are going to mint a batch of 10 NFTs with an index starting with {nftBatchMintStartIndex}.</span>
+                <span>We are going to mint a batch of a NFT with an index starting with {nftBatchMintStartIndex}.</span>
+              </div>
+
+              <div className="p-2 mt-3">
+                <h4>Royalty Claiming:</h4>
+
+                <div className="p-2">
+                  <button
+                    className="btn btn-outline-primary mr-3"
+                    disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter}
+                    onClick={_dataNftViewTokenBalancesForPossibleRoyaltyClaiming}>
+                    Check
+                  </button>
+                  <span>Check my minter's EGLD and ESDT tokens (which are most likely royalties that can be claimed)</span>
+                </div>
+
+                <div className="p-2">
+                  <button
+                    className="btn btn-outline-primary mr-3"
+                    disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter || tokenRoyaltyToClaim.trim().length < 2}
+                    onClick={_dataNftRoyaltyClaiming}>
+                    Claim
+                  </button>
+                  <span className="my-ptr-9">Claim royalty of a specific token type</span>
+                  <input
+                    type="text"
+                    className="form-control form-control-lg"
+                    placeholder="A token identifier with balance that want to claim"
+                    onChange={(event) => {
+                      setTokenRoyaltyToClaim(event.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="p-2 mt-3">
+                <h4>Collection Curation:</h4>
+
+                <div className="p-2">
+                  <button
+                    className="btn btn-outline-primary mr-3"
+                    disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter || !contractConfig}
+                    onClick={_dataNftViewTokensFromChain}>
+                    Fetch
+                  </button>
+                  <span>Show Data NFTs in my collection</span>
+                </div>
+
+                <div className="p-2">
+                  <button
+                    className="btn btn-outline-primary mr-3"
+                    disabled={minterSCAddressToWorkWith.trim().length < 5 || !nftMinter || !contractConfig || tokenNonceToBurn === -1}
+                    onClick={_dataNftBurn}>
+                    Burn
+                  </button>
+                  <span className="my-ptr-9">Burn a token you own</span>
+                  <input
+                    type="text"
+                    className="form-control form-control-lg"
+                    placeholder="A token nonce that you own"
+                    onChange={(event) => {
+                      setTokenNonceToBurn(parseInt(event.target.value));
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
@@ -1037,7 +1363,8 @@ main()
               <div>Has pending transactions? {hasPendingTransactions}</div>
               {(loading && <div>Loading...</div>) || (
                 <div>
-                  <input type="text" className="form-control form-control-lg" value={sdkResponses || "n/a"} />
+                  <input type="text" className="form-control form-control-lg" defaultValue={sdkResponses || "n/a"} />
+                  <textarea name="Text1" rows={5} style={{ width: "100%", padding: ".5rem" }} defaultValue={sdkResponses || "n/a"}></textarea>
                 </div>
               )}
             </div>

@@ -59,7 +59,7 @@ export const MyWallet = () => {
   async function fetchData() {
     setIsLoading(true);
 
-    const _dataNfts = await DataNft.ownedByAddress(address, "DATALT1-4e6fb5");
+    const _dataNfts = await DataNft.ownedByAddress(address, "DATALT2-39ee0c");
 
     console.log("_dataNfts", _dataNfts);
 
