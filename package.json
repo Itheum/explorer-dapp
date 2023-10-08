@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer is a DApp for the public to explore and visualize data within the Itheum protocol",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -9,7 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "6.4.2",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@headlessui/react": "1.7.17",
-    "@itheum/sdk-mx-data-nft": "1.2.0",
+    "@itheum/sdk-mx-data-nft": "2.1.3",
     "@multiversx/sdk-core": "12.9.0",
     "@multiversx/sdk-dapp": "2.22.1",
     "@multiversx/sdk-network-providers": "2.0.0",
