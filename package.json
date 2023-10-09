@@ -29,7 +29,7 @@
     "lucide-react": "0.284.0",
     "moment": "2.29.4",
     "moment-timezone": "0.5.43",
-    "node": "19.7.0",
+    "node": "18.17.1",
     "react": "18.2.0",
     "react-bootstrap": "2.9.0",
     "react-calendar-heatmap": "1.9.0",
