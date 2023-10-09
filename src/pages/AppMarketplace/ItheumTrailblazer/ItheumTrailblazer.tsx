@@ -151,7 +151,7 @@ export const ItheumTrailblazer = () => {
             viewData={viewData}
             modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
             modalTitle={"Trailblazer"}
-            modalTitleStyle="p-5"
+            modalTitleStyle="md:!p-5 !pt-5 !pb-5 px-2"
             hasFilter={true}
             filterData={filterData}
           />

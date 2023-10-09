@@ -116,7 +116,7 @@ h5, h6 {
 }
 
 .vertical-timeline-element-content {
-    @apply bg-background shadow-none text-foreground !important;
+    @apply bg-background shadow-none text-foreground md:p-[1em] p-0 !important;
 }
 
 .vertical-timeline-element-icon {
