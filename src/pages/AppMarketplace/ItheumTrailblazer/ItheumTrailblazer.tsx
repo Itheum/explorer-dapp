@@ -37,7 +37,7 @@ export const ItheumTrailblazer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_TOKENS.map((v) => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
 
     setItDataNfts(_nfts);
     setIsLoading(false);

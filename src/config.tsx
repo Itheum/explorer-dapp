@@ -14,8 +14,21 @@ export const sampleAuthenticatedDomains = [TOOLS_API_URL];
 //////////////////////////////////////////////////////////////////////////////////////////////////
 export const dAppName = "Itheum Explorer";
 
-export const TRAILBLAZER_TOKENS = process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? [407, 423, 453] : [1];
-export const MULTIVERSX_BUBBLE_TOKENS = process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? [416, 491] : [2];
+export const TRAILBLAZER_TOKENS =
+  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
+    ? [
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 407 },
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 423 },
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 453 },
+      ]
+    : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 1 }];
+export const MULTIVERSX_BUBBLE_TOKENS =
+  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
+    ? [
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 416 },
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 491 },
+      ]
+    : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 2 }];
 export const MULTIVERSX_INFOGRAPHICS_TOKENS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
     ? [
@@ -24,7 +37,7 @@ export const MULTIVERSX_INFOGRAPHICS_TOKENS =
         { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 480 },
         { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 490 },
       ]
-    : [{ tokenIdentifier: "DATANFTFT4-3ba099", nonce: 3 }];
+    : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 3 }];
 export const NF_TUNES_TOKENS = [
   { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 527 },
   { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 529 },
