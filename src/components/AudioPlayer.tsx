@@ -222,7 +222,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   const handleChangeSong = () => {
     const index = props.songs[currentTrackIndex]?.idx;
-
     if (songSource[index]) {
       // if we previously fetched the song and it was an error, show again the exact error.
       if (songSource[index].includes("Error:")) {
@@ -243,6 +242,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   useEffect(() => {
     audio.pause();
+    audio.src = "";
     setIsPlaying(false);
     setIsLoaded(false);
     handleChangeSong();
@@ -319,7 +319,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             </div>
 
             <div className="gap-2 text-foreground select-none w-full flex flex-row justify-center items-center px-10 pb-6 ">
-              <span className="w-12 p-2 text-xs font-sans font-medium text-muted-foreground ">{currentTime}</span>
+              <span className="w-[4rem] p-2 text-xs font-sans font-medium text-muted-foreground ">{currentTime}</span>
               <input
                 type="range"
                 min="0"
@@ -329,7 +329,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                 onChange={(e) => handleProgressChange(Number(e.target.value))}
                 className="accent-black dark:accent-white w-full bg-white mx-auto  focus:outline-none cursor-pointer"
               />{" "}
-              <span className="p-2 text-xs font-sans font-medium text-muted-foreground ">{duration}</span>
+              <span className="w-[4rem] p-2 text-xs font-sans font-medium text-muted-foreground ">{duration}</span>
             </div>
 
             <div className="select-none p-2 bg-[#0f0f0f]/10 dark:bg-[#0F0F0F]/50 rounded-b-xl   border-t border-gray-400 dark:border-gray-900  flex items-center justify-between z-10 ">
