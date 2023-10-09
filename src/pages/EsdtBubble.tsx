@@ -13,7 +13,7 @@ import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
-import { ESDT_BUBBLE_NONCES, MAINNET_EXPLORER_ADDRESS } from "config";
+import { ESDT_BUBBLE_TOKENS, MAINNET_EXPLORER_ADDRESS } from "config";
 import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
@@ -184,7 +184,7 @@ export const EsdtBubble = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_NONCES.map((v) => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(ESDT_BUBBLE_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
     setDataNfts(_nfts);
 
     setIsLoading(false);

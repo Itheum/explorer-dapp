@@ -8,7 +8,7 @@ import SVG from "react-inlinesvg";
 import Modal from "react-modal";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
-import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
+import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
@@ -56,7 +56,9 @@ export const MultiversxInfographics = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map((v) => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      MULTIVERSX_INFOGRAPHICS_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier }))
+    );
     setDataNfts(_nfts);
 
     setIsLoading(false);

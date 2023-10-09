@@ -14,18 +14,28 @@ export const sampleAuthenticatedDomains = [TOOLS_API_URL];
 //////////////////////////////////////////////////////////////////////////////////////////////////
 export const dAppName = "Itheum Explorer";
 
-export const CANTINA_CORNER_NONCES = [50, 51, 52];
-
-export const TRAILBLAZER_NONCES = process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? [407, 423, 453] : [1];
-export const MULTIVERSX_BUBBLE_NONCES = process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? [416, 491] : [2];
-export const MULTIVERSX_INFOGRAPHICS_NONCES =
-  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? [469, 476, 480, 490] : [3];
-export const NF_TUNES_NONCES = [527, 529];
+export const TRAILBLAZER_TOKENS = process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? [407, 423, 453] : [1];
+export const MULTIVERSX_BUBBLE_TOKENS = process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? [416, 491] : [2];
+export const MULTIVERSX_INFOGRAPHICS_TOKENS =
+  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
+    ? [
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 469 },
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 476 },
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 480 },
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 490 },
+      ]
+    : [{ tokenIdentifier: "DATANFTFT4-3ba099", nonce: 3 }];
+export const NF_TUNES_TOKENS = [
+  { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 527 },
+  { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 529 },
+];
 
 export const CC_SHOW_SIZE = 10;
-export const GAMER_PASSPORT_GAMER_NONCES = [12];
-export const PLAYSTATION_GAMER_PASSPORT_NONCES = [379, 380];
-export const ESDT_BUBBLE_NONCES = [417];
+export const PLAYSTATION_GAMER_PASSPORT_TOKENS = [
+  { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 379 },
+  { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 380 },
+];
+export const ESDT_BUBBLE_TOKENS = [{ tokenIdentifier: "DATANFTFT4-3ba099", nonce: 417 }];
 export const EB_SHOW_SIZE = 10;
 
 export const MARKETPLACE_DETAILS_PAGE =
@@ -34,6 +44,9 @@ export const MARKETPLACE_DETAILS_PAGE =
     : "https://datadex.itheum.io/datanfts/marketplace/";
 
 export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
+
+export const SUPPORTED_COLLECTIONS =
+  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? ["DATANFTFT4-3ba099"] : ["DATANFTFT-e936d4"];
 
 export const SUPPORTED_APPS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
