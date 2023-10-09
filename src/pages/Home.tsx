@@ -6,8 +6,6 @@ import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
-import disk from "../assets/img/nf-tunes-logo-disk.png";
-import stick from "../assets/img/nf-tunes-logo-stick.png";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
