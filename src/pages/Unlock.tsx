@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 import { useLocation } from "react-router-dom";
@@ -13,6 +13,8 @@ import {
 import { walletConnectV2ProjectId } from "config";
 import { getApi } from "libs/utils";
 import { routeNames } from "routes";
+import { useGetIsLoggedIn } from "../hooks";
+import { useLocalStorageStore } from "../store/LocalStorageStore.ts";
 
 // find a route name based on a pathname that comes in via React Router Link params
 function getRouteNameBasedOnPathNameParam(pathname: string) {
@@ -31,6 +33,14 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
 const UnlockPage = () => {
   const location = useLocation();
   const { chainID } = useGetNetworkConfig();
+  const isLoggedIn = useGetIsLoggedIn();
+  const { appVersion } = useLocalStorageStore();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      localStorage.setItem("app-version", appVersion ?? "");
+    }
+  }, [appVersion]);
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
