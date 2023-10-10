@@ -59,7 +59,9 @@ export const MARKETPLACE_DETAILS_PAGE =
 export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
 
 export const SUPPORTED_COLLECTIONS =
-  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet ? ["DATANFTFT4-3ba099"] : ["DATANFTFT-e936d4"];
+  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
+    ? ["DATANFTFT4-3ba099", "DATALT2-39ee0c"]
+    : ["DATANFTFT-e936d4"];
 
 export const SUPPORTED_APPS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
