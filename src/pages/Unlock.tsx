@@ -24,7 +24,7 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
     // Note: if it's home route, better UX is to go the dashboard
     return (routeNames as any)[matchPathnameToRouteName];
   } else {
-    return routeNames.dashboard;
+    return routeNames.home;
   }
 }
 
