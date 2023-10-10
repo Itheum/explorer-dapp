@@ -1,19 +1,16 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { AuthRedirectWrapper } from "components";
 import { SUPPORTED_APPS } from "config";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
-import disk from "../assets/img/nf-tunes-logo-disk.png";
-import stick from "../assets/img/nf-tunes-logo-stick.png";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
 }
 
-const HomePage = () => {
+export const Home = () => {
   return (
     <HeaderComponent pageTitle={"App Marketplace"} hasImage={false}>
       {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
@@ -37,9 +34,3 @@ const HomePage = () => {
     </HeaderComponent>
   );
 };
-
-export const Home = () => (
-  <AuthRedirectWrapper>
-    <HomePage />
-  </AuthRedirectWrapper>
-);
