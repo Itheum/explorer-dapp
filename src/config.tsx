@@ -38,10 +38,13 @@ export const MULTIVERSX_INFOGRAPHICS_TOKENS =
         { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 490 },
       ]
     : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 3 }];
-export const NF_TUNES_TOKENS = [
-  { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 527 },
-  { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 529 },
-];
+export const NF_TUNES_TOKENS =
+  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
+    ? [
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 527 },
+        { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 529 },
+      ]
+    : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
 
 export const CC_SHOW_SIZE = 10;
 export const PLAYSTATION_GAMER_PASSPORT_TOKENS = [
