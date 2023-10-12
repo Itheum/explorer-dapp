@@ -39,8 +39,9 @@ export const MyListed = () => {
 
   async function fetchDataNfts() {
     setIsNftLoading(true);
-    const nonces: number[] = offers.map((offer) => offer.offeredTokenNonce);
-    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(nonces.map((v) => ({ nonce: v })));
+    const _dataNfts: DataNft[] = await DataNft.createManyFromApi(
+      offers.map((offer) => ({ nonce: offer.offeredTokenNonce, tokenIdentifier: offer.offeredTokenIdentifier }))
+    );
     setDataNfts(_dataNfts);
 
     setIsNftLoading(false);

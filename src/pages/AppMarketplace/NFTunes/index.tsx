@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { DataNftCard, Loader } from "components";
-import { NF_TUNES_NONCES } from "config";
+import { NF_TUNES_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { toastError } from "libs/utils";
@@ -62,7 +62,7 @@ export const NFTunes = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(NF_TUNES_NONCES.map((v) => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(NF_TUNES_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
     setDataNfts(_nfts);
 
     setIsLoading(false);

@@ -6,7 +6,7 @@ import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 
 import { DataNftCard, Loader } from "components";
-import { MARKETPLACE_DETAILS_PAGE } from "config";
+import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { nativeAuthOrigins, toastError } from "libs/utils";
@@ -37,7 +37,11 @@ export const MyWallet = () => {
   async function fetchData() {
     setIsLoading(true);
 
-    const _dataNfts = await DataNft.ownedByAddress(address);
+    const _dataNfts = [];
+    for (const collection of SUPPORTED_COLLECTIONS) {
+      const nfts = await DataNft.ownedByAddress(address, collection);
+      _dataNfts.push(...nfts);
+    }
     setDataNftCount(_dataNfts.length);
     setDataNfts(_dataNfts);
 

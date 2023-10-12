@@ -6,7 +6,7 @@ import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { DataNftCard, Loader } from "components";
-import { PLAYSTATION_GAMER_PASSPORT_NONCES } from "config";
+import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
 import { nativeAuthOrigins, toastError } from "libs/utils";
@@ -40,7 +40,9 @@ export const PlayStationGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(PLAYSTATION_GAMER_PASSPORT_NONCES.map((nonce) => ({ nonce })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      PLAYSTATION_GAMER_PASSPORT_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier }))
+    );
     console.log("ccDataNfts", _nfts);
     setCcDataNfts(_nfts);
 

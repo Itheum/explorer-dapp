@@ -23,7 +23,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
     <Dialog>
       <DialogTrigger asChild>{openTrigger}</DialogTrigger>
       <DialogContent
-        className={cn("overflow-y-scroll overflow-x-hidden scrollbar max-w-[80%] min-h-[40%] max-h-[85%] !pt-0 rounded-xl border-foreground", modalClassName)}
+        className={cn("overflow-y-auto overflow-x-hidden  max-w-[80%] min-h-[40%] max-h-[85%] !pt-0 rounded-xl border-foreground", modalClassName)}
         onPointerDownOutside={(e) => !closeOnOverlayClick && e.preventDefault()}>
         <DialogHeader className="text-left sticky-top flex md:flex-row flex-col justify-between md:items-center items-start md:p-0 p-3 backdrop-blur bg-background/60 w-full border-b border-foreground">
           <div className="flex flex-col w-auto md:w-full text-left">
@@ -33,7 +33,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
           {hasFilter ? <Filter filterData={filterData ?? []} /> : <></>}
           <div></div>
         </DialogHeader>
-        <div className="max-h-[70dvh]">{children}</div>
+        <div className="overflow-x-hidden scrollbar max-h-[70dvh]">{children}</div>
       </DialogContent>
     </Dialog>
   );

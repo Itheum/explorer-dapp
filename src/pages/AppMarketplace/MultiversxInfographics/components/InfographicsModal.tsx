@@ -7,7 +7,7 @@ import { PDFDocumentProxy } from "pdfjs-dist";
 import { sleep } from "../../../../libs/utils/legacyUtil";
 import { Address, SignableMessage } from "@multiversx/sdk-core/out";
 import { routeNames } from "../../../../routes";
-import { MULTIVERSX_INFOGRAPHICS_NONCES } from "../../../../config";
+import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "../../../../config";
 import { toastError } from "../../../../libs/utils";
 import { BlobDataType } from "../../../../libs/types";
 import { useGetAccount, useGetPendingTransactions } from "../../../../hooks";

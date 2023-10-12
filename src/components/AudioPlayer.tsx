@@ -57,7 +57,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          initialSlide:0,
+          initialSlide: 0,
         },
       },
       {
@@ -73,14 +73,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         breakpoint: 730,
         settings: {
           slidesToShow: 2,
-          slidesToScroll:2,
+          slidesToScroll: 2,
         },
       },
       {
         breakpoint: 550,
         settings: {
           slidesToShow: 1,
-          slidesToScroll:1,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -222,7 +222,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   const handleChangeSong = () => {
     const index = props.songs[currentTrackIndex]?.idx;
-
     if (songSource[index]) {
       // if we previously fetched the song and it was an error, show again the exact error.
       if (songSource[index].includes("Error:")) {
@@ -243,6 +242,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   useEffect(() => {
     audio.pause();
+    audio.src = "";
     setIsPlaying(false);
     setIsLoaded(false);
     handleChangeSong();
@@ -253,15 +253,15 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   return (
-    <div className="p-12 relative overflow-hidden">
+    <div className="p-2 md:p-12 relative overflow-hidden">
       {displayPlaylist ? (
-        <div className="w-full h-[500px] overflow-hidden">
+        <div className="w-full h-[500px] ">
           <button
             className="border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-sky-200 dark:hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden   "
             onClick={() => setDisplayPlaylist(false)}>
             <ArrowBigLeft />
           </button>
-          <div className=" grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
+          <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mx-4  mt-6 mb-20">
             {props.songs.map((song: any, index: number) => {
               return (
                 <div
@@ -270,7 +270,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                     setCurrentTrackIndex(index);
                     setDisplayPlaylist(false);
                   }}
-                  className={`border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-sky-200 dark:hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden text-white `}>
+                  className={`border-[1px] border-foreground/40 select-none flex flex-col items-center justify-center md:flex-row bg-[#fafafa]/50 dark:bg-[#0f0f0f]/25  p-2 gap-2 text-xs relative cursor-pointer  transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-sky-200 dark:hover:shadow-teal-200   bg-[#27293d] rounded-2xl overflow-hidden text-foreground`}>
                   <div className="w-[80%] md:w-[60%] h-32 flex items-center justify-center">
                     <img
                       src={song.cover_art_url}
@@ -283,10 +283,10 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                   </div>
 
                   <div className="w-8/12 flex flex-col items-center justify-center">
-                    <h6 className=" truncate text-base text-gray-700 dark:text-slate-300">{song.title}</h6>
+                    <h6 className=" truncate text-base text-foreground">{song.title}</h6>
 
-                    <p className="truncate text-sm text-center text-gray-700 dark:text-slate-300 ">{song.artist}</p>
-                    <p className="text-xs text-center text-gray-400">{song.album}</p>
+                    <p className="truncate text-sm text-center text-foreground">{song.artist}</p>
+                    <p className="text-xs text-center text-muted-foreground">{song.album}</p>
                   </div>
                 </div>
               );
@@ -294,7 +294,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden  w-full   flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
+        <div className="overflow-hidden  w-full flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
           <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-[1px] border-foreground/40  relative md:w-[60%] flex flex-col rounded-xl">
             <div className="px-10 pt-10 pb-4 flex items-center">
               <img
@@ -308,20 +308,18 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
               <div className="flex flex-col select-text">
                 <div>
-                  <span className="font-sans text-lg font-medium leading-7 text-slate-900 dark:text-white">{props.songs[currentTrackIndex]?.title}</span>{" "}
-                  <span className="ml-2 font-sans text-base font-medium   text-gray-500 dark:text-gray-400">
-                    {props.songs[currentTrackIndex]?.date.split("T")[0]}
-                  </span>
+                  <span className="font-sans text-lg font-medium leading-7 text-foreground">{props.songs[currentTrackIndex]?.title}</span>{" "}
+                  <span className="ml-2 font-sans text-base font-medium text-muted-foreground">{props.songs[currentTrackIndex]?.date.split("T")[0]}</span>
                 </div>
 
-                <span className="font-sans text-base font-medium text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex]?.category}</span>
-                <span className="font-sans text-lg font-medium leading-6 text-slate-900 dark:text-white">{props.songs[currentTrackIndex]?.artist}</span>
-                <span className="font-sans text-base font-medium leading-6 text-gray-500 dark:text-gray-400">{props.songs[currentTrackIndex]?.album}</span>
+                <span className="font-sans text-base font-medium text-foreground/60">{props.songs[currentTrackIndex]?.category}</span>
+                <span className="font-sans text-lg font-medium leading-6 text-foreground">{props.songs[currentTrackIndex]?.artist}</span>
+                <span className="font-sans text-base font-medium leading-6 text-muted-foreground">{props.songs[currentTrackIndex]?.album}</span>
               </div>
             </div>
 
-            <div className="gap-2 text-white select-none w-full flex flex-row justify-center items-center px-10 pb-6 ">
-              <span className="w-12 p-2 text-xs font-sans font-medium  text-gray-500 ">{currentTime}</span>
+            <div className="gap-2 text-foreground select-none w-full flex flex-row justify-center items-center px-10 pb-6 ">
+              <span className="w-[4rem] p-2 text-xs font-sans font-medium text-muted-foreground ">{currentTime}</span>
               <input
                 type="range"
                 min="0"
@@ -331,7 +329,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                 onChange={(e) => handleProgressChange(Number(e.target.value))}
                 className="accent-black dark:accent-white w-full bg-white mx-auto  focus:outline-none cursor-pointer"
               />{" "}
-              <span className="p-2 text-xs font-sans font-medium text-gray-500 ">{duration}</span>
+              <span className="w-[4rem] p-2 text-xs font-sans font-medium text-muted-foreground ">{duration}</span>
             </div>
 
             <div className="select-none p-2 bg-[#0f0f0f]/10 dark:bg-[#0F0F0F]/50 rounded-b-xl   border-t border-gray-400 dark:border-gray-900  flex items-center justify-between z-10 ">
@@ -357,7 +355,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               <button className="cursor-pointer" onClick={handleNextButton}>
                 <SkipForward />
               </button>
-              <button className="cursor-pointer   " onClick={repeatTrack}>
+              <button className="cursor-pointer" onClick={repeatTrack}>
                 <RefreshCcwDot />
               </button>
               <button className="mr-2  xl:pr-8" onClick={showPlaylist}>
@@ -366,7 +364,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             </div>
           </div>
           <div className="w-[80%] 2xl:w-[70%] mt-8 mx-auto">
-            <h4 className="select-none flex justify-start font-semibold dark:text-white mt-4 mb-2   ">{`Tracklist ${props.songs.length} songs`} </h4>
+            <h4 className="select-none flex justify-start font-semibold text-foreground mt-4 mb-2">{`Tracklist ${props.songs.length} songs`} </h4>
             <Slider {...settings}>
               {props.songs.map((song: any, index: number) => {
                 return (
@@ -375,9 +373,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                       onClick={() => {
                         setCurrentTrackIndex(index);
                       }}
-                      className={`mx-auto w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center
-                     bg-[#fafafa]/25 dark:bg-[#0f0f0f]/25
-                     cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200   rounded-2xl text dark:text-white border-[1px] border-foreground/40  `}>
+                      className="mx-auto w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center bg-[#fafafa]/25 dark:bg-[#0f0f0f]/25 cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200 rounded-2xl text-foreground border-[1px] border-foreground/40">
                       <div className="w-[80%] xl:w-[40%] justify-center">
                         <img
                           src={song.cover_art_url}
@@ -389,8 +385,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                         />
                       </div>
                       <div className=" xl:w-[60%] flex flex-col justify-center text-center  ">
-                        <h6 className="font-semibold truncate ">{song.title}</h6>
-                        <p className="aray-400 truncate">{song.artist}</p>
+                        <h6 className=" text-base text-foreground truncate ">{song.title}</h6>
+                        <p className="font-sans text-base font-medium leading-6 text-muted-foreground truncate">{song.artist}</p>
                       </div>
                     </div>
                   </div>
@@ -399,7 +395,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             </Slider>
             <style>
               {`
-              
                 /* CSS styles for Swiper navigation arrows  */
                 .slick-prev:before,
                 .slick-next:before {
@@ -409,8 +404,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           </div>
         </div>
       )}
-      <div className="z-[-1]   ml-[-10%]  mt-[-25%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#00C797] rounded-full"> </div>
-      <div className="z-[-1]   mt-[-15%] ml-[40%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#3D00EA] rounded-full "> </div>
+      <div className="z-[-1] ml-[-10%]  mt-[-25%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#00C797] rounded-full"></div>
+      <div className="z-[-1] mt-[-15%] ml-[40%] h-[50%] w-[60%] opacity-75 blur-[300px] absolute bg-[#3D00EA] rounded-full "></div>
     </div>
   );
 };
