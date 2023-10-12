@@ -64,7 +64,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         tileCode = (
           <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
             <Card className="flex flex-col items-center justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
-              <div className="flex flex-row justify-between items-center w-full">
+              <div className="flex md:flex-row flex-col justify-between items-center w-full">
                 <span className="text-2xl text-uppercase font-[Satoshi-Medium]">Offer</span>
                 <span className="text-muted-foreground text-sm">{new Date(dataItem.date).toDateString()}</span>
               </div>
@@ -100,7 +100,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         tileCode = (
           <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
             <Card className="flex flex-col items-center justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
-              <div className="flex flex-row justify-between items-center w-full">
+              <div className="flex md:flex-row flex-col justify-between items-center w-full">
                 <span className="text-2xl text-uppercase font-[Satoshi-Medium]">Quest</span>
                 <span className="text-muted-foreground text-sm">{new Date(dataItem.date).toDateString()}</span>
               </div>
@@ -134,10 +134,10 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         tileCode = (
           <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
             <Card className="flex flex-col items-center justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
-              <CardHeader className="flex flex-row justify-between items-center w-full">
+              <div className="flex md:flex-row flex-col justify-between items-center w-full">
                 <span className="text-2xl text-uppercase font-[Satoshi-Medium]">Secret Leaderboard</span>
                 <span className="text-muted-foreground text-sm">{new Date(dataItem.date).toDateString()}</span>
-              </CardHeader>
+              </div>
               <hr className="border border-muted-foreground w-full my-2" />
               <div className="w-full text-xl pt-1 pb-2 text-center">{dataItem.title}</div>
               <div className="w-full">
@@ -257,7 +257,6 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
             <VerticalTimeline>
               {filter === null || filter === undefined
                 ? data?.map((_dataItem: any, _index: any) => {
-                    console.log(_dataItem);
                     return (
                       <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
                         {getTileForCategory(_dataItem)}
@@ -267,7 +266,6 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                 : data
                     ?.filter((newValues: any) => newValues.category === filter)
                     .map((_dataItem: any, _index: any) => {
-                      console.log(_dataItem);
                       return (
                         <VerticalTimelineElement key={_index} icon={getIconForCategory(_dataItem)}>
                           {getTileForCategory(_dataItem)}

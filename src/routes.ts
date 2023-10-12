@@ -7,7 +7,6 @@ import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbl
 
 export const routeNames = {
   home: "/",
-  dashboard: "/dashboard",
   unlock: "/unlock",
   mylisted: "/my-listed",
   mywallet: "/my-wallet",
@@ -28,12 +27,6 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.home,
     title: "Home",
     component: Home,
-  },
-  {
-    path: routeNames.dashboard,
-    title: "Dashboard",
-    component: Home,
-    authenticatedRoute: false,
   },
   {
     path: routeNames.mylisted,
