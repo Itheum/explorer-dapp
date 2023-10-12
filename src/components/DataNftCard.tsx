@@ -8,6 +8,7 @@ import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
+import { IFilterData } from "../libComponents/Filter";
 
 export function DataNftCard({
   index,
@@ -20,6 +21,8 @@ export function DataNftCard({
   modalContent,
   modalTitle,
   modalTitleStyle,
+  hasFilter,
+  filterData,
 }: {
   index: number;
   dataNft: DataNft;
@@ -31,6 +34,8 @@ export function DataNftCard({
   modalContent?: JSX.Element;
   modalTitle?: string;
   modalTitleStyle?: string;
+  hasFilter?: boolean;
+  filterData?: Array<IFilterData>;
 }) {
   const {
     network: { explorerAddress },
@@ -114,6 +119,8 @@ export function DataNftCard({
                   }
                   closeOnOverlayClick={false}
                   title={modalTitle ?? ""}
+                  hasFilter={hasFilter ?? false}
+                  filterData={filterData ?? []}
                   titleClassName={modalTitleStyle}>
                   {modalContent}
                 </Modal>

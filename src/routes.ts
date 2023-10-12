@@ -1,7 +1,7 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
+import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
-import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
 import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
 

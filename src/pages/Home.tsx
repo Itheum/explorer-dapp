@@ -16,7 +16,7 @@ const HomePage = () => {
     <HeaderComponent pageTitle={"App Marketplace"} hasImage={false}>
       {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
         <div key={item.routeKey} className="mb-3 w-[341px]">
-          <div className=" mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
+          <div className="  mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
             <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
           </div>
           <h3 className=" !font-[Clash-Medium]">{item.appName}</h3>
