@@ -120,7 +120,7 @@ export const Navbar = () => {
                       }>
                       <NavigationMenuLink>
                         <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">My Wallet Data NFT's</p>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">View RAW Data</p>
                       </NavigationMenuLink>
                     </Link>
                     <div className="flex flex-col p-3">
