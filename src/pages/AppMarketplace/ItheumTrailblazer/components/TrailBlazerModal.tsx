@@ -22,9 +22,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
       // console.log(data.category);
       if (data.category === filter) {
         filteredData.add(data);
-        console.log("da");
       } else {
-        console.log("nu");
         setFilteredData(0);
       }
       setFilteredData(filteredData.size);
