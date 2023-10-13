@@ -17,7 +17,6 @@ export function returnRoute(routeKey: string) {
 export const Home = () => {
   const isLoggedIn = useGetIsLoggedIn();
   const { appVersion, setAppVersion } = useLocalStorageStore();
-  console.log(appVersion);
   const handleLogout = () => {
     logout(`${window.location.origin}`, undefined, false);
   };
