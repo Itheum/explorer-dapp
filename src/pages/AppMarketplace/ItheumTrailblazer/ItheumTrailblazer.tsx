@@ -83,10 +83,8 @@ export const ItheumTrailblazer = () => {
         };
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log(res);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
-        console.log("res", res);
 
         setData(res.data.data.reverse());
         setIsFetchingDataMarshal(false);
