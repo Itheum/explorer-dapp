@@ -8,7 +8,7 @@ import { ArrowBigLeft, Loader2, Play, Pause, Library, RefreshCcwDot, Volume2, Vo
 
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { toastError } from "libs/utils";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
 
 type AudioPlayerProps = {
@@ -123,7 +123,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         }));
         /// if not previously fetched, fetch now and save the url of the blob
         const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
-          mvxNativeAuthOrigins: [window.location.origin],
+          mvxNativeAuthOrigins: nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3000,
 
           fwdHeaderMapLookup: {

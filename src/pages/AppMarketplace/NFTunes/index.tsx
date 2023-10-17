@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import nfTunesBanner from "assets/img/nf-tunes-banner.png";
+import disk from "assets/img/nf-tunes-logo-disk.png";
 import { DataNftCard, Loader } from "components";
+import { AudioPlayer } from "components/AudioPlayer";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { NF_TUNES_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { nativeAuthOrigins, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { HeaderComponent } from "components/Layout/HeaderComponent";
-import nfTunesBanner from "assets/img/nf-tunes-banner.png";
-import disk from "assets/img/nf-tunes-logo-disk.png";
-import { AudioPlayer } from "components/AudioPlayer";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
