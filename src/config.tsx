@@ -69,4 +69,4 @@ export const SUPPORTED_COLLECTIONS =
 export const SUPPORTED_APPS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
     ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes"]
-    : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics"];
+    : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes"];
