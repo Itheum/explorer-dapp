@@ -5,7 +5,7 @@ import { DataNftCard, Loader } from "components";
 import { NF_TUNES_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { toastError } from "libs/utils";
+import { nativeAuthOrigins, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
@@ -103,7 +103,7 @@ export const NFTunes = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: [window.location.origin],
+          mvxNativeAuthOrigins: nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3000,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
