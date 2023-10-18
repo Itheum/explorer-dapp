@@ -29,7 +29,7 @@ export const Filter: React.FC<FilterProps> = (props) => {
             variant="outline"
             className="md:flex hidden border-[1px] border-slate-100/20 text-foreground w-full"
             onClick={() => setIsFilterShown(!isFilterShown)}>
-            All Categories
+            {filter === null ? "All Categories" : filter}
             <ChevronDown className="w-5 h-5 mt-1" />
           </Button>
           <Button variant="ghost" className="md:hidden flex bg-foreground/10 text-foreground w-full" onClick={() => setIsFilterShown(!isFilterShown)}>
