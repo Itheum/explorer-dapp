@@ -61,8 +61,8 @@ export const Navbar = () => {
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
           <img src={theme === "dark" ? darkLogo : theme === "system" && systemTheme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
-          <span className="text-black dark:text-white pl-2 md:text-xl text-base">Itheum</span>
-          <span className="text-black dark:text-white font-semibold md:text-xl text-base">Explorer</span>
+          <span className="text-black dark:!text-white pl-2 md:text-xl text-base">Itheum</span>
+          <span className="text-black dark:!text-white font-semibold md:text-xl text-base">Explorer</span>
         </Link>
       </div>
 
@@ -71,7 +71,7 @@ export const Navbar = () => {
           <NavigationMenuItem>
             <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
               <NavigationMenuLink
-                className={navigationMenuTriggerStyle() + "dark:!text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+                className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
                 Home
               </NavigationMenuLink>
             </Link>
@@ -88,8 +88,8 @@ export const Navbar = () => {
                       "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     }>
                     <NavigationMenuLink>
-                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">{item.appName}</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">{item?.appDescription}</p>
+                      <div className="text-md font-medium leading-none text-foreground">{item.appName}</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5 ">{item?.appDescription}</p>
                     </NavigationMenuLink>
                   </Link>
                 ))}
@@ -120,7 +120,7 @@ export const Navbar = () => {
                       }>
                       <NavigationMenuLink>
                         <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">My Wallet Data NFT's</p>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">View RAW Data</p>
                       </NavigationMenuLink>
                     </Link>
                     <div className="flex flex-col p-3">

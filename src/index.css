@@ -10,17 +10,17 @@ body {
 
 h1,
 h2 {
-  @apply font-[Clash-Medium] text-4xl !important;
+  @apply font-[Clash-Medium] text-4xl text-foreground !important;
 }
 
 h3,
 h4 {
-  @apply font-[Clash-Regular] text-2xl !important;
+  @apply font-[Clash-Regular] text-2xl text-foreground !important;
 }
 
 h5,
 h6 {
-  @apply font-[Clash-Regular] text-lg !important;
+  @apply font-[Clash-Regular] text-lg text-foreground !important;
 }
 
 .filter::placeholder {
@@ -94,6 +94,21 @@ h6 {
 
     --radius: 0.5rem;
   }
+  ::-webkit-scrollbar {
+    @apply w-3;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply rounded-md bg-[#f7f4ed];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-400/90 rounded-lg;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400/70;
+  }
 }
 
 @layer utilities {
@@ -106,16 +121,28 @@ h6 {
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-orange-400/90 rounded-lg;
+    @apply bg-neutral-400/90 rounded-lg;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-orange-400/70;
+    @apply bg-neutral-400/70;
   }
 }
 
+.vertical-timeline {
+  @apply text-foreground !important;
+}
+
+.vertical-timeline-element-content {
+  @apply bg-background shadow-none text-foreground md:p-[1em] p-0 !important;
+}
+
 .vertical-timeline-element-icon {
-  @apply bg-gradient-to-r from-yellow-300 to-orange-500;
+  @apply bg-gradient-to-r from-yellow-300 to-orange-500 text-background;
+}
+
+.vertical-timeline-element-content-arrow {
+  @apply border-r-[7px] border-r-foreground !important;
 }
 
 .vertical-timeline::before {
@@ -124,13 +151,13 @@ h6 {
 
 .dapp-core-component__transactionToast-styles__content,
 .dapp-core-component__customToast-styles__close {
-    @apply text-white bg-ring fill-black !important;
+  @apply text-white bg-ring fill-black !important;
 }
 
 .dapp-core-component__transactionsToastList-styles__toasts,
 .dapp-custom-toast,
 .dapp-core-component__transactionsToastList-styles__toastWrapper {
-    @apply bg-ring fixed bottom-14 right-10 !important;
+  @apply bg-ring fixed bottom-14 right-10 !important;
 }
 
 @layer base {
@@ -139,7 +166,9 @@ h6 {
   }
   body {
     @apply dark:bg-black bg-slate-50 text-foreground !important;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
 

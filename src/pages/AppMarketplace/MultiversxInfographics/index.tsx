@@ -6,7 +6,7 @@ import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
-import { MULTIVERSX_INFOGRAPHICS_NONCES } from "config";
+import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { nativeAuthOrigins, toastError } from "libs/utils";
@@ -42,7 +42,6 @@ export const MultiversxInfographics = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -60,22 +59,12 @@ export const MultiversxInfographics = () => {
     }
   }, [isLoading, address]);
 
-  function openModal() {
-    setIsModalOpened(true);
-  }
-
-  function closeModal() {
-    setIsModalOpened(false);
-    setViewDataRes(undefined);
-    setFile(null);
-    setNumPages(0);
-    setPageNumber(1);
-  }
-
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_INFOGRAPHICS_NONCES.map((v) => ({ nonce: v })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      MULTIVERSX_INFOGRAPHICS_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier }))
+    );
     setDataNfts(_nfts);
 
     setIsLoading(false);
@@ -105,7 +94,6 @@ export const MultiversxInfographics = () => {
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
-        openModal();
 
         const dataNft = dataNfts[index];
         let res: any;
@@ -144,13 +132,10 @@ export const MultiversxInfographics = () => {
 
         setViewDataRes(viewDataPayload);
         setIsFetchingDataMarshal(false);
-      } else {
-        openModal();
       }
     } catch (err) {
       console.error(err);
       toastError((err as Error).message);
-      closeModal();
       setIsFetchingDataMarshal(false);
     }
   }

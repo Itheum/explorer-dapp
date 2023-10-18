@@ -1,13 +1,12 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
+import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
-import { ItheumTrailblazer } from "pages/ItheumTrailblazer";
 import { withPageTitle } from "./components/PageTitle";
 import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
 
 export const routeNames = {
   home: "/",
-  dashboard: "/dashboard",
   unlock: "/unlock",
   mylisted: "/my-listed",
   mywallet: "/my-wallet",
@@ -28,12 +27,6 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.home,
     title: "Home",
     component: Home,
-  },
-  {
-    path: routeNames.dashboard,
-    title: "Dashboard",
-    component: Home,
-    authenticatedRoute: false,
   },
   {
     path: routeNames.mylisted,
