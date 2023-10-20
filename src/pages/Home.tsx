@@ -21,12 +21,12 @@ export const Home = () => {
     logout(`${window.location.origin}`, undefined, false);
   };
 
-  useEffect(() => {
-    if (isLoggedIn && appVersion !== localStorage.getItem("app-version")) {
-      localStorage.setItem("app-version", appVersion ?? "");
-      handleLogout();
-    }
-  }, [appVersion]);
+  // useEffect(() => {
+  //   if (isLoggedIn && appVersion !== localStorage.getItem("app-version")) {
+  //     localStorage.setItem("app-version", appVersion ?? "");
+  //     handleLogout();
+  //   }
+  // }, [appVersion]);
 
   return (
     <HeaderComponent pageTitle={"App Marketplace"} hasImage={false}>
