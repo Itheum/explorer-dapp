@@ -61,7 +61,7 @@ const UnlockPage = () => {
           <div className=" py-5 px-2 px-sm-2 mx-lg-4">
             <h4 className="mb-4 font-weight-bold">Login</h4>
 
-            <div className="d-flex flex-column" style={{ minWidth: "20rem", gap: "1rem" }}>
+            <div className="flex flex-col min-w-[20rem] gap-4">
               <WalletConnectLoginButton loginButtonText="xPortal App" {...commonProps} {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})} />
               <ExtensionLoginButton loginButtonText="DeFi Wallet" {...commonProps} />
 

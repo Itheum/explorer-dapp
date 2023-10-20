@@ -6,7 +6,7 @@ export const Footer = () => {
   const appVersion = process.env.REACT_APP_VERSION ? `v${process.env.REACT_APP_VERSION}` : "version number unknown";
 
   return (
-    <footer className="text-center mt-2 mb-3">
+    <footer className="w-full flex justify-center mt-2 mb-3">
       <div>
         <a
           {...{
@@ -14,7 +14,7 @@ export const Footer = () => {
           }}
           className="flex items-center dark:text-white text-black"
           href="https://itheum.com">
-          Made with <HeartIcon className="mx-1" /> by Itheum
+          Made with <HeartIcon className="mx-1 text-foreground" /> by Itheum
         </a>
         <div>
           <small>{appVersion}</small>
