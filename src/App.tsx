@@ -7,7 +7,7 @@ import {
 } from "components";
 import { TransactionsToastList, NotificationModal, SignTransactionsModals } from "components";
 import { apiTimeout, walletConnectV2ProjectId, sampleAuthenticatedDomains, ELROND_NETWORK } from "config";
-import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock } from "pages";
+import { BlenderDataNft, MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock } from "pages";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { routes, routeNames } from "routes";
@@ -44,6 +44,7 @@ export const App = () => {
                   <Route path={`${routeNames.multiversxbubbles}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxBubbles />} />
                   <Route path={`${routeNames.multiversxinfographics}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxInfographics />} />
                   <Route path={`${routeNames.nftunes}/:targetNonce/:targetMessageToBeSigned`} element={<NFTunes />} />
+                  <Route path={`${routeNames.blendnft}/:targetNonce/:targetMessageToBeSigned`} element={<BlenderDataNft />} />
 
                   <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                   <Route path="*" element={<PageNotFound />} />

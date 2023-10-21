@@ -5,8 +5,8 @@ import { Loader } from "components";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { Button } from "../../../../libComponents/Button";
 import { Modal } from "../../../../components/Modal/Modal";
-import { Card, CardHeader } from "../../../../libComponents/Card";
-import { ChevronDown, ShoppingCart } from "lucide-react";
+import { Card } from "../../../../libComponents/Card";
+import { ShoppingCart } from "lucide-react";
 import { useFilterStore } from "../../../../store/FilterStore";
 import { NoDataFound } from "../../../../components/NoDataFound";
 

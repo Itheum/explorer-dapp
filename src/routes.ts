@@ -4,6 +4,7 @@ import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/Itheum
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { withPageTitle } from "./components/PageTitle";
 import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
+import { BlenderDataNft } from "./pages/AppMarketplace/BlendNFT/BlenderDataNft";
 
 export const routeNames = {
   home: "/",
@@ -16,6 +17,7 @@ export const routeNames = {
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
   nftunes: "/nftunes",
+  blendnft: "/blendnft",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -74,6 +76,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.nftunes,
     title: "NFTunes",
     component: NFTunes,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.blendnft,
+    title: "Blend your NFT",
+    component: BlenderDataNft,
     authenticatedRoute: false,
   },
 ];

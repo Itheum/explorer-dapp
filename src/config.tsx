@@ -45,6 +45,10 @@ export const NF_TUNES_TOKENS =
         { tokenIdentifier: "DATANFTFT4-3ba099", nonce: 529 },
       ]
     : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
+export const BLEND_NFT_TOKENS =
+  process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
+    ? [{ tokenIdentifier: "DATANFTFT4-3ba099", nonce: 606 }]
+    : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
 
 export const CC_SHOW_SIZE = 10;
 export const PLAYSTATION_GAMER_PASSPORT_TOKENS = [
