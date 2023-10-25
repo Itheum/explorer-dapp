@@ -87,7 +87,7 @@ export const Navbar = () => {
                       "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     }>
                     <div className="text-md font-medium leading-none text-foreground">{item.appName}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5 ">{item?.appDescription}</p>
+                    <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5 ">{item?.appDescription}</p>
                   </Link>
                 ))}
               </ul>
@@ -105,7 +105,7 @@ export const Navbar = () => {
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
                       <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
+                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
                     </Link>
                     <Link
                       to={routeNames.mywallet}
@@ -114,7 +114,7 @@ export const Navbar = () => {
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
                       <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">View RAW Data</p>
+                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">View RAW Data</p>
                     </Link>
                     <div className="flex flex-col p-3">
                       <p className="text-sm font-medium leading-none dark:text-slate-100 pb-0.5">My Address Quick Copy</p>
@@ -125,7 +125,7 @@ export const Navbar = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-                  <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                  <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                     <Button
                       className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide !text-lg"
                       variant="outline"
@@ -139,7 +139,7 @@ export const Navbar = () => {
           ) : (
             <NavigationMenuItem>
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
                     className="bg-background text-foreground hover:bg-background/90 border-0 rounded-lg font-medium tracking-wide !text-lg"
                     variant="outline">
@@ -160,9 +160,9 @@ export const Navbar = () => {
           <div className="flex flex-row">
             {isLoggedIn ? (
               <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
-                    className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide"
                     variant="outline"
                     size="sm"
                     onClick={handleLogout}>
@@ -172,9 +172,9 @@ export const Navbar = () => {
               </Link>
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
-                    className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide"
                     variant="outline">
                     Login
                   </Button>
@@ -192,7 +192,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               <Link to={routeNames.home}>
                 <DropdownMenuItem>
-                  <Home className="pr-2 h-4 w-4" />
+                  <Home className="mr-2 h-4 w-4" />
                   <span>Home</span>
                 </DropdownMenuItem>
               </Link>
@@ -205,7 +205,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                 <Link to={returnRoute(item.routeKey)} key={item.routeKey}>
-                  <DropdownMenuItem>{item?.appName}</DropdownMenuItem>
+                  <DropdownMenuItem className="text-foreground/50">{item?.appName}</DropdownMenuItem>
                 </Link>
               ))}
             </DropdownMenuGroup>
@@ -218,10 +218,10 @@ export const Navbar = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <Link to={routeNames.mylisted}>
-                    <DropdownMenuItem>Listed data</DropdownMenuItem>
+                    <DropdownMenuItem className="text-foreground/50">Listed data</DropdownMenuItem>
                   </Link>
                   <Link to={routeNames.mywallet}>
-                    <DropdownMenuItem>Wallet</DropdownMenuItem>
+                    <DropdownMenuItem className="!text-foreground/50">Wallet</DropdownMenuItem>
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuLabel>My Address Quick Copy</DropdownMenuLabel>

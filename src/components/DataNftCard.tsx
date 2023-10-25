@@ -52,7 +52,7 @@ export function DataNftCard({
             <img className="" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
           </div>
 
-          <div className="h-[220px]">
+          <div className="h-[15rem]">
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6">Title:</span>
               <span className="col-span-8 text-left">{dataNft.title}</span>
@@ -98,15 +98,17 @@ export function DataNftCard({
           </div>
 
           <div className="">
-            {!isWallet && (
-              <div className="mt-3 text-center">
+            {!isWallet ? (
+              <div className="pt-5 pb-3 text-center">
                 <h6 className="font-weight-bold" style={{ visibility: owned ? "visible" : "hidden" }}>
                   You have this Data NFT
                 </h6>
               </div>
+            ) : (
+              <div></div>
             )}
 
-            <CardFooter className="flex w-full justify-center mt-3 pb-2 text-center">
+            <CardFooter className="flex w-full justify-center pb-2 text-center">
               {owned ? (
                 <Modal
                   openTrigger={

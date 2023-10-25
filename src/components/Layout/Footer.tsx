@@ -14,11 +14,11 @@ export const Footer = () => {
           }}
           className="flex items-center dark:text-white text-black"
           href="https://itheum.com">
-          Made with <HeartIcon className="mx-1 text-foreground" /> by Itheum
+          Made with ♥ by Itheum
         </a>
-        <div>
+        <div className="text-center">
           <small>{appVersion}</small>
-          <small className="ml-1">{ELROND_NETWORK.toUpperCase()}</small>
+          <small className="">{ELROND_NETWORK.toUpperCase()}</small>
         </div>
       </div>
     </footer>
