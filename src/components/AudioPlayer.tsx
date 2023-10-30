@@ -16,12 +16,11 @@ type AudioPlayerProps = {
   songs: any;
   tokenLogin: any;
 };
-
 export const AudioPlayer = (props: AudioPlayerProps) => {
   useEffect(() => {
-    audio.onended = function () {
-      setIsPlaying(false);
-    };
+    audio.addEventListener("ended", function () {
+      setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < props.songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
+    });
     audio.addEventListener("timeupdate", updateProgress);
     audio.addEventListener("canplaythrough", function () {
       // Audio is ready to be played
