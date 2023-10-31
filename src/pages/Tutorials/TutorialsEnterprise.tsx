@@ -61,6 +61,21 @@ export const TutorialsEnterprise = () => {
     setLoading(false);
   }
 
+  async function _enterpriseViewMetaData() {
+    setLoading(true);
+    setSdkResponses(null);
+
+    const taxPercentage = await factory.viewTaxPercentage();
+    const treasuryAddress = await factory.viewTreasuryAddress();
+    const claimsContractAddress = await factory.viewClaimsContractAddress();
+    const claimsTokenIdentifier = await factory.viewClaimsTokenIdentifier();
+
+    setSdkResponses(
+      `taxPercentage = ${taxPercentage} treasuryAddress = ${treasuryAddress} claimsContractAddress = ${claimsContractAddress}  claimsTokenIdentifier = ${claimsTokenIdentifier}`
+    );
+    setLoading(false);
+  }
+
   async function _enterpriseShowAvailableMinterVersions() {
     setLoading(true);
     setSdkResponses(null);
@@ -628,7 +643,7 @@ export const TutorialsEnterprise = () => {
       await refreshAccount();
 
       // Note: if the transaction fails due to gas limit you can apply your own gas limit before signing.
-      // txToIssue.setGasLimit(100000000);
+      txToIssue.setGasLimit(100000000);
 
       const { sessionId, error } = await sendTransactions({
         transactions: txToIssue,
@@ -920,6 +935,16 @@ main()
                   If whitelisting is required then you need to be explicitly whitelisted, check that here.
                 </Tooltip>
                 <span className="my-ptr-2">Is my address whitelisted? </span>
+              </div>
+
+              <div className="p-2">
+                <button className="btn btn-outline-primary mr-3" onClick={_enterpriseViewMetaData}>
+                  Lookup
+                </button>
+                <Tooltip anchorSelect=".my-ptr-2" place="top">
+                  If whitelisting is required then you need to be explicitly whitelisted, check that here.
+                </Tooltip>
+                <span className="my-ptr-2">Show me tax percentage, treasury address, claims contract address and claims token identifier? </span>
               </div>
 
               <div className="p-2">
