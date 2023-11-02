@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { TRAILBLAZER_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader } from "components";
-import { TRAILBLAZER_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { nativeAuthOrigins, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";

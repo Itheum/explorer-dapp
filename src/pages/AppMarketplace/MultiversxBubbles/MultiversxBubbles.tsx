@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { MULTIVERSX_BUBBLE_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader } from "components";
-import { MULTIVERSX_BUBBLE_TOKENS } from "config";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { ZoomableSvg } from "components/ZoomableSvg";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { Button } from "libComponents/Button";
 import { BlobDataType } from "libs/types";
 import { nativeAuthOrigins, toastError } from "libs/utils";
-import { HeaderComponent } from "components/Layout/HeaderComponent";
-import { Button } from "libComponents/Button";
-import { ZoomableSvg } from "components/ZoomableSvg";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
