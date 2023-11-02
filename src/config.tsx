@@ -17,7 +17,7 @@ export const dAppName = "Itheum Explorer";
 export const TRAILBLAZER_TOKENS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
     ? [
-        // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 407 },
+        { tokenIdentifier: "DATANFTFT-e0b917", nonce: 1 },
         // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 423 },
         // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 453 },
       ]
@@ -32,7 +32,7 @@ export const MULTIVERSX_BUBBLE_TOKENS =
 export const MULTIVERSX_INFOGRAPHICS_TOKENS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
     ? [
-        // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 469 },
+        { tokenIdentifier: "DATANFTFT-e0b917", nonce: 3 },
         // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 476 },
         // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 480 },
         // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 490 },
@@ -41,7 +41,7 @@ export const MULTIVERSX_INFOGRAPHICS_TOKENS =
 export const NF_TUNES_TOKENS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
     ? [
-        // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 527 },
+        { tokenIdentifier: "DATANFTFT-e0b917", nonce: 2 },
         // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 529 },
       ]
     : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
