@@ -39,7 +39,7 @@ export const MyWallet = () => {
 
     const _dataNfts = [];
     for (const collection of SUPPORTED_COLLECTIONS) {
-      const nfts = await DataNft.ownedByAddress(address, collection);
+      const nfts = await DataNft.ownedByAddress(address, [collection]);
       _dataNfts.push(...nfts);
     }
     setDataNftCount(_dataNfts.length);
