@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { SUPPORTED_APPS } from "config";
+import { SUPPORTED_APPS } from "appsConfig";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { logout } from "../helpers";
+import { useGetIsLoggedIn } from "../hooks";
 import { Button } from "../libComponents/Button";
 import { useLocalStorageStore } from "../store/LocalStorageStore.ts";
-import { useGetIsLoggedIn } from "../hooks";
-import { logout } from "../helpers";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
