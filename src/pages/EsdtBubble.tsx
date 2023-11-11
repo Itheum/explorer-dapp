@@ -236,7 +236,7 @@ export const EsdtBubble = () => {
 
       const arg = {
         mvxNativeAuthOrigins: nativeAuthOrigins(),
-        mvxNativeAuthMaxExpirySeconds: 3000,
+        mvxNativeAuthMaxExpirySeconds: 3600,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
         },

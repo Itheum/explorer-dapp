@@ -124,7 +124,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         /// if not previously fetched, fetch now and save the url of the blob
         const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
           mvxNativeAuthOrigins: nativeAuthOrigins(),
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthMaxExpirySeconds: 3600,
 
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,
