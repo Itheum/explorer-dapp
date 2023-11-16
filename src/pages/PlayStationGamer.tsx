@@ -5,13 +5,13 @@ import { ModalBody } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
+import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
 import { DataNftCard, Loader } from "components";
-import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
 import { nativeAuthOrigins, toastError } from "libs/utils";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import PlaystationGamerInsights from "./PlaystationGamerInsights";
+import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 export const PlayStationGamer = () => {
   const { address } = useGetAccount();

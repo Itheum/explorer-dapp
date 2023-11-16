@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SUPPORTED_APPS } from "appsConfig";
 import lightLogo from "assets/img/logo-icon-b.png";
 import darkLogo from "assets/img/logo-sml-d.png";
 import { CopyAddress } from "components/CopyAddress";
-import { SUPPORTED_APPS } from "config";
 import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
+import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
 import {
   DropdownMenu,
@@ -30,7 +31,6 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
-import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -69,11 +69,10 @@ export const Navbar = () => {
       <NavigationMenu className="md:!inline !hidden z-0">
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-              <NavigationMenuLink
-                className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
-                Home
-              </NavigationMenuLink>
+            <Link
+              to={isLoggedIn ? routeNames.home : routeNames.home}
+              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+              Home
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
@@ -87,10 +86,8 @@ export const Navbar = () => {
                     className={
                       "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     }>
-                    <NavigationMenuLink>
-                      <div className="text-md font-medium leading-none text-foreground">{item.appName}</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5 ">{item?.appDescription}</p>
-                    </NavigationMenuLink>
+                    <div className="text-md font-medium leading-none text-foreground">{item.appName}</div>
+                    <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5 ">{item?.appDescription}</p>
                   </Link>
                 ))}
               </ul>
@@ -107,10 +104,8 @@ export const Navbar = () => {
                       className={
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
-                      <NavigationMenuLink>
-                        <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
-                      </NavigationMenuLink>
+                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
                     </Link>
                     <Link
                       to={routeNames.mywallet}
@@ -118,10 +113,8 @@ export const Navbar = () => {
                       className={
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
-                      <NavigationMenuLink>
-                        <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">View RAW Data</p>
-                      </NavigationMenuLink>
+                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">View RAW Data</p>
                     </Link>
                     <div className="flex flex-col p-3">
                       <p className="text-sm font-medium leading-none dark:text-slate-100 pb-0.5">My Address Quick Copy</p>
@@ -190,7 +183,7 @@ export const Navbar = () => {
             )}
             <SwitchButton />
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="!pl-0">
+              <Button variant="ghost" size="icon" className="mr-2">
                 <Menu />
               </Button>
             </DropdownMenuTrigger>
@@ -199,7 +192,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               <Link to={routeNames.home}>
                 <DropdownMenuItem>
-                  <Home className="mr-2 h-4 w-4" />
+                  <Home className="pr-2 h-4 w-4" />
                   <span>Home</span>
                 </DropdownMenuItem>
               </Link>

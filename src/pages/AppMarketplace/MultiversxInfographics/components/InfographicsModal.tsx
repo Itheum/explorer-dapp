@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Loader } from "../../../../components";
-import { Button } from "../../../../libComponents/Button";
-import { Document, Page } from "react-pdf";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { PDFDocumentProxy } from "pdfjs-dist";
-import { sleep } from "../../../../libs/utils/legacyUtil";
-import { Address, SignableMessage } from "@multiversx/sdk-core/out";
-import { routeNames } from "../../../../routes";
-import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "../../../../config";
-import { toastError } from "../../../../libs/utils";
-import { BlobDataType } from "../../../../libs/types";
-import { useGetAccount, useGetPendingTransactions } from "../../../../hooks";
-import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
-import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
-import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
-import { useNavigate, useParams } from "react-router-dom";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
+import { Address, SignableMessage } from "@multiversx/sdk-core/out";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLastSignedMessageSession } from "@multiversx/sdk-dapp/hooks/signMessage/useGetLastSignedMessageSession";
+import { useGetSignMessageInfoStatus } from "@multiversx/sdk-dapp/hooks/signMessage/useGetSignedMessageStatus";
+import { useSignMessage } from "@multiversx/sdk-dapp/hooks/signMessage/useSignMessage";
+import { PDFDocumentProxy } from "pdfjs-dist";
+import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
+import { useNavigate, useParams } from "react-router-dom";
+import { Loader } from "../../../../components";
+import { useGetAccount, useGetPendingTransactions } from "../../../../hooks";
+import { Button } from "../../../../libComponents/Button";
+import { BlobDataType } from "../../../../libs/types";
+import { toastError } from "../../../../libs/utils";
+import { sleep } from "../../../../libs/utils/legacyUtil";
+import { routeNames } from "../../../../routes";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
