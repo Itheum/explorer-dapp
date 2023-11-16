@@ -9,7 +9,7 @@ import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -62,7 +62,7 @@ export const MyWallet = () => {
     }
 
     const arg = {
-      mvxNativeAuthOrigins: nativeAuthOrigins(),
+      mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
       mvxNativeAuthMaxExpirySeconds: 3600,
       fwdHeaderMapLookup: {
         "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,

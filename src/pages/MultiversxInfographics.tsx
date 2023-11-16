@@ -12,7 +12,7 @@ import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -77,6 +77,7 @@ export const MultiversxInfographics = () => {
   }
 
   async function viewData(index: number) {
+    console.log("data");
     try {
       if (!(index >= 0 && index < dataNfts.length)) {
         toastError("Data is not loaded");
@@ -97,7 +98,7 @@ export const MultiversxInfographics = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
           mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,

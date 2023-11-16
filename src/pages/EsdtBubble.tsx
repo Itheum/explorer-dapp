@@ -15,7 +15,7 @@ import Modal from "react-modal";
 import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
 import { MAINNET_EXPLORER_ADDRESS } from "config";
 import { modalStyles } from "libs/ui";
-import { convertWeiToEsdt, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
+import { convertWeiToEsdt, decodeNativeAuthToken, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { ESDT_BUBBLE_TOKENS } from "appsConfig";
 
@@ -235,7 +235,7 @@ export const EsdtBubble = () => {
       }
 
       const arg = {
-        mvxNativeAuthOrigins: nativeAuthOrigins(),
+        mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
         mvxNativeAuthMaxExpirySeconds: 3600,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,

@@ -9,7 +9,7 @@ import { ZoomableSvg } from "components/ZoomableSvg";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType } from "libs/types";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -82,7 +82,7 @@ export const MultiversxBubbles = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
           mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,

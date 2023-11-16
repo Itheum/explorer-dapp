@@ -102,13 +102,13 @@ export const MultiversxInfographics = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
+          : nativeAuthOrigins(),
           mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-
+        console.log("arg", arg);
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
         let blobDataType = BlobDataType.TEXT;

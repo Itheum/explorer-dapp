@@ -9,7 +9,7 @@ import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import PlaystationGamerInsights from "./PlaystationGamerInsights";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
@@ -93,7 +93,7 @@ export const PlayStationGamer = () => {
       }
 
       const arg = {
-        mvxNativeAuthOrigins: nativeAuthOrigins(),
+        mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
         mvxNativeAuthMaxExpirySeconds: 3600,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
