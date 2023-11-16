@@ -9,7 +9,7 @@ import { AudioPlayer } from "components/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
@@ -103,7 +103,7 @@ export const NFTunes = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
           mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
