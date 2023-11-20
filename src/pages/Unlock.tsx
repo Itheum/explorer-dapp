@@ -33,14 +33,6 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
 const UnlockPage = () => {
   const location = useLocation();
   const { chainID } = useGetNetworkConfig();
-  const isLoggedIn = useGetIsLoggedIn();
-  const { appVersion } = useLocalStorageStore();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      localStorage.setItem("app-version", appVersion ?? "");
-    }
-  }, [appVersion]);
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
@@ -64,8 +56,6 @@ const UnlockPage = () => {
             <div className="d-flex flex-column" style={{ minWidth: "20rem", gap: "1rem" }}>
               <WalletConnectLoginButton loginButtonText="xPortal App" {...commonProps} {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})} />
               <ExtensionLoginButton loginButtonText="DeFi Wallet" {...commonProps} />
-
-              <OperaWalletLoginButton loginButtonText="Opera Crypto Wallet" {...commonProps} />
 
               <WebWalletLoginButton loginButtonText="Web Wallet" {...commonProps} />
               <LedgerLoginButton loginButtonText="Ledger" className="test-class_name" {...commonProps} />

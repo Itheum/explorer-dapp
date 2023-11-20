@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { TRAILBLAZER_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader } from "components";
-import { TRAILBLAZER_TOKENS } from "config";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { nativeAuthOrigins, toastError } from "libs/utils";
-import "react-vertical-timeline-component/style.min.css";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import "react-vertical-timeline-component/style.min.css";
 import { TrailBlazerModal } from "./components/TrailBlazerModal";
 
 export const ItheumTrailblazer = () => {
@@ -75,7 +75,7 @@ export const ItheumTrailblazer = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
           mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,

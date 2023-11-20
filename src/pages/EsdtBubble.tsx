@@ -13,10 +13,11 @@ import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
-import { ESDT_BUBBLE_TOKENS, MAINNET_EXPLORER_ADDRESS } from "config";
+import { MAINNET_EXPLORER_ADDRESS } from "config";
 import { modalStyles } from "libs/ui";
-import { convertWeiToEsdt, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
+import { convertWeiToEsdt, decodeNativeAuthToken, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { ESDT_BUBBLE_TOKENS } from "appsConfig";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, zoomPlugin);
 
@@ -234,7 +235,7 @@ export const EsdtBubble = () => {
       }
 
       const arg = {
-        mvxNativeAuthOrigins: nativeAuthOrigins(),
+        mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
         mvxNativeAuthMaxExpirySeconds: 3600,
         fwdHeaderMapLookup: {
           "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
