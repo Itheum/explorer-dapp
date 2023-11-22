@@ -62,7 +62,7 @@ export const Navbar = () => {
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
           <img src={theme === "dark" ? darkLogo : theme === "system" && systemTheme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
           <span className="text-black dark:!text-white pl-2 md:text-xl text-base">Itheum</span>
-          <span className="text-black dark:!text-white font-semibold md:text-xl text-base">Explorer</span>
+          <span className="text-black dark:!text-white font-semibold md:text-xl text-base">&nbsp;Explorer</span>
         </Link>
       </div>
 
@@ -76,7 +76,7 @@ export const Navbar = () => {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>App Marketplace</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Data Widget Marketplace</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
@@ -199,7 +199,7 @@ export const Navbar = () => {
             </DropdownMenuGroup>
             <DropdownMenuLabel className="flex flex-row items-center">
               <Store className="mr-2 h-4 w-4" />
-              <span>App Marketplace</span>
+              <span>Data Widget Marketplace</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
