@@ -147,7 +147,7 @@ export const MyWallet = () => {
                     <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
                     original file (at your own risk). <br />
                     <br />
-                    Alternatively, <strong>as the safest option, only use official apps in the App Marketplace</strong> (accessible via the Header Menu in this
+                    Alternatively, <strong>as the safest option, only use official apps in the Data Widget Marketplace</strong> (accessible via the Header Menu in this
                     Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
                   </div>
                 )}

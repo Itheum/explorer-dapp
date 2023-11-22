@@ -284,7 +284,7 @@ export const PlayStationGamer = () => {
   console.log("activeGamerData", activeGamerData);
 
   return (
-    <HeaderComponent pageTitle={"PlayStation Gamer Passport"} hasImage={false} pageSubtitle={"Data NFTs that Unlock this App"} dataNftCount={ccDataNfts.length}>
+    <HeaderComponent pageTitle={"PlayStation Gamer Passport"} hasImage={false} pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"} dataNftCount={ccDataNfts.length}>
       {ccDataNfts.length > 0 ? (
         ccDataNfts.map((dataNft, index) => (
           <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />

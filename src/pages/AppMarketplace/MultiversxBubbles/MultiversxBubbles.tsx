@@ -145,7 +145,7 @@ export const MultiversxBubbles = () => {
       hasImage={true}
       imgSrc={headerHero}
       altImageAttribute={"bubbleMap"}
-      pageSubtitle={"Data NFTs that Unlock this App"}
+      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (
