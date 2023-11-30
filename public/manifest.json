@@ -3,12 +3,12 @@
   "name": "Itheum Explorer",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo32.png",
       "sizes": "32x32",
       "type": "image/x-icon"
     },
     {
-      "src": "favicon-16x16.png",
+      "src": "logo16.png",
       "sizes": "16x16",
       "type": "image/x-icon"
     },
