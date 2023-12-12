@@ -3,6 +3,7 @@ import { Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import lightLogo from "assets/img/logo-icon-b.png";
 import darkLogo from "assets/img/logo-sml-d.png";
+import logo192 from "assets/img/logo192.png";
 import { CopyAddress } from "components/CopyAddress";
 import { SUPPORTED_APPS } from "config";
 import { logout } from "helpers";
@@ -24,7 +25,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
@@ -60,8 +60,8 @@ export const Navbar = () => {
     <div className="flex flex-row justify-between items-center 2xl:mx-[19.5rem] xl:mx-[7.5rem] md:mx-[3.5rem] h-20">
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
-          <img src={theme === "dark" ? darkLogo : theme === "system" && systemTheme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
-          <span className="text-black dark:!text-white pl-2 md:text-xl text-base">Itheum</span>
+          <img src={logo192} className="w-[5rem]" />
+          <span className="text-black dark:!text-white md:text-xl text-base">Itheum</span>
           <span className="text-black dark:!text-white font-semibold md:text-xl text-base">Explorer</span>
         </Link>
       </div>
