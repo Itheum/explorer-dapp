@@ -37,7 +37,7 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
 export const PLAYSTATION_GAMER_PASSPORT_TOKENS: app_token[] = [
-  // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 379 },
+  { tokenIdentifier: "DATANFTFT-e0b917", nonce: 24 },
   // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 380 },
 ];
 export const ESDT_BUBBLE_TOKENS: app_token[] = [
