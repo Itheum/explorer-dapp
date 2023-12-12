@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { DataNftCard, Loader } from "components";
-import { NF_TUNES_TOKENS } from "config";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType } from "libs/types";
-import { nativeAuthOrigins, toastError } from "libs/utils";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
-import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { NF_TUNES_TOKENS } from "appsConfig";
 import nfTunesBanner from "assets/img/nf-tunes-banner.png";
 import disk from "assets/img/nf-tunes-logo-disk.png";
+import { DataNftCard, Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { BlobDataType } from "libs/types";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -103,8 +103,8 @@ export const NFTunes = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
+          mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
@@ -148,7 +148,7 @@ export const NFTunes = () => {
       imgSrc={nfTunesBanner}
       animation={imgAnimation}
       altImageAttribute={"NF-Tunes application"}
-      pageSubtitle={"Data NFTs that Unlock this App"}
+      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (

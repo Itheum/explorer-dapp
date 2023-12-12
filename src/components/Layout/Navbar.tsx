@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SUPPORTED_APPS } from "appsConfig";
 import lightLogo from "assets/img/logo-icon-b.png";
 import darkLogo from "assets/img/logo-sml-d.png";
 import logo192 from "assets/img/logo192.png";
 import { CopyAddress } from "components/CopyAddress";
-import { SUPPORTED_APPS } from "config";
 import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { APP_MAPPINGS } from "libs/utils/constant";
@@ -30,7 +30,6 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
-import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -76,7 +75,7 @@ export const Navbar = () => {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>App Marketplace</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Data Widget Marketplace</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
@@ -199,7 +198,7 @@ export const Navbar = () => {
             </DropdownMenuGroup>
             <DropdownMenuLabel className="flex flex-row items-center">
               <Store className="mr-2 h-4 w-4" />
-              <span>App Marketplace</span>
+              <span>Data Widget Marketplace</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>

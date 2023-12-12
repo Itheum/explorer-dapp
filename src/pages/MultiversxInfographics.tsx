@@ -6,13 +6,13 @@ import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
+import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
-import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { modalStylesFull } from "libs/ui";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -77,6 +77,7 @@ export const MultiversxInfographics = () => {
   }
 
   async function viewData(index: number) {
+    console.log("data");
     try {
       if (!(index >= 0 && index < dataNfts.length)) {
         toastError("Data is not loaded");
@@ -97,8 +98,8 @@ export const MultiversxInfographics = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
+          mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
@@ -174,7 +175,7 @@ export const MultiversxInfographics = () => {
       hasImage={true}
       imgSrc={headerHero}
       altImageAttribute={"mvxInfographics"}
-      pageSubtitle={"Data NFTs that Unlock this App"}
+      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (

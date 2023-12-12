@@ -9,7 +9,7 @@ import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -38,10 +38,8 @@ export const MyWallet = () => {
     setIsLoading(true);
 
     const _dataNfts = [];
-    for (const collection of SUPPORTED_COLLECTIONS) {
-      const nfts = await DataNft.ownedByAddress(address, [collection]);
-      _dataNfts.push(...nfts);
-    }
+    const nfts = await DataNft.ownedByAddress(address, SUPPORTED_COLLECTIONS);
+    _dataNfts.push(...nfts);
     setDataNftCount(_dataNfts.length);
     setDataNfts(_dataNfts);
 
@@ -64,8 +62,8 @@ export const MyWallet = () => {
     }
 
     const arg = {
-      mvxNativeAuthOrigins: nativeAuthOrigins(),
-      mvxNativeAuthMaxExpirySeconds: 3000,
+      mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
+      mvxNativeAuthMaxExpirySeconds: 3600,
       fwdHeaderMapLookup: {
         "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
       },
@@ -149,7 +147,7 @@ export const MyWallet = () => {
                     <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
                     original file (at your own risk). <br />
                     <br />
-                    Alternatively, <strong>as the safest option, only use official apps in the App Marketplace</strong> (accessible via the Header Menu in this
+                    Alternatively, <strong>as the safest option, only use official apps in the Data Widget Marketplace</strong> (accessible via the Header Menu in this
                     Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
                   </div>
                 )}

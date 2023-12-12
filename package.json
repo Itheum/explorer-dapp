@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer is a DApp for the public to explore and visualize data within the Itheum protocol",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -17,7 +17,6 @@
     "@radix-ui/react-navigation-menu": "1.1.4",
     "@radix-ui/react-slot": "1.0.2",
     "@radix-ui/react-switch": "1.0.3",
-    "@types/react-modal": "3.16.1",
     "axios": "1.6.1",
     "bootstrap": "4.6.2",
     "chart.js": "4.4.0",
@@ -29,7 +28,7 @@
     "lucide-react": "0.292.0",
     "moment": "2.29.4",
     "moment-timezone": "0.5.43",
-    "node": "18.18.0",
+    "node": "18.18.2",
     "react": "18.2.0",
     "react-bootstrap": "2.9.0",
     "react-calendar-heatmap": "1.9.0",
@@ -53,9 +52,10 @@
     "zustand": "4.4.6"
   },
   "scripts": {
-    "start": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-app-rewired start",
-    "winStart": "set \"REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version')\" && react-app-rewired start",
-    "build": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-app-rewired build",
+    "start": "REACT_APP_VERSION=$npm_package_version react-app-rewired start",
+    "build": "REACT_APP_VERSION=$npm_package_version react-app-rewired build",
+    "winStart": "cross-env REACT_APP_VERSION=$npm_package_version react-app-rewired start",
+    "winBuild": "cross-env REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext js,ts,tsx src"

@@ -8,7 +8,7 @@ import { ArrowBigLeft, Loader2, Play, Pause, Library, RefreshCcwDot, Volume2, Vo
 
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
 
 type AudioPlayerProps = {
@@ -16,12 +16,11 @@ type AudioPlayerProps = {
   songs: any;
   tokenLogin: any;
 };
-
 export const AudioPlayer = (props: AudioPlayerProps) => {
   useEffect(() => {
-    audio.onended = function () {
-      setIsPlaying(false);
-    };
+    audio.addEventListener("ended", function () {
+      setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < props.songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
+    });
     audio.addEventListener("timeupdate", updateProgress);
     audio.addEventListener("canplaythrough", function () {
       // Audio is ready to be played
@@ -123,8 +122,8 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         }));
         /// if not previously fetched, fetch now and save the url of the blob
         const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
-          mvxNativeAuthOrigins: [window.location.origin],
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(props.tokenLogin.nativeAuthToken).origin],
+          mvxNativeAuthMaxExpirySeconds: 3600,
 
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,

@@ -4,12 +4,12 @@ import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
+import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
-import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "./MultiversxInfographics.scss";
@@ -102,13 +102,13 @@ export const MultiversxInfographics = () => {
         }
 
         const arg = {
-          mvxNativeAuthOrigins: nativeAuthOrigins(),
-          mvxNativeAuthMaxExpirySeconds: 3000,
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
+          mvxNativeAuthMaxExpirySeconds: 3600,
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-
+        console.log("arg", arg);
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
         let blobDataType = BlobDataType.TEXT;
@@ -167,7 +167,7 @@ export const MultiversxInfographics = () => {
       hasImage={true}
       imgSrc={headerHero}
       altImageAttribute={"mvxInfographics"}
-      pageSubtitle={"Data NFTs that Unlock this App"}
+      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (
