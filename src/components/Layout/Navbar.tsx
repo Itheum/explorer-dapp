@@ -30,6 +30,7 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
+import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();

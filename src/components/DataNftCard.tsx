@@ -31,7 +31,7 @@ export function DataNftCard({
   isWallet?: boolean;
   viewData: (e: number) => void;
   showBalance?: boolean;
-  modalContent?: JSX.Element;
+  modalContent?: React.ReactElement;
   modalTitle?: string;
   modalTitleStyle?: string;
   hasFilter?: boolean;
@@ -44,9 +44,11 @@ export function DataNftCard({
   function goToMarketplace(tokenIdentifier: string) {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
+
+  // TODO: card needs to be a little bit lower on mobile
   return (
     <div className="mb-3 ">
-      <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px]">
+      <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] w-[330px]">
         <CardContent className="flex flex-col p-3">
           <div className="mb-4">
             <img className="" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
@@ -108,7 +110,7 @@ export function DataNftCard({
               <div></div>
             )}
 
-            <CardFooter className="flex w-full justify-center pb-2 text-center">
+            <CardFooter className="flex w-full justify-center py-2 text-center">
               {owned ? (
                 <Modal
                   openTrigger={

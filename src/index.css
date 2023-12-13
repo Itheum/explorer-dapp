@@ -133,6 +133,10 @@ h6 {
   @apply text-foreground !important;
 }
 
+.vertical-timeline-element{
+  @apply !important;
+}
+
 .vertical-timeline-element-content {
   @apply bg-background shadow-none text-foreground md:p-[1em] p-0 !important;
 }

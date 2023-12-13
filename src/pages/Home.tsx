@@ -29,7 +29,12 @@ export const Home = () => {
   }, [appVersion]);
 
   return (
-    <HeaderComponent pageTitle={"Data Widget Marketplace"} subTitle={"Itheum Data Widgets are lightweight apps powered by Data NFTs, enabling creative ways to open, visualize and discover the potential of the raw data found within Data NFTs."} hasImage={false}>
+    <HeaderComponent
+      pageTitle={"Data Widget Marketplace"}
+      subTitle={
+        "Itheum Data Widgets are lightweight apps powered by Data NFTs, enabling creative ways to open, visualize and discover the potential of the raw data found within Data NFTs."
+      }
+      hasImage={false}>
       {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
         <div key={item.routeKey} className="mb-10 w-[341px]">
           <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
@@ -41,7 +46,7 @@ export const Home = () => {
             <Link to={returnRoute(item.routeKey)} className="text-base hover:!no-underline hover:text-black">
               <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
                 <div className="bg-background rounded-md">
-                  <Button className="relative left-2 bottom-1.5 text-base bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[6px] hover:scale-100">
+                  <Button className="text-sm relative left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[6px] hover:scale-100">
                     Launch Widget
                   </Button>
                 </div>

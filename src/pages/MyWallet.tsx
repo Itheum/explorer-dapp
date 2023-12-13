@@ -141,14 +141,14 @@ export const MyWallet = () => {
             modalContent={
               <>
                 {isDomPurified && (
-                  <div className="alert alert-warning" role="alert">
+                  <div className="p-4 bg-[#fff3cd] text-[#ae9447] text-sm" role="alert">
                     <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential
                     common security risks; unfortunately, this may mean that even valid and safe content may appear different from the original format.{" "}
                     <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
                     original file (at your own risk). <br />
                     <br />
-                    Alternatively, <strong>as the safest option, only use official apps in the Data Widget Marketplace</strong> (accessible via the Header Menu in this
-                    Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
+                    Alternatively, <strong>as the safest option, only use official apps in the Data Widget Marketplace</strong> (accessible via the Header Menu
+                    in this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
                   </div>
                 )}
 
@@ -179,7 +179,7 @@ export const MyWallet = () => {
                     <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
                   ) : (
                     <div className="p-2">
-                      {(isAutoOpenFormat && (
+                      {(!isAutoOpenFormat && (
                         <>
                           <p className="p-2">
                             This Data NFT content was automatically opened in a new browser window. If your browser is prompting you to allow popups, please
