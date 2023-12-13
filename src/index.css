@@ -131,6 +131,7 @@ h6 {
 
 .vertical-timeline {
   @apply text-foreground !important;
+  z-index: -1;
 }
 
 .vertical-timeline-element{

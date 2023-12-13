@@ -180,16 +180,12 @@ export const MultiversxInfographics = () => {
             viewData={viewData}
             modalContent={
               !owned ? (
-                <div className="d-flex flex-column align-items-center justify-content-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80dvh]">
+                <div className="flex flex-column items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80svh]">
                   <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
                   <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                 </div>
               ) : isFetchingDataMarshal ? (
-                <div
-                  className="d-flex flex-column align-items-center justify-content-center"
-                  style={{
-                    minHeight: "40rem",
-                  }}>
+                <div className="flex flex-col items-center justify-center min-h-[40rem]">
                   <div>
                     <Loader noText />
                     <p className="text-center text-foreground">{"Loading..."}</p>

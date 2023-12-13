@@ -200,31 +200,14 @@ export const MultiversxInfographics = () => {
         <ModalHeader>
           <h4 className="text-center font-title font-weight-bold">MultiversX Infographics</h4>
         </ModalHeader>
-        <ModalBody
-          style={{
-            minWidth: "26rem",
-            minHeight: "36rem",
-            maxHeight: "80vh",
-            overflowY: "scroll",
-          }}>
+        <ModalBody className="min-w-[24rem] max-w-[100%] min-h-[36rem] max-h-[80svh] overflow-y-scroll">
           {!owned ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "50vw",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
+            <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
           ) : isFetchingDataMarshal ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minHeight: "40rem",
-              }}>
+            <div className="flex flex-col items-center justify-center min-h-[40rem]">
               <div>
                 <Loader noText />
                 <p className="text-center font-weight-bold">{"Loading..."}</p>
@@ -237,7 +220,7 @@ export const MultiversxInfographics = () => {
                 (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
                   <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
                 ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-                  <div className="d-flex justify-content-center align-items-center" style={{ height: "30rem" }}>
+                  <div className="flex justify-center items-center" style={{ height: "30rem" }}>
                     <audio controls autoPlay src={viewDataRes.data} />
                   </div>
                 ) : viewDataRes.blobDataType === BlobDataType.SVG ? (

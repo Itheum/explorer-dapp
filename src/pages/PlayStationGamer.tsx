@@ -284,7 +284,11 @@ export const PlayStationGamer = () => {
   console.log("activeGamerData", activeGamerData);
 
   return (
-    <HeaderComponent pageTitle={"PlayStation Gamer Passport"} hasImage={false} pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"} dataNftCount={ccDataNfts.length}>
+    <HeaderComponent
+      pageTitle={"PlayStation Gamer Passport"}
+      hasImage={false}
+      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+      dataNftCount={ccDataNfts.length}>
       {ccDataNfts.length > 0 ? (
         ccDataNfts.map((dataNft, index) => (
           <DataNftCard key={index} index={index} dataNft={dataNft} isLoading={isLoading} owned={flags[index]} viewData={viewData} />
@@ -310,19 +314,12 @@ export const PlayStationGamer = () => {
         </ModalHeader>
         <ModalBody>
           {!owned ? (
-            <div className="d-flex flex-column align-items-center justify-content-center">
+            <div className="flex flex-col items-center justify-center">
               <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
               <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
             </div>
           ) : isFetchingDataMarshal || !data ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "100%",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
+            <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
               <div>
                 <Loader noText />
                 <p className="text-center font-weight-bold">{"Loading..."}</p>

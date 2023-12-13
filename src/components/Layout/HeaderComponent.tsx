@@ -19,7 +19,7 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
       <div className="flex flex-col w-full">
         <h1 className="py-4 mb-0">{pageTitle}</h1>
         {subTitle && <p className="mb-3">{subTitle}</p>}
-        <div className={hasImage ? "z-[-1] border-[0.5px] dark:border-slate-100/30 border-slate-300 rounded-[3rem]" : "hidden"}>
+        <div className={hasImage ? "-z-10 border-[0.5px] dark:border-slate-100/30 border-slate-300 rounded-[3rem]" : "hidden"}>
           {isAnimated && <>{animation}</>}
           <img className="rounded-[3rem] 3xl:h-[375px] w-full " src={imgSrc} alt={altImageAttribute} />
         </div>

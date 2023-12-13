@@ -127,7 +127,7 @@ export const Navbar = () => {
                 <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
                   <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                     <Button
-                      className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide !text-lg"
+                      className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
                       variant="outline"
                       onClick={handleLogout}>
                       Logout
@@ -141,7 +141,7 @@ export const Navbar = () => {
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
-                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
                     variant="outline">
                     Login
                   </Button>
