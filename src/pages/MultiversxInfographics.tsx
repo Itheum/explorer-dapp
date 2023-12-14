@@ -8,8 +8,7 @@ import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { modalStylesFull } from "libs/ui";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {

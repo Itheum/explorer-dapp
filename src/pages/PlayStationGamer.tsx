@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { IoClose } from "react-icons/io5";
-import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
+import { ESDT_BUBBLE_TOKENS, PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { modalStyles } from "libs/ui";
@@ -37,13 +37,17 @@ export const PlayStationGamer = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      PLAYSTATION_GAMER_PASSPORT_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier }))
-    );
-    console.log("ccDataNfts", _nfts);
-    setCcDataNfts(_nfts);
-
-    setIsLoading(false);
+    if (PLAYSTATION_GAMER_PASSPORT_TOKENS.length > 0) {
+      const _nfts: DataNft[] = await DataNft.createManyFromApi(
+        PLAYSTATION_GAMER_PASSPORT_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier }))
+      );
+      // console.log("ccDataNfts", _nfts);
+      setCcDataNfts(_nfts);
+      setIsLoading(false);
+    } else {
+      toastError("No identifier for this Widget.");
+      setIsLoading(false);
+    }
   }
 
   async function fetchMyNfts() {
@@ -293,48 +297,48 @@ export const PlayStationGamer = () => {
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>
       )}
-      <>
-        {/*<Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>*/}
-        <div style={{ height: "3rem" }}>
-          <div
-            style={{
-              float: "right",
-              cursor: "pointer",
-              fontSize: "2rem",
-            }}
-            onClick={closeModal}>
-            <IoClose />
-          </div>
-        </div>
-        <h4 className="text-center font-title font-weight-bold">PlayStation Gamer Passport</h4>
-        {/*<ModalBody>*/}
-        {!owned ? (
-          <div className="flex flex-col items-center justify-center">
-            <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-            <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
-          </div>
-        ) : isFetchingDataMarshal || !data ? (
-          <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
-            <div>
-              <Loader noText />
-              <p className="text-center font-weight-bold">{"Loading..."}</p>
-            </div>
-          </div>
-        ) : (
-          <div
-            style={{
-              minWidth: "26rem",
-              maxWidth: "100%",
-              minHeight: "36rem",
-              maxHeight: "60vh",
-              overflowY: "auto",
-            }}>
-            <PlaystationGamerInsights gamerId={"userId"} gamerData={activeGamerData} />
-          </div>
-        )}
-        {/*</ModalBody>*/}
-        {/*</Modal>*/}
-      </>
+      {/*<>*/}
+      {/*  /!*<Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>*!/*/}
+      {/*  <div style={{ height: "3rem" }}>*/}
+      {/*    <div*/}
+      {/*      style={{*/}
+      {/*        float: "right",*/}
+      {/*        cursor: "pointer",*/}
+      {/*        fontSize: "2rem",*/}
+      {/*      }}*/}
+      {/*      onClick={closeModal}>*/}
+      {/*      <IoClose />*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*  <h4 className="text-center font-title font-weight-bold">PlayStation Gamer Passport</h4>*/}
+      {/*  /!*<ModalBody>*!/*/}
+      {/*  {!owned ? (*/}
+      {/*    <div className="flex flex-col items-center justify-center">*/}
+      {/*      <h4 className="mt-3 font-title">You do not own this Data NFT</h4>*/}
+      {/*      <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>*/}
+      {/*    </div>*/}
+      {/*  ) : isFetchingDataMarshal || !data ? (*/}
+      {/*    <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">*/}
+      {/*      <div>*/}
+      {/*        <Loader noText />*/}
+      {/*        <p className="text-center font-weight-bold">{"Loading..."}</p>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  ) : (*/}
+      {/*    <div*/}
+      {/*      style={{*/}
+      {/*        minWidth: "26rem",*/}
+      {/*        maxWidth: "100%",*/}
+      {/*        minHeight: "36rem",*/}
+      {/*        maxHeight: "60vh",*/}
+      {/*        overflowY: "auto",*/}
+      {/*      }}>*/}
+      {/*      <PlaystationGamerInsights gamerId={"userId"} gamerData={activeGamerData} />*/}
+      {/*    </div>*/}
+      {/*  )}*/}
+      {/*  /!*</ModalBody>*!/*/}
+      {/*  /!*</Modal>*!/*/}
+      {/*</>*/}
     </HeaderComponent>
   );
 };

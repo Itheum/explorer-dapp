@@ -42,11 +42,14 @@ export const MultiversxBubbles = () => {
 
   async function fetchDataNfts() {
     setIsLoading(true);
-
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
-    setDataNfts(_nfts);
-
-    setIsLoading(false);
+    if (MULTIVERSX_BUBBLE_TOKENS.length > 0) {
+      const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
+      setDataNfts(_nfts);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      toastError("No identifier for this Widget.");
+    }
   }
 
   async function fetchMyNfts() {
