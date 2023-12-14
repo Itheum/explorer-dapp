@@ -61,9 +61,13 @@ const UnlockPage = () => {
                 {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})}
               />
               <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
-
               <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
               <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
+              <WebWalletLoginButton
+                loginButtonText={"Google (xAlias)"}
+                className="w-full !m-0"
+                customWalletAddress={process.env.REACT_APP_ENV_NETWORK === "mainnet" ? "https://xalias.com" : "https://devnet.xalias.com"}
+                {...commonProps}></WebWalletLoginButton>
             </div>
           </div>
         </div>
