@@ -6,14 +6,11 @@ import BigNumber from "bignumber.js";
 import { Chart as ChartJS, Legend, LinearScale, PointElement, Tooltip } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 import { pointRadial } from "d3";
-import { ModalBody, Table } from "react-bootstrap";
 import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
 import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import Modal from "react-modal";
 import { CustomPagination, DataNftCard, Loader, MXAddressLink } from "components";
 import { MAINNET_EXPLORER_ADDRESS } from "config";
-import { modalStyles } from "libs/ui";
 import { convertWeiToEsdt, decodeNativeAuthToken, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { ESDT_BUBBLE_TOKENS } from "appsConfig";
@@ -333,7 +330,8 @@ export const EsdtBubble = () => {
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
 
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
+      {/*<Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>*/}
+      <>
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -346,92 +344,93 @@ export const EsdtBubble = () => {
           </div>
         </div>
         <h4 className="text-center font-title font-weight-bold">View Data</h4>
-        <ModalBody
-          style={{
-            minWidth: "26rem",
-            minHeight: "36rem",
-            maxHeight: "80vh",
-            overflowY: "scroll",
-          }}>
-          {!owned ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minWidth: "24rem",
-                maxWidth: "50vw",
-                minHeight: "40rem",
-                maxHeight: "80vh",
-              }}>
-              <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+        {/*<ModalBody*/}
+        {/*  style={{*/}
+        {/*    minWidth: "26rem",*/}
+        {/*    minHeight: "36rem",*/}
+        {/*    maxHeight: "80vh",*/}
+        {/*    overflowY: "scroll",*/}
+        {/*  }}>*/}
+        {!owned ? (
+          <div
+            className="d-flex flex-column align-items-center justify-content-center"
+            style={{
+              minWidth: "24rem",
+              maxWidth: "50vw",
+              minHeight: "40rem",
+              maxHeight: "80vh",
+            }}>
+            <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+            <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+          </div>
+        ) : !data ? (
+          <div
+            className="d-flex flex-column align-items-center justify-content-center"
+            style={{
+              minHeight: "40rem",
+            }}>
+            <div>
+              <Loader noText />
+              <p className="text-center font-weight-bold">{"Loading..."}</p>
             </div>
-          ) : !data ? (
-            <div
-              className="d-flex flex-column align-items-center justify-content-center"
-              style={{
-                minHeight: "40rem",
-              }}>
-              <div>
-                <Loader noText />
-                <p className="text-center font-weight-bold">{"Loading..."}</p>
+          </div>
+        ) : (
+          <>
+            <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">{selectedDataNft?.title}</h5>
+            <div className="text-center font-title font-weight-bold">(TOP {data.datasets.length} Accounts)</div>
+
+            <ChartDescription />
+            <div style={{ position: "relative" }}>
+              <button className="btn btn-danger ml-1 zoom-reset" onClick={onClickResetZoom}>
+                Reset
+              </button>
+
+              <button
+                className={chartSelected ? "btn btn-info ml-2 zoom-reset" : "btn btn-primary ml-2 zoom-reset"}
+                onClick={() => setChartSelected(!chartSelected)}>
+                {chartSelected ? "Unfocus" : "Focus"}
+              </button>
+
+              <div className={chartSelected ? "custom-box-border selected" : "custom-box-border"}>
+                <Bubble options={chartSelected ? chartOptionsWithZoom : chartOptions} data={data} ref={chartRef} onClick={onChartClick} />
               </div>
             </div>
-          ) : (
-            <>
-              <h5 className="mt-3 mb-4 text-center font-title font-weight-bold">{selectedDataNft?.title}</h5>
-              <div className="text-center font-title font-weight-bold">(TOP {data.datasets.length} Accounts)</div>
+            <ChartDescription />
 
-              <ChartDescription />
-              <div style={{ position: "relative" }}>
-                <button className="btn btn-danger ml-1 zoom-reset" onClick={onClickResetZoom}>
-                  Reset
-                </button>
-
-                <button
-                  className={chartSelected ? "btn btn-info ml-2 zoom-reset" : "btn btn-primary ml-2 zoom-reset"}
-                  onClick={() => setChartSelected(!chartSelected)}>
-                  {chartSelected ? "Unfocus" : "Focus"}
-                </button>
-
-                <div className={chartSelected ? "custom-box-border selected" : "custom-box-border"}>
-                  <Bubble options={chartSelected ? chartOptionsWithZoom : chartOptions} data={data} ref={chartRef} onClick={onChartClick} />
-                </div>
-              </div>
-              <ChartDescription />
-
-              <div>
-                <CustomPagination pageCount={pageCount} pageIndex={pageIndex} pageSize={pageSize} gotoPage={onGotoPage} />
-              </div>
-              <Table striped responsive className="mt-3">
-                <thead>
-                  <tr className="">
-                    <th>#</th>
-                    <th>Address</th>
-                    <th>Balance</th>
-                    <th>Percent</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataItems.slice(pageSize * pageIndex, pageSize * (pageIndex + 1)).map((row: any, index: number) => (
-                    <tr key={`e-b-p-${index}`}>
-                      <td>{pageSize * pageIndex + index + 1}</td>
-                      <td>
-                        {<FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? "visible" : "hidden"} />}
-                        <MXAddressLink explorerAddress={MAINNET_EXPLORER_ADDRESS} address={row.address} precision={9} />
-                      </td>
-                      <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
-                      <td>{row.percent.toFixed(4)}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <div>
-                <CustomPagination pageCount={pageCount} pageIndex={pageIndex} pageSize={pageSize} gotoPage={onGotoPage} />
-              </div>
-            </>
-          )}
-        </ModalBody>
-      </Modal>
+            <div>
+              <CustomPagination pageCount={pageCount} pageIndex={pageIndex} pageSize={pageSize} gotoPage={onGotoPage} />
+            </div>
+            {/*<Table striped responsive className="mt-3">*/}
+            <thead>
+              <tr className="">
+                <th>#</th>
+                <th>Address</th>
+                <th>Balance</th>
+                <th>Percent</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataItems.slice(pageSize * pageIndex, pageSize * (pageIndex + 1)).map((row: any, index: number) => (
+                <tr key={`e-b-p-${index}`}>
+                  <td>{pageSize * pageIndex + index + 1}</td>
+                  <td>
+                    {<FaFileAlt className="mr-2" visibility={new Address(row.address).isContractAddress() ? "visible" : "hidden"} />}
+                    <MXAddressLink explorerAddress={MAINNET_EXPLORER_ADDRESS} address={row.address} precision={9} />
+                  </td>
+                  <td>{convertWeiToEsdt(row.balance).toFixed(4)} EGLD</td>
+                  <td>{row.percent.toFixed(4)}%</td>
+                </tr>
+              ))}
+            </tbody>
+            {/*</Table>*/}
+            <div>
+              <CustomPagination pageCount={pageCount} pageIndex={pageIndex} pageSize={pageSize} gotoPage={onGotoPage} />
+            </div>
+          </>
+        )}
+        {/*</ModalBody>*/}
+        {/*</Modal>*/}
+      </>
     </HeaderComponent>
   );
 };

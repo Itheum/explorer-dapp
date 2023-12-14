@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { ModalBody } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
-import Modal from "react-modal";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
@@ -183,8 +181,8 @@ export const MultiversxInfographics = () => {
       ) : (
         <h3 className="text-center text-white">No DataNFT</h3>
       )}
-
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>
+      <>
+        {/*<Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStylesFull} ariaHideApp={false} shouldCloseOnOverlayClick={false}>*/}
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -197,40 +195,41 @@ export const MultiversxInfographics = () => {
           </div>
         </div>
         <h4 className="text-center font-title font-weight-bold">MultiversX Infographics</h4>
-        <ModalBody className="min-w-[24rem] max-w-[100%] min-h-[36rem] max-h-[80svh] overflow-y-scroll">
-          {!owned ? (
-            <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
-              <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+        {/*<ModalBody className="min-w-[24rem] max-w-[100%] min-h-[36rem] max-h-[80svh] overflow-y-scroll">*/}
+        {!owned ? (
+          <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
+            <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+            <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+          </div>
+        ) : isFetchingDataMarshal ? (
+          <div className="flex flex-col items-center justify-center min-h-[40rem]">
+            <div>
+              <Loader noText />
+              <p className="text-center font-weight-bold">{"Loading..."}</p>
             </div>
-          ) : isFetchingDataMarshal ? (
-            <div className="flex flex-col items-center justify-center min-h-[40rem]">
-              <div>
-                <Loader noText />
-                <p className="text-center font-weight-bold">{"Loading..."}</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              {viewDataRes &&
-                !viewDataRes.error &&
-                (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                  <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-                ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-                  <div className="flex justify-center items-center" style={{ height: "30rem" }}>
-                    <audio controls autoPlay src={viewDataRes.data} />
-                  </div>
-                ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                  <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
-                ) : (
-                  <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                    {viewDataRes.data}
-                  </p>
-                ))}
-            </>
-          )}
-        </ModalBody>
-      </Modal>
+          </div>
+        ) : (
+          <>
+            {viewDataRes &&
+              !viewDataRes.error &&
+              (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+              ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
+                <div className="flex justify-center items-center" style={{ height: "30rem" }}>
+                  <audio controls autoPlay src={viewDataRes.data} />
+                </div>
+              ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                <SVG src={viewDataRes.data} preProcessor={(code) => preProcess(code)} style={{ width: "100%", height: "auto" }} />
+              ) : (
+                <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                  {viewDataRes.data}
+                </p>
+              ))}
+          </>
+        )}
+        {/*</ModalBody>*/}
+        {/*</Modal>*/}
+      </>
     </HeaderComponent>
   );
 };

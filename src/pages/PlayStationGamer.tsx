@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { ModalBody } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
-import Modal from "react-modal";
 import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -295,8 +293,8 @@ export const PlayStationGamer = () => {
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>
       )}
-
-      <Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
+      <>
+        {/*<Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>*/}
         <div style={{ height: "3rem" }}>
           <div
             style={{
@@ -309,33 +307,34 @@ export const PlayStationGamer = () => {
           </div>
         </div>
         <h4 className="text-center font-title font-weight-bold">PlayStation Gamer Passport</h4>
-        <ModalBody>
-          {!owned ? (
-            <div className="flex flex-col items-center justify-center">
-              <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-              <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+        {/*<ModalBody>*/}
+        {!owned ? (
+          <div className="flex flex-col items-center justify-center">
+            <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+            <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
+          </div>
+        ) : isFetchingDataMarshal || !data ? (
+          <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
+            <div>
+              <Loader noText />
+              <p className="text-center font-weight-bold">{"Loading..."}</p>
             </div>
-          ) : isFetchingDataMarshal || !data ? (
-            <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
-              <div>
-                <Loader noText />
-                <p className="text-center font-weight-bold">{"Loading..."}</p>
-              </div>
-            </div>
-          ) : (
-            <div
-              style={{
-                minWidth: "26rem",
-                maxWidth: "100%",
-                minHeight: "36rem",
-                maxHeight: "60vh",
-                overflowY: "auto",
-              }}>
-              <PlaystationGamerInsights gamerId={"userId"} gamerData={activeGamerData} />
-            </div>
-          )}
-        </ModalBody>
-      </Modal>
+          </div>
+        ) : (
+          <div
+            style={{
+              minWidth: "26rem",
+              maxWidth: "100%",
+              minHeight: "36rem",
+              maxHeight: "60vh",
+              overflowY: "auto",
+            }}>
+            <PlaystationGamerInsights gamerId={"userId"} gamerData={activeGamerData} />
+          </div>
+        )}
+        {/*</ModalBody>*/}
+        {/*</Modal>*/}
+      </>
     </HeaderComponent>
   );
 };
