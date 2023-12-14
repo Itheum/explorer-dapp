@@ -15,7 +15,11 @@ export const WeekSelector: React.FC = () => {
       <h3 className="uppercase">Week period selector</h3>
       <div className="flex flex-row gap-10 pt-2">
         {weeks.map((week, index) => {
-          return <span className={week.isActive ? "text-teal-400" : ""}>{week.translatedText}</span>;
+          return (
+            <span className={week.isActive ? "text-teal-400" : ""} key={index}>
+              {week.translatedText}
+            </span>
+          );
         })}
       </div>
     </div>
