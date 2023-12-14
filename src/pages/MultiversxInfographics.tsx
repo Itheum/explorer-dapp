@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { ModalBody } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import Modal from "react-modal";
@@ -197,9 +196,7 @@ export const MultiversxInfographics = () => {
             <IoClose />
           </div>
         </div>
-        <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">MultiversX Infographics</h4>
-        </ModalHeader>
+        <h4 className="text-center font-title font-weight-bold">MultiversX Infographics</h4>
         <ModalBody className="min-w-[24rem] max-w-[100%] min-h-[36rem] max-h-[80svh] overflow-y-scroll">
           {!owned ? (
             <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">

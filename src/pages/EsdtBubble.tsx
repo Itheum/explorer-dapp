@@ -3,19 +3,18 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
 import { useGetAccount, useGetLoginInfo, useGetPendingTransactions } from "@multiversx/sdk-dapp/hooks";
 import BigNumber from "bignumber.js";
-import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, Legend, LinearScale, PointElement, Tooltip } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 import { pointRadial } from "d3";
 import { ModalBody, Table } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { Bubble, getDatasetAtEvent } from "react-chartjs-2";
 import { FaFileAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import { CustomPagination, DataNftCard, MXAddressLink, Loader } from "components";
+import { CustomPagination, DataNftCard, Loader, MXAddressLink } from "components";
 import { MAINNET_EXPLORER_ADDRESS } from "config";
 import { modalStyles } from "libs/ui";
-import { convertWeiToEsdt, decodeNativeAuthToken, nativeAuthOrigins, shortenAddress, toastError } from "libs/utils";
+import { convertWeiToEsdt, decodeNativeAuthToken, shortenAddress, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { ESDT_BUBBLE_TOKENS } from "appsConfig";
 
@@ -346,9 +345,7 @@ export const EsdtBubble = () => {
             <IoClose />
           </div>
         </div>
-        <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">View Data</h4>
-        </ModalHeader>
+        <h4 className="text-center font-title font-weight-bold">View Data</h4>
         <ModalBody
           style={{
             minWidth: "26rem",

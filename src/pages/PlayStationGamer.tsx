@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { ModalBody } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
@@ -309,9 +308,7 @@ export const PlayStationGamer = () => {
             <IoClose />
           </div>
         </div>
-        <ModalHeader>
-          <h4 className="text-center font-title font-weight-bold">PlayStation Gamer Passport</h4>
-        </ModalHeader>
+        <h4 className="text-center font-title font-weight-bold">PlayStation Gamer Passport</h4>
         <ModalBody>
           {!owned ? (
             <div className="flex flex-col items-center justify-center">
