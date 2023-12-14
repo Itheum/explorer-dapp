@@ -57,7 +57,7 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center 2xl:mx-[19.5rem] xl:mx-[7.5rem] md:mx-[3.5rem] h-20">
+    <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
           <img src={logo192} className="w-[5rem]" />
@@ -76,7 +76,7 @@ export const Navbar = () => {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Data Widget Marketplace</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Data Widgets</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (

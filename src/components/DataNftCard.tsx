@@ -53,7 +53,7 @@ export function DataNftCard({
             <img className="md:w-auto base:w-[15rem]" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
           </div>
 
-          <div className="md:h-[15rem] h-[12rem]">
+          <div className="md:h-[15rem] h-[13rem]">
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 base:text-sm md:text-base">Title:</span>
               <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.title}</span>
@@ -120,7 +120,7 @@ export function DataNftCard({
                 <Modal
                   openTrigger={
                     <Button
-                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-black rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
                       variant="ghost"
                       onClick={() => viewData(index)}>
                       View Data
@@ -134,9 +134,9 @@ export function DataNftCard({
                   {modalContent}
                 </Modal>
               ) : (
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md w-40 ">
                   <Button
-                    className="dark:bg-[#0f0f0f] border-0 rounded-md font-medium tracking-tight !text-lg hover:opacity-90"
+                    className="dark:bg-[#0f0f0f] border-0 rounded-md font-medium tracking-tight !text-sm hover:opacity-90 w-[9.9rem]"
                     variant="outline"
                     onClick={() => goToMarketplace(dataNft.tokenIdentifier)}>
                     View in Marketplace

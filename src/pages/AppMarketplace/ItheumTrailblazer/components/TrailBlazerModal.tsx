@@ -81,7 +81,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                     </div>
                   </div>
                 </div>
-                <a className=" !no-underline" href={dataItem.link} target="_blank">
+                <a className="!no-underline" href={dataItem.link} target="_blank">
                   <Button
                     className="bg-gradient-to-r from-yellow-300 to-orange-500 h-auto px-3 border-0 text-black rounded-lg font-medium tracking-tight hover:opacity-80 hover:text-black"
                     variant="ghost">

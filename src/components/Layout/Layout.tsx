@@ -35,7 +35,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col flex-auto min-h-[100dvh]">
       <Navbar />
-      <main className="flex flex-col flex-auto 2xl:mx-[20rem] xl:mx-[8rem] md:mx-[4rem] base:mx-[1.5rem]">
+      <main className="flex flex-col flex-auto xl:mx-[8rem] md:mx-[4rem] base:mx-[1.5rem]">
         <AuthenticatedRoutesWrapper routes={routes} unlockRoute={`${routeNames.unlock}${search}`}>
           {children}
         </AuthenticatedRoutesWrapper>

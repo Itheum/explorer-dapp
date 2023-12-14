@@ -134,9 +134,6 @@ h6 {
   z-index: -1;
 }
 
-.vertical-timeline-element{
-  @apply !important;
-}
 
 .vertical-timeline-element-content {
   @apply bg-background shadow-none text-foreground md:p-[1em] p-0 !important;

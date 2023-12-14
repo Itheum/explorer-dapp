@@ -37,7 +37,7 @@ export const App = () => {
                 <Routes>
                   <Route path={routeNames.unlock} element={<Unlock />} />
                   {routes.map((route, index) => (
-                    <Route path={route.path} key={"route-key-" + index} element={<route.component />} />
+                    <Route path={route.path} key={index} element={<route.component />} />
                   ))}
 
                   <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
@@ -56,3 +56,5 @@ export const App = () => {
     </AxiosInterceptorContext.Provider>
   );
 };
+
+export default App;
