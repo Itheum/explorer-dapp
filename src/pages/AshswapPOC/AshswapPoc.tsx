@@ -6,7 +6,7 @@ export const AshswapPoc: React.FC = () => {
   const [getWeekVolume, setGetWeekVolume] = useState<Record<any, any>>({});
   const [totalObject, setTotalObject] = useState<Array<Record<any, any>>>([{}]);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-7">
       <WeekSelector />
       <TradeVolume />
     </div>
