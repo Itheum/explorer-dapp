@@ -59,6 +59,11 @@ const UnlockPage = () => {
 
               <WebWalletLoginButton loginButtonText="Web Wallet" {...commonProps} />
               <LedgerLoginButton loginButtonText="Ledger" className="test-class_name" {...commonProps} />
+              <WebWalletLoginButton
+                loginButtonText={"Google (xAlias)"}
+                buttonClassName="auth_button"
+                customWalletAddress={process.env.REACT_APP_ENV_NETWORK === "mainnet" ? "https://xalias.com" : "https://devnet.xalias.com"}
+                {...commonProps}></WebWalletLoginButton>
             </div>
           </div>
         </div>
