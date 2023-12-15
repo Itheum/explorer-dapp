@@ -39,7 +39,7 @@ export const Dashboard = () => {
   }
 
   return (
-    <div className="d-flex flex-fill align-items-center justify-content-center container py-4">
+    <div className="flex flex-auto items-center justify-center py-4">
       <div className="row w-100">
         <div className="col-12 col-md-10 col-lg-9 mx-auto">
           <div className="card shadow-sm border-0">
