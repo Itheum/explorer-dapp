@@ -27,18 +27,18 @@ export const Filter: React.FC<FilterProps> = (props) => {
         <div className="absolute top-full left-0">
           <Button
             variant="outline"
-            className="md:flex hidden border-[1px] border-slate-100/20 text-foreground w-full"
+            className="md:flex flex-row hidden border-[1px] border-slate-100/20 text-foreground w-full text-sm"
             onClick={() => setIsFilterShown(!isFilterShown)}>
             {filter === null ? "All Categories" : filter}
-            <ChevronDown className="w-5 h-5 mt-1" />
+            <ChevronDown className="w-5 h-5 mt-1 ml-1" />
           </Button>
           <Button variant="ghost" className="md:hidden flex bg-foreground/10 text-foreground w-full" onClick={() => setIsFilterShown(!isFilterShown)}>
             <ListFilter className="w-5 h-5 mt-1" />
           </Button>
           {isFilterShown && (
             <div className="pt-1">
-              <Card className="absolute top-full bg-background text-foreground border-[1px] border-slate-300/40 md:max-w-[22rem] min-w-[16rem] rounded-xl">
-                <CardHeader className="flex flex-row justify-between">
+              <Card className="absolute bg-background text-foreground border-[1px] border-slate-300/40 md:max-w-[22rem] min-w-[16rem] rounded-xl">
+                <CardHeader className="flex flex-row justify-between ">
                   <span className="bg-gradient-to-r from-yellow-300 to-orange-500 bg-clip-text text-transparent text-xl">Filter by:</span>
                   <RotateCcw
                     className="w-6 h-6 cursor-pointer hover:text-muted-foreground"

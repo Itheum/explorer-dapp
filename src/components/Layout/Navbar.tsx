@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import lightLogo from "assets/img/logo-icon-b.png";
 import darkLogo from "assets/img/logo-sml-d.png";
+import logo192 from "assets/img/logo192.png";
 import { CopyAddress } from "components/CopyAddress";
 import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
-import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
 import {
   DropdownMenu,
@@ -25,12 +25,12 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
+import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -57,12 +57,12 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center 2xl:mx-[19.5rem] xl:mx-[7.5rem] md:mx-[3.5rem] h-20">
+    <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
-          <img src={theme === "dark" ? darkLogo : theme === "system" && systemTheme === "dark" ? darkLogo : lightLogo} className="w-[45px] h-auto" />
-          <span className="text-black dark:!text-white pl-2 md:text-xl text-base">Itheum</span>
-          <span className="text-black dark:!text-white font-semibold md:text-xl text-base">&nbsp;Explorer</span>
+          <img src={logo192} className="w-[5rem]" />
+          <span className="text-black dark:!text-white md:text-xl text-base">Itheum</span>
+          <span className="text-black dark:!text-white font-semibold md:text-xl text-base">Explorer</span>
         </Link>
       </div>
 
@@ -76,7 +76,7 @@ export const Navbar = () => {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Data Widget Marketplace</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Data Widgets</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
@@ -87,7 +87,7 @@ export const Navbar = () => {
                       "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     }>
                     <div className="text-md font-medium leading-none text-foreground">{item.appName}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5 ">{item?.appDescription}</p>
+                    <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5 ">{item?.appDescription}</p>
                   </Link>
                 ))}
               </ul>
@@ -105,7 +105,7 @@ export const Navbar = () => {
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
                       <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">Listed Data NFT's</p>
+                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
                     </Link>
                     <Link
                       to={routeNames.mywallet}
@@ -114,7 +114,7 @@ export const Navbar = () => {
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
                       <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted pt-0.5">View RAW Data</p>
+                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">View RAW Data</p>
                     </Link>
                     <div className="flex flex-col p-3">
                       <p className="text-sm font-medium leading-none dark:text-slate-100 pb-0.5">My Address Quick Copy</p>
@@ -125,9 +125,9 @@ export const Navbar = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-                  <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                  <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                     <Button
-                      className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide !text-lg"
+                      className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
                       variant="outline"
                       onClick={handleLogout}>
                       Logout
@@ -139,9 +139,9 @@ export const Navbar = () => {
           ) : (
             <NavigationMenuItem>
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
-                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
                     variant="outline">
                     Login
                   </Button>
@@ -160,9 +160,9 @@ export const Navbar = () => {
           <div className="flex flex-row">
             {isLoggedIn ? (
               <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
-                    className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide"
                     variant="outline"
                     size="sm"
                     onClick={handleLogout}>
@@ -172,9 +172,9 @@ export const Navbar = () => {
               </Link>
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
-                    className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide !text-lg"
+                    className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide"
                     variant="outline">
                     Login
                   </Button>
@@ -192,7 +192,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               <Link to={routeNames.home}>
                 <DropdownMenuItem>
-                  <Home className="pr-2 h-4 w-4" />
+                  <Home className="mr-2 h-4 w-4" />
                   <span>Home</span>
                 </DropdownMenuItem>
               </Link>
@@ -205,7 +205,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                 <Link to={returnRoute(item.routeKey)} key={item.routeKey}>
-                  <DropdownMenuItem>{item?.appName}</DropdownMenuItem>
+                  <DropdownMenuItem className="text-foreground/50">{item?.appName}</DropdownMenuItem>
                 </Link>
               ))}
             </DropdownMenuGroup>
@@ -218,10 +218,10 @@ export const Navbar = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <Link to={routeNames.mylisted}>
-                    <DropdownMenuItem>Listed data</DropdownMenuItem>
+                    <DropdownMenuItem className="text-foreground/50">Listed data</DropdownMenuItem>
                   </Link>
                   <Link to={routeNames.mywallet}>
-                    <DropdownMenuItem>Wallet</DropdownMenuItem>
+                    <DropdownMenuItem className="!text-foreground/50">Wallet</DropdownMenuItem>
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuLabel>My Address Quick Copy</DropdownMenuLabel>

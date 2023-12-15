@@ -81,7 +81,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                     </div>
                   </div>
                 </div>
-                <a className=" !no-underline" href={dataItem.link} target="_blank">
+                <a className="!no-underline" href={dataItem.link} target="_blank">
                   <Button
                     className="bg-gradient-to-r from-yellow-300 to-orange-500 h-auto px-3 border-0 text-black rounded-lg font-medium tracking-tight hover:opacity-80 hover:text-black"
                     variant="ghost">
@@ -232,14 +232,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
           <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
         </div>
       ) : isFetchingDataMarshal || !data ? (
-        <div
-          className="flex flex-col items-center justify-center"
-          style={{
-            minWidth: "24rem",
-            maxWidth: "100%",
-            minHeight: "40rem",
-            maxHeight: "80vh",
-          }}>
+        <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
           <div>
             <Loader noText />
             <p className="text-center font-weight-bold">

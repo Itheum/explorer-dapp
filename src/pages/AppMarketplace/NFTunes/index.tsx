@@ -9,7 +9,7 @@ import { AudioPlayer } from "components/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
@@ -162,7 +162,7 @@ export const NFTunes = () => {
             modalContent={
               isFetchingDataMarshal ? (
                 <div
-                  className="d-flex flex-column align-items-center justify-content-center"
+                  className="flex flex-col items-center justify-center"
                   style={{
                     minHeight: "40rem",
                   }}>

@@ -25,8 +25,8 @@ export const Modal: React.FC<ModalProps> = (props) => {
       <DialogContent
         className={cn("max-w-[80%] min-h-[40%] max-h-[90%] !pt-0 rounded-xl border-foreground", modalClassName)}
         onPointerDownOutside={(e) => !closeOnOverlayClick && e.preventDefault()}>
-        <DialogHeader className="text-left sticky-top flex md:flex-row flex-col justify-between md:items-center items-start md:p-0 p-3 backdrop-blur bg-background/60 w-full border-b border-foreground">
-          <div className="flex flex-col w-auto md:w-full text-left">
+        <DialogHeader className="text-left sticky flex md:flex-row flex-col justify-between md:items-center items-start md:p-0 p-3 backdrop-blur bg-background/60 w-full border-b border-foreground z-10">
+          <div className="flex flex-col w-auto text-left">
             {title ? <DialogTitle className={titleClassName}>{title}</DialogTitle> : <></>}
             {description ? <DialogDescription className={descriptionClassName}>{description}</DialogDescription> : <></>}
           </div>

@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import { Document, Page } from "react-pdf";
-import { pdfjs } from "react-pdf";
+import { Document, Page, pdfjs } from "react-pdf";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import "./MultiversxInfographics.scss";
+import "./MultiversxInfographics.css";
 import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
 import { Button } from "../../../libComponents/Button";
 
@@ -180,16 +179,12 @@ export const MultiversxInfographics = () => {
             viewData={viewData}
             modalContent={
               !owned ? (
-                <div className="d-flex flex-column align-items-center justify-content-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80dvh]">
+                <div className="flex flex-column items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80svh]">
                   <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
                   <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                 </div>
               ) : isFetchingDataMarshal ? (
-                <div
-                  className="d-flex flex-column align-items-center justify-content-center"
-                  style={{
-                    minHeight: "40rem",
-                  }}>
+                <div className="flex flex-col items-center justify-center min-h-[40rem]">
                   <div>
                     <Loader noText />
                     <p className="text-center text-foreground">{"Loading..."}</p>
