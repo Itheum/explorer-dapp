@@ -12,7 +12,7 @@ import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./libComponents/ThemeProvider";
-import { AshswapPoc } from "./pages/AshswapPOC/AshswapPoc";
+import { AshswapPoc } from "./pages/AppMarketplace/AshswapPOC/AshswapPoc";
 
 export const App = () => {
   return (
@@ -41,7 +41,6 @@ export const App = () => {
                     <Route path={route.path} key={"route-key-" + index} element={<route.component />} />
                   ))}
 
-                  <Route path="/ashswappoc" element={<AshswapPoc />} />
                   <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
                   <Route path={`${routeNames.multiversxbubbles}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxBubbles />} />
                   <Route path={`${routeNames.multiversxinfographics}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxInfographics />} />

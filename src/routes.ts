@@ -4,7 +4,7 @@ import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/Itheum
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { withPageTitle } from "./components/PageTitle";
 import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
-import { AshswapPoc } from "./pages/AshswapPOC/AshswapPoc";
+import { AshswapPoc } from "./pages/AppMarketplace/AshswapPOC/AshswapPoc";
 
 export const routeNames = {
   home: "/",

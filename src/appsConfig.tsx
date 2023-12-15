@@ -44,6 +44,8 @@ export const ESDT_BUBBLE_TOKENS: app_token[] = [
   // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 417 }
 ];
 
+export const ASHSWAP_POC_TOKEN: app_token[] = [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 33 }];
+
 export const SUPPORTED_APPS = IS_DEVNET
-  ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes"]
+  ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes", "ashswappoc"]
   : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes"];

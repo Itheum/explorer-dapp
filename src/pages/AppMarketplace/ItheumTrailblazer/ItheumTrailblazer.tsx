@@ -6,7 +6,7 @@ import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { TrailBlazerModal } from "./components/TrailBlazerModal";
 

@@ -50,6 +50,13 @@ export const APP_MAPPINGS = [
     desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
     img: iconNFTunes,
   },
+  {
+    appName: "Ashswap POC",
+    appDescription: "POC for Ashswap",
+    routeKey: "ashswappoc",
+    desc: "POC for Ashswap",
+    img: iconNFTunes,
+  },
 ];
 
 export const ITHEUM_EXPLORER_PROD_URL = "https://explorer.itheum.io";
