@@ -100,6 +100,11 @@ export const AshswapPoc: React.FC = () => {
     }
   }
 
+  // select object from volumeHistory based on selected week
+  const selectFromVolumeHistory = (timestamp: number) => {
+    return volumeHistory.find((item: any) => item.week === timestamp);
+  };
+
   useEffect(() => {
     let newTotalVolume = new BigNumber(0);
     selectedWeeks.forEach((week) => {
@@ -108,11 +113,6 @@ export const AshswapPoc: React.FC = () => {
     });
     setTotalVolume(newTotalVolume);
   }, [selectedWeeks]);
-
-  // select object from volumeHistory based on selected week
-  const selectFromVolumeHistory = (timestamp: number) => {
-    return volumeHistory.find((item: any) => item.week === timestamp);
-  };
 
   return (
     <div className="flex flex-col gap-7">
@@ -129,7 +129,11 @@ export const AshswapPoc: React.FC = () => {
               modalContent={
                 <div className="flex flex-col gap-5 p-3">
                   <WeekSelector selectedWeeks={selectedWeeks} setSelectedWeeks={setSelectedWeeks} />
-                  <TradeVolume totalVolume={totalVolume} volumeHistory={volumeHistory} />
+                  <TradeVolume
+                    totalVolume={totalVolume}
+                    volumeHistory={volumeHistory}
+                    chartItem={volumeHistory.filter((item: any) => selectedWeeks.has(item.week))}
+                  />
                 </div>
               }
               modalTitle={"Ashswap POC"}

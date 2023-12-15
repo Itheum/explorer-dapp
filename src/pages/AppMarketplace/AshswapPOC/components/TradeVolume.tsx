@@ -6,10 +6,13 @@ import { Line } from "react-chartjs-2";
 type TradeVolumeProps = {
   totalVolume: BigNumber.Value;
   volumeHistory: any;
+  chartItem: any;
 };
 
 export const TradeVolume: React.FC<TradeVolumeProps> = (props) => {
-  const { totalVolume, volumeHistory } = props;
+  const { totalVolume, volumeHistory, chartItem } = props;
+
+  // console.log(chartItem);
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -23,10 +26,10 @@ export const TradeVolume: React.FC<TradeVolumeProps> = (props) => {
     },
   };
 
-  const takeLineLabels = volumeHistory.map((volumeHistory: any) => {
+  const takeLineLabels = chartItem.map((volumeHistory: any) => {
     return { volumeHistory: volumeHistory.headerText, volumeAmount: volumeHistory.volume.toNumber() };
   });
-  // console.log(takeLineLabels);
+  // console.log(volumeHistory);
 
   const data = {
     labels: takeLineLabels.map((item: any) => item.volumeHistory),
@@ -34,38 +37,28 @@ export const TradeVolume: React.FC<TradeVolumeProps> = (props) => {
       {
         label: "Dataset 1",
         data: takeLineLabels.map((item: any) => item.volumeAmount),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-        borderDashOffset: 0.0,
-        pointBorderColor: "rgba(75,192,192,1)",
-        pointBackgroundColor: "#fff",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-        pointHoverBorderColor: "rgba(220,220,220,1)",
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
+        borderColor: "rgb(45 212 191)",
+        backgroundColor: "rgb(45 212 191)",
       },
     ],
   };
 
   return (
     <div className="flex flex-col border border-amber-300 p-3 rounded-lg">
-      <h3 className="pb-3">Trade volume Graph</h3>
-      <div className="flex justify-between items-center">
+      <h3 className="pb-3 !font-bold">Trade volume Graph</h3>
+      <div className="flex justify-between items-start">
         <div className="w-[33%] flex flex-col">
-          <h5>Volume in selected period/s</h5>
-          <div className="pt-3">{totalVolume.toString()}</div>
+          <h5 className="!font-semibold">Volume in selected period/s</h5>
+          <div className="pt-3 text-lg font-bold">{totalVolume.toString()}</div>
         </div>
-        <div className="w-[66%] flex flex-col">
-          <h5 className="text-center">Historic Volume</h5>
-          <div className="flex justify-between">
+        <div className="w-[66%] flex flex-col pb-4">
+          <h5 className="text-center !font-semibold">Historic Volume</h5>
+          <div className="flex justify-between py-3">
             {volumeHistory.map((item: any, index: any) => {
               return (
                 <div className="flex flex-col" key={index}>
                   <span>{item.headerText}</span>
-                  {<span>{item.volume.toNumber()}</span>}
+                  <span className="">{item.volume.toNumber()}</span>
                 </div>
               );
             })}

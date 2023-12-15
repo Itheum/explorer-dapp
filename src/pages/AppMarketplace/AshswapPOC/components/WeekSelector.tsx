@@ -35,7 +35,7 @@ export const WeekSelector: React.FC<WeekSelectorProps> = (props) => {
 
   return (
     <div className="flex flex-col border border-amber-300 p-3 rounded-lg mt-3">
-      <h3 className="uppercase">Week period selector</h3>
+      <h3 className="uppercase !font-bold">Week period selector</h3>
       <div className="flex flex-row gap-10 pt-2">
         {arrayOfWeeks.map((week, index) => {
           return (
