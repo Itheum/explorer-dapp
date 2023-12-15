@@ -31,11 +31,14 @@ export const MULTIVERSX_INFOGRAPHICS_TOKENS: app_token[] = IS_DEVNET
 export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
   ? [
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 2 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 10 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 15 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 34 },
       // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 529 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
 export const PLAYSTATION_GAMER_PASSPORT_TOKENS: app_token[] = [
-  // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 379 },
+  { tokenIdentifier: "DATANFTFT-e0b917", nonce: 24 },
   // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 380 },
 ];
 export const ESDT_BUBBLE_TOKENS: app_token[] = [
