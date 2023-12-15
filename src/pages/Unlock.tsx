@@ -58,7 +58,7 @@ const UnlockPage = () => {
               <ExtensionLoginButton loginButtonText="DeFi Wallet" {...commonProps} />
 
               <WebWalletLoginButton loginButtonText="Web Wallet" {...commonProps} />
-              <LedgerLoginButton loginButtonText="Ledger" className="test-class_name" {...commonProps} />
+              {/* <LedgerLoginButton loginButtonText="Ledger" className="test-class_name" {...commonProps} /> */}
             </div>
           </div>
         </div>
