@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
-import { ASHSWAP_POC_TOKEN } from "../../../appsConfig";
-import { decodeNativeAuthToken, toastError } from "../../../libs/utils";
-import { useGetAccount, useGetPendingTransactions } from "../../../hooks";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { DataNftCard } from "../../../components";
-import { WeekSelector } from "./components/WeekSelector";
+import BigNumber from "bignumber.js";
 import { TradeVolume } from "./components/TradeVolume";
+import { WeekSelector } from "./components/WeekSelector";
+import { ASHSWAP_POC_TOKEN } from "../../../appsConfig";
+import { DataNftCard } from "../../../components";
+import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
+import { useGetAccount, useGetPendingTransactions } from "../../../hooks";
+import { decodeNativeAuthToken, toastError } from "../../../libs/utils";
 
 export const AshswapPoc: React.FC = () => {
   const { address } = useGetAccount();
@@ -17,10 +18,14 @@ export const AshswapPoc: React.FC = () => {
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
-  const [owned, setOwned] = useState<boolean>(false);
-  const [data, setData] = useState<any>();
-  const [customObject, setCustomObject] = useState<Set<number>>(new Set([1701907200]));
+  const [volumeHistory, setVolumeHistory] = useState<any>([
+    { week: 1701907200, volume: new BigNumber(0), headerText: "This week" },
+    { week: 1701302400, volume: new BigNumber(100), headerText: "One week ago" },
+    { week: 1700697600, volume: new BigNumber(200), headerText: "Two week ago" },
+    { week: 1700092800, volume: new BigNumber(400), headerText: "Three week ago" },
+  ]);
+  const [selectedWeeks, setSelectedWeeks] = useState<Set<number>>(new Set([]));
+  const [totalVolume, setTotalVolume] = useState<BigNumber>(new BigNumber(0));
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -48,7 +53,7 @@ export const AshswapPoc: React.FC = () => {
     const _flags = [];
 
     for (const cnft of itDataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
+      const matches = _dataNfts.filter((mnft: any) => cnft.nonce === mnft.nonce);
       _flags.push(matches.length > 0);
     }
 
@@ -64,11 +69,8 @@ export const AshswapPoc: React.FC = () => {
 
       const dataNft = itDataNfts[index];
       const _owned = flags[index];
-      setOwned(_owned);
 
       if (_owned) {
-        setIsFetchingDataMarshal(true);
-
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
           throw Error("No nativeAuth token");
@@ -85,16 +87,32 @@ export const AshswapPoc: React.FC = () => {
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
         const textData = await (res.data as Blob).text();
         const parsedData = JSON.parse(textData);
-        console.log(parsedData.data);
-        setData(parsedData.data);
-        setIsFetchingDataMarshal(false);
+        console.log(parsedData);
+        setVolumeHistory((prev: any) => {
+          const newHistory = [...prev];
+          newHistory[0].volume = new BigNumber(parsedData.data.nftDelegator?.getNftVolumeByWeek).div(Math.pow(10, 18)).decimalPlaces(2);
+          return newHistory;
+        });
       }
     } catch (err) {
       console.error(err);
       toastError((err as Error).message);
-      setIsFetchingDataMarshal(false);
     }
   }
+
+  useEffect(() => {
+    let newTotalVolume = new BigNumber(0);
+    selectedWeeks.forEach((week) => {
+      const weekData = selectFromVolumeHistory(week);
+      newTotalVolume = newTotalVolume.plus(weekData.volume);
+    });
+    setTotalVolume(newTotalVolume);
+  }, [selectedWeeks]);
+
+  // select object from volumeHistory based on selected week
+  const selectFromVolumeHistory = (timestamp: number) => {
+    return volumeHistory.find((item: any) => item.week === timestamp);
+  };
 
   return (
     <div className="flex flex-col gap-7">
@@ -110,8 +128,8 @@ export const AshswapPoc: React.FC = () => {
               viewData={viewData}
               modalContent={
                 <div className="flex flex-col gap-5 p-3">
-                  <WeekSelector setCustomObject={setCustomObject} />
-                  <TradeVolume jsonData={data && Number(data.nftDelegator?.getNftVolumeByWeek)} customObject={customObject} />
+                  <WeekSelector selectedWeeks={selectedWeeks} setSelectedWeeks={setSelectedWeeks} />
+                  <TradeVolume totalVolume={totalVolume} volumeHistory={volumeHistory} />
                 </div>
               }
               modalTitle={"Ashswap POC"}
