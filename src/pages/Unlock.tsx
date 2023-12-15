@@ -62,7 +62,7 @@ const UnlockPage = () => {
               />
               <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
               <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
-              <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
+              {/* <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} /> */}
               <WebWalletLoginButton
                 loginButtonText={"Google (xAlias)"}
                 className="w-full !m-0"
