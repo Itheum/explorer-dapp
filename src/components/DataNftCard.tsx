@@ -1,13 +1,12 @@
 import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { convertToLocalString } from "libs/utils";
-import { Button } from "../libComponents/Button";
-import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
+import { Button } from "../libComponents/Button";
+import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { IFilterData } from "../libComponents/Filter";
 
 export function DataNftCard({
@@ -40,7 +39,6 @@ export function DataNftCard({
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
-  const { tokenLogin } = useGetLoginInfo();
   function goToMarketplace(tokenIdentifier: string) {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }

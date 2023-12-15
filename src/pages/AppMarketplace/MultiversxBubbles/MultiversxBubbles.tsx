@@ -9,7 +9,7 @@ import { ZoomableSvg } from "components/ZoomableSvg";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;

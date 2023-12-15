@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from "react";
-import { Card, CardContent, CardHeader } from "./Card";
 import { ChevronDown, ListFilter, RotateCcw, X } from "lucide-react";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
+import { Card, CardContent, CardHeader } from "./Card";
 import { useFilterStore } from "../store/FilterStore";
 
 export interface IFilterData {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { MXAddressLink, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";

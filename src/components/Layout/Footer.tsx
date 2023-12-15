@@ -1,6 +1,5 @@
 import React from "react";
 import { ELROND_NETWORK } from "config";
-import { ReactComponent as HeartIcon } from "../../assets/img/heart.svg";
 
 export const Footer = () => {
   const appVersion = process.env.REACT_APP_VERSION ? `v${process.env.REACT_APP_VERSION}` : "version number unknown";

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { IoClose } from "react-icons/io5";
-import { ESDT_BUBBLE_TOKENS, PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
+import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { modalStyles } from "libs/ui";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
-import PlaystationGamerInsights from "./PlaystationGamerInsights";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 export const PlayStationGamer = () => {
@@ -20,19 +17,10 @@ export const PlayStationGamer = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
-  const [owned, setOwned] = useState<boolean>(false);
 
   const [data, setData] = useState<any>();
 
   const [activeGamerData, setActiveGamerData] = useState<any>(null);
-
-  const [isModalOpened, setIsModalOpenend] = useState<boolean>(false);
-  function openModal() {
-    setIsModalOpenend(true);
-  }
-  function closeModal() {
-    setIsModalOpenend(false);
-  }
 
   async function fetchAppNfts() {
     setIsLoading(true);
@@ -81,11 +69,9 @@ export const PlayStationGamer = () => {
     }
 
     const _owned = flags[index];
-    setOwned(_owned);
 
     if (_owned) {
       setIsFetchingDataMarshal(true);
-      openModal();
 
       const dataNft = ccDataNfts[index];
       let res: any;
@@ -110,8 +96,6 @@ export const PlayStationGamer = () => {
       setData(res.data);
 
       setIsFetchingDataMarshal(false);
-    } else {
-      openModal();
     }
   }
 
@@ -153,127 +137,6 @@ export const PlayStationGamer = () => {
       trophy_titles: rawData.trophy_titles,
       titleAndTrophies,
     });
-
-    // if (rawData.items.length > 0) {
-    //   const readingsInGroups = rawData.metaData.getDataConfig.dataToGather.allApplicableDataTypes.reduce((t:any, i:any) => {
-    //     t[i.toString()] = [];
-    //     return t;
-    //   }, {});
-
-    //   rawData.items.forEach((i : any) => {
-    //     readingsInGroups[i.dataType].push(i);
-    //   });
-
-    //   const gamingActivityAll : any = [];
-    //   const socialActivityAll : any = [];
-
-    //   const onChainManualDataSets : any = {
-    //     onChainAddrTxOnCon: [],
-    //     onChainAddrTxOnConErd: []
-    //   };
-
-    //   const thirdPartyManualDataSets : any = {
-    //     discordBotUserOnGuildActivity: [],
-    //     trdPtyWonderHeroGameApi: [],
-    //   };
-
-    //   Object.keys(readingsInGroups).forEach(dataType => {
-    //     switch (dataType) {
-    //       case '4': {
-    //         if (readingsInGroups['4'].length > 0) {
-    //           const programOnChainReadingsWithInsights = onChainDataInsights_LIB({
-    //             rawReadings: readingsInGroups['4'],
-    //             userTz: ''
-    //           });
-
-    //           const readingsWithInsights : any = programOnChainReadingsWithInsights.readings;
-
-    //           // S: Time Data graphs
-    //           for (let i = 0; i < readingsWithInsights.length; i++) {
-    //             if (readingsWithInsights[i].manual === 'OnChainAddrTxOnCon') {
-    //               const item = {
-    //                 group: readingsWithInsights[i].scoreGroup,
-    //                 time: readingsWithInsights[i].time,
-    //                 when: readingsWithInsights[i].friendyCreatedAt,
-    //                 val: 0,
-    //                 data: readingsWithInsights[i].data
-    //               };
-
-    //               onChainManualDataSets.onChainAddrTxOnCon.push(item);
-    //               gamingActivityAll.push(item);
-    //             }
-    //             else if (readingsWithInsights[i].manual === 'OnChainAddrTxOnConErd') {
-    //               const item = {
-    //                 group: readingsWithInsights[i].scoreGroup,
-    //                 time: readingsWithInsights[i].time,
-    //                 when: readingsWithInsights[i].friendyCreatedAt,
-    //                 val: 0,
-    //                 data: readingsWithInsights[i].data
-    //               };
-
-    //               onChainManualDataSets.onChainAddrTxOnConErd.push(item);
-    //               gamingActivityAll.push(item);
-    //             }
-    //           }
-    //           // E: Time Data graphs
-    //         }
-    //       }
-
-    //         break;
-
-    //       case '5': {
-    //         if (readingsInGroups['5'].length > 0) {
-    //           const thirdPartyReadingsWithInsights = thirdPartyDataInsights_LIB({
-    //             rawReadings: readingsInGroups['5'],
-    //             userTz: ''
-    //           });
-
-    //           const readingsWithInsights : any = thirdPartyReadingsWithInsights.readings;
-
-    //           // S: Time Data graphs
-    //           for (let i = 0; i < readingsWithInsights.length; i++) {
-    //             if (readingsWithInsights[i].manual === 'DiscordBotUserOnGuildActivity') {
-    //               thirdPartyManualDataSets.discordBotUserOnGuildActivity.push(
-    //                 {
-    //                   // group: parseInt(readingsWithInsights[i].val, 10),
-    //                   when: readingsWithInsights[i].friendyCreatedAt,
-    //                   data: readingsWithInsights[i].data,
-    //                   val: parseInt(readingsWithInsights[i].val, 10)
-    //                 }
-    //               );
-
-    //               socialActivityAll.push(parseInt(readingsWithInsights[i].val, 10));
-
-    //             } else if (readingsWithInsights[i].manual === 'TrdPtyWonderHeroGameApi') {
-    //               const item : any = {
-    //                 group: readingsWithInsights[i].scoreGroup,
-    //                 time: readingsWithInsights[i].time,
-    //                 when: readingsWithInsights[i].friendyCreatedAt,
-    //                 val: 0,
-    //                 data: readingsWithInsights[i].data
-    //               };
-
-    //               thirdPartyManualDataSets.trdPtyWonderHeroGameApi.push(item);
-    //               gamingActivityAll.push(item);
-    //             }
-    //           }
-    //           // E: Time Data graphs
-    //         }
-    //       }
-
-    //         break;
-    //     }
-    //   });
-
-    //   setActiveGamerData({
-    //     readingsOnChainAddrTxOnCon: onChainManualDataSets.onChainAddrTxOnCon,
-    //     readingsOnChainAddrTxOnConErd: onChainManualDataSets.onChainAddrTxOnConErd,
-    //     readingsDiscordBotUserOnGuildActivity: thirdPartyManualDataSets.discordBotUserOnGuildActivity,
-    //     readingsTrdPtyWonderHeroGameApi: thirdPartyManualDataSets.trdPtyWonderHeroGameApi,
-    //     socialActivityAllData: socialActivityAll,
-    //     gamingActivityAllData: gamingActivityAll,
-    //   });
-    // }
   };
 
   if (isLoading) {
@@ -297,48 +160,6 @@ export const PlayStationGamer = () => {
       ) : (
         <h3 className="text-center text-white">No Data NFTs</h3>
       )}
-      {/*<>*/}
-      {/*  /!*<Modal isOpen={isModalOpened} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>*!/*/}
-      {/*  <div style={{ height: "3rem" }}>*/}
-      {/*    <div*/}
-      {/*      style={{*/}
-      {/*        float: "right",*/}
-      {/*        cursor: "pointer",*/}
-      {/*        fontSize: "2rem",*/}
-      {/*      }}*/}
-      {/*      onClick={closeModal}>*/}
-      {/*      <IoClose />*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*  <h4 className="text-center font-title font-weight-bold">PlayStation Gamer Passport</h4>*/}
-      {/*  /!*<ModalBody>*!/*/}
-      {/*  {!owned ? (*/}
-      {/*    <div className="flex flex-col items-center justify-center">*/}
-      {/*      <h4 className="mt-3 font-title">You do not own this Data NFT</h4>*/}
-      {/*      <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>*/}
-      {/*    </div>*/}
-      {/*  ) : isFetchingDataMarshal || !data ? (*/}
-      {/*    <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">*/}
-      {/*      <div>*/}
-      {/*        <Loader noText />*/}
-      {/*        <p className="text-center font-weight-bold">{"Loading..."}</p>*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*  ) : (*/}
-      {/*    <div*/}
-      {/*      style={{*/}
-      {/*        minWidth: "26rem",*/}
-      {/*        maxWidth: "100%",*/}
-      {/*        minHeight: "36rem",*/}
-      {/*        maxHeight: "60vh",*/}
-      {/*        overflowY: "auto",*/}
-      {/*      }}>*/}
-      {/*      <PlaystationGamerInsights gamerId={"userId"} gamerData={activeGamerData} />*/}
-      {/*    </div>*/}
-      {/*  )}*/}
-      {/*  /!*</ModalBody>*!/*/}
-      {/*  /!*</Modal>*!/*/}
-      {/*</>*/}
     </HeaderComponent>
   );
 };

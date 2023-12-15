@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { ShoppingCart } from "lucide-react";
 import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaTrophy } from "react-icons/fa";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { Button } from "../../../../libComponents/Button";
 import { Modal } from "../../../../components/Modal/Modal";
-import { Card } from "../../../../libComponents/Card";
-import { ShoppingCart } from "lucide-react";
-import { useFilterStore } from "../../../../store/FilterStore";
 import { NoDataFound } from "../../../../components/NoDataFound";
+import { Button } from "../../../../libComponents/Button";
+import { Card } from "../../../../libComponents/Card";
+import { useFilterStore } from "../../../../store/FilterStore";
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
   const { filter } = useFilterStore();
@@ -16,16 +16,16 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
   const [filteredData, setFilteredData] = useState<number>(1000);
 
   useEffect(() => {
-    const filteredData = new Set();
+    const filteredDataTemp = new Set();
     const allData = new Set(data);
-    allData.forEach((data: any) => {
+    allData.forEach((dataT: any) => {
       // console.log(data.category);
-      if (data.category === filter) {
-        filteredData.add(data);
+      if (dataT.category === filter) {
+        filteredDataTemp.add(dataT);
       } else {
         setFilteredData(0);
       }
-      setFilteredData(filteredData.size);
+      setFilteredData(filteredDataTemp.size);
     });
   }, [filter]);
 

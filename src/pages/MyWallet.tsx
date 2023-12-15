@@ -9,7 +9,7 @@ import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
 

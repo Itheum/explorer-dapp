@@ -8,15 +8,15 @@ import {
 import { TransactionsToastList, NotificationModal, SignTransactionsModals } from "components";
 import { apiTimeout, walletConnectV2ProjectId, sampleAuthenticatedDomains, ELROND_NETWORK } from "config";
 import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock } from "pages";
-import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
+import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./libComponents/ThemeProvider";
 
 export const App = () => {
   return (
     <AxiosInterceptorContext.Provider>
-      <AxiosInterceptorContext.Interceptor authenticatedDomanis={sampleAuthenticatedDomains}>
+      <AxiosInterceptorContext.Interceptor authenticatedDomains={sampleAuthenticatedDomains}>
         <Router>
           <DappProvider
             environment={ELROND_NETWORK}

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
-import lightLogo from "assets/img/logo-icon-b.png";
-import darkLogo from "assets/img/logo-sml-d.png";
 import logo192 from "assets/img/logo192.png";
 import { CopyAddress } from "components/CopyAddress";
 import { logout } from "helpers";
@@ -11,6 +9,7 @@ import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
+import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
 import {
   DropdownMenu,
@@ -30,7 +29,6 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
-import { SwitchButton } from "./SwitchButton";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();

@@ -31,7 +31,6 @@ export const NFTunes = () => {
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
-  const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
@@ -91,7 +90,6 @@ export const NFTunes = () => {
       }
 
       const _owned = flags[index];
-      setOwned(_owned);
 
       if (_owned) {
         setIsFetchingDataMarshal(true);

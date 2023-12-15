@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-
+import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
+import { ArrowBigLeft, Loader2, Play, Pause, Library, RefreshCcwDot, Volume2, Volume1, VolumeX, SkipBack, SkipForward } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { ArrowBigLeft, Loader2, Play, Pause, Library, RefreshCcwDot, Volume2, Volume1, VolumeX, SkipBack, SkipForward } from "lucide-react";
-
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
-import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 
 type AudioPlayerProps = {
   dataNftToOpen: DataNft;

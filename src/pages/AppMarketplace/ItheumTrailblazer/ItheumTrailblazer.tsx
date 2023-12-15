@@ -6,7 +6,7 @@ import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { TrailBlazerModal } from "./components/TrailBlazerModal";
 
@@ -107,24 +107,6 @@ export const ItheumTrailblazer = () => {
     { id: 10, value: "Tech Team" },
     { id: 11, value: "Feature" },
   ];
-
-  // async function processSignature(nonce: number, messageToBeSigned: string, signedMessage: SignableMessage) {
-  //   try {
-  //     setIsFetchingDataMarshal(true);
-  //     setOwned(true);
-  //     openModal();
-  //
-  //     const dataNft = await DataNft.createFromApi(nonce);
-  //     const res = await dataNft.viewData(messageToBeSigned, signedMessage as any);
-  //     res.data = await (res.data as Blob).text();
-  //     res.data = JSON.parse(res.data);
-  //
-  //     setData(res.data.data.reverse());
-  //     setIsFetchingDataMarshal(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
 
   if (isLoading) {
     return <Loader />;

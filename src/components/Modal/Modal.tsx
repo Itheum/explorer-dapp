@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "libComponents/Dialog";
-import { cn } from "libs/utils";
 import { Filter, IFilterData } from "libComponents/Filter";
+import { cn } from "libs/utils";
 
 type ModalProps = {
   openTrigger: React.ReactNode;
