@@ -27,5 +27,5 @@ export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
 
 export const SUPPORTED_COLLECTIONS =
   process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet
-    ? ["DATANFTFT-e0b917", "I3TICKER-03e5c2"]
+    ? ["DATANFTFT-e0b917", "I3TICKER-03e5c2", "COLNAMA-539838"]
     : ["DATANFTFT-e936d4"];
