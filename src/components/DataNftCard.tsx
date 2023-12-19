@@ -132,9 +132,9 @@ export function DataNftCard({
                   {modalContent}
                 </Modal>
               ) : (
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md w-40 ">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md ">
                   <Button
-                    className="dark:bg-[#0f0f0f] border-0 rounded-md font-medium tracking-tight !text-sm hover:opacity-90 w-[9.9rem]"
+                    className="dark:bg-[#0f0f0f] border-0 rounded-md font-medium tracking-tight !text-sm hover:opacity-90"
                     variant="outline"
                     onClick={() => goToMarketplace(dataNft.tokenIdentifier)}>
                     View in Marketplace

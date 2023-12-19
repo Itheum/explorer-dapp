@@ -31,7 +31,7 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
           ) : (
             <></>
           )}
-          <div className="flex flex-wrap base:flex-row flex-col justify-center md:justify-normal gap-x-20 ">{children}</div>
+          <div className="flex flex-wrap base:flex-row flex-col justify-center md:justify-normal gap-x-8 ">{children}</div>
         </div>
       </div>
     </div>
