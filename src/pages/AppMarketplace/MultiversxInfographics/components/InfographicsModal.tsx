@@ -238,7 +238,7 @@ export const InfographicsModal: React.FC = () => {
       {/*    <div>*/}
       {/*      <Loader noText />*/}
       {/*      <p className="text-center text-foreground">*/}
-      {/*        {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}*/}
+      {/*        Loading...*/}
       {/*      </p>*/}
       {/*    </div>*/}
       {/*  </div>*/}
