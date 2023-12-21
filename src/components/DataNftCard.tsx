@@ -87,12 +87,12 @@ export function DataNftCard({
             {showBalance && (
               <div className="grid grid-cols-12 mb-1">
                 <span className="col-span-4 opacity-6 base:text-sm md:text-base">Balance:</span>
-                <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.balance}</span>
+                <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.balance.toString()}</span>
               </div>
             )}
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 base:text-sm md:text-base">Total Supply:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.supply}</span>
+              <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.supply.toString()}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 base:text-sm md:text-base">Royalties:</span>

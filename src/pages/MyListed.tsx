@@ -126,7 +126,7 @@ export const MyListed = () => {
                       </div>
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Total Supply:</span>
-                        <span className="col-span-8 text-left">{isDataNftLoaded && dataNft.supply}</span>
+                        <span className="col-span-8 text-left">{isDataNftLoaded && dataNft.supply.toString()}</span>
                       </div>
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Royalties:</span>
