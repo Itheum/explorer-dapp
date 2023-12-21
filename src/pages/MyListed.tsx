@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { MXAddressLink, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
@@ -127,7 +126,7 @@ export const MyListed = () => {
                       </div>
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Total Supply:</span>
-                        <span className="col-span-8 text-left">{isDataNftLoaded && dataNft.supply}</span>
+                        <span className="col-span-8 text-left">{isDataNftLoaded && dataNft.supply.toString()}</span>
                       </div>
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Royalties:</span>

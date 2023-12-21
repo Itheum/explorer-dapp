@@ -9,7 +9,7 @@ import { ZoomableSvg } from "components/ZoomableSvg";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -42,11 +42,14 @@ export const MultiversxBubbles = () => {
 
   async function fetchDataNfts() {
     setIsLoading(true);
-
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
-    setDataNfts(_nfts);
-
-    setIsLoading(false);
+    if (MULTIVERSX_BUBBLE_TOKENS.length > 0) {
+      const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
+      setDataNfts(_nfts);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      toastError("No identifier for this Widget.");
+    }
   }
 
   async function fetchMyNfts() {
@@ -145,7 +148,7 @@ export const MultiversxBubbles = () => {
       hasImage={true}
       imgSrc={headerHero}
       altImageAttribute={"bubbleMap"}
-      pageSubtitle={"Data NFTs that Unlock this App"}
+      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (
@@ -158,7 +161,7 @@ export const MultiversxBubbles = () => {
             viewData={viewData}
             modalContent={
               !owned ? (
-                <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80dvh]">
+                <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80svh]">
                   <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
                   <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                 </div>

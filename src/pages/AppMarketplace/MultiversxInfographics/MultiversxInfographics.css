@@ -1,6 +1,7 @@
 .c-container-document {
   margin: 1em 0;
   min-height: 900px;
+}
 
   .react-pdf__Document {
     display: flex;
@@ -24,14 +25,13 @@
     padding: 20px;
     color: white;
   }
-}
 
 .c-container-paging {
   text-align: center;
+}
 
   button {
     cursor: pointer;
-    width: 80px;
   }
 
   .btn-outline-primary:hover:disabled {
@@ -44,4 +44,3 @@
     display: flex;
     align-items: center;
   }
-}

@@ -9,7 +9,7 @@ import { AudioPlayer } from "components/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, nativeAuthOrigins, toastError } from "libs/utils";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
@@ -31,7 +31,6 @@ export const NFTunes = () => {
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
-  const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
@@ -91,7 +90,6 @@ export const NFTunes = () => {
       }
 
       const _owned = flags[index];
-      setOwned(_owned);
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
@@ -148,7 +146,7 @@ export const NFTunes = () => {
       imgSrc={nfTunesBanner}
       animation={imgAnimation}
       altImageAttribute={"NF-Tunes application"}
-      pageSubtitle={"Data NFTs that Unlock this App"}
+      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={dataNfts.length}>
       {dataNfts.length > 0 ? (
         dataNfts.map((dataNft, index) => (
@@ -162,7 +160,7 @@ export const NFTunes = () => {
             modalContent={
               isFetchingDataMarshal ? (
                 <div
-                  className="d-flex flex-column align-items-center justify-content-center"
+                  className="flex flex-col items-center justify-center"
                   style={{
                     minHeight: "40rem",
                   }}>
