@@ -166,9 +166,7 @@ export const NFTunes = () => {
                   }}>
                   <div>
                     <Loader noText />
-                    <p className="text-center text-foreground">
-                      {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-                    </p>
+                    <p className="text-center text-foreground">Loading...</p>
                   </div>
                 </div>
               ) : (
