@@ -235,9 +235,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
           <div>
             <Loader noText />
-            <p className="text-center font-weight-bold">
-              {["ledger", "walletconnectv2", "extra"].includes(loginMethod) ? "Please sign the message using xPortal or Ledger" : "Loading..."}
-            </p>
+            <p className="text-center font-weight-bold">Loading...</p>
           </div>
         </div>
       ) : (
