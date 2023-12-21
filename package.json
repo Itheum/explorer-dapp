@@ -11,7 +11,7 @@
     "@itheum/sdk-mx-data-nft": "2.4.1",
     "@multiversx/sdk-core": "12.17.0",
     "@multiversx/sdk-dapp": "2.25.1",
-    "@multiversx/sdk-network-providers": "2.2.0",
+    "@multiversx/sdk-network-providers": "2.1.0",
     "@radix-ui/react-dialog": "1.0.3",
     "@radix-ui/react-dropdown-menu": "2.0.6",
     "@radix-ui/react-navigation-menu": "1.1.4",
