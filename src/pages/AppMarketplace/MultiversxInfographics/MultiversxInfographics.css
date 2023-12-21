@@ -32,7 +32,6 @@
 
   button {
     cursor: pointer;
-    width: 80px;
   }
 
   .btn-outline-primary:hover:disabled {
