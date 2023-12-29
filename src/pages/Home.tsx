@@ -30,7 +30,7 @@ export const Home = () => {
 
   return (
     <HeaderComponent
-      pageTitle={"Data Widget"}
+      pageTitle={"Data Widgets"}
       subTitle={
         "Itheum Data Widgets are lightweight apps powered by Data NFTs, enabling creative ways to open, visualize and discover the potential of the raw data found within Data NFTs."
       }

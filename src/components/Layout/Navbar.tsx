@@ -59,8 +59,8 @@ export const Navbar = () => {
       <div className="flex flex-row items-center text-xl">
         <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
           <img src={logo192} className="w-[5rem]" />
-          <span className="text-black dark:!text-white md:text-xl text-base">Itheum</span>
-          <span className="text-black dark:!text-white font-semibold md:text-xl text-base">Explorer</span>
+          <span className="text-black dark:!text-white md:text-lg text-base">Itheum&nbsp;</span>
+          <span className="text-black dark:!text-white font-bold md:text-lg text-base">Explorer</span>
         </Link>
       </div>
 
