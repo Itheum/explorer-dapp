@@ -2,7 +2,7 @@ import React from "react";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 import { useLocation } from "react-router-dom";
-import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton } from "components";
+import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton, LedgerLoginButton } from "components";
 import { walletConnectV2ProjectId } from "config";
 import { getApi } from "libs/utils";
 import { routeNames } from "routes";
@@ -52,7 +52,7 @@ const UnlockPage = () => {
               />
               <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
               <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
-              {/* <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} /> */}
+              <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
               <WebWalletLoginButton
                 loginButtonText={"Google (xAlias)"}
                 className="w-full !m-0"
