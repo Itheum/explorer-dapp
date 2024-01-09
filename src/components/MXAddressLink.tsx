@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { ExternalLink } from "lucide-react";
 
 interface MXAddressLinkPropsType {
   explorerAddress: string;
@@ -14,7 +14,7 @@ export const MXAddressLink: FC<MXAddressLinkPropsType> = ({ explorerAddress, add
       href={`${explorerAddress}/accounts/${address}`}
       target="_blank">
       {precision > 0 ? address.slice(0, precision) + " ... " + address.slice(-precision) : address}
-      <FaExternalLinkAlt className="ml-2" />
+      <ExternalLink strokeWidth={2.5} size={16} className="ml-1" />
     </a>
   );
 };
