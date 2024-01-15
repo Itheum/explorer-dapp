@@ -1,6 +1,6 @@
 import { EnvironmentsEnum } from "libs/types";
 
-export const IS_DEVNET = process.env.REACT_APP_ENV_NETWORK && process.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet;
+export const IS_DEVNET = import.meta.env.REACT_APP_ENV_NETWORK && import.meta.env.REACT_APP_ENV_NETWORK === EnvironmentsEnum.devnet;
 
 export type app_token = {
   tokenIdentifier: string;

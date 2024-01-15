@@ -12,7 +12,7 @@ import { Navbar } from "./Navbar";
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { search } = useLocation();
   const { isLoggedIn: isMxLoggedIn } = useGetLoginInfo();
-  const appVersion = process.env.REACT_APP_VERSION;
+  const appVersion = import.meta.env.REACT_APP_VERSION;
 
   useEffect(() => {
     const handleAppVersioningLogin = async () => {

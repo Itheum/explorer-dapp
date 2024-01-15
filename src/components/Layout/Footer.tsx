@@ -2,7 +2,7 @@ import React from "react";
 import { ELROND_NETWORK } from "config";
 
 export const Footer = () => {
-  const appVersion = process.env.REACT_APP_VERSION ? `v${process.env.REACT_APP_VERSION}` : "version number unknown";
+  const appVersion = import.meta.env.REACT_APP_VERSION ? `v${import.meta.env.REACT_APP_VERSION}` : "version number unknown";
 
   return (
     <footer className="w-full flex justify-center mt-2 mb-3">
