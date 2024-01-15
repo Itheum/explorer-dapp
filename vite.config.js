@@ -7,6 +7,9 @@ import svgrPlugin from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  define: {
+    "import.meta.env.VITE_APP_VERSION": JSON.stringify(process.env.npm_package_version),
+  },
   server: {
     port: Number(process.env.PORT) || 3000,
     strictPort: true,
