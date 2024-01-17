@@ -4,7 +4,7 @@ import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "reac
 import svgReset from "./Reset.svg";
 import svgZoomIn from "./ZoomIn.svg";
 import svgZoomOut from "./ZoomOut.svg";
-import "./index.scss";
+import "./index.css";
 
 const INITIAL_SCALE = 2;
 
