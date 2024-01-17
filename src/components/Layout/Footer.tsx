@@ -2,7 +2,7 @@ import React from "react";
 import { ELROND_NETWORK } from "config";
 
 export const Footer = () => {
-  const appVersion = import.meta.env.REACT_APP_VERSION ? `v${import.meta.env.REACT_APP_VERSION}` : "version number unknown";
+  const appVersion = import.meta.env.VITE_APP_VERSION ? `v${import.meta.env.VITE_APP_VERSION}` : "version number unknown";
 
   return (
     <footer className="w-full flex justify-center mt-2 mb-3">
@@ -16,7 +16,7 @@ export const Footer = () => {
           Made with ♥ by Itheum
         </a>
         <div className="text-center">
-          <small>{appVersion}</small>
+          <small>{appVersion + " "}</small>
           <small className="">{ELROND_NETWORK.toUpperCase()}</small>
         </div>
       </div>

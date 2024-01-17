@@ -50,7 +50,6 @@ export const Navbar = () => {
   }, [theme]);
 
   const handleLogout = () => {
-    // logout(`${window.location.origin}/unlock`);
     logout(`${window.location.origin}`, undefined, false);
   };
 

@@ -1,33 +1,16 @@
 import * as React from "react";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { logout } from "../helpers";
-import { useGetIsLoggedIn } from "../hooks";
 import { Button } from "../libComponents/Button";
-import { useLocalStorageStore } from "../store/LocalStorageStore.ts";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
 }
 
 export const Home = () => {
-  const isLoggedIn = useGetIsLoggedIn();
-  const { appVersion } = useLocalStorageStore();
-  const handleLogout = () => {
-    logout(`${window.location.origin}`, undefined, false);
-  };
-
-  useEffect(() => {
-    if (isLoggedIn && appVersion !== localStorage.getItem("app-version")) {
-      localStorage.setItem("app-version", appVersion ?? "");
-      handleLogout();
-    }
-  }, [appVersion]);
-
   return (
     <HeaderComponent
       pageTitle={"Data Widgets"}
