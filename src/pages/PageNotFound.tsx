@@ -1,20 +1,17 @@
 import * as React from "react";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
+import { Search } from "lucide-react";
 
 export const PageNotFound = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="flex flex-fill items-center container">
-      <div className="col-12 col-md-8 col-lg-5 mx-auto">
-        <div className="card shadow-accent-foreground/40 shadow-md rounded p-4 border-0 bg-background">
-          <div className="card-body text-center flex flex-col justify-center">
-            <FontAwesomeIcon icon={faSearch} className="mx-auto fa-3x mb-2" />
-            <span className=" mt-3">Page not found</span>
-            <span className="empty-details">{pathname}</span>
-          </div>
+    <div className="flex w-full h-[90svh] justify-center items-center">
+      <div className="w-4/12 shadow-accent-foreground/40 shadow-md rounded p-4 border-0 bg-background">
+        <div className="text-center flex flex-col justify-center p-10">
+          <Search strokeWidth={2.5} className="mx-auto w-20 h-20" />
+          <span className="text-xl mt-3">Page not found</span>
+          <span className="text-lg text-muted-foreground">{pathname}</span>
         </div>
       </div>
     </div>

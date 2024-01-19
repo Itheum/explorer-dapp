@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { IoClose } from "react-icons/io5";
 import SVG from "react-inlinesvg";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
@@ -10,6 +9,7 @@ import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType } from "libs/types";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { X } from "lucide-react";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -190,7 +190,7 @@ export const MultiversxInfographics = () => {
               fontSize: "2rem",
             }}
             onClick={closeModal}>
-            <IoClose />
+            <X strokeWidth={2.5} />
           </div>
         </div>
         <h4 className="text-center font-title font-weight-bold">MultiversX Infographics</h4>

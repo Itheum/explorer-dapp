@@ -1,39 +1,35 @@
 {
   "env": {
     "es2021": true,
-    "node": true
+    "node": true,
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2021,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
-    }
+      "jsx": true,
+    },
   },
   "settings": {
     "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
+      "@typescript-eslint/parser": [".ts", ".tsx"],
     },
     "import/resolver": {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"],
-        "moduleDirectory": ["node_modules", "src/"]
+        "moduleDirectory": ["node_modules", "src/"],
       },
       "typescript": {
-        "alwaysTryTypes": true
-      }
+        "alwaysTryTypes": true,
+      },
     },
     "react": {
       "pragma": "React",
-      "version": "detect"
-    }
+      "version": "detect",
+    },
   },
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
-  ],
+  "extends": ["plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "prettier"],
   "plugins": ["react-hooks", "prettier", "import"],
   "rules": {
     "import/order": [
@@ -44,21 +40,22 @@
           {
             "pattern": "react",
             "group": "external",
-            "position": "before"
-          }
+            "position": "before",
+          },
         ],
         "pathGroupsExcludedImportTypes": ["react"],
         "newlines-between": "ignore",
         "alphabetize": {
           "order": "asc",
-          "caseInsensitive": true
-        }
-      }
+          "caseInsensitive": true,
+        },
+      },
     ],
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
     "react/jsx-one-expression-per-line": "off",
     "react/prop-types": "off",
     "react/display-name": "off",
@@ -81,6 +78,6 @@
     "@typescript-eslint/no-shadow": ["warn"],
     "react/no-array-index-key": "off",
     "prefer-const": "off",
-    "@typescript-eslint/no-inferrable-types": "off"
-  }
+    "@typescript-eslint/no-inferrable-types": "off",
+  },
 }

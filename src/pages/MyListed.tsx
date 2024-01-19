@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
-import { FaExternalLinkAlt } from "react-icons/fa";
-import { MXAddressLink, Loader } from "components";
+import { Loader, MXAddressLink } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
 import { dataNftMarket } from "libs/mvx";
@@ -10,6 +9,7 @@ import { convertToLocalString } from "libs/utils";
 import { createNftId } from "libs/utils/token";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Card, CardContent } from "../libComponents/Card";
+import { ExternalLink } from "lucide-react";
 
 export const MyListed = () => {
   const {
@@ -73,8 +73,8 @@ export const MyListed = () => {
           if (dataNft) {
             return (
               <div className="mb-3" key={`o-c-${index}`}>
-                <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px]">
-                  <CardContent className="flex flex-col p-3">
+                <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px] pb-5">
+                  <CardContent className="flex flex-col p-4">
                     <div className="mb-4">
                       <img src={isDataNftLoaded ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} alt="dataNftImage" />
                     </div>
@@ -91,7 +91,7 @@ export const MyListed = () => {
                               href={`${MARKETPLACE_DETAILS_PAGE}${nftId}`}
                               className="!text-blue-500 text-decoration-none hover:!text-blue-500/80"
                               target="_blank">
-                              <FaExternalLinkAlt />
+                              <ExternalLink strokeWidth={2.5} size={16} />
                             </a>
                           </div>
                         </span>
