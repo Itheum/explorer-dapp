@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { ShoppingCart } from "lucide-react";
-import { FaCalendarCheck, FaChartBar, FaChessKnight, FaFlagCheckered, FaHandshake, FaMoneyBillAlt, FaShopify, FaTrophy } from "react-icons/fa";
+import { Banknote, BarChart3, CalendarCheck, Flag, HeartHandshake, Map, ShoppingCart, Trophy } from "lucide-react";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
 import { Modal } from "../../../../components/Modal/Modal";
@@ -34,22 +33,22 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
       case "Partnership":
-        return <FaHandshake />;
+        return <HeartHandshake strokeWidth={2.5} />;
         break;
       case "Achievement":
-        return <FaTrophy />;
+        return <Trophy strokeWidth={2.5} />;
         break;
       case "Offer":
-        return <FaMoneyBillAlt />;
+        return <Banknote strokeWidth={2.5} />;
         break;
       case "Quest":
-        return <FaChessKnight />;
+        return <Map strokeWidth={2.5} />;
         break;
       case "Leaderboard":
-        return <FaChartBar />;
+        return <BarChart3 strokeWidth={2.5} />;
         break;
       default:
-        return <FaCalendarCheck />;
+        return <CalendarCheck strokeWidth={2.5} />;
         break;
     }
   };
@@ -76,9 +75,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                   <span>{dataItem.title}</span>
                   <div className="flex flex-row items-center">
                     <span>Claimable On:</span>
-                    <div className="pl-2">
-                      <FaShopify className="h-5 w-5" />
-                    </div>
+                    <div className="pl-1 font-semibold">Shopify</div>
                   </div>
                 </div>
                 <a className="!no-underline" href={dataItem.link} target="_blank">
@@ -106,7 +103,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
               <div className="text-xl pt-1">Psst! A secret quest is underway.</div>
               <div className="flex md:flex-row flex-col w-full justify-around items-center py-4 gap-3">
                 <div className="">
-                  <FaFlagCheckered className="w-12 h-12" />
+                  <Flag className="w-12 h-12" />
                 </div>
                 <div className="flex flex-col space-y-2">
                   <div className="w-48 leading-relaxed text-[14px]">{dataItem.title}</div>

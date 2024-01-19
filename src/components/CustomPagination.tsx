@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 // const PAGE_SIZES: number[] = [8, 16, 24];
 const THROTTLE_TIME = 500;
@@ -49,7 +49,7 @@ export const CustomPagination: FC<PropsType> = ({
             }, THROTTLE_TIME);
           }}
           disabled={!canPreviousPage || isInThrottle || disabled}>
-          <FaAngleDoubleLeft />
+          <ChevronsLeft strokeWidth={2.5} />
         </button>
         <button
           className="btn btn-primary"
@@ -61,7 +61,7 @@ export const CustomPagination: FC<PropsType> = ({
             }, THROTTLE_TIME);
           }}
           disabled={!canPreviousPage || isInThrottle || disabled}>
-          <FaAngleLeft />
+          <ChevronLeft strokeWidth={2.5} />
         </button>
       </div>
 
@@ -82,7 +82,7 @@ export const CustomPagination: FC<PropsType> = ({
             }, THROTTLE_TIME);
           }}
           disabled={!canNextPage || isInThrottle || disabled}>
-          <FaAngleRight />
+          <ChevronRight strokeWidth={2.5} />
         </button>
         <button
           className="btn btn-primary"
@@ -94,7 +94,7 @@ export const CustomPagination: FC<PropsType> = ({
             }, THROTTLE_TIME);
           }}
           disabled={!canNextPage || isInThrottle || disabled}>
-          <FaAngleDoubleRight />
+          <ChevronsRight strokeWidth={2.5} />
         </button>
       </div>
     </div>
