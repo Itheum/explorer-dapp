@@ -30,10 +30,6 @@
   text-align: center;
 }
 
-  button {
-    cursor: pointer;
-  }
-
   .btn-outline-primary:hover:disabled {
     color: grey;
     cursor: initial;
