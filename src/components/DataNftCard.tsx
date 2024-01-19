@@ -48,7 +48,10 @@ export function DataNftCard({
       <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]">
         <CardContent className="flex flex-col p-3">
           <div className="mb-4 flex justify-center">
-            <img className="md:w-auto base:w-[15rem]" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
+            <img
+              className="md:w-auto base:w-[15rem] h-[15rem] rounded-xl"
+              src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"}
+            />
           </div>
 
           <div className="md:h-[15rem] h-[13rem]">
