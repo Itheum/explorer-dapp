@@ -3,7 +3,7 @@ import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { withPageTitle } from "./components/PageTitle";
-import { PlayStationGamer, Home, MyListed, MyWallet, EsdtBubble, MultiversxBubbles, MultiversxInfographics } from "./pages";
+import { PlayStationGamer, Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics } from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -50,12 +50,6 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.itheumtrailblazer,
     title: "TrailBlazer",
     component: ItheumTrailblazer,
-    authenticatedRoute: false,
-  },
-  {
-    path: routeNames.esdtBubble,
-    title: "ESDT Bubbles",
-    component: EsdtBubble,
     authenticatedRoute: false,
   },
   {

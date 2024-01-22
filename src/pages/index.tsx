@@ -1,6 +1,5 @@
 export * from "./PlayStationGamer";
 export * from "./Dashboard";
-export * from "./EsdtBubble";
 export * from "./AppMarketplace/MultiversxBubbles/MultiversxBubbles";
 export * from "./AppMarketplace/MultiversxInfographics";
 export * from "./AppMarketplace/ItheumTrailblazer/components/TrailBlazerModal";

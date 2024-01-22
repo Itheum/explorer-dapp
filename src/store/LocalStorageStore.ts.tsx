@@ -6,6 +6,6 @@ interface LocalStorageStore {
 }
 
 export const useLocalStorageStore = create<LocalStorageStore>((set) => ({
-  appVersion: process.env.REACT_APP_VERSION,
+  appVersion: import.meta.env.VITE_APP_VERSION,
   setAppVersion: (newAppVersion) => set({ appVersion: newAppVersion }),
 }));
