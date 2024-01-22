@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer is a DApp for the public to explore and visualize data within the Itheum protocol",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -84,7 +84,7 @@
     "prettier": "3.2.2",
     "tailwindcss": "3.4.1",
     "typescript": "4.9.5",
-    "vite": "5.0.11",
+    "vite": "5.0.12",
     "vite-plugin-node-polyfills": "0.19.0",
     "vite-plugin-svgr": "4.2.0",
     "vite-tsconfig-paths": "4.2.3",
