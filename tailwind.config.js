@@ -74,12 +74,21 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "gradient": {
+          to: { "background-position": "200% center" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "spin-slow": "spin 4s linear infinite",
+        "gradient": "gradient 10s linear infinite",
       },
+      backgroundImage: (theme) => ({
+        "gradient-nftunes": `linear-gradient(to right, ${theme("colors.pink")}, ${theme("colors.orange")})`,
+
+        "manu-image": "url('../src/assets/img/nf-tunes/bg-manu.jpg')",
+      }),
     },
   },
 

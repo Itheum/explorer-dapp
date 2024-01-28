@@ -17,6 +17,10 @@ import { Music, Music2 } from "lucide-react";
 import { Button } from "libComponents/Button";
 import zstorageDataVault from "../../../assets/img/zstorage/zstorage-data-vault.png";
 import musicNote from "../../../assets/img/music-note.png";
+import manuImage from "../../../assets/img/nf-tunes/manu.png";
+import manuBackground from "../../../assets/img/nf-tunes/bg-manu.jpg";
+import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
+
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
 }
@@ -31,6 +35,7 @@ export const NFTunes = () => {
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
+  const [featuredArtistDataNft, setFeaturedArtistDataNft] = useState<DataNft>();
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
@@ -66,7 +71,7 @@ export const NFTunes = () => {
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(NF_TUNES_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
     setDataNfts(_nfts);
-
+    console.log("_nfts", _nfts);
     setIsLoading(false);
   }
 
@@ -76,8 +81,8 @@ export const NFTunes = () => {
     const _dataNfts = await DataNft.ownedByAddress(address);
     const _flags = [];
 
-    for (const cnft of dataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
+    for (const currentNft of dataNfts) {
+      const matches = _dataNfts.filter((ownedNft) => currentNft.nonce === ownedNft.nonce);
       _flags.push(matches.length > 0);
     }
 
@@ -142,11 +147,16 @@ export const NFTunes = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center ">
+    <div className="flex flex-col justify-center items-center gap-8  ">
       <div className="flex flex-col items-start h-screen mt-[5%]">
         <div className="flex flex-col w-full xl:w-[60%] gap-6">
           <div className="flex-row flex items-center ">
-            <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
+            <span
+              className="text-5xl xl:text-[8rem]  
+             bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]
+            ">
+              NF-Tunes
+            </span>
             <img className="max-h-[30%] mb-6" src={musicNote} />
           </div>
           <div className="flex flex-row justify-between">
@@ -155,7 +165,8 @@ export const NFTunes = () => {
             </span>
             <Music className="md:scale-[2] text-primary mr-8" />
           </div>
-          <button className=" text-sm md:text-xl p-2 md:p-4 bg-gradient-to-l from-purple-800 via-stone-500 to-neutral-500 rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary ">
+
+          <button className=" text-sm md:text-xl p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100% rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary ">
             Visualize NF-tunes
           </button>
         </div>
@@ -183,116 +194,267 @@ export const NFTunes = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-start items-start w-full">
-        <div className="flex flex-row rounded-lg  px-2 text-center gap-3 bg-foreground md:text-2xl   justify-start items-center ">
+      {/* Benefits of NF-Tunes */}
+      <div className="flex flex-col justify-start items-center xl:items-start w-full gap-12  ">
+        <div className="flex flex-row rounded-lg  px-8 xl:px-16 text-center gap-3 bg-foreground md:text-2xl xl:text-3xl  justify-start items-center ">
           <Music2 className="text-secondary" />
           <span className="text-secondary">Benefits of NF-Tunes</span>
           <Music2 className="text-secondary" />
         </div>
+        <div className="flex flex-col xl:flex-row justify-start items-center gap-8 w-full">
+          <div className="flex flex-col gap-4 p-8 pb-16 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border boder-background-foreground">
+            <div className="flex justify-start w-full">
+              <div className="rounded-full h-24 w-24 bg-accent   "> </div>
+            </div>
+            <span className="text-primary text-2xl  ">Transform your music streams into NFT Masterpieces</span>
+            <span className="text-muted-foreground text-sm  ">
+              Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.
+            </span>
+          </div>
+          <div className="flex flex-col gap-4 p-8 pb-16 items-start  w-[80%] xl:w-[30%] bg-background rounded-[3rem] border boder-background-foreground">
+            <div className="flex justify-start w-full">
+              <div className="rounded-full h-24 w-24 bg-accent   "> </div>
+            </div>
+            <span className="text-primary text-2xl  ">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
+            <span className="text-muted-foreground text-sm  ">
+              Explore the availability of Music Data NFTs across various NFT platforms, connecting you with "new fans" and fostering a direct relationship with
+              your audience.{" "}
+            </span>
+          </div>
+          <div className="flex flex-col gap-4 p-8 pb-16 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border boder-background-foreground">
+            <div className="flex justify-start w-full">
+              <div className="rounded-full h-24 w-24 bg-accent   "> </div>
+            </div>
+            <span className="text-primary text-2xl  ">Take Command of Royalties and Distribution for Your Music NFTs</span>
+            <span className="text-muted-foreground text-sm  ">
+              Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.{" "}
+            </span>
+          </div>
+        </div>
       </div>
+
+      {/* Featured Artist Section */}
+      <div className=" bg-manu-image bg-cover	bg-top flex flex-col xl:flex-row  justify-center items-center xl:items-start  w-screen h-full xl:h-screen gap-12  ">
+        <div className=" py-8 flex flex-col w-[80%] justify-center items-start">
+          <div className="flex flex-row  rounded-lg px-8 xl:px-16 text-center gap-3 bg-foreground md:text-2xl xl:text-3xl  justify-start items-center ">
+            <Music className="text-secondary" />
+            <span className="text-secondary">Featured Artist Sections</span>
+            <Music className="text-secondary" />
+          </div>
+
+          <div className="flex flex-col xl:flex-row w-full h-full justify-center items-center xl:items-start p-8 gap-4">
+            <div className="flex flex-col w-[30%] min-w-[20rem]   justify-center items-center">
+              <span className="text-primary text-center text-2xl">Meet Manu YFGP</span>
+              <img className="" src={manuImage} />
+              <span className="text-primary text-light text-xs w-[80%]">
+                Empowering Indie musicians to engage with a fresh fan community and discover alternative avenues for music distribution. Empowering Indie
+                musicians to engage with a fresh fan community and discover alternative avenues for music distribution.{" "}
+              </span>
+            </div>
+            <div className="flex flex-col w-[30%] min-w-[20rem]  justify-start items-start">
+              <span className="text-primary text-center text-2xl">Preview Manu’s Music Stream</span>
+              <img className=" " src={manuImage} />
+
+              {/* <audio src={"https://preview.yfgpmusic.com/musicpreview/mashup.mp3"}></audio> */}
+            </div>
+            <div className="flex flex-col  w-[30%] min-w-[20rem]   justify-center items-center">
+              <span className="text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
+              <div className="scale-[0.7] -mt-24 pt-4 xl:pt-0">
+                {dataNfts.length > 0 ? ( //show the first nft in the NF_TUNES_TOKENS array
+                  <DataNftCard
+                    key={0}
+                    index={0}
+                    dataNft={dataNfts[0]}
+                    isLoading={isLoading}
+                    owned={flags[0]}
+                    viewData={viewData}
+                    modalContent={
+                      isFetchingDataMarshal ? (
+                        <div
+                          className="flex flex-col items-center justify-center"
+                          style={{
+                            minHeight: "40rem",
+                          }}>
+                          <div>
+                            <Loader noText />
+                            <p className="text-center text-foreground">Loading...</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                            <AudioPlayer
+                              dataNftToOpen={dataNfts[currentIndex]}
+                              songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                              tokenLogin={tokenLogin}
+                            />
+                          )}
+                        </>
+                      )
+                    }
+                    modalTitle={"NF-Tunes"}
+                    modalTitleStyle="p-4"
+                  />
+                ) : (
+                  <h3 className="text-center text-white">No DataNFT</h3>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Storage Solution Zstorage  */}
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-row rounded-lg w-[80%] px-2 text-center gap-3 bg-foreground md:text-2xl md:w-[60%] justify-center items-center ">
+      <div className="flex flex-col justify-center items-center xl:items-start">
+        <div className="flex flex-row rounded-lg w-[80%] px-2 text-center gap-3 bg-foreground xl:text-2xl xl:w-[60%] justify-center items-center ">
           <Music2 className="text-secondary" />
-          <span className="text-secondary">Storage solution for your music data NFT</span>
+          <span className="text-secondary text-">Storage solution for your music data NFT</span>
           <Music2 className="text-secondary" />
         </div>
-        <div className="flex flex-row">
-          <div className="flex flex-col">
-            <div className="text-primary text-2xl">
-              Integrate with <span className="text-nftunes-gradient">zstorage</span>
+        <div className="flex flex-col xl:flex-row pt-12">
+          <div className="flex flex-col gap-8">
+            <div className="text-primary text-3xl xl:text-6xl">
+              Integrate with
+              <span className="ml-2 font-bold bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]">
+                zStorage
+              </span>
             </div>
-            <div className="text-muted-foreground">
+            <div className="text-muted-foreground xl:text-xl xl:w-[60%]">
               Empowering Indie musicians to engage with a fresh fan community and discover alternative avenues for music distribution.{" "}
             </div>
-            <Button className="bg-gradient-to-l from-purple-800 via-stone-500 to-neutral-500 rounded-lg w-[20%] text-secondary">Try zStorage today</Button>
+            {/* <button className=" text-sm md:text-xl p-2 md:p-4  rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary font-extrabold  bg-[linear-gradient(to_right, #737373, #A76262 , #5D3899, #5D3899 , #A76262 , #737373 )] bg-[length:200%_auto] animate-gradient"> */}
+
+            <button className=" text-sm md:text-xl p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary ">
+              Try zStorage today
+            </button>
           </div>
-          <div>
+          <div className="my-8 xl:my-16 xl:scale-150">
             <img src={zstorageDataVault} alt="zstorage data vault" />
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-[80%] items-center justify-center">
-        <div className="flex flex-row justify-between gap-16 h-32 p-2 border-b border-muted-foreground">
+      <div className="flex flex-col items-center justify-center border-t border-muted-foreground ">
+        <div className="flex flex-row justify-between gap-2 xl:gap-16 xl:max-h-32 p-2 border-b border-muted-foreground">
           <div className="text-5xl flex justify-end items-end">
             <span>01.</span>
           </div>
           <div className="flex max-w-[30%] justify-start">
             <span>Effortless Music Management</span>
           </div>
-          <div className="text-sm text-muted-foreground max-w-[30%] flex justify-center items-center">
+          <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
             Effortlessly add, update, and manage your music files, art, and music metadata. Simplify your workflow with seamless control and organization.{" "}
           </div>
         </div>
-        <div className="flex flex-row justify-between gap-16 h-32 p-2 border-b border-muted-foreground">
+        <div className="flex flex-row justify-between gap-2 xl:gap-16 xl:max-h-32 p-2 border-b border-muted-foreground">
           <div className="text-5xl flex justify-end items-end">
             <span>02.</span>
           </div>
           <div className="flex max-w-[30%] justify-start">
             <span>Eternal Resonance with zStorage</span>
           </div>
-          <div className="text-sm text-muted-foreground max-w-[30%] flex justify-center items-center">
+          <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
             Safeguard your data on a resilient, censorship-resistant network or choose traditional web2-style storage for ultimate versatility and control{" "}
           </div>
         </div>
-        <div className="flex flex-row justify-between gap-16 h-32 p-2 border-b border-muted-foreground">
+
+        <div className="flex flex-row justify-between gap-2 xl:gap-16 xl:max-h-32 p-2 border-b border-muted-foreground">
           <div className="text-5xl flex justify-end items-end">
             <span>03.</span>
           </div>
-          <div className="flex max-w-[30%] justify-start">
+          <div className="flex max-w-[30%] justify-start text-center">
             <span>Link zStorage Music Streams to Itheum Data NFTs</span>
           </div>
-          <div className="text-sm text-muted-foreground max-w-[30%] flex justify-center items-center">
+          <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
             Easily mint, manage, and showcase your Data NFT collection on the marketplace.{" "}
           </div>
         </div>
       </div>
+
+      {/* Calling musicians Section */}
+      <div className="flex flex-col gap-4 justify-center items-center bg-primary xl:p-32 w-screen h-screen text-center">
+        <span className="text-secondary text-2xl xl:text-6xl"> Calling all Indie musicians!</span>
+        <span className="xl:w-[50%] text-primary-foreground xl:text-2xl ">
+          Explore the possibilities with NFTunes—we're here to assist you in onboarding and minting your Music Data NFTs.
+        </span>
+        <img src={megaphone} alt="megaphone" />
+      </div>
+      <div className="flex flex-col justify-center items-center xl:items-start w-full gap-12">
+        <div className="flex flex-row rounded-lg w-[80%] px-2 text-center gap-3 bg-foreground xl:text-2xl xl:w-[60%] justify-center items-center ">
+          <Music className="text-secondary" />
+          <span className="text-secondary text-">Storage solution for your music data NFT</span>
+          <Music className="text-secondary" />
+        </div>
+        <div className="text-2xl xl:text-5xl xl:w-[60%]  ">
+          Music Data NFTs:<br></br> Universally
+          <span className="ml-2 font-bold bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]">
+            Accessible
+          </span>
+          ,<br></br>
+          <span className="text-muted-foreground "> Just Like</span>
+          <span className="ml-2 font-bold bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]">
+            Regular NFTs{" "}
+          </span>
+        </div>
+        <div className="flex flex-col xl:flex-row items-center justify-between gap-4 text-center xl:text-2xl ">
+          <div className="flex items-center justify-center bg-background rounded-full w-52 h-52 border border-background-foreground">
+            <span className="w-[60%]">Itheum Data DEX</span>
+          </div>
+          <div className="flex items-center justify-center bg-background rounded-full w-52 h-52 border border-background-foreground">
+            <span className="w-[60%]">NFT Marketplaces</span>
+          </div>
+          <div className="flex items-center justify-center bg-background rounded-full w-52 h-52 border border-background-foreground">
+            <span className="w-[60%]">Itheum Data DEX</span>
+          </div>
+        </div>
+      </div>
+      {/*
+        add this for multiple data music nfts 
+      <HeaderComponent
+        pageTitle={"NF-Tunes"}
+        isAnimated
+        hasImage={true}
+        imgSrc={nfTunesBanner}
+        animation={imgAnimation}
+        altImageAttribute={"NF-Tunes application"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        dataNftCount={dataNfts.length}>
+        {dataNfts.length > 0 ? (
+          dataNfts.map((dataNft, index) => (
+            <DataNftCard
+              key={index}
+              index={index}
+              dataNft={dataNft}
+              isLoading={isLoading}
+              owned={flags[index]}
+              viewData={viewData}
+              modalContent={
+                isFetchingDataMarshal ? (
+                  <div
+                    className="flex flex-col items-center justify-center"
+                    style={{
+                      minHeight: "40rem",
+                    }}>
+                    <div>
+                      <Loader noText />
+                      <p className="text-center text-foreground">Loading...</p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                      <AudioPlayer dataNftToOpen={dataNfts[currentIndex]} songs={dataMarshalResponse ? dataMarshalResponse.data : []} tokenLogin={tokenLogin} />
+                    )}
+                  </>
+                )
+              }
+              modalTitle={"NF-Tunes"}
+              modalTitleStyle="p-4"
+            />
+          ))
+        ) : (
+          <h3 className="text-center text-white">No DataNFT</h3>
+        )}
+      </HeaderComponent> */}
     </div>
-    // <HeaderComponent
-    //   pageTitle={"NF-Tunes"}
-    //   isAnimated
-    //   hasImage={true}
-    //   imgSrc={nfTunesBanner}
-    //   animation={imgAnimation}
-    //   altImageAttribute={"NF-Tunes application"}
-    //   pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
-    //   dataNftCount={dataNfts.length}>
-    //   {dataNfts.length > 0 ? (
-    //     dataNfts.map((dataNft, index) => (
-    //       <DataNftCard
-    //         key={index}
-    //         index={index}
-    //         dataNft={dataNft}
-    //         isLoading={isLoading}
-    //         owned={flags[index]}
-    //         viewData={viewData}
-    //         modalContent={
-    //           isFetchingDataMarshal ? (
-    //             <div
-    //               className="flex flex-col items-center justify-center"
-    //               style={{
-    //                 minHeight: "40rem",
-    //               }}>
-    //               <div>
-    //                 <Loader noText />
-    //                 <p className="text-center text-foreground">Loading...</p>
-    //               </div>
-    //             </div>
-    //           ) : (
-    //             <>
-    //               {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-    //                 <AudioPlayer dataNftToOpen={dataNfts[currentIndex]} songs={dataMarshalResponse ? dataMarshalResponse.data : []} tokenLogin={tokenLogin} />
-    //               )}
-    //             </>
-    //           )
-    //         }
-    //         modalTitle={"NF-Tunes"}
-    //         modalTitleStyle="p-4"
-    //       />
-    //     ))
-    //   ) : (
-    //     <h3 className="text-center text-white">No DataNFT</h3>
-    //   )}
-    // </HeaderComponent>
   );
 };

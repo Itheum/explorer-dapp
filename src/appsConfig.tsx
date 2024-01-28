@@ -29,6 +29,9 @@ export const MULTIVERSX_INFOGRAPHICS_TOKENS: app_token[] = IS_DEVNET
       // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 490 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 3 }];
+export const FEATURED_NF_TUNES_TOKENS: app_token[] = IS_DEVNET
+  ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 42 }]
+  : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
 export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
   ? [
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 2 },
