@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { NF_TUNES_TOKENS } from "appsConfig";
+import { NF_TUNES_TOKENS, FEATURED_NF_TUNES_TOKEN } from "appsConfig";
 import nfTunesBanner from "assets/img/nf-tunes-banner.png";
 import disk from "assets/img/nf-tunes-logo-disk.png";
 import { DataNftCard, Loader } from "components";
@@ -38,6 +38,7 @@ export const NFTunes = () => {
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [featuredArtistDataNft, setFeaturedArtistDataNft] = useState<DataNft>();
+  const [featuredDataNftIndex, setFeaturedDataNftIndex] = useState(-1);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
@@ -72,8 +73,10 @@ export const NFTunes = () => {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(NF_TUNES_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
+    const _featuredNft: DataNft = await DataNft.createFromApi(FEATURED_NF_TUNES_TOKEN);
     setDataNfts(_nfts);
-    console.log("_nfts", _nfts);
+    setFeaturedArtistDataNft(_featuredNft);
+
     setIsLoading(false);
   }
 
@@ -84,6 +87,9 @@ export const NFTunes = () => {
     const _flags = [];
 
     for (const currentNft of dataNfts) {
+      if (currentNft.nonce == FEATURED_NF_TUNES_TOKEN.nonce) {
+        setFeaturedDataNftIndex(_flags.length);
+      }
       const matches = _dataNfts.filter((ownedNft) => currentNft.nonce === ownedNft.nonce);
       _flags.push(matches.length > 0);
     }
@@ -147,9 +153,8 @@ export const NFTunes = () => {
       setIsFetchingDataMarshal(false);
     }
   }
-  if (dataNfts.length) console.log(dataNfts[2].dataPreview);
   return (
-    <div className="flex flex-col justify-center items-center gap-32   ">
+    <div className="flex flex-col justify-center items-center gap-32 font-[Clash-Regular] ">
       <div className="flex flex-col items-start h-screen mt-[5%]">
         <div className="flex flex-col w-full xl:w-[60%] gap-6">
           <div className="flex-row flex items-center ">
@@ -201,8 +206,8 @@ export const NFTunes = () => {
             <div className="flex justify-start w-full">
               <div className="rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%    "> </div>
             </div>
-            <span className="text-primary text-2xl  ">Transform your music streams into NFT Masterpieces</span>
-            <span className="text-muted-foreground text-sm  ">
+            <span className="text-primary text-2xl   ">Transform your music streams into NFT Masterpieces</span>
+            <span className="text-primary text-sm  font-[Clash-Light]">
               Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.
             </span>
           </div>
@@ -211,7 +216,7 @@ export const NFTunes = () => {
               <div className="rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%   "> </div>
             </div>
             <span className="text-primary text-2xl  ">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
-            <span className="text-muted-foreground text-sm  ">
+            <span className="text-primary text-sm  font-[Clash-Light]">
               Explore the availability of Music Data NFTs across various NFT platforms, connecting you with "new fans" and fostering a direct relationship with
               your audience.{" "}
             </span>
@@ -221,7 +226,7 @@ export const NFTunes = () => {
               <div className="rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%  "> </div>
             </div>
             <span className="text-primary text-2xl  ">Take Command of Royalties and Distribution for Your Music NFTs</span>
-            <span className="text-muted-foreground text-sm  ">
+            <span className="text-primary text-sm font-[Clash-Light] ">
               Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.{" "}
             </span>
           </div>
@@ -241,7 +246,7 @@ export const NFTunes = () => {
             <div className="flex flex-col w-[30%] min-w-[20rem]   justify-center items-center">
               <span className="text-primary text-center text-2xl">Meet Manu YFGP</span>
               <img className="" src={manuImage} />
-              <span className="text-primary text-light text-xs w-[80%]">
+              <span className="text-primary font-[Clash-Light] text-xs w-[80%]">
                 Empowering Indie musicians to engage with a fresh fan community and discover alternative avenues for music distribution. Empowering Indie
                 musicians to engage with a fresh fan community and discover alternative avenues for music distribution.{" "}
               </span>
@@ -252,8 +257,8 @@ export const NFTunes = () => {
 
               <Modal
                 openTrigger={
-                  <button className="h-64 cursor-pointer flex rounded-full justify-center w-full mt-[-11rem]">
-                    <PlayCircle className="scale-[2]" />
+                  <button className="h-64  flex rounded-full justify-center w-full mt-[-11rem]">
+                    <PlayCircle className="scale-[3] cursor-pointer" />
                   </button>
                 }
                 closeOnOverlayClick={false}
@@ -261,7 +266,7 @@ export const NFTunes = () => {
                 hasFilter={false}
                 filterData={[]}
                 titleClassName={"p-8"}>
-                {isFetchingDataMarshal ? (
+                {!featuredArtistDataNft ? (
                   <div
                     className="flex flex-col items-center justify-center"
                     style={{
@@ -273,7 +278,24 @@ export const NFTunes = () => {
                     </div>
                   </div>
                 ) : (
-                  <>{<AudioPlayer dataNftToOpen={dataNfts[0]} songs={[]} tokenLogin={tokenLogin} />}</>
+                  <>
+                    {featuredArtistDataNft && (
+                      <AudioPlayer
+                        previewUrl={featuredArtistDataNft.dataPreview}
+                        songs={[
+                          {
+                            "idx": 1,
+                            // "date": featuredArtistDataNft.creationTime,
+                            "category": "Preview",
+                            // "artist": "YFGP",
+                            "album": featuredArtistDataNft.description,
+                            "cover_art_url": featuredArtistDataNft.nftImgUrl,
+                            "title": featuredArtistDataNft.title,
+                          },
+                        ]}
+                      />
+                    )}
+                  </>
                 )}
               </Modal>
               {dataNfts.length > 0 && <audio className="w-full h-full" src={dataNfts[2].dataPreview}></audio>}
@@ -281,13 +303,13 @@ export const NFTunes = () => {
             <div className="flex flex-col  w-[30%] min-w-[20rem]   justify-center items-center">
               <span className="text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
               <div className="scale-[0.7] -mt-24 pt-4 xl:pt-0">
-                {dataNfts.length > 0 ? ( //show the first nft in the NF_TUNES_TOKENS array
+                {featuredArtistDataNft ? ( //show the first nft in the NF_TUNES_TOKENS array
                   <DataNftCard
                     key={0}
                     index={0}
-                    dataNft={dataNfts[0]}
+                    dataNft={featuredArtistDataNft}
                     isLoading={isLoading}
-                    owned={flags[0]}
+                    owned={flags[featuredDataNftIndex] ? flags[featuredDataNftIndex] : false}
                     viewData={viewData}
                     modalContent={
                       isFetchingDataMarshal ? (
@@ -340,7 +362,7 @@ export const NFTunes = () => {
                 zStorage
               </span>
             </div>
-            <div className="text-muted-foreground xl:text-xl xl:w-[60%]">
+            <div className="text-primary xl:text-xl xl:w-[60%]">
               Empowering Indie musicians to engage with a fresh fan community and discover alternative avenues for music distribution.{" "}
             </div>
             {/* <button className=" text-sm md:text-xl p-2 md:p-4  rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary font-extrabold  bg-[linear-gradient(to_right, #737373, #A76262 , #5D3899, #5D3899 , #A76262 , #737373 )] bg-[length:200%_auto] animate-gradient"> */}
@@ -393,7 +415,7 @@ export const NFTunes = () => {
 
       {/* Calling musicians Section */}
       <div className="flex flex-col gap-4 justify-center items-center bg-primary xl:p-32 w-screen h-screen text-center">
-        <span className="text-secondary text-2xl xl:text-6xl"> Calling all Indie musicians!</span>
+        <span className="text-secondary font-[Clash-Bold] text-2xl xl:text-6xl"> Calling all Indie musicians!</span>
         <span className="xl:w-[50%] text-primary-foreground xl:text-2xl ">
           Explore the possibilities with NFTunes—we're here to assist you in onboarding and minting your Music Data NFTs.
         </span>
