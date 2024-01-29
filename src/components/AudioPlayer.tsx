@@ -14,6 +14,7 @@ type AudioPlayerProps = {
   songs: any;
   tokenLogin: any;
 };
+
 export const AudioPlayer = (props: AudioPlayerProps) => {
   useEffect(() => {
     audio.addEventListener("ended", function () {

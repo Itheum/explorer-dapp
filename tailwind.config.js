@@ -64,6 +64,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        // clash: ["var(--font-clash)", ...fontFamily.clash],
       },
       keyframes: {
         "accordion-down": {
