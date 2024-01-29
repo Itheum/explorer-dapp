@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import * as DOMPurify from "dompurify";
+import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 
