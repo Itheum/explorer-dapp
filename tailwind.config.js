@@ -78,16 +78,20 @@ module.exports = {
         "gradient": {
           to: { "background-position": "200% center" },
         },
+        "cube-down": {
+          "0%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(10px)" },
+          "100%": { transform: "translateY(0px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "spin-slow": "spin 4s linear infinite",
         "gradient": "gradient 10s linear infinite",
+        "cube-down": "cube-down 1s ease-in-out infinite",
       },
       backgroundImage: (theme) => ({
-        "gradient-nftunes": `linear-gradient(to right, ${theme("colors.pink")}, ${theme("colors.orange")})`,
-
         "manu-image": "url('../src/assets/img/nf-tunes/bg-manu.jpg')",
       }),
     },
