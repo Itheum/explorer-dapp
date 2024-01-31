@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { NF_TUNES_TOKENS, FEATURED_NF_TUNES_TOKEN, IS_DEVNET } from "appsConfig";
-import nfTunesBanner from "assets/img/nf-tunes-banner.png";
 import disk from "assets/img/nf-tunes-logo-disk.png";
 import { DataNftCard, Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer";
@@ -13,11 +12,8 @@ import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
-import { MoveDown, MoveRight, Music, Music2, PlayCircle } from "lucide-react";
-import { Button } from "libComponents/Button";
-import zstorageDataVault from "../../../assets/img/zstorage/zstorage-data-vault.png";
+import { MoveDown, Music, Music2, PlayCircle } from "lucide-react";
 import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
-import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
 import itheumLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
 import pulsarLogo from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money.png";
 import xoxnoLogo from "../../../assets/img/nf-tunes/platforms-logo/xoxno.png";
@@ -32,6 +28,12 @@ import { Link } from "react-router-dom";
 import cubes from "../../../assets/img/zstorage/cubes.png";
 import frontCube from "../../../assets/img/zstorage/front.png";
 import backCube from "../../../assets/img/zstorage/back.png";
+import vault from "../../../assets/img/zstorage/vault-dots.png";
+import dataLines from "../../../assets/img/zstorage/data-lines.png";
+import benefitsLogo1 from "../../../assets/img/nf-tunes/benefits-logo1.png";
+import benefitsLogo2 from "../../../assets/img/nf-tunes/benefits-logo2.png";
+import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
+import { motion } from "framer-motion";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -48,7 +50,6 @@ const platforms = [
 
 export const NFTunes = () => {
   const { address } = useGetAccount();
-  const { loginMethod } = useGetLoginInfo();
 
   ///native auth
   const { tokenLogin } = useGetLoginInfo();
@@ -64,16 +65,6 @@ export const NFTunes = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
-
-  // const imgAnimation = useMemo(
-  //   () => (
-  //     <div className="relative  top-[15%]">
-  //       <img className="animate-spin-slow w-[20%] left-[40%] max-w-[300px] absolute" src={disk} alt="disk" />
-  //       <img className="rotate-[20deg] absolute top-[-10px] md:top-[-15px] max-w-[200px] left-[52%] 3xl:left-[50%] w-[15%] " src={stick} alt="stick" />
-  //     </div>
-  //   ),
-  //   []
-  // );
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -174,9 +165,9 @@ export const NFTunes = () => {
   }
   return (
     <div className="flex flex-col justify-center items-center w-full">
-      <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
-      <div className="flex flex-col justify-center items-center  font-[Clash-Regular] w-full max-w-[100rem]  ">
-        <div className="flex flex-col items-start h-screen w-[100%] pt-16 xl:pt-32  mb-16 xl:mb-32">
+      <div className="w-screen h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
+      <div className="flex flex-col justify-center items-center font-[Clash-Regular] w-screen max-w-[100rem] xl:p-12 ">
+        <div className="flex flex-col justify-center items-center xl:items-start h-screen w-[100%] pt-16 xl:pt-32  mb-16 xl:mb-32 p-8 xl:p-12">
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center ">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
@@ -190,7 +181,7 @@ export const NFTunes = () => {
 
             <button
               onClick={() => scrollToSection("featured-artist")}
-              className=" text-sm md:text-xl p-2 md:p-4 rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary
+              className=" hover:scale-125 transition text-sm md:text-xl p-2 md:p-4 rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary
            bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%  ">
               Visualize NF-tunes
             </button>
@@ -201,7 +192,7 @@ export const NFTunes = () => {
               <Music className="md:scale-[2] mb-8 ml-[14%] text-primary" />
             </div>
 
-            <div className="relative h-full w-full xl:-mt-[15%]">
+            <div className="relative min-h-[10rem] h-full w-full xl:-mt-[15%]">
               <div className="absolute w-[60%] max-w-[500px]  -mt-[10%] left-[10%] xl:left-[35%] h-[150%] max-h-[500px] bg-gradient-to-br from-[#737373] from-20% via-[#A76262] via-40% to-[#5D3899] to-80% rounded-full   filter blur-2xl opacity-25   "></div>
               <img className="animate-spin-slow w-[60%] left-[20%] xl:left-[40%] max-w-[350px] absolute" src={disk} alt="disk" />
               <img className="absolute left-[60%] lg:left-[50%] xl:left-[70%] top-[-30px] xl:top-[-50px] w-[30%] max-w-[200px]      " src={stick} alt="stick" />
@@ -218,7 +209,7 @@ export const NFTunes = () => {
         </div>
 
         {/* Benefits of NF-Tunes */}
-        <div className="flex flex-col justify-start items-center w-full gap-12 mb-12 xl:mb-24 ">
+        <div className="flex flex-col justify-start items-center w-full gap-12 mb-12 p-6 xl:p-12">
           <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
             <div className="flex flex-row rounded-lg mb-12 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music2 className="text-secondary" />
@@ -226,32 +217,34 @@ export const NFTunes = () => {
               <Music2 className="text-secondary" />
             </div>
             <div className="flex flex-col xl:flex-row justify-start items-center gap-8 w-full">
-              <div className="flex flex-col gap-4 p-8 pb-16 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
-                <div className="flex justify-start w-full">
-                  <div className="rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%    "> </div>
+              <div className="flex flex-col gap-4 p-8   items-start  w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+                <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%   ">
+                  <img src={benefitsLogo1} />
                 </div>
                 <span className="text-primary text-2xl">Transform your music streams into NFT Masterpieces</span>
-                <span className="text-primary text-sm  font-[Clash-Light]">
+                <span className="text-primary text-sm h-32 font-[Clash-Light]">
                   Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.
                 </span>
               </div>
-              <div className="flex flex-col gap-4 p-8 pb-16 items-start  w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
-                <div className="flex justify-start w-full">
-                  <div className="rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%   "> </div>
+              <div className="flex flex-col gap-4 p-8   items-start  w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+                <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%   ">
+                  <img src={benefitsLogo2} />
                 </div>
                 <span className="text-primary text-2xl  ">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
-                <span className="text-primary text-sm  font-[Clash-Light]">
+                <span className="text-primary text-sm  h-32 font-[Clash-Light]">
                   Explore the availability of Music Data NFTs across various NFT platforms, connecting you with "new fans" and fostering a direct relationship
                   with your audience.{" "}
                 </span>
               </div>
-              <div className="flex flex-col gap-4 p-8 pb-16 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+              <div className="flex flex-col gap-4 p-8   items-start  w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-start w-full">
-                  <div className="rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%  "> </div>
+                  <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%   ">
+                    <img src={benefitsLogo3} />
+                  </div>
                 </div>
                 <span className="text-primary text-2xl  ">Take Command of Royalties and Distribution for Your Music NFTs</span>
-                <span className="text-primary text-sm font-[Clash-Light] ">
-                  Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.{" "}
+                <span className="text-primary text-sm h-32 font-[Clash-Light]">
+                  Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.
                 </span>
               </div>
             </div>
@@ -261,8 +254,8 @@ export const NFTunes = () => {
         {/* Featured Artist Section */}
         <div
           id="featured-artist"
-          className=" bg-manu-image bg-cover bg-top flex flex-col xl:flex-row  justify-center items-center xl:items-start  w-full h-full gap-12  mb-16 xl:mb-32 ">
-          <div className=" py-8 flex flex-col w-[100%] justify-center xl:items-start">
+          className="bg-manu-image bg-cover bg-top flex flex-col xl:flex-row  justify-center items-center xl:items-start  w-full h-full gap-12  mb-16 xl:mb-32">
+          <div className="py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
             <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music className="text-secondary" />
               <span className="text-secondary">Featured Artist Sections</span>
@@ -270,9 +263,9 @@ export const NFTunes = () => {
             </div>
             <div className="flex flex-col xl:flex-row w-full h-full justify-center items-center xl:items-start p-8 gap-4">
               <div className="flex flex-col w-[30%] min-w-[20rem]   justify-center items-center">
-                <span className="text-primary text-center text-2xl">Meet Manu YFGP</span>
+                <span className="text-primary  text-center text-2xl">Meet Manu YFGP</span>
                 <img className="" src={manuImage} />
-                <span className="text-primary font-[Clash-Light]   w-[80%]">
+                <span className="text-primary font-[Clash-Light] w-[80%]">
                   Empowering Indie musicians to engage with a fresh fan community and discover alternative avenues for music distribution. Empowering Indie
                   musicians to engage with a fresh fan community and discover alternative avenues for music distribution.{" "}
                 </span>
@@ -364,6 +357,12 @@ export const NFTunes = () => {
                       modalTitleStyle="p-4"
                     />
                   ) : (
+                    // isLoading ? (
+                    //   <div className=" ">
+                    //     <Loader noText />
+                    //     <p className="text-center text-foreground">Loading...</p>
+                    //   </div>
+                    // ) :
                     <h3 className="text-center text-white">No DataNFT yet</h3>
                   )}
                 </div>
@@ -383,22 +382,22 @@ export const NFTunes = () => {
         </div>
 
         {/* Storage Solution Zstorage  */}
-        <div className="flex flex-col justify-center items-center  ">
-          <div className=" py-8 flex flex-col w-[100%] justify-center items-start">
+        <div className="flex flex-col justify-center items-center ">
+          <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
             <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music2 className="text-secondary" />
               <span className="text-secondary ">Storage solution for your music data NFT</span>
               <Music2 className="text-secondary" />
             </div>
-            <div className="flex flex-col xl:flex-row pt-12 w-full h-screen  ">
-              <div className="flex flex-col gap-8 xl:w-[50%]">
+            <div className="flex flex-col xl:flex-row  w-full h-[100vsh] items-center justify-center">
+              <div className="flex flex-col gap-8 xl:w-[50%] justify-start items-center xl:items-start">
                 <div className="text-primary text-3xl xl:text-6xl">
                   Integrate with <br></br>
                   <span className="ml-2 font-bold bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]">
                     Zedge Storage
                   </span>
                 </div>
-                <div className="text-primary xl:text-xl xl:w-[50%]">
+                <div className="text-primary text-center xl:text-start xl:text-xl xl:w-[60%]">
                   Empowering Indie musicians to engage with a fresh fan community and discover alternative avenues for music distribution.{" "}
                 </div>
                 {/* <button className=" text-sm md:text-xl p-2 md:p-4  rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary font-extrabold  bg-[linear-gradient(to_right, #737373, #A76262 , #5D3899, #5D3899 , #A76262 , #737373 )] bg-[length:200%_auto] animate-gradient"> */}
@@ -406,25 +405,48 @@ export const NFTunes = () => {
                 <Link
                   to={`https://www.zedgestorage.com/${tokenLogin && tokenLogin.nativeAuthToken ? "?accessToken=" + tokenLogin?.nativeAuthToken : ""}`}
                   target="_blank"
-                  className="text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary ">
+                  className="hover:scale-125 transition text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%] xl:max-w-[45%] text-primary ">
                   Try zStorage today
                 </Link>
               </div>
-              <div className="relative xl:w-[50%] h-[20rem] my-auto xl:scale-125 overflow-hidden">
-                <img src={zstorageDataVault} alt="zstorage data vault" className="absolute " />
-                <img
-                  src={cubes}
-                  className="absolute ml-[100px] -mt-[100px] animate-cubes-down transform hover:translate-y-[50px] transition-transform duration-1000 ease-linear"
-                />
-                <img src={frontCube} className="absolute -ml-12 mt-32 transform hover:translate-x-[75px] transition-transform duration-1000 ease-linear" />
-                <img
-                  src={backCube}
-                  className="absolute ml-[400px] mt-[-50px] transform hover:translate-x-[-100px] hover:translate-y-[50px] transition-transform duration-1000 ease-linear"
-                />
-                <div className="relative mx-auto my-auto mt-[300px] ml-[300px]  transform hover:translate-y-[-120px] transition-transform duration-1000 ease-linear">
-                  <img src={cubes} className="absolute mt-[40px]" />
-                  <img src={cubes} className="absolute" />
-                </div>
+              <div className="flex justify-center items-center h-[30rem]  w-full xl:w-[50%]">
+                <motion.div className="flex min-w-[20rem] xl:w-[30rem] xl:h-[20rem]">
+                  <motion.img
+                    src={frontCube}
+                    initial={{ x: -150, y: 160, opacity: 0 }}
+                    whileInView={{ opacity: 1, x: -40, y: 130, transition: { duration: 3 } }}
+                    className="absolute z-[11]"></motion.img>
+                  <img src={vault} className="z-10  w-[25rem] h-[20rem]" />
+
+                  <motion.img
+                    src={dataLines}
+                    initial={{ x: -25, y: 25, opacity: 0 }}
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 4 }}
+                    className="absolute -z-10   xl:w-[30rem] h-[20rem] "></motion.img>
+
+                  <motion.img
+                    src={cubes}
+                    initial={{ x: 100, y: -100 }}
+                    whileInView={{ opacity: 1, x: 100, y: 0, transition: { duration: 3 } }}
+                    className="absolute"></motion.img>
+
+                  <motion.img
+                    src={backCube}
+                    initial={{ x: 350, y: -100 }}
+                    whileInView={{ opacity: 1, x: 250, y: 0, transition: { duration: 3 } }}
+                    transition={{ duration: 5 }}
+                    className="absolute"></motion.img>
+
+                  <motion.div
+                    initial={{ x: 280, y: 250 }}
+                    whileInView={{ opacity: 1, x: 220, y: 180, transition: { duration: 3 } }}
+                    transition={{ duration: 5 }}
+                    className="z-[11] absolute">
+                    <img src={cubes} className="" />
+                    <img src={cubes} className="-mt-[35px]" />
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
             <div className="flex flex-col items-center justify-center border-t border-muted-foreground pb-16">
@@ -467,8 +489,8 @@ export const NFTunes = () => {
         </div>
 
         {/* Calling musicians Section */}
-        <div className="flex flex-col gap-4 justify-center items-center bg-primary xl:p-32 w-full h-screen text-center  mb-16 xl:mb-32">
-          <span className="text-secondary font-[Clash-Bold] text-2xl xl:text-6xl"> Calling all Indie musicians!</span>
+        <div className="flex flex-col gap-4 justify-center items-center bg-primary xl:p-32 w-full h-[100svh] text-center   ">
+          <span className="text-secondary font-[Clash-Medium] text-2xl xl:text-6xl "> Calling all Indie musicians!</span>
           <span className="xl:w-[50%] text-primary-foreground xl:text-2xl ">
             Explore the possibilities with NFTunes—we're here to assist you in onboarding and minting your Music Data NFTs.
           </span>
@@ -476,9 +498,9 @@ export const NFTunes = () => {
         </div>
 
         {/* Supported Platforms */}
-        <div className="flex flex-col justify-center items-center w-full gap-12 mt-12">
-          <div className=" py-8 flex flex-col w-[100%] justify-center items-start gap-12">
-            <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
+        <div className="flex flex-col justify-center items-center w-full gap-12 mt-12 xl:p-12">
+          <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start gap-12">
+            <div className="flex flex-row w-[80%] xl:w-[60%] rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music className="text-secondary" />
               <span className="text-secondary ">
                 Supported Platforms for
@@ -584,7 +606,7 @@ export const NFTunes = () => {
           </HeaderComponent>
         </div>
       </div>
-      <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
+      <div className="w-screen h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
     </div>
   );
 };
