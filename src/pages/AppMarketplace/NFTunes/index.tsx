@@ -163,6 +163,7 @@ export const NFTunes = () => {
       setIsFetchingDataMarshal(false);
     }
   }
+
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <div className="w-screen h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
@@ -298,7 +299,7 @@ export const NFTunes = () => {
                     </div>
                   ) : (
                     <>
-                      {featuredArtistDataNft && (
+                      {featuredArtistDataNft && featuredArtistDataNft.dataPreview && (
                         <AudioPlayer
                           previewUrl={featuredArtistDataNft.dataPreview}
                           songs={[
@@ -356,14 +357,13 @@ export const NFTunes = () => {
                       modalTitle={"NF-Tunes"}
                       modalTitleStyle="p-4"
                     />
+                  ) : isLoading ? (
+                    <div className="mt-32 ">
+                      <Loader noText />
+                      <p className="text-center text-foreground">Loading...</p>
+                    </div>
                   ) : (
-                    // isLoading ? (
-                    //   <div className=" ">
-                    //     <Loader noText />
-                    //     <p className="text-center text-foreground">Loading...</p>
-                    //   </div>
-                    // ) :
-                    <h3 className="text-center text-white">No DataNFT yet</h3>
+                    <h3 className="text-center mt-32 text-white">No Data NFT yet</h3>
                   )}
                 </div>
               </div>
@@ -381,7 +381,7 @@ export const NFTunes = () => {
           </div>
         </div>
 
-        {/* Storage Solution Zstorage  */}
+        {/* Storage Solution Zedge Storage  */}
         <div className="flex flex-col justify-center items-center ">
           <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
             <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
@@ -406,7 +406,7 @@ export const NFTunes = () => {
                   to={`https://www.zedgestorage.com/${tokenLogin && tokenLogin.nativeAuthToken ? "?accessToken=" + tokenLogin?.nativeAuthToken : ""}`}
                   target="_blank"
                   className="hover:scale-125 transition text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%] xl:max-w-[45%] text-primary ">
-                  Try zStorage today
+                  Try Zedge Storage today
                 </Link>
               </div>
               <div className="flex justify-center items-center h-[30rem]  w-full xl:w-[50%]">
@@ -454,7 +454,7 @@ export const NFTunes = () => {
                 <div className="text-5xl flex justify-end items-end">
                   <span>01.</span>
                 </div>
-                <div className="flex  max-w-[80%] xl:max-w-[30%] justify-start xl:twext-center">
+                <div className="flex text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start">
                   <span>Effortless Music Management</span>
                 </div>
                 <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
@@ -465,20 +465,20 @@ export const NFTunes = () => {
                 <div className="text-5xl flex justify-end items-end">
                   <span>02.</span>
                 </div>
-                <div className="flex xl:max-w-[30%] justify-start xl:text-center">
-                  <span>Eternal Resonance with zStorage</span>
+                <div className="flex  text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start">
+                  <span>Eternal Resonance with Zedge Storage</span>
                 </div>
                 <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
                   Safeguard your data on a resilient, censorship-resistant network or choose traditional web2-style storage for ultimate versatility and control{" "}
                 </div>
               </div>
 
-              <div className="flex  flex-col xl:flex-row justify-between w-full gap-2 xl:gap-16 xl:h-32 p-2 border-b border-muted-foreground">
+              <div className="flex flex-col xl:flex-row justify-between w-full gap-2 xl:gap-16 xl:h-32 p-2 border-b border-muted-foreground">
                 <div className="text-5xl flex justify-end  items-end">
                   <span>03.</span>
                 </div>
-                <div className="flex max-w-[80%] xl:max-w-[30%] justify-end xl:justify-start xl:text-center">
-                  <span>Link zStorage Music Streams to Itheum Data NFTs</span>
+                <div className="flex text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start ">
+                  <span>Link Zedge Storage Music Streams to Itheum Data NFTs</span>
                 </div>
                 <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
                   Easily mint, manage, and showcase your Data NFT collection on the marketplace.{" "}
