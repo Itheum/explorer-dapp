@@ -109,6 +109,11 @@ export const MyWallet = () => {
         setIsAutoOpenFormat(false);
         res.data = DOMPurify.sanitize(await (res.data as Blob).text());
         setIsDomPurified(true);
+      } else if (res.contentType.search("video/mp4") >= 0) {
+        setIsAutoOpenFormat(false);
+        const videoObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
+        res.data = videoObject;
+        blobDataType = BlobDataType.VIDEO;
       } else {
         setIsAutoOpenFormat(false);
         // we don't support that format
@@ -177,6 +182,10 @@ export const MyWallet = () => {
                     </div>
                   ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
                     <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                  ) : viewDataRes.blobDataType === BlobDataType.VIDEO ? (
+                    <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls>
+                      <source src={viewDataRes.data} type="video/mp4"></source>
+                    </video>
                   ) : (
                     <div className="p-2">
                       {(isAutoOpenFormat && (
