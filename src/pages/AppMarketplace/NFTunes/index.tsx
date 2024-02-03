@@ -39,15 +39,6 @@ interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
 }
 
-const platforms = [
-  { platform: "NFT Marketplaces", logo: "Url1" },
-  { platform: "NFT Marketplaces", logo: "Url2" },
-  { platform: "Pulsar Money", logo: "Url3" },
-  { platform: "xPand DAO", logo: "Url4" },
-  { platform: "MultiversX Ecosystem", logo: "Url5" },
-  { platform: "MultiversX Ecosystem", logo: "Url6" },
-];
-
 export const NFTunes = () => {
   const { address } = useGetAccount();
 
@@ -65,6 +56,10 @@ export const NFTunes = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
+
+  useEffect(() => {
+    window.scrollTo(0, 80);
+  }, []);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -166,11 +161,11 @@ export const NFTunes = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
-      <div className="w-screen h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
-      <div className="flex flex-col justify-center items-center font-[Clash-Regular] w-screen max-w-[100rem] xl:p-12 ">
-        <div className="flex flex-col justify-center items-center xl:items-start h-screen w-[100%] pt-16 xl:pt-32  mb-16 xl:mb-32 p-8 xl:p-12">
+      <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
+      <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
+        <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  ">
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
-            <div className="flex-row flex items-center ">
+            <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
               <img className="max-h-[30%] mb-6" src={musicNote} />
             </div>
@@ -409,7 +404,7 @@ export const NFTunes = () => {
                   Try Zedge Storage today
                 </Link>
               </div>
-              <div className="flex justify-center items-center h-[30rem]  w-full xl:w-[50%]">
+              <div className="flex justify-center items-center h-[30rem]  w-full xl:w-[50%]  overflow-hidden">
                 <motion.div className="flex min-w-[20rem] xl:w-[30rem] xl:h-[20rem]">
                   <motion.img
                     src={frontCube}
@@ -606,7 +601,7 @@ export const NFTunes = () => {
           </HeaderComponent>
         </div>
       </div>
-      <div className="w-screen h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
+      <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
     </div>
   );
 };
