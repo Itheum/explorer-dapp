@@ -518,7 +518,7 @@ export const NFTunes = () => {
             </div>
             <div className="flex flex-col xl:flex-row gap-8 justify-center items-center w-full">
               <Link
-                to={`https://${IS_DEVNET ? "test." : ""}datadex.itheum.io/datanfts/marketplace/market`}
+                to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
                 className="hover:scale-110 transition  flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={itheumLogo} alt="itheum logo" />
@@ -547,7 +547,7 @@ export const NFTunes = () => {
                 <img src={xPandLogo} alt="xPand logo" />
               </Link>
               <Link
-                to={"https://multiversx.com/"}
+                to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
                 className="hover:scale-110 transition  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={multiversxLogo} alt="multiversx logo" />
