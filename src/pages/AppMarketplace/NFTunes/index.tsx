@@ -160,10 +160,10 @@ export const NFTunes = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center w-full">
+    <div className="flex flex-col justify-center items-center w-full overflow-hidden">
       <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
-        <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  ">
+        <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32">
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
@@ -195,7 +195,7 @@ export const NFTunes = () => {
             </div>
 
             <div className="flex flex-col items-center h-full">
-              <div className=" flex justify-start xl:justify-end w-full md:-mt-32 ">
+              <div className=" flex justify-start xl:justify-end w-full md:-mt-32 xl:-ml-8">
                 <img className="scale-50 md:scale-75 -ml-4 -mt-6" src={musicNote} />
                 <Music className="md:scale-[2] text-primary" />
               </div>
@@ -404,8 +404,8 @@ export const NFTunes = () => {
                   Try Zedge Storage today
                 </Link>
               </div>
-              <div className="flex justify-center items-center h-[30rem]  w-full xl:w-[50%]  overflow-hidden">
-                <motion.div className="flex min-w-[20rem] xl:w-[30rem] xl:h-[20rem]">
+              <div className="flex justify-center items-center h-[30rem] w-full xl:w-[50%] scale-100 ">
+                <motion.div className="flex min-w-[20rem] xl:w-[30rem] xl:h-[20rem] overflow-hidden">
                   <motion.img
                     src={frontCube}
                     initial={{ x: -150, y: 160, opacity: 0 }}
@@ -418,7 +418,7 @@ export const NFTunes = () => {
                     initial={{ x: -25, y: 25, opacity: 0 }}
                     whileInView={{ opacity: [0, 1] }}
                     transition={{ duration: 4 }}
-                    className="absolute -z-10   xl:w-[30rem] h-[20rem] "></motion.img>
+                    className="absolute ml-8 xl:ml-0 -z-10  xl:w-[30rem] h-[20rem] "></motion.img>
 
                   <motion.img
                     src={cubes}
@@ -431,7 +431,7 @@ export const NFTunes = () => {
                     initial={{ x: 350, y: -100 }}
                     whileInView={{ opacity: 1, x: 250, y: 0, transition: { duration: 3 } }}
                     transition={{ duration: 5 }}
-                    className="absolute"></motion.img>
+                    className="absolute -ml-16 xl:-ml-0"></motion.img>
 
                   <motion.div
                     initial={{ x: 280, y: 250 }}
