@@ -65,7 +65,7 @@ export const Navbar = () => {
         </Link>
       </div>
 
-      <NavigationMenu className="md:!inline !hidden z-0">
+      <NavigationMenu className="md:!inline !hidden z-0 pr-2">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
