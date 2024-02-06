@@ -163,7 +163,7 @@ export const NFTunes = () => {
     <div className="flex flex-col justify-center items-center w-full overflow-hidden">
       <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
-        <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32">
+        <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  pl-4  ">
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
@@ -177,7 +177,7 @@ export const NFTunes = () => {
 
             <button
               onClick={() => scrollToSection("featured-artist")}
-              className=" hover:scale-125 transition text-sm md:text-xl p-2 md:p-4 rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary
+              className="hover:scale-110 transition duration-700 text-sm md:text-xl p-2 md:p-4 rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary
            bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%  ">
               Visualize NF-tunes
             </button>
@@ -398,9 +398,9 @@ export const NFTunes = () => {
                 {/* <button className=" text-sm md:text-xl p-2 md:p-4  rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary font-extrabold  bg-[linear-gradient(to_right, #737373, #A76262 , #5D3899, #5D3899 , #A76262 , #737373 )] bg-[length:200%_auto] animate-gradient"> */}
 
                 <Link
-                  to={`https://www.zedgestorage.com/${tokenLogin && tokenLogin.nativeAuthToken ? "?accessToken=" + tokenLogin?.nativeAuthToken : ""}`}
+                  to={`https://www.zedgestorage.com/itheum-music-data-nft`} /// /${tokenLogin && tokenLogin.nativeAuthToken ? "?accessToken=" + tokenLogin?.nativeAuthToken : ""}
                   target="_blank"
-                  className="hover:scale-125 transition text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%] xl:max-w-[45%] text-primary ">
+                  className="hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%]   text-primary ">
                   Try Zedge Storage today
                 </Link>
               </div>
@@ -520,11 +520,11 @@ export const NFTunes = () => {
               <Link
                 to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
-                className="hover:scale-110 transition  flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700 flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={itheumLogo} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
-              <div className=" hover:scale-110 transition  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+              <div className=" hover:scale-110 transition duration-700 flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
                   <img src={xoxnoLogo} alt="xoxno logo" />
@@ -536,20 +536,20 @@ export const NFTunes = () => {
               <Link
                 to={"https://pulsar.money/"}
                 target="_blank"
-                className="hover:scale-110 transition  flex items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={pulsarLogo} alt="pulsar" />
               </Link>
               <Link
                 to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
                 target="_blank"
-                className=" hover:scale-110 transition  flex flex-col items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className=" hover:scale-110 transition duration-700 flex flex-col items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className="w-[60%] text-center">xPand DAO</span>
                 <img src={xPandLogo} alt="xPand logo" />
               </Link>
               <Link
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
-                className="hover:scale-110 transition  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={multiversxLogo} alt="multiversx logo" />
                 <span className="w-[60%] text-center"> Ecosystem</span>
               </Link>
