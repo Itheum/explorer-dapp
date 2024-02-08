@@ -452,7 +452,7 @@ export const NFTunes = () => {
                 <div className="flex text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start">
                   <span>Effortless Music Management</span>
                 </div>
-                <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
+                <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-start">
                   Effortlessly add, update, and manage your music files, art, and music metadata. Simplify your workflow with seamless control and organization.{" "}
                 </div>
               </div>
@@ -463,7 +463,7 @@ export const NFTunes = () => {
                 <div className="flex  text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start">
                   <span>Eternal Resonance with Zedge Storage</span>
                 </div>
-                <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
+                <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-start">
                   Safeguard your data on a resilient, censorship-resistant network or choose traditional web2-style storage for ultimate versatility and control{" "}
                 </div>
               </div>
@@ -475,7 +475,7 @@ export const NFTunes = () => {
                 <div className="flex text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start ">
                   <span>Link Zedge Storage Music Streams to Itheum Data NFTs</span>
                 </div>
-                <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-center">
+                <div className="text-sm text-muted-foreground w-full xl:max-w-[30%] flex justify-center items-start">
                   Easily mint, manage, and showcase your Data NFT collection on the marketplace.{" "}
                 </div>
               </div>

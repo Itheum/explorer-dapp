@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
-import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX } from "lucide-react";
+import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, XCircle } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -271,7 +271,13 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   const showPlaylist = () => {
     if (props.previewUrl) {
-      toast.error("This is just a preview. You have to buy the Music Data Nft to see all the songs.");
+      toast.error("This is just a preview. You have to buy the Music Data Nft to see all the songs.", {
+        icon: (
+          <button onClick={() => toast.dismiss()}>
+            <XCircle color="red" />
+          </button>
+        ),
+      });
     } else {
       setDisplayPlaylist(true);
     }
