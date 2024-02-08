@@ -36,6 +36,7 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 15 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 34 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 42 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 56 },
       // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 529 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
