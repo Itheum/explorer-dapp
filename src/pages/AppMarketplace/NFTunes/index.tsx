@@ -189,7 +189,7 @@ export const NFTunes = () => {
             </div>
 
             <div className="relative min-h-[10rem] h-full w-full xl:-mt-[15%]">
-              <div className="absolute w-[60%] max-w-[500px]  -mt-[10%] left-[10%] xl:left-[35%] h-[150%] max-h-[500px] bg-gradient-to-br from-[#737373] from-20% via-[#A76262] via-40% to-[#5D3899] to-80% rounded-full   filter blur-2xl opacity-25   "></div>
+              <div className="absolute w-[60%] max-w-[500px]  -mt-[10%] left-[20%] xl:left-[35%] h-[300px] xl:h-[500px] bg-gradient-to-br from-[#737373] from-20% via-[#A76262] via-40% to-[#5D3899] to-80% rounded-full filter blur-2xl opacity-25   "></div>
               <img className="animate-spin-slow w-[60%] left-[20%] xl:left-[40%] max-w-[350px] absolute" src={disk} alt="disk" />
               <img className="absolute left-[60%] lg:left-[50%] xl:left-[70%] top-[-30px] xl:top-[-50px] w-[30%] max-w-[200px]      " src={stick} alt="stick" />
             </div>
