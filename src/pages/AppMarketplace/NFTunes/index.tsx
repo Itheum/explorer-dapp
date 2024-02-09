@@ -446,7 +446,7 @@ export const NFTunes = () => {
             </div>
             <div className="flex flex-col items-center justify-center border-t border-muted-foreground pb-16">
               <div className="flex flex-col xl:flex-row justify-between w-full gap-2 xl:gap-16 xl:h-32 p-2 border-b border-muted-foreground">
-                <div className="text-5xl flex justify-end items-end">
+                <div className="text-5xl flex ">
                   <span>01.</span>
                 </div>
                 <div className="flex text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start">
@@ -457,7 +457,7 @@ export const NFTunes = () => {
                 </div>
               </div>
               <div className="flex  flex-col xl:flex-row justify-between w-full gap-2 xl:gap-16 xl:h-32 p-2 border-b border-muted-foreground">
-                <div className="text-5xl flex justify-end items-end">
+                <div className="text-5xl flex ">
                   <span>02.</span>
                 </div>
                 <div className="flex  text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start">
@@ -469,7 +469,7 @@ export const NFTunes = () => {
               </div>
 
               <div className="flex flex-col xl:flex-row justify-between w-full gap-2 xl:gap-16 xl:h-32 p-2 border-b border-muted-foreground">
-                <div className="text-5xl flex justify-end  items-end">
+                <div className="text-5xl flex ">
                   <span>03.</span>
                 </div>
                 <div className="flex text-2xl font-[Clash-Medium] max-w-[80%] xl:max-w-[20%] justify-end xl:justify-start xl:text-start ">
