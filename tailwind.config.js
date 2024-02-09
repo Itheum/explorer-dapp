@@ -64,6 +64,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        // clash: ["var(--font-clash)", ...fontFamily.clash],
       },
       keyframes: {
         "accordion-down": {
@@ -74,12 +75,25 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "gradient": {
+          to: { "background-position": "200% center" },
+        },
+        "cube-down": {
+          "0%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(10px)" },
+          "100%": { transform: "translateY(0px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "spin-slow": "spin 4s linear infinite",
+        "gradient": "gradient 10s linear infinite",
+        "cube-down": "cube-down 1s ease-in-out infinite",
       },
+      backgroundImage: (theme) => ({
+        "manu-image": "url('../src/assets/img/nf-tunes/bg-manu.jpg')",
+      }),
     },
   },
 
