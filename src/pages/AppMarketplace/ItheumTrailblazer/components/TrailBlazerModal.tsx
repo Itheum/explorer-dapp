@@ -165,7 +165,20 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
           </div>
         );
         break;
-      default:
+      case "Meme":
+        tileCode = (
+          <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
+            <Card className="flex flex-col items-start justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
+              <h2>{dataItem.title}</h2>
+              <h3>{new Date(dataItem.date).toDateString()}</h3>
+              <a href={dataItem.link} target="_blank" className="!text-blue-500">
+                See more...
+              </a>
+            </Card>
+          </div>
+        );
+        break;
+      case "Leaderboard":
         tileCode = (
           <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
             <Card className="flex flex-col items-start justify-center !p-4 text-foreground bg-background border-0 rounded-xl">

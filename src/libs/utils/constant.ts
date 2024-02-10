@@ -50,6 +50,13 @@ export const APP_MAPPINGS = [
     desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
     img: iconNFTunes,
   },
+  {
+    appName: "Time Capsule",
+    appDescription: "Time Capsule",
+    routeKey: "timecapsule",
+    desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
+    img: "https://itheum-static.s3.ap-southeast-2.amazonaws.com/expl-app-esdt-bubbles-icon.png",
+  },
 ];
 
 export const ITHEUM_EXPLORER_PROD_URL = "https://explorer.itheum.io";
