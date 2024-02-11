@@ -257,21 +257,21 @@ export const NFTunes = () => {
             </div>
             <div className="flex flex-col xl:flex-row w-full h-full justify-center items-center xl:items-start p-8 gap-4">
               <div className="flex flex-col w-[30%] min-w-[20rem]   justify-center items-center">
-                <span className="text-primary  text-center text-2xl">Meet Manu YFGP</span>
+                <span className="text-secondary dark:text-primary  text-center text-2xl">Meet Manu YFGP</span>
                 <img className="" src={manuImage} />
-                <span className="text-primary font-[Clash-Light] w-[80%]">
+                <span className="text-secondary dark:text-primary font-[Clash-Light] w-[80%]">
                   Empowering Indie musicians to engage with a fresh fan community and discover alternative avenues for music distribution. Empowering Indie
                   musicians to engage with a fresh fan community and discover alternative avenues for music distribution.{" "}
                 </span>
               </div>
               <div className="flex flex-col w-[30%] min-w-[20rem]  justify-center items-center">
-                <span className="text-primary text-center text-2xl">Preview Manu’s Music Stream</span>
+                <span className="text-secondary dark:text-primary text-center text-2xl">Preview Manu’s Music Stream</span>
                 <img className="opacity-20" src={manuImage} />
 
                 <Modal
                   openTrigger={
                     <button className="h-64  flex rounded-full justify-center w-full mt-[-11rem]">
-                      <PlayCircle className="scale-[3] cursor-pointer text-primary" />
+                      <PlayCircle className="scale-[3] cursor-pointer text-secondary dark:text-primary" />
                     </button>
                   }
                   closeOnOverlayClick={false}
@@ -310,9 +310,9 @@ export const NFTunes = () => {
                   )}
                 </Modal>
               </div>
-              <div className="flex flex-col w-[30%] min-w-[20rem]   justify-center items-center">
-                <span className="text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
-                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0">
+              <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
+                <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
+                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 bg-secondary dark:bg-none  rounded-[2.37rem]">
                   {featuredArtistDataNft ? (
                     <DataNftCard
                       index={featuredDataNftIndex}
@@ -515,11 +515,11 @@ export const NFTunes = () => {
               <Link
                 to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
-                className="hover:scale-110 transition duration-700 flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700 flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={itheumLogo} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
-              <div className=" hover:scale-110 transition duration-700 flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+              <div className=" hover:scale-110 transition duration-700 flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
                   <img src={xoxnoLogo} alt="xoxno logo" />
@@ -531,20 +531,20 @@ export const NFTunes = () => {
               <Link
                 to={"https://pulsar.money/"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={pulsarLogo} alt="pulsar" />
               </Link>
               <Link
                 to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
                 target="_blank"
-                className=" hover:scale-110 transition duration-700 flex flex-col items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className=" hover:scale-110 transition duration-700 flex flex-col items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className="w-[60%] text-center">xPand DAO</span>
                 <img src={xPandLogo} alt="xPand logo" />
               </Link>
               <Link
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={multiversxLogo} alt="multiversx logo" />
                 <span className="w-[60%] text-center"> Ecosystem</span>
               </Link>
