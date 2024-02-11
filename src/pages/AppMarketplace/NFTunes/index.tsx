@@ -78,10 +78,14 @@ export const NFTunes = () => {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(NF_TUNES_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
-    const _featuredNft: DataNft = await DataNft.createFromApi(FEATURED_NF_TUNES_TOKEN);
-    setDataNfts(_nfts);
-    setFeaturedArtistDataNft(_featuredNft);
 
+    setDataNfts(_nfts);
+    _nfts.map((currentNft, index) => {
+      if (currentNft.nonce === FEATURED_NF_TUNES_TOKEN.nonce && currentNft.collection === FEATURED_NF_TUNES_TOKEN.tokenIdentifier) {
+        setFeaturedDataNftIndex(index);
+        setFeaturedArtistDataNft(currentNft);
+      }
+    });
     setIsLoading(false);
   }
 
@@ -92,9 +96,6 @@ export const NFTunes = () => {
     const _flags = [];
 
     for (const currentNft of dataNfts) {
-      if (currentNft.nonce == FEATURED_NF_TUNES_TOKEN.nonce) {
-        setFeaturedDataNftIndex(_flags.length);
-      }
       const matches = _dataNfts.filter((ownedNft) => currentNft.nonce === ownedNft.nonce);
       _flags.push(matches.length > 0);
     }
@@ -109,12 +110,9 @@ export const NFTunes = () => {
         toastError("Data is not loaded");
         return;
       }
-
       const _owned = flags[index];
-
       if (_owned) {
         setIsFetchingDataMarshal(true);
-
         const dataNft = dataNfts[index];
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -300,10 +298,8 @@ export const NFTunes = () => {
                           songs={[
                             {
                               "idx": 1,
-                              // "date": featuredArtistDataNft.creationTime,
-                              "category": "Preview",
-                              // "artist": "YFGP",
-                              "album": featuredArtistDataNft.description,
+
+                              "description": featuredArtistDataNft.description,
                               "cover_art_url": featuredArtistDataNft.nftImgUrl,
                               "title": featuredArtistDataNft.title,
                             },
@@ -319,8 +315,7 @@ export const NFTunes = () => {
                 <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0">
                   {featuredArtistDataNft ? (
                     <DataNftCard
-                      key={0}
-                      index={0}
+                      index={featuredDataNftIndex}
                       dataNft={featuredArtistDataNft}
                       isLoading={isLoading}
                       owned={flags[featuredDataNftIndex] ? flags[featuredDataNftIndex] : false}
@@ -556,50 +551,52 @@ export const NFTunes = () => {
             </div>
           </div>
         </div>
-        <div id="data-nfts" className="flex justify-center items-center p-16 ">
-          <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Music Data NFTs "} dataNftCount={dataNfts.length}>
-            {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => (
-                <DataNftCard
-                  key={index}
-                  index={index}
-                  dataNft={dataNft}
-                  isLoading={isLoading}
-                  owned={flags[index]}
-                  viewData={viewData}
-                  modalContent={
-                    isFetchingDataMarshal ? (
-                      <div
-                        className="flex flex-col items-center justify-center"
-                        style={{
-                          minHeight: "40rem",
-                        }}>
-                        <div>
-                          <Loader noText />
-                          <p className="text-center text-foreground">Loading...</p>
+        {IS_DEVNET && (
+          <div id="data-nfts" className="flex justify-center items-center p-16 ">
+            <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Music Data NFTs "} dataNftCount={dataNfts.length}>
+              {dataNfts.length > 0 ? (
+                dataNfts.map((dataNft, index) => (
+                  <DataNftCard
+                    key={index}
+                    index={index}
+                    dataNft={dataNft}
+                    isLoading={isLoading}
+                    owned={flags[index]}
+                    viewData={viewData}
+                    modalContent={
+                      isFetchingDataMarshal ? (
+                        <div
+                          className="flex flex-col items-center justify-center"
+                          style={{
+                            minHeight: "40rem",
+                          }}>
+                          <div>
+                            <Loader noText />
+                            <p className="text-center text-foreground">Loading...</p>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <>
-                        {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-                          <AudioPlayer
-                            dataNftToOpen={dataNfts[currentIndex]}
-                            songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                            tokenLogin={tokenLogin}
-                          />
-                        )}
-                      </>
-                    )
-                  }
-                  modalTitle={"NF-Tunes"}
-                  modalTitleStyle="p-4"
-                />
-              ))
-            ) : (
-              <h3 className="text-center text-white">No DataNFT</h3>
-            )}
-          </HeaderComponent>
-        </div>
+                      ) : (
+                        <>
+                          {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                            <AudioPlayer
+                              dataNftToOpen={dataNfts[currentIndex]}
+                              songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                              tokenLogin={tokenLogin}
+                            />
+                          )}
+                        </>
+                      )
+                    }
+                    modalTitle={"NF-Tunes"}
+                    modalTitleStyle="p-4"
+                  />
+                ))
+              ) : (
+                <h3 className="text-center text-white">No DataNFT</h3>
+              )}
+            </HeaderComponent>
+          </div>
+        )}
       </div>
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
     </div>
