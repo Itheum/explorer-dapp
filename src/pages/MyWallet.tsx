@@ -183,7 +183,7 @@ export const MyWallet = () => {
                   ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
                     <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
                   ) : viewDataRes.blobDataType === BlobDataType.VIDEO ? (
-                    <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls>
+                    <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls autoPlay>
                       <source src={viewDataRes.data} type="video/mp4"></source>
                     </video>
                   ) : (

@@ -25,3 +25,13 @@ export const toastSuccess = (message: string) => {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+export const scrollToSection = (sectionId: string) => {
+  const section = document.getElementById(sectionId);
+
+  if (section) {
+    window.scrollTo({
+      top: section.offsetTop,
+      behavior: "smooth",
+    });
+  }
+};

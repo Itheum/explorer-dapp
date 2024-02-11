@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { TIMECAPSULE_TOKENS } from "appsConfig";
-import headerHero from "assets/img/custom-app-header-trailblazer.png";
+import headerHero from "assets/img/timecapsule/custom-app-header-timecapsule.png";
 import { DataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -86,7 +86,11 @@ export const TimeCapsule = () => {
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
 
-        setData(res.data.data.reverse());
+        const orderedDataByDateDesc = res.data.data.sort((a: any, b: any) => {
+          return new Date(b.date).valueOf() - new Date(a.date).valueOf();
+        });
+
+        setData(orderedDataByDateDesc);
         setIsFetchingDataMarshal(false);
       }
     } catch (err) {
@@ -102,10 +106,10 @@ export const TimeCapsule = () => {
 
   return (
     <HeaderComponent
-      pageTitle={"TimeCapsule"}
+      pageTitle={"Time Capsule"}
       hasImage={true}
       imgSrc={headerHero}
-      altImageAttribute={"TimeCapsule"}
+      altImageAttribute={"Time Capsule"}
       pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={itDataNfts.length}>
       {itDataNfts.length > 0 ? (
@@ -118,7 +122,7 @@ export const TimeCapsule = () => {
             owned={flags[index]}
             viewData={viewData}
             modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
-            modalTitle={"TimeCapsule"}
+            modalTitle={"Time Capsule"}
             modalTitleStyle="md:p-5 pt-5 pb-5 px-2"
             hasFilter={false}
           />
