@@ -39,6 +39,7 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 10 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 34 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 42 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 56 },
       // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 529 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
@@ -49,7 +50,10 @@ export const PLAYSTATION_GAMER_PASSPORT_TOKENS: app_token[] = [
 export const ESDT_BUBBLE_TOKENS: app_token[] = [
   // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 417 }
 ];
+export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
+  ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 57 }]
+  : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
 
 export const SUPPORTED_APPS = IS_DEVNET
-  ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes"]
+  ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes", "timecapsule"]
   : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes"];

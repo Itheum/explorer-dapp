@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { Banknote, BarChart3, CalendarCheck, Flag, HeartHandshake, Map, ShoppingCart, Trophy } from "lucide-react";
+import { Banknote, BarChart3, CalendarCheck, Flag, HeartHandshake, Map, ShoppingCart, Trophy, Drama } from "lucide-react";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Loader } from "components";
-import { Modal } from "../../../../components/Modal/Modal";
-import { NoDataFound } from "../../../../components/NoDataFound";
-import { Button } from "../../../../libComponents/Button";
-import { Card } from "../../../../libComponents/Card";
-import { useFilterStore } from "../../../../store/FilterStore";
+import { Modal } from "components/Modal/Modal";
+import { NoDataFound } from "components/NoDataFound";
+import { Button } from "libComponents/Button";
+import { Card } from "libComponents/Card";
+import { useFilterStore } from "store/FilterStore";
 
 export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
   const { filter } = useFilterStore();
-  const { loginMethod } = useGetLoginInfo();
   const [filteredData, setFilteredData] = useState<number>(1000);
 
   useEffect(() => {
     const filteredDataTemp = new Set();
     const allData = new Set(data);
     allData.forEach((dataT: any) => {
-      // console.log(data.category);
       if (dataT.category === filter) {
         filteredDataTemp.add(dataT);
       } else {
@@ -27,8 +24,6 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
       setFilteredData(filteredDataTemp.size);
     });
   }, [filter]);
-
-  // console.log(allData);
 
   const getIconForCategory = (dataItem: any) => {
     switch (dataItem.category) {
@@ -46,6 +41,9 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         break;
       case "Leaderboard":
         return <BarChart3 strokeWidth={2.5} />;
+        break;
+      case "Meme":
+        return <Drama />;
         break;
       default:
         return <CalendarCheck strokeWidth={2.5} />;
@@ -161,6 +159,24 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
                   </table>
                 )}
               </div>
+            </Card>
+          </div>
+        );
+        break;
+      case "Meme":
+        tileCode = (
+          <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
+            <Card className="flex flex-col items-start justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
+              <h2>{dataItem.title}</h2>
+              <h3>{new Date(dataItem.date).toDateString()}</h3>
+              {dataItem.file && dataItem["file_mimeType"] && (
+                <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls>
+                  <source src={dataItem.file} type={dataItem["file_mimeType"]}></source>
+                </video>
+              )}
+              <a href={dataItem.link} target="_blank" className="!text-blue-500">
+                See more...
+              </a>
             </Card>
           </div>
         );

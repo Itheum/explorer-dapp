@@ -1,6 +1,7 @@
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
+import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
@@ -49,6 +50,13 @@ export const APP_MAPPINGS = [
     routeKey: "nftunes",
     desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
     img: iconNFTunes,
+  },
+  {
+    appName: "Time Capsule",
+    appDescription: "Time Capsule",
+    routeKey: "timecapsule",
+    desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
+    img: iconTimeCapsule,
   },
 ];
 
