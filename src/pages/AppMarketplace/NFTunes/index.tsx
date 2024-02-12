@@ -222,7 +222,7 @@ export const NFTunes = () => {
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo1} />
                 </div>
-                <span className="text-primary text-2xl">Transform your music streams into NFT Masterpieces</span>
+                <span className="text-primary text-2xl min-h-24">Transform your music streams into NFT Masterpieces</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
                   Release single music tracks or entire playlists, mixes, or extended compositions through a unified Music Data NFT. Update your music at any
                   time and your NFT holders receive the latest content instantly.{" "}
@@ -232,7 +232,7 @@ export const NFTunes = () => {
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo2} />
                 </div>
-                <span className="text-primary text-2xl">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
+                <span className="text-primary text-2xl min-h-24">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
                   Explore the availability of Music Data NFTs across various NFT platforms, connecting you with "new fans" and fostering a direct relationship
                   with your audience.{" "}
@@ -244,7 +244,7 @@ export const NFTunes = () => {
                     <img src={benefitsLogo3} />
                   </div>
                 </div>
-                <span className="text-primary text-2xl">Take Command of Royalties and Distribution</span>
+                <span className="text-primary text-2xl min-h-24 ">Take Command of Royalties and Distribution</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
                   Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.
                 </span>
@@ -340,7 +340,7 @@ export const NFTunes = () => {
               </div>
               <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
                 <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
-                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 bg-secondary dark:bg-none  rounded-[2.37rem]">
+                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
                   {featuredArtistDataNft ? (
                     <DataNftCard
                       className="text-white"
@@ -518,7 +518,7 @@ export const NFTunes = () => {
           <Link
             to={`https://share-eu1.hsforms.com/1h2V8AgnkQJKp3tstayTsEAf5yjc`}
             target="_blank"
-            className="mt-10 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg  max-w-[50%] text-primary ">
+            className="mt-10 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg  max-w-[50%] text-white ">
             Reach Out Today
           </Link>
         </div>
