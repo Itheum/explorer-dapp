@@ -4,4 +4,5 @@ export enum BlobDataType {
   AUDIO,
   SVG,
   PDF,
+  VIDEO,
 }
