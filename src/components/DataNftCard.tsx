@@ -2,7 +2,7 @@ import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
-import { convertToLocalString } from "libs/utils";
+import { cn, convertToLocalString } from "libs/utils";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
 import { Button } from "../libComponents/Button";
@@ -22,6 +22,7 @@ export function DataNftCard({
   modalTitleStyle,
   hasFilter,
   filterData,
+  className,
 }: {
   index: number;
   dataNft: DataNft;
@@ -35,6 +36,7 @@ export function DataNftCard({
   modalTitleStyle?: string;
   hasFilter?: boolean;
   filterData?: Array<IFilterData>;
+  className?: string;
 }) {
   const {
     network: { explorerAddress },
@@ -45,7 +47,11 @@ export function DataNftCard({
 
   return (
     <div className="mb-3">
-      <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]">
+      <Card
+        className={cn(
+          className,
+          "border-[0.5px]  dark:border-slate-100/30 border-slate-300  bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]"
+        )}>
         <CardContent className="flex flex-col p-3">
           <div className="mb-4 flex justify-center">
             <img className="md:w-auto base:w-[15rem]" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
@@ -132,7 +138,7 @@ export function DataNftCard({
                   {modalContent}
                 </Modal>
               ) : (
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md ">
+                <div className="text-foreground bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md ">
                   <Button
                     className="dark:bg-[#0f0f0f] border-0 rounded-md font-medium tracking-tight !text-sm hover:opacity-90"
                     variant="outline"
