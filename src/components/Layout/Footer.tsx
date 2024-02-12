@@ -12,8 +12,8 @@ export const Footer = () => {
           {...{
             target: "_blank",
           }}
-          className="flex items-center dark:text-white text-black"
-          href="https://itheum.com">
+          className="flex items-center dark:text-white text-black text-sm"
+          href="https://itheum.io">
           Made with ♥ by Itheum
         </a>
         <div className="flex justify-center items-center gap-2">
