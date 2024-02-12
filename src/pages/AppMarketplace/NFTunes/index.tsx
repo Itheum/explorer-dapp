@@ -193,14 +193,14 @@ export const NFTunes = () => {
               <Music className="md:scale-[2] mb-8 ml-[14%] text-primary" />
             </div>
 
-            <div className="relative min-h-[10rem] h-full w-full xl:-mt-[15%]">
+            <div className="relative min-h-[10rem] h-full w-full xl:-mt-[15%] -z-10">
               <div className="absolute w-[60%] max-w-[500px]  -mt-[10%] left-[20%] xl:left-[35%] h-[300px] xl:h-[500px] bg-gradient-to-br from-[#737373] from-20% via-[#A76262] via-40% to-[#5D3899] to-80% rounded-full filter blur-2xl opacity-25   "></div>
               <img className="animate-spin-slow w-[60%] left-[20%] xl:left-[40%] max-w-[350px] absolute" src={disk} alt="disk" />
               <img className="absolute left-[60%] lg:left-[50%] xl:left-[70%] top-[-30px] xl:top-[-50px] w-[30%] max-w-[200px]" src={stick} alt="stick" />
             </div>
 
             <div className="flex flex-col items-center h-full">
-              <div className=" flex justify-start xl:justify-end w-full md:-mt-32 xl:-ml-8">
+              <div className=" flex justify-start xl:justify-end w-full md:-mt-32 xl:-ml-8 -z-10">
                 <img className="scale-50 md:scale-75 -ml-4 -mt-6" src={musicNote} />
                 <Music className="md:scale-[2] text-primary" />
               </div>
