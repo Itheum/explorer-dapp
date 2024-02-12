@@ -340,9 +340,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                   {props.previewUrl ? (
                     <div className="flex flex-col select-text justify-center ">
                       <span className="font-sans text-lg font-medium leading-7 text-foreground">{props.songs[currentTrackIndex]?.title}</span>{" "}
-                      <span className="font-sans text-base font-medium text-foreground/60">{props.songs[currentTrackIndex]?.category}</span>
-                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground overflow-ellipsis overflow-hidden max-w-[90%]">
-                        {props.songs[currentTrackIndex]?.album}
+                      <span className="font-sans text-base font-medium text-foreground/60">Preview</span>
+                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground overflow-ellipsis overflow-y-auto  max-w-[90%] max-h-32 ">
+                        {props.songs[currentTrackIndex]?.description}
                       </span>
                     </div>
                   ) : (

@@ -75,10 +75,14 @@ export const NFTunes = () => {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(NF_TUNES_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
-    const _featuredNft: DataNft = await DataNft.createFromApi(FEATURED_NF_TUNES_TOKEN);
-    setDataNfts(_nfts);
-    setFeaturedArtistDataNft(_featuredNft);
 
+    setDataNfts(_nfts);
+    _nfts.map((currentNft, index) => {
+      if (currentNft.nonce === FEATURED_NF_TUNES_TOKEN.nonce && currentNft.collection === FEATURED_NF_TUNES_TOKEN.tokenIdentifier) {
+        setFeaturedDataNftIndex(index);
+        setFeaturedArtistDataNft(currentNft);
+      }
+    });
     setIsLoading(false);
   }
 
@@ -89,9 +93,6 @@ export const NFTunes = () => {
     const _flags = [];
 
     for (const currentNft of dataNfts) {
-      if (currentNft.nonce == FEATURED_NF_TUNES_TOKEN.nonce) {
-        setFeaturedDataNftIndex(_flags.length);
-      }
       const matches = _dataNfts.filter((ownedNft) => currentNft.nonce === ownedNft.nonce);
       _flags.push(matches.length > 0);
     }
@@ -106,12 +107,9 @@ export const NFTunes = () => {
         toastError("Data is not loaded");
         return;
       }
-
       const _owned = flags[index];
-
       if (_owned) {
         setIsFetchingDataMarshal(true);
-
         const dataNft = dataNfts[index];
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -273,9 +271,9 @@ export const NFTunes = () => {
             </div>
             <div className="flex flex-col xl:flex-row w-full h-full justify-center items-center xl:items-start p-8 gap-4">
               <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
-                <span className="text-primary  text-center text-2xl">Meet Manu YFGP</span>
+                <span className="text-secondary dark:text-primary text-center text-2xl">Meet Manu YFGP</span>
                 <img className="" src={manuImage} />
-                <span className="text-primary font-[Clash-Light] w-[80%]">
+                <span className="text-secondary dark:text-primary font-[Clash-Light] w-[80%]">
                   Manu, who goes by the name of YFGP (Your Favorite Ghost Producer) is a Music Producer, SFX Artist, Live Streamer and Music NFT pioneer based
                   out of Sibiu, Romania.&nbsp;&nbsp;
                   <Link to={`https://linktr.ee/Yfgp`} target="_blank" className="!text-blue-500">
@@ -284,13 +282,13 @@ export const NFTunes = () => {
                 </span>
               </div>
               <div className="flex flex-col w-[30%] min-w-[20rem]  justify-center items-center">
-                <span className="text-primary text-center text-xl">Preview Manu’s Music Stream</span>
+                <span className="text-secondary dark:text-primary text-center text-xl">Preview Manu’s Music Stream</span>
                 <img className="opacity-20" src={manuImage} />
 
                 <Modal
                   openTrigger={
                     <button className="h-64  flex rounded-full justify-center w-full mt-[-11rem]">
-                      <PlayCircle className="scale-[3] cursor-pointer text-primary" />
+                      <PlayCircle className="scale-[3] cursor-pointer text-secondary dark:text-primary" />
                     </button>
                   }
                   closeOnOverlayClick={false}
@@ -317,6 +315,7 @@ export const NFTunes = () => {
                           songs={[
                             {
                               "idx": 1,
+                              "description": featuredArtistDataNft.description,
                               "category": "Preview",
                               "album": featuredArtistDataNft.description,
                               "cover_art_url": featuredArtistDataNft.nftImgUrl,
@@ -330,12 +329,11 @@ export const NFTunes = () => {
                 </Modal>
               </div>
               <div className="flex flex-col w-[30%] min-w-[20rem]   justify-center items-center">
-                <span className="text-primary text-center text-xl">Own Manu’s Music Data NFT </span>
-                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0">
+                <span className="text-secondary dark:text-primary text-center text-xl">Own Manu’s Music Data NFT </span>
+                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 bg-secondary dark:bg-none  rounded-[2.37rem]">
                   {featuredArtistDataNft ? (
                     <DataNftCard
-                      key={0}
-                      index={0}
+                      index={featuredDataNftIndex}
                       dataNft={featuredArtistDataNft}
                       isLoading={isLoading}
                       owned={flags[featuredDataNftIndex] ? flags[featuredDataNftIndex] : false}
@@ -541,11 +539,11 @@ export const NFTunes = () => {
               <Link
                 to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
-                className="hover:scale-110 transition duration-700 flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700 flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={itheumLogo} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
-              <div className=" hover:scale-110 transition duration-700 flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+              <div className=" hover:scale-110 transition duration-700 flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
                   <img src={xoxnoLogo} alt="xoxno logo" />
@@ -557,70 +555,72 @@ export const NFTunes = () => {
               <Link
                 to={"https://pulsar.money/"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={pulsarLogo} alt="pulsar" />
               </Link>
               <Link
                 to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
                 target="_blank"
-                className=" hover:scale-110 transition duration-700 flex flex-col items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className=" hover:scale-110 transition duration-700 flex flex-col items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className="w-[60%] text-center">xPand DAO</span>
                 <img src={xPandLogo} alt="xPand logo" />
               </Link>
               <Link
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={multiversxLogo} alt="multiversx logo" />
                 <span className="w-[60%] text-center">Ecosystem</span>
               </Link>
             </div>
           </div>
         </div>
-        <div id="data-nfts" className="flex justify-center items-center p-16 ">
-          <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Music Data NFTs "} dataNftCount={dataNfts.length}>
-            {dataNfts.length > 0 ? (
-              dataNfts.map((dataNft, index) => (
-                <DataNftCard
-                  key={index}
-                  index={index}
-                  dataNft={dataNft}
-                  isLoading={isLoading}
-                  owned={flags[index]}
-                  viewData={viewData}
-                  modalContent={
-                    isFetchingDataMarshal ? (
-                      <div
-                        className="flex flex-col items-center justify-center"
-                        style={{
-                          minHeight: "40rem",
-                        }}>
-                        <div>
-                          <Loader noText />
-                          <p className="text-center text-foreground">Loading...</p>
+        {IS_DEVNET && (
+          <div id="data-nfts" className="flex justify-center items-center p-16 ">
+            <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Music Data NFTs "} dataNftCount={dataNfts.length}>
+              {dataNfts.length > 0 ? (
+                dataNfts.map((dataNft, index) => (
+                  <DataNftCard
+                    key={index}
+                    index={index}
+                    dataNft={dataNft}
+                    isLoading={isLoading}
+                    owned={flags[index]}
+                    viewData={viewData}
+                    modalContent={
+                      isFetchingDataMarshal ? (
+                        <div
+                          className="flex flex-col items-center justify-center"
+                          style={{
+                            minHeight: "40rem",
+                          }}>
+                          <div>
+                            <Loader noText />
+                            <p className="text-center text-foreground">Loading...</p>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <>
-                        {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-                          <AudioPlayer
-                            dataNftToOpen={dataNfts[currentIndex]}
-                            songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                            tokenLogin={tokenLogin}
-                          />
-                        )}
-                      </>
-                    )
-                  }
-                  modalTitle={"NF-Tunes"}
-                  modalTitleStyle="p-4"
-                />
-              ))
-            ) : (
-              <h3 className="text-center text-white">No DataNFT</h3>
-            )}
-          </HeaderComponent>
-        </div>
+                      ) : (
+                        <>
+                          {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                            <AudioPlayer
+                              dataNftToOpen={dataNfts[currentIndex]}
+                              songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                              tokenLogin={tokenLogin}
+                            />
+                          )}
+                        </>
+                      )
+                    }
+                    modalTitle={"NF-Tunes"}
+                    modalTitleStyle="p-4"
+                  />
+                ))
+              ) : (
+                <h3 className="text-center text-white">No DataNFT</h3>
+              )}
+            </HeaderComponent>
+          </div>
+        )}
       </div>
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
     </div>
