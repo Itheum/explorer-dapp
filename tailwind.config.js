@@ -91,9 +91,6 @@ module.exports = {
         "gradient": "gradient 10s linear infinite",
         "cube-down": "cube-down 1s ease-in-out infinite",
       },
-      backgroundImage: (theme) => ({
-        "manu-image": "url('../src/assets/img/nf-tunes/bg-manu.jpg')",
-      }),
     },
   },
 

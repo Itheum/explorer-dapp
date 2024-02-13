@@ -22,7 +22,7 @@ export function DataNftCard({
   modalTitleStyle,
   hasFilter,
   filterData,
-  className,
+  cardStyles,
 }: {
   index: number;
   dataNft: DataNft;
@@ -36,7 +36,7 @@ export function DataNftCard({
   modalTitleStyle?: string;
   hasFilter?: boolean;
   filterData?: Array<IFilterData>;
-  className?: string;
+  cardStyles?: string;
 }) {
   const {
     network: { explorerAddress },
@@ -49,7 +49,7 @@ export function DataNftCard({
     <div className="mb-3">
       <Card
         className={cn(
-          className,
+          cardStyles,
           "border-[0.5px]  dark:border-slate-100/30 border-slate-300  bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]"
         )}>
         <CardContent className="flex flex-col p-3">

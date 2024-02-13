@@ -40,7 +40,7 @@ import benefitsLogo1 from "../../../assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "../../../assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
 import { motion } from "framer-motion";
-import YouTubeEmbed from "libComponents/YouTubeEmbed";
+import YouTubeEmbed from "components/YouTubeEmbed";
 import { useTheme } from "libComponents/ThemeProvider";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
@@ -272,7 +272,7 @@ export const NFTunes = () => {
         {/* Featured Artist Section */}
         <div
           id="featured-artist"
-          className="bg-manu-image bg-cover bg-top flex flex-col xl:flex-row  justify-center items-center xl:items-start w-full h-full gap-12 mb-16 xl:mb-32">
+          className="bg-manu-image flex flex-col xl:flex-row  justify-center items-center xl:items-start w-full h-full gap-12 mb-16 xl:mb-32">
           <div className="py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
             <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl justify-center items-center ">
               <Music className="text-secondary" />
@@ -343,7 +343,7 @@ export const NFTunes = () => {
                 <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
                   {featuredArtistDataNft ? (
                     <DataNftCard
-                      className="text-white"
+                      cardStyles="text-white"
                       index={featuredDataNftIndex}
                       dataNft={featuredArtistDataNft}
                       isLoading={isLoading}
