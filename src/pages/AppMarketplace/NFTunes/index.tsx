@@ -14,15 +14,21 @@ import "react-pdf/dist/Page/TextLayer.css";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
 import { MoveDown, Music, Music2, PlayCircle } from "lucide-react";
 import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
+import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
 import itheumLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
 import pulsarLogo from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money.png";
 import xoxnoLogo from "../../../assets/img/nf-tunes/platforms-logo/xoxno.png";
 import frameItLogo from "../../../assets/img/nf-tunes/platforms-logo/frame-it.png";
 import multiversxLogo from "../../../assets/img/nf-tunes/platforms-logo/multiversx.png";
-import xPandLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
+import itheumLogoLight from "../../../assets/img/nf-tunes/platforms-logo/itheum-light.png";
+import pulsarLogoLight from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money-light.png";
+import xoxnoLogoLight from "../../../assets/img/nf-tunes/platforms-logo/xoxno-light.png";
+import frameItLogoLight from "../../../assets/img/nf-tunes/platforms-logo/frame-it-light.png";
+import multiversxLogoLight from "../../../assets/img/nf-tunes/platforms-logo/multiversx-light.png";
 import { scrollToSection } from "libs/utils";
 import manuImage from "../../../assets/img/nf-tunes/manu.png";
 import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
+import megaphoneLight from "../../../assets/img/nf-tunes/megaphone-light.png";
 import { Modal } from "components/Modal/Modal";
 import { Link } from "react-router-dom";
 import cubes from "../../../assets/img/zstorage/cubes.png";
@@ -35,6 +41,7 @@ import benefitsLogo2 from "../../../assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
 import { motion } from "framer-motion";
 import YouTubeEmbed from "libComponents/YouTubeEmbed";
+import { useTheme } from "libComponents/ThemeProvider";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -42,6 +49,9 @@ interface ExtendedViewDataReturnType extends ViewDataReturnType {
 
 export const NFTunes = () => {
   const { address } = useGetAccount();
+  const { theme } = useTheme();
+  console.log("Theme", theme);
+  ///native auth
   const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -162,7 +172,7 @@ export const NFTunes = () => {
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
-              <img className="max-h-[30%] mb-6" src={musicNote} />
+              <img className="max-h-[30%] mb-6" src={theme === "dark" ? musicNote : musicNoteBlack} />
             </div>
             <div className="flex flex-row justify-between">
               <span className="text-base md:text-2xl text-primary text-light w-[70%]">
@@ -172,7 +182,7 @@ export const NFTunes = () => {
 
             <button
               onClick={() => scrollToSection("featured-artist")}
-              className="hover:scale-110 transition duration-700 text-sm md:text-xl p-2 md:p-4 rounded-lg  max-w-[50%] xl:max-w-[35%] text-primary
+              className="hover:scale-110 transition duration-700 text-sm md:text-xl p-2 md:p-4 rounded-lg  max-w-[50%] xl:max-w-[35%] text-white
            bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
               Visualize NF-Tunes
             </button>
@@ -183,14 +193,14 @@ export const NFTunes = () => {
               <Music className="md:scale-[2] mb-8 ml-[14%] text-primary" />
             </div>
 
-            <div className="relative min-h-[10rem] h-full w-full xl:-mt-[15%]">
+            <div className="relative min-h-[10rem] h-full w-full xl:-mt-[15%] -z-10">
               <div className="absolute w-[60%] max-w-[500px]  -mt-[10%] left-[20%] xl:left-[35%] h-[300px] xl:h-[500px] bg-gradient-to-br from-[#737373] from-20% via-[#A76262] via-40% to-[#5D3899] to-80% rounded-full filter blur-2xl opacity-25   "></div>
               <img className="animate-spin-slow w-[60%] left-[20%] xl:left-[40%] max-w-[350px] absolute" src={disk} alt="disk" />
               <img className="absolute left-[60%] lg:left-[50%] xl:left-[70%] top-[-30px] xl:top-[-50px] w-[30%] max-w-[200px]" src={stick} alt="stick" />
             </div>
 
             <div className="flex flex-col items-center h-full">
-              <div className=" flex justify-start xl:justify-end w-full md:-mt-32 xl:-ml-8">
+              <div className=" flex justify-start xl:justify-end w-full md:-mt-32 xl:-ml-8 -z-10">
                 <img className="scale-50 md:scale-75 -ml-4 -mt-6" src={musicNote} />
                 <Music className="md:scale-[2] text-primary" />
               </div>
@@ -202,7 +212,7 @@ export const NFTunes = () => {
         {/* Benefits of NF-Tunes */}
         <div className="flex flex-col justify-start items-center w-full gap-12 p-6 xl:p-12 xl:pb-0">
           <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
-            <div className="flex flex-row rounded-lg mb-12 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl justify-center items-center ">
+            <div className="flex flex-row rounded-lg mb-12 px-8 xl:px-16 text-center gap-4 bg-primary md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music2 className="text-secondary" />
               <span className="text-secondary">Benefits of NF-Tunes</span>
               <Music2 className="text-secondary" />
@@ -212,7 +222,7 @@ export const NFTunes = () => {
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo1} />
                 </div>
-                <span className="text-primary text-2xl">Transform your music streams into NFT Masterpieces</span>
+                <span className="text-primary text-2xl min-h-24">Transform your music streams into NFT Masterpieces</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
                   Release single music tracks or entire playlists, mixes, or extended compositions through a unified Music Data NFT. Update your music at any
                   time and your NFT holders receive the latest content instantly.{" "}
@@ -222,7 +232,7 @@ export const NFTunes = () => {
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo2} />
                 </div>
-                <span className="text-primary text-2xl">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
+                <span className="text-primary text-2xl min-h-24">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
                   Explore the availability of Music Data NFTs across various NFT platforms, connecting you with "new fans" and fostering a direct relationship
                   with your audience.{" "}
@@ -234,7 +244,7 @@ export const NFTunes = () => {
                     <img src={benefitsLogo3} />
                   </div>
                 </div>
-                <span className="text-primary text-2xl">Take Command of Royalties and Distribution</span>
+                <span className="text-primary text-2xl min-h-24 ">Take Command of Royalties and Distribution</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
                   Forge a direct connection with your fans, experiment with diverse royalty and distribution approaches, showcase the demand for your music.
                 </span>
@@ -328,11 +338,12 @@ export const NFTunes = () => {
                   )}
                 </Modal>
               </div>
-              <div className="flex flex-col w-[30%] min-w-[20rem]   justify-center items-center">
-                <span className="text-secondary dark:text-primary text-center text-xl">Own Manu’s Music Data NFT </span>
-                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 bg-secondary dark:bg-none  rounded-[2.37rem]">
+              <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
+                <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
+                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
                   {featuredArtistDataNft ? (
                     <DataNftCard
+                      className="text-white"
                       index={featuredDataNftIndex}
                       dataNft={featuredArtistDataNft}
                       isLoading={isLoading}
@@ -380,7 +391,7 @@ export const NFTunes = () => {
               <div className="flex flex-row w-full justify-center">
                 <button
                   onClick={() => scrollToSection("data-nfts")}
-                  className="hover:scale-125 transition flex flex-row gap-2 text-primary justify-center items-center  p-4 rounded-lg  bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%  ">
+                  className="hover:scale-125 transition flex flex-row gap-2 text-white justify-center items-center  p-4 rounded-lg  bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%  ">
                   See all
                   <MoveDown />
                 </button>
@@ -412,7 +423,7 @@ export const NFTunes = () => {
                 <Link
                   to={`https://www.zedgestorage.com/itheum-music-data-nft`}
                   target="_blank"
-                  className="hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%]   text-primary ">
+                  className="hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%]   text-white ">
                   Try Zedge Storage today
                 </Link>
               </div>
@@ -502,12 +513,12 @@ export const NFTunes = () => {
             Explore the possibilities with NF-Tunes — we're here to assist you in onboarding and minting your Music Data NFTs.
           </span>
 
-          <img src={megaphone} alt="megaphone" />
+          <img src={theme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
 
           <Link
             to={`https://share-eu1.hsforms.com/1h2V8AgnkQJKp3tstayTsEAf5yjc`}
             target="_blank"
-            className="mt-10 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg  max-w-[50%] text-primary ">
+            className="mt-10 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg  max-w-[50%] text-white ">
             Reach Out Today
           </Link>
         </div>
@@ -539,38 +550,37 @@ export const NFTunes = () => {
               <Link
                 to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
-                className="hover:scale-110 transition duration-700 flex flex-row items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={itheumLogo} alt="itheum logo" />
+                className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                <img src={theme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
-              <div className=" hover:scale-110 transition duration-700 flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+              <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
-                  <img src={xoxnoLogo} alt="xoxno logo" />
+                  <img src={theme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
                 </Link>
                 <Link to={"https://www.frameit.gg/"} target="_blank">
-                  <img src={frameItLogo} alt="frame it logo" />
+                  <img src={theme === "dark" ? frameItLogo : frameItLogoLight} alt="frame it logo" />
                 </Link>
               </div>
               <Link
                 to={"https://pulsar.money/"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={pulsarLogo} alt="pulsar" />
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                <img src={theme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
               </Link>
               <Link
                 to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
                 target="_blank"
-                className=" hover:scale-110 transition duration-700 flex flex-col items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <span className="w-[60%] text-center">xPand DAO</span>
-                <img src={xPandLogo} alt="xPand logo" />
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                <span className="text-xl text-primary w-[60%] text-center">xPand DAO</span>
               </Link>
               <Link
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t  from-black from-20% to-gray-400 dark:to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={multiversxLogo} alt="multiversx logo" />
-                <span className="w-[60%] text-center">Ecosystem</span>
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                <img src={theme === "dark" ? multiversxLogo : multiversxLogoLight} alt="multiversx logo" />
+                <span className="w-[60%] text-lg font-semibold text-center"> Ecosystem</span>
               </Link>
             </div>
           </div>
