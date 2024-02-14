@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
-import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX } from "lucide-react";
+import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, XCircle } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,12 +8,15 @@ import "slick-carousel/slick/slick-theme.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
+import toast from "react-hot-toast";
 
 type AudioPlayerProps = {
-  dataNftToOpen: DataNft;
-  songs: any;
-  tokenLogin: any;
+  dataNftToOpen?: DataNft;
+  songs?: any;
+  tokenLogin?: any;
+  previewUrl?: string;
 };
+
 export const AudioPlayer = (props: AudioPlayerProps) => {
   useEffect(() => {
     audio.addEventListener("ended", function () {
@@ -27,12 +30,13 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       // play the song
       if (audio.currentTime == 0) togglePlay();
     });
-    props.songs?.forEach((song: any) => {
-      ///TODO if there are more than 10 songs, analyze this
-      fetchMarshalForSong(song.idx);
-    });
-    updateProgress();
-
+    if (props.songs) {
+      props.songs?.forEach((song: any) => {
+        ///TODO if there are more than 10 songs, analyze this
+        fetchMarshalForSong(song.idx);
+      });
+      updateProgress();
+    }
     return () => {
       audio.pause();
       audio.removeEventListener("timeupdate", updateProgress);
@@ -119,30 +123,32 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           [index]: "Fetching", // update the value of specific key
         }));
         /// if not previously fetched, fetch now and save the url of the blob
-        const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
-          mvxNativeAuthOrigins: [decodeNativeAuthToken(props.tokenLogin.nativeAuthToken).origin],
-          mvxNativeAuthMaxExpirySeconds: 3600,
+        if (props.dataNftToOpen) {
+          const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
+            mvxNativeAuthOrigins: [decodeNativeAuthToken(props.tokenLogin.nativeAuthToken).origin],
+            mvxNativeAuthMaxExpirySeconds: 3600,
 
-          fwdHeaderMapLookup: {
-            "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,
-          },
+            fwdHeaderMapLookup: {
+              "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,
+            },
 
-          stream: true,
-          nestedIdxToStream: index, ///   get the song for the current index
-        });
+            stream: true,
+            nestedIdxToStream: index, ///   get the song for the current index
+          });
 
-        if (!res.error) {
-          const blobUrl = URL.createObjectURL(res.data);
+          if (!res.error) {
+            const blobUrl = URL.createObjectURL(res.data);
 
-          setSongSource((prevState) => ({
-            ...prevState, // keep all other key-value pairs
-            [index]: blobUrl, // update the value of specific key
-          }));
-        } else {
-          setSongSource((prevState) => ({
-            ...prevState,
-            [index]: "Error: " + res.error,
-          }));
+            setSongSource((prevState) => ({
+              ...prevState, // keep all other key-value pairs
+              [index]: blobUrl, // update the value of specific key
+            }));
+          } else {
+            setSongSource((prevState) => ({
+              ...prevState,
+              [index]: "Error: " + res.error,
+            }));
+          }
         }
       } catch (err) {
         setSongSource((prevState) => ({
@@ -218,7 +224,15 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   const handleChangeSong = () => {
+    if (props.previewUrl) {
+      audio.src = props.previewUrl;
+      audio.load();
+      updateProgress();
+      audio.currentTime = 0;
+      return true;
+    }
     const index = props.songs[currentTrackIndex]?.idx;
+
     if (songSource[index]) {
       // if we previously fetched the song and it was an error, show again the exact error.
       if (songSource[index].includes("Error:")) {
@@ -245,10 +259,29 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     handleChangeSong();
   }, [currentTrackIndex, songSource[props.songs[currentTrackIndex]?.idx]]);
 
-  const showPlaylist = () => {
-    setDisplayPlaylist(true);
-  };
+  useEffect(() => {
+    if (props.previewUrl) {
+      audio.pause();
+      audio.src = props.previewUrl;
+      setIsPlaying(false);
+      setIsLoaded(false);
+      handleChangeSong();
+    }
+  }, [props.previewUrl]);
 
+  const showPlaylist = () => {
+    if (props.previewUrl) {
+      toast.error("This is just a preview. You have to buy the Music Data Nft to see all the songs.", {
+        icon: (
+          <button onClick={() => toast.dismiss()}>
+            <XCircle color="red" />
+          </button>
+        ),
+      });
+    } else {
+      setDisplayPlaylist(true);
+    }
+  };
   return (
     <div className="bg-gradient-to-br from-[#00C79740] to-[#3D00EA20] bg-blend-multiply">
       <div className="bg-[#1b1b1b10] backdrop-contrast-[1.10]">
@@ -295,26 +328,35 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           ) : (
             <div className="overflow-hidden  w-full flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
               <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-[1px] border-foreground/40  relative md:w-[60%] flex flex-col rounded-xl">
-                <div className="px-10 pt-10 pb-4 flex items-center">
+                <div className="px-10 pt-10 pb-4 flex flex-col md:flex-row  items-center">
                   <img
-                    src={props.songs[currentTrackIndex]?.cover_art_url}
+                    src={props.songs ? props.songs[currentTrackIndex]?.cover_art_url : ""}
                     alt="Album Cover"
-                    className=" select-none w-24 h-24 rounded-md mr-6 border border-grey-900"
+                    className=" select-none w-24 h-24 rounded-md md:mr-6 border border-grey-900"
                     onError={({ currentTarget }) => {
                       currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                     }}
                   />
-
-                  <div className="flex flex-col select-text">
-                    <div>
+                  {props.previewUrl ? (
+                    <div className="flex flex-col select-text justify-center ">
                       <span className="font-sans text-lg font-medium leading-7 text-foreground">{props.songs[currentTrackIndex]?.title}</span>{" "}
-                      <span className="ml-2 font-sans text-base font-medium text-muted-foreground">{props.songs[currentTrackIndex]?.date.split("T")[0]}</span>
+                      <span className="font-sans text-base font-medium text-foreground/60">Preview</span>
+                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground overflow-ellipsis overflow-y-auto  max-w-[90%] max-h-32 ">
+                        {props.songs[currentTrackIndex]?.description}
+                      </span>
                     </div>
+                  ) : (
+                    <div className="flex flex-col select-text">
+                      <div>
+                        <span className="font-sans text-lg font-medium leading-7 text-foreground">{props.songs[currentTrackIndex]?.title}</span>{" "}
+                        <span className="ml-2 font-sans text-base font-medium text-muted-foreground">{props.songs[currentTrackIndex]?.date.split("T")[0]}</span>
+                      </div>
 
-                    <span className="font-sans text-base font-medium text-foreground/60">{props.songs[currentTrackIndex]?.category}</span>
-                    <span className="font-sans text-lg font-medium leading-6 text-foreground">{props.songs[currentTrackIndex]?.artist}</span>
-                    <span className="font-sans text-base font-medium leading-6 text-muted-foreground">{props.songs[currentTrackIndex]?.album}</span>
-                  </div>
+                      <span className="font-sans text-base font-medium text-foreground/60">{props.songs[currentTrackIndex]?.category}</span>
+                      <span className="font-sans text-lg font-medium leading-6 text-foreground">{props.songs[currentTrackIndex]?.artist}</span>
+                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground">{props.songs[currentTrackIndex]?.album}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="gap-2 text-foreground select-none w-full flex flex-row justify-center items-center px-10 pb-6">
@@ -368,45 +410,47 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                   </button>
                 </div>
               </div>
-              <div className="w-[80%] 2xl:w-[70%] mt-8 mx-auto">
-                <h4 className="select-none flex justify-start font-semibold text-foreground mt-4 mb-2">{`Tracklist ${props.songs.length} songs`} </h4>
-                <Slider {...settings}>
-                  {props.songs.map((song: any, index: number) => {
-                    return (
-                      <div key={index} className=" w-32 xl:w-64 shadow-none flex items-center justify-center">
-                        <div
-                          onClick={() => {
-                            setCurrentTrackIndex(index);
-                          }}
-                          className="mx-auto w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center bg-[#fafafa]/25 dark:bg-[#0f0f0f]/25 cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200 rounded-2xl text-foreground border-[1px] border-foreground/40">
-                          <div className="w-[80%] xl:w-[40%] justify-center">
-                            <img
-                              src={song.cover_art_url}
-                              alt="Album Cover"
-                              className="h-24 p-2 rounded-md"
-                              onError={({ currentTarget }) => {
-                                currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
-                              }}
-                            />
-                          </div>
-                          <div className=" xl:w-[60%] flex flex-col justify-center text-center  ">
-                            <h6 className=" text-base text-foreground truncate ">{song.title}</h6>
-                            <p className="font-sans text-base font-medium leading-6 text-muted-foreground truncate">{song.artist}</p>
+              {!props.previewUrl && (
+                <div className="w-[80%] 2xl:w-[70%] mt-8 mx-auto">
+                  <h4 className="select-none flex justify-start font-semibold text-foreground mt-4 mb-2">{`Tracklist ${props.songs.length} songs`} </h4>
+                  <Slider {...settings}>
+                    {props.songs.map((song: any, index: number) => {
+                      return (
+                        <div key={index} className=" w-32 xl:w-64 shadow-none flex items-center justify-center">
+                          <div
+                            onClick={() => {
+                              setCurrentTrackIndex(index);
+                            }}
+                            className="mx-auto w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center bg-[#fafafa]/25 dark:bg-[#0f0f0f]/25 cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200 rounded-2xl text-foreground border-[1px] border-foreground/40">
+                            <div className="w-[80%] xl:w-[40%] justify-center">
+                              <img
+                                src={song.cover_art_url}
+                                alt="Album Cover"
+                                className="h-24 p-2 rounded-md"
+                                onError={({ currentTarget }) => {
+                                  currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
+                                }}
+                              />
+                            </div>
+                            <div className=" xl:w-[60%] flex flex-col justify-center text-center  ">
+                              <h6 className=" text-base text-foreground truncate ">{song.title}</h6>
+                              <p className="font-sans text-base font-medium leading-6 text-muted-foreground truncate">{song.artist}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </Slider>
-                <style>
-                  {`
+                      );
+                    })}
+                  </Slider>
+                  <style>
+                    {`
                 /* CSS styles for Swiper navigation arrows  */
                 .slick-prev:before,
                 .slick-next:before {
                 color: ${theme === "light" ? "black;" : "white;"},
                     }`}
-                </style>
-              </div>
+                  </style>
+                </div>
+              )}
             </div>
           )}
         </div>

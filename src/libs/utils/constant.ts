@@ -1,6 +1,7 @@
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
+import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
@@ -50,6 +51,13 @@ export const APP_MAPPINGS = [
     desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
     img: iconNFTunes,
   },
+  {
+    appName: "Time Capsule",
+    appDescription: "Time Capsule",
+    routeKey: "timecapsule",
+    desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
+    img: iconTimeCapsule,
+  },
 ];
 
 export const ITHEUM_EXPLORER_PROD_URL = "https://explorer.itheum.io";
@@ -58,6 +66,8 @@ export const ITHEUM_EXPLORER_TEST_URL = "https://test.explorer.itheum.io";
 export const ITHEUM_DATADEX_PROD_URL = "https://datadex.itheum.io";
 export const ITHEUM_DATADEX_STG_URL = "https://stg.datadex.itheum.io";
 export const ITHEUM_DATADEX_TEST_URL = "https://test.datadex.itheum.io";
+export const ZEDGE_STORAGE_PROD_URL = "https://www.zedgestorage.com";
+export const ZEDGE_STORAGE_TEST_URL = "https://www.test.zedgestorage.com";
 
 export const nativeAuthOrigins = () => {
   return [ITHEUM_DATADEX_PROD_URL, ITHEUM_DATADEX_STG_URL, ITHEUM_DATADEX_TEST_URL, window.location.origin];

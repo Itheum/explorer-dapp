@@ -1,6 +1,7 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
+import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { withPageTitle } from "./components/PageTitle";
 import { PlayStationGamer, Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics } from "./pages";
@@ -16,6 +17,7 @@ export const routeNames = {
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
   nftunes: "/nftunes",
+  timecapsule: "/timecapsule",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -68,6 +70,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.nftunes,
     title: "NFTunes",
     component: NFTunes,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.timecapsule,
+    title: "Time Capsule",
+    component: TimeCapsule,
     authenticatedRoute: false,
   },
 ];
