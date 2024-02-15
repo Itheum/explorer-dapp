@@ -550,11 +550,11 @@ export const NFTunes = () => {
               <Link
                 to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
-                className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={theme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
-              <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+              <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
                   <img src={theme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
@@ -566,19 +566,19 @@ export const NFTunes = () => {
               <Link
                 to={"https://pulsar.money/"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={theme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
               </Link>
               <Link
                 to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className="text-xl text-primary w-[60%] text-center">xPand DAO</span>
               </Link>
               <Link
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center  shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <img src={theme === "dark" ? multiversxLogo : multiversxLogoLight} alt="multiversx logo" />
                 <span className="w-[60%] text-lg font-semibold text-center"> Ecosystem</span>
               </Link>
