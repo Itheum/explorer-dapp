@@ -173,3 +173,9 @@ h6 {
 .dapp-core-component__confirmAddressStyles__ledger-confirm-address-heading {
   @apply text-black !important;
 }
+
+.bg-manu-image {
+  background-image: url("./assets/img/nf-tunes/bg-manu.jpg");
+  background-size: cover;
+  background-position: top;
+}
