@@ -56,4 +56,4 @@ export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
 
 export const SUPPORTED_APPS = IS_DEVNET
   ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes", "timecapsule"]
-  : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes"];
+  : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes", "timecapsule"];
