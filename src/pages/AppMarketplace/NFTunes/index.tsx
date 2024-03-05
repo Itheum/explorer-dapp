@@ -50,7 +50,6 @@ interface ExtendedViewDataReturnType extends ViewDataReturnType {
 export const NFTunes = () => {
   const { address } = useGetAccount();
   const { theme } = useTheme();
-  console.log("Theme", theme);
   ///native auth
   const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
