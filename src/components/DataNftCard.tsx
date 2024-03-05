@@ -53,10 +53,12 @@ export function DataNftCard({
           "border-[0.5px]  dark:border-slate-100/30 border-slate-300  bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]"
         )}>
         <CardContent className="flex flex-col p-3">
-          <div className="mb-4 flex justify-center">
-            <img className="md:w-auto base:w-[15rem]" src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} />
+          <div className="mb-4 flex justify-center base:max-h-[15rem] md:max-h-[18rem] object-cover">
+            <img
+              className="md:w-auto base:w-[15rem] rounded-3xl"
+              src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"}
+            />
           </div>
-
           <div className="md:h-[15rem] h-[13rem]">
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 base:text-sm md:text-base">Title:</span>
