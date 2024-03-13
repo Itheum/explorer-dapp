@@ -39,7 +39,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     });
     if (songs) {
       songs?.forEach((song: any) => {
-        ///TODO if there are more than 10 songs, analyze this
         if (song.idx === 1) return;
         fetchMarshalForSong(song.idx);
       });

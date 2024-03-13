@@ -50,6 +50,7 @@ interface ExtendedViewDataReturnType extends ViewDataReturnType {
 export const NFTunes = () => {
   const { address } = useGetAccount();
   const { theme } = useTheme();
+  const currentTheme = theme !== "system" ? theme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -187,7 +188,7 @@ export const NFTunes = () => {
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
-              <img className="max-h-[30%] mb-6" src={theme === "dark" ? musicNote : musicNoteBlack} />
+              <img className="max-h-[30%] mb-6" src={currentTheme === "dark" ? musicNote : musicNoteBlack} />
             </div>
             <div className="flex flex-row justify-between">
               <span className="text-base md:text-2xl text-primary text-light w-[70%]">
@@ -389,7 +390,6 @@ export const NFTunes = () => {
                           </>
                         )
                       }
-                      modalContentStyle="!h-full"
                       modalTitle={"NF-Tunes"}
                       modalTitleStyle="p-4"
                     />
@@ -530,7 +530,7 @@ export const NFTunes = () => {
             Explore the possibilities with NF-Tunes — we're here to assist you in onboarding and minting your Music Data NFTs.
           </span>
 
-          <img src={theme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
+          <img src={currentTheme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
 
           <Link
             to={`https://share-eu1.hsforms.com/1h2V8AgnkQJKp3tstayTsEAf5yjc`}
@@ -568,34 +568,23 @@ export const NFTunes = () => {
                 to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
                 className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={theme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
+                <img src={currentTheme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
               <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
-                  <img
-                    src={
-                      theme === "system"
-                        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-                          ? xoxnoLogo
-                          : xoxnoLogoLight
-                        : theme === "dark"
-                          ? xoxnoLogo
-                          : xoxnoLogoLight
-                    }
-                    alt="xoxno logo"
-                  />
+                  <img src={currentTheme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
                 </Link>
                 <Link to={"https://www.frameit.gg/"} target="_blank">
-                  <img src={theme === "dark" ? frameItLogo : frameItLogoLight} alt="frame it logo" />
+                  <img src={currentTheme === "dark" ? frameItLogo : frameItLogoLight} alt="frame it logo" />
                 </Link>
               </div>
               <Link
                 to={"https://pulsar.money/"}
                 target="_blank"
                 className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={theme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
+                <img src={currentTheme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
               </Link>
               <Link
                 to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
@@ -607,7 +596,7 @@ export const NFTunes = () => {
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
                 className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={theme === "dark" ? multiversxLogo : multiversxLogoLight} alt="multiversx logo" />
+                <img src={currentTheme === "dark" ? multiversxLogo : multiversxLogoLight} alt="multiversx logo" />
                 <span className="w-[60%] text-lg font-semibold text-center"> Ecosystem</span>
               </Link>
             </div>
