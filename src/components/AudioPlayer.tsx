@@ -4,23 +4,30 @@ import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, S
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import toast from "react-hot-toast";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
-import toast from "react-hot-toast";
 
 type AudioPlayerProps = {
   dataNftToOpen?: DataNft;
   songs?: any;
   tokenLogin?: any;
+  firstSongBlobUrl?: string;
   previewUrl?: string;
 };
 
 export const AudioPlayer = (props: AudioPlayerProps) => {
+  const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl } = props;
+
   useEffect(() => {
+    if (firstSongBlobUrl)
+      setSongSource((prevState) => ({
+        ...prevState, // keep all other key-value pairs
+        [1]: firstSongBlobUrl, // update the value of the first index
+      }));
     audio.addEventListener("ended", function () {
-      setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < props.songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
+      setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
     });
     audio.addEventListener("timeupdate", updateProgress);
     audio.addEventListener("canplaythrough", function () {
@@ -30,9 +37,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       // play the song
       if (audio.currentTime == 0) togglePlay();
     });
-    if (props.songs) {
-      props.songs?.forEach((song: any) => {
-        ///TODO if there are more than 10 songs, analyze this
+    if (songs) {
+      songs?.forEach((song: any) => {
+        if (song.idx === 1) return;
         fetchMarshalForSong(song.idx);
       });
       updateProgress();
@@ -123,13 +130,13 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           [index]: "Fetching", // update the value of specific key
         }));
         /// if not previously fetched, fetch now and save the url of the blob
-        if (props.dataNftToOpen) {
-          const res: ViewDataReturnType = await props.dataNftToOpen.viewDataViaMVXNativeAuth({
-            mvxNativeAuthOrigins: [decodeNativeAuthToken(props.tokenLogin.nativeAuthToken).origin],
+        if (dataNftToOpen) {
+          const res: ViewDataReturnType = await dataNftToOpen.viewDataViaMVXNativeAuth({
+            mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
             mvxNativeAuthMaxExpirySeconds: 3600,
 
             fwdHeaderMapLookup: {
-              "authorization": `Bearer ${props.tokenLogin?.nativeAuthToken}`,
+              "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
             },
 
             stream: true,
@@ -172,6 +179,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     updateProgress();
   }, [audio.src]);
 
+  useEffect(() => {
+    if (firstSongBlobUrl)
+      setSongSource((prevState) => ({
+        ...prevState, // keep all other key-value pairs
+        [1]: firstSongBlobUrl, // update the value of the first index
+      }));
+  }, [firstSongBlobUrl]);
+
   const togglePlay = () => {
     if (isPlaying) {
       if (!audio.paused) {
@@ -196,14 +211,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
   const handlePrevButton = () => {
     if (currentTrackIndex <= 0) {
-      setCurrentTrackIndex(props.songs.length - 1);
+      setCurrentTrackIndex(songs.length - 1);
       return;
     }
     setCurrentTrackIndex((prevCurrentTrackIndex) => prevCurrentTrackIndex - 1);
   };
 
   const handleNextButton = () => {
-    if (currentTrackIndex >= props.songs.length - 1) {
+    if (currentTrackIndex >= songs.length - 1) {
       setCurrentTrackIndex(0);
       return;
     }
@@ -224,14 +239,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   const handleChangeSong = () => {
-    if (props.previewUrl) {
-      audio.src = props.previewUrl;
+    if (previewUrl) {
+      audio.src = previewUrl;
       audio.load();
       updateProgress();
       audio.currentTime = 0;
       return true;
     }
-    const index = props.songs[currentTrackIndex]?.idx;
+    const index = songs[currentTrackIndex]?.idx;
 
     if (songSource[index]) {
       // if we previously fetched the song and it was an error, show again the exact error.
@@ -257,20 +272,20 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     setIsPlaying(false);
     setIsLoaded(false);
     handleChangeSong();
-  }, [currentTrackIndex, songSource[props.songs[currentTrackIndex]?.idx]]);
+  }, [currentTrackIndex, songSource[songs[currentTrackIndex]?.idx]]);
 
   useEffect(() => {
-    if (props.previewUrl) {
+    if (previewUrl) {
       audio.pause();
-      audio.src = props.previewUrl;
+      audio.src = previewUrl;
       setIsPlaying(false);
       setIsLoaded(false);
       handleChangeSong();
     }
-  }, [props.previewUrl]);
+  }, [previewUrl]);
 
   const showPlaylist = () => {
-    if (props.previewUrl) {
+    if (previewUrl) {
       toast.error("This is just a preview. You have to buy the Music Data Nft to see all the songs.", {
         icon: (
           <button onClick={() => toast.dismiss()}>
@@ -282,6 +297,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       setDisplayPlaylist(true);
     }
   };
+
   return (
     <div className="bg-gradient-to-br from-[#00C79740] to-[#3D00EA20] bg-blend-multiply">
       <div className="bg-[#1b1b1b10] backdrop-contrast-[1.10]">
@@ -294,7 +310,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                 <ArrowBigLeft />
               </button>
               <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mx-4 mt-6 mb-20">
-                {props.songs.map((song: any, index: number) => {
+                {songs.map((song: any, index: number) => {
                   return (
                     <div
                       key={index}
@@ -330,31 +346,31 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-[1px] border-foreground/40  relative md:w-[60%] flex flex-col rounded-xl">
                 <div className="px-10 pt-10 pb-4 flex flex-col md:flex-row  items-center">
                   <img
-                    src={props.songs ? props.songs[currentTrackIndex]?.cover_art_url : ""}
+                    src={songs ? songs[currentTrackIndex]?.cover_art_url : ""}
                     alt="Album Cover"
                     className=" select-none w-24 h-24 rounded-md md:mr-6 border border-grey-900"
                     onError={({ currentTarget }) => {
                       currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                     }}
                   />
-                  {props.previewUrl ? (
+                  {previewUrl ? (
                     <div className="flex flex-col select-text justify-center ">
-                      <span className="font-sans text-lg font-medium leading-7 text-foreground">{props.songs[currentTrackIndex]?.title}</span>{" "}
+                      <span className="font-sans text-lg font-medium leading-7 text-foreground">{songs[currentTrackIndex]?.title}</span>{" "}
                       <span className="font-sans text-base font-medium text-foreground/60">Preview</span>
                       <span className="font-sans text-base font-medium leading-6 text-muted-foreground overflow-ellipsis overflow-y-auto  max-w-[90%] max-h-32 ">
-                        {props.songs[currentTrackIndex]?.description}
+                        {songs[currentTrackIndex]?.description}
                       </span>
                     </div>
                   ) : (
                     <div className="flex flex-col select-text">
                       <div>
-                        <span className="font-sans text-lg font-medium leading-7 text-foreground">{props.songs[currentTrackIndex]?.title}</span>{" "}
-                        <span className="ml-2 font-sans text-base font-medium text-muted-foreground">{props.songs[currentTrackIndex]?.date.split("T")[0]}</span>
+                        <span className="font-sans text-lg font-medium leading-7 text-foreground">{songs[currentTrackIndex]?.title}</span>{" "}
+                        <span className="ml-2 font-sans text-base font-medium text-muted-foreground">{songs[currentTrackIndex]?.date.split("T")[0]}</span>
                       </div>
 
-                      <span className="font-sans text-base font-medium text-foreground/60">{props.songs[currentTrackIndex]?.category}</span>
-                      <span className="font-sans text-lg font-medium leading-6 text-foreground">{props.songs[currentTrackIndex]?.artist}</span>
-                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground">{props.songs[currentTrackIndex]?.album}</span>
+                      <span className="font-sans text-base font-medium text-foreground/60">{songs[currentTrackIndex]?.category}</span>
+                      <span className="font-sans text-lg font-medium leading-6 text-foreground">{songs[currentTrackIndex]?.artist}</span>
+                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground">{songs[currentTrackIndex]?.album}</span>
                     </div>
                   )}
                 </div>
@@ -410,11 +426,11 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                   </button>
                 </div>
               </div>
-              {!props.previewUrl && (
+              {!previewUrl && (
                 <div className="w-[80%] 2xl:w-[70%] mt-8 mx-auto">
-                  <h4 className="select-none flex justify-start font-semibold text-foreground mt-4 mb-2">{`Tracklist ${props.songs.length} songs`} </h4>
+                  <h4 className="select-none flex justify-start font-semibold text-foreground mt-4 mb-2">{`Tracklist ${songs.length} songs`} </h4>
                   <Slider {...settings}>
-                    {props.songs.map((song: any, index: number) => {
+                    {songs.map((song: any, index: number) => {
                       return (
                         <div key={index} className=" w-32 xl:w-64 shadow-none flex items-center justify-center">
                           <div
