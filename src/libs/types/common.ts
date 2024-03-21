@@ -6,3 +6,9 @@ export enum BlobDataType {
   PDF,
   VIDEO,
 }
+
+export interface TrendingNft {
+  uuid: string;
+  tokenIdentifier: string;
+  rating: number;
+}
