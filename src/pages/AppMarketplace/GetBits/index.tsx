@@ -170,7 +170,7 @@ export const GetBits = () => {
             {isFetchingDataMarshal && (
               <div>
                 <Loader noText />
-                <p className="text-center text-xl text-gray-950 text-foreground">What will the DeGen bestow on you??</p>
+                <p className="text-center text-xl text-gray-950 text-foreground">What will the DeGen Gods bestow on you??</p>
               </div>
             )}
           </div>
