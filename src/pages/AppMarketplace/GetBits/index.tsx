@@ -162,14 +162,15 @@ export const GetBits = () => {
             {!isFetchingDataMarshal && (
               <div onClick={() => viewData()}>
                 <p className="text-center text-xl text-gray-950 text-foreground cursor-pointer">
-                  Hey Itheum Degen! Are ready to grab you some of them sweet sweet {`<BiTS>`} points? Click when you are ready...
+                  Hey Itheum DeGen! Are ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points? Sacrifice a meme to the DeGen Gods and click when you
+                  are ready...
                 </p>
               </div>
             )}
             {isFetchingDataMarshal && (
               <div>
                 <Loader noText />
-                <p className="text-center text-xl text-gray-950 text-foreground">{"What will it be?"}</p>
+                <p className="text-center text-xl text-gray-950 text-foreground">What will the DeGen bestow on you??</p>
               </div>
             )}
           </div>
@@ -206,7 +207,7 @@ export const GetBits = () => {
 
                     {viewDataRes.data.gamePlayResult.bitsWon > 0 && (
                       <p className="text-xl text-gray-950">
-                        WOOP! WOOP! You have won {viewDataRes.data.gamePlayResult.bitsWon} {` <BiTS>`}.
+                        w00t! w00t! You have won {viewDataRes.data.gamePlayResult.bitsWon} {` <BiTS>`}.
                       </p>
                     )}
 
