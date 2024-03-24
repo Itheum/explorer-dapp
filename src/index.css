@@ -179,3 +179,19 @@ h6 {
   background-size: cover;
   background-position: top;
 }
+
+.blinkMe {
+  animation: blinkEffect 2s linear infinite;
+}
+
+@keyframes blinkEffect {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

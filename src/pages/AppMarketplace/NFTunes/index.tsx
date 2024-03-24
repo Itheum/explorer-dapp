@@ -7,7 +7,7 @@ import { DataNftCard, Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType } from "libs/types";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -42,10 +42,6 @@ import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
 import { motion } from "framer-motion";
 import YouTubeEmbed from "components/YouTubeEmbed";
 import { useTheme } from "libComponents/ThemeProvider";
-
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
 
 export const NFTunes = () => {
   const { address } = useGetAccount();
