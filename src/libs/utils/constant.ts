@@ -61,7 +61,7 @@ export const APP_MAPPINGS = [
   },
   {
     appName: "Get <BiTS> Points",
-    appDescription: "Collect Itheum Degen <BiTS> Points",
+    appDescription: "Collect Itheum <BiTS> Points",
     routeKey: "getbits",
     desc: "Itheum DeGen! You are a data ownership pioneer. Open this apps to get <BiTS> points, <BiTS> points are like Itheum DeGen XP. Let's Get <BiTS>!",
     img: iconGetBits,

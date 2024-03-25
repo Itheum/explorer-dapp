@@ -67,7 +67,7 @@ export const Navbar = () => {
         </Link>
       </div>
 
-      <NavigationMenu className="md:!inline !hidden z-0 pr-2">
+      <NavigationMenu className="md:!inline !hidden z-0 pr-2 relative md:z-10">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
@@ -140,7 +140,7 @@ export const Navbar = () => {
                 <Link to={routeNames.getbits}>
                   <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
                     <Button
-                      className="text-sm dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide"
+                      className="min-w-24 text-sm dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide"
                       variant="outline">
                       {bitsBalance === -2 ? <span className="blinkMe">{"... <B>"}</span> : <>{bitsBalance === -1 ? "0 <B>" : `${bitsBalance} <B>`}</>}
                     </Button>
@@ -228,7 +228,7 @@ export const Navbar = () => {
                   <span>Account</span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
+                <DropdownMenuGroup className="text-foreground/50">
                   <Link to={routeNames.mylisted}>
                     <DropdownMenuItem className="text-foreground/50">My Listed</DropdownMenuItem>
                   </Link>
