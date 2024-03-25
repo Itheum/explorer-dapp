@@ -158,14 +158,14 @@ export const GetBits = () => {
                         md:absolute md:p-[2rem] md:w-[400px] md:mt-0">
             {!isFetchingDataMarshal && (
               <div className="text-center text-xl text-gray-950 text-foreground cursor-pointer" onClick={() => playGame()}>
-                <p>Hey Itheum DeGen! Are ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
-                <p className="font-bold mt-5">Sacrifice a meme to the DeGen Gods and click here when you are ready...</p>
+                <p>We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
+                <p className="font-bold mt-5">Sacrifice a meme to the Meme Gods and click here when you are ready...</p>
               </div>
             )}
             {isFetchingDataMarshal && (
               <div>
                 <Loader noText />
-                <p className="text-center text-xl text-gray-950 text-foreground">What will the DeGen Gods bestow on you??</p>
+                <p className="text-center text-xl text-gray-950 text-foreground">What will the Meme Gods bestow on you??</p>
               </div>
             )}
           </div>
@@ -259,10 +259,13 @@ export const GetBits = () => {
           <div className="mt-[2rem]">
             <h3 className="text-white">What are Itheum {`<BiTS>`} Points?</h3>
             <p>
-              Think of them as the XP points of the Itheum Protocol, we like to call them "Data Ownership DeGen XP Points". You need to use Data NFT and Itheum
-              Core Infrastructure to collect your Itheum {`<BiTS>`}, and this exact Web3/Blockchain based product stack can be used by you to empower you to
-              take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization technology! Welcome Data Ownership
-              DeGen!
+              Think of them as the XP points of the Itheum Protocol, we like to call them "Data Ownership OG (Original Gangster) XP Points" and if you consider
+              yourself an Itheum OG and love Data Ownership, then we absolutely think you are a pioneer and {`<BiTS>`} is the Itheum XP system for you!!
+              <p className="mt-5">
+                You need to use Data NFT and Itheum Core Infrastructure to collect your Itheum {`<BiTS>`}, and this exact Web3/Blockchain based product stack
+                can be used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization
+                technology! Welcome Itheum Data Ownership OG!
+              </p>
             </p>
           </div>
 
@@ -291,7 +294,7 @@ export const GetBits = () => {
             </p>
             <ol className="mt-5">
               <li>
-                1. Top 3 Movers each month get Airdropped 2. Get a boost on Monthly{" "}
+                1. Top 3 Movers each month get Airdropped
                 <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
                   Data NFTs
                 </a>{" "}
@@ -307,7 +310,12 @@ export const GetBits = () => {
               <li>3. Admire the balance grow as you connect your wallet to Itheum Protocol dApps and play</li>
             </ol>
 
-            <p className="mt-5">This is just the start, we have a bunch of other ideas planned for {`<BiTS>`}.</p>
+            <p className="mt-5">
+              This is just the start, we have a bunch of other ideas planned for {`<BiTS>`}. Got ideas for {`<BiTS>`} utility? We love to hear them:
+              <a className="!text-[#7a98df] hover:underline" href="https://forms.gle/muA4XiD2ddQis4G78" target="blank">
+                Send ideas
+              </a>{" "}
+            </p>
           </div>
 
           <div className="mt-[2rem]">
@@ -346,7 +354,7 @@ export const GetBits = () => {
             <h3 className="text-white">Will this {`<BiTS>`} App become a Playable Game?</h3>
             <p>
               We are not game developers and don't pretend to be so are waiting for an A.I tool that will build the game for us. Are you an A.I or a Game Dev
-              and want to build a game layer for itheum {`<BiTS>`}, reach out and get a grant from us via the{" "}
+              and want to build a game layer for the Itheum {`<BiTS>`} XP system? reach out and you could get a grant from via the{" "}
               <a
                 className="!text-[#7a98df] hover:underline"
                 href="https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"
@@ -364,11 +372,14 @@ export const GetBits = () => {
           <div className="mt-[2rem]">
             <h3 className="text-white">Help Make Itheum {`<BiTS>`} Better?</h3>
             <p>
-              We want to make Itheum {`<BiTS>`} better! Do you have any questions or ideas for us or just want to know more? Head over to our{" "}
+              We want to make the Itheum {`<BiTS>`} XP System better! Do you have any questions or ideas for us or just want to know more? Head over to our{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/discord" target="blank">
                 Discord
               </a>{" "}
-              and speak to us
+              and speak to us or{" "}
+              <a className="!text-[#7a98df] hover:underline" href="https://forms.gle/muA4XiD2ddQis4G78" target="blank">
+                Send us your utility ideas for {`<BiTS>`} here.
+              </a>{" "}
             </p>
           </div>
         </div>

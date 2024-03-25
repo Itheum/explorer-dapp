@@ -3,7 +3,7 @@ import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
-import iconGetBits from "assets/img/getbits/expl-app-getbits-icon.png";
+import iconGetBits from "assets/img/getbits/expl-app-getbits-icon.gif";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
@@ -63,7 +63,7 @@ export const APP_MAPPINGS = [
     appName: "Get <BiTS> Points",
     appDescription: "Collect Itheum <BiTS> Points",
     routeKey: "getbits",
-    desc: "Itheum DeGen! You are a data ownership pioneer. Open this apps to get <BiTS> points, <BiTS> points are like Itheum DeGen XP. Let's Get <BiTS>!",
+    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTS> points, <BiTS> points are like Data Ownership OG XP Points. Let's Get <BiTS>!",
     img: iconGetBits,
   },
 ];
