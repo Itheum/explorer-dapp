@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { confetti } from "@tsparticles/confetti";
+import { fireworks } from "@tsparticles/fireworks";
 import Countdown from "react-countdown";
 import { GET_BITS_TOKEN } from "appsConfig";
-import { Loader } from "components";
-import { MARKETPLACE_DETAILS_PAGE } from "config";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep } from "libs/utils";
-import { useAccountStore } from "../../../store/account";
 import "./GetBits.css";
 
 // Image Layers
-import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
-import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
-import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
 import FingerPoint from "assets/img/getbits/finger-point.gif";
-import SacrificeGodLoader from "assets/img/getbits/sacrifice-god-loader.mp4";
-
+import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
+import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
+import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import Meme1 from "assets/img/getbits/memes/1.jpg";
 import Meme2 from "assets/img/getbits/memes/2.jpg";
 import Meme3 from "assets/img/getbits/memes/3.jpg";
 import Meme4 from "assets/img/getbits/memes/4.jpg";
 import Meme5 from "assets/img/getbits/memes/5.jpg";
 import Meme6 from "assets/img/getbits/memes/6.jpg";
+import aladinRugg from "assets/img/getbits/aladin.png";
+
+import SacrificeGodLoader from "assets/img/getbits/sacrifice-god-loader.mp4";
+import { Loader } from "components";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, toastError, sleep } from "libs/utils";
+import { useAccountStore } from "../../../store/account";
+import { motion } from "framer-motion";
 
 const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 
@@ -133,7 +137,20 @@ export const GetBits = () => {
       setGameDataFetched(true);
       setIsFetchingDataMarshal(false);
       setViewDataRes(viewDataPayload);
-
+      if (viewDataPayload.data.gamePlayResult.bitsWon === 0) {
+      } else if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
+        if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
+          (async () => {
+            await fireworks({ background: "transparent" });
+          })();
+        } else {
+          (async () => {
+            await confetti({ count: 500 });
+            await confetti({ origin: { x: 70 } });
+            await confetti({ origin: { x: 30 } });
+          })();
+        }
+      }
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitsBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       }
@@ -266,6 +283,7 @@ export const GetBits = () => {
       return (
         <div className="relative">
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
+
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -277,6 +295,12 @@ export const GetBits = () => {
                     // setBypassDebug(true);
                     memeBurn();
                   }}>
+                  <motion.img
+                    className="  absolute "
+                    src={aladinRugg}
+                    initial={{ x: -450, y: -360, opacity: 0, scale: 0.1 }}
+                    whileInView={{ opacity: 1, x: -50, y: -100, scale: 0.8, transition: { duration: 5 } }}
+                  />
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
                   <p className="font-bold md:text-2xl mt-5">But the {`<BiTS>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
                   <p className="font-bold mt-5">Click here when you are ready...</p>
@@ -329,17 +353,25 @@ export const GetBits = () => {
                     </div>
                   </div>
                 )}
-
+                <motion.img
+                  className="w-[300px] m-auto absolute "
+                  src={aladinRugg}
+                  initial={{ x: -450, y: -360, opacity: 0, scale: 0.1 }}
+                  whileInView={{ opacity: 1, x: -50, y: -100, scale: 0.8, transition: { duration: 5 } }}
+                />
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
-                    {/* {(_viewDataRes.data.gamePlayResult.bitsScoreBeforePlay && (
-                      <p>
-                        Previous {`<BiTS>`} Balance {_viewDataRes.data.gamePlayResult.bitsScoreBeforePlay}
-                      </p>
-                    )) ||
-                      null} */}
-
-                    {(_viewDataRes.data.gamePlayResult.bitsWon === 0 && <p className="text-2xl">OPPS! You got Rugged! 0 Points this time... :(</p>) || null}
+                    {true === 0 && (
+                      <div>
+                        <p className="text-2xl">OPPS! You got Rugged! 0 Points this time... :(</p>)
+                        <motion.img
+                          className="w-[300px] m-auto  "
+                          src={aladinRugg}
+                          initial={{ x: -450, y: -360, opacity: 0, scale: 0.1 }}
+                          whileInView={{ opacity: 1, x: -50, y: -100, scale: 0.8, transition: { duration: 5 } }}
+                        />
+                      </div>
+                    )}
 
                     {(_viewDataRes.data.gamePlayResult.bitsWon > 0 && (
                       <>
