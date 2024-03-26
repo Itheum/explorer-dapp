@@ -1,0 +1,42 @@
+.c-container-document {
+  margin: 1em 0;
+  min-height: 900px;
+}
+
+  .react-pdf__Document {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .react-pdf__Page {
+    max-width: calc(100% - 2em);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    margin: 1em;
+    min-height: 300px;
+  }
+
+  .react-pdf__Page canvas {
+    max-width: 100%;
+    height: auto !important;
+  }
+
+  .react-pdf__message {
+    padding: 20px;
+    color: white;
+  }
+
+.c-container-paging {
+  text-align: center;
+}
+
+  .btn-outline-primary:hover:disabled {
+    color: grey;
+    cursor: initial;
+  }
+
+  .c-pagecount {
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }

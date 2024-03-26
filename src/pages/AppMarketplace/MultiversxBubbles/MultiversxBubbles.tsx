@@ -8,12 +8,8 @@ import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { ZoomableSvg } from "components/ZoomableSvg";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
-import { BlobDataType } from "libs/types";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
-
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
 
 export const MultiversxBubbles = () => {
   const { address } = useGetAccount();

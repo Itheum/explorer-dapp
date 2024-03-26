@@ -29,9 +29,11 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
+import { useAccountStore } from "../../store/account";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
+  const bitsBalance = useAccountStore((state: any) => state.bitsBalance);
   const { address } = useGetAccount();
   const { theme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<string>();
@@ -65,7 +67,7 @@ export const Navbar = () => {
         </Link>
       </div>
 
-      <NavigationMenu className="md:!inline !hidden z-0 pr-2">
+      <NavigationMenu className="md:!inline !hidden z-0 pr-2 relative md:z-10">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
@@ -130,6 +132,17 @@ export const Navbar = () => {
                       variant="outline"
                       onClick={handleLogout}>
                       Logout
+                    </Button>
+                  </div>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link to={routeNames.getbits}>
+                  <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
+                    <Button
+                      className="min-w-24 text-sm dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide"
+                      variant="outline">
+                      {bitsBalance === -2 ? <span className="blinkMe">{"... <B>"}</span> : <>{bitsBalance === -1 ? "0 <B>" : `${bitsBalance} <B>`}</>}
                     </Button>
                   </div>
                 </Link>
@@ -215,12 +228,23 @@ export const Navbar = () => {
                   <span>Account</span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
+                <DropdownMenuGroup className="text-foreground/50">
                   <Link to={routeNames.mylisted}>
-                    <DropdownMenuItem className="text-foreground/50">Listed data</DropdownMenuItem>
+                    <DropdownMenuItem className="text-foreground/50">My Listed</DropdownMenuItem>
                   </Link>
                   <Link to={routeNames.mywallet}>
-                    <DropdownMenuItem className="!text-foreground/50">Wallet</DropdownMenuItem>
+                    <DropdownMenuItem className="!text-foreground/50">My Wallet</DropdownMenuItem>
+                  </Link>
+                  <Link to={routeNames.getbits}>
+                    <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
+                      <DropdownMenuItem className="!text-foreground/50 dark:!text-black">
+                        {bitsBalance === -2 ? (
+                          <span className="blinkMe">{`... <BiTS> Points`}</span>
+                        ) : (
+                          <>{bitsBalance === -1 ? "0 <BiTS> Points" : `${bitsBalance} <BiTS> Points`}</>
+                        )}
+                      </DropdownMenuItem>
+                    </div>
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuLabel>My Address Quick Copy</DropdownMenuLabel>

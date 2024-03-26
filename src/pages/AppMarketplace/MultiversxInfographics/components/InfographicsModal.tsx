@@ -12,7 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "../../../../components";
 import { useGetAccount, useGetPendingTransactions } from "../../../../hooks";
 import { Button } from "../../../../libComponents/Button";
-import { BlobDataType } from "../../../../libs/types";
+import { BlobDataType, ExtendedViewDataReturnType } from "../../../../libs/types";
 import { toastError } from "../../../../libs/utils";
 import { sleep } from "../../../../libs/utils/legacyUtil";
 import { routeNames } from "../../../../routes";
@@ -23,10 +23,6 @@ const options = {
   cMapUrl: "/cmaps/",
   standardFontDataUrl: "/standard_fonts/",
 };
-
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
 
 type PDFFile = string | File | null;
 export const InfographicsModal: React.FC = () => {
