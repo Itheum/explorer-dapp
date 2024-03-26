@@ -135,9 +135,7 @@ export const GetBits = () => {
     if (viewDataPayload) {
       setGameDataFetched(true);
       setIsFetchingDataMarshal(false);
-      setViewDataRes(viewDataPayload);
-      if (viewDataPayload.data.gamePlayResult.bitsWon === 0) {
-      } else if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
+      if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
         if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
           (async () => {
             await fireworks({ background: "transparent" });
@@ -145,11 +143,11 @@ export const GetBits = () => {
         } else {
           (async () => {
             await confetti({ count: 500 });
-            await confetti({ origin: { x: 70 } });
-            await confetti({ origin: { x: 30 } });
           })();
         }
       }
+      setViewDataRes(viewDataPayload);
+
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitsBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       }
