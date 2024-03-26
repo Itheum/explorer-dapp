@@ -89,6 +89,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          initialSlide: 0,
         },
       },
     ],
