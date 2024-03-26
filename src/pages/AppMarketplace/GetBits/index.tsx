@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import Countdown from "react-countdown";
 import { GET_BITS_TOKEN } from "appsConfig";
 import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, timeUntil } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep } from "libs/utils";
 import { useAccountStore } from "../../../store/account";
 import "./GetBits.css";
 
@@ -14,6 +15,17 @@ import "./GetBits.css";
 import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
 import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
+import FingerPoint from "assets/img/getbits/finger-point.gif";
+import SacrificeGodLoader from "assets/img/getbits/sacrifice-god-loader.mp4";
+
+import Meme1 from "assets/img/getbits/memes/1.jpg";
+import Meme2 from "assets/img/getbits/memes/2.jpg";
+import Meme3 from "assets/img/getbits/memes/3.jpg";
+import Meme4 from "assets/img/getbits/memes/4.jpg";
+import Meme5 from "assets/img/getbits/memes/5.jpg";
+import Meme6 from "assets/img/getbits/memes/6.jpg";
+
+const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 
 export const GetBits = () => {
   const { address } = useGetAccount();
@@ -23,11 +35,17 @@ export const GetBits = () => {
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
+  const [isMemeBurnHappening, setIsMemeBurnHappening] = useState<boolean>(false);
   const [gameDataFetched, setGameDataFetched] = useState<boolean>(false);
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const bitsBalance = useAccountStore((state: any) => state.bitsBalance);
   const updateBitsBalance = useAccountStore((state) => state.updateBitsBalance);
+  const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
+  const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
+  const [randomMeme, setRandomMeme] = useState<any>(Meme1);
+
+  // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -57,7 +75,33 @@ export const GetBits = () => {
       const _dataNfts = await DataNft.ownedByAddress(address);
       const hasRequiredDataNFT = _dataNfts.find((dNft) => gameDataNFT.nonce === dNft.nonce);
       setHasGameDataNFT(hasRequiredDataNFT ? true : false);
+
+      setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
     }
+  }
+
+  async function memeBurn() {
+    setIsMemeBurnHappening(true);
+    await sleep(5);
+    setBurnFireScale("scale(1) translate(-13px, -15px)");
+    setBurnFireGlow(1 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(3) translate(-13px, -15px)");
+    setBurnFireGlow(3 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(5) translate(-13px, -15px)");
+    setBurnFireGlow(5 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(7) translate(-13px, -15px)");
+    setBurnFireGlow(7 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(9) translate(-13px, -15px)");
+    await sleep(2);
+    setBurnFireScale("scale(10) translate(-13px, -15px)");
+    await sleep(5);
+    setIsMemeBurnHappening(false);
+
+    playGame();
   }
 
   async function playGame() {
@@ -99,6 +143,17 @@ export const GetBits = () => {
     }
   }
 
+  function resetToStartGame() {
+    setIsMemeBurnHappening(false);
+    setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
+    setBurnFireScale("scale(0) translate(-13px, -15px)");
+    setBurnFireGlow(0);
+
+    setGameDataFetched(false);
+    setIsFetchingDataMarshal(false);
+    setViewDataRes(undefined);
+  }
+
   async function viewData(viewDataArgs: any, requiredDataNFT: DataNft) {
     try {
       if (!gameDataNFT) {
@@ -121,6 +176,40 @@ export const GetBits = () => {
   }
 
   const gamePlayImageSprites = () => {
+    let _viewDataRes = viewDataRes;
+
+    let _loadBlankGameCanvas = loadBlankGameCanvas;
+    let _gameDataFetched = gameDataFetched;
+    let _isFetchingDataMarshal = isFetchingDataMarshal;
+    let _isMemeBurnHappening = isMemeBurnHappening;
+
+    // if (!viewDataRes && !bypassDebug) {
+    //   // for local UI debugging
+    //   _loadBlankGameCanvas = true;
+    //   _gameDataFetched = false;
+    //   _isFetchingDataMarshal = false;
+    //   _isMemeBurnHappening = false;
+
+    //   _viewDataRes = {
+    //     contentType: "string",
+    //     data: {
+    //       gamePlayResult: {
+    //         bitsScoreBeforePlay: -1, // points before current play
+    //         bitsScoreAfterPlay: -1, // points after current play
+    //         bitsWon: -1, // can be 0 for no win, no 5-50. -1 means they tried to paly to soon
+    //         userWonMaxBits: -1, // the user just won the maximum bits? 1 for yes, -1 for no
+    //         lastPlayedBeforeThisPlay: -1, // the timestampbefore current play
+    //         lastPlayedAndCommitted: -1, // the latest timestamp of current play
+    //         configCanPlayEveryMSecs: -1, // how many Mili seconds interval before being able to play again
+    //         // triedTooSoonTryAgainInMs: -1, // played too soon before allowed, so they have to wait this many Mili seconds to play (use for countdown timer to next play)
+    //         triedTooSoonTryAgainInMs: 6000, // played too soon before allowed, so they have to wait this many Mili seconds to play (use for countdown timer to next play)
+    //       },
+    //     },
+    //   };
+    // }
+
+    // console.log("_viewDataRes", _viewDataRes);
+
     // user does not have the data nft, so take them to the marketplace
     if (!hasGameDataNFT) {
       return (
@@ -136,7 +225,7 @@ export const GetBits = () => {
     }
 
     // user has data nft, so load the "start game" view
-    if (!loadBlankGameCanvas && !isFetchingDataMarshal) {
+    if (!_loadBlankGameCanvas && !_isFetchingDataMarshal) {
       return (
         <div
           onClick={() => {
@@ -147,82 +236,138 @@ export const GetBits = () => {
       );
     }
 
+    const CountDownComplete = () => (
+      <div
+        className="cursor-pointer"
+        onClick={() => {
+          resetToStartGame();
+        }}>
+        You can try again!
+      </div>
+    );
+
+    // Renderer callback with condition
+    const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
+      if (completed) {
+        // Render a complete state
+        return <CountDownComplete />;
+      } else {
+        // Render a countdown
+        return (
+          <span>
+            {hours}H:{minutes}M:{seconds}S
+          </span>
+        );
+      }
+    };
+
     // user clicked on the start game view, so load the empty blank game canvas
-    if (loadBlankGameCanvas && !gameDataFetched) {
+    if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative">
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
-
           <div
-            className="flex justify-center items-center mt-[10px] w-[100%] h-[300px] static top-[10%] left-[30%] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50
-                        md:absolute md:p-[2rem] md:w-[400px] md:mt-0">
-            {!isFetchingDataMarshal && (
-              <div className="text-center text-xl text-gray-950 text-foreground cursor-pointer" onClick={() => playGame()}>
-                <p>We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
-                <p className="font-bold mt-5">Sacrifice a meme to the Meme Gods and click here when you are ready...</p>
+            className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+                        md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
+            {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
+              <>
+                <div
+                  className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
+                  onClick={() => {
+                    // setBypassDebug(true);
+                    memeBurn();
+                  }}>
+                  <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
+                  <p className="font-bold md:text-2xl mt-5">But the {`<BiTS>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
+                  <p className="font-bold mt-5">Click here when you are ready...</p>
+                  <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />
+                </div>
+              </>
+            )) ||
+              null}
+
+            {_isMemeBurnHappening && (
+              <div>
+                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">Let's Burn Sacrifice this Meme!</p>
+
+                <img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />
+                <div className="glow" style={{ opacity: burnFireGlow }}></div>
+                <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
             )}
-            {isFetchingDataMarshal && (
+
+            {_isFetchingDataMarshal && (
               <div>
-                <Loader noText />
-                <p className="text-center text-xl text-gray-950 text-foreground">What will the Meme Gods bestow on you??</p>
+                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">
+                  Did the {`<BiTS>`} Generator God like that Meme Sacrifice?
+                </p>
+                <video className="w-[210px] md:w-[300px] m-auto" autoPlay loop src={SacrificeGodLoader} />
+                {/* <Loader noText /> */}
               </div>
             )}
           </div>
-
           {spritLayerPointsCloud()}
         </div>
       );
     }
-
     // we got the response from the game play
-    if (loadBlankGameCanvas && !isFetchingDataMarshal && gameDataFetched) {
+    if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />
-
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />s
           <div
-            className="flex justify-center items-center mt-[10px] w-[100%] h-[300px] static top-[10%] left-[30%] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50
-                        md:absolute md:p-[2rem] md:w-[400px] md:mt-0">
-            {viewDataRes && !viewDataRes.error && (
+            className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+                        md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
+            {_viewDataRes && !_viewDataRes.error && (
               <>
-                {viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs > 0 && (
+                {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs > 0 && (
                   <div>
-                    <p className="text-xl text-center">
-                      You FOMOed in too fast, try again in: {getTimeUntilString(viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs / 1000)}
-                    </p>
+                    <p className="text-2xl text-center">You FOMOed in too fast, try again in:</p>
+                    {/* <p className="text-3xl text-center mt-[2rem]">{getTimeUntilString(_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs / 1000)}</p> */}
+                    <div className="text-3xl text-center mt-[2rem]">
+                      <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs} renderer={countdownRenderer} />
+                    </div>
                   </div>
                 )}
 
-                {viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
+                {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
-                    {(viewDataRes.data.gamePlayResult.bitsScoreBeforePlay && (
+                    {/* {(_viewDataRes.data.gamePlayResult.bitsScoreBeforePlay && (
                       <p>
-                        Previous {`<BiTS>`} Balance {viewDataRes.data.gamePlayResult.bitsScoreBeforePlay}
+                        Previous {`<BiTS>`} Balance {_viewDataRes.data.gamePlayResult.bitsScoreBeforePlay}
                       </p>
+                    )) ||
+                      null} */}
+
+                    {(_viewDataRes.data.gamePlayResult.bitsWon === 0 && <p className="text-2xl">OPPS! You got Rugged! 0 Points this time... :(</p>) || null}
+
+                    {(_viewDataRes.data.gamePlayResult.bitsWon > 0 && (
+                      <>
+                        <p className="text-2xl text-gray-950">w00t! w00t! You have won:</p>
+                        <p className="text-4xl mt-[2rem] text-gray-950">
+                          {_viewDataRes.data.gamePlayResult.bitsWon} {` <BiTS>`}
+                        </p>
+                      </>
                     )) ||
                       null}
 
-                    {(viewDataRes.data.gamePlayResult.bitsWon === 0 && <p className="text-xl">OPPS! You got Rugged! 0 Points this time... :(</p>) || null}
+                    <div className="text-center mt-[2rem]">
+                      <p className="text-xl">You can try again in:</p>
+                      <div className="text-3xl mt-[1rem]">
+                        <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.configCanPlayEveryMSecs} renderer={countdownRenderer} />
+                      </div>
+                    </div>
 
-                    {(viewDataRes.data.gamePlayResult.bitsWon > 0 && (
-                      <p className="text-xl text-gray-950">
-                        w00t! w00t! You have won {viewDataRes.data.gamePlayResult.bitsWon} {` <BiTS>`}.
-                      </p>
-                    )) ||
-                      null}
-
-                    {viewDataRes.data.gamePlayResult.bitsWon > 0 && viewDataRes.data.gamePlayResult.bitsScoreAfterPlay ? (
+                    {/* {_viewDataRes.data.gamePlayResult.bitsWon > 0 && _viewDataRes.data.gamePlayResult.bitsScoreAfterPlay ? (
                       <p>
-                        New {`<BiTS>`} Balance: {viewDataRes.data.gamePlayResult.bitsScoreAfterPlay}
+                        New {`<BiTS>`} Balance: {_viewDataRes.data.gamePlayResult.bitsScoreAfterPlay}
                       </p>
-                    ) : null}
+                    ) : null} */}
                   </div>
                 )}
               </>
             )}
           </div>
-
           {spritLayerPointsCloud()}
         </div>
       );
@@ -241,12 +386,6 @@ export const GetBits = () => {
   if (isLoading) {
     return <Loader />;
   }
-
-  const getTimeUntilString = (secondsUntil: number) => {
-    const timeUntilObj = timeUntil(Math.floor(secondsUntil));
-
-    return `${timeUntilObj.count} ${timeUntilObj.unit}`;
-  };
 
   return (
     <>
