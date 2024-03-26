@@ -85,6 +85,7 @@ export const GetBits = () => {
   }
 
   async function memeBurn() {
+    // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
     setIsMemeBurnHappening(true);
     await sleep(5);
     setBurnFireScale("scale(1) translate(-13px, -15px)");
@@ -255,11 +256,11 @@ export const GetBits = () => {
 
     const CountDownComplete = () => (
       <div
-        className="cursor-pointer"
+        className="cursor-pointer underline decoration-pink-500"
         onClick={() => {
           resetToStartGame();
         }}>
-        You can try again!
+        RIGHT NOW! What are you waiting for? (Click Here)
       </div>
     );
 
@@ -326,7 +327,6 @@ export const GetBits = () => {
                   Did the {`<BiTS>`} Generator God like that Meme Sacrifice?
                 </p>
                 <video className="w-[210px] md:w-[300px] m-auto" autoPlay loop src={SacrificeGodLoader} />
-                {/* <Loader noText /> */}
               </div>
             )}
           </div>
@@ -347,8 +347,7 @@ export const GetBits = () => {
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs > 0 && (
                   <div>
                     <p className="text-2xl text-center">You FOMOed in too fast, try again in:</p>
-                    {/* <p className="text-3xl text-center mt-[2rem]">{getTimeUntilString(_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs / 1000)}</p> */}
-                    <div className="text-3xl text-center mt-[2rem]">
+                    <div className="text-2xl text-center mt-[2rem]">
                       <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs} renderer={countdownRenderer} />
                     </div>
                   </div>
@@ -361,7 +360,7 @@ export const GetBits = () => {
                 />
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
-                    {true === 0 && (
+                    {_viewDataRes.data.gamePlayResult.bitsWon === 0 && (
                       <div>
                         <p className="text-2xl">OPPS! You got Rugged! 0 Points this time... :(</p>)
                         <motion.img
@@ -385,16 +384,10 @@ export const GetBits = () => {
 
                     <div className="text-center mt-[2rem]">
                       <p className="text-xl">You can try again in:</p>
-                      <div className="text-3xl mt-[1rem]">
+                      <div className="text-2xl mt-[1rem]">
                         <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.configCanPlayEveryMSecs} renderer={countdownRenderer} />
                       </div>
                     </div>
-
-                    {/* {_viewDataRes.data.gamePlayResult.bitsWon > 0 && _viewDataRes.data.gamePlayResult.bitsScoreAfterPlay ? (
-                      <p>
-                        New {`<BiTS>`} Balance: {_viewDataRes.data.gamePlayResult.bitsScoreAfterPlay}
-                      </p>
-                    ) : null} */}
                   </div>
                 )}
               </>
@@ -443,10 +436,10 @@ export const GetBits = () => {
           <div className="mt-[2rem]">
             <h3 className="text-white">How can I collect {`<BiTS>`} Points?</h3>
             <p>
-              You need to hold a {`<BiTS>`} Data NFT in your wallet to play the Get Bits game (you are on this page now). This Data NFT was airdropped in waves
-              to OGs of the Itheum Protocol, but fear not, you can also get it on any NFT Marketplace (if the OGs broke our hearts and parted ways with their
-              Data NFTs). If this "Series 1" {`<BiTS>`} Data NFT is successful, there may be a follow-up Series of {`<BiTS>`} Data NFTs launched and airdropped
-              as well.
+              You need to hold a {`<BiTS>`} compatible Data NFT in your wallet to play the Get {`<BiTS>`} game (you are on this page now). This Data NFT was
+              airdropped in waves to OGs of the Itheum Protocol, but fear not, you can also get it on any NFT Marketplace (if the OGs broke our hearts and
+              parted ways with their Data NFTs). If this "Series 1" {`<BiTS>`} Data NFT is successful, there may be a follow-up Series of {`<BiTS>`} Data NFTs
+              launched and airdropped as well.
             </p>
             <p className="mt-5">Once you have the Data NFT in your wallet, you can play the Game every 6 Hours. Based on random chance, you win {`<BiTS>`}.</p>
             <p className="mt-5">You DO NOT need to spend any gas to Play the game! SAY WAT?!</p>
@@ -465,7 +458,7 @@ export const GetBits = () => {
             </p>
             <ol className="mt-5">
               <li>
-                1. Top 3 Movers each month get Airdropped
+                1. Top 3 Movers each month get Airdropped{" "}
                 <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
                   Data NFTs
                 </a>{" "}
@@ -482,8 +475,9 @@ export const GetBits = () => {
             </ol>
 
             <p className="mt-5">
-              This is just the start, we have a bunch of other ideas planned for {`<BiTS>`}. Got ideas for {`<BiTS>`} utility? We love to hear them:
+              This is just the start, we have a bunch of other ideas planned for {`<BiTS>`}. Got ideas for {`<BiTS>`} utility? We love to hear them:{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://forms.gle/muA4XiD2ddQis4G78" target="blank">
+                {" "}
                 Send ideas
               </a>{" "}
             </p>
