@@ -1,47 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { motion } from "framer-motion";
+import { MoveDown, Music, Music2, PlayCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { NF_TUNES_TOKENS, FEATURED_NF_TUNES_TOKEN, IS_DEVNET } from "appsConfig";
 import disk from "assets/img/nf-tunes-logo-disk.png";
 import { DataNftCard, Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Modal } from "components/Modal/Modal";
+import YouTubeEmbed from "components/YouTubeEmbed";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { useTheme } from "libComponents/ThemeProvider";
 import { BlobDataType } from "libs/types";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import stick from "../../../assets/img/nf-tunes-logo-stick.png";
-import { MoveDown, Music, Music2, PlayCircle } from "lucide-react";
-import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
-import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
-import itheumLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
-import pulsarLogo from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money.png";
-import xoxnoLogo from "../../../assets/img/nf-tunes/platforms-logo/xoxno.png";
-import frameItLogo from "../../../assets/img/nf-tunes/platforms-logo/frame-it.png";
-import multiversxLogo from "../../../assets/img/nf-tunes/platforms-logo/multiversx.png";
-import itheumLogoLight from "../../../assets/img/nf-tunes/platforms-logo/itheum-light.png";
-import pulsarLogoLight from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money-light.png";
-import xoxnoLogoLight from "../../../assets/img/nf-tunes/platforms-logo/xoxno-light.png";
-import frameItLogoLight from "../../../assets/img/nf-tunes/platforms-logo/frame-it-light.png";
-import multiversxLogoLight from "../../../assets/img/nf-tunes/platforms-logo/multiversx-light.png";
 import { scrollToSection } from "libs/utils";
-import manuImage from "../../../assets/img/nf-tunes/manu.png";
-import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
-import megaphoneLight from "../../../assets/img/nf-tunes/megaphone-light.png";
-import { Modal } from "components/Modal/Modal";
-import { Link } from "react-router-dom";
-import cubes from "../../../assets/img/zstorage/cubes.png";
-import frontCube from "../../../assets/img/zstorage/front.png";
-import backCube from "../../../assets/img/zstorage/back.png";
-import vault from "../../../assets/img/zstorage/vault-dots.png";
-import dataLines from "../../../assets/img/zstorage/data-lines.png";
 import benefitsLogo1 from "../../../assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "../../../assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
-import { motion } from "framer-motion";
-import YouTubeEmbed from "components/YouTubeEmbed";
-import { useTheme } from "libComponents/ThemeProvider";
+import manuImage from "../../../assets/img/nf-tunes/manu.png";
+import megaphoneLight from "../../../assets/img/nf-tunes/megaphone-light.png";
+import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
+import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
+import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
+import frameItLogoLight from "../../../assets/img/nf-tunes/platforms-logo/frame-it-light.png";
+import frameItLogo from "../../../assets/img/nf-tunes/platforms-logo/frame-it.png";
+import itheumLogoLight from "../../../assets/img/nf-tunes/platforms-logo/itheum-light.png";
+import itheumLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
+import multiversxLogoLight from "../../../assets/img/nf-tunes/platforms-logo/multiversx-light.png";
+import multiversxLogo from "../../../assets/img/nf-tunes/platforms-logo/multiversx.png";
+import pulsarLogoLight from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money-light.png";
+import pulsarLogo from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money.png";
+import xoxnoLogoLight from "../../../assets/img/nf-tunes/platforms-logo/xoxno-light.png";
+import xoxnoLogo from "../../../assets/img/nf-tunes/platforms-logo/xoxno.png";
+import stick from "../../../assets/img/nf-tunes-logo-stick.png";
+import backCube from "../../../assets/img/zstorage/back.png";
+import cubes from "../../../assets/img/zstorage/cubes.png";
+import dataLines from "../../../assets/img/zstorage/data-lines.png";
+import frontCube from "../../../assets/img/zstorage/front.png";
+import vault from "../../../assets/img/zstorage/vault-dots.png";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -50,7 +50,7 @@ interface ExtendedViewDataReturnType extends ViewDataReturnType {
 export const NFTunes = () => {
   const { address } = useGetAccount();
   const { theme } = useTheme();
-  ///native auth
+  const currentTheme = theme !== "system" ? theme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -62,11 +62,11 @@ export const NFTunes = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
+  const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
 
   useEffect(() => {
     window.scrollTo(0, 80);
   }, []);
-
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchDataNfts();
@@ -116,6 +116,8 @@ export const NFTunes = () => {
         toastError("Data is not loaded");
         return;
       }
+      setFirstSongBlobUrl(undefined);
+
       const _owned = flags[index];
       if (_owned) {
         setIsFetchingDataMarshal(true);
@@ -135,9 +137,19 @@ export const NFTunes = () => {
         };
         setCurrentIndex(index);
 
-        res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        let blobDataType = BlobDataType.TEXT;
+        // start the request for the first song
+        const firstSongResPromise: any = dataNft.viewDataViaMVXNativeAuth({
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
+          mvxNativeAuthMaxExpirySeconds: 3600,
+          fwdHeaderMapLookup: { "authorization": `Bearer ${tokenLogin?.nativeAuthToken}` },
+          stream: true,
+          nestedIdxToStream: 1, // get the song for the first index
+        });
 
+        // start the request for the manifest file from marshal
+        res = await dataNft.viewDataViaMVXNativeAuth(arg);
+
+        let blobDataType = BlobDataType.TEXT;
         if (!res.error) {
           if (res.contentType.search("application/json") >= 0) {
             res.data = await (res.data as Blob).text();
@@ -151,10 +163,15 @@ export const NFTunes = () => {
           ...res,
           blobDataType,
         };
-        setDataMarshalResponse(JSON.parse(res.data));
 
+        setDataMarshalResponse(JSON.parse(res.data));
         setViewDataRes(viewDataPayload);
         setIsFetchingDataMarshal(false);
+
+        // await the first song response and set the firstSongBlobUrl state
+        const firstSongRes: ViewDataReturnType = await firstSongResPromise;
+        const blobUrl = URL.createObjectURL(firstSongRes.data);
+        setFirstSongBlobUrl(blobUrl);
       }
     } catch (err) {
       console.error(err);
@@ -171,7 +188,7 @@ export const NFTunes = () => {
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
-              <img className="max-h-[30%] mb-6" src={theme === "dark" ? musicNote : musicNoteBlack} />
+              <img className="max-h-[30%] mb-6" src={currentTheme === "dark" ? musicNote : musicNoteBlack} />
             </div>
             <div className="flex flex-row justify-between">
               <span className="text-base md:text-2xl text-primary text-light w-[70%]">
@@ -362,11 +379,12 @@ export const NFTunes = () => {
                           </div>
                         ) : (
                           <>
-                            {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                            {viewDataRes && !viewDataRes.error && tokenLogin && featuredDataNftIndex > -1 && (
                               <AudioPlayer
-                                dataNftToOpen={dataNfts[currentIndex]}
+                                dataNftToOpen={dataNfts[featuredDataNftIndex]}
                                 songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                 tokenLogin={tokenLogin}
+                                firstSongBlobUrl={firstSongBlobUrl}
                               />
                             )}
                           </>
@@ -512,7 +530,7 @@ export const NFTunes = () => {
             Explore the possibilities with NF-Tunes — we're here to assist you in onboarding and minting your Music Data NFTs.
           </span>
 
-          <img src={theme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
+          <img src={currentTheme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
 
           <Link
             to={`https://share-eu1.hsforms.com/1h2V8AgnkQJKp3tstayTsEAf5yjc`}
@@ -550,23 +568,23 @@ export const NFTunes = () => {
                 to={`https://datadex.itheum.io/datanfts/marketplace/market`}
                 target="_blank"
                 className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={theme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
+                <img src={currentTheme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
               <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
-                  <img src={theme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
+                  <img src={currentTheme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
                 </Link>
                 <Link to={"https://www.frameit.gg/"} target="_blank">
-                  <img src={theme === "dark" ? frameItLogo : frameItLogoLight} alt="frame it logo" />
+                  <img src={currentTheme === "dark" ? frameItLogo : frameItLogoLight} alt="frame it logo" />
                 </Link>
               </div>
               <Link
                 to={"https://pulsar.money/"}
                 target="_blank"
                 className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={theme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
+                <img src={currentTheme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
               </Link>
               <Link
                 to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
@@ -578,7 +596,7 @@ export const NFTunes = () => {
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
                 className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={theme === "dark" ? multiversxLogo : multiversxLogoLight} alt="multiversx logo" />
+                <img src={currentTheme === "dark" ? multiversxLogo : multiversxLogoLight} alt="multiversx logo" />
                 <span className="w-[60%] text-lg font-semibold text-center"> Ecosystem</span>
               </Link>
             </div>
@@ -615,6 +633,7 @@ export const NFTunes = () => {
                               dataNftToOpen={dataNfts[currentIndex]}
                               songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                               tokenLogin={tokenLogin}
+                              firstSongBlobUrl={firstSongBlobUrl}
                             />
                           )}
                         </>
