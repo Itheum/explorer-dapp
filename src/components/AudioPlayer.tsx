@@ -58,7 +58,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     speed: 1000,
     slidesToShow: 4,
     slidesToScroll: 4,
-    initialSlide: 1,
     responsive: [
       {
         breakpoint: 1800,
