@@ -9,8 +9,8 @@ import { TransactionsToastList, NotificationModal, SignTransactionsModals } from
 import { apiTimeout, walletConnectV2ProjectId, sampleAuthenticatedDomains, ELROND_NETWORK } from "config";
 import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock } from "pages";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
-import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
+import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./libComponents/ThemeProvider";
 
