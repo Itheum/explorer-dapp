@@ -87,7 +87,7 @@ export const GetBits = () => {
   async function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
     setIsMemeBurnHappening(true);
-    await sleep(5);
+    await sleep(2);
     setBurnFireScale("scale(1) translate(-13px, -15px)");
     setBurnFireGlow(1 * 0.1);
     await sleep(2);
@@ -122,7 +122,6 @@ export const GetBits = () => {
     setIsFetchingDataMarshal(true);
 
     await sleep(5);
-
     const viewDataArgs = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
       mvxNativeAuthMaxExpirySeconds: 3600,
@@ -133,7 +132,6 @@ export const GetBits = () => {
     };
 
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
-
     if (viewDataPayload) {
       setGameDataFetched(true);
       setIsFetchingDataMarshal(false);
@@ -282,7 +280,7 @@ export const GetBits = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative">
+        <div className="relative  overflow-hidden  ">
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
@@ -296,16 +294,10 @@ export const GetBits = () => {
                     // setBypassDebug(true);
                     memeBurn();
                   }}>
-                  <motion.img
-                    className="  absolute "
-                    src={aladinRugg}
-                    initial={{ x: -450, y: -360, opacity: 0, scale: 0.1 }}
-                    whileInView={{ opacity: 1, x: -50, y: -100, scale: 0.8, transition: { duration: 5 } }}
-                  />
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
                   <p className="font-bold md:text-2xl mt-5">But the {`<BiTS>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
                   <p className="font-bold mt-5">Click here when you are ready...</p>
-                  <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />
+                  <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
                 </div>
               </>
             )) ||
@@ -337,7 +329,7 @@ export const GetBits = () => {
     // we got the response from the game play
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
@@ -352,22 +344,23 @@ export const GetBits = () => {
                     </div>
                   </div>
                 )}
-                <motion.img
-                  className="w-[300px] m-auto absolute "
-                  src={aladinRugg}
-                  initial={{ x: -450, y: -360, opacity: 0, scale: 0.1 }}
-                  whileInView={{ opacity: 1, x: -50, y: -100, scale: 0.8, transition: { duration: 5 } }}
-                />
+
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
                     {_viewDataRes.data.gamePlayResult.bitsWon === 0 && (
                       <div>
-                        <p className="text-2xl">OPPS! You got Rugged! 0 Points this time... :(</p>)
+                        <p className="text-2xl">OPPS! Aladdin rugged you! 0 Points this time...</p>
                         <motion.img
-                          className="w-[300px] m-auto  "
+                          className=" w-[150px] lg:w-full absolute"
                           src={aladinRugg}
-                          initial={{ x: -450, y: -360, opacity: 0, scale: 0.1 }}
-                          whileInView={{ opacity: 1, x: -50, y: -100, scale: 0.8, transition: { duration: 5 } }}
+                          initial={{ x: -750, y: 0 }}
+                          animate={{
+                            scale: [0.5, 1, 1, 0.5],
+                            rotate: [0, 0, -360, -360, -360, -360],
+                            opacity: [0.8, 1, 1, 1, 1, 1, 1, 0],
+                            x: [-750, 0, 200, 1000],
+                          }}
+                          transition={{ duration: 8 }}
                         />
                       </div>
                     )}
