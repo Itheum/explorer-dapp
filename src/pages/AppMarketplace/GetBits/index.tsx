@@ -520,12 +520,20 @@ export const GetBits = () => {
           <div className="md:flex">
             <div className="allTime md:flex-1">
               <h3 className="text-center text-white mb-[1rem]">All Time</h3>
-              {leaderBoardIsLoading ? <Loader /> : <>{leaderBoardAllTime.length > 0 ? leaderBoardTable(leaderBoardAllTime) : <div>No Data Yet!</div>}</>}
+              {leaderBoardIsLoading ? (
+                <Loader />
+              ) : (
+                <>{leaderBoardAllTime.length > 0 ? leaderBoardTable(leaderBoardAllTime) : <div className="text-center">No Data Yet!</div>}</>
+              )}
             </div>
 
             <div className="my-[1rem] md:my-auto monthly md:flex-1">
               <h3 className="text-center text-white mb-[1rem]">Monthly ({leaderBoardMonthString.replace("_", "-20")})</h3>
-              {leaderBoardIsLoading ? <Loader /> : <>{leaderBoardMonthly.length > 0 ? leaderBoardTable(leaderBoardMonthly) : <div>No Data Yet!</div>}</>}
+              {leaderBoardIsLoading ? (
+                <Loader />
+              ) : (
+                <>{leaderBoardMonthly.length > 0 ? leaderBoardTable(leaderBoardMonthly) : <div className="text-center">No Data Yet!</div>}</>
+              )}
             </div>
           </div>
         </div>
