@@ -35,6 +35,7 @@ import Meme3 from "assets/img/getbits/memes/3.jpg";
 import Meme4 from "assets/img/getbits/memes/4.jpg";
 import Meme5 from "assets/img/getbits/memes/5.jpg";
 import Meme6 from "assets/img/getbits/memes/6.jpg";
+import { BurningImage } from "./BurningImage";
 
 const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 
@@ -327,11 +328,12 @@ export const GetBits = () => {
             )) ||
               null}
 
+            {/*<img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />*/}
             {_isMemeBurnHappening && (
               <div>
                 <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
 
-                <img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />
+                <BurningImage src={randomMeme} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
