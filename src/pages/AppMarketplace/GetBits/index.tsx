@@ -510,8 +510,8 @@ export const GetBits = () => {
           TO CELEBRATE THE LAUNCH of Itheum {`<BiTS>`}, The {`<BiTS>`} Generator God is in a generous mood! For the first month only (April 1, 2024 - May 1,
           2024), check out these LAUNCH WINDOW special perks:
           <ol className="mt-5">
-            <li>1. A special shorter Game Window is in place. So instead of a longer 6 Hours Window. You can play every 3 hours!</li>
-            <li>2. The top 20 LEADERBOARD movers will month get Airdropped Data NFTs from previous Data NFT Creators</li>
+            <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Window. You can play every 3 hours!</li>
+            <li>2. The top 20 LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators</li>
           </ol>
         </div>
 
