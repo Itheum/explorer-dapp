@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FlaskRound, Home, Menu, Store, Wallet } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
 import { CopyAddress } from "components/CopyAddress";
@@ -38,7 +38,6 @@ export const Navbar = () => {
   const bitsBalance = useAccountStore((state: any) => state.bitsBalance);
   const { address } = useGetAccount();
   const { theme } = useTheme();
-  const navigate = useNavigate();
   const [systemTheme, setSystemTheme] = useState<string>();
   const getSystemTheme = () => {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
