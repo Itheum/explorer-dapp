@@ -17,7 +17,7 @@ import ImgLogin from "assets/img/getbits/getbits-login.gif";
 import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
 import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import FingerPoint from "assets/img/getbits/finger-point.gif";
-
+import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
 import Meme1 from "assets/img/getbits/memes/1.jpg";
 import Meme2 from "assets/img/getbits/memes/2.jpg";
 import Meme3 from "assets/img/getbits/memes/3.jpg";
@@ -318,8 +318,9 @@ export const GetBits = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Play Game"} />
+         <div className="relative overflow-hidden">
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
+ 
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -368,7 +369,7 @@ export const GetBits = () => {
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Get <BiTS> Points"} />
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
