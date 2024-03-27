@@ -8,9 +8,9 @@ const burningImageVariants = {
     filter: "none",
   },
   burning: {
-    opacity: [1, 1, 0.7, 0.3, 0],
-    scale: [1, 0.9, 0.7, 0.3, 0.0],
-    filter: ["blur(0px)", "blur(1px)", "blur(2px)", "blur(4px)", "blur(8px)"],
+    opacity: [1, 1, 0.7, 0.2, 0],
+    scale: [1, 0.9, 0.7, 0.5, 0],
+    filter: ["brightness(100%)", "brightness(15%)", "brightness(5%)", "brightness(0%)", "brightness(0%)"],
     transition: {
       duration: 20,
       ease: "easeInOut",
