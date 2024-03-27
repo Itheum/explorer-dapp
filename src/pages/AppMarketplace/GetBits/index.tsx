@@ -1,15 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import axios, { AxiosError } from "axios";
 import { confetti } from "@tsparticles/confetti";
 import { fireworks } from "@tsparticles/fireworks";
 import Countdown from "react-countdown";
+import { Link } from "react-router-dom";
 import { GET_BITS_TOKEN } from "appsConfig";
+import { Loader } from "components";
+import { CopyAddress } from "components/CopyAddress";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
+import { routeNames } from "routes";
+import { useAccountStore } from "store/account";
 import "./GetBits.css";
 
+interface LeaderBoardItemType {
+  playerAddr: string;
+  bits: number;
+}
+
 // Image Layers
-import FingerPoint from "assets/img/getbits/finger-point.gif";
-import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
+import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
+import ImgLogin from "assets/img/getbits/getbits-login.gif";
 import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
 import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import Meme1 from "assets/img/getbits/memes/1.jpg";
@@ -34,10 +50,11 @@ const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 export const GetBits = () => {
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
+  const { chainID } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
   const [isMemeBurnHappening, setIsMemeBurnHappening] = useState<boolean>(false);
   const [gameDataFetched, setGameDataFetched] = useState<boolean>(false);
@@ -48,6 +65,12 @@ export const GetBits = () => {
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
+
+  // LeaderBoard
+  const [leaderBoardAllTime, setLeaderBoardAllTime] = useState<LeaderBoardItemType[]>([]);
+  const [leaderBoardMonthly, setLeaderBoardMonthly] = useState<LeaderBoardItemType[]>([]);
+  const [leaderBoardMonthString, setLeaderBoardMonthString] = useState<string>("");
+  const [leaderBoardIsLoading, setLeaderBoardIsLoading] = useState<boolean>(false);
 
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
 
@@ -62,6 +85,14 @@ export const GetBits = () => {
       fetchMyNfts();
     }
   }, [isLoading, address]);
+
+  useEffect(() => {
+    if (!chainID) {
+      return;
+    }
+    // Load the LeaderBoards regardless on if the user has does not have the data nft in to entice them
+    fetchAndLoadLeaderBoards();
+  }, [chainID]);
 
   // first, we get the Data NFT details needed for this game (but not if the current user has it)
   async function fetchDataNfts() {
@@ -151,6 +182,11 @@ export const GetBits = () => {
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitsBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       }
+
+      // if the user won something, then we should reload the LeaderBoards
+      if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
+        fetchAndLoadLeaderBoards();
+      }
     } else {
       toastError("ER2: Did not get a response from the game server");
       setIsFetchingDataMarshal(false);
@@ -189,7 +225,7 @@ export const GetBits = () => {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
 
-  const gamePlayImageSprites = () => {
+  function gamePlayImageSprites() {
     let _viewDataRes = viewDataRes;
 
     let _loadBlankGameCanvas = loadBlankGameCanvas;
@@ -224,8 +260,17 @@ export const GetBits = () => {
 
     // console.log("_viewDataRes", _viewDataRes);
 
-    // user does not have the data nft, so take them to the marketplace
-    if (!hasGameDataNFT) {
+    // user is note logged in, ask them to connect wallet
+    if (!address) {
+      return (
+        <Link to={routeNames.unlock} state={{ from: location.pathname }}>
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLogin} alt={"Connect your wallet to play"} />
+        </Link>
+      );
+    }
+
+    // user is logged in does not have the data nft, so take them to the marketplace
+    if (address && !hasGameDataNFT) {
       return (
         <div
           onClick={() => {
@@ -261,15 +306,15 @@ export const GetBits = () => {
     );
 
     // Renderer callback with condition
-    const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
-      if (completed) {
+    const countdownRenderer = (props: { hours: number; minutes: number; seconds: number; completed: boolean }) => {
+      if (props.completed) {
         // Render a complete state
         return <CountDownComplete />;
       } else {
         // Render a countdown
         return (
           <span>
-            {hours}H:{minutes}M:{seconds}S
+            {props.hours}H:{props.minutes}M:{props.seconds}S
           </span>
         );
       }
@@ -303,7 +348,7 @@ export const GetBits = () => {
 
             {_isMemeBurnHappening && (
               <div>
-                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">Let's Burn Sacrifice this Meme!</p>
+                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
 
                 <img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
@@ -388,7 +433,7 @@ export const GetBits = () => {
         </div>
       );
     }
-  };
+  }
 
   function spritLayerPointsCloud() {
     return (
@@ -399,8 +444,101 @@ export const GetBits = () => {
     );
   }
 
-  if (isLoading) {
-    return <Loader />;
+  async function fetchAndLoadLeaderBoards() {
+    setLeaderBoardIsLoading(true);
+
+    // https://api.itheumcloud-stg.com/datadexapi/xpGamePrivate/leaderBoard
+    // https://api.itheumcloud-stg.com/datadexapi/xpGamePrivate/monthLeaderBoard?MMYYString=03_24
+
+    const callConfig = {
+      headers: {
+        "fwd-tokenid": "DATANFTFT-e0b917-c6",
+      },
+    };
+
+    const nowDateObj = new Date();
+    let UTCMonth = nowDateObj.getUTCMonth() + 1; // can returns vals 1 - 12
+    let UTCMonthStr = UTCMonth.toString();
+    if (UTCMonth < 10) {
+      UTCMonthStr = "0" + UTCMonthStr; // make 1 = 01 ... 9 = 09 etc
+    }
+    const UTCYear = nowDateObj.getUTCFullYear().toString().slice(-2); // converts number 2024 to string 24
+    const MMYYString = `${UTCMonthStr}_${UTCYear}`;
+
+    setLeaderBoardMonthString(MMYYString);
+
+    try {
+      // S: ACTUAL LOGIC
+      const { data } = await axios.get<LeaderBoardItemType[]>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/leaderBoard`, callConfig);
+      const toJSONString = JSON.stringify(data);
+      const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
+
+      setLeaderBoardAllTime(data);
+      // E: ACTUAL LOGIC
+
+      // // S: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
+      // const allTimePayload =
+      //   "W3sicGxheWVyQWRkciI6ImVyZDF2eWVqdjUyZTQzZnhxOTZjc2NoeXlqOWc1N3FuOWtndHhyaGtnOTJleWhmdTVhMDIycGxxdGR4dmRtIiwiYml0cyI6MjkwLCJkYXRhTkZUSWQiOiJEQVRBTkZURlQtZTBiOTE3LWM2In0seyJwbGF5ZXJBZGRyIjoiZXJkMWV3ZXF5a3hjcmhoNW5wczRmemt0dTllZnRmN3J4cGE4eGRma3lwd3owazRodWhsMHMwNHNhNnRxeWQiLCJiaXRzIjoyNjAsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifSx7InBsYXllckFkZHIiOiJlcmQxdXdrZzlwcnh3cXZsY2xhemQ1OHR4MjJ6OWV6Y3JkYTh5bnJ2MDR6aGg4YW11bm44bDV2cTQ1dnRtMCIsImJpdHMiOjE3NSwiZGF0YU5GVElkIjoiREFUQU5GVEZULWUwYjkxNy1jNiJ9LHsicGxheWVyQWRkciI6ImVyZDF4ZHE0ZDd1ZXdwdHg5ajlrMjNhdWZyYWtsZGE5bGV1bXFjN2V1M3VlenQya2Y0ZnF4ejJzZXgycnhsIiwiYml0cyI6OTUsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifSx7InBsYXllckFkZHIiOiJlcmQxNnZqaHJnYTR5anB5ODhsd251NjR3bHhsYXB3eHR2amw5M2pheDRyZzN5cTNoenh0bmF1c2RtaGNqZiIsImJpdHMiOjcwLCJkYXRhTkZUSWQiOiJEQVRBTkZURlQtZTBiOTE3LWM2In0seyJwbGF5ZXJBZGRyIjoiZXJkMXI1M2R2ZDBoOWo2dTBnenp5ZXR4czVzajMyaHM3a256cHJzbHk3cng5eXgyM2RjbHdsenM4MzM1enciLCJiaXRzIjo3MCwiZGF0YU5GVElkIjoiREFUQU5GVEZULWUwYjkxNy1jNiJ9LHsicGxheWVyQWRkciI6ImVyZDFxbXNxNmVqMzQ0a3BuOG1jOXhmbmdqaHlsYTN6ZDZscWRtNHp4eDY2NTNqZWU2cmZxM25zM2ZrY2M3IiwiYml0cyI6NTAsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifSx7InBsYXllckFkZHIiOiJlcmQxNnU4eTQ1dTM5N201YWR1eXo5Zm5jNWdwdjNlcmF4cWh0dWVkMnF2dnJza2QzMmZmamtnc3BkNGxjbSIsImJpdHMiOjMwLCJkYXRhTkZUSWQiOiJEQVRBTkZURlQtZTBiOTE3LWM2In0seyJwbGF5ZXJBZGRyIjoiZXJkMXV0aHY4bmFqZGM0Mmg1N2w4cDk3NXRkNnI4OHgzczQ4cGZ5dXNsczQ3ZXY1Nnhjczh0eXMwM3llczUiLCJiaXRzIjoyMCwiZGF0YU5GVElkIjoiREFUQU5GVEZULWUwYjkxNy1jNiJ9LHsicGxheWVyQWRkciI6ImVyZDFseWh0OHh1eW4zaHlrdjNlcnFrd3ljZWFqeXRzNXV3cnpyNWNudTlrNHV1MzRnODc4bDNxa25kanc4IiwiYml0cyI6MjAsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifV0=";
+
+      // const base64ToString = atob(allTimePayload);
+      // const stringToJSON = JSON.parse(base64ToString);
+
+      // setLeaderBoardAllTime(stringToJSON);
+      // // E: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
+    } catch (err) {
+      const message = "Leaderboard fetching failed:" + (err as AxiosError).message;
+      console.error(message);
+    }
+
+    try {
+      // S: ACTUAL LOGIC
+      const { data } = await axios.get<LeaderBoardItemType[]>(
+        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/monthLeaderBoard?MMYYString=${MMYYString}`,
+        callConfig
+      );
+
+      const toJSONString = JSON.stringify(data);
+      const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
+
+      setLeaderBoardMonthly(data);
+      // E: ACTUAL LOGIC
+
+      // // S: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
+      // const monthlyPayload =
+      //   "W3siTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXZ5ZWp2NTJlNDNmeHE5NmNzY2h5eWo5ZzU3cW45a2d0eHJoa2c5MmV5aGZ1NWEwMjJwbHF0ZHh2ZG0iLCJiaXRzIjoyOTB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMWV3ZXF5a3hjcmhoNW5wczRmemt0dTllZnRmN3J4cGE4eGRma3lwd3owazRodWhsMHMwNHNhNnRxeWQiLCJiaXRzIjoyNjB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXV3a2c5cHJ4d3F2bGNsYXpkNTh0eDIyejllemNyZGE4eW5ydjA0emhoOGFtdW5uOGw1dnE0NXZ0bTAiLCJiaXRzIjoxNzV9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXhkcTRkN3Vld3B0eDlqOWsyM2F1ZnJha2xkYTlsZXVtcWM3ZXUzdWV6dDJrZjRmcXh6MnNleDJyeGwiLCJiaXRzIjo5NX0seyJNTVlZRGF0YU5GVElkIjoiMDNfMjRfREFUQU5GVEZULWUwYjkxNy1jNiIsInBsYXllckFkZHIiOiJlcmQxNnZqaHJnYTR5anB5ODhsd251NjR3bHhsYXB3eHR2amw5M2pheDRyZzN5cTNoenh0bmF1c2RtaGNqZiIsImJpdHMiOjcwfSx7Ik1NWVlEYXRhTkZUSWQiOiIwM18yNF9EQVRBTkZURlQtZTBiOTE3LWM2IiwicGxheWVyQWRkciI6ImVyZDFyNTNkdmQwaDlqNnUwZ3p6eWV0eHM1c2ozMmhzN2tuenByc2x5N3J4OXl4MjNkY2x3bHpzODMzNXp3IiwiYml0cyI6NzB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXFtc3E2ZWozNDRrcG44bWM5eGZuZ2poeWxhM3pkNmxxZG00enh4NjY1M2plZTZyZnEzbnMzZmtjYzciLCJiaXRzIjo1MH0seyJNTVlZRGF0YU5GVElkIjoiMDNfMjRfREFUQU5GVEZULWUwYjkxNy1jNiIsInBsYXllckFkZHIiOiJlcmQxNnU4eTQ1dTM5N201YWR1eXo5Zm5jNWdwdjNlcmF4cWh0dWVkMnF2dnJza2QzMmZmamtnc3BkNGxjbSIsImJpdHMiOjMwfSx7Ik1NWVlEYXRhTkZUSWQiOiIwM18yNF9EQVRBTkZURlQtZTBiOTE3LWM2IiwicGxheWVyQWRkciI6ImVyZDF1dGh2OG5hamRjNDJoNTdsOHA5NzV0ZDZyODh4M3M0OHBmeXVzbHM0N2V2NTZ4Y3M4dHlzMDN5ZXM1IiwiYml0cyI6MjB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMWx5aHQ4eHV5bjNoeWt2M2VycWt3eWNlYWp5dHM1dXdyenI1Y251OWs0dXUzNGc4NzhsM3FrbmRqdzgiLCJiaXRzIjoyMH1d";
+      // const base64ToString = atob(monthlyPayload);
+      // const stringToJSON = JSON.parse(base64ToString);
+
+      // setLeaderBoardMonthly(stringToJSON);
+      // // E: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
+    } catch (err) {
+      const message = "Monthly Leaderboard fetching failed:" + (err as AxiosError).message;
+      console.error(message);
+    }
+    setLeaderBoardIsLoading(false);
+  }
+
+  function leaderBoardTable(leaderBoardData: LeaderBoardItemType[]) {
+    return (
+      <>
+        <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
+          <tr className="border">
+            <th className="p-2">Rank</th>
+            <th className="p-2">User</th>
+            <th className="p-2">BITs Points</th>
+          </tr>
+          {leaderBoardData.map((item, rank) => (
+            <tr key={rank} className="border">
+              <td className="p-2">
+                #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+              </td>
+              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
+              <td className="p-2">{item.bits}</td>
+            </tr>
+          ))}
+        </table>
+      </>
+    );
   }
 
   return (
@@ -408,50 +546,93 @@ export const GetBits = () => {
       {gamePlayImageSprites()}
 
       <div className="flex flex-col max-w-[100%] border border-primary/50 p-[2rem] my-[3rem]">
+        <div className="p-5 font-bold text-md text-black bg-gradient-to-r from-[#35d9fa] to-[#7a98df] rounded-[1rem] mb-[3rem]">
+          TO CELEBRATE THE LAUNCH of Itheum {`<BiTS>`}, The {`<BiTS>`} Generator God is in a generous mood! For the first month only (April 1, 2024 - May 1,
+          2024), check out these LAUNCH WINDOW special perks:
+          <ol className="mt-5">
+            <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Window. You can play every 3 hours!</li>
+            <li>2. The top 20 LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators</li>
+          </ol>
+        </div>
+
+        <div className="leaderBoard">
+          <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
+          <div className="md:flex">
+            <div className="allTime md:flex-1">
+              <h3 className="text-center text-white mb-[1rem]">All Time</h3>
+              {leaderBoardIsLoading ? (
+                <Loader />
+              ) : (
+                <>
+                  {leaderBoardAllTime.length > 0 ? (
+                    leaderBoardTable(leaderBoardAllTime)
+                  ) : (
+                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="my-[1rem] md:my-auto monthly md:flex-1">
+              <h3 className="text-center text-white mb-[1rem]">Monthly ({leaderBoardMonthString.replace("_", "-20")})</h3>
+              {leaderBoardIsLoading ? (
+                <Loader />
+              ) : (
+                <>
+                  {leaderBoardMonthly.length > 0 ? (
+                    leaderBoardTable(leaderBoardMonthly)
+                  ) : (
+                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
         <div>
-          <h2 className="text-center text-white">FAQs</h2>
+          <h2 className="text-center text-white my-[3rem]">FAQs</h2>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">What are Itheum {`<BiTS>`} Points?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What are Itheum {`<BiTS>`} Points?</h3>
             <p>
-              Think of them as the XP points of the Itheum Protocol, we like to call them "Data Ownership OG (Original Gangster) XP Points" and if you consider
-              yourself an Itheum OG and love Data Ownership, then we absolutely think you are a pioneer and {`<BiTS>`} is the Itheum XP system for you!!
-              <p className="mt-5">
-                You need to use Data NFT and Itheum Core Infrastructure to collect your Itheum {`<BiTS>`}, and this exact Web3/Blockchain based product stack
-                can be used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization
-                technology! Welcome Itheum Data Ownership OG!
-              </p>
+              Think of them as XP (Experience Points) of the Itheum Protocol, we like to call them "Data Ownership OG (Original Gangster) XP" and if you
+              consider yourself an Itheum OG and love Data Ownership, then we absolutely think you are a pioneer and {`<BiTS>`} is the Itheum XP system for
+              you!!
+            </p>
+            <p className="mt-5">
+              You need to use Data NFT and Itheum Core Infrastructure to collect your Itheum {`<BiTS>`}, and this exact Web3/Blockchain based product stack can
+              be used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization
+              technology! Welcome Itheum Data Ownership OG!
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">How can I collect {`<BiTS>`} Points?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">How can I collect {`<BiTS>`} Points?</h3>
             <p>
               You need to hold a {`<BiTS>`} compatible Data NFT in your wallet to play the Get {`<BiTS>`} game (you are on this page now). This Data NFT was
               airdropped in waves to OGs of the Itheum Protocol, but fear not, you can also get it on any NFT Marketplace (if the OGs broke our hearts and
               parted ways with their Data NFTs). If this "Series 1" {`<BiTS>`} Data NFT is successful, there may be a follow-up Series of {`<BiTS>`} Data NFTs
               launched and airdropped as well.
             </p>
-            <p className="mt-5">Once you have the Data NFT in your wallet, you can play the Game every 6 Hours. Based on random chance, you win {`<BiTS>`}.</p>
+            <p className="mt-5">
+              Once you have the Data NFT in your wallet, you can play the Game every 6 Hours (3 Hours in "Launch Window"). Based on random chance, you win{" "}
+              {`<BiTS>`}.
+            </p>
             <p className="mt-5">You DO NOT need to spend any gas to Play the game! SAY WAT?!</p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">Wen Itheum {`<BiTS>`} Leaderboards?</h3>
-            <p>Hang tight, leaderboards are coming very soon. Keep collecting them {`<BiTS>`} in the meantime.</p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="text-white">What can I do with Itheum {`<BiTS>`} Points?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What can I do with Itheum {`<BiTS>`} Points?</h3>
             <p>
               Itheum {`<BiTS>`} is like an XP system as you interact with the Itheum Protocol to collect your points. And like all XP Systems, there will be
-              leaderboard-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be available:
+              LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be available:
             </p>
             <ol className="mt-5">
               <li>
-                1. Top 3 Movers each month get Airdropped{" "}
+                1. Top 5 Movers each month get Airdropped{" "}
                 <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
-                  Data NFTs
+                  Data NFTs (top 20 during LAUNCH WINDOW)
                 </a>{" "}
                 from previous and upcoming Data Creators
               </li>
@@ -475,23 +656,23 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">Are Itheum {`<BiTS>`} Points Blockchain Tokens?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTS>`} Points Blockchain Tokens?</h3>
             <p>
-              Nope, there are more than enough meme coins out there and we don't need more. Itheum {`<BiTS>`} are simple XP points to gamify usage of the Itheum
+              Nope, there are more than enough meme coins out there and we don't need more. Itheum {`<BiTS>`} are simple XP to "gamify" usage of the Itheum
               Protocol infrastructure. The $ITHEUM token is the primary utility token of the entire Itheum Ecosystem.
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">Are Itheum {`<BiTS>`} Points Tradable?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTS>`} Points Tradable?</h3>
             <p>
               We are heart-broken that you asked :( and nope you can't as they are not blockchain tokens (see above). But we are looking at possibilities of
-              where you can "gift" them to Data Creators who mint Data NFT Collections. "Gifting" Itheum {`<BiTS>`} will have its own leaderboard and perks ;)
+              where you can "gift" them to Data Creators who mint Data NFT Collections. "Gifting" Itheum {`<BiTS>`} will have its own LEADERBOARD and perks ;)
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">Can I move Itheum {`<BiTS>`} Points Between my Wallets?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I move Itheum {`<BiTS>`} Points Between my Wallets?</h3>
             <p>
               Lost your primary wallet or want to move Itheum {`<BiTS>`} to your new wallet? unfortunately, this is not possible right now (it MAY be in the
               future - but no guarantee). So make sure you get {`<BiTS>`} in the wallet you treasure the most.
@@ -499,7 +680,7 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">Why is it Called {`<BiTS>`}?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why is it Called {`<BiTS>`}?</h3>
             <p>
               Itheum is a data ownership protocol that is trying to break the current cycle of data exploitation. A Bit is the smallest unit of data. Let's
               break the cycle of data exploitation one {`<BiT>`} at a time.
@@ -507,7 +688,7 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">Will this {`<BiTS>`} App become a Playable Game?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Will this {`<BiTS>`} App become a Playable Game?</h3>
             <p>
               We are not game developers and don't pretend to be so are waiting for an A.I tool that will build the game for us. Are you an A.I or a Game Dev
               and want to build a game layer for the Itheum {`<BiTS>`} XP system? reach out and you could get a grant from via the{" "}
@@ -526,7 +707,7 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="text-white">Help Make Itheum {`<BiTS>`} Better?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Help Make Itheum {`<BiTS>`} Better?</h3>
             <p>
               We want to make the Itheum {`<BiTS>`} XP System better! Do you have any questions or ideas for us or just want to know more? Head over to our{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/discord" target="blank">
