@@ -25,6 +25,7 @@ import Meme4 from "assets/img/getbits/memes/4.jpg";
 import Meme5 from "assets/img/getbits/memes/5.jpg";
 import Meme6 from "assets/img/getbits/memes/6.jpg";
 import aladinRugg from "assets/img/getbits/aladin.png";
+import { BurningImage } from "./BurningImage";
 
 import SacrificeGodLoader from "assets/img/getbits/sacrifice-god-loader.mp4";
 import { Loader } from "components";
@@ -317,9 +318,9 @@ export const GetBits = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative  overflow-hidden  ">
+         <div className="relative overflow-hidden">
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
-
+ 
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -340,11 +341,12 @@ export const GetBits = () => {
             )) ||
               null}
 
+            {/*<img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />*/}
             {_isMemeBurnHappening && (
               <div>
                 <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
 
-                <img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />
+                <BurningImage src={randomMeme} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
