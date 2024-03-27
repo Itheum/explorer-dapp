@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { MULTIVERSX_BUBBLE_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader } from "components";
@@ -9,7 +9,7 @@ import { ZoomableSvg } from "components/ZoomableSvg";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 
 interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
@@ -18,6 +18,7 @@ interface ExtendedViewDataReturnType extends ViewDataReturnType {
 export const MultiversxBubbles = () => {
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
+  const { chainID } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -93,6 +94,9 @@ export const MultiversxBubbles = () => {
           stream: true,
         };
 
+        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+          dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+        }
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
         let blobDataType = BlobDataType.TEXT;
