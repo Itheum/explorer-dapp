@@ -74,6 +74,9 @@ export const GetBits = () => {
   useEffect(() => {
     if (!isLoading && address) {
       fetchMyNfts();
+
+      // Load the LeaderBoards regardless on if the user has if logged in to entice them
+      fetchAndLoadLeaderBoards();
     }
   }, [isLoading, address]);
 
@@ -96,9 +99,6 @@ export const GetBits = () => {
 
       setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
     }
-
-    // Load the LeaderBoards regardless on if the user has the Data NFT or NOT
-    fetchAndLoadLeaderBoards();
   }
 
   async function memeBurn() {
