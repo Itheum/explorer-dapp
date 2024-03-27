@@ -3,31 +3,20 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import axios, { AxiosError } from "axios";
+import { confetti } from "@tsparticles/confetti";
+import { fireworks } from "@tsparticles/fireworks";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITS_TOKEN } from "appsConfig";
-import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
-import { MARKETPLACE_DETAILS_PAGE } from "config";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
 import { routeNames } from "routes";
-import { useAccountStore } from "store/account";
 import "./GetBits.css";
 
-interface LeaderBoardItemType {
-  playerAddr: string;
-  bits: number;
-}
-
 // Image Layers
-import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import ImgLogin from "assets/img/getbits/getbits-login.gif";
 import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
-import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
+import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import FingerPoint from "assets/img/getbits/finger-point.gif";
-import SacrificeGodLoader from "assets/img/getbits/sacrifice-god-loader.mp4";
 
 import Meme1 from "assets/img/getbits/memes/1.jpg";
 import Meme2 from "assets/img/getbits/memes/2.jpg";
@@ -35,6 +24,20 @@ import Meme3 from "assets/img/getbits/memes/3.jpg";
 import Meme4 from "assets/img/getbits/memes/4.jpg";
 import Meme5 from "assets/img/getbits/memes/5.jpg";
 import Meme6 from "assets/img/getbits/memes/6.jpg";
+import aladinRugg from "assets/img/getbits/aladin.png";
+
+import SacrificeGodLoader from "assets/img/getbits/sacrifice-god-loader.mp4";
+import { Loader } from "components";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
+import { useAccountStore } from "../../../store/account";
+import { motion } from "framer-motion";
+interface LeaderBoardItemType {
+  playerAddr: string;
+  bits: number;
+}
 
 const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 
@@ -109,7 +112,7 @@ export const GetBits = () => {
   async function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
     setIsMemeBurnHappening(true);
-    await sleep(5);
+    await sleep(2);
     setBurnFireScale("scale(1) translate(-13px, -15px)");
     setBurnFireGlow(1 * 0.1);
     await sleep(2);
@@ -144,7 +147,6 @@ export const GetBits = () => {
     setIsFetchingDataMarshal(true);
 
     await sleep(5);
-
     const viewDataArgs = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
       mvxNativeAuthMaxExpirySeconds: 3600,
@@ -155,10 +157,20 @@ export const GetBits = () => {
     };
 
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
-
     if (viewDataPayload) {
       setGameDataFetched(true);
       setIsFetchingDataMarshal(false);
+      if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
+        if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
+          (async () => {
+            await fireworks({ background: "transparent" });
+          })();
+        } else {
+          (async () => {
+            await confetti({ count: 500 });
+          })();
+        }
+      }
       setViewDataRes(viewDataPayload);
 
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
@@ -305,8 +317,9 @@ export const GetBits = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
+        <div className="relative  overflow-hidden  ">
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Play Game"} />
+
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -321,7 +334,7 @@ export const GetBits = () => {
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
                   <p className="font-bold md:text-2xl mt-5">But the {`<BiTS>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
                   <p className="font-bold mt-5">Click here when you are ready...</p>
-                  <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />
+                  <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
                 </div>
               </>
             )) ||
@@ -329,7 +342,7 @@ export const GetBits = () => {
 
             {_isMemeBurnHappening && (
               <div>
-                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
+                <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
 
                 <img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
@@ -339,7 +352,7 @@ export const GetBits = () => {
 
             {_isFetchingDataMarshal && (
               <div>
-                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">
+                <p className="text-center text-md text-gray-950 text-foreground  md:text-xl mb-[1rem]">
                   Did the {`<BiTS>`} Generator God like that Meme Sacrifice?
                 </p>
                 <video className="w-[210px] md:w-[300px] m-auto" autoPlay loop src={SacrificeGodLoader} />
@@ -353,8 +366,8 @@ export const GetBits = () => {
     // we got the response from the game play
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
-        <div className="relative">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />
+        <div className="relative overflow-hidden">
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Get <BiTS> Points"} />
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -371,7 +384,23 @@ export const GetBits = () => {
 
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
-                    {(_viewDataRes.data.gamePlayResult.bitsWon === 0 && <p className="text-2xl">OPPS! You got Rugged! 0 Points this time... :(</p>) || null}
+                    {_viewDataRes.data.gamePlayResult.bitsWon === 0 && (
+                      <div>
+                        <p className="text-2xl">OPPS! Aladdin rugged you! 0 Points this time...</p>
+                        <motion.img
+                          className=" w-[150px] lg:w-full absolute"
+                          src={aladinRugg}
+                          initial={{ x: -750, y: 0 }}
+                          animate={{
+                            scale: [0.5, 1, 1, 0.5],
+                            rotate: [0, 0, -360, -360, -360, -360],
+                            opacity: [0.8, 1, 1, 1, 1, 1, 1, 0],
+                            x: [-750, 0, 200, 1000],
+                          }}
+                          transition={{ duration: 8 }}
+                        />
+                      </div>
+                    )}
 
                     {(_viewDataRes.data.gamePlayResult.bitsWon > 0 && (
                       <>
@@ -487,20 +516,24 @@ export const GetBits = () => {
     return (
       <>
         <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
-          <tr className="border">
-            <th className="p-2">Rank</th>
-            <th className="p-2">User</th>
-            <th className="p-2">BITs Points</th>
-          </tr>
-          {leaderBoardData.map((item, rank) => (
-            <tr key={rank} className="border">
-              <td className="p-2">
-                #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-              </td>
-              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
-              <td className="p-2">{item.bits}</td>
+          <thead>
+            <tr className="border">
+              <th className="p-2">Rank</th>
+              <th className="p-2">User</th>
+              <th className="p-2">BITs Points</th>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {leaderBoardData.map((item, rank) => (
+              <tr key={rank} className="border">
+                <td className="p-2">
+                  #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+                </td>
+                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
+                <td className="p-2">{item.bits}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </>
     );
