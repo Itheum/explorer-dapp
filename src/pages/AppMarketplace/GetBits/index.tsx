@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
-import axios, { AxiosError } from "axios";
 import { confetti } from "@tsparticles/confetti";
 import { fireworks } from "@tsparticles/fireworks";
+import axios, { AxiosError } from "axios";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITS_TOKEN } from "appsConfig";
@@ -17,7 +17,7 @@ import ImgLogin from "assets/img/getbits/getbits-login.gif";
 import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
 import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import FingerPoint from "assets/img/getbits/finger-point.gif";
-
+import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
 import Meme1 from "assets/img/getbits/memes/1.jpg";
 import Meme2 from "assets/img/getbits/memes/2.jpg";
 import Meme3 from "assets/img/getbits/memes/3.jpg";
@@ -35,6 +35,7 @@ import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
 import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
+
 interface LeaderBoardItemType {
   playerAddr: string;
   bits: number;
@@ -70,6 +71,10 @@ export const GetBits = () => {
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (!hasPendingTransactions) {
       fetchDataNfts();
     }
@@ -85,6 +90,7 @@ export const GetBits = () => {
     if (!chainID) {
       return;
     }
+
     // Load the LeaderBoards regardless on if the user has does not have the data nft in to entice them
     fetchAndLoadLeaderBoards();
   }, [chainID]);
@@ -113,7 +119,8 @@ export const GetBits = () => {
   async function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
     setIsMemeBurnHappening(true);
-    await sleep(2);
+
+    await sleep(1);
     setBurnFireScale("scale(1) translate(-13px, -15px)");
     setBurnFireGlow(1 * 0.1);
     await sleep(2);
@@ -130,6 +137,7 @@ export const GetBits = () => {
     await sleep(2);
     setBurnFireScale("scale(10) translate(-13px, -15px)");
     await sleep(5);
+
     setIsMemeBurnHappening(false);
 
     playGame();
@@ -148,6 +156,7 @@ export const GetBits = () => {
     setIsFetchingDataMarshal(true);
 
     await sleep(5);
+
     const viewDataArgs = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
       mvxNativeAuthMaxExpirySeconds: 3600,
@@ -158,9 +167,8 @@ export const GetBits = () => {
     };
 
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
+
     if (viewDataPayload) {
-      setGameDataFetched(true);
-      setIsFetchingDataMarshal(false);
       if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
         if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
           (async () => {
@@ -172,6 +180,8 @@ export const GetBits = () => {
           })();
         }
       }
+      setGameDataFetched(true);
+      setIsFetchingDataMarshal(false);
       setViewDataRes(viewDataPayload);
 
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
@@ -318,8 +328,9 @@ export const GetBits = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Play Game"} />
+        <div className="relative overflow-hidden">
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
+
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -340,7 +351,6 @@ export const GetBits = () => {
             )) ||
               null}
 
-            {/*<img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />*/}
             {_isMemeBurnHappening && (
               <div>
                 <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
@@ -364,11 +374,12 @@ export const GetBits = () => {
         </div>
       );
     }
+
     // we got the response from the game play
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Get <BiTS> Points"} />
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -387,7 +398,7 @@ export const GetBits = () => {
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
                     {_viewDataRes.data.gamePlayResult.bitsWon === 0 && (
                       <div>
-                        <p className="text-2xl">OPPS! Aladdin rugged you! 0 Points this time...</p>
+                        <p className="text-2xl">OPPS! Aladdin Rugged You! 0 Points this Time...</p>
                         <motion.img
                           className=" w-[150px] lg:w-full absolute"
                           src={aladinRugg}
@@ -424,6 +435,7 @@ export const GetBits = () => {
               </>
             )}
           </div>
+
           {spritLayerPointsCloud()}
         </div>
       );
@@ -441,9 +453,6 @@ export const GetBits = () => {
 
   async function fetchAndLoadLeaderBoards() {
     setLeaderBoardIsLoading(true);
-
-    // https://api.itheumcloud-stg.com/datadexapi/xpGamePrivate/leaderBoard
-    // https://api.itheumcloud-stg.com/datadexapi/xpGamePrivate/monthLeaderBoard?MMYYString=03_24
 
     const callConfig = {
       headers: {
@@ -521,7 +530,7 @@ export const GetBits = () => {
             <tr className="border">
               <th className="p-2">Rank</th>
               <th className="p-2">User</th>
-              <th className="p-2">BITs Points</th>
+              <th className="p-2">{`<BiTS>`} Points</th>
             </tr>
           </thead>
           <tbody>
@@ -544,16 +553,16 @@ export const GetBits = () => {
     <>
       {gamePlayImageSprites()}
 
-      <div className="flex flex-col max-w-[100%] border border-primary/50 p-[2rem] my-[3rem]">
-        <div className="p-5 font-bold text-md text-black bg-gradient-to-r from-[#35d9fa] to-[#7a98df] rounded-[1rem] mb-[3rem]">
-          TO CELEBRATE THE LAUNCH of Itheum {`<BiTS>`}, The {`<BiTS>`} Generator God is in a generous mood! For the first month only (April 1, 2024 - May 1,
-          2024), check out these LAUNCH WINDOW special perks:
-          <ol className="mt-5">
-            <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Window. You can play every 3 hours!</li>
-            <li>2. The top 20 LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators</li>
-          </ol>
-        </div>
+      <div className="p-5 text-lg font-bold bg-[#35d9fa] text-black rounded-[1rem] my-[3rem]">
+        TO CELEBRATE THE LAUNCH of Itheum {`<BiTS>`}, The {`<BiTS>`} Generator God is in a generous mood! For the first month only (April 1, 2024 - May 1,
+        2024), check out these LAUNCH WINDOW special perks:
+        <ol className="mt-5">
+          <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Window. You can play every 3 hours!</li>
+          <li>2. The top 20 LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators</li>
+        </ol>
+      </div>
 
+      <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
         <div className="leaderBoard">
           <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
           <div className="md:flex">
@@ -603,6 +612,15 @@ export const GetBits = () => {
               You need to use Data NFT and Itheum Core Infrastructure to collect your Itheum {`<BiTS>`}, and this exact Web3/Blockchain based product stack can
               be used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization
               technology! Welcome Itheum Data Ownership OG!
+            </p>
+          </div>
+
+          <div className="mt-[2rem]">
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why are Itheum {`<BiTS>`} Points Important?</h3>
+            <p>
+              On top of being XP, they also signal your "liveliness" as a human and not a BOT. This is a form of "reputation signalling" of you as a human
+              within the Itheum ecosystem, this reputation signalling is a very powerful concept when you link it to "data ownership" as it add a layer of
+              "proof of humanity" to the Itheum Protocol.
             </p>
           </div>
 
