@@ -516,20 +516,24 @@ export const GetBits = () => {
     return (
       <>
         <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
-          <tr className="border">
-            <th className="p-2">Rank</th>
-            <th className="p-2">User</th>
-            <th className="p-2">BITs Points</th>
-          </tr>
-          {leaderBoardData.map((item, rank) => (
-            <tr key={rank} className="border">
-              <td className="p-2">
-                #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-              </td>
-              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
-              <td className="p-2">{item.bits}</td>
+          <thead>
+            <tr className="border">
+              <th className="p-2">Rank</th>
+              <th className="p-2">User</th>
+              <th className="p-2">BITs Points</th>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {leaderBoardData.map((item, rank) => (
+              <tr key={rank} className="border">
+                <td className="p-2">
+                  #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+                </td>
+                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
+                <td className="p-2">{item.bits}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </>
     );
