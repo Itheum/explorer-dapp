@@ -35,6 +35,7 @@ import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
 import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
+import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -61,6 +62,7 @@ export const GetBits = () => {
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
+  let tweetText = `I just played the <BiTS> Game on Itheum ${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTS> points!" : "!"} Play now and win some <BiTS>! #Itheum #BiTSGame`;
 
   // LeaderBoard
   const [leaderBoardAllTime, setLeaderBoardAllTime] = useState<LeaderBoardItemType[]>([]);
@@ -420,6 +422,22 @@ export const GetBits = () => {
                         <p className="text-4xl mt-[2rem] text-gray-950">
                           {_viewDataRes.data.gamePlayResult.bitsWon} {` <BiTS>`}
                         </p>
+                        <div className="bg-black rounded-full p-1">
+                          <HoverBorderGradient>
+                            <a
+                              className=" bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
+                              href={"https://twitter.com/intent/tweet?text=" + tweetText}
+                              data-size="large"
+                              target="_blank">
+                              <span className="[&>svg]:h-4 [&>svg]:w-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+                                  <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                                </svg>
+                              </span>
+                              Tweet
+                            </a>
+                          </HoverBorderGradient>
+                        </div>
                       </>
                     )) ||
                       null}
