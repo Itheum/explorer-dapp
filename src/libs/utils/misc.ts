@@ -67,3 +67,10 @@ export const sleep = (sec: number) => {
     }, sec * 1000);
   });
 };
+
+export const getApiWeb2Apps = (chainID: string) => {
+  const envKey = chainID === "1" ? "VITE_ENV_WEB2_APPS_MAINNET_API" : "VITE_ENV_WEB2_APPS_DEVNET_API";
+  const defaultUrl = chainID === "1" ? "https://api.itheumcloud.com" : "https://api.itheumcloud-stg.com";
+
+  return import.meta.env[envKey] || defaultUrl;
+};
