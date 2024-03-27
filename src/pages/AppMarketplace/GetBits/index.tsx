@@ -61,7 +61,6 @@ export const GetBits = () => {
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const [isAnimationLoaded, setIsAnimationLoaded] = useState<boolean>(false);
   // LeaderBoard
   const [leaderBoardAllTime, setLeaderBoardAllTime] = useState<LeaderBoardItemType[]>([]);
   const [leaderBoardMonthly, setLeaderBoardMonthly] = useState<LeaderBoardItemType[]>([]);
@@ -118,8 +117,8 @@ export const GetBits = () => {
 
   async function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
-    setIsMemeBurnHappening(true);
 
+    setIsMemeBurnHappening(true);
     await sleep(1);
     setBurnFireScale("scale(1) translate(-13px, -15px)");
     setBurnFireGlow(1 * 0.1);
@@ -155,7 +154,7 @@ export const GetBits = () => {
 
     setIsFetchingDataMarshal(true);
 
-    //await sleep(5);
+    await sleep(5);
 
     const viewDataArgs = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
@@ -169,22 +168,30 @@ export const GetBits = () => {
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
 
     if (viewDataPayload) {
-      if (viewDataPayload.data.gamePlayResult.bitsWon === 0) {
-        setIsAnimationLoaded(true);
-      } else if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
+      let animation;
+      if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
         if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
-          (async () => {
-            await fireworks({ background: "transparent" });
-            setIsAnimationLoaded(true);
-            console.log("fireworks ");
-          })();
+          animation = await fireworks({ background: "transparent", sounds: true });
         } else {
-          (async () => {
-            await confetti({});
-            setIsAnimationLoaded(true);
-            console.log("fireworks 11 ");
-          })();
+          animation = await confetti({
+            spread: 360,
+            ticks: 100,
+            gravity: 0,
+            decay: 0.94,
+            startVelocity: 30,
+            particleCount: 200,
+            scalar: 2,
+            shapes: ["emoji"],
+            shapeOptions: {
+              emoji: {
+                value: ["🤲🏼", "💎", "🤲🏼", "💎", "🎊", "🐸", "🐸", "🐸", "🐸", "🐹", "🐹"],
+              },
+            },
+          });
         }
+
+        // if the user won something, then we should reload the LeaderBoards
+        fetchAndLoadLeaderBoards();
       }
 
       setGameDataFetched(true);
@@ -194,10 +201,9 @@ export const GetBits = () => {
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitsBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       }
-
-      // if the user won something, then we should reload the LeaderBoards
-      if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
-        fetchAndLoadLeaderBoards();
+      if (animation) {
+        await sleep(10);
+        animation.stop();
       }
     } else {
       toastError("ER2: Did not get a response from the game server");
@@ -210,7 +216,6 @@ export const GetBits = () => {
     setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
     setBurnFireScale("scale(0) translate(-13px, -15px)");
     setBurnFireGlow(0);
-    setIsAnimationLoaded(false);
     setGameDataFetched(false);
     setIsFetchingDataMarshal(false);
     setViewDataRes(undefined);
@@ -401,7 +406,7 @@ export const GetBits = () => {
                   </div>
                 )}
 
-                {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && isAnimationLoaded && (
+                {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
                     {_viewDataRes.data.gamePlayResult.bitsWon === 0 && (
                       <div>
