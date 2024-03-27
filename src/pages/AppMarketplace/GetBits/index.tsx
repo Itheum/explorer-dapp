@@ -155,7 +155,7 @@ export const GetBits = () => {
 
     setIsFetchingDataMarshal(true);
 
-    await sleep(5);
+    //await sleep(5);
 
     const viewDataArgs = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
@@ -176,7 +176,7 @@ export const GetBits = () => {
           })();
         } else {
           (async () => {
-            await confetti({ count: 500 });
+            await confetti({});
           })();
         }
       }
