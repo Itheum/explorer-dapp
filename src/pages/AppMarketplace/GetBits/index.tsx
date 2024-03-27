@@ -169,9 +169,6 @@ export const GetBits = () => {
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
 
     if (viewDataPayload) {
-      setGameDataFetched(true);
-      setIsFetchingDataMarshal(false);
-
       if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
         if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
           (async () => {
@@ -183,7 +180,8 @@ export const GetBits = () => {
           })();
         }
       }
-
+      setGameDataFetched(true);
+      setIsFetchingDataMarshal(false);
       setViewDataRes(viewDataPayload);
 
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
