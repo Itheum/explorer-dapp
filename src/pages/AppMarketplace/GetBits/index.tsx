@@ -74,11 +74,16 @@ export const GetBits = () => {
   useEffect(() => {
     if (!isLoading && address) {
       fetchMyNfts();
-
-      // Load the LeaderBoards regardless on if the user has if logged in to entice them
-      fetchAndLoadLeaderBoards();
     }
   }, [isLoading, address]);
+
+  useEffect(() => {
+    if (!chainID) {
+      return;
+    }
+    // Load the LeaderBoards regardless on if the user has does not have the data nft in to entice them
+    fetchAndLoadLeaderBoards();
+  }, [chainID]);
 
   // first, we get the Data NFT details needed for this game (but not if the current user has it)
   async function fetchDataNfts() {
@@ -523,7 +528,13 @@ export const GetBits = () => {
               {leaderBoardIsLoading ? (
                 <Loader />
               ) : (
-                <>{leaderBoardAllTime.length > 0 ? leaderBoardTable(leaderBoardAllTime) : <div className="text-center">No Data Yet!</div>}</>
+                <>
+                  {leaderBoardAllTime.length > 0 ? (
+                    leaderBoardTable(leaderBoardAllTime)
+                  ) : (
+                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                  )}
+                </>
               )}
             </div>
 
@@ -532,7 +543,13 @@ export const GetBits = () => {
               {leaderBoardIsLoading ? (
                 <Loader />
               ) : (
-                <>{leaderBoardMonthly.length > 0 ? leaderBoardTable(leaderBoardMonthly) : <div className="text-center">No Data Yet!</div>}</>
+                <>
+                  {leaderBoardMonthly.length > 0 ? (
+                    leaderBoardTable(leaderBoardMonthly)
+                  ) : (
+                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                  )}
+                </>
               )}
             </div>
           </div>
