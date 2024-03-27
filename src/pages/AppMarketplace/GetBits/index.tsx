@@ -8,26 +8,16 @@ import { fireworks } from "@tsparticles/fireworks";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITS_TOKEN } from "appsConfig";
-import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
-import { MARKETPLACE_DETAILS_PAGE } from "config";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
 import { routeNames } from "routes";
-import { useAccountStore } from "store/account";
 import "./GetBits.css";
 
-interface LeaderBoardItemType {
-  playerAddr: string;
-  bits: number;
-}
-
 // Image Layers
-import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
 import ImgLogin from "assets/img/getbits/getbits-login.gif";
 import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
 import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
+import FingerPoint from "assets/img/getbits/finger-point.gif";
+
 import Meme1 from "assets/img/getbits/memes/1.jpg";
 import Meme2 from "assets/img/getbits/memes/2.jpg";
 import Meme3 from "assets/img/getbits/memes/3.jpg";
@@ -41,9 +31,13 @@ import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
 import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
+interface LeaderBoardItemType {
+  playerAddr: string;
+  bits: number;
+}
 
 const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 
@@ -324,7 +318,7 @@ export const GetBits = () => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative  overflow-hidden  ">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Play Game"} />
 
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
@@ -348,7 +342,7 @@ export const GetBits = () => {
 
             {_isMemeBurnHappening && (
               <div>
-                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
+                <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
 
                 <img className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto" src={randomMeme} alt={"Sacrifice a Meme"} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
@@ -358,7 +352,7 @@ export const GetBits = () => {
 
             {_isFetchingDataMarshal && (
               <div>
-                <p className="text-center text-md text-gray-950 text-foreground mb-[0.5rem] md:text-xl mb-[1rem]">
+                <p className="text-center text-md text-gray-950 text-foreground  md:text-xl mb-[1rem]">
                   Did the {`<BiTS>`} Generator God like that Meme Sacrifice?
                 </p>
                 <video className="w-[210px] md:w-[300px] m-auto" autoPlay loop src={SacrificeGodLoader} />
@@ -373,7 +367,7 @@ export const GetBits = () => {
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Get <BiTS> Points"} />
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
