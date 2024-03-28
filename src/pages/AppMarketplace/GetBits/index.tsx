@@ -62,7 +62,7 @@ export const GetBits = () => {
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  let tweetText = `I just played the <BiTS> Game on Itheum ${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTS> points!" : "!"} Play now and win some <BiTS>! #Itheum #BiTSGame`;
+  let tweetText = `url=https://explorer.itheum.io/getbits&text=I just played the Get <BiTz> XP Game on %23itheum ${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points!" : "!"} Play now and get your own <BiTz>! %23GetBiTz`;
 
   // LeaderBoard
   const [leaderBoardAllTime, setLeaderBoardAllTime] = useState<LeaderBoardItemType[]>([]);
