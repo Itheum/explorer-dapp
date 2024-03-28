@@ -41,6 +41,9 @@ interface LeaderBoardItemType {
   bits: number;
 }
 
+export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
+export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
+
 const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 
 export const GetBits = () => {
@@ -51,22 +54,31 @@ export const GetBits = () => {
   const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const bitsBalance = useAccountStore((state: any) => state.bitsBalance);
+  const updateBitsBalance = useAccountStore((state) => state.updateBitsBalance);
+
+  // a single game-play related (so we have to reset these if the user wants to "replay")
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
   const [isMemeBurnHappening, setIsMemeBurnHappening] = useState<boolean>(false);
   const [gameDataFetched, setGameDataFetched] = useState<boolean>(false);
-  const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-  const bitsBalance = useAccountStore((state: any) => state.bitsBalance);
-  const updateBitsBalance = useAccountStore((state) => state.updateBitsBalance);
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  // LeaderBoard
+ 
+
+  // Game canvas related
+  const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
+
+  // LeaderBoard related
+ 
   const [leaderBoardAllTime, setLeaderBoardAllTime] = useState<LeaderBoardItemType[]>([]);
   const [leaderBoardMonthly, setLeaderBoardMonthly] = useState<LeaderBoardItemType[]>([]);
   const [leaderBoardMonthString, setLeaderBoardMonthString] = useState<string>("");
   const [leaderBoardIsLoading, setLeaderBoardIsLoading] = useState<boolean>(false);
 
+  // Debug / Tests
+  const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
 
   useEffect(() => {
@@ -115,6 +127,17 @@ export const GetBits = () => {
     }
   }
 
+  // have to reset all "single game-play related" (see above)
+  function resetToStartGame() {
+    setIsFetchingDataMarshal(false);
+    setIsMemeBurnHappening(false);
+    setGameDataFetched(false);
+    setViewDataRes(undefined);
+    setBurnFireScale("scale(0) translate(-13px, -15px)");
+    setBurnFireGlow(0);
+    setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
+  }
+
   async function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
 
@@ -156,7 +179,7 @@ export const GetBits = () => {
 
     await sleep(5);
 
-    const viewDataArgs = {
+    const viewDataArgs: Record<string, any> = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
       mvxNativeAuthMaxExpirySeconds: 3600,
       fwdHeaderMapLookup: {
@@ -164,6 +187,12 @@ export const GetBits = () => {
       },
       fwdHeaderKeys: "authorization",
     };
+
+    // if we are testing future month leaderboards, then send this custom param to the origin
+    if (inDateStringDebugMode) {
+      viewDataArgs.fwdHeaderMapLookup["x-test-custom-mmyy-string"] = leaderBoardMonthString;
+      viewDataArgs.fwdHeaderKeys = "authorization,x-test-custom-mmyy-string";
+    }
 
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
 
@@ -209,16 +238,6 @@ export const GetBits = () => {
       toastError("ER2: Did not get a response from the game server");
       setIsFetchingDataMarshal(false);
     }
-  }
-
-  function resetToStartGame() {
-    setIsMemeBurnHappening(false);
-    setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
-    setBurnFireScale("scale(0) translate(-13px, -15px)");
-    setBurnFireGlow(0);
-    setGameDataFetched(false);
-    setIsFetchingDataMarshal(false);
-    setViewDataRes(undefined);
   }
 
   async function viewData(viewDataArgs: any, requiredDataNFT: DataNft) {
@@ -475,11 +494,23 @@ export const GetBits = () => {
     const nowDateObj = new Date();
     let UTCMonth = nowDateObj.getUTCMonth() + 1; // can returns vals 1 - 12
     let UTCMonthStr = UTCMonth.toString();
+
     if (UTCMonth < 10) {
       UTCMonthStr = "0" + UTCMonthStr; // make 1 = 01 ... 9 = 09 etc
     }
+
     const UTCYear = nowDateObj.getUTCFullYear().toString().slice(-2); // converts number 2024 to string 24
-    const MMYYString = `${UTCMonthStr}_${UTCYear}`;
+    let MMYYString = `${UTCMonthStr}_${UTCYear}`;
+
+    // S: for TESTING monthly leaderboards, allow a param override!
+    const searchParams = new URLSearchParams(window.location.search);
+    const _overrideMMYYString = searchParams.get("x-test-custom-mmyy-string"); // should be like this 03_24
+
+    if (_overrideMMYYString && _overrideMMYYString.length === 5 && _overrideMMYYString.indexOf("_") === 2) {
+      MMYYString = _overrideMMYYString;
+      setInDateStringDebugMode(true);
+    }
+    // E: for TESTING monthly leaderboards, allow a param override!
 
     setLeaderBoardMonthString(MMYYString);
 
@@ -566,11 +597,11 @@ export const GetBits = () => {
       {gamePlayImageSprites()}
 
       <div className="p-5 text-lg font-bold bg-[#35d9fa] text-black rounded-[1rem] my-[3rem]">
-        TO CELEBRATE THE LAUNCH of Itheum {`<BiTS>`}, The {`<BiTS>`} Generator God is in a generous mood! For the first month only (April 1, 2024 - May 1,
-        2024), check out these LAUNCH WINDOW special perks:
+        To celebrate the launch of {`<BiTS>`} XP, the {`<BiTS>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 - May 1,
+        2024), check out these special LAUNCH WINDOW perks:
         <ol className="mt-5">
-          <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Window. You can play every 3 hours!</li>
-          <li>2. The top 20 LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators</li>
+          <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Game Window. You can play every {BIT_GAME_WINDOW_HOURS} hours!</li>
+          <li>2. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators</li>
         </ol>
       </div>
 
@@ -593,8 +624,10 @@ export const GetBits = () => {
               )}
             </div>
 
-            <div className="my-[1rem] md:my-auto monthly md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">Monthly ({leaderBoardMonthString.replace("_", "-20")})</h3>
+            <div className="my-[1rem] monthly md:flex-1">
+              <h3 className="text-center text-white mb-[1rem]">
+                Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
+              </h3>
               {leaderBoardIsLoading ? (
                 <Loader />
               ) : (
@@ -616,23 +649,27 @@ export const GetBits = () => {
           <div className="mt-[2rem]">
             <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What are Itheum {`<BiTS>`} Points?</h3>
             <p>
-              Think of them as XP (Experience Points) of the Itheum Protocol, we like to call them "Data Ownership OG (Original Gangster) XP" and if you
+              Think of them as XP (Experience Points) of the Itheum Protocol, we also like to call them "Data Ownership OG (Original Gangster) XP" and if you
               consider yourself an Itheum OG and love Data Ownership, then we absolutely think you are a pioneer and {`<BiTS>`} is the Itheum XP system for
               you!!
             </p>
             <p className="mt-5">
-              You need to use Data NFT and Itheum Core Infrastructure to collect your Itheum {`<BiTS>`}, and this exact Web3/Blockchain based product stack can
-              be used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization
-              technology! Welcome Itheum Data Ownership OG!
+              You need to use Data NFT and Itheum Core Infrastructure to collect your {`<BiTS>`} XP, and this exact Web3/Blockchain based product stack can be
+              used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization technology
+              and learning about how you can take ownership of you data! Welcome Itheum Data Ownership OG!
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why are Itheum {`<BiTS>`} Points Important?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why are {`<BiTS>`} Points Important?</h3>
             <p>
-              On top of being XP, they also signal your "liveliness" as a human and not a BOT. This is a form of "reputation signalling" of you as a human
-              within the Itheum ecosystem, this reputation signalling is a very powerful concept when you link it to "data ownership" as it add a layer of
-              "proof of humanity" to the Itheum Protocol.
+              On top of being Itheum Protocol XP, they also signal your "liveliness" as a human and not a BOT. This is a form of "reputation signalling" of you
+              as a human within the Itheum ecosystem, this reputation signalling is a very powerful concept when you link it to "data ownership" as it add a
+              layer of "proof of humanity" to the Itheum Protocol.
+            </p>
+            <p className="mt-5">
+              There will be a wave of new "liveliness & reputation signalling" features launching within the Itheum protocol in the very near future, and{" "}
+              {`<BiTS>`} XP is the first such "liveliness & reputation signalling" features to launch
             </p>
           </div>
 
@@ -645,32 +682,56 @@ export const GetBits = () => {
               launched and airdropped as well.
             </p>
             <p className="mt-5">
-              Once you have the Data NFT in your wallet, you can play the Game every 6 Hours (3 Hours in "Launch Window"). Based on random chance, you win{" "}
-              {`<BiTS>`}.
+              Once you have the Data NFT in your wallet, you can play the Game every 6 Hours ({BIT_GAME_WINDOW_HOURS} Hours in "Launch Window"). You have to
+              burn a Meme and sacrifice it to the {`<BiTS>`} Generator God and then based on pure random chance, you win {`<BiTS>`}!
             </p>
-            <p className="mt-5">You DO NOT need to spend any gas to Play the game! SAY WAT?!</p>
+            <p className="mt-5">You DO NOT need to spend any gas to Play the Get {`<BiTS>`} ! SAY WAT?!</p>
+            <p className="mt-5">
+              But in the near future, the Get {`<BiTS>`} game won't be the only way to collect BITS points, if you stay "active" on the Itheum Protocol, you
+              will be rewarded with bonus {`<BiTS>`} points as well. For example, if you use the{" "}
+              <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
+                Data DEX
+              </a>{" "}
+              to explore and "favorite" the Data NFTs and Data Creators you like or if you use features like "Data Uptime Checks" or use Data Widgets inside the
+              Itheum Explorer, all these Itheum Protocol "activity" will have {`<BiTS>`} bonus points attached to it and sent to you!
+            </p>
+          </div>
+
+          <div className="mt-[2rem]">
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Where can I play the Get {`<BiTS>`} Game?</h3>
+            <p>
+              Currently, you can play it on Itheum Explorer's Get {`<BiTS>`} Data Widget{" "}
+              <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/getbits" target="blank">
+                explorer.itheum.io/getbits
+              </a>
+            </p>
+            <p className="mt-5">
+              Also note that Itheum Explorer is available on xPortal Hub as well, so with a few taps on your xPortal mobile wallet, you can open the game and
+              Get {`<BiTS>`}!
+            </p>
           </div>
 
           <div className="mt-[2rem]">
             <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What can I do with Itheum {`<BiTS>`} Points?</h3>
             <p>
-              Itheum {`<BiTS>`} is like an XP system as you interact with the Itheum Protocol to collect your points. And like all XP Systems, there will be
-              LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be available:
+              Itheum {`<BiTS>`} is like an XP system and you collect {`<BiTS>`} each time you interact with certain features of Itheum Protocol. Like all XP
+              Systems, there will be LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be
+              available:
             </p>
             <ol className="mt-5">
               <li>
                 1. Top 5 Movers each month get Airdropped{" "}
                 <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
-                  Data NFTs (top 20 during LAUNCH WINDOW)
+                  Data NFTs (top {BIT_GAME_TOP_LEADER_BOARD_GROUP} during LAUNCH WINDOW)
                 </a>{" "}
-                from previous and upcoming Data Creators
+                from previous and upcoming Data Creators.
               </li>
               <li>
                 2. Get a boost on Monthly{" "}
                 <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/project-trailblazer" target="blank">
                   Itheum Trailblazer
                 </a>{" "}
-                Data NFT Quest Rewards
+                Data NFT Quest Rewards.
               </li>
               <li>3. Admire the balance grow as you connect your wallet to Itheum Protocol dApps and play</li>
             </ol>
@@ -701,6 +762,16 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I use Multiple Wallets to Claim {`<BiTS>`} XP?</h3>
+            <p>
+              If you do this, you will "fragment" your XP and you wont get much benefits so it's best you use your primary identity wallet to collect {`<BiTS>`}{" "}
+              XP. BUT, we also know that many "hunters" may try and do this to game (sybil attack) the LEADERBOARD and it will disadvantage the regular genuine
+              users. We are rolling out some new blockchain powered "liveliness & reputation signalling" features that should prevent or drastically reduce such
+              XP sybil attacks.
+            </p>
+          </div>
+
+          <div className="mt-[2rem]">
             <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I move Itheum {`<BiTS>`} Points Between my Wallets?</h3>
             <p>
               Lost your primary wallet or want to move Itheum {`<BiTS>`} to your new wallet? unfortunately, this is not possible right now (it MAY be in the
@@ -719,13 +790,14 @@ export const GetBits = () => {
           <div className="mt-[2rem]">
             <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Will this {`<BiTS>`} App become a Playable Game?</h3>
             <p>
-              We are not game developers and don't pretend to be so are waiting for an A.I tool that will build the game for us. Are you an A.I or a Game Dev
-              and want to build a game layer for the Itheum {`<BiTS>`} XP system? reach out and you could get a grant from via the{" "}
+              We are not game developers and don't pretend to be, so are waiting for an A.I tool that will build the game for us. We'd love for the Get{" "}
+              {`<BiTS>`} app to become a hub of "Mini-Games" where you win {`<BiTS>`} XP. Are you an A.I or a Game Dev and want to build a game layer for the
+              Itheum {`<BiTS>`} XP system? reach out and you could get a grant from via the{" "}
               <a
                 className="!text-[#7a98df] hover:underline"
                 href="https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"
                 target="blank">
-                Itheum xPand program
+                Itheum xPand DAO program
               </a>
               . As the entire game logic is actually inside the Data NFT, ANYONE can{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://docs.itheum.io/product-docs/developers/software-development-kits-sdks/data-nft-sdk">

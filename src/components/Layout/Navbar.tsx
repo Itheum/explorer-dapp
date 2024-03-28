@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Home, Menu, Store, Wallet } from "lucide-react";
+import { FlaskRound, Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -30,6 +30,9 @@ import {
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
 import { useAccountStore } from "../../store/account";
+import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { BIT_GAME_WINDOW_HOURS, BIT_GAME_TOP_LEADER_BOARD_GROUP } from "../../pages/AppMarketplace/GetBits";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -124,6 +127,56 @@ export const Navbar = () => {
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <div className="shadow-sm shadow-sky-300 p-[1px] rounded-lg justify-center cursor-pointer">
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
+                        {bitsBalance === -2 ? (
+                          <span className="flex items-center gap-0.5 blinkMe text-lg">
+                            ... <FlaskRound className="w-5 h-5 fill-sky-300 " />
+                          </span>
+                        ) : (
+                          <>
+                            {bitsBalance === -1 ? (
+                              <div className="flex items-center gap-0.5 text-base">
+                                0 <FlaskRound className="w-5 h-5 fill-sky-300 " />
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-0.5 text-base">
+                                {bitsBalance} <FlaskRound className="w-5 h-5 fill-sky-300 " />
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-[25rem]">
+                      <PopoverPrimitive.Arrow className="fill-border w-5 h-3" />
+                      <div className="flex flex-col justify-center p-3 w-full">
+                        <div className="flex justify-center w-full py-4">
+                          <div className="flex w-16 h-16 justify-center items-center border border-b-border rounded-lg shadow-inner shadow-sky-400">
+                            <FlaskRound className="w-7 h-7 fill-sky-300" />
+                          </div>
+                        </div>
+                        <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTS>`} XP?</p>
+                        <p className="text-sm text-card-foreground/40 font-[Satoshi-Regular] leading-relaxed py-4">
+                          {`<BiTS>`} are Itheum Protocol XP. {`<BiTS>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTS>`} game
+                          Data Widget. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Monthly Leaderboard get's special perks and drops!
+                        </p>
+                        <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbits"}>
+                          <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+                          <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+                            Get {`<BiTS>`}
+                          </span>
+                        </Link>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
                   <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
@@ -132,17 +185,6 @@ export const Navbar = () => {
                       variant="outline"
                       onClick={handleLogout}>
                       Logout
-                    </Button>
-                  </div>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to={routeNames.getbits}>
-                  <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
-                    <Button
-                      className="min-w-24 text-sm dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide"
-                      variant="outline">
-                      {bitsBalance === -2 ? <span className="blinkMe">{"... <B>"}</span> : <>{bitsBalance === -1 ? "0 <B>" : `${bitsBalance} <B>`}</>}
                     </Button>
                   </div>
                 </Link>

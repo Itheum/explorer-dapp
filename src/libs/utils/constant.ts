@@ -11,6 +11,13 @@ export const ERROR_DATA_LOADING = "Data is still loading";
 
 export const APP_MAPPINGS = [
   {
+    appName: "Get <BiTS> Points",
+    appDescription: "Collect Itheum <BiTS> Points",
+    routeKey: "getbits",
+    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTS> points, <BiTS> points are like Data Ownership OG XP. Let's Get <BiTS>!",
+    img: iconGetBits,
+  },
+  {
     appName: "TrailBlazer",
     appDescription: "TrailBlazer Quest App",
     routeKey: "itheumtrailblazer",
@@ -58,13 +65,6 @@ export const APP_MAPPINGS = [
     routeKey: "timecapsule",
     desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
     img: iconTimeCapsule,
-  },
-  {
-    appName: "Get <BiTS> Points",
-    appDescription: "Collect Itheum <BiTS> Points",
-    routeKey: "getbits",
-    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTS> points, <BiTS> points are like Data Ownership OG XP. Let's Get <BiTS>!",
-    img: iconGetBits,
   },
 ];
 
