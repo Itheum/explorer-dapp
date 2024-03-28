@@ -32,6 +32,7 @@ import { useTheme } from "../../libComponents/ThemeProvider";
 import { useAccountStore } from "../../store/account";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { BIT_GAME_WINDOW_HOURS, BIT_GAME_TOP_LEADER_BOARD_GROUP } from "../../pages/AppMarketplace/GetBits";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -162,8 +163,8 @@ export const Navbar = () => {
                         </div>
                         <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTS>`} XP?</p>
                         <p className="text-sm text-card-foreground/40 font-[Satoshi-Regular] leading-relaxed py-4">
-                          {`<BiTS>`} are the Itheum Protocol XP system. {`<BiTS>`} can be collected every 6 hours by playing the Get {`<BiTS>`} game Data
-                          Widget. Top 20 Monthly Leaderboard gets a free Data NFT drop!
+                          {`<BiTS>`} are Itheum Protocol XP. {`<BiTS>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTS>`} game
+                          Data Widget. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Monthly Leaderboard get's special perks and drops!
                         </p>
                         <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbits"}>
                           <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
