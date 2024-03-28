@@ -652,8 +652,8 @@ export const GetBits = () => {
               layer of "proof of humanity" to the Itheum Protocol.
             </p>
             <p className="mt-5">
-              There is will be wave of new "liveliness & reputation signalling" features launching withing the Itheum protocol in the very near future, and{" "}
-              {`<BiTS>`} XP is the first such "liveliness & reputation signalling" features to launch.
+              There will be a wave of new "liveliness & reputation signalling" features launching within the Itheum protocol in the very near future, and{" "}
+              {`<BiTS>`} XP is the first such "liveliness & reputation signalling" features to launch
             </p>
           </div>
 
@@ -669,7 +669,16 @@ export const GetBits = () => {
               Once you have the Data NFT in your wallet, you can play the Game every 6 Hours ({BIT_GAME_WINDOW_HOURS} Hours in "Launch Window"). You have to
               burn a Meme and sacrifice it to the {`<BiTS>`} Generator God and then based on pure random chance, you win {`<BiTS>`}!
             </p>
-            <p className="mt-5">You DO NOT need to spend any gas to Play the game! SAY WAT?!</p>
+            <p className="mt-5">You DO NOT need to spend any gas to Play the Get {`<BiTS>`} ! SAY WAT?!</p>
+            <p className="mt-5">
+              But in the near future, the Get {`<BiTS>`} game won't be the only way to collect BITS points, if you stay "active" on the Itheum Protocol, you
+              will be rewarded with bonus {`<BiTS>`} points as well. For example, if you use the{" "}
+              <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
+                Data DEX
+              </a>{" "}
+              to explore and "favorite" the Data NFTs and Data Creators you like or if you use features like "Data Uptime Checks" or use Data Widgets inside the
+              Itheum Explorer, all these Itheum Protocol "activity" will have {`<BiTS>`} bonus points attached to it and sent to you!
+            </p>
           </div>
 
           <div className="mt-[2rem]">
