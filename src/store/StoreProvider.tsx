@@ -5,14 +5,14 @@ import { GET_BITS_TOKEN } from "appsConfig";
 import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken } from "libs/utils";
 import { useAccountStore } from "./account";
-import { viewDataJSONCore } from "../pages/AppMarketplace/GetBits";
+import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz";
 
 export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
 
   // ACCOUNT STORE
-  const updateBitsBalance = useAccountStore((state) => state.updateBitsBalance);
+  const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
 
   useEffect(() => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -20,17 +20,17 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     }
 
     (async () => {
-      // get the bits game data nft details
-      const bitsGameDataNFT = await DataNft.createFromApi(GET_BITS_TOKEN);
+      // get the bitz game data nft details
+      const bitzGameDataNFT = await DataNft.createFromApi(GET_BITS_TOKEN);
 
-      // does the logged in user actually OWN the bits game data nft
+      // does the logged in user actually OWN the bitz game data nft
       const _myDataNfts = await DataNft.ownedByAddress(address);
-      const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitsGameDataNFT.nonce === dNft.nonce);
+      const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitzGameDataNFT.nonce === dNft.nonce);
       const hasGameDataNFT = hasRequiredDataNFT ? true : false;
 
-      // only get the bits balance if the user owns the token
+      // only get the bitz balance if the user owns the token
       if (hasGameDataNFT) {
-        console.log("info: user OWNs the bits score data nft, so get balance");
+        console.log("info: user OWNs the bitz score data nft, so get balance");
 
         const viewDataArgs = {
           mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
@@ -42,14 +42,14 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
           fwdHeaderKeys: "authorization, dmf-custom-only-state",
         };
 
-        const getBitsGameResult = await viewDataJSONCore(viewDataArgs, bitsGameDataNFT);
+        const getBitzGameResult = await viewDataJSONCore(viewDataArgs, bitzGameDataNFT);
 
-        if (getBitsGameResult) {
-          updateBitsBalance(getBitsGameResult.data.gamePlayResult.bitsScoreBeforePlay);
+        if (getBitzGameResult) {
+          updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay);
         }
       } else {
-        console.log("info: user does NOT OWN the bits score data nft");
-        updateBitsBalance(-1);
+        console.log("info: user does NOT OWN the bitz score data nft");
+        updateBitzBalance(-1);
       }
     })();
   }, [address, tokenLogin]);

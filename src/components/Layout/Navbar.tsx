@@ -32,11 +32,11 @@ import { useTheme } from "../../libComponents/ThemeProvider";
 import { useAccountStore } from "../../store/account";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { BIT_GAME_WINDOW_HOURS, BIT_GAME_TOP_LEADER_BOARD_GROUP } from "../../pages/AppMarketplace/GetBits";
+import { BIT_GAME_WINDOW_HOURS, BIT_GAME_TOP_LEADER_BOARD_GROUP } from "../../pages/AppMarketplace/GetBitz";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
-  const bitsBalance = useAccountStore((state: any) => state.bitsBalance);
+  const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const { address } = useGetAccount();
   const { theme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<string>();
@@ -133,19 +133,19 @@ export const Navbar = () => {
                   <Popover>
                     <PopoverTrigger>
                       <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
-                        {bitsBalance === -2 ? (
+                        {bitzBalance === -2 ? (
                           <span className="flex items-center gap-0.5 blinkMe text-lg">
                             ... <FlaskRound className="w-5 h-5 fill-sky-300 " />
                           </span>
                         ) : (
                           <>
-                            {bitsBalance === -1 ? (
+                            {bitzBalance === -1 ? (
                               <div className="flex items-center gap-0.5 text-base">
                                 0 <FlaskRound className="w-5 h-5 fill-sky-300 " />
                               </div>
                             ) : (
                               <div className="flex items-center gap-0.5 text-base">
-                                {bitsBalance} <FlaskRound className="w-5 h-5 fill-sky-300 " />
+                                {bitzBalance} <FlaskRound className="w-5 h-5 fill-sky-300 " />
                               </div>
                             )}
                           </>
@@ -161,15 +161,15 @@ export const Navbar = () => {
                             <FlaskRound className="w-7 h-7 fill-sky-300" />
                           </div>
                         </div>
-                        <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTS>`} XP?</p>
+                        <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
                         <p className="text-sm text-card-foreground/40 font-[Satoshi-Regular] leading-relaxed py-4">
-                          {`<BiTS>`} are Itheum Protocol XP. {`<BiTS>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTS>`} game
+                          {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game
                           Data Widget. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Monthly Leaderboard get's special perks and drops!
                         </p>
-                        <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbits"}>
+                        <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
                           <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
                           <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
-                            Get {`<BiTS>`}
+                            Get {`<BiTz>`}
                           </span>
                         </Link>
                       </div>
@@ -277,13 +277,13 @@ export const Navbar = () => {
                   <Link to={routeNames.mywallet}>
                     <DropdownMenuItem className="!text-foreground/50">My Wallet</DropdownMenuItem>
                   </Link>
-                  <Link to={routeNames.getbits}>
+                  <Link to={routeNames.getbitz}>
                     <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
                       <DropdownMenuItem className="!text-foreground/50 dark:!text-black">
-                        {bitsBalance === -2 ? (
-                          <span className="blinkMe">{`... <BiTS> Points`}</span>
+                        {bitzBalance === -2 ? (
+                          <span className="blinkMe">{`... <BiTz> Points`}</span>
                         ) : (
-                          <>{bitsBalance === -1 ? "0 <BiTS> Points" : `${bitsBalance} <BiTS> Points`}</>
+                          <>{bitzBalance === -1 ? "0 <BiTz> Points" : `${bitzBalance} <BiTz> Points`}</>
                         )}
                       </DropdownMenuItem>
                     </div>

@@ -59,5 +59,5 @@ export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
 export const GET_BITS_TOKEN: app_token = IS_DEVNET ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 } : { tokenIdentifier: "", nonce: 0 };
 
 export const SUPPORTED_APPS = IS_DEVNET
-  ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes", "timecapsule", "getbits"]
+  ? ["itheumtrailblazer", "multiversxbubbles", "esdtBubble", "playstationgamerpassport", "multiversxinfographics", "nftunes", "timecapsule", "getbitz"]
   : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes", "timecapsule"];

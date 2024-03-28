@@ -4,7 +4,7 @@ import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/Itheum
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { withPageTitle } from "./components/PageTitle";
-import { PlayStationGamer, Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBits } from "./pages";
+import { PlayStationGamer, Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz } from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -18,7 +18,7 @@ export const routeNames = {
   multiversxinfographics: "/multiversx-infographics",
   nftunes: "/nftunes",
   timecapsule: "/timecapsule",
-  getbits: "/getbits",
+  getbitz: "/getbitz",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -80,9 +80,9 @@ export const routes: RouteWithTitleType[] = [
     authenticatedRoute: false,
   },
   {
-    path: routeNames.getbits,
-    title: "Get Bits",
-    component: GetBits,
+    path: routeNames.getbitz,
+    title: "Get Bitz",
+    component: GetBitz,
     authenticatedRoute: false,
   },
 ];

@@ -10,24 +10,24 @@ import { Link } from "react-router-dom";
 import { GET_BITS_TOKEN } from "appsConfig";
 import { CopyAddress } from "components/CopyAddress";
 import { routeNames } from "routes";
-import "./GetBits.css";
+import "./GetBitz.css";
 
 // Image Layers
-import ImgLogin from "assets/img/getbits/getbits-login.gif";
-import ImgGetDataNFT from "assets/img/getbits/getbits-get-datanft.gif";
-import ImgPlayGame from "assets/img/getbits/getbits-play.gif";
-import FingerPoint from "assets/img/getbits/finger-point.gif";
-import ImgGameCanvas from "assets/img/getbits/getbits-game-canvas.gif";
-import Meme1 from "assets/img/getbits/memes/1.jpg";
-import Meme2 from "assets/img/getbits/memes/2.jpg";
-import Meme3 from "assets/img/getbits/memes/3.jpg";
-import Meme4 from "assets/img/getbits/memes/4.jpg";
-import Meme5 from "assets/img/getbits/memes/5.jpg";
-import Meme6 from "assets/img/getbits/memes/6.jpg";
-import aladinRugg from "assets/img/getbits/aladin.png";
+import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
+import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
+import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
+import FingerPoint from "assets/img/getbitz/finger-point.gif";
+import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.gif";
+import Meme1 from "assets/img/getbitz/memes/1.jpg";
+import Meme2 from "assets/img/getbitz/memes/2.jpg";
+import Meme3 from "assets/img/getbitz/memes/3.jpg";
+import Meme4 from "assets/img/getbitz/memes/4.jpg";
+import Meme5 from "assets/img/getbitz/memes/5.jpg";
+import Meme6 from "assets/img/getbitz/memes/6.jpg";
+import aladinRugg from "assets/img/getbitz/aladin.png";
 import { BurningImage } from "./BurningImage";
 
-import SacrificeGodLoader from "assets/img/getbits/sacrifice-god-loader.mp4";
+import SacrificeGodLoader from "assets/img/getbitz/sacrifice-god-loader.mp4";
 import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -36,10 +36,11 @@ import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/u
 import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
+import MouseFollower from "./Mouse";
 
 interface LeaderBoardItemType {
   playerAddr: string;
-  bits: number;
+  bitz: number;
 }
 
 export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
@@ -47,7 +48,7 @@ export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winner
 
 const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
 
-export const GetBits = () => {
+export const GetBitz = () => {
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
@@ -55,8 +56,8 @@ export const GetBits = () => {
   const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const bitsBalance = useAccountStore((state: any) => state.bitsBalance);
-  const updateBitsBalance = useAccountStore((state) => state.updateBitsBalance);
+  const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
+  const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
 
   // a single game-play related (so we have to reset these if the user wants to "replay")
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
@@ -66,7 +67,7 @@ export const GetBits = () => {
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  let tweetText = `url=https://explorer.itheum.io/getbits&text=I just played the Get <BiTz> XP Game on %23itheum ${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points!" : "!"} Play now and get your own <BiTz>! %23GetBiTz`;
+  let tweetText = `url=https://explorer.itheum.io/getbitz&text=I just played the Get <BiTz> XP Game on %23itheum ${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points!" : "!"} Play now and get your own <BiTz>! %23GetBiTz`;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -200,7 +201,7 @@ export const GetBits = () => {
     if (viewDataPayload) {
       let animation;
       if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
-        if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
+        if (viewDataPayload.data.gamePlayResult.userWonMaxBitz === 1) {
           animation = await fireworks({ background: "transparent", sounds: true });
         } else {
           animation = await confetti({
@@ -229,7 +230,7 @@ export const GetBits = () => {
       setViewDataRes(viewDataPayload);
 
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
-        updateBitsBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
+        updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       }
       if (animation) {
         await sleep(10);
@@ -281,10 +282,10 @@ export const GetBits = () => {
     //     contentType: "string",
     //     data: {
     //       gamePlayResult: {
-    //         bitsScoreBeforePlay: -1, // points before current play
-    //         bitsScoreAfterPlay: -1, // points after current play
-    //         bitsWon: -1, // can be 0 for no win, no 5-50. -1 means they tried to paly to soon
-    //         userWonMaxBits: -1, // the user just won the maximum bits? 1 for yes, -1 for no
+    //         bitzScoreBeforePlay: -1, // points before current play
+    //         bitzScoreAfterPlay: -1, // points after current play
+    //         bitzWon: -1, // can be 0 for no win, no 5-50. -1 means they tried to paly to soon
+    //         userWonMaxBitz: -1, // the user just won the maximum bitz? 1 for yes, -1 for no
     //         lastPlayedBeforeThisPlay: -1, // the timestampbefore current play
     //         lastPlayedAndCommitted: -1, // the latest timestamp of current play
     //         configCanPlayEveryMSecs: -1, // how many Mili seconds interval before being able to play again
@@ -315,7 +316,7 @@ export const GetBits = () => {
               goToMarketplace(gameDataNFT.tokenIdentifier);
             }
           }}>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTS> Data NFT from Data NFT Marketplace"} />
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTz> Data NFT from Data NFT Marketplace"} />
         </div>
       );
     }
@@ -361,8 +362,7 @@ export const GetBits = () => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Play Game"} />
-
+          <img className="rounded-[3rem] w-full cursor-none" src={ImgGameCanvas} alt={"Play Game"} />
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -374,8 +374,8 @@ export const GetBits = () => {
                     // setBypassDebug(true);
                     memeBurn();
                   }}>
-                  <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTS>`} points?</p>
-                  <p className="font-bold md:text-2xl mt-5">But the {`<BiTS>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
+                  <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTz>`} points?</p>
+                  <p className="font-bold md:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
                   <p className="font-bold mt-5">Click here when you are ready...</p>
                   <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
                 </div>
@@ -396,7 +396,7 @@ export const GetBits = () => {
             {_isFetchingDataMarshal && (
               <div>
                 <p className="text-center text-md text-gray-950 text-foreground  md:text-xl mb-[1rem]">
-                  Did the {`<BiTS>`} Generator God like that Meme Sacrifice?
+                  Did the {`<BiTz>`} Generator God like that Meme Sacrifice?
                 </p>
                 <video className="w-[210px] md:w-[300px] m-auto" autoPlay loop src={SacrificeGodLoader} />
               </div>
@@ -411,7 +411,7 @@ export const GetBits = () => {
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTS> Points"} />
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
           <div
             className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -450,13 +450,13 @@ export const GetBits = () => {
                       <>
                         <p className="text-2xl text-gray-950">w00t! w00t! You have won:</p>
                         <p className="text-4xl mt-[2rem] text-gray-950">
-                          {_viewDataRes.data.gamePlayResult.bitsWon} {` <BiTS>`}
+                          {_viewDataRes.data.gamePlayResult.bitsWon} {` <BiTz>`}
                         </p>
                         <div className="bg-black rounded-full p-1">
                           <HoverBorderGradient>
                             <a
                               className=" bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
-                              href={"https://twitter.com/intent/tweet?text=" + tweetText}
+                              href={"https://twitter.com/intent/tweet?" + tweetText}
                               data-size="large"
                               target="_blank">
                               <span className="[&>svg]:h-4 [&>svg]:w-4">
@@ -493,8 +493,8 @@ export const GetBits = () => {
   function spritLayerPointsCloud() {
     return (
       <div className="flex flex-col justify-center items-center w-[200px] h-[100px] absolute top-[2%] left-[2%] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50">
-        <p className="text-sm">Your {`<BiTS>`} Points</p>
-        <p className="text-[1.5rem] font-bold mt-[2px]">{bitsBalance === -2 ? `...` : <>{bitsBalance === -1 ? "0" : `${bitsBalance}`}</>}</p>
+        <p className="text-sm">Your {`<BiTz>`} Points</p>
+        <p className="text-[1.5rem] font-bold mt-[2px]">{bitzBalance === -2 ? `...` : <>{bitzBalance === -1 ? "0" : `${bitzBalance}`}</>}</p>
       </div>
     );
   }
@@ -590,7 +590,7 @@ export const GetBits = () => {
             <tr className="border">
               <th className="p-2">Rank</th>
               <th className="p-2">User</th>
-              <th className="p-2">{`<BiTS>`} Points</th>
+              <th className="p-2">{`<BiTz>`} Points</th>
             </tr>
           </thead>
           <tbody>
@@ -614,7 +614,7 @@ export const GetBits = () => {
       {gamePlayImageSprites()}
 
       <div className="p-5 text-lg font-bold bg-[#35d9fa] text-black rounded-[1rem] my-[3rem]">
-        To celebrate the launch of {`<BiTS>`} XP, the {`<BiTS>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 - May 1,
+        To celebrate the launch of {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 - May 1,
         2024), check out these special LAUNCH WINDOW perks:
         <ol className="mt-5">
           <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Game Window. You can play every {BIT_GAME_WINDOW_HOURS} hours!</li>
@@ -664,21 +664,21 @@ export const GetBits = () => {
           <h2 className="text-center text-white my-[3rem]">FAQs</h2>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What are Itheum {`<BiTS>`} Points?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What are Itheum {`<BiTz>`} Points?</h3>
             <p>
               Think of them as XP (Experience Points) of the Itheum Protocol, we also like to call them "Data Ownership OG (Original Gangster) XP" and if you
-              consider yourself an Itheum OG and love Data Ownership, then we absolutely think you are a pioneer and {`<BiTS>`} is the Itheum XP system for
+              consider yourself an Itheum OG and love Data Ownership, then we absolutely think you are a pioneer and {`<BiTz>`} is the Itheum XP system for
               you!!
             </p>
             <p className="mt-5">
-              You need to use Data NFT and Itheum Core Infrastructure to collect your {`<BiTS>`} XP, and this exact Web3/Blockchain based product stack can be
+              You need to use Data NFT and Itheum Core Infrastructure to collect your {`<BiTz>`} XP, and this exact Web3/Blockchain based product stack can be
               used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization technology
               and learning about how you can take ownership of you data! Welcome Itheum Data Ownership OG!
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why are {`<BiTS>`} Points Important?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why are {`<BiTz>`} Points Important?</h3>
             <p>
               On top of being Itheum Protocol XP, they also signal your "liveliness" as a human and not a BOT. This is a form of "reputation signalling" of you
               as a human within the Itheum ecosystem, this reputation signalling is a very powerful concept when you link it to "data ownership" as it add a
@@ -686,52 +686,52 @@ export const GetBits = () => {
             </p>
             <p className="mt-5">
               There will be a wave of new "liveliness & reputation signalling" features launching within the Itheum protocol in the very near future, and{" "}
-              {`<BiTS>`} XP is the first such "liveliness & reputation signalling" features to launch
+              {`<BiTz>`} XP is the first such "liveliness & reputation signalling" features to launch
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">How can I collect {`<BiTS>`} Points?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">How can I collect {`<BiTz>`} Points?</h3>
             <p>
-              You need to hold a {`<BiTS>`} compatible Data NFT in your wallet to play the Get {`<BiTS>`} game (you are on this page now). This Data NFT was
+              You need to hold a {`<BiTz>`} compatible Data NFT in your wallet to play the Get {`<BiTz>`} game (you are on this page now). This Data NFT was
               airdropped in waves to OGs of the Itheum Protocol, but fear not, you can also get it on any NFT Marketplace (if the OGs broke our hearts and
-              parted ways with their Data NFTs). If this "Series 1" {`<BiTS>`} Data NFT is successful, there may be a follow-up Series of {`<BiTS>`} Data NFTs
+              parted ways with their Data NFTs). If this "Series 1" {`<BiTz>`} Data NFT is successful, there may be a follow-up Series of {`<BiTz>`} Data NFTs
               launched and airdropped as well.
             </p>
             <p className="mt-5">
               Once you have the Data NFT in your wallet, you can play the Game every 6 Hours ({BIT_GAME_WINDOW_HOURS} Hours in "Launch Window"). You have to
-              burn a Meme and sacrifice it to the {`<BiTS>`} Generator God and then based on pure random chance, you win {`<BiTS>`}!
+              burn a Meme and sacrifice it to the {`<BiTz>`} Generator God and then based on pure random chance, you win {`<BiTz>`}!
             </p>
-            <p className="mt-5">You DO NOT need to spend any gas to Play the Get {`<BiTS>`} ! SAY WAT?!</p>
+            <p className="mt-5">You DO NOT need to spend any gas to Play the Get {`<BiTz>`} ! SAY WAT?!</p>
             <p className="mt-5">
-              But in the near future, the Get {`<BiTS>`} game won't be the only way to collect BITS points, if you stay "active" on the Itheum Protocol, you
-              will be rewarded with bonus {`<BiTS>`} points as well. For example, if you use the{" "}
+              But in the near future, the Get {`<BiTz>`} game won't be the only way to collect BITS points, if you stay "active" on the Itheum Protocol, you
+              will be rewarded with bonus {`<BiTz>`} points as well. For example, if you use the{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
                 Data DEX
               </a>{" "}
               to explore and "favorite" the Data NFTs and Data Creators you like or if you use features like "Data Uptime Checks" or use Data Widgets inside the
-              Itheum Explorer, all these Itheum Protocol "activity" will have {`<BiTS>`} bonus points attached to it and sent to you!
+              Itheum Explorer, all these Itheum Protocol "activity" will have {`<BiTz>`} bonus points attached to it and sent to you!
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Where can I play the Get {`<BiTS>`} Game?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Where can I play the Get {`<BiTz>`} Game?</h3>
             <p>
-              Currently, you can play it on Itheum Explorer's Get {`<BiTS>`} Data Widget{" "}
-              <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/getbits" target="blank">
-                explorer.itheum.io/getbits
+              Currently, you can play it on Itheum Explorer's Get {`<BiTz>`} Data Widget{" "}
+              <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/getbitz" target="blank">
+                explorer.itheum.io/getbitz
               </a>
             </p>
             <p className="mt-5">
               Also note that Itheum Explorer is available on xPortal Hub as well, so with a few taps on your xPortal mobile wallet, you can open the game and
-              Get {`<BiTS>`}!
+              Get {`<BiTz>`}!
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What can I do with Itheum {`<BiTS>`} Points?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What can I do with Itheum {`<BiTz>`} Points?</h3>
             <p>
-              Itheum {`<BiTS>`} is like an XP system and you collect {`<BiTS>`} each time you interact with certain features of Itheum Protocol. Like all XP
+              Itheum {`<BiTz>`} is like an XP system and you collect {`<BiTz>`} each time you interact with certain features of Itheum Protocol. Like all XP
               Systems, there will be LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be
               available:
             </p>
@@ -754,7 +754,7 @@ export const GetBits = () => {
             </ol>
 
             <p className="mt-5">
-              This is just the start, we have a bunch of other ideas planned for {`<BiTS>`}. Got ideas for {`<BiTS>`} utility? We love to hear them:{" "}
+              This is just the start, we have a bunch of other ideas planned for {`<BiTz>`}. Got ideas for {`<BiTz>`} utility? We love to hear them:{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://forms.gle/muA4XiD2ddQis4G78" target="blank">
                 {" "}
                 Send ideas
@@ -763,25 +763,25 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTS>`} Points Blockchain Tokens?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTz>`} Points Blockchain Tokens?</h3>
             <p>
-              Nope, there are more than enough meme coins out there and we don't need more. Itheum {`<BiTS>`} are simple XP to "gamify" usage of the Itheum
+              Nope, there are more than enough meme coins out there and we don't need more. Itheum {`<BiTz>`} are simple XP to "gamify" usage of the Itheum
               Protocol infrastructure. The $ITHEUM token is the primary utility token of the entire Itheum Ecosystem.
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTS>`} Points Tradable?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTz>`} Points Tradable?</h3>
             <p>
               We are heart-broken that you asked :( and nope you can't as they are not blockchain tokens (see above). But we are looking at possibilities of
-              where you can "gift" them to Data Creators who mint Data NFT Collections. "Gifting" Itheum {`<BiTS>`} will have its own LEADERBOARD and perks ;)
+              where you can "gift" them to Data Creators who mint Data NFT Collections. "Gifting" Itheum {`<BiTz>`} will have its own LEADERBOARD and perks ;)
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I use Multiple Wallets to Claim {`<BiTS>`} XP?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I use Multiple Wallets to Claim {`<BiTz>`} XP?</h3>
             <p>
-              If you do this, you will "fragment" your XP and you wont get much benefits so it's best you use your primary identity wallet to collect {`<BiTS>`}{" "}
+              If you do this, you will "fragment" your XP and you wont get much benefits so it's best you use your primary identity wallet to collect {`<BiTz>`}{" "}
               XP. BUT, we also know that many "hunters" may try and do this to game (sybil attack) the LEADERBOARD and it will disadvantage the regular genuine
               users. We are rolling out some new blockchain powered "liveliness & reputation signalling" features that should prevent or drastically reduce such
               XP sybil attacks.
@@ -789,15 +789,15 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I move Itheum {`<BiTS>`} Points Between my Wallets?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I move Itheum {`<BiTz>`} Points Between my Wallets?</h3>
             <p>
-              Lost your primary wallet or want to move Itheum {`<BiTS>`} to your new wallet? unfortunately, this is not possible right now (it MAY be in the
-              future - but no guarantee). So make sure you get {`<BiTS>`} in the wallet you treasure the most.
+              Lost your primary wallet or want to move Itheum {`<BiTz>`} to your new wallet? unfortunately, this is not possible right now (it MAY be in the
+              future - but no guarantee). So make sure you get {`<BiTz>`} in the wallet you treasure the most.
             </p>
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why is it Called {`<BiTS>`}?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why is it Called {`<BiTz>`}?</h3>
             <p>
               Itheum is a data ownership protocol that is trying to break the current cycle of data exploitation. A Bit is the smallest unit of data. Let's
               break the cycle of data exploitation one {`<BiT>`} at a time.
@@ -805,11 +805,11 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Will this {`<BiTS>`} App become a Playable Game?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Will this {`<BiTz>`} App become a Playable Game?</h3>
             <p>
               We are not game developers and don't pretend to be, so are waiting for an A.I tool that will build the game for us. We'd love for the Get{" "}
-              {`<BiTS>`} app to become a hub of "Mini-Games" where you win {`<BiTS>`} XP. Are you an A.I or a Game Dev and want to build a game layer for the
-              Itheum {`<BiTS>`} XP system? reach out and you could get a grant from via the{" "}
+              {`<BiTz>`} app to become a hub of "Mini-Games" where you win {`<BiTz>`} XP. Are you an A.I or a Game Dev and want to build a game layer for the
+              Itheum {`<BiTz>`} XP system? reach out and you could get a grant from via the{" "}
               <a
                 className="!text-[#7a98df] hover:underline"
                 href="https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"
@@ -825,15 +825,15 @@ export const GetBits = () => {
           </div>
 
           <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Help Make Itheum {`<BiTS>`} Better?</h3>
+            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Help Make Itheum {`<BiTz>`} Better?</h3>
             <p>
-              We want to make the Itheum {`<BiTS>`} XP System better! Do you have any questions or ideas for us or just want to know more? Head over to our{" "}
+              We want to make the Itheum {`<BiTz>`} XP System better! Do you have any questions or ideas for us or just want to know more? Head over to our{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/discord" target="blank">
                 Discord
               </a>{" "}
               and speak to us or{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://forms.gle/muA4XiD2ddQis4G78" target="blank">
-                Send us your utility ideas for {`<BiTS>`} here.
+                Send us your utility ideas for {`<BiTz>`} here.
               </a>{" "}
             </p>
           </div>

@@ -3,7 +3,7 @@ import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
-import iconGetBits from "assets/img/getbits/expl-app-getbits-icon.gif";
+import iconGetBitz from "assets/img/getbitz/expl-app-getbitz-icon.gif";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
@@ -11,11 +11,11 @@ export const ERROR_DATA_LOADING = "Data is still loading";
 
 export const APP_MAPPINGS = [
   {
-    appName: "Get <BiTS> Points",
-    appDescription: "Collect Itheum <BiTS> Points",
-    routeKey: "getbits",
-    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTS> points, <BiTS> points are like Data Ownership OG XP. Let's Get <BiTS>!",
-    img: iconGetBits,
+    appName: "Get <BiTz> Points",
+    appDescription: "Collect Itheum <BiTz> Points",
+    routeKey: "getbitz",
+    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTz> points, <BiTz> points are like Data Ownership OG XP. Let's Get <BiTz>!",
+    img: iconGetBitz,
   },
   {
     appName: "TrailBlazer",
