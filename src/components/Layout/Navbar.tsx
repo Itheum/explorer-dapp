@@ -91,7 +91,7 @@ export const Navbar = () => {
                       "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     }>
                     <div className="text-md font-medium leading-none text-foreground">{item.appName}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5 ">{item?.appDescription}</p>
+                    <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60 font-[Satoshi-Light] pt-0.5 ">{item?.appDescription}</p>
                   </Link>
                 ))}
               </ul>
@@ -108,8 +108,8 @@ export const Navbar = () => {
                       className={
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
-                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
+                      <div className="text-md font-medium leading-none ">My Listed</div>
+                      <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60  font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
                     </Link>
                     <Link
                       to={routeNames.mywallet}
@@ -117,11 +117,11 @@ export const Navbar = () => {
                       className={
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
-                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">View RAW Data</p>
+                      <div className="text-md font-medium leading-none   ">My Wallet</div>
+                      <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60   font-[Satoshi-Light] pt-0.5">View RAW Data</p>
                     </Link>
                     <div className="flex flex-col p-3">
-                      <p className="text-sm font-medium leading-none dark:text-slate-100 pb-0.5">My Address Quick Copy</p>
+                      <p className="text-sm font-medium leading-none pb-0.5">My Address Quick Copy</p>
                       <CopyAddress address={address} precision={6} />
                     </div>
                   </ul>
@@ -162,13 +162,13 @@ export const Navbar = () => {
                           </div>
                         </div>
                         <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
-                        <p className="text-sm text-card-foreground/40 font-[Satoshi-Regular] leading-relaxed py-4">
+                        <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4">
                           {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game
                           Data Widget. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Monthly Leaderboard get's special perks and drops!
                         </p>
                         <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
                           <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
-                          <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+                          <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
                             Get {`<BiTz>`}
                           </span>
                         </Link>
@@ -259,7 +259,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                 <Link to={returnRoute(item.routeKey)} key={item.routeKey}>
-                  <DropdownMenuItem className="text-foreground/50">{item?.appName}</DropdownMenuItem>
+                  <DropdownMenuItem className=" ">{item?.appName}</DropdownMenuItem>
                 </Link>
               ))}
             </DropdownMenuGroup>
@@ -270,16 +270,16 @@ export const Navbar = () => {
                   <span>Account</span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup className="text-foreground/50">
+                <DropdownMenuGroup className="">
                   <Link to={routeNames.mylisted}>
-                    <DropdownMenuItem className="text-foreground/50">My Listed</DropdownMenuItem>
+                    <DropdownMenuItem className=" ">My Listed</DropdownMenuItem>
                   </Link>
                   <Link to={routeNames.mywallet}>
-                    <DropdownMenuItem className="!text-foreground/50">My Wallet</DropdownMenuItem>
+                    <DropdownMenuItem className=" ">My Wallet</DropdownMenuItem>
                   </Link>
                   <Link to={routeNames.getbitz}>
                     <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
-                      <DropdownMenuItem className="!text-foreground/50 dark:!text-black">
+                      <DropdownMenuItem className="  dark:!text-black">
                         {bitzBalance === -2 ? (
                           <span className="blinkMe">{`... <BiTz> Points`}</span>
                         ) : (
