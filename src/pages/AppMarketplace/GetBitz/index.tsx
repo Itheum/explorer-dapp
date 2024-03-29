@@ -26,7 +26,6 @@ import Meme5 from "assets/img/getbitz/memes/5.jpg";
 import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import aladinRugg from "assets/img/getbitz/aladin.png";
 import { BurningImage } from "./BurningImage";
-import fireEffect from "assets/img/getbitz/fire.mp4";
 import SacrificeGodLoader from "assets/img/getbitz/sacrifice-god-loader.mp4";
 import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
@@ -36,7 +35,6 @@ import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/u
 import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
-import MouseFollower from "./Torch";
 import { MousePointerClick } from "lucide-react";
 
 interface LeaderBoardItemType {
@@ -337,11 +335,14 @@ export const GetBitz = () => {
 
     const CountDownComplete = () => (
       <div
-        className="cursor-pointer underline decoration-pink-500"
+        className="cursor-pointer relative inline-flex h-12 overflow-hidden rounded-full p-[1px] "
         onClick={() => {
           resetToStartGame();
         }}>
-        RIGHT NOW! What are you waiting for? (Click Here)
+        <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+        <span className="text-primary inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
+          RIGHT NOW! Try again <MousePointerClick className="ml-2 text-sky-300" />
+        </span>
       </div>
     );
 
@@ -386,7 +387,7 @@ export const GetBitz = () => {
 
             {_isMemeBurnHappening && (
               <div
-                className="cursor-    z-10 relative"
+                className="  z-10 relative"
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
