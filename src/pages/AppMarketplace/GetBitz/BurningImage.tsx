@@ -1,38 +1,43 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { MousePointerClick } from "lucide-react";
+import MouseFollower from "./Torch";
 
-const burningImageVariants = {
-  initial: {
-    opacity: 1,
-    scale: 1,
-    filter: "none",
-  },
-  burning: {
-    opacity: [1, 1, 0.7, 0.2, 0],
-    scale: [1, 0.9, 0.7, 0.5, 0],
-    filter: ["brightness(100%)", "brightness(15%)", "brightness(5%)", "brightness(0%)", "brightness(0%)"],
-    transition: {
-      duration: 20,
-      ease: "easeInOut",
+export const BurningImage: React.FC<{ src: string; burnProgress: number }> = ({ src, burnProgress }) => {
+  const burningImageVariants = {
+    initial: {
+      opacity: 1,
+      scale: 1,
+      filter: "none",
     },
-  },
-  consumed: {
-    opacity: 0,
-    scale: 1,
-    filter: "blur(8px)",
-  },
-};
-
-export const BurningImage: React.FC<{ src: string }> = ({ src }) => {
+    burning: {
+      opacity: 1 - burnProgress / 12,
+      scale: 1 - burnProgress / 12,
+      filter: `brightness(${100 - burnProgress * 8}%)`,
+      transition: {
+        duration: 5,
+        ease: "easeInOut",
+      },
+    },
+    consumed: {
+      opacity: 0,
+      scale: 1,
+      filter: "blur(8px)",
+    },
+  };
   return (
-    <motion.img
-      className="rounded-[.5rem] w-[210px] md:w-[300px] m-auto -z-1"
-      src={src}
-      alt="Burning Image"
-      variants={burningImageVariants}
-      initial="initial"
-      animate="burning"
-      exit="consumed"
-    />
+    <div className="cursor-none relative select-none">
+      <MouseFollower />
+      <motion.img
+        className="rounded-[.5rem] w-[210px] md:w-[300px] max-h-[400px] m-auto -z-1"
+        src={src}
+        alt="Burning Image"
+        variants={burningImageVariants}
+        initial="initial"
+        animate="burning"
+        exit="consumed"
+      />{" "}
+      {burnProgress === 0 && <MousePointerClick className="text-[#35d9fa] w-10 h-10 animate-pulse absolute -mt-32 right-0" />}
+    </div>
   );
 };

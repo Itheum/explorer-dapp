@@ -26,7 +26,7 @@ import Meme5 from "assets/img/getbitz/memes/5.jpg";
 import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import aladinRugg from "assets/img/getbitz/aladin.png";
 import { BurningImage } from "./BurningImage";
-
+import fireEffect from "assets/img/getbitz/fire.mp4";
 import SacrificeGodLoader from "assets/img/getbitz/sacrifice-god-loader.mp4";
 import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
@@ -36,11 +36,12 @@ import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/u
 import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
-import MouseFollower from "./Mouse";
+import MouseFollower from "./Torch";
+import { MousePointerClick } from "lucide-react";
 
 interface LeaderBoardItemType {
   playerAddr: string;
-  bitz: number;
+  bits: number;
 }
 
 export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
@@ -66,6 +67,7 @@ export const GetBitz = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
+  const [burnProgress, setBurnProgress] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
   let tweetText = `url=https://explorer.itheum.io/getbitz&text=I just played the Get <BiTz> XP Game on %23itheum ${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points!" : "!"} Play now and get your own <BiTz>! %23GetBiTz`;
 
@@ -135,36 +137,34 @@ export const GetBitz = () => {
     setIsMemeBurnHappening(false);
     setGameDataFetched(false);
     setViewDataRes(undefined);
+    setBurnProgress(0);
     setBurnFireScale("scale(0) translate(-13px, -15px)");
     setBurnFireGlow(0);
     setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
   }
 
-  async function memeBurn() {
+  // user needs to click 10 times to burn the meme
+  useEffect(() => {
+    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
+    setBurnFireGlow(burnProgress * 0.1);
+    if (burnProgress === 10) {
+      setIsMemeBurnHappening(false);
+      playGame();
+    }
+  }, [burnProgress]);
+
+  function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
-
+    console.log(burnProgress, "progress burn");
     setIsMemeBurnHappening(true);
-    await sleep(1);
-    setBurnFireScale("scale(1) translate(-13px, -15px)");
-    setBurnFireGlow(1 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(3) translate(-13px, -15px)");
-    setBurnFireGlow(3 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(5) translate(-13px, -15px)");
-    setBurnFireGlow(5 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(7) translate(-13px, -15px)");
-    setBurnFireGlow(7 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(9) translate(-13px, -15px)");
-    await sleep(2);
-    setBurnFireScale("scale(10) translate(-13px, -15px)");
-    await sleep(5);
 
-    setIsMemeBurnHappening(false);
+    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
+    setBurnFireGlow(burnProgress * 0.1);
 
-    playGame();
+    if (burnProgress === 10) {
+      setIsMemeBurnHappening(false);
+      playGame();
+    }
   }
 
   async function playGame() {
@@ -199,11 +199,13 @@ export const GetBitz = () => {
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
 
     if (viewDataPayload) {
+      console.log("animation start");
       let animation;
       if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
-        if (viewDataPayload.data.gamePlayResult.userWonMaxBitz === 1) {
+        if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
           animation = await fireworks({ background: "transparent", sounds: true });
         } else {
+          console.log("ANIMATION", animation);
           animation = await confetti({
             spread: 360,
             ticks: 100,
@@ -234,7 +236,7 @@ export const GetBitz = () => {
       }
       if (animation) {
         await sleep(10);
-        animation.stop();
+        animation.pause();
       }
     } else {
       toastError("ER2: Did not get a response from the game server");
@@ -361,17 +363,16 @@ export const GetBitz = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative overflow-hidden">
+        <div className="relative  overflow-hidden">
           <img className="rounded-[3rem] w-full cursor-none" src={ImgGameCanvas} alt={"Play Game"} />
           <div
-            className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+            className="cursor-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
                 <div
                   className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
                   onClick={() => {
-                    // setBypassDebug(true);
                     memeBurn();
                   }}>
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTz>`} points?</p>
@@ -384,10 +385,13 @@ export const GetBitz = () => {
               null}
 
             {_isMemeBurnHappening && (
-              <div>
+              <div
+                className="cursor-    z-10 relative"
+                onClick={() => {
+                  setBurnProgress((prev) => prev + 1);
+                }}>
                 <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
-
-                <BurningImage src={randomMeme} />
+                <BurningImage src={randomMeme} burnProgress={burnProgress} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
@@ -448,11 +452,11 @@ export const GetBitz = () => {
 
                     {(_viewDataRes.data.gamePlayResult.bitsWon > 0 && (
                       <>
-                        <p className="text-2xl text-gray-950">w00t! w00t! You have won:</p>
+                        <p className="text-2xl text-gray-950">w👀t! w👀t! You have won:</p>
                         <p className="text-4xl mt-[2rem] text-gray-950">
                           {_viewDataRes.data.gamePlayResult.bitsWon} {` <BiTz>`}
                         </p>
-                        <div className="bg-black rounded-full p-1">
+                        <div className="bg-black rounded-full p-[1px]">
                           <HoverBorderGradient>
                             <a
                               className=" bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
@@ -534,9 +538,8 @@ export const GetBitz = () => {
     try {
       // S: ACTUAL LOGIC
       const { data } = await axios.get<LeaderBoardItemType[]>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/leaderBoard`, callConfig);
-      const toJSONString = JSON.stringify(data);
-      const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
-
+      // const toJSONString = JSON.stringify(data);
+      // const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
       setLeaderBoardAllTime(data);
       // E: ACTUAL LOGIC
 
@@ -561,8 +564,8 @@ export const GetBitz = () => {
         callConfig
       );
 
-      const toJSONString = JSON.stringify(data);
-      const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
+      // const toJSONString = JSON.stringify(data);
+      // const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
 
       setLeaderBoardMonthly(data);
       // E: ACTUAL LOGIC
