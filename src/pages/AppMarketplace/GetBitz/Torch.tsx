@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import torch from "assets/img/getbitz/torch.webp";
-import fireEffect from "assets/img/getbitz/fire.mp4";
 
 const Torch: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });

@@ -36,6 +36,7 @@ import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
 import { MousePointerClick } from "lucide-react";
+import Torch from "./Torch";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -153,7 +154,6 @@ export const GetBitz = () => {
 
   function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
-    console.log(burnProgress, "progress burn");
     setIsMemeBurnHappening(true);
 
     setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
@@ -197,13 +197,11 @@ export const GetBitz = () => {
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
 
     if (viewDataPayload) {
-      console.log("animation start");
       let animation;
       if (viewDataPayload.data.gamePlayResult.bitsWon > 0) {
         if (viewDataPayload.data.gamePlayResult.userWonMaxBits === 1) {
           animation = await fireworks({ background: "transparent", sounds: true });
         } else {
-          console.log("ANIMATION", animation);
           animation = await confetti({
             spread: 360,
             ticks: 100,
@@ -366,6 +364,7 @@ export const GetBitz = () => {
       return (
         <div className="relative  overflow-hidden">
           <img className="rounded-[3rem] w-full cursor-none" src={ImgGameCanvas} alt={"Play Game"} />
+
           <div
             className="cursor-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
@@ -391,7 +390,9 @@ export const GetBitz = () => {
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
-                <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
+                <Torch />
+
+                <p className="text-center text-md text-gray-950 text-foreground md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
                 <BurningImage src={randomMeme} burnProgress={burnProgress} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
@@ -400,6 +401,8 @@ export const GetBitz = () => {
 
             {_isFetchingDataMarshal && (
               <div>
+                {" "}
+                <Torch />
                 <p className="text-center text-md text-gray-950 text-foreground  md:text-xl mb-[1rem]">
                   Did the {`<BiTz>`} Generator God like that Meme Sacrifice?
                 </p>
