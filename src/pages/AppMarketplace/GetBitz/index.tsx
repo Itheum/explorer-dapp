@@ -68,7 +68,7 @@ export const GetBitz = () => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  let tweetText = `url=https://explorer.itheum.io/getbitz&text=I just played the Get <BiTz> XP Game on %23itheum ${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points!" : "!"} Play now and get your own <BiTz>! %23GetBiTz`;
+  let tweetText = `url=https://explorer.itheum.io/getbitz&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time on %23itheum. Maybe you will have better luck? Try here to %23GetBiTz"} `;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -230,9 +230,10 @@ export const GetBitz = () => {
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       }
+
       if (animation) {
-        await sleep(10);
-        animation.pause();
+        await sleep(6);
+        animation.stop();
       }
     } else {
       toastError("ER2: Did not get a response from the game server");
@@ -437,21 +438,39 @@ export const GetBitz = () => {
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs === -1 && (
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
                     {_viewDataRes.data.gamePlayResult.bitsWon === 0 && (
-                      <div>
-                        <p className="text-2xl">OPPS! Aladdin Rugged You! 0 Points this Time...</p>
-                        <motion.img
-                          className=" w-[150px] lg:w-full absolute"
-                          src={aladinRugg}
-                          initial={{ x: -750, y: 0 }}
-                          animate={{
-                            scale: [0.5, 1, 1, 0.5],
-                            rotate: [0, 0, -360, -360, -360, -360],
-                            opacity: [0.8, 1, 1, 1, 1, 1, 1, 0],
-                            x: [-750, 0, 200, 1000],
-                          }}
-                          transition={{ duration: 8 }}
-                        />
-                      </div>
+                      <>
+                        <div>
+                          <p className="text-2xl">OPPS! Aladdin Rugged You! 0 Points this Time...</p>
+                          <motion.img
+                            className="w-[150px] lg:w-full absolute"
+                            src={aladinRugg}
+                            initial={{ x: -750, y: 0 }}
+                            animate={{
+                              scale: [0.5, 1, 1, 0.5],
+                              rotate: [0, 0, -360, -360, -360, -360],
+                              opacity: [0.8, 1, 1, 1, 1, 1, 1, 0],
+                              x: [-750, 0, 200, 1000],
+                            }}
+                            transition={{ duration: 8 }}
+                          />
+                        </div>
+                        <div className="bg-black rounded-full p-[1px]">
+                          <HoverBorderGradient>
+                            <a
+                              className=" bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
+                              href={"https://twitter.com/intent/tweet?" + tweetText}
+                              data-size="large"
+                              target="_blank">
+                              <span className="[&>svg]:h-4 [&>svg]:w-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+                                  <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                                </svg>
+                              </span>
+                              Tweet
+                            </a>
+                          </HoverBorderGradient>
+                        </div>
+                      </>
                     )}
 
                     {(_viewDataRes.data.gamePlayResult.bitsWon > 0 && (
