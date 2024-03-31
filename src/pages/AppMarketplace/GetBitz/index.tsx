@@ -3,6 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { confetti } from "@tsparticles/confetti";
+import { Container } from "@tsparticles/engine";
 import { fireworks } from "@tsparticles/fireworks";
 import axios, { AxiosError } from "axios";
 import Countdown from "react-countdown";
@@ -66,9 +67,8 @@ export const GetBitz = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
-  const [burnProgress, setBurnProgress] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  let tweetText = `url=https://explorer.itheum.io/getbitz&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time on %23itheum. Maybe you will have better luck? Try here to %23GetBiTz"} `;
+  let tweetText = `url=https://explorer.itheum.io/getbitz&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck? Try here to %23GetBiTz %23itheum"} `;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -136,33 +136,36 @@ export const GetBitz = () => {
     setIsMemeBurnHappening(false);
     setGameDataFetched(false);
     setViewDataRes(undefined);
-    setBurnProgress(0);
     setBurnFireScale("scale(0) translate(-13px, -15px)");
     setBurnFireGlow(0);
     setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
   }
 
-  // user needs to click 10 times to burn the meme
-  useEffect(() => {
-    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
-    setBurnFireGlow(burnProgress * 0.1);
-    if (burnProgress === 10) {
-      setIsMemeBurnHappening(false);
-      playGame();
-    }
-  }, [burnProgress]);
-
-  function memeBurn() {
+  async function memeBurn() {
     // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
     setIsMemeBurnHappening(true);
 
-    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
-    setBurnFireGlow(burnProgress * 0.1);
+    await sleep(1);
+    setBurnFireScale("scale(1) translate(-13px, -15px)");
+    setBurnFireGlow(1 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(3) translate(-13px, -15px)");
+    setBurnFireGlow(3 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(5) translate(-13px, -15px)");
+    setBurnFireGlow(5 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(7) translate(-13px, -15px)");
+    setBurnFireGlow(7 * 0.1);
+    await sleep(2);
+    setBurnFireScale("scale(9) translate(-13px, -15px)");
+    await sleep(2);
+    setBurnFireScale("scale(10) translate(-13px, -15px)");
+    await sleep(5);
 
-    if (burnProgress === 10) {
-      setIsMemeBurnHappening(false);
-      playGame();
-    }
+    setIsMemeBurnHappening(false);
+
+    playGame();
   }
 
   async function playGame() {
@@ -234,6 +237,10 @@ export const GetBitz = () => {
       if (animation) {
         await sleep(6);
         animation.stop();
+        // if its confetti, then we have to destroy it
+        if ((animation as unknown as Container).destroy) {
+          (animation as unknown as Container).destroy();
+        }
       }
     } else {
       toastError("ER2: Did not get a response from the game server");
@@ -294,8 +301,6 @@ export const GetBitz = () => {
     //     },
     //   };
     // }
-
-    // console.log("_viewDataRes", _viewDataRes);
 
     // user is note logged in, ask them to connect wallet
     if (!address) {
@@ -364,17 +369,16 @@ export const GetBitz = () => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative  overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-none" src={ImgGameCanvas} alt={"Play Game"} />
+          <img className="rounded-[3rem] w-full" src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
-            className="cursor-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+            className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
                 <div
                   className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
                   onClick={() => {
-                    // setBypassDebug(true);
                     memeBurn();
                   }}>
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTz>`} points?</p>
@@ -387,15 +391,10 @@ export const GetBitz = () => {
               null}
 
             {_isMemeBurnHappening && (
-              <div
-                className="z-10 relative"
-                onClick={() => {
-                  setBurnProgress((prev) => prev + 1);
-                }}>
-                <Torch />
+              <div>
+                <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
 
-                <p className="text-center text-md text-gray-950 text-foreground md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
-                <BurningImage src={randomMeme} burnProgress={burnProgress} />
+                <BurningImage src={randomMeme} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
@@ -439,10 +438,10 @@ export const GetBitz = () => {
                   <div className="flex flex-col justify-around h-[100%] items-center text-center">
                     {_viewDataRes.data.gamePlayResult.bitsWon === 0 && (
                       <>
-                        <div>
+                        <div className="z-[25]">
                           <p className="text-2xl">OPPS! Aladdin Rugged You! 0 Points this Time...</p>
                           <motion.img
-                            className="w-[150px] lg:w-full absolute"
+                            className="w-[150px] lg:w-full absolute z-[25]"
                             src={aladinRugg}
                             initial={{ x: -750, y: 0 }}
                             animate={{
@@ -454,19 +453,19 @@ export const GetBitz = () => {
                             transition={{ duration: 8 }}
                           />
                         </div>
-                        <div className="bg-black rounded-full p-[1px]">
-                          <HoverBorderGradient>
+                        <div className="bg-black rounded-full p-[1px] -z-1 ">
+                          <HoverBorderGradient className="-z-1">
                             <a
-                              className=" bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
+                              className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
                               href={"https://twitter.com/intent/tweet?" + tweetText}
                               data-size="large"
                               target="_blank">
-                              <span className="[&>svg]:h-4 [&>svg]:w-4">
+                              <span className=" [&>svg]:h-4 [&>svg]:w-4 z-10">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
                                   <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
                                 </svg>
                               </span>
-                              Tweet
+                              <p className="z-10">Tweet</p>
                             </a>
                           </HoverBorderGradient>
                         </div>
