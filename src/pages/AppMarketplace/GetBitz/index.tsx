@@ -37,7 +37,6 @@ import { useAccountStore } from "../../../store/account";
 import { motion } from "framer-motion";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
 import { MousePointerClick } from "lucide-react";
-import Torch from "./Torch";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -74,7 +73,6 @@ export const GetBitz = () => {
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
 
   // LeaderBoard related
-
   const [leaderBoardAllTime, setLeaderBoardAllTime] = useState<LeaderBoardItemType[]>([]);
   const [leaderBoardMonthly, setLeaderBoardMonthly] = useState<LeaderBoardItemType[]>([]);
   const [leaderBoardMonthString, setLeaderBoardMonthString] = useState<string>("");
