@@ -17,7 +17,7 @@ import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
 import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
 import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
 import FingerPoint from "assets/img/getbitz/finger-point.gif";
-import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.gif";
+import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.png";
 import Meme1 from "assets/img/getbitz/memes/1.jpg";
 import Meme2 from "assets/img/getbitz/memes/2.jpg";
 import Meme3 from "assets/img/getbitz/memes/3.jpg";
@@ -26,7 +26,7 @@ import Meme5 from "assets/img/getbitz/memes/5.jpg";
 import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import aladinRugg from "assets/img/getbitz/aladin.png";
 import { BurningImage } from "./BurningImage";
-import SacrificeGodLoader from "assets/img/getbitz/sacrifice-god-loader.mp4";
+import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
@@ -273,7 +273,7 @@ export const GetBitz = () => {
     //   // for local UI debugging
     //   _loadBlankGameCanvas = true;
     //   _gameDataFetched = false;
-    //   _isFetchingDataMarshal = false;
+    //   _isFetchingDataMarshal = true;
     //   _isMemeBurnHappening = false;
 
     //   _viewDataRes = {
@@ -373,6 +373,7 @@ export const GetBitz = () => {
                 <div
                   className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
                   onClick={() => {
+                    // setBypassDebug(true);
                     memeBurn();
                   }}>
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTz>`} points?</p>
@@ -386,7 +387,7 @@ export const GetBitz = () => {
 
             {_isMemeBurnHappening && (
               <div
-                className="  z-10 relative"
+                className="z-10 relative"
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
@@ -401,15 +402,14 @@ export const GetBitz = () => {
 
             {_isFetchingDataMarshal && (
               <div>
-                {" "}
-                <Torch />
                 <p className="text-center text-md text-gray-950 text-foreground  md:text-xl mb-[1rem]">
-                  Did the {`<BiTz>`} Generator God like that Meme Sacrifice?
+                  Did the {`<BiTz>`} Generator God like that Meme Sacrifice? Only time will tell...
                 </p>
-                <video className="w-[210px] md:w-[300px] m-auto" autoPlay loop src={SacrificeGodLoader} />
+                <img className="w-[250px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
               </div>
             )}
           </div>
+
           {spritLayerPointsCloud()}
         </div>
       );
