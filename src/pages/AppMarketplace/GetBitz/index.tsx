@@ -632,7 +632,7 @@ export const GetBitz = () => {
         May 1, 2024), check out these special LAUNCH WINDOW perks:
         <ol className="mt-5">
           <li className="my-5">
-            1. A special shorter Game Window is in place. So instead of a usual 6 Hours Game Window. You can play every {BIT_GAME_WINDOW_HOURS} hours!
+            1. A special shorter Game Cooldown is in place. So instead of a usual 6 Hours Game Cooldown. You can play every {BIT_GAME_WINDOW_HOURS} hours!
           </li>
           <li className="my-5">
             2. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators
