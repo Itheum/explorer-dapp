@@ -6,11 +6,21 @@ import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
 import { fireworks } from "@tsparticles/fireworks";
 import axios, { AxiosError } from "axios";
+import { motion } from "framer-motion";
+import { MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
-import { GET_BITS_TOKEN } from "appsConfig";
+import { GET_BITZ_TOKEN } from "appsConfig";
+import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId } from "libs/utils";
 import { routeNames } from "routes";
+import { BurningImage } from "./BurningImage";
+import { useAccountStore } from "../../../store/account";
 import "./GetBitz.css";
 
 // Image Layers
@@ -26,17 +36,7 @@ import Meme4 from "assets/img/getbitz/memes/4.jpg";
 import Meme5 from "assets/img/getbitz/memes/5.jpg";
 import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import aladinRugg from "assets/img/getbitz/aladin.png";
-import { BurningImage } from "./BurningImage";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
-import { Loader } from "components";
-import { MARKETPLACE_DETAILS_PAGE } from "config";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps } from "libs/utils";
-import { useAccountStore } from "../../../store/account";
-import { motion } from "framer-motion";
-import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
-import { MousePointerClick } from "lucide-react";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -111,7 +111,7 @@ export const GetBitz = () => {
   async function fetchDataNfts() {
     setIsLoading(true);
 
-    const _gameDataNFT = await DataNft.createFromApi(GET_BITS_TOKEN);
+    const _gameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
     setGameDataNFT(_gameDataNFT);
 
     setIsLoading(false);
@@ -528,7 +528,7 @@ export const GetBitz = () => {
 
     const callConfig = {
       headers: {
-        "fwd-tokenid": "DATANFTFT-e0b917-c6",
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
       },
     };
 
@@ -636,13 +636,20 @@ export const GetBitz = () => {
     <>
       {gamePlayImageSprites()}
 
-      <div className="p-5 text-lg font-bold bg-[#35d9fa] text-black rounded-[1rem] my-[3rem]">
-        To celebrate the launch of {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 - May 1,
-        2024), check out these special LAUNCH WINDOW perks:
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] my-[3rem]">
+        <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
+        To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
+        May 1, 2024), check out these special LAUNCH WINDOW perks:
         <ol className="mt-5">
-          <li>1. A special shorter Game Window is in place. So instead of a usual 6 Hours Game Window. You can play every {BIT_GAME_WINDOW_HOURS} hours!</li>
-          <li>2. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators</li>
+          <li className="my-5">
+            1. A special shorter Game Window is in place. So instead of a usual 6 Hours Game Window. You can play every {BIT_GAME_WINDOW_HOURS} hours!
+          </li>
+          <li className="my-5">
+            2. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators
+          </li>
+          <li className="my-5">3. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
         </ol>
+        <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
       </div>
 
       <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
@@ -682,7 +689,8 @@ export const GetBitz = () => {
             </div>
           </div>
         </div>
-
+      </div>
+      <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
         <div>
           <h2 className="text-center text-white my-[3rem]">FAQs</h2>
 
@@ -727,8 +735,8 @@ export const GetBitz = () => {
             </p>
             <p className="mt-5">You DO NOT need to spend any gas to Play the Get {`<BiTz>`} ! SAY WAT?!</p>
             <p className="mt-5">
-              But in the near future, the Get {`<BiTz>`} game won't be the only way to collect BITS points, if you stay "active" on the Itheum Protocol, you
-              will be rewarded with bonus {`<BiTz>`} points as well. For example, if you use the{" "}
+              But in the near future, the Get {`<BiTz>`} game won't be the only way to collect {`<BiTz>`} points, if you stay "active" on the Itheum Protocol,
+              you will be rewarded with bonus {`<BiTz>`} points as well. For example, if you use the{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
                 Data DEX
               </a>{" "}
@@ -758,22 +766,29 @@ export const GetBitz = () => {
               Systems, there will be LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be
               available:
             </p>
-            <ol className="mt-5">
-              <li>
-                1. Top 5 Movers each month get Airdropped{" "}
+            <ol className="mt-5 text-lg">
+              <li className="my-5">
+                1. Top 5 Movers (top {BIT_GAME_TOP_LEADER_BOARD_GROUP} during LAUNCH WINDOW) from "Monthly" LEADERBOARD get Airdropped{" "}
                 <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
-                  Data NFTs (top {BIT_GAME_TOP_LEADER_BOARD_GROUP} during LAUNCH WINDOW)
+                  Data NFTs
                 </a>{" "}
                 from previous and upcoming Data Creators.
               </li>
-              <li>
+              <li className="my-5">
                 2. Get a boost on Monthly{" "}
                 <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/project-trailblazer" target="blank">
                   Itheum Trailblazer
                 </a>{" "}
                 Data NFT Quest Rewards.
               </li>
-              <li>3. Admire the balance grow as you connect your wallet to Itheum Protocol dApps and play</li>
+              <li className="my-5">
+                3. 3 bonus drops of{" "}
+                <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
+                  Data NFTs
+                </a>{" "}
+                from previous and upcoming Data Creators sent randomly to users from top 100 "All Time" LEADERBOARD
+              </li>
+              <li className="my-5">4. Bragging rights as you climb to the top of the LEADERBOARD!</li>
             </ol>
 
             <p className="mt-5">

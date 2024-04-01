@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { GET_BITS_TOKEN } from "appsConfig";
+import { GET_BITZ_TOKEN } from "appsConfig";
 import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken } from "libs/utils";
 import { useAccountStore } from "./account";
@@ -21,7 +21,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
     (async () => {
       // get the bitz game data nft details
-      const bitzGameDataNFT = await DataNft.createFromApi(GET_BITS_TOKEN);
+      const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
 
       // does the logged in user actually OWN the bitz game data nft
       const _myDataNfts = await DataNft.ownedByAddress(address);
