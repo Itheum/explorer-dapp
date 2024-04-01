@@ -38,6 +38,7 @@ import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import aladinRugg from "assets/img/getbitz/aladin.png";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import Torch from "./Torch";
+import Faq from "./Faq";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -680,8 +681,9 @@ export const GetBitz = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
-        <div>
+      {/* <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]"> */}
+      <Faq />
+      {/* <div>
           <h2 className="text-center text-white my-[3rem]">FAQs</h2>
 
           <div className="mt-[2rem]">
@@ -865,8 +867,8 @@ export const GetBitz = () => {
               </a>{" "}
             </p>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </>
   );
 };
