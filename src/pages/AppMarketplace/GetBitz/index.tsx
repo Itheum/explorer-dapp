@@ -646,7 +646,7 @@ export const GetBitz = () => {
         <div className="leaderBoard">
           <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
           <div className="md:flex">
-            <div className="allTime md:flex-1">
+            <div className="my-[1rem] allTime md:flex-1">
               <h3 className="text-center text-white mb-[1rem]">All Time</h3>
               {leaderBoardIsLoading ? (
                 <Loader />
