@@ -151,17 +151,6 @@ export const GetBitz = () => {
     }
   }, [burnProgress]);
 
-  // async function memeBurn() {
-  //   // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
-  //   setIsMemeBurnHappening(true);
-  //   setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
-  //   setBurnFireGlow(burnProgress * 0.1);
-  //   if (burnProgress === 10) {
-  //     setIsMemeBurnHappening(false);
-  //     playGame();
-  //   }
-  // }
-
   async function playGame() {
     if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
       throw Error("No Native Auth token");
