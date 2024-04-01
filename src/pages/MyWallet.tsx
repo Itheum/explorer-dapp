@@ -8,14 +8,10 @@ import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType } from "libs/types";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
-
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
 
 export const MyWallet = () => {
   const { address } = useGetAccount();

@@ -12,8 +12,8 @@ import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Modal } from "components/Modal/Modal";
 import YouTubeEmbed from "components/YouTubeEmbed";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { useTheme } from "libComponents/ThemeProvider";
-import { BlobDataType } from "libs/types";
 import { decodeNativeAuthToken, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -42,10 +42,6 @@ import cubes from "../../../assets/img/zstorage/cubes.png";
 import dataLines from "../../../assets/img/zstorage/data-lines.png";
 import frontCube from "../../../assets/img/zstorage/front.png";
 import vault from "../../../assets/img/zstorage/vault-dots.png";
-
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
 
 export const NFTunes = () => {
   const { address } = useGetAccount();
