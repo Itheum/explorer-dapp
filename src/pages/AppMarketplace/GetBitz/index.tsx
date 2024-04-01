@@ -37,6 +37,7 @@ import Meme5 from "assets/img/getbitz/memes/5.jpg";
 import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import aladinRugg from "assets/img/getbitz/aladin.png";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import Torch from "./Torch";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -66,6 +67,7 @@ export const GetBitz = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
+  const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
   let tweetText = `url=https://explorer.itheum.io/getbitz&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck? Try here to %23GetBiTz %23itheum"} `;
 
@@ -133,38 +135,32 @@ export const GetBitz = () => {
     setIsFetchingDataMarshal(false);
     setIsMemeBurnHappening(false);
     setGameDataFetched(false);
+    setBurnProgress(0);
     setViewDataRes(undefined);
     setBurnFireScale("scale(0) translate(-13px, -15px)");
     setBurnFireGlow(0);
     setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
   }
 
-  async function memeBurn() {
-    // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
-    setIsMemeBurnHappening(true);
+  useEffect(() => {
+    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
+    setBurnFireGlow(burnProgress * 0.1);
+    if (burnProgress === 10) {
+      setIsMemeBurnHappening(false);
+      playGame();
+    }
+  }, [burnProgress]);
 
-    await sleep(1);
-    setBurnFireScale("scale(1) translate(-13px, -15px)");
-    setBurnFireGlow(1 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(3) translate(-13px, -15px)");
-    setBurnFireGlow(3 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(5) translate(-13px, -15px)");
-    setBurnFireGlow(5 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(7) translate(-13px, -15px)");
-    setBurnFireGlow(7 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(9) translate(-13px, -15px)");
-    await sleep(2);
-    setBurnFireScale("scale(10) translate(-13px, -15px)");
-    await sleep(5);
-
-    setIsMemeBurnHappening(false);
-
-    playGame();
-  }
+  // async function memeBurn() {
+  //   // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
+  //   setIsMemeBurnHappening(true);
+  //   setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
+  //   setBurnFireGlow(burnProgress * 0.1);
+  //   if (burnProgress === 10) {
+  //     setIsMemeBurnHappening(false);
+  //     playGame();
+  //   }
+  // }
 
   async function playGame() {
     if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -366,7 +362,7 @@ export const GetBitz = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative  overflow-hidden">
+        <div className="relative  overflow-hidden ">
           <img className="rounded-[3rem] w-full" src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
@@ -377,7 +373,7 @@ export const GetBitz = () => {
                 <div
                   className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
                   onClick={() => {
-                    memeBurn();
+                    setIsMemeBurnHappening(true);
                   }}>
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTz>`} points?</p>
                   <p className="font-bold md:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
@@ -389,10 +385,15 @@ export const GetBitz = () => {
               null}
 
             {_isMemeBurnHappening && (
-              <div>
-                <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
+              <div
+                className="z-10 relative cursor-none"
+                onClick={() => {
+                  setBurnProgress((prev) => prev + 1);
+                }}>
+                <Torch />
 
-                <BurningImage src={randomMeme} />
+                <p className="text-center text-md text-gray-950 text-foreground md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
+                <BurningImage src={randomMeme} burnProgress={burnProgress} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
