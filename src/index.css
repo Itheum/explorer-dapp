@@ -127,14 +127,22 @@ h6 {
 
 .dapp-core-component__transactionToast-styles__content,
 .dapp-core-component__customToast-styles__close {
-  @apply text-white bg-ring fill-black !important;
+  @apply text-foreground bg-background fill-black !important;
 }
 
 .dapp-core-component__transactionsToastList-styles__toasts,
 .dapp-custom-toast,
 .dapp-core-component__transactionsToastList-styles__toastWrapper {
-  @apply bg-ring fixed bottom-14 right-10 !important;
+  @apply fixed bottom-14 right-10 bg-background/60 text-foreground !important;
 }
+
+.dapp-core-component__transactionsToastList-styles__toasts,
+.dapp-custom-toast,
+.dapp-core-component__transactionsToastList-styles__toastWrapper {
+  @apply bg-background/60 !important;
+}
+
+/*.dapp-core-component__transactionToast-styles__content*/
 
 @layer base {
   * {

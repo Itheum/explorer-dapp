@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Home, Menu, Store, Wallet } from "lucide-react";
+import { FlaskRound, Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -29,9 +29,14 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useTheme } from "../../libComponents/ThemeProvider";
+import { useAccountStore } from "../../store/account";
+import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { BIT_GAME_WINDOW_HOURS, BIT_GAME_TOP_LEADER_BOARD_GROUP } from "../../pages/AppMarketplace/GetBitz";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
+  const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const { address } = useGetAccount();
   const { theme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<string>();
@@ -65,7 +70,7 @@ export const Navbar = () => {
         </Link>
       </div>
 
-      <NavigationMenu className="md:!inline !hidden z-0 pr-2">
+      <NavigationMenu className="md:!inline !hidden z-0 pr-2 relative md:z-10">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
@@ -86,7 +91,7 @@ export const Navbar = () => {
                       "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     }>
                     <div className="text-md font-medium leading-none text-foreground">{item.appName}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5 ">{item?.appDescription}</p>
+                    <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60 font-[Satoshi-Light] pt-0.5 ">{item?.appDescription}</p>
                   </Link>
                 ))}
               </ul>
@@ -103,8 +108,8 @@ export const Navbar = () => {
                       className={
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
-                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Listed</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
+                      <div className="text-md font-medium leading-none ">My Listed</div>
+                      <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60  font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
                     </Link>
                     <Link
                       to={routeNames.mywallet}
@@ -112,15 +117,65 @@ export const Navbar = () => {
                       className={
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
-                      <div className="text-md font-medium leading-none dark:text-white text-muted-foreground">My Wallet</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-foreground/60 font-[Satoshi-Light] pt-0.5">View RAW Data</p>
+                      <div className="text-md font-medium leading-none   ">My Wallet</div>
+                      <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60   font-[Satoshi-Light] pt-0.5">View RAW Data</p>
                     </Link>
                     <div className="flex flex-col p-3">
-                      <p className="text-sm font-medium leading-none dark:text-slate-100 pb-0.5">My Address Quick Copy</p>
+                      <p className="text-sm font-medium leading-none pb-0.5">My Address Quick Copy</p>
                       <CopyAddress address={address} precision={6} />
                     </div>
                   </ul>
                 </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <div className="shadow-sm shadow-sky-300 p-[1px] rounded-lg justify-center cursor-pointer">
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
+                        {bitzBalance === -2 ? (
+                          <span className="flex items-center gap-0.5 blinkMe text-lg">
+                            ... <FlaskRound className="w-5 h-5 fill-sky-300 " />
+                          </span>
+                        ) : (
+                          <>
+                            {bitzBalance === -1 ? (
+                              <div className="flex items-center gap-0.5 text-base">
+                                0 <FlaskRound className="w-5 h-5 fill-sky-300 " />
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-0.5 text-base">
+                                {bitzBalance} <FlaskRound className="w-5 h-5 fill-sky-300 " />
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-[25rem]">
+                      <PopoverPrimitive.Arrow className="fill-border w-5 h-3" />
+                      <div className="flex flex-col justify-center p-3 w-full">
+                        <div className="flex justify-center w-full py-4">
+                          <div className="flex w-16 h-16 justify-center items-center border border-b-border rounded-lg shadow-inner shadow-sky-400">
+                            <FlaskRound className="w-7 h-7 fill-sky-300" />
+                          </div>
+                        </div>
+                        <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
+                        <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4">
+                          {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game
+                          Data Widget. Top LEADERBOARD climbers get special perks and drops!
+                        </p>
+                        <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
+                          <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+                          <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
+                            Get {`<BiTz>`}
+                          </span>
+                        </Link>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
@@ -204,7 +259,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                 <Link to={returnRoute(item.routeKey)} key={item.routeKey}>
-                  <DropdownMenuItem className="text-foreground/50">{item?.appName}</DropdownMenuItem>
+                  <DropdownMenuItem className=" ">{item?.appName}</DropdownMenuItem>
                 </Link>
               ))}
             </DropdownMenuGroup>
@@ -215,12 +270,23 @@ export const Navbar = () => {
                   <span>Account</span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
+                <DropdownMenuGroup className="">
                   <Link to={routeNames.mylisted}>
-                    <DropdownMenuItem className="text-foreground/50">Listed data</DropdownMenuItem>
+                    <DropdownMenuItem className=" ">My Listed</DropdownMenuItem>
                   </Link>
                   <Link to={routeNames.mywallet}>
-                    <DropdownMenuItem className="!text-foreground/50">Wallet</DropdownMenuItem>
+                    <DropdownMenuItem className=" ">My Wallet</DropdownMenuItem>
+                  </Link>
+                  <Link to={routeNames.getbitz}>
+                    <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
+                      <DropdownMenuItem className="  dark:!text-black">
+                        {bitzBalance === -2 ? (
+                          <span className="blinkMe">{`... <BiTz> Points`}</span>
+                        ) : (
+                          <>{bitzBalance === -1 ? "0 <BiTz> Points" : `${bitzBalance} <BiTz> Points`}</>
+                        )}
+                      </DropdownMenuItem>
+                    </div>
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuLabel>My Address Quick Copy</DropdownMenuLabel>
