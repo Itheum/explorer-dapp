@@ -164,7 +164,7 @@ export const Navbar = () => {
                         <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
                         <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4">
                           {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game
-                          Data Widget. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Monthly Leaderboard get's special perks and drops!
+                          Data Widget. Top LEADERBOARD climbers get special perks and drops!
                         </p>
                         <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
                           <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />

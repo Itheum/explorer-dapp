@@ -2,7 +2,7 @@ import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
-import { cn, convertToLocalString } from "libs/utils";
+import { cn } from "libs/utils";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
 import { Button } from "../libComponents/Button";

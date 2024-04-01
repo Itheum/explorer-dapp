@@ -30,7 +30,7 @@ h6 {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 94%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
@@ -53,7 +53,7 @@ h6 {
   }
 
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 0 0% 9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -136,7 +136,9 @@ h6 {
   @apply fixed bottom-14 right-10 bg-background/60 text-foreground !important;
 }
 
-.dapp-core-component__transactionsToastList-styles__toasts, .dapp-custom-toast, .dapp-core-component__transactionsToastList-styles__toastWrapper {
+.dapp-core-component__transactionsToastList-styles__toasts,
+.dapp-custom-toast,
+.dapp-core-component__transactionsToastList-styles__toastWrapper {
   @apply bg-background/60 !important;
 }
 
@@ -147,7 +149,7 @@ h6 {
     @apply border-border;
   }
   body {
-    @apply dark:bg-black bg-slate-50 text-foreground !important;
+    @apply bg-background text-foreground;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
@@ -185,5 +187,3 @@ h6 {
   background-size: cover;
   background-position: top;
 }
-
-
