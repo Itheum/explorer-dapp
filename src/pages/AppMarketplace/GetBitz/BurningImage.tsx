@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { MousePointerClick } from "lucide-react";
-import clickHere from "assets/img/getbitz/hand-apple.gif";
+import clickHere from "assets/img/getbitz/click-here.gif";
+
 export const BurningImage: React.FC<{ src: string; burnProgress: number }> = ({ src, burnProgress }) => {
   const burningImageVariants = {
     initial: {
