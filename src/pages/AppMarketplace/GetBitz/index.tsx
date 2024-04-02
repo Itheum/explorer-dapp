@@ -358,11 +358,11 @@ export const GetBitz = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative  overflow-hidden ">
+        <div className="relative  overflow-hidden  ">
           <img className="rounded-[3rem] w-full" src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
-            className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+            className="select-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
@@ -382,13 +382,13 @@ export const GetBitz = () => {
 
             {_isMemeBurnHappening && (
               <div
-                className="z-10 relative cursor-none  "
+                className="z-10 relative cursor-none select-none"
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
                 <Torch />
-                <p className="text-center text-md text-gray-950 text-foreground md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
-
+                <p className="text-center text-md text-gray-950 text-foreground md:text-xl ">Light up this meme sacrifice!</p>
+                <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn </p>
                 <BurningImage src={randomMeme} burnProgress={burnProgress} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[125px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>

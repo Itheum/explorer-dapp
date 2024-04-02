@@ -36,7 +36,7 @@ export const BurningImage: React.FC<{ src: string; burnProgress: number }> = ({ 
         animate="burning"
         exit="consumed"
       />{" "}
-      {burnProgress === 0 && (
+      {burnProgress < 3 && (
         <div className="absolute -mt-32 bottom-16 ">
           <img src={clickHere} className="w-32 h-32 z-10" />
         </div>
