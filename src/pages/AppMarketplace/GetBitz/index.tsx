@@ -27,6 +27,7 @@ import "./GetBitz.css";
 import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
 import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
 import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
+import ImgLoadingGame from "assets/img/getbitz/getbitz-loading.gif";
 import FingerPoint from "assets/img/getbitz/finger-point.gif";
 import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.png";
 import aladinRugg from "assets/img/getbitz/aladin.png";
@@ -62,6 +63,7 @@ export const GetBitz = () => {
   const { chainID } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
+  const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
@@ -132,6 +134,7 @@ export const GetBitz = () => {
       const _dataNfts = await DataNft.ownedByAddress(address);
       const hasRequiredDataNFT = _dataNfts.find((dNft) => gameDataNFT.nonce === dNft.nonce);
       setHasGameDataNFT(hasRequiredDataNFT ? true : false);
+      setCheckingIfHasGameDataNFT(false);
 
       setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
     }
@@ -292,7 +295,7 @@ export const GetBitz = () => {
     //   };
     // }
 
-    // user is note logged in, ask them to connect wallet
+    // user is not logged in, ask them to connect wallet
     if (!address) {
       return (
         <Link to={routeNames.unlock} state={{ from: location.pathname }}>
@@ -301,8 +304,17 @@ export const GetBitz = () => {
       );
     }
 
+    // user is logged in and we are checking if they have the data nft to proceed with a play
+    if (address && checkingIfHasGameDataNFT && !hasGameDataNFT) {
+      return (
+        <div>
+          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+        </div>
+      );
+    }
+
     // user is logged in does not have the data nft, so take them to the marketplace
-    if (address && !hasGameDataNFT) {
+    if (address && !checkingIfHasGameDataNFT && !hasGameDataNFT) {
       return (
         <div
           onClick={() => {
