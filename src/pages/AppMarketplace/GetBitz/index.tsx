@@ -29,14 +29,20 @@ import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
 import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
 import FingerPoint from "assets/img/getbitz/finger-point.gif";
 import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.png";
+import aladinRugg from "assets/img/getbitz/aladin.png";
+import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+
+// Memes
 import Meme1 from "assets/img/getbitz/memes/1.jpg";
 import Meme2 from "assets/img/getbitz/memes/2.jpg";
 import Meme3 from "assets/img/getbitz/memes/3.jpg";
 import Meme4 from "assets/img/getbitz/memes/4.jpg";
 import Meme5 from "assets/img/getbitz/memes/5.jpg";
 import Meme6 from "assets/img/getbitz/memes/6.jpg";
-import aladinRugg from "assets/img/getbitz/aladin.png";
-import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import Meme7 from "assets/img/getbitz/memes/7.jpg";
+import Meme8 from "assets/img/getbitz/memes/8.jpg";
+import Meme9 from "assets/img/getbitz/memes/9.jpg";
+import Meme10 from "assets/img/getbitz/memes/10.jpg";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -46,7 +52,7 @@ interface LeaderBoardItemType {
 export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
 export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
 
-const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6];
+const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6, Meme7, Meme8, Meme9, Meme10];
 
 export const GetBitz = () => {
   const { address } = useGetAccount();
@@ -67,7 +73,7 @@ export const GetBitz = () => {
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  let tweetText = `url=https://explorer.itheum.io/getbitz&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck? Try here to %23GetBiTz %23itheum"} `;
+  const tweetText = `url=https://explorer.itheum.io/getbitz&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck? Try here to %23GetBiTz %23itheum"} `;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
