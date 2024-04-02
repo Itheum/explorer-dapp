@@ -17,7 +17,7 @@ import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
 import { routeNames } from "routes";
 import { BurningImage } from "./BurningImage";
 import { useAccountStore } from "../../../store/account";
@@ -359,11 +359,13 @@ export const GetBitz = () => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative  overflow-hidden  ">
-          <img className="rounded-[3rem] w-full" src={ImgGameCanvas} alt={"Play Game"} />
+          <img className={cn("rounded-[3rem] w-full", _isMemeBurnHappening ? "cursor-none" : "")} src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
-            className="select-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
-                        md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
+            className={cn(
+              "select-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2",
+              _isMemeBurnHappening ? "cursor-none" : ""
+            )}>
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
                 <div
