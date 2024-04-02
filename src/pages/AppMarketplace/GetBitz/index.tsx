@@ -43,6 +43,8 @@ import Meme7 from "assets/img/getbitz/memes/7.jpg";
 import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import Meme10 from "assets/img/getbitz/memes/10.jpg";
+import Torch from "./Torch";
+import Faq from "./Faq";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -72,6 +74,7 @@ export const GetBitz = () => {
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [burnFireScale, setBurnFireScale] = useState<string>("scale(0) translate(-13px, -15px)");
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
+  const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
   const tweetText = `url=https://explorer.itheum.io/getbitz&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck? Try here to %23GetBiTz %23itheum"} `;
 
@@ -139,38 +142,21 @@ export const GetBitz = () => {
     setIsFetchingDataMarshal(false);
     setIsMemeBurnHappening(false);
     setGameDataFetched(false);
+    setBurnProgress(0);
     setViewDataRes(undefined);
     setBurnFireScale("scale(0) translate(-13px, -15px)");
     setBurnFireGlow(0);
     setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
   }
 
-  async function memeBurn() {
-    // animation uses: https://codepen.io/freedommayer/pen/vYRrarM
-    setIsMemeBurnHappening(true);
-
-    await sleep(1);
-    setBurnFireScale("scale(1) translate(-13px, -15px)");
-    setBurnFireGlow(1 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(3) translate(-13px, -15px)");
-    setBurnFireGlow(3 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(5) translate(-13px, -15px)");
-    setBurnFireGlow(5 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(7) translate(-13px, -15px)");
-    setBurnFireGlow(7 * 0.1);
-    await sleep(2);
-    setBurnFireScale("scale(9) translate(-13px, -15px)");
-    await sleep(2);
-    setBurnFireScale("scale(10) translate(-13px, -15px)");
-    await sleep(5);
-
-    setIsMemeBurnHappening(false);
-
-    playGame();
-  }
+  useEffect(() => {
+    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
+    setBurnFireGlow(burnProgress * 0.1);
+    if (burnProgress === 10) {
+      setIsMemeBurnHappening(false);
+      playGame();
+    }
+  }, [burnProgress]);
 
   async function playGame() {
     if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -372,18 +358,18 @@ export const GetBitz = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative  overflow-hidden">
+        <div className="relative  overflow-hidden  ">
           <img className="rounded-[3rem] w-full" src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
-            className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+            className="select-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
                 <div
                   className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
                   onClick={() => {
-                    memeBurn();
+                    setIsMemeBurnHappening(true);
                   }}>
                   <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTz>`} points?</p>
                   <p className="font-bold md:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
@@ -395,12 +381,17 @@ export const GetBitz = () => {
               null}
 
             {_isMemeBurnHappening && (
-              <div>
-                <p className="text-center text-md text-gray-950 text-foreground   md:text-xl mb-[1rem]">Light up this meme sacrifice!</p>
-
-                <BurningImage src={randomMeme} />
+              <div
+                className="z-10 relative cursor-none select-none"
+                onClick={() => {
+                  setBurnProgress((prev) => prev + 1);
+                }}>
+                <Torch />
+                <p className="text-center text-md text-gray-950 text-foreground md:text-xl ">Light up this meme sacrifice!</p>
+                <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn </p>
+                <BurningImage src={randomMeme} burnProgress={burnProgress} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
-                <div className="flame !top-[285px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
+                <div className="flame !top-[125px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
             )}
 
@@ -648,12 +639,20 @@ export const GetBitz = () => {
         May 1, 2024), check out these special LAUNCH WINDOW perks:
         <ol className="mt-5">
           <li className="my-5">
-            1. A special shorter Game Window is in place. So instead of a usual 6 Hours Game Window. You can play every {BIT_GAME_WINDOW_HOURS} hours!
+            1. A special shorter Game Cooldown is in place. So instead of a usual 6 Hours Game Cooldown. You can play every {BIT_GAME_WINDOW_HOURS} hours!
           </li>
           <li className="my-5">
             2. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators
           </li>
           <li className="my-5">3. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
+          <li className="my-5">
+            {" "}
+            4. Got Memes for burning? Join our{" "}
+            <a className="!text-[#7a98df] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
+              Discord Meme Channel
+            </a>{" "}
+            and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
+          </li>
         </ol>
         <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
       </div>
@@ -662,7 +661,7 @@ export const GetBitz = () => {
         <div className="leaderBoard">
           <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
           <div className="md:flex">
-            <div className="allTime md:flex-1">
+            <div className="my-[1rem] allTime md:flex-1">
               <h3 className="text-center text-white mb-[1rem]">All Time</h3>
               {leaderBoardIsLoading ? (
                 <Loader />
@@ -696,193 +695,7 @@ export const GetBitz = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
-        <div>
-          <h2 className="text-center text-white my-[3rem]">FAQs</h2>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What are Itheum {`<BiTz>`} Points?</h3>
-            <p>
-              Think of them as XP (Experience Points) of the Itheum Protocol, we also like to call them "Data Ownership OG (Original Gangster) XP" and if you
-              consider yourself an Itheum OG and love Data Ownership, then we absolutely think you are a pioneer and {`<BiTz>`} is the Itheum XP system for
-              you!!
-            </p>
-            <p className="mt-5">
-              You need to use Data NFT and Itheum Core Infrastructure to collect your {`<BiTz>`} XP, and this exact Web3/Blockchain based product stack can be
-              used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization technology
-              and learning about how you can take ownership of you data! Welcome Itheum Data Ownership OG!
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why are {`<BiTz>`} Points Important?</h3>
-            <p>
-              On top of being Itheum Protocol XP, they also signal your "liveliness" as a human and not a BOT. This is a form of "reputation signalling" of you
-              as a human within the Itheum ecosystem, this reputation signalling is a very powerful concept when you link it to "data ownership" as it add a
-              layer of "proof of humanity" to the Itheum Protocol.
-            </p>
-            <p className="mt-5">
-              There will be a wave of new "liveliness & reputation signalling" features launching within the Itheum protocol in the very near future, and{" "}
-              {`<BiTz>`} XP is the first such "liveliness & reputation signalling" features to launch
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">How can I collect {`<BiTz>`} Points?</h3>
-            <p>
-              You need to hold a {`<BiTz>`} compatible Data NFT in your wallet to play the Get {`<BiTz>`} game (you are on this page now). This Data NFT was
-              airdropped in waves to OGs of the Itheum Protocol, but fear not, you can also get it on any NFT Marketplace (if the OGs broke our hearts and
-              parted ways with their Data NFTs). If this "Series 1" {`<BiTz>`} Data NFT is successful, there may be a follow-up Series of {`<BiTz>`} Data NFTs
-              launched and airdropped as well.
-            </p>
-            <p className="mt-5">
-              Once you have the Data NFT in your wallet, you can play the Game every 6 Hours ({BIT_GAME_WINDOW_HOURS} Hours in "Launch Window"). You have to
-              burn a Meme and sacrifice it to the {`<BiTz>`} Generator God and then based on pure random chance, you win {`<BiTz>`}!
-            </p>
-            <p className="mt-5">You DO NOT need to spend any gas to Play the Get {`<BiTz>`} ! SAY WAT?!</p>
-            <p className="mt-5">
-              But in the near future, the Get {`<BiTz>`} game won't be the only way to collect {`<BiTz>`} points, if you stay "active" on the Itheum Protocol,
-              you will be rewarded with bonus {`<BiTz>`} points as well. For example, if you use the{" "}
-              <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
-                Data DEX
-              </a>{" "}
-              to explore and "favorite" the Data NFTs and Data Creators you like or if you use features like "Data Uptime Checks" or use Data Widgets inside the
-              Itheum Explorer, all these Itheum Protocol "activity" will have {`<BiTz>`} bonus points attached to it and sent to you!
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Where can I play the Get {`<BiTz>`} Game?</h3>
-            <p>
-              Currently, you can play it on Itheum Explorer's Get {`<BiTz>`} Data Widget{" "}
-              <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/getbitz" target="blank">
-                explorer.itheum.io/getbitz
-              </a>
-            </p>
-            <p className="mt-5">
-              Also note that Itheum Explorer is available on xPortal Hub as well, so with a few taps on your xPortal mobile wallet, you can open the game and
-              Get {`<BiTz>`}!
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">What can I do with Itheum {`<BiTz>`} Points?</h3>
-            <p>
-              Itheum {`<BiTz>`} is like an XP system and you collect {`<BiTz>`} each time you interact with certain features of Itheum Protocol. Like all XP
-              Systems, there will be LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be
-              available:
-            </p>
-            <ol className="mt-5 text-lg">
-              <li className="my-5">
-                1. Top 5 Movers (top {BIT_GAME_TOP_LEADER_BOARD_GROUP} during LAUNCH WINDOW) from "Monthly" LEADERBOARD get Airdropped{" "}
-                <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
-                  Data NFTs
-                </a>{" "}
-                from previous and upcoming Data Creators.
-              </li>
-              <li className="my-5">
-                2. Get a boost on Monthly{" "}
-                <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/project-trailblazer" target="blank">
-                  Itheum Trailblazer
-                </a>{" "}
-                Data NFT Quest Rewards.
-              </li>
-              <li className="my-5">
-                3. 3 bonus drops of{" "}
-                <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
-                  Data NFTs
-                </a>{" "}
-                from previous and upcoming Data Creators sent randomly to users from top 100 "All Time" LEADERBOARD
-              </li>
-              <li className="my-5">4. Bragging rights as you climb to the top of the LEADERBOARD!</li>
-            </ol>
-
-            <p className="mt-5">
-              This is just the start, we have a bunch of other ideas planned for {`<BiTz>`}. Got ideas for {`<BiTz>`} utility? We love to hear them:{" "}
-              <a className="!text-[#7a98df] hover:underline" href="https://forms.gle/muA4XiD2ddQis4G78" target="blank">
-                {" "}
-                Send ideas
-              </a>{" "}
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTz>`} Points Blockchain Tokens?</h3>
-            <p>
-              Nope, there are more than enough meme coins out there and we don't need more. Itheum {`<BiTz>`} are simple XP to "gamify" usage of the Itheum
-              Protocol infrastructure. The $ITHEUM token is the primary utility token of the entire Itheum Ecosystem.
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Are Itheum {`<BiTz>`} Points Tradable?</h3>
-            <p>
-              We are heart-broken that you asked :( and nope you can't as they are not blockchain tokens (see above). But we are looking at possibilities of
-              where you can "gift" them to Data Creators who mint Data NFT Collections. "Gifting" Itheum {`<BiTz>`} will have its own LEADERBOARD and perks ;)
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I use Multiple Wallets to Claim {`<BiTz>`} XP?</h3>
-            <p>
-              If you do this, you will "fragment" your XP and you wont get much benefits so it's best you use your primary identity wallet to collect {`<BiTz>`}{" "}
-              XP. BUT, we also know that many "hunters" may try and do this to game (sybil attack) the LEADERBOARD and it will disadvantage the regular genuine
-              users. We are rolling out some new blockchain powered "liveliness & reputation signalling" features that should prevent or drastically reduce such
-              XP sybil attacks.
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Can I move Itheum {`<BiTz>`} Points Between my Wallets?</h3>
-            <p>
-              Lost your primary wallet or want to move Itheum {`<BiTz>`} to your new wallet? unfortunately, this is not possible right now (it MAY be in the
-              future - but no guarantee). So make sure you get {`<BiTz>`} in the wallet you treasure the most.
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Why is it Called {`<BiTz>`}?</h3>
-            <p>
-              Itheum is a data ownership protocol that is trying to break the current cycle of data exploitation. A Bit is the smallest unit of data. Let's
-              break the cycle of data exploitation one {`<BiT>`} at a time.
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Will this {`<BiTz>`} App become a Playable Game?</h3>
-            <p>
-              We are not game developers and don't pretend to be, so are waiting for an A.I tool that will build the game for us. We'd love for the Get{" "}
-              {`<BiTz>`} app to become a hub of "Mini-Games" where you win {`<BiTz>`} XP. Are you an A.I or a Game Dev and want to build a game layer for the
-              Itheum {`<BiTz>`} XP system? reach out and you could get a grant from via the{" "}
-              <a
-                className="!text-[#7a98df] hover:underline"
-                href="https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"
-                target="blank">
-                Itheum xPand DAO program
-              </a>
-              . As the entire game logic is actually inside the Data NFT, ANYONE can{" "}
-              <a className="!text-[#7a98df] hover:underline" href="https://docs.itheum.io/product-docs/developers/software-development-kits-sdks/data-nft-sdk">
-                use our SDK
-              </a>{" "}
-              and build their own game UI in front of it, this is the power and "Composability" of Itheum's Data NFTs in action.
-            </p>
-          </div>
-
-          <div className="mt-[2rem]">
-            <h3 className="!text-[#7a98df] dark:!text-[#35d9fa]">Help Make Itheum {`<BiTz>`} Better?</h3>
-            <p>
-              We want to make the Itheum {`<BiTz>`} XP System better! Do you have any questions or ideas for us or just want to know more? Head over to our{" "}
-              <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/discord" target="blank">
-                Discord
-              </a>{" "}
-              and speak to us or{" "}
-              <a className="!text-[#7a98df] hover:underline" href="https://forms.gle/muA4XiD2ddQis4G78" target="blank">
-                Send us your utility ideas for {`<BiTz>`} here.
-              </a>{" "}
-            </p>
-          </div>
-        </div>
-      </div>
+      <Faq />
     </>
   );
 };
