@@ -20,9 +20,11 @@ export const Home = () => {
       hasImage={false}>
       {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
         <div key={item.routeKey} className="mb-10 w-[341px]">
-          <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
-            <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
-          </div>
+          <Link to={returnRoute(item.routeKey)}>
+            <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
+              <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
+            </div>
+          </Link>
           <h3 className="!font-[Clash-Medium]">{item.appName}</h3>
           <p className="h-[100px] text-foreground font-[Satoshi-Light] mt-1">{item.desc}</p>
           <div className="pt-5">
