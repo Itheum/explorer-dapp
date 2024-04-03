@@ -392,6 +392,7 @@ export const GetBitz = () => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
+          {_isMemeBurnHappening && <Torch />}
           <img className={cn("rounded-[3rem] w-full", _isMemeBurnHappening ? "cursor-none" : "")} src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
@@ -424,7 +425,6 @@ export const GetBitz = () => {
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
-                <Torch />
                 <p className="text-center text-md text-gray-950 text-foreground md:text-xl ">Light up this Meme Sacrifice!</p>
                 <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
                 <BurningImage src={randomMeme} burnProgress={burnProgress} />

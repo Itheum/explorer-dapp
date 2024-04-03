@@ -28,7 +28,12 @@ const Torch: React.FC = () => {
     };
   }, []);
 
-  return <img src={torch} className="w-16 h-32 z-10 absolute" style={{ left: position.x - 840, top: position.y - 340 }}></img>;
+  return (
+    <img
+      src={torch}
+      className="w-16 h-32 z-[30] absolute -ml-[50px] md:-ml-[100px] xl:-ml-[150px] -mt-[60px]"
+      style={{ left: position.x, top: position.y }}></img>
+  );
 };
 
 export default Torch;
