@@ -37,8 +37,8 @@ export const BurningImage: React.FC<{ src: string; burnProgress: number }> = ({ 
         exit="consumed"
       />{" "}
       {burnProgress < 3 && (
-        <div className="absolute -mt-32 bottom-16 ">
-          <img src={clickHere} className="w-32 h-32 z-10" />
+        <div className="absolute -mt-32 bottom-16 -ml-24 ">
+          <img src={clickHere} className="w-32 h-32 z-10 " />
         </div>
       )}
     </div>
