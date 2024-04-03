@@ -44,6 +44,13 @@ import Meme7 from "assets/img/getbitz/memes/7.jpg";
 import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import Meme10 from "assets/img/getbitz/memes/10.jpg";
+import Meme11 from "assets/img/getbitz/memes/11.jpg";
+import Meme12 from "assets/img/getbitz/memes/12.jpg";
+import Meme13 from "assets/img/getbitz/memes/13.jpg";
+import Meme14 from "assets/img/getbitz/memes/14.jpg";
+import Meme15 from "assets/img/getbitz/memes/15.jpg";
+import Meme16 from "assets/img/getbitz/memes/16.jpg";
+import Meme17 from "assets/img/getbitz/memes/17.jpg";
 import Torch from "./Torch";
 import Faq from "./Faq";
 
@@ -55,7 +62,7 @@ interface LeaderBoardItemType {
 export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
 export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
 
-const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6, Meme7, Meme8, Meme9, Meme10];
+const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6, Meme7, Meme8, Meme9, Meme10, Meme11, Meme12, Meme13, Meme14, Meme15, Meme16, Meme17];
 
 export const GetBitz = () => {
   const { address } = useGetAccount();
@@ -88,9 +95,9 @@ export const GetBitz = () => {
   const [leaderBoardMonthly, setLeaderBoardMonthly] = useState<LeaderBoardItemType[]>([]);
   const [leaderBoardMonthString, setLeaderBoardMonthString] = useState<string>("");
   const [leaderBoardIsLoading, setLeaderBoardIsLoading] = useState<boolean>(false);
+  const [myRankOnAllTimeLeaderBoard, setMyRankOnAllTimeLeaderBoard] = useState<string>("-2");
 
   // Debug / Tests
-  const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
 
   useEffect(() => {
@@ -117,6 +124,35 @@ export const GetBitz = () => {
     // Load the LeaderBoards regardless on if the user has does not have the data nft in to entice them
     fetchAndLoadLeaderBoards();
   }, [chainID]);
+
+  useEffect(() => {
+    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
+    setBurnFireGlow(burnProgress * 0.1);
+    if (burnProgress === 10) {
+      setIsMemeBurnHappening(false);
+      playGame();
+    }
+  }, [burnProgress]);
+
+  useEffect(() => {
+    // load my rank if i'm not in the visible leader board (e.g. I'm not in the top 20, so whats my rank?)
+    if (address && leaderBoardAllTime.length > 0) {
+      let playerRank = -1;
+
+      for (let i = 0; i < leaderBoardAllTime.length; i++) {
+        if (leaderBoardAllTime[i].playerAddr === address) {
+          playerRank = i + 1;
+          break;
+        }
+      }
+
+      if (playerRank > -1) {
+        setMyRankOnAllTimeLeaderBoard(playerRank.toString());
+      } else {
+        fetchAndLoadMyRankOnLeaderBoard();
+      }
+    }
+  }, [address, leaderBoardAllTime]);
 
   // first, we get the Data NFT details needed for this game (but not if the current user has it)
   async function fetchDataNfts() {
@@ -152,15 +188,6 @@ export const GetBitz = () => {
     setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
   }
 
-  useEffect(() => {
-    setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
-    setBurnFireGlow(burnProgress * 0.1);
-    if (burnProgress === 10) {
-      setIsMemeBurnHappening(false);
-      playGame();
-    }
-  }, [burnProgress]);
-
   async function playGame() {
     if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
       throw Error("No Native Auth token");
@@ -183,12 +210,6 @@ export const GetBitz = () => {
       },
       fwdHeaderKeys: "authorization",
     };
-
-    // if we are testing future month leaderboards, then send this custom param to the origin
-    if (inDateStringDebugMode) {
-      viewDataArgs.fwdHeaderMapLookup["x-test-custom-mmyy-string"] = leaderBoardMonthString;
-      viewDataArgs.fwdHeaderKeys = "authorization,x-test-custom-mmyy-string";
-    }
 
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
 
@@ -274,8 +295,8 @@ export const GetBitz = () => {
     //   // for local UI debugging
     //   _loadBlankGameCanvas = true;
     //   _gameDataFetched = false;
-    //   _isFetchingDataMarshal = true;
-    //   _isMemeBurnHappening = false;
+    //   _isFetchingDataMarshal = false;
+    //   _isMemeBurnHappening = true;
 
     //   _viewDataRes = {
     //     contentType: "string",
@@ -370,12 +391,12 @@ export const GetBitz = () => {
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
-        <div className="relative  overflow-hidden  ">
+        <div className="relative overflow-hidden">
           <img className="rounded-[3rem] w-full" src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
-            className="select-none flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
-                        md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
+            className="select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+                        md:absolute md:pb-[.5rem] md:w-[500px] md:h-[420px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
                 <div
@@ -383,9 +404,12 @@ export const GetBitz = () => {
                   onClick={() => {
                     setIsMemeBurnHappening(true);
                   }}>
-                  <p className="md:text-md">We love our Itheum OGs! So get ready to grab yourself some of them sWeet sWeet {`<BiTz>`} points?</p>
-                  <p className="font-bold md:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme Sacrifice from you to proceed!</p>
-                  <p className="font-bold mt-5">Click here when you are ready...</p>
+                  <p className="md:text-md">Welcome Back Itheum OG!</p>
+                  <p className="md:text-md mt-2 md:mt-5">
+                    Ready to grab yourself some of them <span className=" md:text-3xl">🤤</span> {`<BiTz>`} points?
+                  </p>
+                  <p className="font-bold md:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!</p>
+                  <p className="font-bold mt-2 md:mt-5">Click here when you are ready...</p>
                   <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
                 </div>
               </>
@@ -399,8 +423,8 @@ export const GetBitz = () => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
                 <Torch />
-                <p className="text-center text-md text-gray-950 text-foreground md:text-xl ">Light up this meme sacrifice!</p>
-                <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn </p>
+                <p className="text-center text-md text-gray-950 text-foreground md:text-xl ">Light up this Meme Sacrifice!</p>
+                <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
                 <BurningImage src={randomMeme} burnProgress={burnProgress} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[125px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
@@ -409,10 +433,11 @@ export const GetBitz = () => {
 
             {_isFetchingDataMarshal && (
               <div>
-                <p className="text-center text-md text-gray-950 text-foreground  md:text-xl mb-[1rem]">
+                <p className="text-center text-md text-gray-950 text-foreground md:text-xl mb-[1rem]">
                   Did the {`<BiTz>`} Generator God like that Meme Sacrifice? Only time will tell...
                 </p>
-                <img className="w-[250px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
+                <p className="text-gray-950 text-sm text-center mb-[1rem]">Hang tight, result incoming</p>
+                <img className="w-[160px] md:w-[230px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
               </div>
             )}
           </div>
@@ -428,7 +453,7 @@ export const GetBitz = () => {
         <div className="relative overflow-hidden">
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
           <div
-            className="flex justify-center items-center mt-[10px] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
+            className="flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
                         md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
             {_viewDataRes && !_viewDataRes.error && (
               <>
@@ -550,20 +575,11 @@ export const GetBitz = () => {
     }
 
     const UTCYear = nowDateObj.getUTCFullYear().toString().slice(-2); // converts number 2024 to string 24
-    let MMYYString = `${UTCMonthStr}_${UTCYear}`;
-
-    // S: for TESTING monthly leaderboards, allow a param override!
-    const searchParams = new URLSearchParams(window.location.search);
-    const _overrideMMYYString = searchParams.get("x-test-custom-mmyy-string"); // should be like this 03_24
-
-    if (_overrideMMYYString && _overrideMMYYString.length === 5 && _overrideMMYYString.indexOf("_") === 2) {
-      MMYYString = _overrideMMYYString;
-      setInDateStringDebugMode(true);
-    }
-    // E: for TESTING monthly leaderboards, allow a param override!
+    const MMYYString = `${UTCMonthStr}_${UTCYear}`;
 
     setLeaderBoardMonthString(MMYYString);
 
+    // Get All Time leaderboard
     try {
       // S: ACTUAL LOGIC
       const { data } = await axios.get<LeaderBoardItemType[]>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/leaderBoard`, callConfig);
@@ -586,6 +602,7 @@ export const GetBitz = () => {
       console.error(message);
     }
 
+    // Get Monthly Leaderboard
     try {
       // S: ACTUAL LOGIC
       const { data } = await axios.get<LeaderBoardItemType[]>(
@@ -611,7 +628,25 @@ export const GetBitz = () => {
       const message = "Monthly Leaderboard fetching failed:" + (err as AxiosError).message;
       console.error(message);
     }
+
     setLeaderBoardIsLoading(false);
+  }
+
+  async function fetchAndLoadMyRankOnLeaderBoard() {
+    const callConfig = {
+      headers: {
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+      },
+    };
+
+    try {
+      const { data } = await axios.get<any>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/playerRankOnLeaderBoard?playerAddr=${address}`, callConfig);
+
+      setMyRankOnAllTimeLeaderBoard(data.playerRank || "N/A");
+    } catch (err) {
+      const message = "Getting my rank on the all time leaderboard failed:" + (err as AxiosError).message;
+      console.error(message);
+    }
   }
 
   function leaderBoardTable(leaderBoardData: LeaderBoardItemType[]) {
@@ -672,6 +707,22 @@ export const GetBitz = () => {
       <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
         <div className="leaderBoard">
           <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
+
+          {address && leaderBoardAllTime.length > 0 && (
+            <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:border-r-4 border-[#171717]">
+                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Current All-Time Rank</p>
+                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">{myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}</p>
+              </div>
+              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
+                <p className="flex items-end md:text-lg md:mr-[1rem]">Your {`<BiTz>`} Points </p>
+                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
+                  {bitzBalance === -2 ? `...` : <>{bitzBalance === -1 ? "0" : `${bitzBalance}`}</>}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="md:flex">
             <div className="my-[1rem] allTime md:flex-1">
               <h3 className="text-center text-white mb-[1rem]">All Time</h3>
@@ -689,9 +740,7 @@ export const GetBitz = () => {
             </div>
 
             <div className="my-[1rem] monthly md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">
-                Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
-              </h3>
+              <h3 className="text-center text-white mb-[1rem]">Monthly ({leaderBoardMonthString.replace("_", "-20")})</h3>
               {leaderBoardIsLoading ? (
                 <Loader />
               ) : (
