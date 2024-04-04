@@ -80,13 +80,15 @@ export const Arcade: React.FC = () => {
           fwdHeaderMapLookup: {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
+          nestedStream: true,
+          nestedIdxToStream: 1,
         };
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        res.data = await (res.data as Blob).text();
-        res.data = JSON.parse(res.data);
+        res.data = await (res.data as Blob);
+        // console.log(res.data);
 
-        setData(res.data.data);
+        setData(res.data);
         setIsFetchingDataMarshal(false);
       }
     } catch (err) {
@@ -96,7 +98,7 @@ export const Arcade: React.FC = () => {
     }
   }
 
-  console.log(data);
+  // console.log(data);
   return (
     <HeaderComponent
       pageTitle={"Arcade Room"}

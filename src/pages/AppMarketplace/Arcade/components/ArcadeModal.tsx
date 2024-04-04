@@ -1,21 +1,25 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import { Loader } from "../../../../components";
 
 type ArcadeModalProps = {
-  data: Record<any, any>;
+  data: any;
   owned: boolean;
   isFetchingDataMarshal: boolean;
 };
 
 export const ArcadeModal: React.FC<ArcadeModalProps> = (props) => {
   const { data, owned, isFetchingDataMarshal } = props;
-  const [iframeSrc, setIframeSrc] = useState<string>("");
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  // const [isFullscreen, setIsFullscreen] = React.useState(false);
+  const htmlCached = useMemo(() => data, [data]);
 
-  useEffect(() => {
-    if (data) {
-      setIframeSrc(data[0].file);
-    }
-  }, [isFetchingDataMarshal]);
+  // Fullscreen logic if i cant handle from game itself
+  // const handleFullscreen = () => {
+  //   const iframeElement = iframeRef.current;
+  //   if (!isFullscreen) {
+  //     iframeElement?.requestFullscreen();
+  //   }
+  // };
 
   return (
     <>
@@ -32,7 +36,12 @@ export const ArcadeModal: React.FC<ArcadeModalProps> = (props) => {
           </div>
         </div>
       ) : (
-        <iframe src={iframeSrc} height="800" className="w-full rounded-bl-xl" />
+        <>
+          {/*<Button className="absolute bottom-4 left-4" onClick={handleFullscreen}>*/}
+          {/*  Fullscreen*/}
+          {/*</Button>*/}
+          <iframe ref={iframeRef} id="gameiframe" src={URL.createObjectURL(htmlCached)} height="800" className="w-full rounded-bl-xl" allow="fullscreen" />
+        </>
       )}
     </>
   );

@@ -62,7 +62,10 @@ export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
 
 export const ARCADE_TOKENS: app_token[] = IS_DEVNET
-  ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 218 }]
+  ? [
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 218 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 230 },
+    ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 218 }];
 
 export const GET_BITZ_TOKEN: app_token = IS_DEVNET ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 } : { tokenIdentifier: "DATANFTFT-e936d4", nonce: 7 };
