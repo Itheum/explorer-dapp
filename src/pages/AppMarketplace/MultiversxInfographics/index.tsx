@@ -104,11 +104,11 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        // console.log("arg", arg);
-        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+ 
+         if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
           dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
         }
-        res = await dataNft.viewDataViaMVXNativeAuth(arg);
+         res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
         let blobDataType = BlobDataType.TEXT;
 

@@ -53,6 +53,7 @@ import Meme16 from "assets/img/getbitz/memes/16.jpg";
 import Meme17 from "assets/img/getbitz/memes/17.jpg";
 import Torch from "./Torch";
 import Faq from "./Faq";
+import { computeRemainingCooldown } from "libs/utils/functions";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -73,8 +74,11 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
+  const cooldown = useAccountStore((state: any) => state.cooldown);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
+  const updateCooldown = useAccountStore((state) => state.updateCooldown);
 
   // a single game-play related (so we have to reset these if the user wants to "replay")
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
@@ -243,6 +247,17 @@ export const GetBitz = () => {
       setGameDataFetched(true);
       setIsFetchingDataMarshal(false);
       setViewDataRes(viewDataPayload);
+      console.log("viewDataPayload", viewDataPayload.data.gamePlayResult);
+      console.log(
+        "cooldown",
+        computeRemainingCooldown(viewDataPayload.data.gamePlayResult.lastPlayedAndCommitted, viewDataPayload.data.gamePlayResult.configCanPlayEveryMSecs)
+      );
+      updateCooldown(
+        computeRemainingCooldown(
+          Math.max(viewDataPayload.data.gamePlayResult.lastPlayedAndCommitted, viewDataPayload.data.gamePlayResult.lastPlayedBeforeThisPlay),
+          viewDataPayload.data.gamePlayResult.configCanPlayEveryMSecs
+        )
+      );
 
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
@@ -326,7 +341,7 @@ export const GetBitz = () => {
     }
 
     // user is logged in and we are checking if they have the data nft to proceed with a play
-    if (address && checkingIfHasGameDataNFT && !hasGameDataNFT) {
+    if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
       return (
         <div>
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
@@ -347,19 +362,6 @@ export const GetBitz = () => {
         </div>
       );
     }
-
-    // user has data nft, so load the "start game" view
-    if (!_loadBlankGameCanvas && !_isFetchingDataMarshal) {
-      return (
-        <div
-          onClick={() => {
-            setLoadBlankGameCanvas(true);
-          }}>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Start Game"} />
-        </div>
-      );
-    }
-
     const CountDownComplete = () => (
       <div
         className="cursor-pointer relative inline-flex h-12 overflow-hidden rounded-full p-[1px] "
@@ -382,11 +384,51 @@ export const GetBitz = () => {
         // Render a countdown
         return (
           <span>
-            {props.hours}H:{props.minutes}M:{props.seconds}S
+            {props.hours > 0 ? (props.hours + props.hours === 1 ? " Hour " : " Hours ") : ""}
+            {props.minutes > 0 ? props.minutes + " Min : " : ""} {props.seconds} Sec
           </span>
         );
       }
     };
+
+    // user has data nft, so load the "start game" view
+    if (!_loadBlankGameCanvas && !_isFetchingDataMarshal) {
+      return (
+        <div className="relative">
+          {cooldown > 0 && (
+            <Countdown
+              className="mx-auto text-3"
+              date={cooldown}
+              renderer={(props: { hours: number; minutes: number; seconds: number; completed: boolean }) => {
+                if (props.completed) {
+                  return <> </>;
+                } else {
+                  return (
+                    <div className="absolute z-10 w-full h-full rounded-[3rem] bg-black/90 ">
+                      <div className="flex w-full h-full  items-center justify-center">
+                        <div className="text-3xl md:text-5xl flex flex-col items-center justify-center ">
+                          <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
+                          {props.hours > 0 ? (props.hours + props.hours === 1 ? " Hour " : " Hours ") : ""}
+                          {props.minutes > 0 ? props.minutes + " Min : " : ""} {props.seconds} Sec
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              }}
+            />
+          )}
+          <img
+            onClick={() => {
+              setLoadBlankGameCanvas(true);
+            }}
+            className="rounded-[3rem] w-full cursor-pointer"
+            src={ImgPlayGame}
+            alt={"Start Game"}
+          />
+        </div>
+      );
+    }
 
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
