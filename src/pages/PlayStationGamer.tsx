@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 
 export const PlayStationGamer = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
+  const { chainID } = useGetNetworkConfig();
 
   const [ccDataNfts, setCcDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
@@ -86,7 +87,9 @@ export const PlayStationGamer = () => {
         },
       };
       console.log("arg", arg);
-
+      if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+        dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+      }
       res = await dataNft.viewDataViaMVXNativeAuth(arg);
       res.data = await (res.data as Blob).text();
       res.data = JSON.parse(res.data);
