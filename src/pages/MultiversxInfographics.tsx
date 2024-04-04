@@ -70,7 +70,6 @@ export const MultiversxInfographics = () => {
   }
 
   async function viewData(index: number) {
-    console.log("data");
     try {
       if (!(index >= 0 && index < dataNfts.length)) {
         toastError("Data is not loaded");
@@ -97,12 +96,10 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log("arg", arg);
         if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
           dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
         }
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log("res", res);
 
         let blobDataType = BlobDataType.TEXT;
 

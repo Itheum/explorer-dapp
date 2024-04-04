@@ -76,7 +76,7 @@ export const Navbar = () => {
                   <PopoverPrimitive.PopoverClose>
                     <div className="flex  flex-row justify-center items-center">
                       <Gift className="mx-2 text-sky-300" />
-                      <span> Claim your {`<BiTz>`} </span>
+                      <span> Collect your {`<BiTz>`} </span>
                     </div>
                   </PopoverPrimitive.PopoverClose>
                 );
@@ -94,7 +94,7 @@ export const Navbar = () => {
           <PopoverPrimitive.PopoverClose>
             <div className="flex  flex-row justify-center items-center">
               <Gift className="mx-2 text-sky-300" />
-              <span> Claim your {`<BiTz>`} </span>
+              <span> Collect your {`<BiTz>`} </span>
             </div>
           </PopoverPrimitive.PopoverClose>
         )}

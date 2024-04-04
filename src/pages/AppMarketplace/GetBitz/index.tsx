@@ -18,8 +18,11 @@ import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
+import { computeRemainingCooldown } from "libs/utils/functions";
 import { routeNames } from "routes";
 import { BurningImage } from "./BurningImage";
+import Faq from "./Faq";
+import Torch from "./Torch";
 import { useAccountStore } from "../../../store/account";
 import "./GetBitz.css";
 
@@ -51,9 +54,19 @@ import Meme14 from "assets/img/getbitz/memes/14.jpg";
 import Meme15 from "assets/img/getbitz/memes/15.jpg";
 import Meme16 from "assets/img/getbitz/memes/16.jpg";
 import Meme17 from "assets/img/getbitz/memes/17.jpg";
-import Torch from "./Torch";
-import Faq from "./Faq";
-import { computeRemainingCooldown } from "libs/utils/functions";
+
+import Meme18 from "assets/img/getbitz/memes/18.jpg";
+import Meme19 from "assets/img/getbitz/memes/19.jpg";
+import Meme20 from "assets/img/getbitz/memes/20.jpg";
+import Meme21 from "assets/img/getbitz/memes/21.jpg";
+import Meme22 from "assets/img/getbitz/memes/22.jpg";
+import Meme23 from "assets/img/getbitz/memes/23.jpg";
+import Meme24 from "assets/img/getbitz/memes/24.jpg";
+import Meme25 from "assets/img/getbitz/memes/25.jpg";
+import Meme26 from "assets/img/getbitz/memes/26.jpg";
+import Meme27 from "assets/img/getbitz/memes/27.jpg";
+import Meme28 from "assets/img/getbitz/memes/28.jpg";
+import Meme29 from "assets/img/getbitz/memes/29.jpg";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -63,7 +76,37 @@ interface LeaderBoardItemType {
 export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
 export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
 
-const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6, Meme7, Meme8, Meme9, Meme10, Meme11, Meme12, Meme13, Meme14, Meme15, Meme16, Meme17];
+const MEME_IMGS = [
+  Meme1,
+  Meme2,
+  Meme3,
+  Meme4,
+  Meme5,
+  Meme6,
+  Meme7,
+  Meme8,
+  Meme9,
+  Meme10,
+  Meme11,
+  Meme12,
+  Meme13,
+  Meme14,
+  Meme15,
+  Meme16,
+  Meme17,
+  Meme18,
+  Meme19,
+  Meme20,
+  Meme21,
+  Meme22,
+  Meme23,
+  Meme24,
+  Meme25,
+  Meme26,
+  Meme27,
+  Meme28,
+  Meme29,
+];
 
 export const GetBitz = () => {
   const { address } = useGetAccount();
@@ -247,11 +290,7 @@ export const GetBitz = () => {
       setGameDataFetched(true);
       setIsFetchingDataMarshal(false);
       setViewDataRes(viewDataPayload);
-      console.log("viewDataPayload", viewDataPayload.data.gamePlayResult);
-      console.log(
-        "cooldown",
-        computeRemainingCooldown(viewDataPayload.data.gamePlayResult.lastPlayedAndCommitted, viewDataPayload.data.gamePlayResult.configCanPlayEveryMSecs)
-      );
+
       updateCooldown(
         computeRemainingCooldown(
           Math.max(viewDataPayload.data.gamePlayResult.lastPlayedAndCommitted, viewDataPayload.data.gamePlayResult.lastPlayedBeforeThisPlay),

@@ -32,8 +32,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
       // only get the bitz balance if the user owns the token
       if (hasGameDataNFT) {
-        console.log("info: user OWNs the bitz score data nft, so get balance");
-
         const viewDataArgs = {
           mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
           mvxNativeAuthMaxExpirySeconds: 3600,
@@ -56,7 +54,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
           );
         }
       } else {
-        console.log("info: user does NOT OWN the bitz score data nft");
         updateBitzBalance(-1);
         updateCooldown(-1);
       }

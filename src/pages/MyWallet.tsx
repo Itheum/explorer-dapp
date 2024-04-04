@@ -73,7 +73,6 @@ export const MyWallet = () => {
       dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
     }
     res = await dataNft.viewDataViaMVXNativeAuth(arg);
-    console.log(res);
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {
