@@ -73,7 +73,7 @@ export const MyWallet = () => {
       dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
     }
     res = await dataNft.viewDataViaMVXNativeAuth(arg);
-
+    console.log(res);
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {
@@ -116,6 +116,9 @@ export const MyWallet = () => {
         const videoObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         res.data = videoObject;
         blobDataType = BlobDataType.VIDEO;
+      } else if (res.contentType.search("text/html") >= 0) {
+        const blobUrl = URL.createObjectURL(res.data);
+        window.open(blobUrl, "_blank");
       } else {
         setIsAutoOpenFormat(false);
         // we don't support that format
