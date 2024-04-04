@@ -29,7 +29,6 @@ export const PlayStationGamer = () => {
       const _nfts: DataNft[] = await DataNft.createManyFromApi(
         PLAYSTATION_GAMER_PASSPORT_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier }))
       );
-      // console.log("ccDataNfts", _nfts);
       setCcDataNfts(_nfts);
       setIsLoading(false);
     } else {
