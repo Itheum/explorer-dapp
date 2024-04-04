@@ -6,12 +6,7 @@ export const walletConnectV2ProjectId = import.meta.env.VITE_ENV_WALLETCONNECTV2
 
 export const apiTimeout = 10_000; // 10s
 export const TOOLS_API_URL = "https://tools.multiversx.com";
-/**
- * Calls to these domains will use `nativeAuth` Baerer token
- */
-export const sampleAuthenticatedDomains = [TOOLS_API_URL];
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 export const dAppName = "Itheum Explorer";
 
 export const CC_SHOW_SIZE = 10;

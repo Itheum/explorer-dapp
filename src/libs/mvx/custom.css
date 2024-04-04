@@ -138,3 +138,7 @@
 .dapp-core-component__dappModalStyles__dappModalCloseButton.dapp-core-component__main__btn.dapp-core-component__main__btn-light.dapp-core-component__walletConnectLoginContainerStyles__xPortal-modal-close-button {
   @apply text-foreground bg-background !important;
 }
+
+.dapp-core-component__transactionToast-styles__icon {
+  filter: invert(50%) !important;
+}
