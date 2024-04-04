@@ -26,7 +26,7 @@ export const BurningImage: React.FC<{ src: string; burnProgress: number }> = ({ 
   };
 
   return (
-    <div className="cursor-none relative select-none  ">
+    <div className="cursor-none relative select-none">
       <motion.img
         className="rounded-[.1rem] w-[250px] max-h-[250px] md:w-[310px] md:max-h-[310px] m-auto -z-1"
         src={src}

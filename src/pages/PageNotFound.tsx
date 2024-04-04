@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useLocation } from "react-router-dom";
 import { Search } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 export const PageNotFound = () => {
   const { pathname } = useLocation();

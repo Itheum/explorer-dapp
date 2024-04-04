@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlaskRound, Home, Menu, Store, Wallet } from "lucide-react";
+import { FlaskRound, Gift, Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -32,14 +32,17 @@ import { useTheme } from "../../libComponents/ThemeProvider";
 import { useAccountStore } from "../../store/account";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { BIT_GAME_WINDOW_HOURS, BIT_GAME_TOP_LEADER_BOARD_GROUP } from "../../pages/AppMarketplace/GetBitz";
+import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
+import Countdown from "react-countdown";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
+  const cooldown = useAccountStore((state: any) => state.cooldown);
   const { address } = useGetAccount();
   const { theme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<string>();
+
   const getSystemTheme = () => {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       return "dark";
@@ -57,6 +60,47 @@ export const Navbar = () => {
   const handleLogout = () => {
     logout(`${window.location.origin}`, undefined, false);
   };
+
+  const ClaimBitzButton = () => (
+    <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
+      <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+      <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
+        {cooldown === -2 ? (
+          <span className="blinkMe">...</span>
+        ) : cooldown > 0 ? (
+          <Countdown
+            date={cooldown}
+            renderer={(props: { hours: number; minutes: number; seconds: number; completed: boolean }) => {
+              if (props.completed) {
+                return (
+                  <PopoverPrimitive.PopoverClose>
+                    <div className="flex  flex-row justify-center items-center">
+                      <Gift className="mx-2 text-sky-300" />
+                      <span> Collect your {`<BiTz>`} </span>
+                    </div>
+                  </PopoverPrimitive.PopoverClose>
+                );
+              } else {
+                return (
+                  <span className="ml-1">
+                    Play again in {props.hours > 0 ? (props.hours + props.hours === 1 ? " Hour " : " Hours ") : ""}
+                    {props.minutes > 0 ? props.minutes + " Min : " : ""} {props.seconds} Sec
+                  </span>
+                );
+              }
+            }}
+          />
+        ) : (
+          <PopoverPrimitive.PopoverClose>
+            <div className="flex  flex-row justify-center items-center">
+              <Gift className="mx-2 text-sky-300" />
+              <span> Collect your {`<BiTz>`} </span>
+            </div>
+          </PopoverPrimitive.PopoverClose>
+        )}
+      </span>
+    </Link>
+  );
 
   return (
     <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">
@@ -162,16 +206,11 @@ export const Navbar = () => {
                           </div>
                         </div>
                         <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
-                        <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4">
+                        <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
                           {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game
                           Data Widget. Top LEADERBOARD climbers get special perks and drops!
                         </p>
-                        <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
-                          <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
-                          <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
-                            Get {`<BiTz>`}
-                          </span>
-                        </Link>
+                        <ClaimBitzButton />
                       </div>
                     </PopoverContent>
                   </Popover>
