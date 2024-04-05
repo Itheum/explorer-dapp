@@ -447,8 +447,8 @@ export const GetBitz = () => {
                       <div className="flex w-full h-full  items-center justify-center">
                         <div className="text-3xl md:text-5xl flex flex-col items-center justify-center ">
                           <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
-                          {props.hours > 0 ? (props.hours + props.hours === 1 ? " Hour " : " Hours ") : ""}
-                          {props.minutes > 0 ? props.minutes + " Min : " : ""} {props.seconds} Sec
+                          {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
+                          {props.minutes > 0 ? props.minutes + " Min " : ""} {props.seconds} Sec
                         </div>
                       </div>
                     </div>
