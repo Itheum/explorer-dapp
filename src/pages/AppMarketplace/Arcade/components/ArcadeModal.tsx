@@ -1,5 +1,6 @@
 import React, { useMemo, useRef } from "react";
 import { Loader } from "../../../../components";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 
 type ArcadeModalProps = {
   data: any;
@@ -12,6 +13,7 @@ export const ArcadeModal: React.FC<ArcadeModalProps> = (props) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   // const [isFullscreen, setIsFullscreen] = React.useState(false);
   const htmlCached = useMemo(() => data, [data]);
+  const { tokenLogin } = useGetLoginInfo();
 
   // Fullscreen logic if i cant handle from game itself
   // const handleFullscreen = () => {
@@ -40,7 +42,14 @@ export const ArcadeModal: React.FC<ArcadeModalProps> = (props) => {
           {/*<Button className="absolute bottom-4 left-4" onClick={handleFullscreen}>*/}
           {/*  Fullscreen*/}
           {/*</Button>*/}
-          <iframe ref={iframeRef} id="gameiframe" src={URL.createObjectURL(htmlCached)} height="800" className="w-full rounded-bl-xl" allow="fullscreen" />
+          <iframe
+            ref={iframeRef}
+            id="gameiframe"
+            src={URL.createObjectURL(htmlCached) + "#tokenLogin?" + tokenLogin?.nativeAuthToken}
+            height="800"
+            className="w-full rounded-bl-xl"
+            allow="fullscreen"
+          />
         </>
       )}
     </>
