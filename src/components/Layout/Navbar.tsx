@@ -83,8 +83,8 @@ export const Navbar = () => {
               } else {
                 return (
                   <span className="ml-1">
-                    Play again in {props.hours > 0 ? (props.hours + props.hours === 1 ? " Hour " : " Hours ") : ""}
-                    {props.minutes > 0 ? props.minutes + " Min : " : ""} {props.seconds} Sec
+                    Play again in {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
+                    {props.minutes > 0 ? props.minutes + " Min " : ""} {props.seconds} Sec
                   </span>
                 );
               }
