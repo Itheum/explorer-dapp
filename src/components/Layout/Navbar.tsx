@@ -75,7 +75,6 @@ export const Navbar = () => {
                 return (
                   <PopoverPrimitive.PopoverClose>
                     <div className="flex  flex-row justify-center items-center">
-                      You can try again in:
                       <Gift className="mx-2 text-sky-300" />
                       <span> Collect your {`<BiTz>`} </span>
                     </div>
