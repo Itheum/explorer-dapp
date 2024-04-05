@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import toast from "react-hot-toast";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 
 type AudioPlayerProps = {
   dataNftToOpen?: DataNft;
@@ -15,10 +15,11 @@ type AudioPlayerProps = {
   tokenLogin?: any;
   firstSongBlobUrl?: string;
   previewUrl?: string;
+  chainID?: string;
 };
 
 export const AudioPlayer = (props: AudioPlayerProps) => {
-  const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl } = props;
+  const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl, chainID } = props;
 
   useEffect(() => {
     if (firstSongBlobUrl)
@@ -131,6 +132,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         }));
         /// if not previously fetched, fetch now and save the url of the blob
         if (dataNftToOpen) {
+          if (!dataNftToOpen.dataMarshal || dataNftToOpen.dataMarshal === "") {
+            dataNftToOpen.updateDataNft({ dataMarshal: getApiDataMarshal(chainID ?? "D") });
+          }
           const res: ViewDataReturnType = await dataNftToOpen.viewDataViaMVXNativeAuth({
             mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
             mvxNativeAuthMaxExpirySeconds: 3600,

@@ -17,9 +17,12 @@ import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
+import { computeRemainingCooldown } from "libs/utils/functions";
 import { routeNames } from "routes";
 import { BurningImage } from "./BurningImage";
+import Faq from "./Faq";
+import Torch from "./Torch";
 import { useAccountStore } from "../../../store/account";
 import "./GetBitz.css";
 
@@ -51,8 +54,19 @@ import Meme14 from "assets/img/getbitz/memes/14.jpg";
 import Meme15 from "assets/img/getbitz/memes/15.jpg";
 import Meme16 from "assets/img/getbitz/memes/16.jpg";
 import Meme17 from "assets/img/getbitz/memes/17.jpg";
-import Torch from "./Torch";
-import Faq from "./Faq";
+
+import Meme18 from "assets/img/getbitz/memes/18.jpg";
+import Meme19 from "assets/img/getbitz/memes/19.jpg";
+import Meme20 from "assets/img/getbitz/memes/20.jpg";
+import Meme21 from "assets/img/getbitz/memes/21.jpg";
+import Meme22 from "assets/img/getbitz/memes/22.jpg";
+import Meme23 from "assets/img/getbitz/memes/23.jpg";
+import Meme24 from "assets/img/getbitz/memes/24.jpg";
+import Meme25 from "assets/img/getbitz/memes/25.jpg";
+import Meme26 from "assets/img/getbitz/memes/26.jpg";
+import Meme27 from "assets/img/getbitz/memes/27.jpg";
+import Meme28 from "assets/img/getbitz/memes/28.jpg";
+import Meme29 from "assets/img/getbitz/memes/29.jpg";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -62,7 +76,37 @@ interface LeaderBoardItemType {
 export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
 export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
 
-const MEME_IMGS = [Meme1, Meme2, Meme3, Meme4, Meme5, Meme6, Meme7, Meme8, Meme9, Meme10, Meme11, Meme12, Meme13, Meme14, Meme15, Meme16, Meme17];
+const MEME_IMGS = [
+  Meme1,
+  Meme2,
+  Meme3,
+  Meme4,
+  Meme5,
+  Meme6,
+  Meme7,
+  Meme8,
+  Meme9,
+  Meme10,
+  Meme11,
+  Meme12,
+  Meme13,
+  Meme14,
+  Meme15,
+  Meme16,
+  Meme17,
+  Meme18,
+  Meme19,
+  Meme20,
+  Meme21,
+  Meme22,
+  Meme23,
+  Meme24,
+  Meme25,
+  Meme26,
+  Meme27,
+  Meme28,
+  Meme29,
+];
 
 export const GetBitz = () => {
   const { address } = useGetAccount();
@@ -73,8 +117,11 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
+  const cooldown = useAccountStore((state: any) => state.cooldown);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
+  const updateCooldown = useAccountStore((state) => state.updateCooldown);
 
   // a single game-play related (so we have to reset these if the user wants to "replay")
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
@@ -244,6 +291,13 @@ export const GetBitz = () => {
       setIsFetchingDataMarshal(false);
       setViewDataRes(viewDataPayload);
 
+      updateCooldown(
+        computeRemainingCooldown(
+          Math.max(viewDataPayload.data.gamePlayResult.lastPlayedAndCommitted, viewDataPayload.data.gamePlayResult.lastPlayedBeforeThisPlay),
+          viewDataPayload.data.gamePlayResult.configCanPlayEveryMSecs
+        )
+      );
+
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       }
@@ -326,7 +380,7 @@ export const GetBitz = () => {
     }
 
     // user is logged in and we are checking if they have the data nft to proceed with a play
-    if (address && checkingIfHasGameDataNFT && !hasGameDataNFT) {
+    if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
       return (
         <div>
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
@@ -347,19 +401,6 @@ export const GetBitz = () => {
         </div>
       );
     }
-
-    // user has data nft, so load the "start game" view
-    if (!_loadBlankGameCanvas && !_isFetchingDataMarshal) {
-      return (
-        <div
-          onClick={() => {
-            setLoadBlankGameCanvas(true);
-          }}>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgPlayGame} alt={"Start Game"} />
-        </div>
-      );
-    }
-
     const CountDownComplete = () => (
       <div
         className="cursor-pointer relative inline-flex h-12 overflow-hidden rounded-full p-[1px] "
@@ -382,21 +423,64 @@ export const GetBitz = () => {
         // Render a countdown
         return (
           <span>
-            {props.hours}H:{props.minutes}M:{props.seconds}S
+            {props.hours > 0 ? (props.hours + props.hours === 1 ? " Hour " : " Hours ") : ""}
+            {props.minutes > 0 ? props.minutes + " Min : " : ""} {props.seconds} Sec
           </span>
         );
       }
     };
 
+    // user has data nft, so load the "start game" view
+    if (!_loadBlankGameCanvas && !_isFetchingDataMarshal) {
+      return (
+        <div className="relative">
+          {cooldown > 0 && (
+            <Countdown
+              className="mx-auto text-3"
+              date={cooldown}
+              renderer={(props: { hours: number; minutes: number; seconds: number; completed: boolean }) => {
+                if (props.completed) {
+                  return <> </>;
+                } else {
+                  return (
+                    <div className="absolute z-10 w-full h-full rounded-[3rem] bg-black/90 ">
+                      <div className="flex w-full h-full  items-center justify-center">
+                        <div className="text-3xl md:text-5xl flex flex-col items-center justify-center ">
+                          <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
+                          {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
+                          {props.minutes > 0 ? props.minutes + " Min " : ""} {props.seconds} Sec
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              }}
+            />
+          )}
+          <img
+            onClick={() => {
+              setLoadBlankGameCanvas(true);
+            }}
+            className="rounded-[3rem] w-full cursor-pointer"
+            src={ImgPlayGame}
+            alt={"Start Game"}
+          />
+        </div>
+      );
+    }
+
     // user clicked on the start game view, so load the empty blank game canvas
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full" src={ImgGameCanvas} alt={"Play Game"} />
+          {_isMemeBurnHappening && <Torch />}
+          <img className={cn("rounded-[3rem] w-full", _isMemeBurnHappening ? "cursor-none" : "")} src={ImgGameCanvas} alt={"Play Game"} />
 
           <div
-            className="select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
-                        md:absolute md:pb-[.5rem] md:w-[500px] md:h-[420px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
+            className={cn(
+              "select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static md:absolute md:pb-[.5rem] md:w-[500px] md:h-[420px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2",
+              _isMemeBurnHappening ? "cursor-none" : ""
+            )}>
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
                 <div
@@ -422,7 +506,6 @@ export const GetBitz = () => {
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
-                <Torch />
                 <p className="text-center text-md text-gray-950 text-foreground md:text-xl ">Light up this Meme Sacrifice!</p>
                 <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
                 <BurningImage src={randomMeme} burnProgress={burnProgress} />

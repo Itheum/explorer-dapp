@@ -6,6 +6,7 @@ import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken } from "libs/utils";
 import { useAccountStore } from "./account";
 import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz";
+import { computeRemainingCooldown } from "libs/utils/functions";
 
 export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { address } = useGetAccount();
@@ -13,6 +14,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
   // ACCOUNT STORE
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
+  const updateCooldown = useAccountStore((state) => state.updateCooldown);
 
   useEffect(() => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -30,8 +32,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
       // only get the bitz balance if the user owns the token
       if (hasGameDataNFT) {
-        console.log("info: user OWNs the bitz score data nft, so get balance");
-
         const viewDataArgs = {
           mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
           mvxNativeAuthMaxExpirySeconds: 3600,
@@ -46,10 +46,16 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
         if (getBitzGameResult) {
           updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay);
+          updateCooldown(
+            computeRemainingCooldown(
+              getBitzGameResult.data.gamePlayResult.lastPlayedBeforeThisPlay,
+              getBitzGameResult.data.gamePlayResult.configCanPlayEveryMSecs
+            )
+          );
         }
       } else {
-        console.log("info: user does NOT OWN the bitz score data nft");
         updateBitzBalance(-1);
+        updateCooldown(-1);
       }
     })();
   }, [address, tokenLogin]);

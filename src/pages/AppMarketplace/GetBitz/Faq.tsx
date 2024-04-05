@@ -17,7 +17,7 @@ const Faq: React.FC = () => {
           <p className="mt-5">
             You need to use Data NFT and Itheum Core Infrastructure to collect your {`<BiTz>`} XP, and this exact Web3/Blockchain based product stack can be
             used by you to empower you to take ownership of and tokenize your data. So in essence, you are using Data Ownership + Data Tokenization technology
-            and learning about how you can take ownership of you data! Welcome Itheum Data Ownership OG!
+            and learning about how you can take ownership of your data! Welcome Itheum Data Ownership OG!
           </p>
         </>
       ),
@@ -27,13 +27,13 @@ const Faq: React.FC = () => {
       content: (
         <>
           <p>
-            On top of being Itheum Protocol XP, they also signal your "liveliness" as a human and not a BOT. This is a form of "reputation signalling" of you as
-            a human within the Itheum ecosystem, this reputation signalling is a very powerful concept when you link it to "data ownership" as it add a layer of
-            "proof of humanity" to the Itheum Protocol.
+            In addition to serving as the Itheum Protocol XP, they signal your "liveliness" and authenticate your status as a human rather than a BOT. This
+            serves as a form of "reputation signalling" within the Itheum ecosystem, a concept greatly strengthened when connected to "data ownership," adding
+            an additional layer of "proof of experience" to the Itheum Protocol.
           </p>
           <p className="mt-5">
-            There will be a wave of new "liveliness & reputation signalling" features launching within the Itheum protocol in the very near future, and{" "}
-            {`<BiTz>`} XP is the first such "liveliness & reputation signalling" features to launch
+            A series of new features related to "liveliness & reputation signalling" will soon be introduced within the Itheum protocol, and {`<BiTz>`} XP
+            stands as the inaugural feature of its kind.
           </p>
         </>
       ),
@@ -45,9 +45,12 @@ const Faq: React.FC = () => {
           {" "}
           <p>
             You need to hold a {`<BiTz>`} compatible Data NFT in your wallet to play the Get {`<BiTz>`} game (you are on this page now). This Data NFT was
-            airdropped in waves to OGs of the Itheum Protocol, but fear not, you can also get it on any NFT Marketplace (if the OGs broke our hearts and parted
-            ways with their Data NFTs). If this "Series 1" {`<BiTz>`} Data NFT is successful, there may be a follow-up Series of {`<BiTz>`} Data NFTs launched
-            and airdropped as well.
+            airdropped in waves to OGs of the Itheum Protocol, but fear not, you can also get it on the{" "}
+            <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/DATANFTFT-e936d4-07" target="blank">
+              Itheum Data NFT Marketplace
+            </a>{" "}
+            or any NFT Marketplace (if the OGs broke our hearts and parted ways with their Data NFTs). If this "Gen 1" {`<BiTz>`} Data NFT is successful, there
+            may be a follow-up Series of {`<BiTz>`} Data NFTs launched and airdropped as well.
           </p>
           <p className="mt-5">
             Once you have the Data NFT in your wallet, you can play the Game every 6 Hours ({BIT_GAME_WINDOW_HOURS} Hours in "Launch Window"). You have to burn
