@@ -1,16 +1,15 @@
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import React, { useEffect, useState } from "react";
-import headerImg from "../../../assets/img/arcade/arcadeRoom.mp4";
+import headerImg from "../../../assets/img/bober/BoberLast.png";
 import { useGetAccount, useGetPendingTransactions } from "../../../hooks";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { ARCADE_TOKENS, TRAILBLAZER_TOKENS } from "../../../appsConfig";
+import { BOBER_TOKENS } from "../../../appsConfig";
 import { decodeNativeAuthToken, toastError } from "../../../libs/utils";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { DataNftCard } from "../../../components";
-import { TrailBlazerModal } from "../ItheumTrailblazer/components/TrailBlazerModal";
 import { ArcadeModal } from "./components/ArcadeModal";
 
-export const Arcade: React.FC = () => {
+export const BobreGame: React.FC = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
@@ -37,7 +36,7 @@ export const Arcade: React.FC = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(ARCADE_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(BOBER_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
 
     setItDataNfts(_nfts);
     setIsLoading(false);
@@ -101,10 +100,10 @@ export const Arcade: React.FC = () => {
   // console.log(data);
   return (
     <HeaderComponent
-      pageTitle={"Arcade Room"}
-      hasImage={false}
-      hasVideo={true}
-      videoSrc={headerImg}
+      pageTitle={"Bober Room"}
+      hasImage={true}
+      imgSrc={headerImg}
+      headerImgStyle="h-[70rem] 3xl:h-[72rem]"
       altImageAttribute={"itheumTrailblazer"}
       pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
       dataNftCount={itDataNfts.length}>
@@ -118,7 +117,7 @@ export const Arcade: React.FC = () => {
             owned={flags[index]}
             viewData={viewData}
             modalContent={<ArcadeModal data={data} isFetchingDataMarshal={isFetchingDataMarshal} owned={owned} />}
-            modalTitle={"Arcade Room"}
+            modalTitle={"Bober Room"}
             modalTitleStyle="md:p-5 pt-5 pb-5 px-2"
           />
         ))
