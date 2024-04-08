@@ -68,10 +68,10 @@ export const APP_MAPPINGS = [
     img: iconTimeCapsule,
   },
   {
-    appName: "Bobre Game",
+    appName: "Bober Room",
     appDescription: "Bober is ready to own the world.",
     routeKey: "bober",
-    desc: "",
+    desc: "Annoying memes are flooding the forest! Use your trusty water cannon to blast them away before they reach the dam! It's a beaver battle against cringe!",
     img: iconBober,
   },
 ];
