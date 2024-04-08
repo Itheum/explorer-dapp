@@ -15,6 +15,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   // ACCOUNT STORE
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
+  const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
 
   useEffect(() => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -46,6 +47,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
         if (getBitzGameResult) {
           updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay);
+          updateGivenBitzSum(getBitzGameResult.data.bitsMain.bitsGivenSum);
           updateCooldown(
             computeRemainingCooldown(
               getBitzGameResult.data.gamePlayResult.lastPlayedBeforeThisPlay,
@@ -55,6 +57,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         }
       } else {
         updateBitzBalance(-1);
+        updateGivenBitzSum(-1);
         updateCooldown(-1);
       }
     })();

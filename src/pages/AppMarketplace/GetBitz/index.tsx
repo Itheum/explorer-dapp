@@ -24,6 +24,7 @@ import { BurningImage } from "./BurningImage";
 import Faq from "./Faq";
 import Torch from "./Torch";
 import { useAccountStore } from "../../../store/account";
+import GiveBitzBase from "./GiveBitz/GiveBitzBase";
 import "./GetBitz.css";
 
 // Image Layers
@@ -840,6 +841,8 @@ export const GetBitz = () => {
         </div>
       </div>
       <Faq />
+
+      <GiveBitzBase viewDataRes={viewDataRes} />
     </>
   );
 };
