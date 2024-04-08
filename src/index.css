@@ -187,3 +187,18 @@ h6 {
   background-size: cover;
   background-position: top;
 }
+
+@keyframes ping {
+  0% {
+    transform: scale(0.1);
+    opacity: 1;
+  }
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+.animate-ping-slow {
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}

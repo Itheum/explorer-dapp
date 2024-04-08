@@ -51,6 +51,72 @@ export const Navbar = () => {
     }
   };
 
+  const FlaskBottleAnimation = () => {
+    return (
+      <div className="relative w-full h-full ">
+        {cooldown <= 0 && (
+          <>
+            <div
+              className="absolute rounded-full w-[0.4rem] h-[0.4rem] top-[-15px] left-[10px]    bg-sky-300 animate-ping-slow"
+              style={{ animationDelay: "1s" }}></div>
+            <div
+              className="absolute rounded-full w-[0.3rem] h-[0.3rem] top-[-8px]  left-[4px]  bg-sky-300  animate-ping-slow"
+              style={{ animationDelay: "0.5s" }}></div>
+            <div className="absolute rounded-full w-1 h-1 top-[-5px] left-[13px]  bg-sky-300 animate-ping-slow"></div>
+          </>
+        )}
+        <FlaskRound className="fill-sky-300" />
+      </div>
+    );
+  };
+
+  const BitzDropdown = () => {
+    return (
+      <div className=" shadow-sm shadow-sky-300  rounded-lg justify-center cursor-pointer">
+        <Popover>
+          <PopoverTrigger>
+            <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
+              {bitzBalance === -2 ? (
+                <span className="flex items-center gap-0.5 blinkMe text-lg">
+                  ... <FlaskBottleAnimation />
+                </span>
+              ) : (
+                <>
+                  {bitzBalance === -1 ? (
+                    <div className="flex items-center gap-0.5 text-base">
+                      0 <FlaskBottleAnimation />
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-0.5 text-base">
+                      {bitzBalance} <FlaskBottleAnimation />
+                    </div>
+                  )}
+                </>
+              )}
+            </Button>
+          </PopoverTrigger>
+
+          <PopoverContent className="w-[15rem] md:w-[25rem]">
+            <PopoverPrimitive.Arrow className="fill-border w-5 h-3" />
+            <div className="flex flex-col justify-center p-3 w-full">
+              <div className="flex justify-center w-full py-4">
+                <div className="flex w-16 h-16 justify-center items-center border border-b-border rounded-lg shadow-inner shadow-sky-400">
+                  <FlaskRound className="w-7 h-7 fill-sky-300" />
+                </div>
+              </div>
+              <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
+              <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
+                {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game Data
+                Widget. Top LEADERBOARD climbers get special perks and drops!
+              </p>
+              <ClaimBitzButton />
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+    );
+  };
+
   useEffect(() => {
     if (theme === "system") {
       setSystemTheme(getSystemTheme());
@@ -82,8 +148,9 @@ export const Navbar = () => {
                 );
               } else {
                 return (
-                  <span className="ml-1">
-                    Play again in {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
+                  <span className="ml-1 text-center">
+                    Play again in <br></br>
+                    {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
                     {props.minutes > 0 ? props.minutes + " Min " : ""} {props.seconds} Sec
                   </span>
                 );
@@ -173,48 +240,7 @@ export const Navbar = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <div className="shadow-sm shadow-sky-300 p-[1px] rounded-lg justify-center cursor-pointer">
-                  <Popover>
-                    <PopoverTrigger>
-                      <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
-                        {bitzBalance === -2 ? (
-                          <span className="flex items-center gap-0.5 blinkMe text-lg">
-                            ... <FlaskRound className="w-5 h-5 fill-sky-300 " />
-                          </span>
-                        ) : (
-                          <>
-                            {bitzBalance === -1 ? (
-                              <div className="flex items-center gap-0.5 text-base">
-                                0 <FlaskRound className="w-5 h-5 fill-sky-300 " />
-                              </div>
-                            ) : (
-                              <div className="flex items-center gap-0.5 text-base">
-                                {bitzBalance} <FlaskRound className="w-5 h-5 fill-sky-300 " />
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-
-                    <PopoverContent className="w-[25rem]">
-                      <PopoverPrimitive.Arrow className="fill-border w-5 h-3" />
-                      <div className="flex flex-col justify-center p-3 w-full">
-                        <div className="flex justify-center w-full py-4">
-                          <div className="flex w-16 h-16 justify-center items-center border border-b-border rounded-lg shadow-inner shadow-sky-400">
-                            <FlaskRound className="w-7 h-7 fill-sky-300" />
-                          </div>
-                        </div>
-                        <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
-                        <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
-                          {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game
-                          Data Widget. Top LEADERBOARD climbers get special perks and drops!
-                        </p>
-                        <ClaimBitzButton />
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                <BitzDropdown />
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
@@ -252,18 +278,19 @@ export const Navbar = () => {
         <DropdownMenu>
           <div className="flex flex-row">
             {isLoggedIn ? (
-              <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
-                  <Button
-                    className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleLogout}>
-                    Logout
-                  </Button>
-                </div>
-              </Link>
+              <BitzDropdown />
             ) : (
+              // <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
+              //   <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
+              //     <Button
+              //       className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide"
+              //       variant="outline"
+              //       size="sm"
+              //       onClick={handleLogout}>
+              //       Logout
+              //     </Button>
+              //   </div>
+              // </Link>
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
@@ -273,7 +300,7 @@ export const Navbar = () => {
                   </Button>
                 </div>
               </Link>
-            )}
+            )}{" "}
             <SwitchButton />
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="mr-2">
@@ -328,11 +355,24 @@ export const Navbar = () => {
                     </div>
                   </Link>
                 </DropdownMenuGroup>
-                <DropdownMenuLabel>My Address Quick Copy</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                {/* <DropdownMenuLabel>My Address Quick Copy</DropdownMenuLabel> */}
+                <DropdownMenuItem className="gap-4">
                   <CopyAddress address={address} precision={6} />
-                </DropdownMenuItem>
+                </DropdownMenuItem>{" "}
+                <DropdownMenuSeparator />{" "}
+                <DropdownMenuGroup>
+                  <Link to={routeNames.home} className="w-full flex justify-center items-center">
+                    <div className="w-[80px] bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center items-center">
+                      <Button
+                        className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleLogout}>
+                        Logout
+                      </Button>
+                    </div>
+                  </Link>
+                </DropdownMenuGroup>
               </>
             ) : null}
           </DropdownMenuContent>
