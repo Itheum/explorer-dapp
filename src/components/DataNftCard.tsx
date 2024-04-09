@@ -41,6 +41,7 @@ export function DataNftCard({
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
+
   function goToMarketplace(tokenIdentifier: string) {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
@@ -76,10 +77,12 @@ export function DataNftCard({
                 {<MXAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}
               </span>
             </div>
-            <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Created At:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.creationTime.toLocaleString()}</span>
-            </div>
+            {dataNft.creationTime && (
+              <div className="grid grid-cols-12 mb-1">
+                <span className="col-span-4 opacity-6 base:text-sm md:text-base">Created At:</span>
+                <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.creationTime.toLocaleString()}</span>
+              </div>
+            )}
 
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 base:text-sm md:text-base">Identifier:</span>
@@ -95,7 +98,7 @@ export function DataNftCard({
             {showBalance && (
               <div className="grid grid-cols-12 mb-1">
                 <span className="col-span-4 opacity-6 base:text-sm md:text-base">Balance:</span>
-                <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.balance.toString()}</span>
+                <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.balance !== 0 ? dataNft.balance.toString() : "1"}</span>
               </div>
             )}
             <div className="grid grid-cols-12 mb-1">

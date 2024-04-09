@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { X } from "lucide-react";
 import SVG from "react-inlinesvg";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { X } from "lucide-react";
-
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
 
 export const MultiversxInfographics = () => {
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
+  const { chainID } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
@@ -73,7 +70,6 @@ export const MultiversxInfographics = () => {
   }
 
   async function viewData(index: number) {
-    console.log("data");
     try {
       if (!(index >= 0 && index < dataNfts.length)) {
         toastError("Data is not loaded");
@@ -100,10 +96,10 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-        console.log("arg", arg);
-
+        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+          dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+        }
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
-        console.log("res", res);
 
         let blobDataType = BlobDataType.TEXT;
 

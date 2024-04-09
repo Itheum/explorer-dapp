@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
@@ -8,19 +8,16 @@ import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { DataNftCard, Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
-
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
 
 export const MyWallet = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
+  const { chainID } = useGetNetworkConfig();
   const [dataNftCount, setDataNftCount] = useState<number>(0);
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,6 +54,9 @@ export const MyWallet = () => {
 
     const dataNft = dataNfts[index];
     let res: any;
+    if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+      dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+    }
     if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
       throw Error("No nativeAuth token");
     }
@@ -68,9 +68,10 @@ export const MyWallet = () => {
         "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
       },
     };
-
+    if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+      dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+    }
     res = await dataNft.viewDataViaMVXNativeAuth(arg);
-
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {
@@ -113,6 +114,9 @@ export const MyWallet = () => {
         const videoObject = window.URL.createObjectURL(new Blob([res.data], { type: res.contentType }));
         res.data = videoObject;
         blobDataType = BlobDataType.VIDEO;
+      } else if (res.contentType.search("text/html") >= 0) {
+        const blobUrl = URL.createObjectURL(res.data);
+        window.open(blobUrl, "_blank");
       } else {
         setIsAutoOpenFormat(false);
         // we don't support that format

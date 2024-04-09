@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { TIMECAPSULE_TOKENS } from "appsConfig";
 import headerHero from "assets/img/timecapsule/custom-app-header-timecapsule.png";
 import { DataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
 import { TrailBlazerModal } from "../ItheumTrailblazer/components/TrailBlazerModal";
 
@@ -14,6 +14,7 @@ export const TimeCapsule = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
+  const { chainID } = useGetNetworkConfig();
   const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
   const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,7 +81,9 @@ export const TimeCapsule = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
-
+        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+          dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+        }
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);

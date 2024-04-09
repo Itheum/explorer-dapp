@@ -3,6 +3,7 @@ import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
+import iconGetBitz from "assets/img/getbitz/expl-app-getbitz-icon.gif";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
@@ -10,8 +11,15 @@ export const ERROR_DATA_LOADING = "Data is still loading";
 
 export const APP_MAPPINGS = [
   {
+    appName: "Get <BiTz> Points",
+    appDescription: "Collect Itheum <BiTz> Points",
+    routeKey: "getbitz",
+    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTz> points, <BiTz> points are like Data Ownership OG XP. Let's Get <BiTz>!",
+    img: iconGetBitz,
+  },
+  {
     appName: "TrailBlazer",
-    appDescription: "TrailBlazer Data NFT",
+    appDescription: "TrailBlazer Quest App",
     routeKey: "itheumtrailblazer",
     desc: "Hardcore community members unlock Project Alpha by owning their favorite project's TrailBlazer Data NFTs. Unlock and visualize these TrailBlazer Data NFTs by using this app.",
     img: iconTrailblazer,
@@ -25,7 +33,7 @@ export const APP_MAPPINGS = [
   },
   {
     appName: "MultiversX Bubbles",
-    appDescription: "MultiversX Bubbles Data NFT",
+    appDescription: "MultiversX Datasets Visualized",
     routeKey: "multiversxbubbles",
     desc: "This app visualizes dynamic data streams of various MultiversX ecosystem metrics and insights as bubble graphs. Get MultiversX ecosystem alpha today!",
     img: iconBubbleMaps,
@@ -39,21 +47,21 @@ export const APP_MAPPINGS = [
   },
   {
     appName: "MultiversX Infographics",
-    appDescription: "MultiversX Infographics Data NFT",
+    appDescription: "View Dynamic Infographic PDFs",
     routeKey: "multiversxinfographics",
     desc: 'This app visualizes dynamic and evolving data streams rendered into PDF files that showcase unique MultiversX ecosystem "alpha", insights, and education.',
     img: iconInfrographics,
   },
   {
     appName: "NF-Tunes",
-    appDescription: "MultiversX Music Data NFT",
+    appDescription: "Listen to Music Playlists",
     routeKey: "nftunes",
     desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
     img: iconNFTunes,
   },
   {
     appName: "Time Capsule",
-    appDescription: "Time Capsule",
+    appDescription: "Preserve Memories Forever",
     routeKey: "timecapsule",
     desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
     img: iconTimeCapsule,

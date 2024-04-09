@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import toast from "react-hot-toast";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 
 type AudioPlayerProps = {
   dataNftToOpen?: DataNft;
@@ -15,10 +15,11 @@ type AudioPlayerProps = {
   tokenLogin?: any;
   firstSongBlobUrl?: string;
   previewUrl?: string;
+  chainID?: string;
 };
 
 export const AudioPlayer = (props: AudioPlayerProps) => {
-  const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl } = props;
+  const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl, chainID } = props;
 
   useEffect(() => {
     if (firstSongBlobUrl)
@@ -58,14 +59,13 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     speed: 1000,
     slidesToShow: 4,
     slidesToScroll: 4,
-    initialSlide: 0,
     responsive: [
       {
         breakpoint: 1800,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          initialSlide: 0,
+          initialSlide: 1,
         },
       },
       {
@@ -73,7 +73,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          initialSlide: 0,
+          initialSlide: 1,
         },
       },
 
@@ -89,6 +89,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          initialSlide: 0,
         },
       },
     ],
@@ -131,6 +132,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         }));
         /// if not previously fetched, fetch now and save the url of the blob
         if (dataNftToOpen) {
+          if (!dataNftToOpen.dataMarshal || dataNftToOpen.dataMarshal === "") {
+            dataNftToOpen.updateDataNft({ dataMarshal: getApiDataMarshal(chainID ?? "D") });
+          }
           const res: ViewDataReturnType = await dataNftToOpen.viewDataViaMVXNativeAuth({
             mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
             mvxNativeAuthMaxExpirySeconds: 3600,

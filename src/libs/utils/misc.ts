@@ -59,3 +59,23 @@ export const decodeNativeAuthToken = (accessToken: string) => {
 
   return result;
 };
+
+export const getApiDataMarshal = (chainID: string) => {
+  const envKey = chainID === "1" ? "VITE_ENV_DATAMARSHAL_MAINNET_API" : "VITE_ENV_DATAMARSHAL_DEVNET_API";
+  const defaultUrl = chainID === "1" ? "https://api.itheumcloud.com/datamarshalapi/router/v1" : "https://api.itheumcloud-stg.com/datamarshalapi/router/v1";
+  return import.meta.env[envKey] || defaultUrl;
+};
+export const sleep = (sec: number) => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, sec * 1000);
+  });
+};
+
+export const getApiWeb2Apps = (chainID: string) => {
+  const envKey = chainID === "1" ? "VITE_ENV_WEB2_APPS_MAINNET_API" : "VITE_ENV_WEB2_APPS_DEVNET_API";
+  const defaultUrl = chainID === "1" ? "https://api.itheumcloud.com" : "https://api.itheumcloud-stg.com";
+
+  return import.meta.env[envKey] || defaultUrl;
+};

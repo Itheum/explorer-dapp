@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { motion } from "framer-motion";
 import { MoveDown, Music, Music2, PlayCircle } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -13,8 +13,8 @@ import { Modal } from "components/Modal/Modal";
 import YouTubeEmbed from "components/YouTubeEmbed";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { useTheme } from "libComponents/ThemeProvider";
-import { BlobDataType } from "libs/types";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { scrollToSection } from "libs/utils";
@@ -43,15 +43,12 @@ import dataLines from "../../../assets/img/zstorage/data-lines.png";
 import frontCube from "../../../assets/img/zstorage/front.png";
 import vault from "../../../assets/img/zstorage/vault-dots.png";
 
-interface ExtendedViewDataReturnType extends ViewDataReturnType {
-  blobDataType: BlobDataType;
-}
-
 export const NFTunes = () => {
   const { address } = useGetAccount();
   const { theme } = useTheme();
   const currentTheme = theme !== "system" ? theme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const { tokenLogin } = useGetLoginInfo();
+  const { chainID } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [featuredArtistDataNft, setFeaturedArtistDataNft] = useState<DataNft>();
@@ -147,6 +144,9 @@ export const NFTunes = () => {
         });
 
         // start the request for the manifest file from marshal
+        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+          dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+        }
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
         let blobDataType = BlobDataType.TEXT;
@@ -385,6 +385,7 @@ export const NFTunes = () => {
                                 songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                 tokenLogin={tokenLogin}
                                 firstSongBlobUrl={firstSongBlobUrl}
+                                chainID={chainID}
                               />
                             )}
                           </>
@@ -634,6 +635,7 @@ export const NFTunes = () => {
                               songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                               tokenLogin={tokenLogin}
                               firstSongBlobUrl={firstSongBlobUrl}
+                              chainID={chainID}
                             />
                           )}
                         </>
