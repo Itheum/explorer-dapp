@@ -114,6 +114,7 @@ export const BobreGame: React.FC = () => {
             dataNft={dataNft}
             isLoading={isLoading}
             owned={flags[index]}
+            modalStyles={"md:h-[95svh] sm:h-[100svh]"}
             viewData={viewData}
             modalContent={<BoberModal data={data} isFetchingDataMarshal={isFetchingDataMarshal} owned={owned} />}
             modalTitle={"Bober Room"}

@@ -50,7 +50,7 @@ export const App = () => {
                     <Route path={`${routeNames.timecapsule}/:targetNonce/:targetMessageToBeSigned`} element={<TimeCapsule />} />
                     <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                     <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
-                    <Route path={`${routeNames.arcade}/:targetNonce/:targetMessageToBeSigned`} element={<BobreGame />} />
+                    <Route path={`${routeNames.bober}/:targetNonce/:targetMessageToBeSigned`} element={<BobreGame />} />
                     <Route path="*" element={<PageNotFound />} />
                   </Routes>
                 </Layout>

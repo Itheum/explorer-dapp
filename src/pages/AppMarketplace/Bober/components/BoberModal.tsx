@@ -23,6 +23,16 @@ export const BoberModal: React.FC<BoberModalProps> = (props) => {
   //   }
   // };
 
+  const innerHeightIframe = (innerHeight: number) => {
+    if (innerHeight > 1000 && innerHeight < 1350) {
+      return "800";
+    } else if (innerHeight > 1350) {
+      return "1080";
+    } else if (innerHeight < 1000) {
+      return "700";
+    }
+  };
+
   return (
     <>
       {!owned ? (
@@ -42,7 +52,7 @@ export const BoberModal: React.FC<BoberModalProps> = (props) => {
           <iframe
             ref={iframeRef}
             src={URL.createObjectURL(htmlCached) + "#tokenLogin?" + tokenLogin?.nativeAuthToken}
-            height={innerHeight > 1000 ? "800" : "700"}
+            height={innerHeightIframe(window.innerHeight)}
             className="w-full rounded-b-xl overflow-y-hidden"
             allow="fullscreen"
           />
