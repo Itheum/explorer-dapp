@@ -115,7 +115,6 @@ export const BobreGame: React.FC = () => {
             isLoading={isLoading}
             owned={flags[index]}
             viewData={viewData}
-            modalStyles="h-[100%]"
             modalContent={<BoberModal data={data} isFetchingDataMarshal={isFetchingDataMarshal} owned={owned} />}
             modalTitle={"Bober Room"}
             modalTitleStyle="md:p-5 pt-5 pb-5 px-2"

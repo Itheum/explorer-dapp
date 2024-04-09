@@ -39,13 +39,10 @@ export const BoberModal: React.FC<BoberModalProps> = (props) => {
         </div>
       ) : (
         <>
-          {/*<Button className="absolute bottom-4 left-4" onClick={handleFullscreen}>*/}
-          {/*  Fullscreen*/}
-          {/*</Button>*/}
           <iframe
             ref={iframeRef}
             src={URL.createObjectURL(htmlCached) + "#tokenLogin?" + tokenLogin?.nativeAuthToken}
-            height="800"
+            height={innerHeight > 1000 ? "800" : "700"}
             className="w-full rounded-b-xl overflow-y-hidden"
             allow="fullscreen"
           />
