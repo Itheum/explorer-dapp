@@ -303,7 +303,7 @@ export const GetBitz = () => {
       }
 
       if (animation) {
-        await sleep(6);
+        await sleep(10);
         animation.stop();
         // if its confetti, then we have to destroy it
         if ((animation as unknown as Container).destroy) {
