@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
+import RecentDataNFTsSection from "components/RecentDataNftsSection";
+import TrandingSection from "components/TrendingSection";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
-import { ThreeDCard } from "components/TreeDCard";
-import TrandingSection from "components/TrendingSection";
-import RecentDataNFTsSection from "components/RecentDataNftsSection";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];

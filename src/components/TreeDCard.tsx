@@ -22,7 +22,7 @@ export function ThreeDCard(props: ThreeDCardProps) {
             href={`https://${chainID === "D" ? "test." : ""}datadex.itheum.io/datanfts/marketplace/${tokenIdentifier}${offerIndex ? "/offer-" + offerIndex : ""}`}
             target="_blank"
             className="cursor-pointer">
-            <img src={nftImgUrl} className="h-48 w-48 object-cover rounded-xl group-hover/card:shadow-xl" alt="thumbnail" />
+            <img src={nftImgUrl} className="h-48 w-48 object-cover rounded-3xl group-hover/card:shadow-xl" alt="thumbnail" />
           </a>
         </CardItem>
         <CardItem translateZ="50" className=" max-w-48 elipsis truncate mt-4 text-md font-bold text-neutral-600 dark:text-white">
