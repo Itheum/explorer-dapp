@@ -280,17 +280,6 @@ export const Navbar = () => {
             {isLoggedIn ? (
               <BitzDropdown />
             ) : (
-              // <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-              //   <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
-              //     <Button
-              //       className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide"
-              //       variant="outline"
-              //       size="sm"
-              //       onClick={handleLogout}>
-              //       Logout
-              //     </Button>
-              //   </div>
-              // </Link>
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
                   <Button
@@ -355,7 +344,6 @@ export const Navbar = () => {
                     </div>
                   </Link>
                 </DropdownMenuGroup>
-                {/* <DropdownMenuLabel>My Address Quick Copy</DropdownMenuLabel> */}
                 <DropdownMenuItem className="gap-4">
                   <CopyAddress address={address} precision={6} />
                 </DropdownMenuItem>{" "}
