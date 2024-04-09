@@ -104,8 +104,8 @@ export const Navbar = () => {
                   <FlaskRound className="w-7 h-7 fill-sky-300" />
                 </div>
               </div>
-              <p className="text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
-              <p className="text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
+              <p className="text-xl md:text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
+              <p className="text-xs md:text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
                 {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game Data
                 Widget. Top LEADERBOARD climbers get special perks and drops!
               </p>
