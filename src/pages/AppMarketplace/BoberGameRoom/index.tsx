@@ -1,15 +1,15 @@
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import React, { useEffect, useState } from "react";
-import headerImg from "../../../assets/img/bober/BoberCover.png";
-import { useGetAccount, useGetPendingTransactions } from "../../../hooks";
+import headerImg from "assets/img/bober-game-room/BoberCover.png";
+import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { BOBER_ROOM_TOKENS } from "../../../appsConfig";
-import { decodeNativeAuthToken, toastError } from "../../../libs/utils";
+import { BOBER_GAME_ROOM_TOKENS } from "appsConfig";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
-import { DataNftCard } from "../../../components";
+import { DataNftCard } from "components";
 import { BoberModal } from "./components/BoberModal";
 
-export const BobreGame: React.FC = () => {
+export const BoberGame: React.FC = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
@@ -36,7 +36,7 @@ export const BobreGame: React.FC = () => {
   async function fetchAppNfts() {
     setIsLoading(true);
 
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(BOBER_ROOM_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(BOBER_GAME_ROOM_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
 
     setItDataNfts(_nfts);
     setIsLoading(false);
@@ -100,7 +100,7 @@ export const BobreGame: React.FC = () => {
   // console.log(data);
   return (
     <HeaderComponent
-      pageTitle={"Bober Room"}
+      pageTitle={"Bober Game Room"}
       hasImage={true}
       imgSrc={headerImg}
       altImageAttribute={"itheumTrailblazer"}
@@ -117,7 +117,7 @@ export const BobreGame: React.FC = () => {
             modalStyles={"md:h-[95svh] sm:h-[100svh]"}
             viewData={viewData}
             modalContent={<BoberModal data={data} isFetchingDataMarshal={isFetchingDataMarshal} owned={owned} />}
-            modalTitle={"Bober Room"}
+            modalTitle={"Bober Game Room"}
             modalTitleStyle="md:p-5 pt-5 pb-5 px-2"
           />
         ))

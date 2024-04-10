@@ -7,7 +7,7 @@ import {
 } from "components";
 import { TransactionsToastList, NotificationModal, SignTransactionsModals } from "components";
 import { apiTimeout, walletConnectV2ProjectId, sampleAuthenticatedDomains, ELROND_NETWORK } from "config";
-import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock, GetBitz, BobreGame } from "pages";
+import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock, GetBitz, BoberGame } from "pages";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
@@ -50,7 +50,7 @@ export const App = () => {
                     <Route path={`${routeNames.timecapsule}/:targetNonce/:targetMessageToBeSigned`} element={<TimeCapsule />} />
                     <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                     <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
-                    <Route path={`${routeNames.bober}/:targetNonce/:targetMessageToBeSigned`} element={<BobreGame />} />
+                    <Route path={`${routeNames.bobergameroom}/:targetNonce/:targetMessageToBeSigned`} element={<BoberGame />} />
                     <Route path="*" element={<PageNotFound />} />
                   </Routes>
                 </Layout>

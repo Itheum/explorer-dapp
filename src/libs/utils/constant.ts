@@ -4,7 +4,7 @@ import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
 import iconGetBitz from "assets/img/getbitz/expl-app-getbitz-icon.gif";
-import iconBober from "assets/img/bober/BoberLast.png";
+import iconBober from "assets/img/bober-game-room/BoberLast.png";
 
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
@@ -24,6 +24,20 @@ export const APP_MAPPINGS = [
     routeKey: "itheumtrailblazer",
     desc: "Hardcore community members unlock Project Alpha by owning their favorite project's TrailBlazer Data NFTs. Unlock and visualize these TrailBlazer Data NFTs by using this app.",
     img: iconTrailblazer,
+  },
+  {
+    appName: "NF-Tunes",
+    appDescription: "Listen to Music Playlists",
+    routeKey: "nftunes",
+    desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
+    img: iconNFTunes,
+  },
+  {
+    appName: "Bober Game Room",
+    appDescription: "Play a fun Bober Video Game",
+    routeKey: "bobergameroom",
+    desc: "Annoying memes are flooding the forest! Use your trusty water cannon to blast them away before they reach the dam! It's a beaver battle against cringe!",
+    img: iconBober,
   },
   {
     appName: "MultiversX ESDT Bubbles",
@@ -54,25 +68,11 @@ export const APP_MAPPINGS = [
     img: iconInfrographics,
   },
   {
-    appName: "NF-Tunes",
-    appDescription: "Listen to Music Playlists",
-    routeKey: "nftunes",
-    desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
-    img: iconNFTunes,
-  },
-  {
     appName: "Time Capsule",
     appDescription: "Preserve Memories Forever",
     routeKey: "timecapsule",
     desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
     img: iconTimeCapsule,
-  },
-  {
-    appName: "Bober Room",
-    appDescription: "Bober is ready to own the world.",
-    routeKey: "bober",
-    desc: "Annoying memes are flooding the forest! Use your trusty water cannon to blast them away before they reach the dam! It's a beaver battle against cringe!",
-    img: iconBober,
   },
 ];
 
