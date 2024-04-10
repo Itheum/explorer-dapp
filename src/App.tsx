@@ -14,6 +14,7 @@ import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./libComponents/ThemeProvider";
 import { StoreProvider } from "./store/StoreProvider";
+import { BoberSylla } from "pages/AppMarketplace/BoberSylla";
 
 export const App = () => {
   return (
@@ -51,6 +52,7 @@ export const App = () => {
                     <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                     <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
                     <Route path={`${routeNames.bobergameroom}/:targetNonce/:targetMessageToBeSigned`} element={<BoberGameRoom />} />
+                    <Route path={`${routeNames.bobersylla}/:targetNonce/:targetMessageToBeSigned`} element={<BoberSylla />} />
                     <Route path="*" element={<PageNotFound />} />
                   </Routes>
                 </Layout>

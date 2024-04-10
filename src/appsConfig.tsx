@@ -70,6 +70,8 @@ export const BOBER_GAME_ROOM_TOKENS: app_token[] = IS_DEVNET
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 8 }];
 
+export const BOBER_SYLLA_TOKENS: app_token[] = IS_DEVNET ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 259 }] : [];
+
 export const GET_BITZ_TOKEN: app_token = IS_DEVNET ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 } : { tokenIdentifier: "DATANFTFT-e936d4", nonce: 7 };
 
 export const SUPPORTED_APPS = IS_DEVNET
@@ -83,5 +85,6 @@ export const SUPPORTED_APPS = IS_DEVNET
       "timecapsule",
       "getbitz",
       "bobergameroom",
+      "bober-sylla",
     ]
   : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes", "timecapsule", "getbitz", "bobergameroom"];
