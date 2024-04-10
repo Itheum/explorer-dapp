@@ -22,7 +22,7 @@ export const BoberModal: React.FC<BoberModalProps> = (props) => {
       return "700";
     }
   };
-  console.log("bla bla bla");
+
   return (
     <>
       {!owned ? (
