@@ -9,7 +9,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { DataNftCard } from "components";
 import { BoberModal } from "./components/BoberModal";
 
-export const BoberGame: React.FC = () => {
+export const BoberGameRoom: React.FC = () => {
   const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
