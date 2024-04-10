@@ -40,7 +40,6 @@ export const MyWallet = () => {
     _dataNfts.push(...nfts);
     setDataNftCount(_dataNfts.length);
     setDataNfts(_dataNfts);
-
     setIsLoading(false);
   }
 
