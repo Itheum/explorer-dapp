@@ -66,6 +66,7 @@ export const BOBER_GAME_ROOM_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 218 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 230 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 255 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 257 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 8 }];
 
