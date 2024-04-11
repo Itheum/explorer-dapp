@@ -69,7 +69,7 @@ import Meme27 from "assets/img/getbitz/memes/27.jpg";
 import Meme28 from "assets/img/getbitz/memes/28.jpg";
 import Meme29 from "assets/img/getbitz/memes/29.jpg";
 
-interface LeaderBoardItemType {
+export interface LeaderBoardItemType {
   playerAddr: string;
   bits: number;
 }
@@ -121,6 +121,8 @@ export const GetBitz = () => {
 
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
+  const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
+  const updateCollectedBitzBalance = useAccountStore((state) => state.updateCollectedBitzBalance);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
 
@@ -299,8 +301,14 @@ export const GetBitz = () => {
         )
       );
 
+      const sumGivenBits = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
+
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
-        updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
+        updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay - sumGivenBits); // won some bis, minus given bits and show
+        updateCollectedBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
+      } else {
+        updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // did not win bits, minus given bits from current and show
+        updateCollectedBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay);
       }
 
       if (animation) {
@@ -666,6 +674,7 @@ export const GetBitz = () => {
     // Get All Time leaderboard
     try {
       // S: ACTUAL LOGIC
+      console.log("AXIOS CALL -----> xpGamePrivate/leaderBoard");
       const { data } = await axios.get<LeaderBoardItemType[]>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/leaderBoard`, callConfig);
       // const toJSONString = JSON.stringify(data);
       // const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
@@ -689,6 +698,7 @@ export const GetBitz = () => {
     // Get Monthly Leaderboard
     try {
       // S: ACTUAL LOGIC
+      console.log("AXIOS CALL -----> xpGamePrivate/monthLeaderBoard");
       const { data } = await axios.get<LeaderBoardItemType[]>(
         `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/monthLeaderBoard?MMYYString=${MMYYString}`,
         callConfig
@@ -724,6 +734,7 @@ export const GetBitz = () => {
     };
 
     try {
+      console.log("AXIOS CALL -----> xpGamePrivate/playerRankOnLeaderBoard");
       const { data } = await axios.get<any>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/playerRankOnLeaderBoard?playerAddr=${address}`, callConfig);
 
       setMyRankOnAllTimeLeaderBoard(data.playerRank || "N/A");
@@ -731,33 +742,6 @@ export const GetBitz = () => {
       const message = "Getting my rank on the all time leaderboard failed:" + (err as AxiosError).message;
       console.error(message);
     }
-  }
-
-  function leaderBoardTable(leaderBoardData: LeaderBoardItemType[]) {
-    return (
-      <>
-        <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
-          <thead>
-            <tr className="border">
-              <th className="p-2">Rank</th>
-              <th className="p-2">User</th>
-              <th className="p-2">{`<BiTz>`} Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderBoardData.map((item, rank) => (
-              <tr key={rank} className="border">
-                <td className="p-2">
-                  #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-                </td>
-                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
-                <td className="p-2">{item.bits}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-    );
   }
 
   return (
@@ -799,9 +783,9 @@ export const GetBitz = () => {
                 <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">{myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}</p>
               </div>
               <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your {`<BiTz>`} Points </p>
+                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
                 <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
-                  {bitzBalance === -2 ? `...` : <>{bitzBalance === -1 ? "0" : `${bitzBalance}`}</>}
+                  {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
                 </p>
               </div>
             </div>
@@ -815,7 +799,7 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardAllTime.length > 0 ? (
-                    leaderBoardTable(leaderBoardAllTime)
+                    leaderBoardTable(leaderBoardAllTime, address)
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -830,7 +814,7 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardMonthly.length > 0 ? (
-                    leaderBoardTable(leaderBoardMonthly)
+                    leaderBoardTable(leaderBoardMonthly, address)
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -840,9 +824,10 @@ export const GetBitz = () => {
           </div>
         </div>
       </div>
-      <Faq />
 
-      <GiveBitzBase viewDataRes={viewDataRes} />
+      {address && leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase viewDataRes={viewDataRes} gameDataNFT={gameDataNFT} />}
+
+      <Faq />
     </>
   );
 };
@@ -853,7 +838,8 @@ A utility method that we can use to get, parse and return data from the viewData
 export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataNft) {
   try {
     let res: any;
-    res = await requiredDataNFT.viewDataViaMVXNativeAuth(viewDataArgs);
+    // res = await requiredDataNFT.viewDataViaMVXNativeAuth(viewDataArgs);
+    res = await __viewDataViaMVXNativeAuth(viewDataArgs);
 
     let blobDataType = BlobDataType.TEXT;
 
@@ -879,5 +865,148 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
     console.error(err);
 
     return undefined;
+  }
+}
+
+export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string) {
+  return (
+    <>
+      <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
+        <thead>
+          <tr className="border">
+            <th className="p-2">Rank</th>
+            <th className="p-2">User</th>
+            <th className="p-2">{`<BiTz>`} Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaderBoardData.map((item, rank) => (
+            <tr key={rank} className="border">
+              <td className="p-2">
+                #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+              </td>
+              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={4} />}</td>
+              <td className="p-2">{item.bits}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+async function __viewDataViaMVXNativeAuth(p: any) {
+  try {
+    // S: run any format specific validation
+    // const { allPassed, validationMessages } = (0, utils_1.validateSpecificParamsViewData)({
+    //     mvxNativeAuthOrigins: p.mvxNativeAuthOrigins,
+    //     mvxNativeAuthMaxExpirySeconds: p.mvxNativeAuthMaxExpirySeconds,
+    //     fwdHeaderKeys: p.fwdHeaderKeys,
+    //     fwdHeaderMapLookup: p.fwdHeaderMapLookup,
+    //     fwdAllHeaders: p.fwdAllHeaders,
+    //     stream: p.stream,
+    //     nestedIdxToStream: p.nestedIdxToStream,
+    //     asDeputyOnAppointerAddr: p.asDeputyOnAppointerAddr,
+    //     _fwdHeaderMapLookupMustContainBearerAuthHeader: true,
+    //     _mandatoryParamsList: [
+    //         'mvxNativeAuthOrigins',
+    //         'mvxNativeAuthMaxExpirySeconds',
+    //         'fwdHeaderMapLookup'
+    //     ]
+    // });
+    // if (!allPassed) {
+    //     throw new Error(`params have validation issues = ${validationMessages}`);
+    // }
+    // E: run any format specific validation...
+    // convert mvxNativeAuthOrigins from a string array to API required base64 format
+    let mvxNativeAuthOriginsToBase64 = p.mvxNativeAuthOrigins.join(","); // convert the array to a string
+    mvxNativeAuthOriginsToBase64 = mvxNativeAuthOriginsToBase64.trim().replaceAll(" ", ""); // remove all spaces
+    mvxNativeAuthOriginsToBase64 = Buffer.from(mvxNativeAuthOriginsToBase64).toString("base64");
+    let chainId = "ED";
+    // if (this.overrideDataMarshalChainId === '') {
+    //     chainId =
+    //         DataNft.networkConfiguration.chainID === 'D'
+    //             ? 'ED'
+    //             : DataNft.networkConfiguration.chainID;
+    // }
+    // else if (this.overrideDataMarshalChainId === 'D') {
+    //     chainId = 'ED';
+    // }
+    // else {
+    //     chainId = this.overrideDataMarshalChainId;
+    // }
+    // debugger;
+    // let dataMarshal;
+    // if (this.overrideDataMarshal === '') {
+    //     dataMarshal = this.dataMarshal;
+    // }
+    // else {
+    //     dataMarshal = this.overrideDataMarshal;
+    // }
+
+    const dataMarshal = "http://localhost:4000/datamarshalapi/router/v1";
+
+    // construct the api url
+    // https://api.itheumcloud-stg.com/datamarshalapi/router/v1/access?NFTId=DATANFTFT-e0b917-c6&chainId=ED&mvxNativeAuthEnable=1&mvxNativeAuthMaxExpirySeconds=3600&mvxNativeAuthOrigins=aHR0cHM6Ly9sb2NhbGhvc3Q6MzAwMA==&fwdHeaderKeys=authorization,%20dmf-custom-only-state
+
+    let url = `${dataMarshal}/access?NFTId=DATANFTFT-e0b917-c6&chainId=${chainId}&mvxNativeAuthEnable=1&mvxNativeAuthMaxExpirySeconds=${p.mvxNativeAuthMaxExpirySeconds}&mvxNativeAuthOrigins=${mvxNativeAuthOriginsToBase64}`;
+    const fetchConfig = {
+      method: "GET",
+      headers: {},
+    };
+    // S: append optional params if found
+    if (typeof p.stream !== "undefined") {
+      url += p.stream ? "&streamInLine=1" : "";
+    }
+    if (typeof p.fwdAllHeaders !== "undefined") {
+      url += p.fwdAllHeaders ? "&fwdAllHeaders=1" : "";
+    }
+    if (typeof p.nestedIdxToStream !== "undefined") {
+      url += `&nestedIdxToStream=${p.nestedIdxToStream}`;
+    }
+    // if fwdHeaderMapLookup exists, send these headers and values to the data marshal for forwarding
+    if (typeof p.fwdHeaderMapLookup !== "undefined" && Object.keys(p.fwdHeaderMapLookup).length > 0) {
+      // authorization WILL be present based on validation, so let's fwd this as a request header param
+      fetchConfig.headers = {};
+      fetchConfig.headers["authorization"] = p.fwdHeaderMapLookup["authorization"];
+      // ... and forward any OTHER params user wanted to forward to the origin server via the marshal
+      if (typeof p.fwdHeaderKeys !== "undefined") {
+        url += `&fwdHeaderKeys=${p.fwdHeaderKeys}`;
+        Object.keys(p.fwdHeaderMapLookup).forEach((headerKey) => {
+          // already appended above so skip it...
+          if (headerKey !== "authorization") {
+            fetchConfig.headers[headerKey] = p.fwdHeaderMapLookup?.[headerKey];
+          }
+        });
+      }
+    }
+    if (typeof p.asDeputyOnAppointerAddr !== "undefined") {
+      url += `&asDeputyOnAppointerAddr=${p.asDeputyOnAppointerAddr}`;
+    }
+    // E: append optional params...
+    const response = await fetch(url, fetchConfig);
+    const contentType = response.headers.get("content-type");
+    const data = await response.blob();
+    // if the marshal returned a error, we should throw it here so that the SDK integrator can handle it
+    // ... if we don't, the marshal error response is just passed through as a normal data stream response
+    // ... and the user won't know what went wrong
+    // try {
+    //     (0, utils_1.checkStatus)(response);
+    // }
+    // catch (e) {
+    //     // as it's a data marshal error, we get it's payload which is in JSON and send that thrown as text
+    //     const errorPayload = await data.text();
+    //     throw new Error(`${e.toString()}. Detailed error trace follows : ${errorPayload}`);
+    // }
+    return {
+      data: data,
+      contentType: contentType || "",
+    };
+  } catch (err) {
+    // return {
+    //     data: undefined,
+    //     contentType: '',
+    //     error: err?.message
+    // };
   }
 }

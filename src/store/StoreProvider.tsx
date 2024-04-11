@@ -16,6 +16,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
+  const updateCollectedBitzBalance = useAccountStore((state) => state.updateCollectedBitzBalance);
 
   useEffect(() => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -44,21 +45,24 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         };
 
         const getBitzGameResult = await viewDataJSONCore(viewDataArgs, bitzGameDataNFT);
-
         if (getBitzGameResult) {
-          updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay);
-          updateGivenBitzSum(getBitzGameResult.data.bitsMain.bitsGivenSum);
+          const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
+
+          updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // collected bits - given bits
+          updateGivenBitzSum(sumGivenBits); // given bits -- for power-ups
           updateCooldown(
             computeRemainingCooldown(
               getBitzGameResult.data.gamePlayResult.lastPlayedBeforeThisPlay,
               getBitzGameResult.data.gamePlayResult.configCanPlayEveryMSecs
             )
           );
+          updateCollectedBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits by playing
         }
       } else {
         updateBitzBalance(-1);
         updateGivenBitzSum(-1);
         updateCooldown(-1);
+        updateCollectedBitzBalance(-1);
       }
     })();
   }, [address, tokenLogin]);
