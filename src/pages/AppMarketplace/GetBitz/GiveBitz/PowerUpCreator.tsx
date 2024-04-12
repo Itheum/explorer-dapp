@@ -61,7 +61,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
         if (giveBitzGameResult) {
           console.log("giveBitzGameResult", giveBitzGameResult);
           if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
-            throw new Error("Error: Not possible to sent power up. Error code returned");
+            throw new Error("Error: Not possible to sent power up. As error code returned. Do you have enough BiTz to give?");
           } else {
             await sleep(2);
             fetchGivenBitsForCreator();
@@ -145,11 +145,14 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
   }
 
   return (
-    <div className="creator-tile border p-10 w-[300px]">
+    <div className="creator-tile border p-10 min-w-[300px] max-w-[360px]">
       <div className="text-lg">Creator Profile</div>
       <div className="mb-5">
         {" "}
         <CopyAddress address={creatorAddress} precision={8} />
+      </div>
+      <div className="mb-3 py-2 border-b-4">
+        <div>Campaign Perks:</div>
       </div>
       <div className="mb-3 py-2 border-b-4">
         <div>Given BiTz: {bitsGivenToCreator === -1 ? "Loading..." : <>{bitsGivenToCreator === -2 ? "0" : bitsGivenToCreator}</>}</div>

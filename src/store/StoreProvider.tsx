@@ -26,6 +26,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     (async () => {
       // get the bitz game data nft details
       const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
+      debugger;
 
       // does the logged in user actually OWN the bitz game data nft
       const _myDataNfts = await DataNft.ownedByAddress(address);
@@ -48,8 +49,14 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         if (getBitzGameResult) {
           const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
 
-          updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // collected bits - given bits
-          updateGivenBitzSum(sumGivenBits); // given bits -- for power-ups
+          if (sumGivenBits > 0) {
+            updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // collected bits - given bits
+            updateGivenBitzSum(sumGivenBits); // given bits -- for power-ups
+          } else {
+            updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits - not given bits yet
+            updateGivenBitzSum(0); // given bits - not given bits yet
+          }
+
           updateCooldown(
             computeRemainingCooldown(
               getBitzGameResult.data.gamePlayResult.lastPlayedBeforeThisPlay,

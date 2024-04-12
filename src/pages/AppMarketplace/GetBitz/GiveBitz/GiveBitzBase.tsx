@@ -54,6 +54,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         // update stores
         const sumGivenBits = data.bits ? parseInt(data.bits, 10) : -2;
         updateGivenBitzSum(sumGivenBits);
+        debugger;
         if (sumGivenBits > 0) {
           updateBitzBalance(collectedBitzSum - sumGivenBits); // update new balance (collected bits - given bits)
         }
@@ -135,7 +136,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         <div className="flex flex-col mt-10 mb-8 items-center justify-center">
           <span className="text-foreground text-4xl mb-2">Power-up Creators</span>
           <span className="text-base text-foreground/75 text-center ">
-            Power-Up VERIFIED Data Creators with your BiTz XP, Climb Data Creator Leaderboards and get bonus rewards and drops.
+            VERIFIED Data Creators run "Power-Me-Up" campiagn. Check out their campaign perks and Power-Up Data Creators with your BiTz XP, Climb Data Creator
+            Leaderboards and get perk.
           </span>
         </div>
 

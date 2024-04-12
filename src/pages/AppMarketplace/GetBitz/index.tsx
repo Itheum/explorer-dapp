@@ -149,6 +149,7 @@ export const GetBitz = () => {
 
   // Debug / Tests
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
+  const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -303,11 +304,22 @@ export const GetBitz = () => {
 
       const sumGivenBits = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
 
+      debugger;
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
-        updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay - sumGivenBits); // won some bis, minus given bits and show
+        if (sumGivenBits > 0) {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay - sumGivenBits); // won some bis, minus given bits and show
+        } else {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay); // won some bis, not given anything yet
+        }
+
         updateCollectedBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       } else {
-        updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // did not win bits, minus given bits from current and show
+        if (sumGivenBits > 0) {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // did not win bits, minus given bits from current and show
+        } else {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay); // did not win bits, not given anything yet
+        }
+
         updateCollectedBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay);
       }
 
@@ -410,6 +422,7 @@ export const GetBitz = () => {
         </div>
       );
     }
+
     const CountDownComplete = () => (
       <div
         className="cursor-pointer relative inline-flex h-12 overflow-hidden rounded-full p-[1px] "
@@ -667,7 +680,17 @@ export const GetBitz = () => {
     }
 
     const UTCYear = nowDateObj.getUTCFullYear().toString().slice(-2); // converts number 2024 to string 24
-    const MMYYString = `${UTCMonthStr}_${UTCYear}`;
+    let MMYYString = `${UTCMonthStr}_${UTCYear}`;
+
+    // S: for TESTING monthly leaderboards, allow a param override!
+    const searchParams = new URLSearchParams(window.location.search);
+    const _overrideMMYYString = searchParams.get("x-test-custom-mmyy-string"); // should be like this 03_24
+
+    if (_overrideMMYYString && _overrideMMYYString.length === 5 && _overrideMMYYString.indexOf("_") === 2) {
+      MMYYString = _overrideMMYYString;
+      setInDateStringDebugMode(true);
+    }
+    // E: for TESTING monthly leaderboards, allow a param override!
 
     setLeaderBoardMonthString(MMYYString);
 
@@ -808,7 +831,9 @@ export const GetBitz = () => {
             </div>
 
             <div className="my-[1rem] monthly md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">Monthly ({leaderBoardMonthString.replace("_", "-20")})</h3>
+              <h3 className="text-center text-white mb-[1rem]">
+                Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
+              </h3>
               {leaderBoardIsLoading ? (
                 <Loader />
               ) : (
