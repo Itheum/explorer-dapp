@@ -1,5 +1,5 @@
 import React from "react";
-import { CardBody, CardContainer, CardItem } from "libComponents/animatedComponents/CardEffect3D";
+import { CardBody, CardContainer, CardItem } from "libComponents/animated/CardEffect3D";
 
 interface ThreeDCardProps {
   chainID: string;
