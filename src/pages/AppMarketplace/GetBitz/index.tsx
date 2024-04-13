@@ -373,27 +373,28 @@ export const GetBitz = () => {
     // user is not logged in, ask them to connect wallet
     if (!address) {
       return (
-        <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLogin} alt={"Connect your wallet to play"} />
+        <Link className="relative" to={routeNames.unlock} state={{ from: location.pathname }}>
+          <img className="z-5 rounded-[3rem] w-full cursor-pointer" src={ImgLogin} alt={"Connect your wallet to play"} />
         </Link>
       );
     }
 
     // user is logged in and we are checking if they have the data nft to proceed with a play
     if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
-      return <div>{/* <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} /> */}</div>;
+      return <div> </div>;
     }
 
     // user is logged in does not have the data nft, so take them to the marketplace
     if (address && !checkingIfHasGameDataNFT && !hasGameDataNFT) {
       return (
         <div
+          className="relative"
           onClick={() => {
             if (gameDataNFT) {
               goToMarketplace(gameDataNFT.tokenIdentifier);
             }
           }}>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTz> Data NFT from Data NFT Marketplace"} />
+          <img className="z-5 rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTz> Data NFT from Data NFT Marketplace"} />
         </div>
       );
     }
@@ -759,7 +760,7 @@ export const GetBitz = () => {
     <>
       <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[30rem] lg:min-h-[40rem] xl:min-h-screen">
         <div className="absolute -z-1">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
         </div>
         {gamePlayImageSprites()}
       </div>
