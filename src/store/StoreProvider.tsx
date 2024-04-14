@@ -26,7 +26,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     (async () => {
       // get the bitz game data nft details
       const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
-      debugger;
 
       // does the logged in user actually OWN the bitz game data nft
       const _myDataNfts = await DataNft.ownedByAddress(address);

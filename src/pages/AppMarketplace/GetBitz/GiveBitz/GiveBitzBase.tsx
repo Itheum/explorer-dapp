@@ -54,7 +54,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         // update stores
         const sumGivenBits = data.bits ? parseInt(data.bits, 10) : -2;
         updateGivenBitzSum(sumGivenBits);
-        debugger;
+
         if (sumGivenBits > 0) {
           updateBitzBalance(collectedBitzSum - sumGivenBits); // update new balance (collected bits - given bits)
         }
@@ -145,16 +145,25 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           <PowerUpCreator
             creatorAddress={"erd1xdq4d7uewptx9j9k23aufraklda9leumqc7eu3uezt2kf4fqxz2sex2rxl"}
             gameDataNFT={gameDataNFT}
+            campaignId="c1"
             refreshMyGivenSum={handleFetchGivenBitsForMe}
           />
           <PowerUpCreator
             creatorAddress={"erd1qmsq6ej344kpn8mc9xfngjhyla3zd6lqdm4zxx6653jee6rfq3ns3fkcc7"}
             gameDataNFT={gameDataNFT}
+            campaignId="c2"
             refreshMyGivenSum={handleFetchGivenBitsForMe}
           />
           <PowerUpCreator
             creatorAddress={"erd16vjhrga4yjpy88lwnu64wlxlapwxtvjl93jax4rg3yq3hzxtnausdmhcjf"}
             gameDataNFT={gameDataNFT}
+            campaignId="c3"
+            refreshMyGivenSum={handleFetchGivenBitsForMe}
+          />
+          <PowerUpCreator
+            creatorAddress={"erd1xdq4d7uewptx9j9k23aufraklda9leumqc7eu3uezt2kf4fqxz2sex2rxl"}
+            gameDataNFT={gameDataNFT}
+            campaignId="c4"
             refreshMyGivenSum={handleFetchGivenBitsForMe}
           />
         </div>
@@ -169,9 +178,9 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
 
         <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between gap-4 justify-center items-center">
-          <PowerUpBounty bountyId={"1"} />
-          <PowerUpBounty bountyId={"2"} />
-          <PowerUpBounty bountyId={"3"} />
+          <PowerUpCreator creatorAddress={"xxxxxxxxxx1"} gameDataNFT={gameDataNFT} campaignId="b1" refreshMyGivenSum={handleFetchGivenBitsForMe} />
+          <PowerUpCreator creatorAddress={"xxxxxxxxxx2"} gameDataNFT={gameDataNFT} campaignId="b2" refreshMyGivenSum={handleFetchGivenBitsForMe} />
+          <PowerUpCreator creatorAddress={"xxxxxxxxxx3"} gameDataNFT={gameDataNFT} campaignId="b3" refreshMyGivenSum={handleFetchGivenBitsForMe} />
         </div>
       </>
     </div>

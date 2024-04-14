@@ -304,7 +304,6 @@ export const GetBitz = () => {
 
       const sumGivenBits = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
 
-      debugger;
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         if (sumGivenBits > 0) {
           updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay - sumGivenBits); // won some bis, minus given bits and show

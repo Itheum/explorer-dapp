@@ -15,11 +15,12 @@ import { Loader } from "components";
 type PowerUpCreatorProps = {
   creatorAddress: string;
   gameDataNFT: DataNft;
+  campaignId: string;
   refreshMyGivenSum: any;
 };
 
 const PowerUpCreator = (props: PowerUpCreatorProps) => {
-  const { creatorAddress, gameDataNFT, refreshMyGivenSum } = props;
+  const { creatorAddress, gameDataNFT, campaignId, refreshMyGivenSum } = props;
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
   const [bitsVal, setBitsVal] = useState<number>(0);
@@ -31,15 +32,15 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
 
   useEffect(() => {
     // onload
-    if (address && creatorAddress && gameDataNFT) {
+    if (address && creatorAddress && gameDataNFT && campaignId) {
       fetchGivenBitsForCreator();
       fetchAndLoadGetterLeaderBoards();
     }
-  }, [address, creatorAddress, gameDataNFT]);
+  }, [address, creatorAddress, gameDataNFT, campaignId]);
 
   async function sendPowerUp() {
     console.log("sendPowerUp");
-    debugger;
+
     if (tokenLogin) {
       setPowerUpSending(true);
 
@@ -52,8 +53,9 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
             "dmf-custom-give-bits": "1",
             "dmf-custom-give-bits-val": bitsVal,
             "dmf-custom-give-bits-to-who": creatorAddress,
+            "dmf-custom-give-bits-to-campaign-id": campaignId,
           },
-          fwdHeaderKeys: "authorization, dmf-custom-give-bits, dmf-custom-give-bits-val, dmf-custom-give-bits-to-who",
+          fwdHeaderKeys: "authorization, dmf-custom-give-bits, dmf-custom-give-bits-val, dmf-custom-give-bits-to-who, dmf-custom-give-bits-to-campaign-id",
         };
 
         const giveBitzGameResult = await viewDataJSONCore(viewDataArgs, gameDataNFT);
@@ -97,7 +99,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
     try {
       console.log("AXIOS CALL -----> xpGamePrivate/givenBits: giverAddr && getterAddr");
       const { data } = await axios.get<any>(
-        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}&getterAddr=${creatorAddress}`,
+        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}&getterAddr=${creatorAddress}&campaignId=${campaignId}`,
         callConfig
       );
 
@@ -123,7 +125,10 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
     try {
       // S: ACTUAL LOGIC
       console.log("AXIOS CALL -----> xpGamePrivate/getterLeaderBoard : getterAddr =", creatorAddress);
-      const { data } = await axios.get<any[]>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterLeaderBoard?getterAddr=${creatorAddress}`, callConfig);
+      const { data } = await axios.get<any[]>(
+        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterLeaderBoard?getterAddr=${creatorAddress}&campaignId=${campaignId}`,
+        callConfig
+      );
 
       const _toLeaderBoardTypeArr: LeaderBoardItemType[] = data.map((i) => {
         const item: LeaderBoardItemType = {
@@ -152,7 +157,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
         <CopyAddress address={creatorAddress} precision={8} />
       </div>
       <div className="mb-3 py-2 border-b-4">
-        <div>Campaign Perks:</div>
+        <div>Campaign Id: {campaignId}</div>
       </div>
       <div className="mb-3 py-2 border-b-4">
         <div>Given BiTz: {bitsGivenToCreator === -1 ? "Loading..." : <>{bitsGivenToCreator === -2 ? "0" : bitsGivenToCreator}</>}</div>
