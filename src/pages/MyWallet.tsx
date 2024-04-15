@@ -40,7 +40,6 @@ export const MyWallet = () => {
     _dataNfts.push(...nfts);
     setDataNftCount(_dataNfts.length);
     setDataNfts(_dataNfts);
-
     setIsLoading(false);
   }
 
@@ -73,7 +72,6 @@ export const MyWallet = () => {
       dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
     }
     res = await dataNft.viewDataViaMVXNativeAuth(arg);
-    console.log(res);
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {

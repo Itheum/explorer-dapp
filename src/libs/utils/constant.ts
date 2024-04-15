@@ -76,3 +76,15 @@ export const ITHEUM_DATADEX_STG_URL = "https://stg.datadex.itheum.io";
 export const ITHEUM_DATADEX_TEST_URL = "https://test.datadex.itheum.io";
 export const ZEDGE_STORAGE_PROD_URL = "https://www.zedgestorage.com";
 export const ZEDGE_STORAGE_TEST_URL = "https://www.test.zedgestorage.com";
+
+export const nativeAuthOrigins = () => {
+  return [ITHEUM_DATADEX_PROD_URL, ITHEUM_DATADEX_STG_URL, ITHEUM_DATADEX_TEST_URL, window.location.origin];
+};
+
+export const uxConfig = {
+  txConfirmationsNeededSml: 1,
+  txConfirmationsNeededLrg: 2,
+  dateStr: "DD/MM/YYYY",
+  dateStrTm: "DD/MM/YYYY LT",
+  mxAPITimeoutMs: 10000,
+};

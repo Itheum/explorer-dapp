@@ -76,15 +76,15 @@ export const Navbar = () => {
                   <PopoverPrimitive.PopoverClose>
                     <div className="flex  flex-row justify-center items-center">
                       <Gift className="mx-2 text-sky-300" />
-                      <span> Claim your {`<BiTz>`} </span>
+                      <span> Collect your {`<BiTz>`} </span>
                     </div>
                   </PopoverPrimitive.PopoverClose>
                 );
               } else {
                 return (
                   <span className="ml-1">
-                    Play again in {props.hours > 0 ? (props.hours + props.hours === 1 ? " Hour " : " Hours ") : ""}
-                    {props.minutes > 0 ? props.minutes + " Min : " : ""} {props.seconds} Sec
+                    Play again in {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
+                    {props.minutes > 0 ? props.minutes + " Min " : ""} {props.seconds} Sec
                   </span>
                 );
               }
@@ -94,7 +94,7 @@ export const Navbar = () => {
           <PopoverPrimitive.PopoverClose>
             <div className="flex  flex-row justify-center items-center">
               <Gift className="mx-2 text-sky-300" />
-              <span> Claim your {`<BiTz>`} </span>
+              <span> Collect your {`<BiTz>`} </span>
             </div>
           </PopoverPrimitive.PopoverClose>
         )}
