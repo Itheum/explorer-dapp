@@ -10,18 +10,8 @@ type BoberModalProps = {
 
 export const BoberModal: React.FC<BoberModalProps> = (props) => {
   const { data, owned, isFetchingDataMarshal } = props;
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  // const [isFullscreen, setIsFullscreen] = React.useState(false);
   const htmlCached = useMemo(() => data, [data]);
   const { tokenLogin } = useGetLoginInfo();
-
-  // Fullscreen logic
-  // const handleFullscreen = () => {
-  //   const iframeElement = iframeRef.current;
-  //   if (!isFullscreen) {
-  //     iframeElement?.requestFullscreen();
-  //   }
-  // };
 
   const innerHeightIframe = (innerHeight: number) => {
     if (innerHeight > 1000 && innerHeight < 1350) {
@@ -50,11 +40,9 @@ export const BoberModal: React.FC<BoberModalProps> = (props) => {
       ) : (
         <>
           <iframe
-            ref={iframeRef}
             src={URL.createObjectURL(htmlCached) + "#tokenLogin?" + tokenLogin?.nativeAuthToken}
             height={innerHeightIframe(window.innerHeight)}
             className="w-full rounded-b-xl overflow-y-hidden"
-            allow="fullscreen"
           />
         </>
       )}
