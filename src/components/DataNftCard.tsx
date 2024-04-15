@@ -58,7 +58,7 @@ export function DataNftCard({
         )}>
         <CardContent className="flex flex-col p-3">
           {dataNft.extraAssets.length > 0 ? (
-            <ImageSlider imageUrls={[dataNft.nftImgUrl, ...dataNft.extraAssets]} autoSlide />
+            <ImageSlider imageUrls={dataNft.media.map((mediaObj: any) => mediaObj.url) ?? [dataNft.nftImgUrl]} autoSlide />
           ) : (
             <div className="mb-8 flex justify-center base:max-h-[15rem] md:max-h-[18rem] object-cover">
               <img
