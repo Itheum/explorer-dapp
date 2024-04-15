@@ -46,12 +46,7 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 134 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 138 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 187 },
-
-      { tokenIdentifier: "OASMUSICPL-47b186", nonce: 1 },
-      { tokenIdentifier: "OASMUSICPL-47b186", nonce: 2 },
-      { tokenIdentifier: "OASMUSICPL-47b186", nonce: 3 },
-
-      // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 529 },
+      ...Array.from({ length: 3 }, (_, i) => ({ tokenIdentifier: "OASMUSICPL-47b186", nonce: i })),
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
 export const PLAYSTATION_GAMER_PASSPORT_TOKENS: app_token[] = [
