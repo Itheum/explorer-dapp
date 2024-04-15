@@ -15,7 +15,7 @@ import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+import { HoverBorderGradient } from "../../../libComponents/animated/HoverBorderGradient";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";

@@ -43,7 +43,7 @@ export const Navbar = () => {
   const FlaskBottleAnimation = () => {
     return (
       <div className="relative w-full h-full ">
-        {cooldown <= 0 && (
+        {cooldown <= 0 && cooldown != -2 && (
           <>
             <div
               className="absolute rounded-full w-[0.4rem] h-[0.4rem] top-[-15px] left-[10px] bg-[#35d9fa] animate-ping-slow"
