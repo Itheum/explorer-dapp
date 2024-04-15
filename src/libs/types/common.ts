@@ -12,3 +12,9 @@ export enum BlobDataType {
 export interface ExtendedViewDataReturnType extends ViewDataReturnType {
   blobDataType: BlobDataType;
 }
+
+export interface TrendingNft {
+  uuid: string;
+  tokenIdentifier: string;
+  rating: number;
+}

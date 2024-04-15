@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { FlaskRound, Gift, Home, Menu, Store, Wallet } from "lucide-react";
+import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -28,51 +30,38 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
-import { useTheme } from "../../libComponents/ThemeProvider";
-import { useAccountStore } from "../../store/account";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
-import Countdown from "react-countdown";
+import { useAccountStore } from "../../store/account";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
   const { address } = useGetAccount();
-  const { theme } = useTheme();
-  const [systemTheme, setSystemTheme] = useState<string>();
-
-  const getSystemTheme = () => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    } else {
-      return "light";
-    }
-  };
 
   const FlaskBottleAnimation = () => {
     return (
       <div className="relative w-full h-full ">
-        {cooldown <= 0 && (
+        {cooldown <= 0 && cooldown != -2 && (
           <>
             <div
-              className="absolute rounded-full w-[0.4rem] h-[0.4rem] top-[-15px] left-[10px]    bg-sky-300 animate-ping-slow"
+              className="absolute rounded-full w-[0.4rem] h-[0.4rem] top-[-15px] left-[10px] bg-[#35d9fa] animate-ping-slow"
               style={{ animationDelay: "1s" }}></div>
             <div
-              className="absolute rounded-full w-[0.3rem] h-[0.3rem] top-[-8px]  left-[4px]  bg-sky-300  animate-ping-slow"
+              className="absolute rounded-full w-[0.3rem] h-[0.3rem] top-[-8px]  left-[4px] bg-[#35d9fa]  animate-ping-slow"
               style={{ animationDelay: "0.5s" }}></div>
-            <div className="absolute rounded-full w-1 h-1 top-[-5px] left-[13px]  bg-sky-300 animate-ping-slow"></div>
+            <div className="absolute rounded-full w-1 h-1 top-[-5px] left-[13px]  bg-[#35d9fa] animate-ping-slow"></div>
           </>
         )}
-        <FlaskRound className="fill-sky-300" />
+        <FlaskRound className="fill-[#35d9fa]" />
       </div>
     );
   };
 
   const BitzDropdown = () => {
     return (
-      <div className=" shadow-sm shadow-sky-300  rounded-lg justify-center cursor-pointer">
+      <div className=" shadow-sm shadow-[#35d9fa]  rounded-lg justify-center cursor-pointer">
         <Popover>
           <PopoverTrigger>
             <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
@@ -101,7 +90,7 @@ export const Navbar = () => {
             <div className="flex flex-col justify-center p-3 w-full">
               <div className="flex justify-center w-full py-4">
                 <div className="flex w-16 h-16 justify-center items-center border border-b-border rounded-lg shadow-inner shadow-sky-400">
-                  <FlaskRound className="w-7 h-7 fill-sky-300" />
+                  <FlaskRound className="w-7 h-7 fill-[#35d9fa]" />
                 </div>
               </div>
               <p className="text-xl md:text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
@@ -117,20 +106,14 @@ export const Navbar = () => {
     );
   };
 
-  useEffect(() => {
-    if (theme === "system") {
-      setSystemTheme(getSystemTheme());
-    }
-  }, [theme]);
-
   const handleLogout = () => {
     logout(`${window.location.origin}`, undefined, false);
   };
 
   const ClaimBitzButton = () => (
     <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
-      <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
-      <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
+      <span className="absolute hover:bg-[#35d9fa] inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+      <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-[#35d9fa] w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
         {cooldown === -2 ? (
           <span className="blinkMe">...</span>
         ) : cooldown > 0 ? (
@@ -141,7 +124,7 @@ export const Navbar = () => {
                 return (
                   <PopoverPrimitive.PopoverClose>
                     <div className="flex  flex-row justify-center items-center">
-                      <Gift className="mx-2 text-sky-300" />
+                      <Gift className="mx-2 text-[#35d9fa]" />
                       <span> Collect your {`<BiTz>`} </span>
                     </div>
                   </PopoverPrimitive.PopoverClose>
@@ -160,7 +143,7 @@ export const Navbar = () => {
         ) : (
           <PopoverPrimitive.PopoverClose>
             <div className="flex  flex-row justify-center items-center">
-              <Gift className="mx-2 text-sky-300" />
+              <Gift className="mx-2 text-[#35d9fa]" />
               <span> Collect your {`<BiTz>`} </span>
             </div>
           </PopoverPrimitive.PopoverClose>
@@ -172,7 +155,7 @@ export const Navbar = () => {
   return (
     <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">
       <div className="flex flex-row items-center text-xl">
-        <Link className="flex flex-row items-center" to={isLoggedIn ? routeNames.home : routeNames.home}>
+        <Link className="flex flex-row items-center" to={routeNames.home}>
           <img src={logo192} className="w-[5rem]" />
           <div className="flex flex-col leading-none">
             <span className="text-black dark:!text-white md:text-lg text-base -mb-1">Itheum&nbsp;</span>
@@ -185,7 +168,7 @@ export const Navbar = () => {
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
-              to={isLoggedIn ? routeNames.home : routeNames.home}
+              to={routeNames.home}
               className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
               Home
             </Link>
@@ -243,8 +226,8 @@ export const Navbar = () => {
                 <BitzDropdown />
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to={isLoggedIn ? routeNames.home : routeNames.home}>
-                  <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
+                <Link to={routeNames.home}>
+                  <div className="flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
                     <Button
                       className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
                       variant="outline"
@@ -258,7 +241,7 @@ export const Navbar = () => {
           ) : (
             <NavigationMenuItem>
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center">
                   <Button
                     className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
                     variant="outline">
@@ -281,7 +264,7 @@ export const Navbar = () => {
               <BitzDropdown />
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] w-full rounded-lg justify-center">
                   <Button
                     className="dark:bg-[#0f0f0f] dark:text-white hover:dark:bg-[#0f0f0f20] border-0 rounded-lg font-medium tracking-wide"
                     variant="outline">
@@ -289,7 +272,7 @@ export const Navbar = () => {
                   </Button>
                 </div>
               </Link>
-            )}{" "}
+            )}
             <SwitchButton />
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="mr-2">
