@@ -1,0 +1,144 @@
+.filter::placeholder {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Ice - #131 */
+.dapp-wallet-connect-login,
+.dapp-extension-login,
+.dapp-web-wallet-login,
+.dapp-ledger-login {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dapp-wallet-connect-login-modal,
+.dapp-modal-dialog-content,
+.dapp-modal-dialog-wrapper {
+  z-index: 1500 !important;
+}
+
+.dapp-core-component__dappModalStyles__dappModalBody {
+  padding: 0px !important;
+}
+
+.dapp-core-component__main__card-body {
+  padding: 0px !important;
+}
+
+.dapp-core-component__signWithDeviceModalStyles__modal-layout-content {
+  --modal-offset: 0px !important;
+}
+
+.dapp-core-component__main__mt-1 {
+  margin-top: 0.5rem !important;
+}
+
+/* START MVX LOGIN STYLING */
+.dapp-core-component__dappModalStyles__dappModalContent.dapp-core-component__ledgerLoginContainerStyles__ledger-modal-dialog-content {
+  @apply text-foreground bg-background !important;
+}
+
+.dapp-core-component__dappModalStyles__dappModalHeader.dapp-core-component__ledgerLoginContainerStyles__ledger-modal-header {
+  @apply bg-background !important;
+}
+
+.dapp-core-component__dappModalStyles__dappModalCloseButton.dapp-core-component__main__btn.dapp-core-component__main__btn-light.dapp-core-component__ledgerLoginContainerStyles__ledger-modal-close-button {
+  @apply bg-background text-foreground !important;
+}
+
+.dapp-core-component__main__btn.dapp-core-component__main__btn-primary.dapp-core-component__ledgerConnectStyles__login-connect-container-button {
+  @apply bg-background text-foreground !important;
+}
+
+.dapp-core-component__addressTableStyles__ledger-address-table-wrapper
+  .dapp-core-component__addressTableStyles__ledger-address-table
+  .dapp-core-component__addressTableStyles__ledger-address-table-header {
+  @apply text-foreground bg-background/60 !important;
+}
+
+.dapp-core-component__confirmAddressStyles__ledger-confirm-address
+  .dapp-core-component__confirmAddressStyles__ledger-confirm-address-section
+  .dapp-core-component__confirmAddressStyles__ledger-confirm-address-description {
+  @apply text-foreground bg-background/60 !important;
+}
+
+.dapp-core-component__confirmAddressStyles__ledger-confirm-address .dapp-core-component__confirmAddressStyles__ledger-confirm-address-footer {
+  @apply text-foreground bg-background/60 !important;
+}
+
+.dapp-core-component__main__data-field .dapp-core-component__main__textarea {
+  @apply text-foreground bg-background/60 !important;
+}
+
+.dapp-core-component__main__btn.dapp-core-component__main__btn-primary.dapp-core-component__main__px-4.dapp-core-component__main__m-1.dapp-core-component__main__mx-3.auth_button {
+  background-color: transparent !important;
+}
+
+.dapp-core-component__ledgerConnectStyles__login-connect-container-icon {
+  filter: invert(70%) !important;
+}
+
+.dapp-core-component__addressRowStyles__ledger-address-table-body-item.dapp-ledger-address-row {
+  @apply text-foreground !important;
+}
+
+.dapp-core-component__addressRowStyles__ledger-address-table-body-item.dapp-core-component__addressRowStyles__ledger-address-table-body-item-selected.dapp-ledger-address-row {
+  font-weight: bold !important;
+}
+
+/* STOP MVX LOGIN STYLING */
+
+.dapp-core-component__transactionToast-styles__content
+  .dapp-core-component__transactionToast-styles__right
+  .dapp-core-component__transactionToast-styles__heading
+  .dapp-core-component__transactionToast-styles__close {
+  @apply text-foreground !important;
+}
+
+.dapp-core-component__main__warning {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+.dapp-core-component__customToast-styles__close {
+  @apply text-foreground !important;
+}
+
+.dapp-wallet-connect-login-modal .dapp-modal-dialog-header,
+.dapp-ledger-login-container .dapp-modal-dialog-header {
+  margin-top: 10px !important;
+}
+
+.dapp-ledger-login-container .dapp-core-component__main__text-danger {
+  margin-bottom: 5px !important;
+}
+
+.dapp-modal-dialog-header .dapp-modal-dialog-close-button {
+  margin-top: 5px !important;
+}
+
+.dapp-core-component__transactionsToastList-styles__toasts.dapp-core-component__transactionsToastList-styles__toastWrapper {
+  position: fixed !important;
+}
+
+.dapp-core-component__dappModalStyles__dappModalContent.dapp-modal-dialog-content {
+  @apply text-foreground bg-background !important;
+  margin-top: 0px !important;
+  margin-bottom: 4rem !important;
+  overflow-y: scroll !important;
+  max-height: 100% !important;
+}
+
+.dapp-core-component__dappModalStyles__dappModalContent.dapp-core-component__walletConnectLoginContainerStyles__xPortal-modal-dialog-content {
+  @apply text-foreground bg-background !important;
+}
+
+.dapp-core-component__dappModalStyles__dappModalCloseButton.dapp-core-component__main__btn.dapp-core-component__main__btn-light.dapp-core-component__walletConnectLoginContainerStyles__xPortal-modal-close-button {
+  @apply text-foreground bg-background !important;
+}
+
+.dapp-core-component__transactionToast-styles__icon {
+  filter: invert(50%) !important;
+}
