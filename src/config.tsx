@@ -6,12 +6,7 @@ export const walletConnectV2ProjectId = import.meta.env.VITE_ENV_WALLETCONNECTV2
 
 export const apiTimeout = 10_000; // 10s
 export const TOOLS_API_URL = "https://tools.multiversx.com";
-/**
- * Calls to these domains will use `nativeAuth` Baerer token
- */
-export const sampleAuthenticatedDomains = [TOOLS_API_URL];
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 export const dAppName = "Itheum Explorer";
 
 export const CC_SHOW_SIZE = 10;
@@ -27,5 +22,5 @@ export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
 
 export const SUPPORTED_COLLECTIONS =
   import.meta.env.VITE_ENV_NETWORK && import.meta.env.VITE_ENV_NETWORK === EnvironmentsEnum.devnet
-    ? ["DATANFTFT-e0b917", "I3TICKER-03e5c2", "COLNAMA-539838", "DNFTPHMA-9e2b1c"]
+    ? ["DATANFTFT-e0b917", "I3TICKER-03e5c2", "COLNAMA-539838", "DNFTPHMA-9e2b1c", "OASISMUSIC-9b3433", "OASMUSICPL-47b186"]
     : ["DATANFTFT-e936d4"];
