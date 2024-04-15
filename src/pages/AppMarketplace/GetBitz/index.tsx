@@ -15,7 +15,6 @@ import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
@@ -27,25 +26,16 @@ import { useAccountStore } from "../../../store/account";
 import "./GetBitz.css";
 
 // Image Layers
-import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
-import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
-import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
-import ImgLoadingGame from "assets/img/getbitz/getbitz-loading.gif";
+import aladinRugg from "assets/img/getbitz/aladin.png";
 import FingerPoint from "assets/img/getbitz/finger-point.gif";
 import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.png";
-import aladinRugg from "assets/img/getbitz/aladin.png";
-import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
+import ImgLoadingGame from "assets/img/getbitz/getbitz-loading.gif";
+import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
+import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
 
 // Memes
 import Meme1 from "assets/img/getbitz/memes/1.jpg";
-import Meme2 from "assets/img/getbitz/memes/2.jpg";
-import Meme3 from "assets/img/getbitz/memes/3.jpg";
-import Meme4 from "assets/img/getbitz/memes/4.jpg";
-import Meme5 from "assets/img/getbitz/memes/5.jpg";
-import Meme6 from "assets/img/getbitz/memes/6.jpg";
-import Meme7 from "assets/img/getbitz/memes/7.jpg";
-import Meme8 from "assets/img/getbitz/memes/8.jpg";
-import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import Meme10 from "assets/img/getbitz/memes/10.jpg";
 import Meme11 from "assets/img/getbitz/memes/11.jpg";
 import Meme12 from "assets/img/getbitz/memes/12.jpg";
@@ -57,6 +47,7 @@ import Meme17 from "assets/img/getbitz/memes/17.jpg";
 
 import Meme18 from "assets/img/getbitz/memes/18.jpg";
 import Meme19 from "assets/img/getbitz/memes/19.jpg";
+import Meme2 from "assets/img/getbitz/memes/2.jpg";
 import Meme20 from "assets/img/getbitz/memes/20.jpg";
 import Meme21 from "assets/img/getbitz/memes/21.jpg";
 import Meme22 from "assets/img/getbitz/memes/22.jpg";
@@ -67,6 +58,15 @@ import Meme26 from "assets/img/getbitz/memes/26.jpg";
 import Meme27 from "assets/img/getbitz/memes/27.jpg";
 import Meme28 from "assets/img/getbitz/memes/28.jpg";
 import Meme29 from "assets/img/getbitz/memes/29.jpg";
+import Meme3 from "assets/img/getbitz/memes/3.jpg";
+import Meme4 from "assets/img/getbitz/memes/4.jpg";
+import Meme5 from "assets/img/getbitz/memes/5.jpg";
+import Meme6 from "assets/img/getbitz/memes/6.jpg";
+import Meme7 from "assets/img/getbitz/memes/7.jpg";
+import Meme8 from "assets/img/getbitz/memes/8.jpg";
+import Meme9 from "assets/img/getbitz/memes/9.jpg";
+import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -373,31 +373,28 @@ export const GetBitz = () => {
     // user is not logged in, ask them to connect wallet
     if (!address) {
       return (
-        <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLogin} alt={"Connect your wallet to play"} />
+        <Link className="relative" to={routeNames.unlock} state={{ from: location.pathname }}>
+          <img className="z-5 rounded-[3rem] w-full cursor-pointer" src={ImgLogin} alt={"Connect your wallet to play"} />
         </Link>
       );
     }
 
     // user is logged in and we are checking if they have the data nft to proceed with a play
     if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
-      return (
-        <div>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
-        </div>
-      );
+      return <div> </div>;
     }
 
     // user is logged in does not have the data nft, so take them to the marketplace
     if (address && !checkingIfHasGameDataNFT && !hasGameDataNFT) {
       return (
         <div
+          className="relative"
           onClick={() => {
             if (gameDataNFT) {
               goToMarketplace(gameDataNFT.tokenIdentifier);
             }
           }}>
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTz> Data NFT from Data NFT Marketplace"} />
+          <img className="z-5 rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTz> Data NFT from Data NFT Marketplace"} />
         </div>
       );
     }
@@ -407,9 +404,9 @@ export const GetBitz = () => {
         onClick={() => {
           resetToStartGame();
         }}>
-        <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
-        <span className="text-primary inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
-          RIGHT NOW! Try again <MousePointerClick className="ml-2 text-sky-300" />
+        <span className="absolute hover:bg-[#35d9fa] inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+        <span className="text-primary inline-flex h-full hover:bg-gradient-to-tl from-background to-[#35d9fa] w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
+          RIGHT NOW! Try again <MousePointerClick className="ml-2 text-[#35d9fa]" />
         </span>
       </div>
     );
@@ -478,7 +475,7 @@ export const GetBitz = () => {
 
           <div
             className={cn(
-              "select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static md:absolute md:pb-[.5rem] md:w-[500px] md:h-[420px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2",
+              "select-none flex justify-center items-center mt-[2rem]  w-[100%] h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
               _isMemeBurnHappening ? "cursor-none" : ""
             )}>
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
@@ -488,12 +485,12 @@ export const GetBitz = () => {
                   onClick={() => {
                     setIsMemeBurnHappening(true);
                   }}>
-                  <p className="md:text-md">Welcome Back Itheum OG!</p>
-                  <p className="md:text-md mt-2 md:mt-5">
-                    Ready to grab yourself some of them <span className=" md:text-3xl">🤤</span> {`<BiTz>`} points?
+                  <p className="lg:text-md">Welcome Back Itheum OG!</p>
+                  <p className="lg:text-md mt-2 lg:mt-5">
+                    Ready to grab yourself some of them <span className=" lg:text-3xl">🤤</span> {`<BiTz>`} points?
                   </p>
-                  <p className="font-bold md:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!</p>
-                  <p className="font-bold mt-2 md:mt-5">Click here when you are ready...</p>
+                  <p className="font-bold lg:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!</p>
+                  <p className="font-bold mt-2 lg:mt-5">Click here when you are ready...</p>
                   <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
                 </div>
               </>
@@ -502,25 +499,25 @@ export const GetBitz = () => {
 
             {_isMemeBurnHappening && (
               <div
-                className="z-10 relative cursor-none select-none"
+                className="z-10 relative cursor-none select-none p-8"
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
-                <p className="text-center text-md text-gray-950 text-foreground md:text-xl ">Light up this Meme Sacrifice!</p>
+                <p className="text-center text-md text-gray-950 text-foreground lg:text-xl ">Light up this Meme Sacrifice!</p>
                 <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
                 <BurningImage src={randomMeme} burnProgress={burnProgress} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
-                <div className="flame !top-[125px] md:!top-[90px]" style={{ transform: burnFireScale }}></div>
+                <div className="flame !top-[125px] lg:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
             )}
 
             {_isFetchingDataMarshal && (
               <div>
-                <p className="text-center text-md text-gray-950 text-foreground md:text-xl mb-[1rem]">
+                <p className="text-center text-md text-gray-950 text-foreground lg:text-xl mb-[1rem]">
                   Did the {`<BiTz>`} Generator God like that Meme Sacrifice? Only time will tell...
                 </p>
                 <p className="text-gray-950 text-sm text-center mb-[1rem]">Hang tight, result incoming</p>
-                <img className="w-[160px] md:w-[230px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
+                <img className="w-[160px] lg:w-[230px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
               </div>
             )}
           </div>
@@ -537,7 +534,7 @@ export const GetBitz = () => {
           <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
           <div
             className="flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
-                        md:absolute md:p-[2rem] md:pb-[.5rem] md:w-[500px] md:h-[400px] md:mt-0 md:top-[40%] md:left-[50%] md:-translate-x-1/2 md:-translate-y-1/2">
+                        lg:absolute lg:p-[2rem] lg:pb-[.5rem] lg:w-[500px] lg:h-[400px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2">
             {_viewDataRes && !_viewDataRes.error && (
               <>
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs > 0 && (
@@ -556,7 +553,7 @@ export const GetBitz = () => {
                         <div className="z-[25]">
                           <p className="text-2xl">OPPS! Aladdin Rugged You! 0 Points this Time...</p>
                           <motion.img
-                            className="w-[150px] lg:w-full absolute z-[25]"
+                            className="w-[150px] md:w-[180px] lg:w-[210px] xl:w-full absolute z-[25]"
                             src={aladinRugg}
                             initial={{ x: -750, y: 0 }}
                             animate={{
@@ -761,9 +758,13 @@ export const GetBitz = () => {
 
   return (
     <>
-      {gamePlayImageSprites()}
-
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] my-[3rem]">
+      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[30rem] lg:min-h-[40rem] xl:min-h-screen">
+        <div className="absolute -z-1">
+          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+        </div>
+        {gamePlayImageSprites()}
+      </div>
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] my-[3rem] mt-">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
