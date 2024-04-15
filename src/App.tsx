@@ -6,8 +6,7 @@ import {
   Layout,
 } from "components";
 import { TransactionsToastList, NotificationModal, SignTransactionsModals } from "components";
-import { apiTimeout, walletConnectV2ProjectId, ELROND_NETWORK } from "config";
-import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock, GetBitz } from "pages";
+import { MultiversxBubbles, MultiversxInfographics, MyWallet, PageNotFound, Unlock, GetBitz, BoberGameRoom } from "pages";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
@@ -39,21 +38,20 @@ export const App = () => {
                 {routes.map((route, index) => (
                   <Route path={route.path} key={index} element={<route.component />} />
                 ))}
-
-                <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
-                <Route path={`${routeNames.multiversxbubbles}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxBubbles />} />
-                <Route path={`${routeNames.multiversxinfographics}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxInfographics />} />
-                <Route path={`${routeNames.nftunes}/:targetNonce/:targetMessageToBeSigned`} element={<NFTunes />} />
-                <Route path={`${routeNames.timecapsule}/:targetNonce/:targetMessageToBeSigned`} element={<TimeCapsule />} />
-                <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
-                <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </Layout>
-          </ThemeProvider>
-        </StoreProvider>
-      </DappProvider>
-    </Router>
+                    <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
+                    <Route path={`${routeNames.multiversxinfographics}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxInfographics />} />
+                    <Route path={`${routeNames.nftunes}/:targetNonce/:targetMessageToBeSigned`} element={<NFTunes />} />
+                    <Route path={`${routeNames.timecapsule}/:targetNonce/:targetMessageToBeSigned`} element={<TimeCapsule />} />
+                    <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
+                    <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
+                    <Route path={`${routeNames.bobergameroom}/:targetNonce/:targetMessageToBeSigned`} element={<BoberGameRoom />} />
+                    <Route path="*" element={<PageNotFound />} />
+                  </Routes>
+                </Layout>
+              </ThemeProvider>
+            </StoreProvider>
+          </DappProvider>
+        </Router>
   );
 };
 
