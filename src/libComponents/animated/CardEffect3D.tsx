@@ -1,7 +1,5 @@
-"use client";
-
-import { cn } from "libs/utils";
 import React, { createContext, useState, useContext, useRef, useEffect } from "react";
+import { cn } from "libs/utils";
 
 const MouseEnterContext = createContext<[boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined>(undefined);
 
