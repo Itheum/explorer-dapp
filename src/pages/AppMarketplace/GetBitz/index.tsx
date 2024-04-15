@@ -15,7 +15,6 @@ import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
-import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
@@ -27,25 +26,16 @@ import { useAccountStore } from "../../../store/account";
 import "./GetBitz.css";
 
 // Image Layers
-import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
-import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
-import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
-import ImgLoadingGame from "assets/img/getbitz/getbitz-loading.gif";
+import aladinRugg from "assets/img/getbitz/aladin.png";
 import FingerPoint from "assets/img/getbitz/finger-point.gif";
 import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.png";
-import aladinRugg from "assets/img/getbitz/aladin.png";
-import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
+import ImgLoadingGame from "assets/img/getbitz/getbitz-loading.gif";
+import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
+import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
 
 // Memes
 import Meme1 from "assets/img/getbitz/memes/1.jpg";
-import Meme2 from "assets/img/getbitz/memes/2.jpg";
-import Meme3 from "assets/img/getbitz/memes/3.jpg";
-import Meme4 from "assets/img/getbitz/memes/4.jpg";
-import Meme5 from "assets/img/getbitz/memes/5.jpg";
-import Meme6 from "assets/img/getbitz/memes/6.jpg";
-import Meme7 from "assets/img/getbitz/memes/7.jpg";
-import Meme8 from "assets/img/getbitz/memes/8.jpg";
-import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import Meme10 from "assets/img/getbitz/memes/10.jpg";
 import Meme11 from "assets/img/getbitz/memes/11.jpg";
 import Meme12 from "assets/img/getbitz/memes/12.jpg";
@@ -57,6 +47,7 @@ import Meme17 from "assets/img/getbitz/memes/17.jpg";
 
 import Meme18 from "assets/img/getbitz/memes/18.jpg";
 import Meme19 from "assets/img/getbitz/memes/19.jpg";
+import Meme2 from "assets/img/getbitz/memes/2.jpg";
 import Meme20 from "assets/img/getbitz/memes/20.jpg";
 import Meme21 from "assets/img/getbitz/memes/21.jpg";
 import Meme22 from "assets/img/getbitz/memes/22.jpg";
@@ -67,6 +58,15 @@ import Meme26 from "assets/img/getbitz/memes/26.jpg";
 import Meme27 from "assets/img/getbitz/memes/27.jpg";
 import Meme28 from "assets/img/getbitz/memes/28.jpg";
 import Meme29 from "assets/img/getbitz/memes/29.jpg";
+import Meme3 from "assets/img/getbitz/memes/3.jpg";
+import Meme4 from "assets/img/getbitz/memes/4.jpg";
+import Meme5 from "assets/img/getbitz/memes/5.jpg";
+import Meme6 from "assets/img/getbitz/memes/6.jpg";
+import Meme7 from "assets/img/getbitz/memes/7.jpg";
+import Meme8 from "assets/img/getbitz/memes/8.jpg";
+import Meme9 from "assets/img/getbitz/memes/9.jpg";
+import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
 
 interface LeaderBoardItemType {
   playerAddr: string;
