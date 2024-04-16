@@ -849,7 +849,7 @@ export const GetBitz = () => {
         </div>
       </div>
 
-      {address && leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase viewDataRes={viewDataRes} gameDataNFT={gameDataNFT} />}
+      {address && leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
 
       <Faq />
     </>

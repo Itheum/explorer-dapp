@@ -1,170 +1,134 @@
 import React, { useState, useEffect } from "react";
-import { CopyAddress } from "components/CopyAddress";
-import { Button } from "../../../../libComponents/Button";
-import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
-import { useGetAccount } from "hooks";
-import { viewDataJSONCore } from "../index";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import axios, { AxiosError } from "axios";
-import { GET_BITZ_TOKEN } from "appsConfig";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId } from "libs/utils";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
-import { LeaderBoardItemType, leaderBoardTable } from "../index";
+import moment from "moment-timezone";
 import { Loader } from "components";
+import { CopyAddress } from "components/CopyAddress";
+import { Modal } from "components/Modal/Modal";
+import { CREATOR_PROFILE_PAGE } from "config";
+import { useGetAccount } from "hooks";
+import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
+import { sleep } from "libs/utils";
+import { Button } from "../../../../libComponents/Button";
+import { LeaderBoardItemType, leaderBoardTable } from "../index";
 
 type PowerUpCreatorProps = {
   creatorAddress: string;
-  gameDataNFT: DataNft;
   campaignId: string;
-  refreshMyGivenSum: any;
+  campaignStartTs: number;
+  campaignEndTs: number;
+  campaignPerks: string;
+  gameDataNFT: DataNft;
+  sendPowerUp: any;
+  fetchGivenBitsForCreator: any;
+  fetchAndLoadGetterLeaderBoards: any;
 };
 
 const PowerUpCreator = (props: PowerUpCreatorProps) => {
-  const { creatorAddress, gameDataNFT, campaignId, refreshMyGivenSum } = props;
+  const {
+    creatorAddress,
+    campaignId,
+    campaignStartTs,
+    campaignEndTs,
+    campaignPerks,
+    gameDataNFT,
+    sendPowerUp,
+    fetchGivenBitsForCreator,
+    fetchAndLoadGetterLeaderBoards,
+  } = props;
   const { address } = useGetAccount();
-  const { tokenLogin } = useGetLoginInfo();
   const [bitsVal, setBitsVal] = useState<number>(0);
   const [bitsGivenToCreator, setBitsGivenToCreator] = useState<number>(-1);
   const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
+  const [isPowerUpSuccess, setIsPowerUpSuccess] = useState<boolean>(false);
+  const [tweetText, setTweetText] = useState<string>("");
   const { chainID } = useGetNetworkConfig();
   const [getterLeaderBoardIsLoading, setGetterLeaderBoardIsLoading] = useState<boolean>(false);
   const [getterLeaderBoard, setGetterLeaderBoard] = useState<LeaderBoardItemType[]>([]);
 
   useEffect(() => {
-    // onload
     if (address && creatorAddress && gameDataNFT && campaignId) {
-      fetchGivenBitsForCreator();
-      fetchAndLoadGetterLeaderBoards();
+      loadBaseData();
     }
   }, [address, creatorAddress, gameDataNFT, campaignId]);
 
-  async function sendPowerUp() {
-    console.log("sendPowerUp");
-
-    if (tokenLogin) {
-      setPowerUpSending(true);
-
-      try {
-        const viewDataArgs = {
-          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
-          mvxNativeAuthMaxExpirySeconds: 3600,
-          fwdHeaderMapLookup: {
-            "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
-            "dmf-custom-give-bits": "1",
-            "dmf-custom-give-bits-val": bitsVal,
-            "dmf-custom-give-bits-to-who": creatorAddress,
-            "dmf-custom-give-bits-to-campaign-id": campaignId,
-          },
-          fwdHeaderKeys: "authorization, dmf-custom-give-bits, dmf-custom-give-bits-val, dmf-custom-give-bits-to-who, dmf-custom-give-bits-to-campaign-id",
-        };
-
-        const giveBitzGameResult = await viewDataJSONCore(viewDataArgs, gameDataNFT);
-
-        if (giveBitzGameResult) {
-          console.log("giveBitzGameResult", giveBitzGameResult);
-          if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
-            throw new Error("Error: Not possible to sent power up. As error code returned. Do you have enough BiTz to give?");
-          } else {
-            await sleep(2);
-            fetchGivenBitsForCreator();
-            await sleep(2);
-            fetchAndLoadGetterLeaderBoards();
-          }
-        } else {
-          throw new Error("Error: Not possible to sent power up");
-        }
-      } catch (err) {
-        console.error(err);
-        toastError((err as Error).message);
-      }
-
-      setBitsVal(0); // reset the figure the user sent
-      setPowerUpSending(false);
-    }
+  async function loadBaseData() {
+    const _fetchGivenBitsForCreator = await fetchGivenBitsForCreator({ getterAddr: creatorAddress, campaignId: campaignId });
+    setBitsGivenToCreator(_fetchGivenBitsForCreator);
+    setGetterLeaderBoardIsLoading(true);
+    const _toLeaderBoardTypeArr: LeaderBoardItemType[] = await fetchAndLoadGetterLeaderBoards({ getterAddr: creatorAddress, campaignId: campaignId });
+    setGetterLeaderBoard(_toLeaderBoardTypeArr);
+    setGetterLeaderBoardIsLoading(false);
   }
 
   function handleGiveBitzChange(bitz: number) {
     setBitsVal(bitz);
   }
 
-  async function fetchGivenBitsForCreator() {
-    setBitsGivenToCreator(-1);
+  async function handlePowerUp() {
+    setPowerUpSending(true);
+    setIsPowerUpSuccess(false);
+    setTweetText("");
 
-    const callConfig = {
-      headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
-      },
-    };
+    const _isPowerUpSuccess = await sendPowerUp({ bitsVal, bitsToWho: creatorAddress, bitsToCampaignId: campaignId });
 
-    try {
-      console.log("AXIOS CALL -----> xpGamePrivate/givenBits: giverAddr && getterAddr");
-      const { data } = await axios.get<any>(
-        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}&getterAddr=${creatorAddress}&campaignId=${campaignId}`,
-        callConfig
-      );
+    if (_isPowerUpSuccess) {
+      await sleep(2);
+      setBitsGivenToCreator(-1);
+      const _fetchGivenBitsForCreator = await fetchGivenBitsForCreator({ getterAddr: creatorAddress, campaignId: campaignId });
+
+      setBitsGivenToCreator(_fetchGivenBitsForCreator);
 
       await sleep(2);
-      setBitsGivenToCreator(data.bits ? parseInt(data.bits, 10) : -2);
-      await sleep(2);
-      refreshMyGivenSum(); // call back to parent and ask to refresh the total given sum
-    } catch (err) {
-      const message = "Getting my rank on the all time leaderboard failed:" + (err as AxiosError).message;
-      console.error(message);
-    }
-  }
 
-  async function fetchAndLoadGetterLeaderBoards() {
-    setGetterLeaderBoardIsLoading(true);
+      setGetterLeaderBoardIsLoading(true);
+      const _toLeaderBoardTypeArr: LeaderBoardItemType[] = await fetchAndLoadGetterLeaderBoards({ getterAddr: creatorAddress, campaignId: campaignId });
 
-    const callConfig = {
-      headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
-      },
-    };
-
-    try {
-      // S: ACTUAL LOGIC
-      console.log("AXIOS CALL -----> xpGamePrivate/getterLeaderBoard : getterAddr =", creatorAddress);
-      const { data } = await axios.get<any[]>(
-        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterLeaderBoard?getterAddr=${creatorAddress}&campaignId=${campaignId}`,
-        callConfig
+      setIsPowerUpSuccess(true);
+      setTweetText(
+        `url=https://explorer.itheum.io/getbitz?v=1&text=I just gave ${bitsVal} of my precious %23itheum <BiTz> XP to Power-Up and support a Data Creator in return for some exclusive rewards and perks. What are you waiting for? %23GetBiTz and %23GiveBiTz here`
       );
-
-      const _toLeaderBoardTypeArr: LeaderBoardItemType[] = data.map((i) => {
-        const item: LeaderBoardItemType = {
-          playerAddr: i.giverAddr,
-          bits: i.bits,
-        };
-
-        return item;
-      });
-
       setGetterLeaderBoard(_toLeaderBoardTypeArr);
-      // E: ACTUAL LOGIC
-    } catch (err) {
-      const message = "Monthly Leaderboard fetching failed:" + (err as AxiosError).message;
-      console.error(message);
+      setGetterLeaderBoardIsLoading(false);
     }
 
-    setGetterLeaderBoardIsLoading(false);
+    setBitsVal(0); // reset the figure the user sent
+    setPowerUpSending(false);
   }
 
   return (
-    <div className="creator-tile border p-10 min-w-[300px] max-w-[360px]">
+    <div className="power-up-tile border p-10 min-w-[300px] max-w-[360px]">
       <div className="text-lg">Creator Profile</div>
       <div className="mb-5">
         {" "}
         <CopyAddress address={creatorAddress} precision={8} />
+        <a className="!text-[#7a98df] hover:underline" href={`${CREATOR_PROFILE_PAGE}${creatorAddress}`} target="blank">
+          : View
+        </a>
       </div>
       <div className="mb-3 py-2 border-b-4">
         <div>Campaign Id: {campaignId}</div>
       </div>
       <div className="mb-3 py-2 border-b-4">
-        <div>Given BiTz: {bitsGivenToCreator === -1 ? "Loading..." : <>{bitsGivenToCreator === -2 ? "0" : bitsGivenToCreator}</>}</div>
+        <div>
+          Campaign Dates: {moment(campaignStartTs * 1000).format("YYYY-MM-DD")} to {moment(campaignEndTs * 1000).format("YYYY-MM-DD")}
+        </div>
       </div>
+      <div className="mb-3 py-2 border-b-4 text-sm">
+        <div>Campaign Perks: {campaignPerks}</div>
+      </div>
+
+      <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+        <p className="flex items-end md:text-lg md:mr-[1rem]">Given BiTz</p>
+        <p className="text-lg md:text-xl dark:text-[#35d9fa] font-bold">
+          {bitsGivenToCreator === -1 ? "Loading..." : <>{bitsGivenToCreator === -2 ? "0" : bitsGivenToCreator}</>}
+        </p>
+      </div>
+
       {powerUpSending && <div>Sending PowerUp...</div>}
       <div className="mb-3 py-2 border-b-4">
         <div>Give More BiTz</div>
+
         <div className="mb-3">
           <input
             type="range"
@@ -174,9 +138,66 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
             value={bitsVal}
             onChange={(e) => handleGiveBitzChange(Number(e.target.value))}
             className="accent-black dark:accent-white w-[70%] cursor-pointer ml-2"></input>
-          <Button disabled={!(bitsVal > 0) || powerUpSending} className="cursor-pointer mt-3" onClick={sendPowerUp}>
-            Send {bitsVal} BiTz Power Up
-          </Button>
+
+          <Modal
+            openTrigger={
+              <Button
+                disabled={!(bitsVal > 0) || powerUpSending}
+                className="cursor-pointer mt-3"
+                onClick={() => {
+                  setIsPowerUpSuccess(false);
+                  setTweetText("");
+                }}>
+                Send {bitsVal} BiTz Power Up
+              </Button>
+            }
+            closeOnOverlayClick={false}
+            title={`Power-up a Data Creator with ${bitsVal} BiTz?`}
+            hasFilter={false}
+            filterData={[]}
+            modalClassName={"p-8"}
+            titleClassName={""}>
+            <div>
+              {!isPowerUpSuccess && (
+                <>
+                  <div className="mt-5 text-lg">{`Are you sure you want to power-up ${creatorAddress} with ${bitsVal} BiTz?`}</div>
+                  <div className="mt-5 text-md">
+                    🛟 Giving BiTz is super rewarding but cannot be un-done, so before you proceed make sure you read and agree to the Give BiTz terms of use{" "}
+                    <a
+                      className="!text-[#7a98df] hover:underline"
+                      href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/bitz-xp/give-bitz"
+                      target="blank">
+                      Give BiTz terms of use
+                    </a>
+                  </div>
+                  <Button disabled={!(bitsVal > 0) || powerUpSending} className="cursor-pointer mt-3" onClick={handlePowerUp}>
+                    I agree, Send {bitsVal} BiTz Power Up
+                  </Button>
+                  {powerUpSending && <div>Sending PowerUp...</div>}
+                </>
+              )}
+
+              {isPowerUpSuccess && (
+                <div className="rounded-full p-[1px] -z-1">
+                  <p className="text-2xl p-2 mt-5">w👀t! w👀t! your power-up has been sent. Share this with the world Itheum OG!</p>
+                  <HoverBorderGradient className="-z-1">
+                    <a
+                      className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
+                      href={"https://twitter.com/intent/tweet?" + tweetText}
+                      data-size="large"
+                      target="_blank">
+                      <span className=" [&>svg]:h-4 [&>svg]:w-4 z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+                          <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                        </svg>
+                      </span>
+                      <p className="z-10">Tweet</p>
+                    </a>
+                  </HoverBorderGradient>
+                </div>
+              )}
+            </div>
+          </Modal>
         </div>
       </div>
 

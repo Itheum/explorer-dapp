@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import axios, { AxiosError } from "axios";
-import PowerUpCreator from "./PowerUpCreator";
-import PowerUpBounty from "./PowerUpBounty";
-import { useAccountStore } from "../../../../store/account";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
-import { Loader } from "components";
-import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId } from "libs/utils";
-import { GET_BITZ_TOKEN } from "appsConfig";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import axios, { AxiosError } from "axios";
+import { GET_BITZ_TOKEN } from "appsConfig";
+import { Loader } from "components";
 import { useGetAccount } from "hooks";
-import { LeaderBoardItemType, leaderBoardTable } from "../index";
+import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, toastError } from "libs/utils";
+import { useAccountStore } from "store/account";
+import PowerUpBounty from "./PowerUpBounty";
+import PowerUpCreator from "./PowerUpCreator";
+import { getCreatorCampaigns, GiveBitzCreatorCampaign, getDataBounties, GiveBitzDataBounty } from "../config";
+import { LeaderBoardItemType, leaderBoardTable, viewDataJSONCore } from "../index";
 
 type GiveBitzBaseProps = {
-  viewDataRes: any;
   gameDataNFT: DataNft;
 };
 
@@ -22,15 +23,15 @@ export interface LeaderBoardGiverItemType {
 }
 
 const GiveBitzBase = (props: GiveBitzBaseProps) => {
-  const { viewDataRes, gameDataNFT } = props;
+  const { gameDataNFT } = props;
   const { address } = useGetAccount();
+  const { tokenLogin } = useGetLoginInfo();
   const givenBitzSum = useAccountStore((state: any) => state.givenBitzSum);
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
   const { chainID } = useGetNetworkConfig();
-
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-
+  const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
 
@@ -101,6 +102,108 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
     setGiverLeaderBoardIsLoading(false);
   }
 
+  async function sendPowerUp({ bitsVal, bitsToWho, bitsToCampaignId }: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) {
+    console.log("sendPowerUp");
+
+    if (tokenLogin) {
+      setPowerUpSending(true);
+
+      try {
+        const viewDataArgs = {
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
+          mvxNativeAuthMaxExpirySeconds: 3600,
+          fwdHeaderMapLookup: {
+            "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+            "dmf-custom-give-bits": "1",
+            "dmf-custom-give-bits-val": bitsVal,
+            "dmf-custom-give-bits-to-who": bitsToWho,
+            "dmf-custom-give-bits-to-campaign-id": bitsToCampaignId,
+          },
+          fwdHeaderKeys: "authorization, dmf-custom-give-bits, dmf-custom-give-bits-val, dmf-custom-give-bits-to-who, dmf-custom-give-bits-to-campaign-id",
+        };
+
+        const giveBitzGameResult = await viewDataJSONCore(viewDataArgs, gameDataNFT);
+
+        if (giveBitzGameResult) {
+          console.log("giveBitzGameResult", giveBitzGameResult);
+          if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
+            throw new Error("Error: Not possible to sent power up. As error code returned. Do you have enough BiTz to give?");
+          } else {
+            // await sleep(2);
+            // fetchGivenBitsForCreator();
+            // await sleep(2);
+            // fetchAndLoadGetterLeaderBoards();
+
+            return true;
+          }
+        } else {
+          throw new Error("Error: Not possible to sent power up");
+        }
+      } catch (err) {
+        console.error(err);
+        toastError((err as Error).message);
+      }
+
+      setPowerUpSending(false);
+    }
+  }
+
+  async function fetchGivenBitsForCreator({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
+    const callConfig = {
+      headers: {
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+      },
+    };
+
+    try {
+      console.log("AXIOS CALL -----> xpGamePrivate/givenBits: giverAddr && getterAddr");
+      const { data } = await axios.get<any>(
+        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}&getterAddr=${getterAddr}&campaignId=${campaignId}`,
+        callConfig
+      );
+
+      await sleep(2);
+      handleFetchGivenBitsForMe(); // call back to parent and ask to refresh the total given sum
+
+      return data.bits ? parseInt(data.bits, 10) : -2;
+    } catch (err) {
+      const message = "Getting my rank on the all time leaderboard failed:" + (err as AxiosError).message;
+      console.error(message);
+    }
+  }
+
+  async function fetchAndLoadGetterLeaderBoards({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
+    const callConfig = {
+      headers: {
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+      },
+    };
+
+    try {
+      // S: ACTUAL LOGIC
+      console.log("AXIOS CALL -----> xpGamePrivate/getterLeaderBoard : getterAddr =", getterAddr);
+      const { data } = await axios.get<any[]>(
+        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterLeaderBoard?getterAddr=${getterAddr}&campaignId=${campaignId}`,
+        callConfig
+      );
+
+      const _toLeaderBoardTypeArr: LeaderBoardItemType[] = data.map((i) => {
+        const item: LeaderBoardItemType = {
+          playerAddr: i.giverAddr,
+          bits: i.bits,
+        };
+
+        return item;
+      });
+
+      return _toLeaderBoardTypeArr;
+      // E: ACTUAL LOGIC
+    } catch (err) {
+      const message = "Monthly Leaderboard fetching failed:" + (err as AxiosError).message;
+      console.error(message);
+    }
+  }
+
   return (
     <div className="flex flex-col lg:flex-row justify-between py-16 ">
       <div className="flex flex-col  mb-8 items-center justify-center">
@@ -137,35 +240,21 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           <span className="text-foreground text-4xl mb-2">Power-up Creators</span>
           <span className="text-base text-foreground/75 text-center ">
             VERIFIED Data Creators run "Power-Me-Up" campiagn. Check out their campaign perks and Power-Up Data Creators with your BiTz XP, Climb Data Creator
-            Leaderboards and get perk.
+            Leaderboards and get perks.
           </span>
         </div>
 
-        <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between gap-4 justify-center items-center">
-          <PowerUpCreator
-            creatorAddress={"erd1xdq4d7uewptx9j9k23aufraklda9leumqc7eu3uezt2kf4fqxz2sex2rxl"}
-            gameDataNFT={gameDataNFT}
-            campaignId="c1"
-            refreshMyGivenSum={handleFetchGivenBitsForMe}
-          />
-          <PowerUpCreator
-            creatorAddress={"erd1qmsq6ej344kpn8mc9xfngjhyla3zd6lqdm4zxx6653jee6rfq3ns3fkcc7"}
-            gameDataNFT={gameDataNFT}
-            campaignId="c2"
-            refreshMyGivenSum={handleFetchGivenBitsForMe}
-          />
-          <PowerUpCreator
-            creatorAddress={"erd16vjhrga4yjpy88lwnu64wlxlapwxtvjl93jax4rg3yq3hzxtnausdmhcjf"}
-            gameDataNFT={gameDataNFT}
-            campaignId="c3"
-            refreshMyGivenSum={handleFetchGivenBitsForMe}
-          />
-          <PowerUpCreator
-            creatorAddress={"erd1xdq4d7uewptx9j9k23aufraklda9leumqc7eu3uezt2kf4fqxz2sex2rxl"}
-            gameDataNFT={gameDataNFT}
-            campaignId="c4"
-            refreshMyGivenSum={handleFetchGivenBitsForMe}
-          />
+        <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between gap-4 justify-center items-center align-start">
+          {getCreatorCampaigns().map((item: GiveBitzCreatorCampaign) => (
+            <PowerUpCreator
+              key={item.campaignId}
+              {...item}
+              gameDataNFT={gameDataNFT}
+              sendPowerUp={sendPowerUp}
+              fetchGivenBitsForCreator={fetchGivenBitsForCreator}
+              fetchAndLoadGetterLeaderBoards={fetchAndLoadGetterLeaderBoards}
+            />
+          ))}
         </div>
       </>
 
@@ -177,10 +266,17 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           </span>
         </div>
 
-        <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between gap-4 justify-center items-center">
-          <PowerUpCreator creatorAddress={"xxxxxxxxxx1"} gameDataNFT={gameDataNFT} campaignId="b1" refreshMyGivenSum={handleFetchGivenBitsForMe} />
-          <PowerUpCreator creatorAddress={"xxxxxxxxxx2"} gameDataNFT={gameDataNFT} campaignId="b2" refreshMyGivenSum={handleFetchGivenBitsForMe} />
-          <PowerUpCreator creatorAddress={"xxxxxxxxxx3"} gameDataNFT={gameDataNFT} campaignId="b3" refreshMyGivenSum={handleFetchGivenBitsForMe} />
+        <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between gap-4 justify-center items-center align-start">
+          {getDataBounties().map((item: GiveBitzDataBounty) => (
+            <PowerUpBounty
+              key={item.bountyId}
+              {...item}
+              gameDataNFT={gameDataNFT}
+              sendPowerUp={sendPowerUp}
+              fetchGivenBitsForCreator={fetchGivenBitsForCreator}
+              fetchAndLoadGetterLeaderBoards={fetchAndLoadGetterLeaderBoards}
+            />
+          ))}
         </div>
       </>
     </div>
