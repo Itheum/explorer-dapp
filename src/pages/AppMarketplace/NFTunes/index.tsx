@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { NF_TUNES_TOKENS, FEATURED_NF_TUNES_TOKEN, IS_DEVNET } from "appsConfig";
 import disk from "assets/img/nf-tunes-logo-disk.png";
 import { DataNftCard, Loader } from "components";
-import { AudioPlayer } from "components/AudioPlayer";
+import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Modal } from "components/Modal/Modal";
 import YouTubeEmbed from "components/YouTubeEmbed";
