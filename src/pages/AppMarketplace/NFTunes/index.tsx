@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { NF_TUNES_TOKENS, FEATURED_NF_TUNES_TOKEN, IS_DEVNET } from "appsConfig";
 import disk from "assets/img/nf-tunes-logo-disk.png";
 import { DataNftCard, Loader } from "components";
-import { AudioPlayer } from "components/AudioPlayer";
+import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Modal } from "components/Modal/Modal";
 import YouTubeEmbed from "components/YouTubeEmbed";
@@ -95,11 +95,12 @@ export const NFTunes = () => {
   // fetch the nfts owned by the logged in address and if the user has any of them set flag to true,
   // on those will be shown view data otherwise show market place explore button
   async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
+    const uniqueTokenIdentifiers = Array.from(new Set(NF_TUNES_TOKENS.map((v) => v.tokenIdentifier)));
+    const _dataNfts = await DataNft.ownedByAddress(address, uniqueTokenIdentifiers);
     const _flags = [];
 
     for (const currentNft of dataNfts) {
-      const matches = _dataNfts.filter((ownedNft) => currentNft.nonce === ownedNft.nonce);
+      const matches = _dataNfts.filter((ownedNft) => currentNft.nonce === ownedNft.nonce && currentNft.collection === ownedNft.collection);
       _flags.push(matches.length > 0);
     }
 
