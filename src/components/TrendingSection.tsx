@@ -1,17 +1,15 @@
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { getHealthCheckFromBackendApi, getTrendingFromBackendApi } from "libs/backend-api";
-import { TrendingNft } from "libs/types";
 import React, { useEffect, useState } from "react";
-import { ThreeDCard } from "./TreeDCard";
-import { convertWeiToEsdt } from "libs/utils";
+import { ThreeDCard } from "./ThreeDCard";
 import toast from "react-hot-toast";
 
-interface NftItem {
-  title: string;
-  supply: number;
-  price: number;
-}
+// interface NftItem {
+//   title: string;
+//   supply: number;
+//   price: number;
+// }
 type TrendingDataCreationNftsType = {
   nonce: number;
   tokenIdentifier: string;
