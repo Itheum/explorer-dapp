@@ -6,9 +6,9 @@ import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
 import { Modal } from "components/Modal/Modal";
 import { useGetAccount } from "hooks";
-import { HoverBorderGradient } from "libComponents/Animated/HoverBorderGradient";
+import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+import { Button } from "libComponents/Button";
 import { sleep } from "libs/utils";
-import { Button } from "../../../../libComponents/Button";
 import { LeaderBoardItemType, leaderBoardTable } from "../index";
 
 type PowerUpBountyProps = {

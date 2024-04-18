@@ -218,8 +218,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   }
 
   return (
-    <div id="givebits" className="flex flex-col lg:flex-row justify-between py-16 ">
-      <div className="flex flex-col  mb-8 items-center justify-center">
+    <div id="givebits" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
+      <div className="flex flex-col mb-8 items-center justify-center">
         <span className="text-foreground text-4xl mb-2">Give Bitz</span>
         <span className="text-base text-foreground/75 text-center ">Power-Up VERIFIED Data Creators and Data Bounties</span>
       </div>
@@ -273,8 +273,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             />
           ))}
 
-          <div className="power-up-tile flex direction-row justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
-            <div className="text-lg text-bond">Run a Power-Up Creator Campaign</div>
+          <div className="power-up-tile flex flex-col direction-row justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
+            <div className="text-lg text-bond">🔌 Run a Power-Up Creator Campaign</div>
             <p>Running a Creator Campaign will help you build your own following of "hardcore fans" who support your creative work.</p>
             <p>
               <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-creator-campaign" target="blank">
@@ -307,8 +307,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             />
           ))}
 
-          <div className="power-up-tile flex direction-row justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
-            <div className="text-lg text-bond">Got an idea for a Data Bounty?</div>
+          <div className="power-up-tile flex flex-col justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
+            <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
             <p>
               Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
               "community cred" for your idea.

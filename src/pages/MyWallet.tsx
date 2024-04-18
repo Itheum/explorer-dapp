@@ -40,7 +40,6 @@ export const MyWallet = () => {
     _dataNfts.push(...nfts);
     setDataNftCount(_dataNfts.length);
     setDataNfts(_dataNfts);
-
     setIsLoading(false);
   }
 
@@ -55,9 +54,6 @@ export const MyWallet = () => {
 
     const dataNft = dataNfts[index];
     let res: any;
-    if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
-      dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
-    }
     if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
       throw Error("No nativeAuth token");
     }

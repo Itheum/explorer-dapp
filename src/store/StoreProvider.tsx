@@ -4,9 +4,9 @@ import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { GET_BITZ_TOKEN } from "appsConfig";
 import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken } from "libs/utils";
+import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "./account";
 import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz";
-import { computeRemainingCooldown } from "libs/utils/functions";
 
 export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { address } = useGetAccount();

@@ -4,6 +4,7 @@ import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, S
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "./AudioPlayer.css";
 import toast from "react-hot-toast";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
@@ -58,22 +59,17 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     infinite: false,
     speed: 1000,
     slidesToShow: 4,
-    slidesToScroll: 4,
     responsive: [
       {
         breakpoint: 1800,
         settings: {
           slidesToShow: 3,
-          slidesToScroll: 3,
-          initialSlide: 1,
         },
       },
       {
         breakpoint: 980,
         settings: {
           slidesToShow: 3,
-          slidesToScroll: 3,
-          initialSlide: 1,
         },
       },
 
@@ -81,15 +77,12 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         breakpoint: 730,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
         },
       },
       {
         breakpoint: 550,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
-          initialSlide: 0,
         },
       },
     ],
