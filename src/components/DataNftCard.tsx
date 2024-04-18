@@ -3,12 +3,12 @@ import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { cn } from "libs/utils";
+import ImageSlider from "./ImageSlider";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
 import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { IFilterData } from "../libComponents/Filter";
-import ImageSlider from "./ImageSlider";
 
 export function DataNftCard({
   index,

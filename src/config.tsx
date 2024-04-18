@@ -1,3 +1,4 @@
+import { IS_DEVNET } from "appsConfig";
 import { EnvironmentsEnum } from "libs/types";
 
 export const ELROND_NETWORK = import.meta.env.VITE_ENV_NETWORK || EnvironmentsEnum.devnet;
@@ -13,14 +14,10 @@ export const CC_SHOW_SIZE = 10;
 
 export const EB_SHOW_SIZE = 10;
 
-export const MARKETPLACE_DETAILS_PAGE =
-  import.meta.env.VITE_ENV_NETWORK && import.meta.env.VITE_ENV_NETWORK === EnvironmentsEnum.devnet
-    ? "https://test.datadex.itheum.io/datanfts/marketplace/"
-    : "https://datadex.itheum.io/datanfts/marketplace/";
+export const MARKETPLACE_DETAILS_PAGE = IS_DEVNET ? "https://test.datadex.itheum.io/datanfts/marketplace/" : "https://datadex.itheum.io/datanfts/marketplace/";
 
 export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
 
-export const SUPPORTED_COLLECTIONS =
-  import.meta.env.VITE_ENV_NETWORK && import.meta.env.VITE_ENV_NETWORK === EnvironmentsEnum.devnet
-    ? ["DATANFTFT-e0b917", "I3TICKER-03e5c2", "COLNAMA-539838", "DNFTPHMA-9e2b1c", "OASISMUSIC-9b3433", "OASMUSICPL-47b186"]
-    : ["DATANFTFT-e936d4"];
+export const SUPPORTED_COLLECTIONS = IS_DEVNET
+  ? ["DATANFTFT-e0b917", "I3TICKER-03e5c2", "COLNAMA-539838", "DNFTPHMA-9e2b1c", "OASISMUSIC-9b3433", "OASMUSICPL-47b186"]
+  : ["DATANFTFT-e936d4"];

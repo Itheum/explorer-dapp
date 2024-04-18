@@ -1,7 +1,7 @@
+import { Offer } from "@itheum/sdk-mx-data-nft/out";
 import axios from "axios";
 import { TrendingNft } from "./types";
 import { uxConfig } from "./utils/constant";
-import { Offer } from "@itheum/sdk-mx-data-nft/out";
 
 export const backendApi = (chainID: string) => {
   const envKey = chainID === "1" ? "VITE_ENV_BACKEND_MAINNET_API" : "VITE_ENV_BACKEND_API";

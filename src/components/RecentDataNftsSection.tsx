@@ -8,6 +8,7 @@ import BigNumber from "bignumber.js";
 import { Address } from "@multiversx/sdk-core/out";
 import toast from "react-hot-toast";
 import { convertWeiToEsdt } from "libs/utils";
+import { IS_DEVNET } from "appsConfig";
 
 export interface RecentDataNFTType {
   index: BigNumber.Value;
@@ -52,7 +53,7 @@ const RecentDataNFTsSection: React.FC = () => {
   }, [isApiUp]);
 
   const apiWrapper = async () => {
-    DataNft.setNetworkConfig(chainID === "1" ? "mainnet" : "devnet");
+    DataNft.setNetworkConfig(IS_DEVNET ? "devnet" : "mainnet");
 
     try {
       const offers = await getRecentOffersFromBackendApi(chainID);

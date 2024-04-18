@@ -6,6 +6,7 @@ import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { useNftsStore } from "store/nfts";
 
 export const PlayStationGamer = () => {
   const { address } = useGetAccount();
@@ -20,6 +21,7 @@ export const PlayStationGamer = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
 
   const [data, setData] = useState<any>();
+  const nfts = useNftsStore((state) => state.nfts);
 
   const [activeGamerData, setActiveGamerData] = useState<any>(null);
 
@@ -39,7 +41,7 @@ export const PlayStationGamer = () => {
   }
 
   async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
+    const _dataNfts = nfts;
 
     const _flags = [];
     for (const cnft of ccDataNfts) {

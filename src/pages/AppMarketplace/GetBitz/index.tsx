@@ -67,6 +67,7 @@ import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+import { useNftsStore } from "store/nfts";
 
 interface LeaderBoardItemType {
   playerAddr: string;
@@ -117,6 +118,7 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const nfts = useNftsStore((state) => state.nfts);
 
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
@@ -214,8 +216,8 @@ export const GetBitz = () => {
   // secondly, we get the user's Data NFTs and flag if the user has the required Data NFT for the game in their wallet
   async function fetchMyNfts() {
     if (gameDataNFT) {
-      const _dataNfts = await DataNft.ownedByAddress(address);
-      const hasRequiredDataNFT = _dataNfts.find((dNft) => gameDataNFT.nonce === dNft.nonce);
+      const _dataNfts = nfts;
+      const hasRequiredDataNFT = _dataNfts.find((dNft) => gameDataNFT.tokenIdentifier === dNft.tokenIdentifier);
       setHasGameDataNFT(hasRequiredDataNFT ? true : false);
       setCheckingIfHasGameDataNFT(false);
 

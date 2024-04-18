@@ -10,6 +10,7 @@ import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { useNftsStore } from "store/nfts";
 
 export const MultiversxInfographics = () => {
   const { address } = useGetAccount();
@@ -24,6 +25,7 @@ export const MultiversxInfographics = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+  const nfts = useNftsStore((state) => state.nfts);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -58,7 +60,7 @@ export const MultiversxInfographics = () => {
   }
 
   async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
+    const _dataNfts = nfts;
     const _flags = [];
 
     for (const cnft of dataNfts) {

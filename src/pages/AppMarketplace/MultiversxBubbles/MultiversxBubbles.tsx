@@ -10,6 +10,7 @@ import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { useNftsStore } from "store/nfts";
 
 export const MultiversxBubbles = () => {
   const { address } = useGetAccount();
@@ -18,24 +19,18 @@ export const MultiversxBubbles = () => {
   const { hasPendingTransactions } = useGetPendingTransactions();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
-  const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [file, setFile] = useState<string | null>(null);
+  const nfts = useNftsStore((state) => state.nfts);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchDataNfts();
     }
   }, [hasPendingTransactions]);
-
-  useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
 
   async function fetchDataNfts() {
     setIsLoading(true);
@@ -49,18 +44,6 @@ export const MultiversxBubbles = () => {
     }
   }
 
-  async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
-    const _flags = [];
-
-    for (const cnft of dataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
-      _flags.push(matches.length > 0);
-    }
-
-    setFlags(_flags);
-  }
-
   async function viewData(index: number) {
     try {
       if (!(index >= 0 && index < dataNfts.length)) {
@@ -68,13 +51,12 @@ export const MultiversxBubbles = () => {
         return;
       }
 
-      const _owned = flags[index];
+      const dataNft = dataNfts[index];
+      const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
-
-        const dataNft = dataNfts[index];
 
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -157,7 +139,7 @@ export const MultiversxBubbles = () => {
             index={index}
             dataNft={dataNft}
             isLoading={isLoading}
-            owned={flags[index]}
+            owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
             viewData={viewData}
             modalContent={
               !owned ? (
