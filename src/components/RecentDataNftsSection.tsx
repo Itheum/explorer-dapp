@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { getHealthCheckFromBackendApi, getRecentOffersFromBackendApi } from "../libs/backend-api";
-import { ThreeDCard } from "./TreeDCard";
+import { ThreeDCard } from "./ThreeDCard";
 import { IAddress } from "@multiversx/sdk-core/out";
 import BigNumber from "bignumber.js";
 import { Address } from "@multiversx/sdk-core/out";
