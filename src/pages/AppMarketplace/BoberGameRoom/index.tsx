@@ -1,25 +1,25 @@
-import { HeaderComponent } from "components/Layout/HeaderComponent";
 import React, { useEffect, useState } from "react";
-import headerImg from "assets/img/bober-game-room/BoberCover.png";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { BOBER_GAME_ROOM_TOKENS } from "appsConfig";
-import { decodeNativeAuthToken, toastError } from "libs/utils";
-import { DataNft } from "@itheum/sdk-mx-data-nft/out";
+import headerImg from "assets/img/bober-game-room/BoberCover.png";
 import { DataNftCard } from "components";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { useGetPendingTransactions } from "hooks";
+import { decodeNativeAuthToken, toastError } from "libs/utils";
+import { useNftsStore } from "store/nfts";
 import { BoberModal } from "./components/BoberModal";
 
 export const BoberGameRoom: React.FC = () => {
-  const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
 
-  const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
-  const [flags, setFlags] = useState<boolean[]>([]);
+  const [appDataNfts, setAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
+  const nfts = useNftsStore((state) => state.nfts);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -27,42 +27,24 @@ export const BoberGameRoom: React.FC = () => {
     }
   }, [hasPendingTransactions]);
 
-  useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
-
   async function fetchAppNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(BOBER_GAME_ROOM_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
 
-    setItDataNfts(_nfts);
+    setAppDataNfts(_nfts);
     setIsLoading(false);
-  }
-
-  async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
-    const _flags = [];
-
-    for (const cnft of itDataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
-      _flags.push(matches.length > 0);
-    }
-
-    setFlags(_flags);
   }
 
   async function viewData(index: number) {
     try {
-      if (!(index >= 0 && index < itDataNfts.length)) {
+      if (!(index >= 0 && index < appDataNfts.length)) {
         toastError("Data is not loaded");
         return;
       }
 
-      const dataNft = itDataNfts[index];
-      const _owned = flags[index];
+      const dataNft = appDataNfts[index];
+      const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
 
       if (_owned) {
@@ -85,7 +67,6 @@ export const BoberGameRoom: React.FC = () => {
 
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
         res.data = await (res.data as Blob);
-        // console.log(res.data);
 
         setData(res.data);
         setIsFetchingDataMarshal(false);
@@ -97,7 +78,6 @@ export const BoberGameRoom: React.FC = () => {
     }
   }
 
-  // console.log(data);
   return (
     <HeaderComponent
       pageTitle={"Bober Game Room"}
@@ -105,15 +85,15 @@ export const BoberGameRoom: React.FC = () => {
       imgSrc={headerImg}
       altImageAttribute={"itheumTrailblazer"}
       pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
-      dataNftCount={itDataNfts.length}>
-      {itDataNfts.length > 0 ? (
-        itDataNfts.map((dataNft, index) => (
+      dataNftCount={appDataNfts.length}>
+      {appDataNfts.length > 0 ? (
+        appDataNfts.map((dataNft, index) => (
           <DataNftCard
             key={index}
             index={index}
             dataNft={dataNft}
             isLoading={isLoading}
-            owned={flags[index]}
+            owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
             modalStyles={"md:h-[95svh] sm:h-[100svh]"}
             viewData={viewData}
             modalContent={<BoberModal data={data} isFetchingDataMarshal={isFetchingDataMarshal} owned={owned} />}

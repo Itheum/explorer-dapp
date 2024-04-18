@@ -6,12 +6,13 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "./MultiversxInfographics.css";
+import { useNftsStore } from "store/nfts";
 import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
 import { Button } from "../../../libComponents/Button";
 
@@ -27,17 +28,17 @@ type PDFFile = string | File | null;
 // we are using react-pdf : https://levelup.gitconnected.com/displaying-pdf-in-react-app-6e9d1fffa1a9
 
 export const MultiversxInfographics = () => {
-  const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { chainID } = useGetNetworkConfig();
 
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
-  const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
+
+  const nfts = useNftsStore((state) => state.nfts);
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -48,12 +49,6 @@ export const MultiversxInfographics = () => {
       fetchDataNfts();
     }
   }, [hasPendingTransactions]);
-
-  useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
 
   async function fetchDataNfts() {
     setIsLoading(true);
@@ -66,32 +61,19 @@ export const MultiversxInfographics = () => {
     setIsLoading(false);
   }
 
-  async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
-    const _flags = [];
-
-    for (const cnft of dataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
-      _flags.push(matches.length > 0);
-    }
-
-    setFlags(_flags);
-  }
-
   async function viewData(index: number) {
     try {
       if (!(index >= 0 && index < dataNfts.length)) {
         toastError("Data is not loaded");
         return;
       }
-
-      const _owned = flags[index];
+      const dataNft = dataNfts[index];
+      const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
 
       if (_owned) {
         setIsFetchingDataMarshal(true);
 
-        const dataNft = dataNfts[index];
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
           throw Error("No nativeAuth token");
@@ -104,11 +86,11 @@ export const MultiversxInfographics = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
- 
-         if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+
+        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
           dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
         }
-         res = await dataNft.viewDataViaMVXNativeAuth(arg);
+        res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
         let blobDataType = BlobDataType.TEXT;
 
@@ -175,7 +157,7 @@ export const MultiversxInfographics = () => {
             index={index}
             dataNft={dataNft}
             isLoading={isLoading}
-            owned={flags[index]}
+            owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
             viewData={viewData}
             modalContent={
               !owned ? (

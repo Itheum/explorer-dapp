@@ -5,23 +5,23 @@ import { TRAILBLAZER_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { useGetPendingTransactions } from "hooks";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
+import { useNftsStore } from "store/nfts";
 import { TrailBlazerModal } from "./components/TrailBlazerModal";
 
 export const ItheumTrailblazer = () => {
-  const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
 
-  const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
-  const [flags, setFlags] = useState<boolean[]>([]);
+  const [appDataNfts, setAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
+  const nfts = useNftsStore((state) => state.nfts);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -29,42 +29,24 @@ export const ItheumTrailblazer = () => {
     }
   }, [hasPendingTransactions]);
 
-  useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
-
   async function fetchAppNfts() {
     setIsLoading(true);
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
 
-    setItDataNfts(_nfts);
+    setAppDataNfts(_nfts);
     setIsLoading(false);
-  }
-
-  async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
-    const _flags = [];
-
-    for (const cnft of itDataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
-      _flags.push(matches.length > 0);
-    }
-
-    setFlags(_flags);
   }
 
   async function viewData(index: number) {
     try {
-      if (!(index >= 0 && index < itDataNfts.length)) {
+      if (!(index >= 0 && index < appDataNfts.length)) {
         toastError("Data is not loaded");
         return;
       }
 
-      const dataNft = itDataNfts[index];
-      const _owned = flags[index];
+      const dataNft = appDataNfts[index];
+      const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
 
       if (_owned) {
@@ -123,15 +105,15 @@ export const ItheumTrailblazer = () => {
       imgSrc={headerHero}
       altImageAttribute={"itheumTrailblazer"}
       pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
-      dataNftCount={itDataNfts.length}>
-      {itDataNfts.length > 0 ? (
-        itDataNfts.map((dataNft, index) => (
+      dataNftCount={appDataNfts.length}>
+      {appDataNfts.length > 0 ? (
+        appDataNfts.map((dataNft, index) => (
           <DataNftCard
             key={index}
             index={index}
             dataNft={dataNft}
             isLoading={isLoading}
-            owned={flags[index]}
+            owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
             viewData={viewData}
             modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
             modalTitle={"Trailblazer"}

@@ -18,6 +18,7 @@ import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { scrollToSection } from "libs/utils";
+import { useNftsStore } from "store/nfts";
 import benefitsLogo1 from "../../../assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "../../../assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
@@ -53,13 +54,14 @@ export const NFTunes = () => {
   const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
   const [featuredArtistDataNft, setFeaturedArtistDataNft] = useState<DataNft>();
   const [featuredDataNftIndex, setFeaturedDataNftIndex] = useState(-1);
-  const [flags, setFlags] = useState<boolean[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
+
+  const nfts = useNftsStore((state) => state.nfts);
 
   useEffect(() => {
     window.scrollTo(0, 80);
@@ -69,12 +71,6 @@ export const NFTunes = () => {
       fetchDataNfts();
     }
   }, [hasPendingTransactions]);
-
-  useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
 
   // get the nfts that are able to open nfTunes app
   async function fetchDataNfts() {
@@ -92,21 +88,6 @@ export const NFTunes = () => {
     setIsLoading(false);
   }
 
-  // fetch the nfts owned by the logged in address and if the user has any of them set flag to true,
-  // on those will be shown view data otherwise show market place explore button
-  async function fetchMyNfts() {
-    const uniqueTokenIdentifiers = Array.from(new Set(NF_TUNES_TOKENS.map((v) => v.tokenIdentifier)));
-    const _dataNfts = await DataNft.ownedByAddress(address, uniqueTokenIdentifiers);
-    const _flags = [];
-
-    for (const currentNft of dataNfts) {
-      const matches = _dataNfts.filter((ownedNft) => currentNft.nonce === ownedNft.nonce && currentNft.collection === ownedNft.collection);
-      _flags.push(matches.length > 0);
-    }
-
-    setFlags(_flags);
-  }
-
   // after pressing the button to view data open modal
   async function viewData(index: number) {
     try {
@@ -116,10 +97,11 @@ export const NFTunes = () => {
       }
       setFirstSongBlobUrl(undefined);
 
-      const _owned = flags[index];
+      const dataNft = dataNfts[index];
+      const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       if (_owned) {
         setIsFetchingDataMarshal(true);
-        const dataNft = dataNfts[index];
+
         let res: any;
         if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
           throw Error("No nativeAuth token");
@@ -364,7 +346,7 @@ export const NFTunes = () => {
                       index={featuredDataNftIndex}
                       dataNft={featuredArtistDataNft}
                       isLoading={isLoading}
-                      owned={flags[featuredDataNftIndex] ? flags[featuredDataNftIndex] : false}
+                      owned={nfts.find((nft) => nft.tokenIdentifier === featuredArtistDataNft.tokenIdentifier) ? true : false}
                       viewData={viewData}
                       modalContent={
                         isFetchingDataMarshal ? (
@@ -614,7 +596,7 @@ export const NFTunes = () => {
                     index={index}
                     dataNft={dataNft}
                     isLoading={isLoading}
-                    owned={flags[index]}
+                    owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
                     viewData={viewData}
                     modalContent={
                       isFetchingDataMarshal ? (
