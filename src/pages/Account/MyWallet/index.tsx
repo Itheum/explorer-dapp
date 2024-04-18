@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
@@ -10,8 +10,8 @@ import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { Button } from "../libComponents/Button";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Button } from "libComponents/Button";
 
 export const MyWallet = () => {
   const { address } = useGetAccount();

@@ -5,7 +5,7 @@ import { PLAYSTATION_GAMER_PASSPORT_TOKENS } from "appsConfig";
 import { DataNftCard, Loader } from "components";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
 
 export const PlayStationGamer = () => {
   const { address } = useGetAccount();
