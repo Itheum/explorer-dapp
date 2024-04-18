@@ -20,7 +20,6 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
     return routeNames.home;
   }
 }
-
 const UnlockPage = () => {
   const location = useLocation();
   const { chainID } = useGetNetworkConfig();

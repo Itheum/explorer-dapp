@@ -10,8 +10,8 @@ import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { useNftsStore } from "store/nfts";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { Button } from "../libComponents/Button";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Button } from "libComponents/Button";
 
 export const MyWallet = () => {
   const { tokenLogin } = useGetLoginInfo();
