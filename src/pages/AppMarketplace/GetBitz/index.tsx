@@ -55,7 +55,6 @@ import Meme14 from "assets/img/getbitz/memes/14.jpg";
 import Meme15 from "assets/img/getbitz/memes/15.jpg";
 import Meme16 from "assets/img/getbitz/memes/16.jpg";
 import Meme17 from "assets/img/getbitz/memes/17.jpg";
-
 import Meme18 from "assets/img/getbitz/memes/18.jpg";
 import Meme19 from "assets/img/getbitz/memes/19.jpg";
 import Meme20 from "assets/img/getbitz/memes/20.jpg";
@@ -119,12 +118,15 @@ export const GetBitz = () => {
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
-  const updateCollectedBitzBalance = useAccountStore((state) => state.updateCollectedBitzBalance);
+  const bonusTries = useAccountStore((state: any) => state.bonusTries);
+  const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
+  const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
   // a single game-play related (so we have to reset these if the user wants to "replay")
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
@@ -135,7 +137,10 @@ export const GetBitz = () => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const tweetText = `url=https://explorer.itheum.io/getbitz?v=1&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck? Try here to %23GetBiTz %23itheum"} `;
+  const tweetText = `url=https://explorer.itheum.io/getbitz?r=${address}&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"} `;
+
+  const [usingReferralCode, setUsingReferralCode] = useState<string>("");
+  const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -170,6 +175,14 @@ export const GetBitz = () => {
   useEffect(() => {
     if (!chainID) {
       return;
+    }
+
+    // is the player using a referral code?
+    const searchParams = new URLSearchParams(window.location.search);
+    const _referralCode = searchParams.get("r");
+
+    if (_referralCode && _referralCode.trim().length > 5) {
+      setUsingReferralCode(_referralCode.trim().toLowerCase());
     }
 
     // Load the LeaderBoards regardless on if the user has does not have the data nft in to entice them
@@ -253,13 +266,22 @@ export const GetBitz = () => {
 
     await sleep(5);
 
+    const _fwdHeaderMapLookup: Record<string, string> = {
+      "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+    };
+
+    let _fwdHeaderKeys = "authorization";
+
+    if (usingReferralCode !== "") {
+      _fwdHeaderMapLookup["dmf-referral-code"] = usingReferralCode;
+      _fwdHeaderKeys = "authorization, dmf-referral-code";
+    }
+
     const viewDataArgs: Record<string, any> = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
       mvxNativeAuthMaxExpirySeconds: 3600,
-      fwdHeaderMapLookup: {
-        "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
-      },
-      fwdHeaderKeys: "authorization",
+      fwdHeaderMapLookup: _fwdHeaderMapLookup,
+      fwdHeaderKeys: _fwdHeaderKeys,
     };
 
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
@@ -311,7 +333,7 @@ export const GetBitz = () => {
           updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay); // won some bis, not given anything yet
         }
 
-        updateCollectedBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
+        updateCollectedBitzSum(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       } else {
         if (sumGivenBits > 0) {
           updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // did not win bits, minus given bits from current and show
@@ -319,7 +341,14 @@ export const GetBitz = () => {
           updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay); // did not win bits, not given anything yet
         }
 
-        updateCollectedBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay);
+        updateCollectedBitzSum(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay);
+      }
+
+      // how many bonus tries does the user have
+      if (viewDataPayload.data.gamePlayResult.bonusTriesAfterThisPlay > -1) {
+        updateBonusTries(viewDataPayload.data.gamePlayResult.bonusTriesAfterThisPlay);
+      } else {
+        updateBonusTries(viewDataPayload.data.gamePlayResult.bonusTriesBeforeThisPlay || 0);
       }
 
       if (animation) {
@@ -375,16 +404,32 @@ export const GetBitz = () => {
     //   _viewDataRes = {
     //     contentType: "string",
     //     data: {
+    //       bitsMain: {
+    //         bitsGivenSum: -1, // the total bits the user has given out to others. You need to deduct this from bitsScoreBeforePlay / bitsScoreAfterPlay to actual bits balance
+    //       },
+    //       giveBits: {
+    //         bitsScoreToGive: -1, // how much shall we give?
+    //         bitsScoreGiveTo: -1, // who did we give it to?
+    //         bitsScoreGiveToCampaignId: -1, // which campaign to give it to?
+    //         bitsScoreBeforeGive: -1, // the balance of bits we have given to bitsScoreGiveTo BEFORE this change
+    //         bitsScoreAfterGive: -1, // the balance of bits we have given to bitsScoreGiveTo AFTER this change
+    //       },
     //       gamePlayResult: {
-    //         bitzScoreBeforePlay: -1, // points before current play
-    //         bitzScoreAfterPlay: -1, // points after current play
-    //         bitzWon: -1, // can be 0 for no win, no 5-50. -1 means they tried to paly to soon
-    //         userWonMaxBitz: -1, // the user just won the maximum bitz? 1 for yes, -1 for no
-    //         lastPlayedBeforeThisPlay: -1, // the timestampbefore current play
-    //         lastPlayedAndCommitted: -1, // the latest timestamp of current play
-    //         configCanPlayEveryMSecs: -1, // how many Mili seconds interval before being able to play again
-    //         // triedTooSoonTryAgainInMs: -1, // played too soon before allowed, so they have to wait this many Mili seconds to play (use for countdown timer to next play)
-    //         triedTooSoonTryAgainInMs: 6000, // played too soon before allowed, so they have to wait this many Mili seconds to play (use for countdown timer to next play)
+    //         bitsScoreBeforePlay: -1,
+    //         bitsScoreAfterPlay: -1,
+    //         bitsScoreMonthBeforePlay: -1, // for currently month only
+    //         bitsScoreMonthAfterPlay: -1, // for currently month only
+    //         bitsWon: -1,
+    //         userWonMaxBits: -1, // the user just won the maximum bits
+    //         lastPlayedBeforeThisPlay: -1, // the timestamp before this one where we played an committed to db (i.e UPDATE_FULL_GAME_PLAY_ROUND)
+    //         lastPlayedAndCommitted: -1, // the latest timestamp if we played an committed to db (i.e UPDATE_FULL_GAME_PLAY_ROUND)
+    //         configCanPlayEveryMSecs: -1,
+    //         triedTooSoonTryAgainInMs: -1,
+    //         currentMonthString: "MMYYString", // the MMYY string we are in for monthly leaderboard
+    //         bonusPlayModeWin: -1, // are we in bonus play mode and won bits in bitsWon
+    //         bonusTriesBeforeThisPlay: -1, // how many bonus tries I have left before this play
+    //         bonusTriesAfterThisPlay: -1, // how many bonus tries I have left after I used a bonus try in bonusPlayModeWin
+    //         commandsExecuted: [],
     //       },
     //     },
     //   };
@@ -464,8 +509,8 @@ export const GetBitz = () => {
                   return <> </>;
                 } else {
                   return (
-                    <div className="absolute z-5 w-full h-full rounded-[3rem] bg-black/90 ">
-                      <div className="flex w-full h-full  items-center justify-center">
+                    <div className="absolute z-5 w-full h-full rounded-[3rem] bg-black/90">
+                      <div className="flex w-full h-full items-center justify-center">
                         <div className="text-3xl md:text-5xl flex flex-col items-center justify-center text-white ">
                           <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
                           {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
@@ -634,12 +679,36 @@ export const GetBitz = () => {
                     )) ||
                       null}
 
-                    <div className="text-center mt-[2rem]">
-                      <p className="text-xl">You can try again in:</p>
-                      <div className="text-2xl mt-[1rem]">
-                        <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.configCanPlayEveryMSecs} renderer={countdownRenderer} />
+                    {(((_viewDataRes.data.gamePlayResult.bonusTriesBeforeThisPlay > 0 && _viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay === -1) ||
+                      _viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay > 0) && (
+                      <div className="text-center mt-[2rem]">
+                        <p className="text-xl">
+                          BONUS GAMES AVAILABLE! w👀t! your referrals have earned you{" "}
+                          {_viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay > 0
+                            ? _viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay
+                            : _viewDataRes.data.gamePlayResult.bonusTriesBeforeThisPlay}{" "}
+                          more bonus tries!
+                        </p>
+
+                        <div
+                          className="cursor-pointer relative inline-flex h-12 overflow-hidden rounded-full p-[1px] "
+                          onClick={() => {
+                            resetToStartGame();
+                          }}>
+                          <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+                          <span className="text-primary inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium backdrop-blur-3xl">
+                            PLAY AGAIN! <MousePointerClick className="ml-2 text-sky-300" />
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    )) || (
+                      <div className="text-center mt-[2rem]">
+                        <p className="text-xl">You can try again in:</p>
+                        <div className="text-2xl mt-[1rem]">
+                          <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.configCanPlayEveryMSecs} renderer={countdownRenderer} />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
@@ -768,9 +837,15 @@ export const GetBitz = () => {
 
   return (
     <>
+      {usingReferralCode !== "" && (
+        <div className="p-1 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mb-[1rem] text-center">
+          You are playing with referral code {usingReferralCode}
+        </div>
+      )}
+
       {gamePlayImageSprites()}
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] my-[3rem]">
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
@@ -794,7 +869,57 @@ export const GetBitz = () => {
         <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
       </div>
 
-      <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
+      {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
+        <div id="referral" className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
+          <h2 className="text-center text-white mb-[1rem]">{`<BiTz>`} XP Referrals : Get Bonus Points!</h2>
+          <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+            <p className="flex items-end md:text-lg md:mr-[1rem]">Bonus Referral Game Plays you have Earned</p>
+            <p className="text-lg md:text-xl dark:text-[#35d9fa] font-bold">{bonusTries === -1 ? "N/A" : <>{bonusTries === -2 ? "0" : bonusTries}</>}</p>
+          </div>
+          <p>
+            With the Referral system you can invite others to join in on the Itheum {`<BiTz>`} XP fun. (Your Referral code is your public wallet address FYI)
+          </p>
+          <p>
+            Each time someone new joins the Itheum {`<BiTz>`} XP system using your referral code,{" "}
+            <span className="text-bold dark:text-[#35d9fa]">they will get rewarded with 1 BONUS chance</span> when they play and{" "}
+            <span className="text-bold dark:text-[#35d9fa]">you will get rewarded with 2 BONUS chances</span> to Get {`<BiTz>`} and climb the LEADERBOARDS. And
+            these{" "}
+            <span>BONUS changes have a higher probability (than regular game play changes) to get larger scores between 15-25 and NO 0 point RUGS!! w👀t!</span>
+          </p>
+          <p className="text-bold text-lg mt-5">How can you share your Referral code?</p>
+          <ol className="mt-5">
+            <li className="my-5">
+              1) You referral code is attached to all Give {`<BiTz>`} or Get {`<BiTz>`} Social Media post links that are shown to you when you complete an
+              action. All you need to do is click on the X button shown to you after any action and share it.
+            </li>
+            <li className="my-5">
+              2) You can also share this unique invite link with others :{" "}
+              <a className="!text-[#7a98df] hover:underline" href={`https://explorer.itheum.io/getbitz?r=${address}`} target="blank">
+                Your invite link
+              </a>{" "}
+            </li>
+            <li className="my-5">
+              3) Or you can share a tweet now using your referral code here:{" "}
+              <HoverBorderGradient className="-z-1">
+                <a
+                  className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
+                  href={"https://twitter.com/intent/tweet?" + tweetTextReferral}
+                  data-size="large"
+                  target="_blank">
+                  <span className=" [&>svg]:h-4 [&>svg]:w-4 z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+                      <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                    </svg>
+                  </span>
+                  <p className="z-10">Tweet</p>
+                </a>
+              </HoverBorderGradient>
+            </li>
+          </ol>
+        </div>
+      )}
+
+      <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
         <div className="leaderBoard">
           <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
 
@@ -849,7 +974,7 @@ export const GetBitz = () => {
         </div>
       </div>
 
-      {address && leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
+      {leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
 
       <Faq />
     </>
@@ -862,8 +987,8 @@ A utility method that we can use to get, parse and return data from the viewData
 export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataNft) {
   try {
     let res: any;
-    // res = await requiredDataNFT.viewDataViaMVXNativeAuth(viewDataArgs);
-    res = await __viewDataViaMVXNativeAuth(viewDataArgs);
+    res = await requiredDataNFT.viewDataViaMVXNativeAuth(viewDataArgs);
+    // res = await __viewDataViaMVXNativeAuth(viewDataArgs); // FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
 
     let blobDataType = BlobDataType.TEXT;
 
@@ -918,6 +1043,11 @@ export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address
     </>
   );
 }
+
+/*
+// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
+// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
+// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
 
 async function __viewDataViaMVXNativeAuth(p: any) {
   try {
@@ -1034,3 +1164,4 @@ async function __viewDataViaMVXNativeAuth(p: any) {
     // };
   }
 }
+*/

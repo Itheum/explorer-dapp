@@ -16,7 +16,8 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
-  const updateCollectedBitzBalance = useAccountStore((state) => state.updateCollectedBitzBalance);
+  const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
+  const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
   useEffect(() => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -62,13 +63,16 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
               getBitzGameResult.data.gamePlayResult.configCanPlayEveryMSecs
             )
           );
-          updateCollectedBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits by playing
+
+          updateCollectedBitzSum(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits by playing
+
+          updateBonusTries(getBitzGameResult.data.gamePlayResult.bonusTriesBeforeThisPlay || 0); // bonus tries awarded to user (currently only via referral code rewards)
         }
       } else {
         updateBitzBalance(-1);
         updateGivenBitzSum(-1);
         updateCooldown(-1);
-        updateCollectedBitzBalance(-1);
+        updateCollectedBitzSum(-1);
       }
     })();
   }, [address, tokenLogin]);
