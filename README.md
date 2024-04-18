@@ -1,4 +1,5 @@
 # @itheum/explorer-dapp
+
 Itheum Explorer the public explore the Itheum protocol components.
 
 Build using the **MultiversX dApp Template**, built using [React.js](https://reactjs.org/) and [Typescript](https://www.typescriptlang.org/).
@@ -71,3 +72,7 @@ One can contribute by creating _pull requests_, or by opening _issues_ for disco
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+## Known Issues
+
+If you see some build error in docket or other CICD services related to vite and `@rollup/rollup-linux-x64-gnu`... you will need to `git rm -r --cached ./package-lock.json` locally and make sure you dont commit `package-lock.json`
