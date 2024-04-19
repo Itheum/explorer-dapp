@@ -40,6 +40,7 @@ export const BoberModal: React.FC<BoberModalProps> = (props) => {
       ) : (
         <>
           <iframe
+            loading={"lazy"}
             src={URL.createObjectURL(htmlCached) + "#tokenLogin?" + tokenLogin?.nativeAuthToken}
             height={innerHeightIframe(window.innerHeight)}
             className="w-full rounded-b-xl overflow-y-hidden"
