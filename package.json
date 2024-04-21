@@ -40,6 +40,7 @@
     "react-slick": "0.30.2",
     "react-vertical-timeline-component": "3.6.0",
     "react-zoom-pan-pinch": "3.4.3",
+    "simplex-noise": "^4.0.1",
     "slick-carousel": "1.8.1",
     "tailwind-merge": "2.2.1",
     "tailwindcss-animate": "1.0.7",
