@@ -23,6 +23,7 @@ import { BurningImage } from "./BurningImage";
 import Faq from "./Faq";
 import Torch from "./Torch";
 import { useAccountStore } from "../../../store/account";
+import GiveBitzBase from "./GiveBitz/GiveBitzBase";
 import "./GetBitz.css";
 
 // Image Layers
@@ -44,7 +45,6 @@ import Meme14 from "assets/img/getbitz/memes/14.jpg";
 import Meme15 from "assets/img/getbitz/memes/15.jpg";
 import Meme16 from "assets/img/getbitz/memes/16.jpg";
 import Meme17 from "assets/img/getbitz/memes/17.jpg";
-
 import Meme18 from "assets/img/getbitz/memes/18.jpg";
 import Meme19 from "assets/img/getbitz/memes/19.jpg";
 import Meme2 from "assets/img/getbitz/memes/2.jpg";
@@ -68,7 +68,7 @@ import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
 
-interface LeaderBoardItemType {
+export interface LeaderBoardItemType {
   playerAddr: string;
   bits: number;
 }
@@ -118,10 +118,15 @@ export const GetBitz = () => {
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
+  const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
+  const bonusTries = useAccountStore((state: any) => state.bonusTries);
+  const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
+  const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
   // a single game-play related (so we have to reset these if the user wants to "replay")
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
@@ -132,7 +137,10 @@ export const GetBitz = () => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const tweetText = `url=https://explorer.itheum.io/getbitz?v=1&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points! Play now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck? Try here to %23GetBiTz %23itheum"} `;
+  const tweetText = `url=https://explorer.itheum.io/getbitz?r=${address}&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"} `;
+
+  const [usingReferralCode, setUsingReferralCode] = useState<string>("");
+  const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -146,6 +154,7 @@ export const GetBitz = () => {
 
   // Debug / Tests
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
+  const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -166,6 +175,14 @@ export const GetBitz = () => {
   useEffect(() => {
     if (!chainID) {
       return;
+    }
+
+    // is the player using a referral code?
+    const searchParams = new URLSearchParams(window.location.search);
+    const _referralCode = searchParams.get("r");
+
+    if (_referralCode && _referralCode.trim().length > 5) {
+      setUsingReferralCode(_referralCode.trim().toLowerCase());
     }
 
     // Load the LeaderBoards regardless on if the user has does not have the data nft in to entice them
@@ -249,13 +266,22 @@ export const GetBitz = () => {
 
     await sleep(5);
 
+    const _fwdHeaderMapLookup: Record<string, string> = {
+      "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+    };
+
+    let _fwdHeaderKeys = "authorization";
+
+    if (usingReferralCode !== "") {
+      _fwdHeaderMapLookup["dmf-referral-code"] = usingReferralCode;
+      _fwdHeaderKeys = "authorization, dmf-referral-code";
+    }
+
     const viewDataArgs: Record<string, any> = {
       mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
       mvxNativeAuthMaxExpirySeconds: 3600,
-      fwdHeaderMapLookup: {
-        "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
-      },
-      fwdHeaderKeys: "authorization",
+      fwdHeaderMapLookup: _fwdHeaderMapLookup,
+      fwdHeaderKeys: _fwdHeaderKeys,
     };
 
     const viewDataPayload: ExtendedViewDataReturnType | undefined = await viewData(viewDataArgs, gameDataNFT);
@@ -298,8 +324,31 @@ export const GetBitz = () => {
         )
       );
 
+      const sumGivenBits = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
+
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
-        updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
+        if (sumGivenBits > 0) {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay - sumGivenBits); // won some bis, minus given bits and show
+        } else {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay); // won some bis, not given anything yet
+        }
+
+        updateCollectedBitzSum(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
+      } else {
+        if (sumGivenBits > 0) {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // did not win bits, minus given bits from current and show
+        } else {
+          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay); // did not win bits, not given anything yet
+        }
+
+        updateCollectedBitzSum(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay);
+      }
+
+      // how many bonus tries does the user have
+      if (viewDataPayload.data.gamePlayResult.bonusTriesAfterThisPlay > -1) {
+        updateBonusTries(viewDataPayload.data.gamePlayResult.bonusTriesAfterThisPlay);
+      } else {
+        updateBonusTries(viewDataPayload.data.gamePlayResult.bonusTriesBeforeThisPlay || 0);
       }
 
       if (animation) {
@@ -355,16 +404,32 @@ export const GetBitz = () => {
     //   _viewDataRes = {
     //     contentType: "string",
     //     data: {
+    //       bitsMain: {
+    //         bitsGivenSum: -1, // the total bits the user has given out to others. You need to deduct this from bitsScoreBeforePlay / bitsScoreAfterPlay to actual bits balance
+    //       },
+    //       giveBits: {
+    //         bitsScoreToGive: -1, // how much shall we give?
+    //         bitsScoreGiveTo: -1, // who did we give it to?
+    //         bitsScoreGiveToCampaignId: -1, // which campaign to give it to?
+    //         bitsScoreBeforeGive: -1, // the balance of bits we have given to bitsScoreGiveTo BEFORE this change
+    //         bitsScoreAfterGive: -1, // the balance of bits we have given to bitsScoreGiveTo AFTER this change
+    //       },
     //       gamePlayResult: {
-    //         bitzScoreBeforePlay: -1, // points before current play
-    //         bitzScoreAfterPlay: -1, // points after current play
-    //         bitzWon: -1, // can be 0 for no win, no 5-50. -1 means they tried to paly to soon
-    //         userWonMaxBitz: -1, // the user just won the maximum bitz? 1 for yes, -1 for no
-    //         lastPlayedBeforeThisPlay: -1, // the timestampbefore current play
-    //         lastPlayedAndCommitted: -1, // the latest timestamp of current play
-    //         configCanPlayEveryMSecs: -1, // how many Mili seconds interval before being able to play again
-    //         // triedTooSoonTryAgainInMs: -1, // played too soon before allowed, so they have to wait this many Mili seconds to play (use for countdown timer to next play)
-    //         triedTooSoonTryAgainInMs: 6000, // played too soon before allowed, so they have to wait this many Mili seconds to play (use for countdown timer to next play)
+    //         bitsScoreBeforePlay: -1,
+    //         bitsScoreAfterPlay: -1,
+    //         bitsScoreMonthBeforePlay: -1, // for currently month only
+    //         bitsScoreMonthAfterPlay: -1, // for currently month only
+    //         bitsWon: -1,
+    //         userWonMaxBits: -1, // the user just won the maximum bits
+    //         lastPlayedBeforeThisPlay: -1, // the timestamp before this one where we played an committed to db (i.e UPDATE_FULL_GAME_PLAY_ROUND)
+    //         lastPlayedAndCommitted: -1, // the latest timestamp if we played an committed to db (i.e UPDATE_FULL_GAME_PLAY_ROUND)
+    //         configCanPlayEveryMSecs: -1,
+    //         triedTooSoonTryAgainInMs: -1,
+    //         currentMonthString: "MMYYString", // the MMYY string we are in for monthly leaderboard
+    //         bonusPlayModeWin: -1, // are we in bonus play mode and won bits in bitsWon
+    //         bonusTriesBeforeThisPlay: -1, // how many bonus tries I have left before this play
+    //         bonusTriesAfterThisPlay: -1, // how many bonus tries I have left after I used a bonus try in bonusPlayModeWin
+    //         commandsExecuted: [],
     //       },
     //     },
     //   };
@@ -398,6 +463,7 @@ export const GetBitz = () => {
         </div>
       );
     }
+
     const CountDownComplete = () => (
       <div
         className="cursor-pointer relative inline-flex h-12 overflow-hidden rounded-full p-[1px] "
@@ -440,8 +506,8 @@ export const GetBitz = () => {
                   return <> </>;
                 } else {
                   return (
-                    <div className="absolute z-5 w-full h-full rounded-[3rem] bg-black/90 ">
-                      <div className="flex w-full h-full  items-center justify-center">
+                    <div className="absolute z-5 w-full h-full rounded-[3rem] bg-black/90">
+                      <div className="flex w-full h-full items-center justify-center">
                         <div className="text-3xl md:text-5xl flex flex-col items-center justify-center text-white ">
                           <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
                           {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
@@ -610,12 +676,36 @@ export const GetBitz = () => {
                     )) ||
                       null}
 
-                    <div className="text-center mt-[2rem]">
-                      <p className="text-xl">You can try again in:</p>
-                      <div className="text-2xl mt-[1rem]">
-                        <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.configCanPlayEveryMSecs} renderer={countdownRenderer} />
+                    {(((_viewDataRes.data.gamePlayResult.bonusTriesBeforeThisPlay > 0 && _viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay === -1) ||
+                      _viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay > 0) && (
+                      <div className="text-center mt-[2rem]">
+                        <p className="text-xl">
+                          BONUS GAMES AVAILABLE! w👀t! your referrals have earned you{" "}
+                          {_viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay > 0
+                            ? _viewDataRes.data.gamePlayResult.bonusTriesAfterThisPlay
+                            : _viewDataRes.data.gamePlayResult.bonusTriesBeforeThisPlay}{" "}
+                          more bonus tries!
+                        </p>
+
+                        <div
+                          className="cursor-pointer relative inline-flex h-12 overflow-hidden rounded-full p-[1px] "
+                          onClick={() => {
+                            resetToStartGame();
+                          }}>
+                          <span className="absolute hover:bg-sky-300 inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+                          <span className="text-primary inline-flex h-full hover:bg-gradient-to-tl from-background to-sky-300 w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium backdrop-blur-3xl">
+                            PLAY AGAIN! <MousePointerClick className="ml-2 text-sky-300" />
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    )) || (
+                      <div className="text-center mt-[2rem]">
+                        <p className="text-xl">You can try again in:</p>
+                        <div className="text-2xl mt-[1rem]">
+                          <Countdown date={Date.now() + _viewDataRes.data.gamePlayResult.configCanPlayEveryMSecs} renderer={countdownRenderer} />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
@@ -655,13 +745,24 @@ export const GetBitz = () => {
     }
 
     const UTCYear = nowDateObj.getUTCFullYear().toString().slice(-2); // converts number 2024 to string 24
-    const MMYYString = `${UTCMonthStr}_${UTCYear}`;
+    let MMYYString = `${UTCMonthStr}_${UTCYear}`;
+
+    // S: for TESTING monthly leaderboards, allow a param override!
+    const searchParams = new URLSearchParams(window.location.search);
+    const _overrideMMYYString = searchParams.get("x-test-custom-mmyy-string"); // should be like this 03_24
+
+    if (_overrideMMYYString && _overrideMMYYString.length === 5 && _overrideMMYYString.indexOf("_") === 2) {
+      MMYYString = _overrideMMYYString;
+      setInDateStringDebugMode(true);
+    }
+    // E: for TESTING monthly leaderboards, allow a param override!
 
     setLeaderBoardMonthString(MMYYString);
 
     // Get All Time leaderboard
     try {
       // S: ACTUAL LOGIC
+      console.log("AXIOS CALL -----> xpGamePrivate/leaderBoard");
       const { data } = await axios.get<LeaderBoardItemType[]>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/leaderBoard`, callConfig);
       // const toJSONString = JSON.stringify(data);
       // const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
@@ -685,6 +786,7 @@ export const GetBitz = () => {
     // Get Monthly Leaderboard
     try {
       // S: ACTUAL LOGIC
+      console.log("AXIOS CALL -----> xpGamePrivate/monthLeaderBoard");
       const { data } = await axios.get<LeaderBoardItemType[]>(
         `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/monthLeaderBoard?MMYYString=${MMYYString}`,
         callConfig
@@ -720,6 +822,7 @@ export const GetBitz = () => {
     };
 
     try {
+      console.log("AXIOS CALL -----> xpGamePrivate/playerRankOnLeaderBoard");
       const { data } = await axios.get<any>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/playerRankOnLeaderBoard?playerAddr=${address}`, callConfig);
 
       setMyRankOnAllTimeLeaderBoard(data.playerRank || "N/A");
@@ -729,42 +832,17 @@ export const GetBitz = () => {
     }
   }
 
-  function leaderBoardTable(leaderBoardData: LeaderBoardItemType[]) {
-    return (
-      <>
-        <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
-          <thead>
-            <tr className="border">
-              <th className="p-2">Rank</th>
-              <th className="p-2">User</th>
-              <th className="p-2">{`<BiTz>`} Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderBoardData.map((item, rank) => (
-              <tr key={rank} className="border">
-                <td className="p-2">
-                  #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-                </td>
-                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
-                <td className="p-2">{item.bits}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-    );
-  }
-
   return (
     <>
-      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[30rem] lg:min-h-[40rem] xl:min-h-screen">
-        <div className="absolute -z-1">
-          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+      {usingReferralCode !== "" && (
+        <div className="p-1 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mb-[1rem] text-center">
+          You are playing with referral code {usingReferralCode}
         </div>
-        {gamePlayImageSprites()}
-      </div>
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] my-[3rem] mt-">
+      )}
+
+      {gamePlayImageSprites()}
+
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
@@ -788,7 +866,57 @@ export const GetBitz = () => {
         <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
       </div>
 
-      <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] mb-[3rem] rounded-[1rem]">
+      {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
+        <div id="referral" className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
+          <h2 className="text-center text-white mb-[1rem]">{`<BiTz>`} XP Referrals : Get Bonus Points!</h2>
+          <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+            <p className="flex items-end md:text-lg md:mr-[1rem]">Bonus Referral Game Plays you have Earned</p>
+            <p className="text-lg md:text-xl dark:text-[#35d9fa] font-bold">{bonusTries === -1 ? "N/A" : <>{bonusTries === -2 ? "0" : bonusTries}</>}</p>
+          </div>
+          <p>
+            With the Referral system you can invite others to join in on the Itheum {`<BiTz>`} XP fun. (Your Referral code is your public wallet address FYI)
+          </p>
+          <p>
+            Each time someone new joins the Itheum {`<BiTz>`} XP system using your referral code,{" "}
+            <span className="text-bold dark:text-[#35d9fa]">they will get rewarded with 1 BONUS chance</span> when they play and{" "}
+            <span className="text-bold dark:text-[#35d9fa]">you will get rewarded with 2 BONUS chances</span> to Get {`<BiTz>`} and climb the LEADERBOARDS. And
+            these{" "}
+            <span>BONUS changes have a higher probability (than regular game play changes) to get larger scores between 15-25 and NO 0 point RUGS!! w👀t!</span>
+          </p>
+          <p className="text-bold text-lg mt-5">How can you share your Referral code?</p>
+          <ol className="mt-5">
+            <li className="my-5">
+              1) You referral code is attached to all Give {`<BiTz>`} or Get {`<BiTz>`} Social Media post links that are shown to you when you complete an
+              action. All you need to do is click on the X button shown to you after any action and share it.
+            </li>
+            <li className="my-5">
+              2) You can also share this unique invite link with others :{" "}
+              <a className="!text-[#7a98df] hover:underline" href={`https://explorer.itheum.io/getbitz?r=${address}`} target="blank">
+                Your invite link
+              </a>{" "}
+            </li>
+            <li className="my-5">
+              3) Or you can share a tweet now using your referral code here:{" "}
+              <HoverBorderGradient className="-z-1">
+                <a
+                  className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
+                  href={"https://twitter.com/intent/tweet?" + tweetTextReferral}
+                  data-size="large"
+                  target="_blank">
+                  <span className=" [&>svg]:h-4 [&>svg]:w-4 z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+                      <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                    </svg>
+                  </span>
+                  <p className="z-10">Tweet</p>
+                </a>
+              </HoverBorderGradient>
+            </li>
+          </ol>
+        </div>
+      )}
+
+      <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
         <div className="leaderBoard">
           <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
 
@@ -799,9 +927,9 @@ export const GetBitz = () => {
                 <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">{myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}</p>
               </div>
               <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your {`<BiTz>`} Points </p>
+                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
                 <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
-                  {bitzBalance === -2 ? `...` : <>{bitzBalance === -1 ? "0" : `${bitzBalance}`}</>}
+                  {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
                 </p>
               </div>
             </div>
@@ -815,7 +943,7 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardAllTime.length > 0 ? (
-                    leaderBoardTable(leaderBoardAllTime)
+                    leaderBoardTable(leaderBoardAllTime, address)
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -824,13 +952,15 @@ export const GetBitz = () => {
             </div>
 
             <div className="my-[1rem] monthly md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">Monthly ({leaderBoardMonthString.replace("_", "-20")})</h3>
+              <h3 className="text-center text-white mb-[1rem]">
+                Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
+              </h3>
               {leaderBoardIsLoading ? (
                 <Loader />
               ) : (
                 <>
                   {leaderBoardMonthly.length > 0 ? (
-                    leaderBoardTable(leaderBoardMonthly)
+                    leaderBoardTable(leaderBoardMonthly, address)
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -840,6 +970,9 @@ export const GetBitz = () => {
           </div>
         </div>
       </div>
+
+      {leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
+
       <Faq />
     </>
   );
@@ -852,6 +985,7 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
   try {
     let res: any;
     res = await requiredDataNFT.viewDataViaMVXNativeAuth(viewDataArgs);
+    // res = await __viewDataViaMVXNativeAuth(viewDataArgs); // FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
 
     let blobDataType = BlobDataType.TEXT;
 
@@ -879,3 +1013,152 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
     return undefined;
   }
 }
+
+export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string) {
+  return (
+    <>
+      <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
+        <thead>
+          <tr className="border">
+            <th className="p-2">Rank</th>
+            <th className="p-2">User</th>
+            <th className="p-2">{`<BiTz>`} Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaderBoardData.map((item, rank) => (
+            <tr key={rank} className="border">
+              <td className="p-2">
+                #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+              </td>
+              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={4} />}</td>
+              <td className="p-2">{item.bits}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+/*
+// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
+// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
+// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
+
+async function __viewDataViaMVXNativeAuth(p: any) {
+  try {
+    // S: run any format specific validation
+    // const { allPassed, validationMessages } = (0, utils_1.validateSpecificParamsViewData)({
+    //     mvxNativeAuthOrigins: p.mvxNativeAuthOrigins,
+    //     mvxNativeAuthMaxExpirySeconds: p.mvxNativeAuthMaxExpirySeconds,
+    //     fwdHeaderKeys: p.fwdHeaderKeys,
+    //     fwdHeaderMapLookup: p.fwdHeaderMapLookup,
+    //     fwdAllHeaders: p.fwdAllHeaders,
+    //     stream: p.stream,
+    //     nestedIdxToStream: p.nestedIdxToStream,
+    //     asDeputyOnAppointerAddr: p.asDeputyOnAppointerAddr,
+    //     _fwdHeaderMapLookupMustContainBearerAuthHeader: true,
+    //     _mandatoryParamsList: [
+    //         'mvxNativeAuthOrigins',
+    //         'mvxNativeAuthMaxExpirySeconds',
+    //         'fwdHeaderMapLookup'
+    //     ]
+    // });
+    // if (!allPassed) {
+    //     throw new Error(`params have validation issues = ${validationMessages}`);
+    // }
+    // E: run any format specific validation...
+    // convert mvxNativeAuthOrigins from a string array to API required base64 format
+    let mvxNativeAuthOriginsToBase64 = p.mvxNativeAuthOrigins.join(","); // convert the array to a string
+    mvxNativeAuthOriginsToBase64 = mvxNativeAuthOriginsToBase64.trim().replaceAll(" ", ""); // remove all spaces
+    mvxNativeAuthOriginsToBase64 = Buffer.from(mvxNativeAuthOriginsToBase64).toString("base64");
+    let chainId = "ED";
+    // if (this.overrideDataMarshalChainId === '') {
+    //     chainId =
+    //         DataNft.networkConfiguration.chainID === 'D'
+    //             ? 'ED'
+    //             : DataNft.networkConfiguration.chainID;
+    // }
+    // else if (this.overrideDataMarshalChainId === 'D') {
+    //     chainId = 'ED';
+    // }
+    // else {
+    //     chainId = this.overrideDataMarshalChainId;
+    // }
+    // debugger;
+    // let dataMarshal;
+    // if (this.overrideDataMarshal === '') {
+    //     dataMarshal = this.dataMarshal;
+    // }
+    // else {
+    //     dataMarshal = this.overrideDataMarshal;
+    // }
+
+    const dataMarshal = "http://localhost:4000/datamarshalapi/router/v1";
+
+    // construct the api url
+    // https://api.itheumcloud-stg.com/datamarshalapi/router/v1/access?NFTId=DATANFTFT-e0b917-c6&chainId=ED&mvxNativeAuthEnable=1&mvxNativeAuthMaxExpirySeconds=3600&mvxNativeAuthOrigins=aHR0cHM6Ly9sb2NhbGhvc3Q6MzAwMA==&fwdHeaderKeys=authorization,%20dmf-custom-only-state
+
+    let url = `${dataMarshal}/access?NFTId=DATANFTFT-e0b917-c6&chainId=${chainId}&mvxNativeAuthEnable=1&mvxNativeAuthMaxExpirySeconds=${p.mvxNativeAuthMaxExpirySeconds}&mvxNativeAuthOrigins=${mvxNativeAuthOriginsToBase64}`;
+    const fetchConfig = {
+      method: "GET",
+      headers: {},
+    };
+    // S: append optional params if found
+    if (typeof p.stream !== "undefined") {
+      url += p.stream ? "&streamInLine=1" : "";
+    }
+    if (typeof p.fwdAllHeaders !== "undefined") {
+      url += p.fwdAllHeaders ? "&fwdAllHeaders=1" : "";
+    }
+    if (typeof p.nestedIdxToStream !== "undefined") {
+      url += `&nestedIdxToStream=${p.nestedIdxToStream}`;
+    }
+    // if fwdHeaderMapLookup exists, send these headers and values to the data marshal for forwarding
+    if (typeof p.fwdHeaderMapLookup !== "undefined" && Object.keys(p.fwdHeaderMapLookup).length > 0) {
+      // authorization WILL be present based on validation, so let's fwd this as a request header param
+      fetchConfig.headers = {};
+      fetchConfig.headers["authorization"] = p.fwdHeaderMapLookup["authorization"];
+      // ... and forward any OTHER params user wanted to forward to the origin server via the marshal
+      if (typeof p.fwdHeaderKeys !== "undefined") {
+        url += `&fwdHeaderKeys=${p.fwdHeaderKeys}`;
+        Object.keys(p.fwdHeaderMapLookup).forEach((headerKey) => {
+          // already appended above so skip it...
+          if (headerKey !== "authorization") {
+            fetchConfig.headers[headerKey] = p.fwdHeaderMapLookup?.[headerKey];
+          }
+        });
+      }
+    }
+    if (typeof p.asDeputyOnAppointerAddr !== "undefined") {
+      url += `&asDeputyOnAppointerAddr=${p.asDeputyOnAppointerAddr}`;
+    }
+    // E: append optional params...
+    const response = await fetch(url, fetchConfig);
+    const contentType = response.headers.get("content-type");
+    const data = await response.blob();
+    // if the marshal returned a error, we should throw it here so that the SDK integrator can handle it
+    // ... if we don't, the marshal error response is just passed through as a normal data stream response
+    // ... and the user won't know what went wrong
+    // try {
+    //     (0, utils_1.checkStatus)(response);
+    // }
+    // catch (e) {
+    //     // as it's a data marshal error, we get it's payload which is in JSON and send that thrown as text
+    //     const errorPayload = await data.text();
+    //     throw new Error(`${e.toString()}. Detailed error trace follows : ${errorPayload}`);
+    // }
+    return {
+      data: data,
+      contentType: contentType || "",
+    };
+  } catch (err) {
+    // return {
+    //     data: undefined,
+    //     contentType: '',
+    //     error: err?.message
+    // };
+  }
+}
+*/
