@@ -16,7 +16,7 @@ import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { routeNames } from "routes";
 import { BurningImage } from "./BurningImage";
@@ -748,7 +748,7 @@ export const GetBitz = () => {
                 <td className="p-2">
                   #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
                 </td>
-                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={8} />}</td>
+                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 8)}</td>
                 <td className="p-2">{item.bits}</td>
               </tr>
             ))}
