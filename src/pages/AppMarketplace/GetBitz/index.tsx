@@ -12,7 +12,6 @@ import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITZ_TOKEN } from "appsConfig";
 import { Loader } from "components";
-import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
@@ -157,7 +156,7 @@ export const GetBitz = () => {
     if (!hasPendingTransactions) {
       fetchDataNfts();
     }
-  }, [hasPendingTransactions]);
+  }, [hasPendingTransactions, nfts]);
 
   useEffect(() => {
     if (!isLoading && address) {
