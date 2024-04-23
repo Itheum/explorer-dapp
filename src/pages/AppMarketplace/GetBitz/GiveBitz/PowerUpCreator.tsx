@@ -11,6 +11,8 @@ import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient"
 import { Button } from "libComponents/Button";
 import { sleep } from "libs/utils";
 import { LeaderBoardItemType, leaderBoardTable } from "../index";
+import { Vortex } from "libComponents/animated/Vortex";
+import { ExternalLinkIcon } from "lucide-react";
 
 type PowerUpCreatorProps = {
   creatorAddress: string;
@@ -49,7 +51,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
   const { chainID } = useGetNetworkConfig();
   const [getterLeaderBoardIsLoading, setGetterLeaderBoardIsLoading] = useState<boolean>(false);
   const [getterLeaderBoard, setGetterLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-
+  const [termsOfUseCheckbox, setTermsOfUseCheckbox] = useState<boolean>(false);
   useEffect(() => {
     if (address && creatorAddress && gameDataNFT && campaignId) {
       loadBaseData();
@@ -105,7 +107,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
   }
 
   return (
-    <div className="power-up-tile border p-10 min-w-[300px] max-w-[360px]">
+    <div className="z-10 power-up-tile border p-10 min-w-[300px] max-w-[360px] relative ">
       <div className="text-lg">Creator Profile</div>
 
       <div className="mb-5">
@@ -122,7 +124,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
 
       <div className="mb-3 py-2 border-b-4">
         <div>
-          Campaign Dates: {moment(campaignStartTs * 1000).format("YYYY-MM-DD")} to {moment(campaignEndTs * 1000).format("YYYY-MM-DD")}
+          Campaign Dates: <br /> {moment(campaignStartTs * 1000).format("YYYY-MM-DD")} to {moment(campaignEndTs * 1000).format("YYYY-MM-DD")}
         </div>
       </div>
 
@@ -141,19 +143,85 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
 
           {powerUpSending && <div>Sending PowerUp...</div>}
 
-          <div className="mb-3 py-2 border-b-4">
-            <div>Give More BiTz</div>
+          {isPowerUpSuccess ? (
+            // <Vortex rangeSpeed={10} baseSpeed={10} baseHue={120}> TODO ADD SOME ANIMATION TO THIS
+            <div className="flex items-center justify-center w-full m-2">
+              <HoverBorderGradient className="-z-1 ">
+                <a
+                  className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
+                  href={"https://twitter.com/intent/tweet?" + tweetText}
+                  data-size="large"
+                  target="_blank">
+                  <span className=" [&>svg]:h-4 [&>svg]:w-4 z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+                      <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                    </svg>
+                  </span>
+                  <p className="z-10">Tweet</p>
+                </a>
+              </HoverBorderGradient>
+            </div>
+          ) : (
+            // </Vortex>
+            <div className="mb-3 py-2 border-b-4">
+              <div>Give More BiTz</div>
 
-            <div className="mb-3">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="1"
-                value={bitsVal}
-                onChange={(e) => handleGiveBitzChange(Number(e.target.value))}
-                className="accent-black dark:accent-white w-[70%] cursor-pointer ml-2"></input>
-
+              <div className="mb-3">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value={bitsVal}
+                  onChange={(e) => handleGiveBitzChange(Number(e.target.value))}
+                  className="accent-black dark:accent-white w-[70%] cursor-pointer ml-2"
+                />
+                <div className="flex flex-row gap-2">
+                  <input
+                    type="checkbox"
+                    required
+                    className="cursor-pointer"
+                    checked={termsOfUseCheckbox}
+                    onChange={(e) => setTermsOfUseCheckbox(e.target.checked)}
+                    style={{
+                      borderColor: "#35d9fa",
+                      color: "#35d9fa",
+                    }}
+                  />
+                  <div className="mt-5 text-md ">
+                    I have read and agree to the <br />
+                    <a
+                      className="!text-[#35d9fa] hover:underline flex flex-row gap-2"
+                      href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/bitz-xp/give-bitz"
+                      target="blank">
+                      Give BiTz terms of use <ExternalLinkIcon width={16} />
+                    </a>
+                  </div>
+                </div>
+                {powerUpSending && <Loader />}
+                <Button
+                  disabled={!(bitsVal > 0) || powerUpSending || !termsOfUseCheckbox}
+                  className="bg-transparent cursor-pointer mt-3"
+                  onClick={() => {
+                    setIsPowerUpSuccess(false);
+                    setTweetText("");
+                    handlePowerUp();
+                  }}>
+                  {!powerUpSending ? (
+                    `Send ${bitsVal} BiTz Power Up`
+                  ) : (
+                    <div className=" relative inline-flex h-12 overflow-hidden rounded-full p-[1px] text-foreground ">
+                      <span className="absolute hover:bg-[#35d9fa] inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
+                      <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-[#35d9fa] w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
+                        Sending bitz...
+                      </span>
+                    </div>
+                  )}
+                </Button>
+              </div>
+            </div>
+          )}
+          {/* 
               <Modal
                 openTrigger={
                   <Button
@@ -213,9 +281,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
                     </div>
                   )}
                 </div>
-              </Modal>
-            </div>
-          </div>
+              </Modal> */}
 
           <div className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[.5rem] mb-[3rem] rounded-[1rem]">
             <h4 className="text-center text-white mb-[1rem] !text-[1rem]">GIVER LEADERBOARD</h4>
@@ -223,7 +289,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
               <Loader />
             ) : (
               <>
-                {getterLeaderBoard.length > 0 ? (
+                {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
                   leaderBoardTable(getterLeaderBoard, address)
                 ) : (
                   <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>

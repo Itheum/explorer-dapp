@@ -1,0 +1,41 @@
+.custom-range-slider {
+  /* Hide the default thumb */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Set the width and height of the thumb */
+  width: 100%;
+  height: 10px;
+  /* Slider track styles */
+  background: #ddd;
+  border-radius: 5px;
+}
+
+/* Thumb: Webkit */
+.custom-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px; /* Width of the thumb */
+  height: 30px; /* Height of the thumb */
+  background-image: url("https://ibaslogic.github.io/hosted-assets/smile.png"); /* Image URL */
+  background-size: contain; /* Image sizing */
+  cursor: pointer;
+}
+
+/* Thumb: Firefox */
+.custom-range-slider::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  background-image: url("https://ibaslogic.github.io/hosted-assets/smile.png");
+  background-size: contain;
+  cursor: pointer;
+}
+
+/* Thumb: IE */
+.custom-range-slider::-ms-thumb {
+  width: 30px;
+  height: 30px;
+  background-image: url("https://ibaslogic.github.io/hosted-assets/smile.png");
+  background-size: contain;
+  cursor: pointer;
+}

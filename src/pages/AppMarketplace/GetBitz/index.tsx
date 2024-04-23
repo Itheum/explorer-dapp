@@ -986,7 +986,6 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
     let res: any;
     res = await requiredDataNFT.viewDataViaMVXNativeAuth(viewDataArgs);
     // res = await __viewDataViaMVXNativeAuth(viewDataArgs); // FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
-
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {
