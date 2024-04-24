@@ -15,6 +15,9 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   // ACCOUNT STORE
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
+  const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
+  const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
+  const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
   useEffect(() => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -43,19 +46,33 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         };
 
         const getBitzGameResult = await viewDataJSONCore(viewDataArgs, bitzGameDataNFT);
-
         if (getBitzGameResult) {
-          updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay);
+          const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
+
+          if (sumGivenBits > 0) {
+            updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // collected bits - given bits
+            updateGivenBitzSum(sumGivenBits); // given bits -- for power-ups
+          } else {
+            updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits - not given bits yet
+            updateGivenBitzSum(0); // given bits - not given bits yet
+          }
+
           updateCooldown(
             computeRemainingCooldown(
               getBitzGameResult.data.gamePlayResult.lastPlayedBeforeThisPlay,
               getBitzGameResult.data.gamePlayResult.configCanPlayEveryMSecs
             )
           );
+
+          updateCollectedBitzSum(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits by playing
+
+          updateBonusTries(getBitzGameResult.data.gamePlayResult.bonusTriesBeforeThisPlay || 0); // bonus tries awarded to user (currently only via referral code rewards)
         }
       } else {
         updateBitzBalance(-1);
+        updateGivenBitzSum(-1);
         updateCooldown(-1);
+        updateCollectedBitzSum(-1);
       }
     })();
   }, [address, tokenLogin]);
