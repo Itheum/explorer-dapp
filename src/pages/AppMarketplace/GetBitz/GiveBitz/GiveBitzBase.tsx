@@ -15,6 +15,8 @@ import { LeaderBoardItemType, leaderBoardTable, viewDataJSONCore } from "../inde
 import { Vortex } from "libComponents/animated/Vortex";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
 import bounty from "assets/img/getbitz/givebitz/bounty.png";
+import { TracingBeam } from "libComponents/animated/TracyBeam";
+import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
 
 type GiveBitzBaseProps = {
   gameDataNFT: DataNft;
@@ -304,7 +306,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       </> */}
 
-      <>
+      <div className="flex flex-col w-full">
         <div className="flex flex-col mt-10 mb-8 items-center justify-center">
           <span className="text-foreground text-4xl mb-2">Power-up Data Bounties</span>
           <span className="text-base text-foreground/75 text-center ">
@@ -328,34 +330,39 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             <div className="absolute inset-0 translate-z-0 bg-sky-300 rounded-full blur-[120px]"></div>
           </div>
         </div> */}
-        <div className="flex flex-col md:flex-row md:flex-wrap gap-4 items-start" style={{ backgroundImage: `url(${bounty})` }}>
-          {getDataBounties().map((item: GiveBitzDataBounty) => (
-            <PowerUpBounty
-              key={item.bountyId}
-              {...item}
-              gameDataNFT={gameDataNFT}
-              sendPowerUp={sendPowerUp}
-              fetchGivenBitsForGetter={fetchGivenBitsForGetter}
-              fetchGetterLeaderBoard={fetchGetterLeaderBoard}
-              fetchMyGivenBitz={fetchMyGivenBitz}
-              fetchGiverLeaderBoard={fetchGiverLeaderBoard}
-            />
-          ))}
 
-          <div className="power-up-tile flex flex-col justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
-            <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
-            <p>
-              Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
-              "community cred" for your idea.
-            </p>
-            <p>
-              <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
-                Express your interest for a new Data Bounty
-              </a>
-            </p>
+        <TracingBeam className="px-6 w-full max-w-none left-0 ">
+          <div
+            className="flex flex-col md:flex-row md:flex-wrap gap-4 items-start  w-full antialiased pt-4 relative h-[100%] ml-auto"
+            style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
+            {getDataBounties().map((item: GiveBitzDataBounty) => (
+              <PowerUpBounty
+                key={item.bountyId}
+                {...item}
+                gameDataNFT={gameDataNFT}
+                sendPowerUp={sendPowerUp}
+                fetchGivenBitsForGetter={fetchGivenBitsForGetter}
+                fetchGetterLeaderBoard={fetchGetterLeaderBoard}
+                fetchMyGivenBitz={fetchMyGivenBitz}
+                fetchGiverLeaderBoard={fetchGiverLeaderBoard}
+              />
+            ))}
+
+            <div className="power-up-tile flex flex-col justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
+              <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
+              <p>
+                Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
+                "community cred" for your idea.
+              </p>
+              <p>
+                <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
+                  Express your interest for a new Data Bounty
+                </a>
+              </p>
+            </div>
           </div>
-        </div>
-      </>
+        </TracingBeam>
+      </div>
     </div>
   );
 };

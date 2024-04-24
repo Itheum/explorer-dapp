@@ -15,10 +15,10 @@
 .custom-range-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 30px; /* Width of the thumb */
+  width: 20px; /* Width of the thumb */
   height: 30px; /* Height of the thumb */
-  background-image: url("https://ibaslogic.github.io/hosted-assets/smile.png"); /* Image URL */
-  background-size: contain; /* Image sizing */
+  background-image: url("https://gateway.lighthouse.storage/ipfs/QmQsV2eeRCjN8nWr6xgUwJn3UJfU9zg8MREyK9SkH5oXkR"); /* Image URL */
+  background-size: cover; /* Image sizing */
   cursor: pointer;
 }
 
@@ -26,8 +26,8 @@
 .custom-range-slider::-moz-range-thumb {
   width: 30px;
   height: 30px;
-  background-image: url("https://ibaslogic.github.io/hosted-assets/smile.png");
-  background-size: contain;
+  background-image: url("https://gateway.lighthouse.storage/ipfs/QmQsV2eeRCjN8nWr6xgUwJn3UJfU9zg8MREyK9SkH5oXkR");
+  background-size: cover;
   cursor: pointer;
 }
 
@@ -35,7 +35,7 @@
 .custom-range-slider::-ms-thumb {
   width: 30px;
   height: 30px;
-  background-image: url("https://ibaslogic.github.io/hosted-assets/smile.png");
-  background-size: contain;
+  background-image: url("https://gateway.lighthouse.storage/ipfs/QmQsV2eeRCjN8nWr6xgUwJn3UJfU9zg8MREyK9SkH5oXkR");
+  background-size: cover;
   cursor: pointer;
 }
