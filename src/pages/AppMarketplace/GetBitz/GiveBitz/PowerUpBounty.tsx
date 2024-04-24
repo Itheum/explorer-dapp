@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import moment from "moment-timezone";
-import bounty from "assets/img/getbitz/givebitz/bounty.png";
+import bounty from "assets/img/getbitz/givebitz/bounty12.jpg";
 import { Loader } from "components";
 import { CopyAddress } from "components/CopyAddress";
 import { Modal } from "components/Modal/Modal";
@@ -69,26 +69,26 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
   async function loadBaseData() {
     // const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({ getterAddr: bountySubmitter, campaignId: bountyId });
     // setBitsGivenToCreator(_fetchGivenBitsForCreator);
-    // setGetterLeaderBoardIsLoading(true);
+    setGetterLeaderBoardIsLoading(true);
     const _toLeaderBoardTypeArr: LeaderBoardItemType[] = await fetchGetterLeaderBoard({ getterAddr: bountySubmitter, campaignId: bountyId });
-    const leaderboardEntries =
-      _toLeaderBoardTypeArr.length < 20
-        ? [..._toLeaderBoardTypeArr, ...new Array(20 - _toLeaderBoardTypeArr.length).fill({ playerAddr: "test", bits: 0 })]
-        : _toLeaderBoardTypeArr.slice(0, 20);
-    setGetterLeaderBoard(leaderboardEntries);
+    // const leaderboardEntries =
+    //   _toLeaderBoardTypeArr.length < 20
+    //     ? [..._toLeaderBoardTypeArr, ...new Array(20 - _toLeaderBoardTypeArr.length).fill({ playerAddr: "test", bits: 0 })]
+    //     : _toLeaderBoardTypeArr.slice(0, 20);
+    setGetterLeaderBoard(_toLeaderBoardTypeArr);
     setGetterLeaderBoardIsLoading(false);
   }
 
   function handleLeaderboard() {
-    if (getterLeaderBoard.length === 0) loadBaseData();
+    loadBaseData();
     setShowLeaderboard((prev) => !prev);
   }
 
   return (
     <div className="power-up-tile border  min-w-[260px] max-w-[360px] relative rounded-3xl">
       <div className="group" data-highlighter>
-        <div className="relative bg-[#35d9fa] dark:bg-[#35d9fa]/30  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
-          <div className="relative h-full bg-neutral-950/60 dark:bg-neutral-950/80  rounded-[inherit] z-20 overflow-hidden p-8">
+        <div className="relative bg-[#35d9fa]/70 dark:bg-[#35d9fa]/30  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
+          <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/60  rounded-[inherit] z-20 overflow-hidden p-4 md:p-8">
             {/* <div className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-1/3 aspect-square" aria-hidden="true">
               <div className="absolute inset-0 translate-z-0 rounded-full bg-slate-800 group-[.swiper-slide-active]/slide:bg-purple-500 transition-colors duration-500 ease-in-out blur-[60px]"></div>
               </div> */}
@@ -127,42 +127,41 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                     fetchGiverLeaderBoard={fetchGiverLeaderBoard}
                   />
                 )}
-                {/* <div className="flex item-center justify-center border-t-4 border-[#35d9fa]/30  ">
-                  <Button className="mt-2" onClick={handleLeaderboard}>
-                    GIVER LEADERBOARD
-                  </Button>
-                </div> */}
-                <div
-                  className="rounded-b-3xl bg-neutral-950  cursor-pointer"
-                  onClick={handleLeaderboard}
-                  // style={{ backgroundImage: `url(${bounty})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-                >
-                  <div className="flex  item-center justify-center border-t-4 border-[#35d9fa]/30  ">
-                    <p className="p-2">{showLeaderboard ? "Close" : "Leaderboard"} </p>{" "}
+
+                {address && (
+                  <div
+                    className="rounded-b-3xl w-full bg-[#35d9fa]/30 dark:bg-neutral-950  cursor-pointer text-foreground relative"
+                    onClick={handleLeaderboard}
+                    // style={{ backgroundImage: `url(${bounty})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+                    //TODO create a separate component with the leaderboard
+                  >
+                    <div className="flex  item-center justify-center border-t-4 border-[#35d9fa]/30   ">
+                      <p className="p-2">{showLeaderboard ? "Close" : "Leaderboard"} </p>{" "}
+                    </div>
+                    {showLeaderboard && (
+                      <motion.div
+                        initial={{ y: 0 }}
+                        animate={{ opacity: 1, y: -753 }}
+                        transition={{ duration: 1, type: "spring" }}
+                        className="z-20 h-[750px] -mt-10 md:-mt-0 md:h-[710px] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-3xl z-100">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col max-w-[100%] p-[.5rem] mb-[3rem] rounded-[1rem]">
+                          <h4 className="text-center text-white mb-[1rem] !text-[1rem]">GIVER LEADERBOARD</h4>
+                          {getterLeaderBoardIsLoading ? (
+                            <Loader />
+                          ) : (
+                            <>
+                              {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
+                                leaderBoardTable(getterLeaderBoard, address)
+                              ) : (
+                                <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                              )}
+                            </>
+                          )}
+                        </motion.div>
+                      </motion.div>
+                    )}{" "}
                   </div>
-                  {showLeaderboard && (
-                    <motion.div
-                      initial={{ y: 0 }}
-                      animate={{ opacity: 1, y: -753 }}
-                      transition={{ duration: 1, type: "spring" }}
-                      className="h-[100%] w-[100%] md:h-[87%] md:w-[82%] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30  bg-[#022629] absolute p-4 rounded-t-3xl z-100">
-                      <div className="flex flex-col max-w-[100%] p-[.5rem] mb-[3rem] rounded-[1rem]">
-                        <h4 className="text-center text-white mb-[1rem] !text-[1rem]">GIVER LEADERBOARD</h4>
-                        {getterLeaderBoardIsLoading ? (
-                          <Loader />
-                        ) : (
-                          <>
-                            {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
-                              leaderBoardTable(getterLeaderBoard, address)
-                            ) : (
-                              <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}{" "}
-                </div>
+                )}
               </>
             ) : (
               <></>

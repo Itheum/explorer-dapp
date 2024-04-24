@@ -144,7 +144,6 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
           {powerUpSending && <div>Sending PowerUp...</div>}
 
           {isPowerUpSuccess ? (
-            // <Vortex rangeSpeed={10} baseSpeed={10} baseHue={120}> TODO ADD SOME ANIMATION TO THIS
             <div className="flex items-center justify-center w-full m-2">
               <HoverBorderGradient className="-z-1 ">
                 <a
@@ -162,7 +161,6 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
               </HoverBorderGradient>
             </div>
           ) : (
-            // </Vortex>
             <div className="mb-3 py-2 border-b-4">
               <div>Give More BiTz</div>
 

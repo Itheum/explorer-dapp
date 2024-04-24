@@ -17,7 +17,7 @@
   appearance: none;
   width: 20px; /* Width of the thumb */
   height: 30px; /* Height of the thumb */
-  background-image: url("https://gateway.lighthouse.storage/ipfs/QmQsV2eeRCjN8nWr6xgUwJn3UJfU9zg8MREyK9SkH5oXkR"); /* Image URL */
+  background-image: url("../../../../assets/img/getbitz/givebitz/flaskBottle.png"); /* Image URL */
   background-size: cover; /* Image sizing */
   cursor: pointer;
 }
@@ -26,7 +26,7 @@
 .custom-range-slider::-moz-range-thumb {
   width: 30px;
   height: 30px;
-  background-image: url("https://gateway.lighthouse.storage/ipfs/QmQsV2eeRCjN8nWr6xgUwJn3UJfU9zg8MREyK9SkH5oXkR");
+  background-image: url("../../../../assets/img/getbitz/givebitz/flaskBottle.png");
   background-size: cover;
   cursor: pointer;
 }
@@ -35,7 +35,7 @@
 .custom-range-slider::-ms-thumb {
   width: 30px;
   height: 30px;
-  background-image: url("https://gateway.lighthouse.storage/ipfs/QmQsV2eeRCjN8nWr6xgUwJn3UJfU9zg8MREyK9SkH5oXkR");
+  background-image: url("../../../../assets/img/getbitz/givebitz/flaskBottle.png");
   background-size: cover;
   cursor: pointer;
 }

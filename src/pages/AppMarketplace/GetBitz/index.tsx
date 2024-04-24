@@ -16,7 +16,7 @@ import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { routeNames } from "routes";
 import { BurningImage } from "./BurningImage";
@@ -866,7 +866,7 @@ export const GetBitz = () => {
         <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
       </div>
 
-      {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
+      {/* {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
         <div id="referral" className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
           <h2 className="text-center text-white mb-[1rem]">{`<BiTz>`} XP Referrals : Get Bonus Points!</h2>
           <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
@@ -895,7 +895,7 @@ export const GetBitz = () => {
                 Your invite link
               </a>{" "}
             </li>
-            <li className="my-5">
+            <li className="my-5 flex flex-row gap-4 items-center">
               3) Or you can share a tweet now using your referral code here:{" "}
               <HoverBorderGradient className="-z-1">
                 <a
@@ -914,7 +914,7 @@ export const GetBitz = () => {
             </li>
           </ol>
         </div>
-      )}
+      )} */}
 
       <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
         <div className="leaderBoard">
@@ -1030,7 +1030,7 @@ export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address
               <td className="p-2">
                 #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
               </td>
-              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : <CopyAddress address={item.playerAddr} precision={4} />}</td>
+              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 4)}</td>
               <td className="p-2">{item.bits}</td>
             </tr>
           ))}

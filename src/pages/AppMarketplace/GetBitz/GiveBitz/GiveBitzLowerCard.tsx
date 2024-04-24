@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ExternalLinkIcon, Loader } from "lucide-react";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-import { Button } from "libComponents/Button";
 import "./CustomRangeSlider.css";
-import { useGetAccount, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
-import { LeaderBoardItemType } from "..";
-import { sleep } from "libs/utils";
+import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useAccountStore } from "store/account";
+import { LeaderBoardItemType } from "..";
 
 export interface LeaderBoardGiverItemType {
   giverAddr: string;
@@ -33,15 +31,10 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
   const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
 
-  // const [getterLeaderBoardIsLoading, setGetterLeaderBoardIsLoading] = useState<boolean>(false);
-  // const [getterLeaderBoard, setGetterLeaderBoard] = useState<LeaderBoardGiverItemType[]>([]);
-
-  const sliderEl = document.querySelector("#rangeBitz") as HTMLInputElement;
-
+  //TODO ASK HOW WE COULD IMPROVE THIS TO NOT MAKE THE CALLS
   useEffect(() => {
     async function fetchData() {
       const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({ getterAddr: bountySubmitter, campaignId: bountyId });
-      // console.log("GIVEN BITZ ", _fetchGivenBitsForCreator);
       setBitzGivenToCreator(_fetchGivenBitsForCreator);
     }
     fetchData();
@@ -98,7 +91,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
       {isPowerUpSuccess ? (
         <div className="flex flex-col items-center justify-between w-full h-[75%]">
-          <p> Maybe a message ? Good job on supporting ideas </p>
+          <p> Share your support for the bounty! Tweet about your contribution and help spread the word.</p>
           <HoverBorderGradient className="-z-1 ">
             <a
               className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
@@ -128,7 +121,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
               onChange={(e) => setBitzVal(Number(e.target.value))}
               className="accent-black dark:accent-white w-[90%] cursor-pointer   custom-range-slider  "
             />
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row items-center md:gap-2">
               <input
                 type="checkbox"
                 required
@@ -136,7 +129,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
                 checked={termsOfUseCheckbox}
                 onChange={(e) => setTermsOfUseCheckbox(e.target.checked)}
               />
-              <div className="mt-5 text-md ">
+              <div className="ml-1 mt-5 text-sm md:text-base ">
                 I have read and agree to the <br />
                 <a
                   className="!text-[#35d9fa] hover:underline flex flex-row gap-2"
@@ -150,19 +143,21 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
           <button
             disabled={!(bitzVal > 0) || powerUpSending || !termsOfUseCheckbox}
-            className="hover:none flex items-center justify-center border disabled:bg-[#35d9fa]/30 bg-[#35d9fa]/80 mt-10 w-[12rem] md:w-[15rem] mx-auto rounded-3xl h-10"
+            className="hover:none flex items-center justify-center disabled:bg-[#35d9fa]/30 bg-[#35d9fa]   mt-10 w-[12rem] md:w-[15rem] mx-auto rounded-3xl h-10"
             onClick={() => {
               setIsPowerUpSuccess(false);
               setTweetText("");
               handlePowerUp();
             }}>
             {!powerUpSending ? (
-              <div className=" flex items-center m-[2px] justify-center bg-neutral-950  w-full h-full rounded-3xl">Send {bitzVal} BiTz Power Up </div>
+              <div className=" flex items-center m-[2px] justify-center text-foreground bg-neutral-950/30 dark:bg-neutral-950  w-full h-full rounded-3xl">
+                Send {bitzVal} BiTz Power Up{" "}
+              </div>
             ) : (
               <div className="w-[12rem] md:w-[15rem] h-10 relative inline-flex  overflow-hidden rounded-3xl p-[1px] text-foreground ">
                 <span className="absolute hover:bg-[#35d9fa] inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
-                <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-[#35d9fa] w-full cursor-pointer items-center justify-center rounded-3xl bg-neutral-950 px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
-                  Sending bitz...
+                <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-[#35d9fa] w-full cursor-pointer items-center justify-center rounded-full bg-[#35d9fa]/20 dark:bg-neutral-950 px-3 py-1 text-sm font-medium backdrop-blur-3xl">
+                  <p className="text-foreground"> Sending bitz... </p>
                 </span>
               </div>
             )}

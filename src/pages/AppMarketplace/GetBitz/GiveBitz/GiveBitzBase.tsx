@@ -14,7 +14,7 @@ import { getCreatorCampaigns, GiveBitzCreatorCampaign, getDataBounties, GiveBitz
 import { LeaderBoardItemType, leaderBoardTable, viewDataJSONCore } from "../index";
 import { Vortex } from "libComponents/animated/Vortex";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
-import bounty from "assets/img/getbitz/givebitz/bounty.png";
+import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
 import { TracingBeam } from "libComponents/animated/TracyBeam";
 import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
 
@@ -243,7 +243,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       )}
 
-      <div id="giveLeaderboard" className="h-full flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem]">
+      <div id="giveLeaderboard" className="h-full flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
         {/* <Vortex
           containerClassName="h-full w-full overflow-hidden"
           backgroundColor="transparent"
@@ -307,7 +307,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
       </> */}
 
       <div className="flex flex-col w-full">
-        <div className="flex flex-col mt-10 mb-8 items-center justify-center">
+        <div className="flex flex-col mt-10 mb-8 items-center justify-center ">
           <span className="text-foreground text-4xl mb-2">Power-up Data Bounties</span>
           <span className="text-base text-foreground/75 text-center ">
             Power-Up Data Bounties (Ideas for new Data NFTs) with your BiTz XP, Climb Bounty Leaderboards and get bonus rewards if your Bounty is realized.
@@ -331,37 +331,39 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           </div>
         </div> */}
 
-        <TracingBeam className="px-6 w-full max-w-none left-0 ">
-          <div
-            className="flex flex-col md:flex-row md:flex-wrap gap-4 items-start  w-full antialiased pt-4 relative h-[100%] ml-auto"
-            style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
-            {getDataBounties().map((item: GiveBitzDataBounty) => (
-              <PowerUpBounty
-                key={item.bountyId}
-                {...item}
-                gameDataNFT={gameDataNFT}
-                sendPowerUp={sendPowerUp}
-                fetchGivenBitsForGetter={fetchGivenBitsForGetter}
-                fetchGetterLeaderBoard={fetchGetterLeaderBoard}
-                fetchMyGivenBitz={fetchMyGivenBitz}
-                fetchGiverLeaderBoard={fetchGiverLeaderBoard}
-              />
-            ))}
+        <div
+          className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center  w-full antialiased pt-4 relative h-[100%] "
+          style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
+          {getDataBounties().map((item: GiveBitzDataBounty) => (
+            <PowerUpBounty
+              key={item.bountyId}
+              {...item}
+              gameDataNFT={gameDataNFT}
+              sendPowerUp={sendPowerUp}
+              fetchGivenBitsForGetter={fetchGivenBitsForGetter}
+              fetchGetterLeaderBoard={fetchGetterLeaderBoard}
+              fetchMyGivenBitz={fetchMyGivenBitz}
+              fetchGiverLeaderBoard={fetchGiverLeaderBoard}
+            />
+          ))}
 
-            <div className="power-up-tile flex flex-col justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
-              <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
-              <p>
-                Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
-                "community cred" for your idea.
-              </p>
-              <p>
-                <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
-                  Express your interest for a new Data Bounty
-                </a>
-              </p>
+          <div className="mt-8 group" data-highlighter>
+            <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/50  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
+              <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/30  rounded-[inherit] z-20 overflow-hidden p-8">
+                <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
+                <p>
+                  Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
+                  "community cred" for your idea.
+                </p>
+                <p>
+                  <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
+                    Express your interest for a new Data Bounty
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
-        </TracingBeam>
+        </div>
       </div>
     </div>
   );
