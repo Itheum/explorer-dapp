@@ -202,3 +202,27 @@ h6 {
 .animate-ping-slow {
   animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+.before\:translate-x-\[var\(--mouse-x\)\]::before {
+  content: var(--tw-content);
+  --tw-translate-x: var(--mouse-x);
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.before\:translate-y-\[var\(--mouse-y\)\]::before {
+  content: var(--tw-content);
+  --tw-translate-y: var(--mouse-y);
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.after\:\[background\:_radial-gradient\(250px_circle_at_var\(--mouse-x\)_var\(--mouse-y\)\2c theme\(colors\.slate\.400\)\2c transparent\)\]::after {
+  content: var(--tw-content);
+  background: radial-gradient(250px circle at var(--mouse-x) var(--mouse-y), #94a3b8, transparent);
+}
+
+.after\:\[background\:_radial-gradient\(250px_circle_at_var\(--mouse-x\)_var\(--mouse-y\)\2c theme\(colors\.slate\.400\)\2c transparent\)\]::after {
+  content: var(--tw-content);
+  background: radial-gradient(250px circle at var(--mouse-x) var(--mouse-y), #94a3b8, transparent);
+}
