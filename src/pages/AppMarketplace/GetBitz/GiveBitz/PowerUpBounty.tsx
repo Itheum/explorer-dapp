@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import moment from "moment-timezone";
-import bounty from "assets/img/getbitz/givebitz/bounty12.jpg";
 import { Loader, MXAddressLink } from "components";
-import { CopyAddress } from "components/CopyAddress";
-import { Modal } from "components/Modal/Modal";
 import { useGetAccount } from "hooks";
-import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
-import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-import { Button } from "libComponents/Button";
-import { sleep } from "libs/utils";
+
 import { LeaderBoardItemType, leaderBoardTable } from "../index";
 import GiveBitzLowerCard from "./GiveBitzLowerCard";
 import { motion } from "framer-motion";
@@ -145,28 +139,31 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                     //TODO create a separate component with the leaderboard
                   >
                     <div className="flex  item-center justify-center border-t-4 border-[#35d9fa]/30">
-                      <p className="p-2">{showLeaderboard ? "Close" : "Leaderboard"} </p>
+                      <p className="p-2">{showLeaderboard ? "Close" : `Leaderboard`} </p>
                     </div>
                     {showLeaderboard && (
                       <motion.div
                         initial={{ y: 0 }}
-                        animate={{ opacity: 1, y: -753 }}
+                        animate={{ opacity: 1, y: -756 }}
                         transition={{ duration: 1, type: "spring" }}
-                        className="z-20 h-[750px] w-full -mt-10 md:-mt-0 md:h-[710px] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-3xl z-100">
+                        className="z-20 h-[753px] w-full -mt-10 md:-mt-0 md:h-[713px] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-3xl z-100">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col max-w-[100%] p-[.5rem] mb-[3rem] rounded-[1rem]">
-                          <h4 className="text-center text-white mb-[1rem] !text-[1rem]">GIVER LEADERBOARD</h4>
+                          <h4 className="text-center text-white mb-[1rem] !text-[1rem]">
+                            Giver Leaderboard <br />
+                            Bounty {bountyId}
+                          </h4>
                           {getterLeaderBoardIsLoading ? (
                             <div className="flex items-center justify-center  ">
                               <Loader />
                             </div>
                           ) : (
-                            <>
+                            <div className="flex">
                               {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
-                                leaderBoardTable(getterLeaderBoard, address)
+                                leaderBoardTable(getterLeaderBoard, address, true)
                               ) : (
                                 <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                               )}
-                            </>
+                            </div>
                           )}
                         </motion.div>
                       </motion.div>

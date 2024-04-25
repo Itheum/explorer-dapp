@@ -117,6 +117,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
       });
 
       await sleep(2);
+
       setGiverLeaderBoard(_toLeaderBoardTypeArr);
       // E: ACTUAL LOGIC
     } catch (err) {
@@ -243,7 +244,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       )}
 
-      <div id="giveLeaderboard" className="h-full flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
+      <div id="giveLeaderboard" className="h-[1700px] md:h-[1000px] flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
         {/* <Vortex
           containerClassName="h-full w-full overflow-hidden"
           backgroundColor="transparent"
@@ -255,7 +256,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           rangeSpeed={0.3}
           rangeRadius={10}
           className="flex items-center flex-col justify-center px-2 md:px-10  py-4 w-full h-full"> */}
-        <h3 className="text-center text-white mb-[1rem]">POWER-UP LEADERBOARD</h3>
+        <h3 className="text-center mb-[1rem]">POWER-UP LEADERBOARD</h3>
 
         {giverLeaderBoardIsLoading ? (
           <Loader />
@@ -306,7 +307,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       </> */}
 
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full items-center justify-center">
         <div className="flex flex-col mt-10 mb-8 items-center justify-center ">
           <span className="text-foreground text-4xl mb-2">Power-up Data Bounties</span>
           <span className="text-base text-foreground/75 text-center ">
@@ -346,21 +347,20 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
               fetchGiverLeaderBoard={fetchGiverLeaderBoard}
             />
           ))}
-
-          <div className="mt-8 group" data-highlighter>
-            <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/50  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
-              <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/30  rounded-[inherit] z-20 overflow-hidden p-8">
-                <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
-                <p>
-                  Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
-                  "community cred" for your idea.
-                </p>
-                <p>
-                  <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
-                    Express your interest for a new Data Bounty
-                  </a>
-                </p>
-              </div>
+        </div>
+        <div className="mt-8 group max-w-[60rem]" data-highlighter>
+          <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/50  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
+            <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/30  rounded-[inherit] z-20 overflow-hidden p-8">
+              <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
+              <p>
+                Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
+                "community cred" for your idea.
+              </p>
+              <p>
+                <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
+                  Express your interest for a new Data Bounty
+                </a>
+              </p>
             </div>
           </div>
         </div>
