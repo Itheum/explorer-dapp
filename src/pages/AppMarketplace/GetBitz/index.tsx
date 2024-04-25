@@ -846,7 +846,7 @@ export const GetBitz = () => {
         {gamePlayImageSprites()}
       </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-3 xl:mt-[5rem]">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
