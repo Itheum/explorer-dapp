@@ -24,7 +24,7 @@ export const MultiversxBubbles = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [file, setFile] = useState<string | null>(null);
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -145,7 +145,7 @@ export const MultiversxBubbles = () => {
               key={index}
               index={index}
               dataNft={dataNft}
-              isLoading={isLoading}
+              isLoading={isLoading || isLoadingUserNfts}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               viewData={viewData}
               modalContent={

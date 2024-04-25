@@ -21,7 +21,7 @@ export const BoberGameRoom: React.FC = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -104,7 +104,7 @@ export const BoberGameRoom: React.FC = () => {
               key={index}
               index={index}
               dataNft={dataNft}
-              isLoading={isLoading}
+              isLoading={isLoading || isLoadingUserNfts}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               modalStyles={"md:h-[95svh] sm:h-[100svh]"}
               viewData={viewData}

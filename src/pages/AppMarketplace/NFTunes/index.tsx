@@ -62,7 +62,7 @@ export const NFTunes = () => {
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
 
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     window.scrollTo(0, 80);
@@ -606,7 +606,7 @@ export const NFTunes = () => {
                       key={index}
                       index={index}
                       dataNft={dataNft}
-                      isLoading={isLoading}
+                      isLoading={isLoading || isLoadingUserNfts}
                       owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
                       viewData={viewData}
                       modalContent={

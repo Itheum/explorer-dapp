@@ -23,7 +23,7 @@ export const ItheumTrailblazer = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -124,7 +124,7 @@ export const ItheumTrailblazer = () => {
               key={index}
               index={index}
               dataNft={dataNft}
-              isLoading={isLoading}
+              isLoading={isLoading || isLoadingUserNfts}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               viewData={viewData}
               modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}

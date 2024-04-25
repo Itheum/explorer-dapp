@@ -21,10 +21,9 @@ export const MyWallet = () => {
   const [isAutoOpenFormat, setIsAutoOpenFormat] = useState<boolean>(false);
   const [isDomPurified, setIsDomPurified] = useState<boolean>(false);
 
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading } = useNftsStore();
   const [numberOfNftsShown, setNumberOfNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownDataNfts, setShownDataNfts] = useState<DataNft[]>(nfts.slice(0, SHOW_NFTS_STEP));
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setShownDataNfts(nfts.slice(0, numberOfNftsShown));

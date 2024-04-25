@@ -117,7 +117,7 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
@@ -168,10 +168,8 @@ export const GetBitz = () => {
   }, [hasPendingTransactions, nfts]);
 
   useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
+    fetchMyNfts();
+  }, [nfts, address]);
 
   useEffect(() => {
     if (!chainID) {

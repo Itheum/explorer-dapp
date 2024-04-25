@@ -39,7 +39,7 @@ export const MultiversxInfographics = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
 
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -165,7 +165,7 @@ export const MultiversxInfographics = () => {
               key={index}
               index={index}
               dataNft={dataNft}
-              isLoading={isLoading}
+              isLoading={isLoading || isLoadingUserNfts}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               viewData={viewData}
               modalContent={
