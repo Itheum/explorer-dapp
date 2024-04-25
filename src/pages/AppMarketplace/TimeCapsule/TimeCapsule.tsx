@@ -44,7 +44,7 @@ export const TimeCapsule = () => {
 
     setShownAppDataNfts((oldNfts) => oldNfts.concat(_nfts));
     if (activeIsLoading) {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   }
 

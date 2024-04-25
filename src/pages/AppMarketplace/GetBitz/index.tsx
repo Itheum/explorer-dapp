@@ -169,7 +169,7 @@ export const GetBitz = () => {
 
   useEffect(() => {
     fetchMyNfts();
-  }, [nfts, address]);
+  }, [nfts, address, gameDataNFT]);
 
   useEffect(() => {
     if (!chainID) {
@@ -226,7 +226,7 @@ export const GetBitz = () => {
 
     setIsLoading(false);
   }
-
+  console.log(checkingIfHasGameDataNFT, hasGameDataNFT);
   // secondly, we get the user's Data NFTs and flag if the user has the required Data NFT for the game in their wallet
   async function fetchMyNfts() {
     if (gameDataNFT) {
