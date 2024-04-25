@@ -44,36 +44,21 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
     setPowerUpSending(true);
     setIsPowerUpSuccess(false);
     setTweetText("");
-
+    const bitzSent = bitzVal;
     const _isPowerUpSuccess = await sendPowerUp({ bitsVal: bitzVal, bitsToWho: bountySubmitter, bitsToCampaignId: bountyId });
 
     if (_isPowerUpSuccess) {
-      // await sleep(1);
-      // setBitzGivenToCreator(-1);
-      setBitzGivenToCreator((prev) => prev + bitzVal);
+      const _bitzGivenToCreator = bitzGivenToCreator >= 0 ? bitzGivenToCreator + bitzSent : bitzSent;
+      setBitzGivenToCreator(_bitzGivenToCreator);
 
-      /// TODO UNECESSARY CALL , we could compute it manually from the previous value
-
-      // const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({ getterAddr: bountySubmitter, campaignId: bountyId });
-      // console.log("GIVEN BITZ ", _fetchGivenBitsForCreator);
-      // setBitzGivenToCreator(_fetchGivenBitsForCreator);
-
-      //await sleep(1);
-
-      // setGetterLeaderBoardIsLoading(true);
-      // const _toLeaderBoardTypeArr: LeaderBoardItemType[] = await fetchGetterLeaderBoard({ getterAddr: bountySubmitter, campaignId: bountyId });
-
-      //await sleep(1);
       fetchMyGivenBitz();
       fetchGiverLeaderBoard();
 
       setIsPowerUpSuccess(true);
-
+      ///TODO add refferal when ready r=${address}
       setTweetText(
-        `url=https://explorer.itheum.io/getbitz?r=${address}&text=I just gave ${bitzVal} of my precious %23itheum <BiTz> XP to Power-Up a Data Bounty in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
+        `url=https://explorer.itheum.io/getbitz&text=I just gave ${bitzVal} of my precious %23itheum <BiTz> XP to Power-Up a Data Bounty in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
       );
-      // setGetterLeaderBoard(_toLeaderBoardTypeArr);
-      // setGetterLeaderBoardIsLoading(false);
     }
 
     setBitzVal(0); // reset the figure the user sent
@@ -151,7 +136,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
             }}>
             {!powerUpSending ? (
               <div className=" flex items-center m-[2px] justify-center text-foreground bg-neutral-950/30 dark:bg-neutral-950  w-full h-full rounded-3xl">
-                Send {bitzVal} BiTz Power Up{" "}
+                {bitzBalance === -1 ? "No bitz to send" : `Send ${bitzVal} BiTz Power Up`}
               </div>
             ) : (
               <div className="w-[12rem] md:w-[15rem] h-10 relative inline-flex  overflow-hidden rounded-3xl p-[1px] text-foreground ">
