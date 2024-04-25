@@ -839,7 +839,7 @@ export const GetBitz = () => {
         </div>
       )}
 
-      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[30rem] lg:min-h-[40rem] xl:min-h-screen">
+      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[30rem] lg:min-h-[40rem] xl:min-h-screen ">
         <div className="absolute -z-1 w-full">
           <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
         </div>

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { ArrowBigRightDashIcon, ArrowLeftRight, ArrowRight, ArrowUpNarrowWide, ExternalLinkIcon, Loader } from "lucide-react";
+import { ArrowBigRightDashIcon, ExternalLinkIcon } from "lucide-react";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
 import "./CustomRangeSlider.css";
-import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useAccountStore } from "store/account";
-import { LeaderBoardItemType } from "..";
 import { confetti } from "@tsparticles/confetti";
 import { motion } from "framer-motion";
 import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
@@ -19,22 +17,19 @@ interface GiveBitzLowerCardProps {
   sendPowerUp: (args: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) => Promise<boolean>;
   fetchGivenBitsForGetter: (args: { getterAddr: string; campaignId: string }) => Promise<number>;
   fetchMyGivenBitz: () => void;
-  fetchGetterLeaderBoard: (args: { getterAddr: string; campaignId: string }) => Promise<LeaderBoardItemType[]>;
   fetchGiverLeaderBoard: () => void;
 }
 
 const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
-  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard, fetchMyGivenBitz, fetchGiverLeaderBoard } = props;
+  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchMyGivenBitz, fetchGiverLeaderBoard } = props;
   const [isPowerUpSuccess, setIsPowerUpSuccess] = useState(false);
   const [tweetText, setTweetText] = useState("");
   const [termsOfUseCheckbox, setTermsOfUseCheckbox] = useState(false);
-  const { address } = useGetAccount();
   const [bitzVal, setBitzVal] = useState<number>(0);
   const [bitzGivenToCreator, setBitzGivenToCreator] = useState<number>(-1);
   const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
 
-  //TODO ASK HOW WE COULD IMPROVE THIS TO NOT MAKE THE CALLS
   useEffect(() => {
     async function fetchData() {
       const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({ getterAddr: bountySubmitter, campaignId: bountyId });
@@ -79,8 +74,6 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
           },
         });
       })();
-
-      ///TODO add refferal when ready r=${address}
 
       setTweetText(
         `url=https://explorer.itheum.io/getbitz&text=I just gave ${bitzVal} of my precious %23itheum <BiTz> XP to Power-Up a Data Bounty in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`

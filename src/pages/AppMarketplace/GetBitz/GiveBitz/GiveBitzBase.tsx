@@ -9,14 +9,10 @@ import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
 import PowerUpBounty from "./PowerUpBounty";
-import PowerUpCreator from "./PowerUpCreator";
-import { getCreatorCampaigns, GiveBitzCreatorCampaign, getDataBounties, GiveBitzDataBounty } from "../config";
+import { getDataBounties, GiveBitzDataBounty } from "../config";
 import { LeaderBoardItemType, leaderBoardTable, viewDataJSONCore } from "../index";
-import { Vortex } from "libComponents/animated/Vortex";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
-import { TracingBeam } from "libComponents/animated/TracyBeam";
-import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
 
 type GiveBitzBaseProps = {
   gameDataNFT: DataNft;
@@ -31,7 +27,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const { chainID } = useGetNetworkConfig();
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-  const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
 
@@ -185,11 +180,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
   // send bits to creator or bounty
   async function sendPowerUp({ bitsVal, bitsToWho, bitsToCampaignId }: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) {
-    console.log("sendPowerUp");
-
     if (tokenLogin) {
-      setPowerUpSending(true);
-
       try {
         const viewDataArgs = {
           mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
@@ -205,10 +196,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         };
 
         const giveBitzGameResult = await viewDataJSONCore(viewDataArgs, gameDataNFT);
-        console.log("giveBitzGameResult", giveBitzGameResult);
 
         if (giveBitzGameResult) {
-          console.log("giveBitzGameResult", giveBitzGameResult);
           if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
             throw new Error("Error: Not possible to sent power-up. As error code returned. Do you have enough BiTz to give?");
           } else {
@@ -221,8 +210,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         console.error(err);
         toastError((err as Error).message);
       }
-
-      setPowerUpSending(false);
     }
   }
 
@@ -315,23 +302,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           </span>
         </div>
 
-        {/* <div
-          data-highlighter
-          className=" relative h-screen bg-slate-800 rounded-3xl p-px -m-px before:absolute before:w-64 before:h-64 before:-left-32 before:-top-32 before:bg-indigo-500 before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-30 before:z-30 before:blur-[64px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.slate.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
-          <div className="relative h-full bg-slate-900 rounded-[inherit] z-20 overflow-hidden">
-            <img src={bounty} />
-            <div className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-1/2 aspect-square" aria-hidden="true">
-              <div className="absolute inset-0 translate-z-0 bg-sky-300 rounded-full blur-[120px]"></div>
-            </div>
-          </div>
-        </div> */}
-        {/* <div className="relative h-full bg-slate-900 rounded-[inherit] z-20 overflow-hidden">
-          <img src={bounty} />
-          <div className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-1/2 aspect-square" aria-hidden="true">
-            <div className="absolute inset-0 translate-z-0 bg-sky-300 rounded-full blur-[120px]"></div>
-          </div>
-        </div> */}
-
         <div
           className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center  w-full antialiased pt-4 relative h-[100%] "
           style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
@@ -339,7 +309,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             <PowerUpBounty
               key={item.bountyId}
               {...item}
-              gameDataNFT={gameDataNFT}
               sendPowerUp={sendPowerUp}
               fetchGivenBitsForGetter={fetchGivenBitsForGetter}
               fetchGetterLeaderBoard={fetchGetterLeaderBoard}
