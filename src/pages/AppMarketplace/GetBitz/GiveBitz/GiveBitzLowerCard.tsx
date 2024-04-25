@@ -6,6 +6,7 @@ import { useAccountStore } from "store/account";
 import { confetti } from "@tsparticles/confetti";
 import { motion } from "framer-motion";
 import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
+import { sleep } from "libs/utils";
 
 export interface LeaderBoardGiverItemType {
   giverAddr: string;
@@ -51,9 +52,8 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
       fetchMyGivenBitz();
       fetchGiverLeaderBoard();
-      setIsPowerUpSuccess(true);
 
-      (async () => {
+      await (async () => {
         const canvas = document.getElementById("canvas-" + bountyId) as any;
 
         canvas.confetti = canvas.confetti || (await confetti.create(canvas, {}));
@@ -74,6 +74,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
           },
         });
       })();
+      setIsPowerUpSuccess(true);
 
       setTweetText(
         `url=https://explorer.itheum.io/getbitz&text=I just gave ${bitzVal} of my precious %23itheum <BiTz> XP to Power-Up a Data Bounty in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
@@ -123,8 +124,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
         <motion.div
           className="flex flex-col items-start justify-between w-full h-full absolute top-0 left-0"
           initial={{ x: 0, opacity: 1 }}
-          animate={{ x: !isPowerUpSuccess ? 0 : "100%", opacity: !isPowerUpSuccess ? 1 : 0 }}
-          transition={{ duration: 0.5 }}>
+          animate={{ x: !isPowerUpSuccess ? 0 : "100%", opacity: !isPowerUpSuccess ? 1 : 0 }}>
           <div>Give More BiTz</div>
           <div className="mb-3 mt-1 w-full">
             <input
