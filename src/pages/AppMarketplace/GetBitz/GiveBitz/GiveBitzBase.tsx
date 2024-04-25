@@ -9,14 +9,10 @@ import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
 import PowerUpBounty from "./PowerUpBounty";
-import PowerUpCreator from "./PowerUpCreator";
-import { getCreatorCampaigns, GiveBitzCreatorCampaign, getDataBounties, GiveBitzDataBounty } from "../config";
+import { getDataBounties, GiveBitzDataBounty } from "../config";
 import { LeaderBoardItemType, leaderBoardTable, viewDataJSONCore } from "../index";
-import { Vortex } from "libComponents/animated/Vortex";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
-import { TracingBeam } from "libComponents/animated/TracyBeam";
-import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
 
 type GiveBitzBaseProps = {
   gameDataNFT: DataNft;
@@ -31,7 +27,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const { chainID } = useGetNetworkConfig();
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-  const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
 
@@ -117,6 +112,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
       });
 
       await sleep(2);
+
       setGiverLeaderBoard(_toLeaderBoardTypeArr);
       // E: ACTUAL LOGIC
     } catch (err) {
@@ -184,11 +180,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
   // send bits to creator or bounty
   async function sendPowerUp({ bitsVal, bitsToWho, bitsToCampaignId }: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) {
-    console.log("sendPowerUp");
-
     if (tokenLogin) {
-      setPowerUpSending(true);
-
       try {
         const viewDataArgs = {
           mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
@@ -204,10 +196,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         };
 
         const giveBitzGameResult = await viewDataJSONCore(viewDataArgs, gameDataNFT);
-        console.log("giveBitzGameResult", giveBitzGameResult);
 
         if (giveBitzGameResult) {
-          console.log("giveBitzGameResult", giveBitzGameResult);
           if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
             throw new Error("Error: Not possible to sent power-up. As error code returned. Do you have enough BiTz to give?");
           } else {
@@ -220,8 +210,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         console.error(err);
         toastError((err as Error).message);
       }
-
-      setPowerUpSending(false);
     }
   }
 
@@ -243,7 +231,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       )}
 
-      <div id="giveLeaderboard" className="h-full flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
+      <div id="giveLeaderboard" className="h-[1700px] md:h-[1000px] flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
         {/* <Vortex
           containerClassName="h-full w-full overflow-hidden"
           backgroundColor="transparent"
@@ -255,7 +243,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           rangeSpeed={0.3}
           rangeRadius={10}
           className="flex items-center flex-col justify-center px-2 md:px-10  py-4 w-full h-full"> */}
-        <h3 className="text-center text-white mb-[1rem]">POWER-UP LEADERBOARD</h3>
+        <h3 className="text-center mb-[1rem]">POWER-UP LEADERBOARD</h3>
 
         {giverLeaderBoardIsLoading ? (
           <Loader />
@@ -306,30 +294,13 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       </> */}
 
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full items-center justify-center">
         <div className="flex flex-col mt-10 mb-8 items-center justify-center ">
           <span className="text-foreground text-4xl mb-2">Power-up Data Bounties</span>
           <span className="text-base text-foreground/75 text-center ">
             Power-Up Data Bounties (Ideas for new Data NFTs) with your BiTz XP, Climb Bounty Leaderboards and get bonus rewards if your Bounty is realized.
           </span>
         </div>
-
-        {/* <div
-          data-highlighter
-          className=" relative h-screen bg-slate-800 rounded-3xl p-px -m-px before:absolute before:w-64 before:h-64 before:-left-32 before:-top-32 before:bg-indigo-500 before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-30 before:z-30 before:blur-[64px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.slate.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
-          <div className="relative h-full bg-slate-900 rounded-[inherit] z-20 overflow-hidden">
-            <img src={bounty} />
-            <div className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-1/2 aspect-square" aria-hidden="true">
-              <div className="absolute inset-0 translate-z-0 bg-sky-300 rounded-full blur-[120px]"></div>
-            </div>
-          </div>
-        </div> */}
-        {/* <div className="relative h-full bg-slate-900 rounded-[inherit] z-20 overflow-hidden">
-          <img src={bounty} />
-          <div className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-1/2 aspect-square" aria-hidden="true">
-            <div className="absolute inset-0 translate-z-0 bg-sky-300 rounded-full blur-[120px]"></div>
-          </div>
-        </div> */}
 
         <div
           className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center  w-full antialiased pt-4 relative h-[100%] "
@@ -338,7 +309,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             <PowerUpBounty
               key={item.bountyId}
               {...item}
-              gameDataNFT={gameDataNFT}
               sendPowerUp={sendPowerUp}
               fetchGivenBitsForGetter={fetchGivenBitsForGetter}
               fetchGetterLeaderBoard={fetchGetterLeaderBoard}
@@ -346,21 +316,20 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
               fetchGiverLeaderBoard={fetchGiverLeaderBoard}
             />
           ))}
-
-          <div className="mt-8 group" data-highlighter>
-            <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/50  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
-              <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/30  rounded-[inherit] z-20 overflow-hidden p-8">
-                <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
-                <p>
-                  Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
-                  "community cred" for your idea.
-                </p>
-                <p>
-                  <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
-                    Express your interest for a new Data Bounty
-                  </a>
-                </p>
-              </div>
+        </div>
+        <div className="mt-8 group max-w-[60rem]" data-highlighter>
+          <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/50  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
+            <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/30  rounded-[inherit] z-20 overflow-hidden p-8">
+              <div className="text-lg text-bond">💡 Got an idea for a Data Bounty?</div>
+              <p>
+                Anyone can submit an innovative idea for a Data Bounty, entice exiting and new Data Creators to "fill" your Data Bounty and earn rewards and
+                "community cred" for your idea.
+              </p>
+              <p>
+                <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
+                  Express your interest for a new Data Bounty
+                </a>
+              </p>
             </div>
           </div>
         </div>

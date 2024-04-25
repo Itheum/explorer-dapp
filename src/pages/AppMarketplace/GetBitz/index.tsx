@@ -12,7 +12,6 @@ import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITZ_TOKEN } from "appsConfig";
 import { Loader } from "components";
-import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
@@ -840,9 +839,14 @@ export const GetBitz = () => {
         </div>
       )}
 
-      {gamePlayImageSprites()}
+      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[30rem] lg:min-h-[40rem] xl:min-h-screen ">
+        <div className="absolute -z-1 w-full">
+          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+        </div>
+        {gamePlayImageSprites()}
+      </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-3 xl:mt-[5rem]">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
@@ -1013,30 +1017,33 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
   }
 }
 
-export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string) {
+export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string, showMyPosition: boolean = false) {
+  const myPosition = showMyPosition ? leaderBoardData.findIndex((item) => item.playerAddr === address) : -1;
   return (
-    <>
-      <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
+    <div className="flex flex-col justify-center items-center w-full">
+      {showMyPosition && <span className="text-xs text-center mb-2">Your position * {myPosition >= 0 ? myPosition + 1 : "20+"} *</span>}
+
+      <table className="border border-[#35d9fa]/60 text-center m-auto w-[90%] max-w-[500px]">
         <thead>
-          <tr className="border">
+          <tr className="border border-[#35d9fa]/30 ">
             <th className="p-2">Rank</th>
-            <th className="p-2">User</th>
-            <th className="p-2">{`<BiTz>`} Points</th>
+            <th className=" ">User</th>
+            <th className="p-2 ">{`<BiTz>`} Points</th>
           </tr>
         </thead>
         <tbody>
           {leaderBoardData.map((item, rank) => (
-            <tr key={rank} className="border">
-              <td className="p-2">
+            <tr key={rank} className="border border-[#35d9fa]/30 ">
+              <td className=" p-2">
                 #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
               </td>
-              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 4)}</td>
-              <td className="p-2">{item.bits}</td>
+              <td className=" ">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 4)}</td>
+              <td className="p-2 ">{item.bits}</td>
             </tr>
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
 

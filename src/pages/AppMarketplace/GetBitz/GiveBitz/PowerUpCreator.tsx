@@ -12,7 +12,7 @@ import { Button } from "libComponents/Button";
 import { sleep } from "libs/utils";
 import { LeaderBoardItemType, leaderBoardTable } from "../index";
 import { Vortex } from "libComponents/animated/Vortex";
-import { ExternalLinkIcon } from "lucide-react";
+import { ArrowUpNarrowWide, ExternalLinkIcon } from "lucide-react";
 
 type PowerUpCreatorProps = {
   creatorAddress: string;

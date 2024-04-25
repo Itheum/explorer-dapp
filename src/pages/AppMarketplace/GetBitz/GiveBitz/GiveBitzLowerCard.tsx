@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ExternalLinkIcon, Loader } from "lucide-react";
+import { ArrowBigRightDashIcon, ExternalLinkIcon } from "lucide-react";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
 import "./CustomRangeSlider.css";
-import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useAccountStore } from "store/account";
-import { LeaderBoardItemType } from "..";
+import { confetti } from "@tsparticles/confetti";
+import { motion } from "framer-motion";
+import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
+import { sleep } from "libs/utils";
 
 export interface LeaderBoardGiverItemType {
   giverAddr: string;
@@ -16,22 +18,19 @@ interface GiveBitzLowerCardProps {
   sendPowerUp: (args: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) => Promise<boolean>;
   fetchGivenBitsForGetter: (args: { getterAddr: string; campaignId: string }) => Promise<number>;
   fetchMyGivenBitz: () => void;
-  fetchGetterLeaderBoard: (args: { getterAddr: string; campaignId: string }) => Promise<LeaderBoardItemType[]>;
   fetchGiverLeaderBoard: () => void;
 }
 
 const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
-  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard, fetchMyGivenBitz, fetchGiverLeaderBoard } = props;
+  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchMyGivenBitz, fetchGiverLeaderBoard } = props;
   const [isPowerUpSuccess, setIsPowerUpSuccess] = useState(false);
   const [tweetText, setTweetText] = useState("");
   const [termsOfUseCheckbox, setTermsOfUseCheckbox] = useState(false);
-  const { address } = useGetAccount();
   const [bitzVal, setBitzVal] = useState<number>(0);
   const [bitzGivenToCreator, setBitzGivenToCreator] = useState<number>(-1);
   const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
 
-  //TODO ASK HOW WE COULD IMPROVE THIS TO NOT MAKE THE CALLS
   useEffect(() => {
     async function fetchData() {
       const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({ getterAddr: bountySubmitter, campaignId: bountyId });
@@ -44,36 +43,42 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
     setPowerUpSending(true);
     setIsPowerUpSuccess(false);
     setTweetText("");
-
+    const bitzSent = bitzVal;
     const _isPowerUpSuccess = await sendPowerUp({ bitsVal: bitzVal, bitsToWho: bountySubmitter, bitsToCampaignId: bountyId });
 
     if (_isPowerUpSuccess) {
-      // await sleep(1);
-      // setBitzGivenToCreator(-1);
-      setBitzGivenToCreator((prev) => prev + bitzVal);
+      const _bitzGivenToCreator = bitzGivenToCreator >= 0 ? bitzGivenToCreator + bitzSent : bitzSent;
+      setBitzGivenToCreator(_bitzGivenToCreator);
 
-      /// TODO UNECESSARY CALL , we could compute it manually from the previous value
-
-      // const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({ getterAddr: bountySubmitter, campaignId: bountyId });
-      // console.log("GIVEN BITZ ", _fetchGivenBitsForCreator);
-      // setBitzGivenToCreator(_fetchGivenBitsForCreator);
-
-      //await sleep(1);
-
-      // setGetterLeaderBoardIsLoading(true);
-      // const _toLeaderBoardTypeArr: LeaderBoardItemType[] = await fetchGetterLeaderBoard({ getterAddr: bountySubmitter, campaignId: bountyId });
-
-      //await sleep(1);
       fetchMyGivenBitz();
       fetchGiverLeaderBoard();
 
+      await (async () => {
+        const canvas = document.getElementById("canvas-" + bountyId) as any;
+
+        canvas.confetti = canvas.confetti || (await confetti.create(canvas, {}));
+
+        await canvas.confetti({
+          spread: 90,
+          particleCount: Math.min(bitzSent * 8, 400),
+          scalar: 2,
+          shapes: ["image"],
+          shapeOptions: {
+            image: [
+              {
+                src: bitzLogo,
+                width: 30,
+                height: 30,
+              },
+            ],
+          },
+        });
+      })();
       setIsPowerUpSuccess(true);
 
       setTweetText(
-        `url=https://explorer.itheum.io/getbitz?r=${address}&text=I just gave ${bitzVal} of my precious %23itheum <BiTz> XP to Power-Up a Data Bounty in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
+        `url=https://explorer.itheum.io/getbitz&text=I just gave ${bitzVal} of my precious %23itheum <BiTz> XP to Power-Up a Data Bounty in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
       );
-      // setGetterLeaderBoard(_toLeaderBoardTypeArr);
-      // setGetterLeaderBoardIsLoading(false);
     }
 
     setBitzVal(0); // reset the figure the user sent
@@ -82,16 +87,24 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
   return (
     <div className="h-[18rem]">
-      <div className=" items-center gap-2   my-rank-and-score  flex  justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+      <div className=" items-center gap-2   my-rank-and-score  flex  justify-center   p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
         <p className="flex  md:text-lg md:mr-[1rem]">Given BiTz</p>
         <p className="text-lg md:text-xl dark:text-[#35d9fa] font-bold">
           {bitzGivenToCreator === -1 ? "Loading..." : <>{bitzGivenToCreator === -2 ? "0" : bitzGivenToCreator}</>}
         </p>
       </div>
 
-      {isPowerUpSuccess ? (
-        <div className="flex flex-col items-center justify-between w-full h-[75%]">
+      <div id={"canvas-" + bountyId} className="flex flex-col items-center justify-between w-full h-[75%] relative">
+        <motion.div
+          className="flex flex-col items-center justify-between w-full h-full absolute top-0 left-0"
+          initial={{ x: 0 }}
+          animate={{ x: isPowerUpSuccess ? 0 : "100%", opacity: isPowerUpSuccess ? 1 : 0 }}
+          transition={{ duration: 0.5 }}>
           <p> Share your support for the bounty! Tweet about your contribution and help spread the word.</p>
+
+          <button onClick={() => setIsPowerUpSuccess(false)} className=" justify-end z-10 ml-auto">
+            <ArrowBigRightDashIcon className="text-foreground hover:scale-125 transition-all" />
+          </button>
           <HoverBorderGradient className="-z-1 ">
             <a
               className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
@@ -106,11 +119,14 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
               <p className="z-10">Tweet</p>
             </a>
           </HoverBorderGradient>
-        </div>
-      ) : (
-        <div className="flex flex-col">
+        </motion.div>
+
+        <motion.div
+          className="flex flex-col items-start justify-between w-full h-full absolute top-0 left-0"
+          initial={{ x: 0, opacity: 1 }}
+          animate={{ x: !isPowerUpSuccess ? 0 : "100%", opacity: !isPowerUpSuccess ? 1 : 0 }}>
           <div>Give More BiTz</div>
-          <div className="mb-3 mt-1">
+          <div className="mb-3 mt-1 w-full">
             <input
               type="range"
               id="rangeBitz"
@@ -119,7 +135,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
               step="1"
               value={bitzVal}
               onChange={(e) => setBitzVal(Number(e.target.value))}
-              className="accent-black dark:accent-white w-[90%] cursor-pointer   custom-range-slider  "
+              className="accent-black dark:accent-white w-full cursor-pointer custom-range-slider"
             />
             <div className="flex flex-row items-center md:gap-2">
               <input
@@ -129,7 +145,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
                 checked={termsOfUseCheckbox}
                 onChange={(e) => setTermsOfUseCheckbox(e.target.checked)}
               />
-              <div className="ml-1 mt-5 text-sm md:text-base ">
+              <div className="ml-1 mt-5 text-sm md:text-base">
                 I have read and agree to the <br />
                 <a
                   className="!text-[#35d9fa] hover:underline flex flex-row gap-2"
@@ -143,15 +159,15 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
           <button
             disabled={!(bitzVal > 0) || powerUpSending || !termsOfUseCheckbox}
-            className="hover:none flex items-center justify-center disabled:bg-[#35d9fa]/30 bg-[#35d9fa]   mt-10 w-[12rem] md:w-[15rem] mx-auto rounded-3xl h-10"
+            className="disabled:cursor-not-allowed hover:scale-110 transition-all flex items-center justify-center disabled:bg-[#35d9fa]/30 bg-[#35d9fa]   mt-10 w-[12rem] md:w-[15rem] mx-auto rounded-3xl h-10"
             onClick={() => {
               setIsPowerUpSuccess(false);
               setTweetText("");
               handlePowerUp();
             }}>
             {!powerUpSending ? (
-              <div className=" flex items-center m-[2px] justify-center text-foreground bg-neutral-950/30 dark:bg-neutral-950  w-full h-full rounded-3xl">
-                Send {bitzVal} BiTz Power Up{" "}
+              <div className=" flex items-center m-[2px] p-2 justify-center text-foreground bg-neutral-950/30 dark:bg-neutral-950  w-full h-full rounded-3xl">
+                {bitzBalance === -1 ? "No bitz to send" : `Send ${bitzVal} BiTz Power Up`}
               </div>
             ) : (
               <div className="w-[12rem] md:w-[15rem] h-10 relative inline-flex  overflow-hidden rounded-3xl p-[1px] text-foreground ">
@@ -162,8 +178,8 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
               </div>
             )}
           </button>
-        </div>
-      )}
+        </motion.div>
+      </div>
     </div>
   );
 };
