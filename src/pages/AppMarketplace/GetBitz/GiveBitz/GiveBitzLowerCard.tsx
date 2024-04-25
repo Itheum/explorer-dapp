@@ -7,6 +7,7 @@ import { useAccountStore } from "store/account";
 import { LeaderBoardItemType } from "..";
 import { confetti } from "@tsparticles/confetti";
 import { motion } from "framer-motion";
+import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
 
 export interface LeaderBoardGiverItemType {
   giverAddr: string;
@@ -55,63 +56,30 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
       fetchMyGivenBitz();
       fetchGiverLeaderBoard();
-
       setIsPowerUpSuccess(true);
 
       (async () => {
-        const canvas = document.getElementById("my-canvas1") as HTMLCanvasElement;
-        if (!canvas) return;
-        // you should  only initialize a canvas once, so save this function
-        // we'll save it to the canvas itself for the purpose of this demo
-        const customConfetti = await confetti.create(canvas, {
-          spread: 180,
-          ticks: 200,
-          gravity: 1,
-          decay: 0.94,
-          startVelocity: 30,
-          particleCount: 100,
-          scalar: 3,
+        const canvas = document.getElementById("canvas-" + bountyId) as any;
+
+        canvas.confetti = canvas.confetti || (await confetti.create(canvas, {}));
+
+        await canvas.confetti({
+          spread: 90,
+          particleCount: Math.min(bitzSent * 8, 400),
+          scalar: 2,
           shapes: ["image"],
           shapeOptions: {
             image: [
               {
-                src: "https://particles.js.org/images/fruits/apple.png",
-                width: 32,
-                height: 32,
-              },
-              {
-                src: "../../../../assets/img/getbitz/givebitz/flaskBottle.png",
-                width: 32,
-                height: 32,
+                src: bitzLogo,
+                width: 30,
+                height: 30,
               },
             ],
           },
         });
       })();
-      // confetti({
-      //   spread: 180,
-      //   ticks: 200,
-      //   gravity: 1,
-      //   decay: 0.94,
-      //   startVelocity: 30,
-      //   particleCount: 100,
-      //   scalar: 3,
-      //   shapes: ["image"],
-      //   shapeOptions: {
-      //     image: [
-      //       {
-      //         src: "https://particles.js.org/images/fruits/apple.png",
-      //         width: 32,
-      //         height: 32,
-      //       },
-      //       {
-      //         src: "../../../../assets/img/getbitz/givebitz/flaskBottle.png",
-      //         width: 32,
-      //         height: 32,
-      //       },
-      //     ],
-      //   },
-      // });
+
       ///TODO add refferal when ready r=${address}
 
       setTweetText(
@@ -124,7 +92,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
   }
 
   return (
-    <div id="my-canvas" className="h-[18rem]">
+    <div className="h-[18rem]">
       <div className=" items-center gap-2   my-rank-and-score  flex  justify-center   p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
         <p className="flex  md:text-lg md:mr-[1rem]">Given BiTz</p>
         <p className="text-lg md:text-xl dark:text-[#35d9fa] font-bold">
@@ -132,7 +100,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
         </p>
       </div>
 
-      <div className="flex flex-col items-center justify-between w-full h-[75%] relative">
+      <div id={"canvas-" + bountyId} className="flex flex-col items-center justify-between w-full h-[75%] relative">
         <motion.div
           className="flex flex-col items-center justify-between w-full h-full absolute top-0 left-0"
           initial={{ x: 0 }}
@@ -161,7 +129,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
         <motion.div
           className="flex flex-col items-start justify-between w-full h-full absolute top-0 left-0"
-          initial={{ x: 0 }}
+          initial={{ x: 0, opacity: 1 }}
           animate={{ x: !isPowerUpSuccess ? 0 : "100%", opacity: !isPowerUpSuccess ? 1 : 0 }}
           transition={{ duration: 0.5 }}>
           <div>Give More BiTz</div>
