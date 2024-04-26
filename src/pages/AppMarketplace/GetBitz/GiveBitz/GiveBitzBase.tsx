@@ -327,7 +327,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
               </p>
               <p>
                 <a
-                  className="!text-[#7a98df] hover:underline"
+                  className="!text-[#35d9fa] hover:underline"
                   href="https://docs.google.com/forms/d/e/1FAIpQLSdnuqbpdCZnYJ_twkf4wWoRBpSzzIiJBNgmv30HWUo1uNU_Ew/viewform?usp=sf_link"
                   target="blank">
                   Express your interest for a new Data Bounty

@@ -115,7 +115,7 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
       <div className="mb-5">
         {" "}
         <CopyAddress address={creatorAddress} precision={8} />
-        <a className="!text-[#7a98df] hover:underline" href={`${CREATOR_PROFILE_PAGE}${creatorAddress}`} target="blank">
+        <a className="!text-[#35d9fa]hover:underline" href={`${CREATOR_PROFILE_PAGE}${creatorAddress}`} target="blank">
           : View
         </a>
       </div>

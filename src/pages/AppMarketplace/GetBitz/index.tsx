@@ -865,7 +865,7 @@ export const GetBitz = () => {
           <li className="my-5">
             {" "}
             4. Got Memes for burning? Join our{" "}
-            <a className="!text-[#7a98df] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
+            <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
               Discord Meme Channel
             </a>{" "}
             and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
