@@ -96,8 +96,10 @@ const PowerUpCreator = (props: PowerUpCreatorProps) => {
 
       setIsPowerUpSuccess(true);
       setTweetText(
-        `url=https://explorer.itheum.io/getbitz?r=${address}&text=I just gave ${bitsVal} of my precious %23itheum <BiTz> XP to Power-Up and support a Data Creator in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
+        `url=https://explorer.itheum.io/getbitz?v=2&text=I just gave ${bitsVal} of my precious %23itheum <BiTz> XP to Power-Up and support a Data Creator in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
       );
+
+      //TODO r=${address} add
       setGetterLeaderBoard(_toLeaderBoardTypeArr);
       setGetterLeaderBoardIsLoading(false);
     }

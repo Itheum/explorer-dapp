@@ -6,6 +6,8 @@ import { useGetAccount } from "hooks";
 import { LeaderBoardItemType, leaderBoardTable } from "../index";
 import GiveBitzLowerCard from "./GiveBitzLowerCard";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ExternalLinkIcon } from "lucide-react";
 
 type PowerUpBountyProps = {
   bountySubmitter: string;
@@ -108,7 +110,7 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
 
               {address && (
                 <div
-                  className="rounded-b-3xl w-full bg-[#35d9fa]/30 dark:bg-neutral-950 hover:bg-[#2495AC] dark:hover:bg-[#022629] cursor-pointer text-foreground relative"
+                  className="rounded-b-3xl w-full bg-[#35d9fa]/30 dark:bg-neutral-950 hover:bg-[#2495AC]  hover:dark:bg-[#022629] cursor-pointer text-foreground relative"
                   onClick={handleLeaderboard}>
                   <div className="flex  item-center justify-center border-t-4 border-[#35d9fa]/30">
                     <p className="p-2">{showLeaderboard ? "Close" : `Leaderboard`} </p>
@@ -143,6 +145,13 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                 </div>
               )}
             </>
+            <Link
+              to="/app-marketplace/get-bitz/give-bitz"
+              target="_blank"
+              className="mt-2 text-[#35d9fa] hover:underline text-xs md:text-sm  flex flex-row gap-1 justify-center items-center">
+              Fill this bounty as a Data NFT!
+              <ExternalLinkIcon width={12} />
+            </Link>
           </div>
         </div>
       </div>
