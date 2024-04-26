@@ -79,11 +79,13 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
               }} />   */}
             <>
               <div className="mb-3 text-lg font-bold p-1">{title}</div>
-              <div className="py-2 border-b-4  border-[#35d9fa]/30 text-sm">
+              <div className="py-2 border-b-4  border-[#35d9fa]/30 text-sm h-[11rem]">
                 {summary} <br />
-                <a className="!text-[#35d9fa] hover:underline" href={readMoreLink} target="blank">
-                  Read More
-                </a>
+                {readMoreLink && (
+                  <a className="!text-[#35d9fa] hover:underline" href={readMoreLink} target="blank">
+                    Read More
+                  </a>
+                )}
               </div>
               <div className="my-2">
                 Submitted Id:{" "}
