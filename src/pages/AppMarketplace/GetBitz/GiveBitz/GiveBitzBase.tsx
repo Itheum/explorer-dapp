@@ -326,7 +326,10 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
                 "community cred" for your idea.
               </p>
               <p>
-                <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-data-bounty" target="blank">
+                <a
+                  className="!text-[#7a98df] hover:underline"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdnuqbpdCZnYJ_twkf4wWoRBpSzzIiJBNgmv30HWUo1uNU_Ew/viewform?usp=sf_link"
+                  target="blank">
                   Express your interest for a new Data Bounty
                 </a>
               </p>

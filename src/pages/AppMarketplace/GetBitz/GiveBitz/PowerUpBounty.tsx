@@ -146,7 +146,7 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
               )}
             </>
             <Link
-              to="/app-marketplace/get-bitz/give-bitz"
+              to="https://docs.google.com/forms/d/e/1FAIpQLSctQIpxSw-TnJzP52nUddJEun28DUcObqbUGH8ulHEd0MNmaQ/viewform?usp=sf_link"
               target="_blank"
               className="mt-2 text-[#35d9fa] hover:underline text-xs md:text-sm  flex flex-row gap-1 justify-center items-center">
               Fill this bounty as a Data NFT!
