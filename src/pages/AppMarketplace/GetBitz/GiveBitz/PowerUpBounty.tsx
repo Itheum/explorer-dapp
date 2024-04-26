@@ -59,7 +59,7 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
   }
 
   function handleLeaderboard() {
-    loadBaseData();
+    if (showLeaderboard === false) loadBaseData();
     setShowLeaderboard((prev) => !prev);
   }
 
@@ -115,33 +115,31 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                   <div className="flex  item-center justify-center border-t-4 border-[#35d9fa]/30">
                     <p className="p-2">{showLeaderboard ? "Close" : `Leaderboard`} </p>
                   </div>
-                  {showLeaderboard && (
-                    <motion.div
-                      initial={{ y: 0 }}
-                      animate={{ opacity: 1, y: -756 }}
-                      transition={{ duration: 1, type: "spring" }}
-                      className="z-20 h-[753px] w-full -mt-10 md:-mt-0 md:h-[713px] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-3xl z-100">
-                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col max-w-[100%] p-[.5rem] mb-[3rem] rounded-[1rem]">
-                        <h4 className="text-center text-white mb-[1rem] !text-[1rem]">
-                          Giver Leaderboard <br />
-                          Bounty {bountyId}
-                        </h4>
-                        {getterLeaderBoardIsLoading ? (
-                          <div className="flex items-center justify-center  ">
-                            <Loader />
-                          </div>
-                        ) : (
-                          <div className="flex">
-                            {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
-                              leaderBoardTable(getterLeaderBoard, address, true)
-                            ) : (
-                              <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
-                            )}
-                          </div>
-                        )}
-                      </motion.div>
+                  <motion.div
+                    initial={{ y: 0 }}
+                    animate={{ opacity: showLeaderboard ? 1 : 0, y: showLeaderboard ? -756 : 0 }}
+                    transition={{ duration: 1, type: "spring" }}
+                    className="  z-20 h-[753px] w-full -mt-10 md:-mt-0 md:h-[713px] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-3xl z-100">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col max-w-[100%] p-[.5rem] mb-[3rem] rounded-[1rem]">
+                      <h4 className="text-center text-white mb-[1rem] !text-[1rem]">
+                        Giver Leaderboard <br />
+                        Bounty {bountyId}
+                      </h4>
+                      {getterLeaderBoardIsLoading ? (
+                        <div className="flex items-center justify-center  ">
+                          <Loader className="w-32" />
+                        </div>
+                      ) : (
+                        <div className="flex">
+                          {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
+                            leaderBoardTable(getterLeaderBoard, address, true)
+                          ) : (
+                            <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                          )}
+                        </div>
+                      )}
                     </motion.div>
-                  )}
+                  </motion.div>
                 </div>
               )}
             </>
