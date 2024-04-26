@@ -136,8 +136,8 @@ export const GetBitz = () => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const tweetText = `url=https://explorer.itheum.io/getbitz?r=${address}&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"} `;
-
+  const tweetText = `url=https://explorer.itheum.io/getbitz?v=2&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
+  ///TODO add ?r=${address}
   const [usingReferralCode, setUsingReferralCode] = useState<string>("");
   const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
 
@@ -839,14 +839,14 @@ export const GetBitz = () => {
         </div>
       )}
 
-      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[30rem] lg:min-h-[40rem] xl:min-h-screen ">
+      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[25rem] lg:min-h-[35rem] xl:min-h-[45rem] 2xl:min-h-[100vsh]">
         <div className="absolute -z-1 w-full">
           <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
         </div>
         {gamePlayImageSprites()}
       </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-3 xl:mt-[5rem]">
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-3 ">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
