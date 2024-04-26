@@ -23,6 +23,11 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
       return;
     }
+    // add all the balances into the loading phase
+    updateBitzBalance(-2);
+    updateGivenBitzSum(-2);
+    updateCooldown(-2);
+    updateCollectedBitzSum(-2);
 
     (async () => {
       // get the bitz game data nft details
