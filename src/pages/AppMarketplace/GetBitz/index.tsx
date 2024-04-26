@@ -445,7 +445,11 @@ export const GetBitz = () => {
 
     // user is logged in and we are checking if they have the data nft to proceed with a play
     if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
-      return <div> </div>;
+      return (
+        <div className="relative">
+          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+        </div>
+      );
     }
 
     // user is logged in does not have the data nft, so take them to the marketplace
@@ -839,14 +843,14 @@ export const GetBitz = () => {
         </div>
       )}
 
-      <div className="relative w-full min-h-[11rem] sm:min-h-[22rem] md:min-h-[25rem] lg:min-h-[35rem] xl:min-h-[45rem] 2xl:min-h-[100vsh]">
+      <div className="relative w-full">
         <div className="absolute -z-1 w-full">
           <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
         </div>
         {gamePlayImageSprites()}
       </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-3 ">
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
