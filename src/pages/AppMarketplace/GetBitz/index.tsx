@@ -7,7 +7,7 @@ import { Container } from "@tsparticles/engine";
 import { fireworks } from "@tsparticles/fireworks";
 import axios, { AxiosError } from "axios";
 import { motion } from "framer-motion";
-import { MousePointerClick } from "lucide-react";
+import { ArrowBigDownDash, MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITZ_TOKEN } from "appsConfig";
@@ -15,7 +15,7 @@ import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress, scrollToSection } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { routeNames } from "routes";
 import { BurningImage } from "./BurningImage";
@@ -116,6 +116,7 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [showMessage, setShowMessage] = useState<boolean>(true);
 
   // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
@@ -154,6 +155,14 @@ export const GetBitz = () => {
   // Debug / Tests
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
   const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowMessage(false);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -844,6 +853,18 @@ export const GetBitz = () => {
       )}
 
       <div className="relative w-full">
+        <div
+          onClick={() => scrollToSection("bounties")}
+          className="text-black md:font-bold text-xs md:text-base z-[6] select-none cursor-pointer absolute mt-3 right-3 md:mt-4 md:right-6 flex flex-row items-center justify-center p-1 md:p-2 border border-white rounded-3xl hover:scale-110 bg-white hover:bg-[#35d9fa]/10  transition-all duration-500">
+          <motion.div
+            layout="position"
+            transition={{ layout: { duration: 0.5, type: "spring" } }}
+            animate={{}}
+            className="flex flex-row justify-center items-center  ">
+            {showMessage && "Data Bounties"}
+            {!showMessage && <ArrowBigDownDash className="w-4 h-4 md:h-8 md:w-8 " />}
+          </motion.div>
+        </div>
         <div className="absolute -z-1 w-full">
           <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
         </div>

@@ -294,7 +294,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       </> */}
 
-      <div className="flex flex-col w-full items-center justify-center">
+      <div id="bounties" className="flex flex-col w-full items-center justify-center">
         <div className="flex flex-col mt-10 mb-8 items-center justify-center ">
           <span className="text-foreground text-4xl mb-2">Power-up Data Bounties</span>
           <span className="text-base text-foreground/75 text-center ">
