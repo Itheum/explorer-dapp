@@ -6,7 +6,6 @@ import { useAccountStore } from "store/account";
 import { confetti } from "@tsparticles/confetti";
 import { motion } from "framer-motion";
 import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
-import { sleep } from "libs/utils";
 
 export interface LeaderBoardGiverItemType {
   giverAddr: string;
