@@ -96,7 +96,9 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
               </div>
               <div className="mb-3 py-1">Bounty Id: {bountyId}</div>
               <div className="mb-3 py-1 border-b-4 border-[#35d9fa]/30">Submitted On: {moment(submittedOnTs * 1000).format("YYYY-MM-DD")}</div>
-              <div className="mb-3 py-2 border-b-4 border-[#35d9fa]/30 text-sm">Bounty Fulfillment Perks: {fillPerks}</div>
+              <div className="mb-3 py-2 border-b-4 border-[#35d9fa]/30 text-sm">
+                Data Bounty Fulfillment Perks: <br /> {fillPerks}
+              </div>
               {address && (
                 <GiveBitzLowerCard
                   bountySubmitter={bountySubmitter}
@@ -119,7 +121,7 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                     initial={{ y: 0 }}
                     animate={{ opacity: showLeaderboard ? 1 : 0, y: showLeaderboard ? -756 : 0 }}
                     transition={{ duration: 1, type: "spring" }}
-                    className="  z-20 h-[753px] w-full -mt-10 md:-mt-0 md:h-[713px] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-3xl z-100">
+                    className="z-20 h-[753px] w-full -mt-10 md:-mt-0 md:h-[713px] overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-3xl z-100">
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col max-w-[100%] p-[.5rem] mb-[3rem] rounded-[1rem]">
                       <h4 className="text-center text-white mb-[1rem] !text-[1rem]">
                         Giver Leaderboard <br />
@@ -146,7 +148,7 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
             <Link
               to="https://docs.google.com/forms/d/e/1FAIpQLSctQIpxSw-TnJzP52nUddJEun28DUcObqbUGH8ulHEd0MNmaQ/viewform?usp=sf_link"
               target="_blank"
-              className="mt-2 text-[#35d9fa] hover:underline text-xs md:text-sm  flex flex-row gap-1 justify-center items-center">
+              className="relative z-[100] mt-2 text-[#35d9fa] hover:underline text-xs md:text-sm  flex flex-row gap-1 justify-center items-center">
               Fill this bounty as a Data NFT!
               <ExternalLinkIcon width={12} />
             </Link>
