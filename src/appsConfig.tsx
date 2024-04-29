@@ -10,6 +10,7 @@ export type app_token = {
 export const TRAILBLAZER_TOKENS: app_token[] = IS_DEVNET
   ? [
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 1 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 266 },
       // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 423 },
       // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 453 },
     ]
@@ -57,7 +58,10 @@ export const ESDT_BUBBLE_TOKENS: app_token[] = [
   // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 417 }
 ];
 export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
-  ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 57 }]
+  ? [
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 57 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 266 },
+    ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
 
 export const BOBER_GAME_ROOM_TOKENS: app_token[] = IS_DEVNET

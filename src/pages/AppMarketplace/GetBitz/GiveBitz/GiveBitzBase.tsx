@@ -303,7 +303,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
 
         <div
-          className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center  w-full antialiased pt-4 relative h-[100%] "
+          className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center md:justify-start w-full antialiased pt-4 relative h-[100%] "
           style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
           {getDataBounties().map((item: GiveBitzDataBounty) => (
             <PowerUpBounty
