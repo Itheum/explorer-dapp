@@ -5,7 +5,7 @@ import { CopyPlusIcon } from "lucide-react";
 export function CopyAddress({ address, precision = 6 }: { address: string; precision?: number }) {
   return (
     <a
-      className="line-clamp-2 text-sm leading-snug !text-sky-300 flex gap-2"
+      className="line-clamp-2 text-sm leading-snug !text-[#35d9fa] flex gap-2"
       style={{
         cursor: "pointer",
       }}
@@ -14,7 +14,7 @@ export function CopyAddress({ address, precision = 6 }: { address: string; preci
         toastSuccess("Address is copied to clipboard");
       }}>
       {precision > 0 ? address.slice(0, precision) + " ... " + address.slice(-precision) : address}
-      <CopyPlusIcon className="text-sky-300 w-4 h-4" />
+      <CopyPlusIcon className="text-[#35d9fa] w-4 h-4" />
     </a>
   );
 }
