@@ -166,7 +166,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           playerAddr: i.giverAddr,
           bits: i.bits,
         };
-
         return item;
       });
 

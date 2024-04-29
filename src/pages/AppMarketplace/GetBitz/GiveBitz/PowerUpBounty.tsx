@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import moment from "moment-timezone";
-import { Loader, MXAddressLink } from "components";
+import { MXAddressLink } from "components";
 import { useGetAccount } from "hooks";
-import { LeaderBoardItemType, leaderBoardTable } from "../index";
 import GiveBitzLowerCard from "./GiveBitzLowerCard";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ExternalLinkIcon } from "lucide-react";
 
@@ -40,28 +38,11 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
     fetchGiverLeaderBoard,
   } = props;
 
-  const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
-  const { chainID } = useGetNetworkConfig();
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
 
   const { address } = useGetAccount();
-
-  const [getterLeaderBoardIsLoading, setGetterLeaderBoardIsLoading] = useState<boolean>(false);
-  const [getterLeaderBoard, setGetterLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-
-  async function loadBaseData() {
-    setGetterLeaderBoardIsLoading(true);
-    const _toLeaderBoardTypeArr: LeaderBoardItemType[] = await fetchGetterLeaderBoard({ getterAddr: bountySubmitter, campaignId: bountyId });
-    setGetterLeaderBoard(_toLeaderBoardTypeArr);
-    setGetterLeaderBoardIsLoading(false);
-  }
-
-  function handleLeaderboard() {
-    if (showLeaderboard === false) loadBaseData();
-    setShowLeaderboard((prev) => !prev);
-  }
 
   return (
     <div className="power-up-tile border  min-w-[260px] max-w-[360px] relative rounded-3xl">
@@ -117,44 +98,10 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                   fetchGivenBitsForGetter={fetchGivenBitsForGetter}
                   fetchMyGivenBitz={fetchMyGivenBitz}
                   fetchGiverLeaderBoard={fetchGiverLeaderBoard}
+                  fetchGetterLeaderBoard={fetchGetterLeaderBoard}
                 />
               )}
 
-              {address && (
-                <div className="relative">
-                  <div
-                    onClick={handleLeaderboard}
-                    className="relative flex z-[100] cursor-pointer text-foreground  rounded-b-3xl w-full bg-[#35d9fa]/30 dark:bg-neutral-950 hover:bg-[#2495AC]  hover:dark:bg-[#022629]  item-center justify-center border-t-4 border-[#35d9fa]/30">
-                    <p className="p-2">{showLeaderboard ? "Close" : `Leaderboard`} </p>
-                  </div>
-
-                  <motion.div
-                    initial={{ y: 0 }}
-                    animate={{ opacity: showLeaderboard ? 1 : 0, y: showLeaderboard ? -800 : 0 }}
-                    transition={{ duration: 1, type: "spring" }}
-                    className="z-20 h-[797px]  w-full -mt-10   overflow-y-auto border border-[#35d9fa]/30 shadow-inner shadow-[#35d9fa]/30 bg-[#2495AC] dark:bg-[#022629] absolute p-4 rounded-t-xl z-100">
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col max-w-[100%] p-[.5rem] mb-[3rem] rounded-[1rem]">
-                      <h4 className="text-center text-white mb-[1rem] !text-[1rem]">
-                        Giver Leaderboard <br />
-                        Bounty {bountyId}
-                      </h4>
-                      {getterLeaderBoardIsLoading ? (
-                        <div className="flex items-center justify-center  ">
-                          <Loader className="w-32" />
-                        </div>
-                      ) : (
-                        <div className="flex">
-                          {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
-                            leaderBoardTable(getterLeaderBoard, address, true)
-                          ) : (
-                            <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
-                          )}
-                        </div>
-                      )}
-                    </motion.div>
-                  </motion.div>
-                </div>
-              )}
               <Link
                 to="https://docs.google.com/forms/d/e/1FAIpQLSctQIpxSw-TnJzP52nUddJEun28DUcObqbUGH8ulHEd0MNmaQ/viewform?usp=sf_link"
                 target="_blank"
