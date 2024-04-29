@@ -6,7 +6,6 @@ import { useAccountStore } from "store/account";
 import { confetti } from "@tsparticles/confetti";
 import { motion } from "framer-motion";
 import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
-import { sleep } from "libs/utils";
 
 export interface LeaderBoardGiverItemType {
   giverAddr: string;
@@ -48,7 +47,6 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
     if (_isPowerUpSuccess) {
       const _bitzGivenToCreator = bitzGivenToCreator >= 0 ? bitzGivenToCreator + bitzSent : bitzSent;
-      setBitzGivenToCreator(_bitzGivenToCreator);
 
       fetchMyGivenBitz();
       fetchGiverLeaderBoard();
@@ -75,6 +73,8 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
       setTweetText(
         `url=https://explorer.itheum.io/getbitz?v=2&text=I just gave ${bitzVal} of my precious %23itheum <BiTz> XP to Power-Up a Data Bounty in return for some exclusive rewards and perks.%0A%0AWhat are you waiting for? %23GetBiTz and %23GiveBiTz here`
       );
+      setBitzVal(0);
+      setBitzGivenToCreator(_bitzGivenToCreator);
       setIsPowerUpSuccess(true);
     }
 
