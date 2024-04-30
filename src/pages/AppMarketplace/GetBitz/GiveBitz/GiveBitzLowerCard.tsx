@@ -123,7 +123,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
 
           <motion.div
             className="flex flex-col items-start justify-between w-full h-full absolute top-0 left-0"
-            initial={{ x: 0, opacity: 1 }}
+            initial={{ x: 0 }}
             animate={{ x: !isPowerUpSuccess ? 0 : "100%", opacity: !isPowerUpSuccess ? 1 : 0 }}
             transition={{ duration: 0.6 }}>
             <div>Give More BiTz</div>

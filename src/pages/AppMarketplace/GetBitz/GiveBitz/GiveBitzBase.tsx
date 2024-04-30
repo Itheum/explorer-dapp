@@ -10,9 +10,10 @@ import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, toastError }
 import { useAccountStore } from "store/account";
 import PowerUpBounty from "./PowerUpBounty";
 import { getDataBounties, GiveBitzDataBounty } from "../config";
-import { LeaderBoardItemType, leaderBoardTable, viewDataJSONCore } from "../index";
+import { LeaderBoardItemType, viewDataJSONCore } from "../index";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
+import LeaderBoardTable from "../LeaderBoardTable";
 
 type GiveBitzBaseProps = {
   gameDataNFT: DataNft;
@@ -249,7 +250,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         ) : (
           <>
             {giverLeaderBoard && giverLeaderBoard.length > 0 ? (
-              leaderBoardTable(giverLeaderBoard, address)
+              <LeaderBoardTable leaderBoardData={giverLeaderBoard} address={address} />
             ) : (
               <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
             )}

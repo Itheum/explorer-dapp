@@ -66,6 +66,7 @@ import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+import LeaderBoardTable from "./LeaderBoardTable";
 
 export interface LeaderBoardItemType {
   playerAddr: string;
@@ -122,7 +123,7 @@ export const GetBitz = () => {
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
-  const bonusTries = useAccountStore((state: any) => state.bonusTries);
+  // const bonusTries = useAccountStore((state: any) => state.bonusTries);
   const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
@@ -140,7 +141,7 @@ export const GetBitz = () => {
   const tweetText = `url=https://explorer.itheum.io/getbitz?v=2&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
   ///TODO add ?r=${address}
   const [usingReferralCode, setUsingReferralCode] = useState<string>("");
-  const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
+  // const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -972,7 +973,7 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardAllTime.length > 0 ? (
-                    leaderBoardTable(leaderBoardAllTime, address)
+                    <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -989,7 +990,7 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardMonthly.length > 0 ? (
-                    leaderBoardTable(leaderBoardMonthly, address)
+                    <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -1042,35 +1043,47 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
   }
 }
 
-export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string, showMyPosition: boolean = false) {
-  const myPosition = showMyPosition ? leaderBoardData.findIndex((item) => item.playerAddr === address) : -1;
-  return (
-    <div className="flex flex-col justify-center items-center w-full">
-      {showMyPosition && <span className="text-xs text-center mb-2">Your position * {myPosition >= 0 ? myPosition + 1 : "20+"} *</span>}
+// export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string, showMyPosition: boolean = false) {
 
-      <table className="border border-[#35d9fa]/60 text-center m-auto w-[90%] max-w-[500px]">
-        <thead>
-          <tr className="border border-[#35d9fa]/30 ">
-            <th className="p-2">Rank</th>
-            <th className=" ">User</th>
-            <th className="p-2 ">{`<BiTz>`} Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaderBoardData.map((item, rank) => (
-            <tr key={rank} className="border border-[#35d9fa]/30 ">
-              <td className=" p-2">
-                #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-              </td>
-              <td className=" ">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 4)}</td>
-              <td className="p-2 ">{item.bits}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+//   const myPosition = showMyPosition ? leaderBoardData.findIndex((item) => item.playerAddr === address) : -1;
+//   return (
+//     <div className="flex flex-col justify-center items-center w-full">
+//       {showMyPosition && <span className="text-xs text-center mb-2">Your position * {myPosition >= 0 ? myPosition + 1 : "20+"} *</span>}
+
+//       <table className="border border-[#35d9fa]/60 text-center m-auto w-[90%] max-w-[500px]">
+//         <thead>
+//           <tr className="border border-[#35d9fa]/30 ">
+//             <th className="p-2">Rank</th>
+//             <th className=" ">User</th>
+//             <th className="p-2 ">{`<BiTz>`} Points</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {leaderBoardData.map((item, rank) => (
+//             <tr key={rank} className="border border-[#35d9fa]/30 ">
+//               <td className=" p-2">
+//                 #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+//               </td>
+//               <td className=" ">
+//                 {item.playerAddr === address ? (
+//                   "It's YOU! 🫵 🎊"
+//                 ) : (
+//                   <MXAddressLink
+//                     textStyle="!text-[#35d9fa]  hover:!text-[#35d9fa] hover:underline"
+//                     explorerAddress={explorerAddress}
+//                     address={item.playerAddr}
+//                     precision={8}
+//                   />
+//                 )}
+//               </td>
+//               <td className="p-2 ">{item.bits}</td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+// }
 
 /*
 // FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!

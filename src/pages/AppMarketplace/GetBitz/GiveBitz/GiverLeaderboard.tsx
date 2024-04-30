@@ -1,8 +1,9 @@
-import { motion } from "framer-motion";
 import React, { useState } from "react";
-import { LeaderBoardItemType, leaderBoardTable } from "..";
+import { useGetAccount, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { Loader } from "@multiversx/sdk-dapp/UI/Loader/Loader";
-import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
+import { motion } from "framer-motion";
+import { LeaderBoardItemType } from "..";
+import LeaderBoardTable from "../LeaderBoardTable";
 
 interface GiverLeaderboardProps {
   bountySubmitter: string;
@@ -56,7 +57,7 @@ const GiverLeaderboard: React.FC<GiverLeaderboardProps> = (props) => {
           ) : (
             <div className="flex">
               {getterLeaderBoard && getterLeaderBoard.length > 0 ? (
-                leaderBoardTable(getterLeaderBoard, address, showUserPosition)
+                <LeaderBoardTable leaderBoardData={getterLeaderBoard} address={address} showMyPosition={showUserPosition} />
               ) : (
                 <div className="text-center">{"No Data Yet"!}</div>
               )}
