@@ -1,7 +1,7 @@
 import React from "react";
 import QuestionCard from "./QuestionCard";
 
-export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
+export const BIT_GAME_WINDOW_HOURS = "6"; // how often we can play the game, need to match logic inside Data NFT
 export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
 
 const Faq: React.FC = () => {
