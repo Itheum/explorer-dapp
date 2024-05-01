@@ -91,7 +91,6 @@ const Faq: React.FC = () => {
       title: "What can I do with Itheum <BiTz> Points?",
       content: (
         <>
-          {" "}
           <p>
             Itheum {`<BiTz>`} is like an XP system and you collect {`<BiTz>`} each time you interact with certain features of Itheum Protocol. Like all XP
             Systems, there will be LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be
@@ -120,6 +119,9 @@ const Faq: React.FC = () => {
               from previous and upcoming Data Creators sent randomly to users from top 100 "All Time" LEADERBOARD
             </li>
             <li className="my-5">4. Bragging rights as you climb to the top of the LEADERBOARD!</li>
+            <li>
+              5. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
+            </li>
           </ol>
           <p className="mt-5">
             This is just the start, we have a bunch of other ideas planned for {`<BiTz>`}. Got ideas for {`<BiTz>`} utility? We love to hear them:{" "}
