@@ -2,7 +2,7 @@ import React from "react";
 import QuestionCard from "./QuestionCard";
 
 export const BIT_GAME_WINDOW_HOURS = "6"; // how often we can play the game, need to match logic inside Data NFT
-export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
+export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "5"; // top X leaderboard winners for the monthly price
 
 const Faq: React.FC = () => {
   const faqs = [
@@ -99,7 +99,7 @@ const Faq: React.FC = () => {
           </p>
           <ol className="mt-5 text-lg">
             <li className="my-5">
-              1. Top 5 Movers (top {BIT_GAME_TOP_LEADER_BOARD_GROUP} during LAUNCH WINDOW) from "Monthly" LEADERBOARD get Airdropped{" "}
+              1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from "Monthly" LEADERBOARD get Airdropped{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
                 Data NFTs
               </a>{" "}
