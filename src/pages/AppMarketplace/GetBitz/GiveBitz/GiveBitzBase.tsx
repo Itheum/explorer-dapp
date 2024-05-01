@@ -149,7 +149,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
         callConfig
       );
-      console.log(data, "DATA");
 
       return data;
       // setGiverLeaderBoard(_toLeaderBoardTypeArr);
@@ -267,17 +266,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
       )}
 
       <div id="giveLeaderboard" className="h-[1700px] md:h-[1000px] flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
-        {/* <Vortex
-          containerClassName="h-full w-full overflow-hidden"
-          backgroundColor="transparent"
-          rangeY={300} /// TOOD SET THE HEIGHT OF THE DIV
-          particleCount={100}
-          baseRadius={4}
-          baseHue={120}
-          baseSpeed={0.3}
-          rangeSpeed={0.3}
-          rangeRadius={10}
-          className="flex items-center flex-col justify-center px-2 md:px-10  py-4 w-full h-full"> */}
         <h3 className="text-center mb-[1rem]">POWER-UP LEADERBOARD</h3>
 
         {giverLeaderBoardIsLoading ? (
@@ -291,7 +279,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             )}
           </>
         )}
-        {/* </Vortex> */}
       </div>
 
       {/* <>

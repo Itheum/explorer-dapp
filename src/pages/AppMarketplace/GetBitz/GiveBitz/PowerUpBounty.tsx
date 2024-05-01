@@ -54,8 +54,8 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
       <div className="group" data-highlighter>
         <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/30  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
           <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/60  rounded-[inherit] z-20 overflow-hidden p-4 md:p-8">
-            <div className="flex justify-between items-center">
-              <div className="bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30  "> Received Bitz: {receivedBitzSum}</div>
+            <div className="flex justify-between items-center text-sm md:text-base">
+              <div className=" bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30  "> Received Bitz: {receivedBitzSum}</div>
               <div className="bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30  ">Givers: {giverCounts}</div>
             </div>
             <>
