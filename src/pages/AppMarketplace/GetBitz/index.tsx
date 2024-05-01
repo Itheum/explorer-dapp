@@ -73,7 +73,7 @@ export interface LeaderBoardItemType {
 }
 
 export const BIT_GAME_WINDOW_HOURS = "6"; // how often we can play the game, need to match logic inside Data NFT
-export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
+export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "5"; // top X leaderboard winners for the monthly price
 
 const MEME_IMGS = [
   Meme1,
@@ -876,7 +876,7 @@ export const GetBitz = () => {
 
         <ol className="mt-5">
           <li className="my-5">
-            1. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators
+            1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from "Monthly" LEADERBOARD get Airdropped Data NFTs from previous and upcoming Data Creators.
           </li>
           <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
           <li className="my-5">
