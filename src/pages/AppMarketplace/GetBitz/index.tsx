@@ -72,7 +72,7 @@ export interface LeaderBoardItemType {
   bits: number;
 }
 
-export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
+export const BIT_GAME_WINDOW_HOURS = "6"; // how often we can play the game, need to match logic inside Data NFT
 export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
 
 const MEME_IMGS = [
@@ -872,24 +872,22 @@ export const GetBitz = () => {
       </div>
 
       <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
-        <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
-        To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
-        May 1, 2024), check out these special LAUNCH WINDOW perks:
+        <h2 className="text-center text-white mb-[1rem]">Get BiTz Perks</h2>
+
         <ol className="mt-5">
           <li className="my-5">
-            1. A special shorter Game Cooldown is in place. So instead of a usual 6 Hours Game Cooldown. You can play every {BIT_GAME_WINDOW_HOURS} hours!
+            1. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators
           </li>
+          <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
           <li className="my-5">
-            2. The top {BIT_GAME_TOP_LEADER_BOARD_GROUP} LEADERBOARD movers in this month will get Airdropped Data NFTs from previous Data NFT Creators
-          </li>
-          <li className="my-5">3. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
-          <li className="my-5">
-            {" "}
-            4. Got Memes for burning? Join our{" "}
+            3. Got Memes for burning? Join our{" "}
             <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
               Discord Meme Channel
             </a>{" "}
             and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
+          </li>
+          <li className="my-5">
+            4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
           </li>
         </ol>
         <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
