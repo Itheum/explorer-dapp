@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGetAccount, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { Loader } from "@multiversx/sdk-dapp/UI/Loader/Loader";
 import { motion } from "framer-motion";
 import { LeaderBoardItemType } from "..";

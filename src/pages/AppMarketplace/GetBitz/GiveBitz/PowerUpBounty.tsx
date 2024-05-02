@@ -20,9 +20,6 @@ type PowerUpBountyProps = {
   sendPowerUp: any;
   fetchGivenBitsForGetter: any;
   fetchGetterLeaderBoard: any;
-  fetchMyGivenBitz: any;
-  fetchGiverLeaderBoard: any;
-  fetchBitSumAndGiverCounts: any;
 };
 
 const PowerUpBounty = (props: PowerUpBountyProps) => {
@@ -39,14 +36,10 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
     sendPowerUp,
     fetchGivenBitsForGetter,
     fetchGetterLeaderBoard,
-    fetchMyGivenBitz,
-    fetchGiverLeaderBoard,
   } = props;
-
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
-
   const { address } = useGetAccount();
 
   return (
@@ -95,8 +88,6 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                   bountyId={bountyId}
                   sendPowerUp={sendPowerUp}
                   fetchGivenBitsForGetter={fetchGivenBitsForGetter}
-                  fetchMyGivenBitz={fetchMyGivenBitz}
-                  fetchGiverLeaderBoard={fetchGiverLeaderBoard}
                   fetchGetterLeaderBoard={fetchGetterLeaderBoard}
                 />
               )}

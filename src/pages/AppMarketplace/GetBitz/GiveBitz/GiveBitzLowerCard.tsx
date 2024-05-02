@@ -15,15 +15,13 @@ export interface LeaderBoardGiverItemType {
 interface GiveBitzLowerCardProps {
   bountySubmitter: string;
   bountyId: string;
-  sendPowerUp: (args: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) => Promise<boolean>;
+  sendPowerUp: (args: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string; isNewGiver: number }) => Promise<boolean>;
   fetchGivenBitsForGetter: (args: { getterAddr: string; campaignId: string }) => Promise<number>;
-  fetchMyGivenBitz: () => void;
-  fetchGiverLeaderBoard: () => void;
   fetchGetterLeaderBoard: () => void;
 }
 
 const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
-  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchMyGivenBitz, fetchGiverLeaderBoard, fetchGetterLeaderBoard } = props;
+  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard } = props;
   const [isPowerUpSuccess, setIsPowerUpSuccess] = useState(false);
   const [tweetText, setTweetText] = useState("");
   const [termsOfUseCheckbox, setTermsOfUseCheckbox] = useState(false);
@@ -45,13 +43,15 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
     setIsPowerUpSuccess(false);
     setTweetText("");
     const bitzSent = bitzVal;
-    const _isPowerUpSuccess = await sendPowerUp({ bitsVal: bitzVal, bitsToWho: bountySubmitter, bitsToCampaignId: bountyId });
+    const _isPowerUpSuccess = await sendPowerUp({
+      bitsVal: bitzVal,
+      bitsToWho: bountySubmitter,
+      bitsToCampaignId: bountyId,
+      isNewGiver: bitzGivenToCreator <= 0 ? 1 : 0,
+    });
 
     if (_isPowerUpSuccess) {
       const _bitzGivenToCreator = bitzGivenToCreator >= 0 ? bitzGivenToCreator + bitzSent : bitzSent;
-
-      fetchMyGivenBitz();
-      fetchGiverLeaderBoard();
 
       await (async () => {
         const canvas = document.getElementById("canvas-" + bountyId) as any;

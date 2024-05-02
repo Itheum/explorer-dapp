@@ -31,6 +31,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
+
   useEffect(() => {
     const highlighters = document.querySelectorAll("[data-highlighter]");
     highlighters.forEach((highlighter) => {
@@ -212,8 +213,34 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
     }
   }
 
+  // find the data bounty with the given id and update its total received amount
+  const updateDataBountyTotalReceivedAmount = (id: string, bitsVal: number, isNewGiver: number) => {
+    setDataBounties((prevDataBounties) => {
+      return prevDataBounties.map((dataBounty) => {
+        if (dataBounty.bountyId === id) {
+          return {
+            ...dataBounty,
+            receivedBitzSum: (dataBounty.receivedBitzSum ?? 0) + bitsVal,
+            giverCounts: (dataBounty.giverCounts ?? 0) + isNewGiver,
+          };
+        }
+        return dataBounty;
+      });
+    });
+  };
+
   // send bits to creator or bounty
-  async function sendPowerUp({ bitsVal, bitsToWho, bitsToCampaignId }: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) {
+  async function sendPowerUp({
+    bitsVal,
+    bitsToWho,
+    bitsToCampaignId,
+    isNewGiver,
+  }: {
+    bitsVal: number;
+    bitsToWho: string;
+    bitsToCampaignId: string;
+    isNewGiver: number;
+  }) {
     if (tokenLogin) {
       try {
         const viewDataArgs = {
@@ -235,6 +262,9 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
             throw new Error("Error: Not possible to sent power-up. As error code returned. Do you have enough BiTz to give?");
           } else {
+            fetchMyGivenBitz();
+            fetchGiverLeaderBoard();
+            updateDataBountyTotalReceivedAmount(bitsToCampaignId, bitsVal, isNewGiver);
             return true;
           }
         } else {
@@ -336,9 +366,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
                   sendPowerUp={sendPowerUp}
                   fetchGivenBitsForGetter={fetchGivenBitsForGetter}
                   fetchGetterLeaderBoard={fetchGetterLeaderBoard}
-                  fetchMyGivenBitz={fetchMyGivenBitz}
-                  fetchGiverLeaderBoard={fetchGiverLeaderBoard}
-                  fetchBitSumAndGiverCounts={fetchBitSumAndGiverCounts}
                 />
               );
             })}
