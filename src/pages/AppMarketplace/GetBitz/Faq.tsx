@@ -233,6 +233,7 @@ const Faq: React.FC = () => {
       ),
     },
   ];
+
   return (
     <div id="faq" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
       <div className="flex flex-col mb-8 items-center justify-center">
