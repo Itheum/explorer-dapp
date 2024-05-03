@@ -7,8 +7,8 @@ import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "h
 import { dataNftMarket } from "libs/mvx";
 import { convertToLocalString } from "libs/utils";
 import { createNftId } from "libs/utils/token";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { Card, CardContent } from "../libComponents/Card";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Card, CardContent } from "libComponents/Card";
 import { ExternalLink } from "lucide-react";
 
 export const MyListed = () => {

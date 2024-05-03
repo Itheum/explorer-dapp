@@ -1,47 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
+import React, { useState } from "react";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 
 import { DataNftCard, Loader } from "components";
-import { MARKETPLACE_DETAILS_PAGE, SUPPORTED_COLLECTIONS } from "config";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import { HeaderComponent } from "../components/Layout/HeaderComponent";
-import { Button } from "../libComponents/Button";
+import { useNftsStore } from "store/nfts";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Button } from "libComponents/Button";
 
 export const MyWallet = () => {
-  const { address } = useGetAccount();
-  const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
-  const [dataNftCount, setDataNftCount] = useState<number>(0);
-  const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [isAutoOpenFormat, setIsAutoOpenFormat] = useState<boolean>(false);
   const [isDomPurified, setIsDomPurified] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!hasPendingTransactions) {
-      fetchData();
-    }
-  }, [hasPendingTransactions]);
-
-  async function fetchData() {
-    setIsLoading(true);
-
-    const _dataNfts = [];
-    const nfts = await DataNft.ownedByAddress(address, SUPPORTED_COLLECTIONS);
-    _dataNfts.push(...nfts);
-    setDataNftCount(_dataNfts.length);
-    setDataNfts(_dataNfts);
-    setIsLoading(false);
-  }
+  const nfts = useNftsStore((state) => state.nfts);
+  const [dataNfts, setDataNfts] = useState<DataNft[]>(nfts);
+  const [dataNftCount, setDataNftCount] = useState<number>(nfts.length);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function viewNormalData(index: number) {
     if (!(index >= 0 && index < dataNfts.length)) {

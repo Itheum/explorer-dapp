@@ -11,7 +11,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ title, content }) => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   return (
-    <div className="p-4 px-6 rounded-3xl border border-[#35d9fa] w-full  shadow-md shadow-black/20 dark:shadow-[#35d9fa]/20">
+    <div className="p-4 px-6 rounded-3xl border border-[#35d9fa] w-full lg:max-w-[80%] shadow-md shadow-black/20 dark:shadow-[#35d9fa]/20">
       <div
         className="flex justify-between items-center cursor-pointer"
         onClick={() => {

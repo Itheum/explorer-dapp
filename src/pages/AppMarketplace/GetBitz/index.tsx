@@ -66,7 +66,10 @@ import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-import LeaderBoardTable from "./LeaderBoardTable";
+ import LeaderBoardTable from "./LeaderBoardTable";
+ 
+import { useNftsStore } from "store/nfts";
+ 
 
 export interface LeaderBoardItemType {
   playerAddr: string;
@@ -117,7 +120,11 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+ 
   const [showMessage, setShowMessage] = useState<boolean>(true);
+ 
+  const nfts = useNftsStore((state) => state.nfts);
+ 
 
   // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
@@ -240,8 +247,8 @@ export const GetBitz = () => {
   // secondly, we get the user's Data NFTs and flag if the user has the required Data NFT for the game in their wallet
   async function fetchMyNfts() {
     if (gameDataNFT) {
-      const _dataNfts = await DataNft.ownedByAddress(address);
-      const hasRequiredDataNFT = _dataNfts.find((dNft) => gameDataNFT.nonce === dNft.nonce);
+      const _dataNfts = nfts;
+      const hasRequiredDataNFT = _dataNfts.find((dNft) => gameDataNFT.tokenIdentifier === dNft.tokenIdentifier);
       setHasGameDataNFT(hasRequiredDataNFT ? true : false);
       setCheckingIfHasGameDataNFT(false);
 
@@ -845,6 +852,33 @@ export const GetBitz = () => {
     }
   }
 
+  function leaderBoardTable(leaderBoardData: LeaderBoardItemType[]) {
+    return (
+      <>
+        <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
+          <thead>
+            <tr className="border">
+              <th className="p-2">Rank</th>
+              <th className="p-2">User</th>
+              <th className="p-2">{`<BiTz>`} Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaderBoardData.map((item, rank) => (
+              <tr key={rank} className="border">
+                <td className="p-2">
+                  #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+                </td>
+                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 8)}</td>
+                <td className="p-2">{item.bits}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    );
+  }
+
   return (
     <>
       {usingReferralCode !== "" && (
@@ -973,7 +1007,9 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardAllTime.length > 0 ? (
+ 
                     <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
+ 
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -990,7 +1026,9 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardMonthly.length > 0 ? (
+ 
                     <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
+ 
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
