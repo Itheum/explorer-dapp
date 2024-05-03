@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { Document, Page, pdfjs } from "react-pdf";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { DataNftCard, Loader } from "components";
+import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
@@ -32,13 +33,13 @@ export const MultiversxInfographics = () => {
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { chainID } = useGetNetworkConfig();
 
-  const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
+  const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
 
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -46,28 +47,35 @@ export const MultiversxInfographics = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      fetchDataNfts();
+      fetchAppNfts();
     }
-  }, [hasPendingTransactions]);
+  }, [hasPendingTransactions, nfts]);
 
-  async function fetchDataNfts() {
-    setIsLoading(true);
+  async function fetchAppNfts(activeIsLoading = true) {
+    if (activeIsLoading) {
+      setIsLoading(true);
+    }
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      MULTIVERSX_INFOGRAPHICS_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier }))
+      MULTIVERSX_INFOGRAPHICS_TOKENS.slice(shownAppDataNfts.length, shownAppDataNfts.length + SHOW_NFTS_STEP).map((v) => ({
+        nonce: v.nonce,
+        tokenIdentifier: v.tokenIdentifier,
+      }))
     );
-    setDataNfts(_nfts);
 
-    setIsLoading(false);
+    setShownAppDataNfts((oldNfts) => oldNfts.concat(_nfts));
+    if (activeIsLoading) {
+      setIsLoading(false);
+    }
   }
 
   async function viewData(index: number) {
     try {
-      if (!(index >= 0 && index < dataNfts.length)) {
+      if (!(index >= 0 && index < shownAppDataNfts.length)) {
         toastError("Data is not loaded");
         return;
       }
-      const dataNft = dataNfts[index];
+      const dataNft = shownAppDataNfts[index];
       const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
 
@@ -143,81 +151,95 @@ export const MultiversxInfographics = () => {
   }
 
   return (
-    <HeaderComponent
-      pageTitle={"MultiversX Infographics"}
-      hasImage={true}
-      imgSrc={headerHero}
-      altImageAttribute={"mvxInfographics"}
-      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
-      dataNftCount={dataNfts.length}>
-      {dataNfts.length > 0 ? (
-        dataNfts.map((dataNft, index) => (
-          <DataNftCard
-            key={index}
-            index={index}
-            dataNft={dataNft}
-            isLoading={isLoading}
-            owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
-            viewData={viewData}
-            modalContent={
-              !owned ? (
-                <div className="flex flex-column items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80svh]">
-                  <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-                  <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
-                </div>
-              ) : isFetchingDataMarshal ? (
-                <div className="flex flex-col items-center justify-center min-h-[40rem]">
-                  <div>
-                    <Loader noText />
-                    <p className="text-center text-foreground">{"Loading..."}</p>
+    <>
+      <HeaderComponent
+        pageTitle={"MultiversX Infographics"}
+        hasImage={true}
+        imgSrc={headerHero}
+        altImageAttribute={"mvxInfographics"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        dataNftCount={shownAppDataNfts.length}>
+        {shownAppDataNfts.length > 0 ? (
+          shownAppDataNfts.map((dataNft, index) => (
+            <DataNftCard
+              key={index}
+              index={index}
+              dataNft={dataNft}
+              isLoading={isLoading || isLoadingUserNfts}
+              owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
+              viewData={viewData}
+              modalContent={
+                !owned ? (
+                  <div className="flex flex-column items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80svh]">
+                    <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+                    <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                   </div>
-                </div>
-              ) : (
-                <>
-                  <div className="flex justify-end mr-3 mb-2">
-                    {file && (
-                      <Button
-                        className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
-                        onClick={() => {
-                          if (file) {
-                            window.open(file as string, "_blank");
-                          }
-                        }}>
-                        Open in full screen
-                      </Button>
-                    )}
-                  </div>
-                  {viewDataRes && !viewDataRes.error && (
+                ) : isFetchingDataMarshal ? (
+                  <div className="flex flex-col items-center justify-center min-h-[40rem]">
                     <div>
-                      <div className="flex justify-center items-center">
-                        <Button className="text-foreground mr-3" variant="outline" disabled={pageNumber <= 1} onClick={previousPage}>
-                          Previous
-                        </Button>
-                        <p className="text-foreground">
-                          Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
-                        </p>
-                        <Button className="text-foreground ml-3" variant="outline" disabled={pageNumber >= numPages} onClick={nextPage}>
-                          Next
-                        </Button>
-                      </div>
-
-                      <div className="c-container-document">
-                        <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-                          <Page pageNumber={pageNumber} />
-                        </Document>
-                      </div>
+                      <Loader noText />
+                      <p className="text-center text-foreground">{"Loading..."}</p>
                     </div>
-                  )}
-                </>
-              )
-            }
-            modalTitle={"MultiversX Infographics"}
-            modalTitleStyle="p-4"
-          />
-        ))
-      ) : (
-        <h3 className="text-center text-white">No DataNFT</h3>
-      )}
-    </HeaderComponent>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex justify-end mr-3 mb-2">
+                      {file && (
+                        <Button
+                          className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
+                          onClick={() => {
+                            if (file) {
+                              window.open(file as string, "_blank");
+                            }
+                          }}>
+                          Open in full screen
+                        </Button>
+                      )}
+                    </div>
+                    {viewDataRes && !viewDataRes.error && (
+                      <div>
+                        <div className="flex justify-center items-center">
+                          <Button className="text-foreground mr-3" variant="outline" disabled={pageNumber <= 1} onClick={previousPage}>
+                            Previous
+                          </Button>
+                          <p className="text-foreground">
+                            Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+                          </p>
+                          <Button className="text-foreground ml-3" variant="outline" disabled={pageNumber >= numPages} onClick={nextPage}>
+                            Next
+                          </Button>
+                        </div>
+
+                        <div className="c-container-document">
+                          <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                            <Page pageNumber={pageNumber} />
+                          </Document>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )
+              }
+              modalTitle={"MultiversX Infographics"}
+              modalTitleStyle="p-4"
+            />
+          ))
+        ) : (
+          <h3 className="text-center text-white">No DataNFT</h3>
+        )}
+      </HeaderComponent>
+      <div className="m-auto mb-5">
+        {shownAppDataNfts.length < MULTIVERSX_INFOGRAPHICS_TOKENS.length && (
+          <Button
+            className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+            onClick={() => {
+              fetchAppNfts(false);
+            }}
+            disabled={false}>
+            Load more
+          </Button>
+        )}
+      </div>
+    </>
   );
 };

@@ -8,7 +8,15 @@ export type app_token = {
 };
 
 export const TRAILBLAZER_TOKENS: app_token[] = IS_DEVNET
-  ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 1 }]
+  ? [
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 1 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 2 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 3 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 4 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 5 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 6 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 7 },
+    ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 1 }];
 
 export const MULTIVERSX_BUBBLE_TOKENS: app_token[] = IS_DEVNET ? [] : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 2 }];
@@ -42,8 +50,6 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 }];
 
 export const PLAYSTATION_GAMER_PASSPORT_TOKENS: app_token[] = [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 24 }];
-
-export const ESDT_BUBBLE_TOKENS: app_token[] = [];
 
 export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
   ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 57 }]

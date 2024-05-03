@@ -12,7 +12,6 @@ import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITZ_TOKEN } from "appsConfig";
 import { Loader } from "components";
-import { CopyAddress } from "components/CopyAddress";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
@@ -118,7 +117,7 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
@@ -166,13 +165,11 @@ export const GetBitz = () => {
     if (!hasPendingTransactions) {
       fetchDataNfts();
     }
-  }, [hasPendingTransactions]);
+  }, [hasPendingTransactions, nfts]);
 
   useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
+    fetchMyNfts();
+  }, [nfts, address, gameDataNFT]);
 
   useEffect(() => {
     if (!chainID) {
@@ -229,7 +226,7 @@ export const GetBitz = () => {
 
     setIsLoading(false);
   }
-
+  console.log(checkingIfHasGameDataNFT, hasGameDataNFT);
   // secondly, we get the user's Data NFTs and flag if the user has the required Data NFT for the game in their wallet
   async function fetchMyNfts() {
     if (gameDataNFT) {
