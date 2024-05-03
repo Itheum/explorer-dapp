@@ -7,7 +7,7 @@ import { Container } from "@tsparticles/engine";
 import { fireworks } from "@tsparticles/fireworks";
 import axios, { AxiosError } from "axios";
 import { motion } from "framer-motion";
-import { MousePointerClick } from "lucide-react";
+import { ArrowBigDownDash, MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITZ_TOKEN } from "appsConfig";
@@ -15,7 +15,7 @@ import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress } from "libs/utils";
+import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress, scrollToSection } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { routeNames } from "routes";
 import { BurningImage } from "./BurningImage";
@@ -66,7 +66,10 @@ import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+ import LeaderBoardTable from "./LeaderBoardTable";
+ 
 import { useNftsStore } from "store/nfts";
+ 
 
 export interface LeaderBoardItemType {
   playerAddr: string;
@@ -117,13 +120,14 @@ export const GetBitz = () => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [showMessage, setShowMessage] = useState<boolean>(true);
   const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
-  const bonusTries = useAccountStore((state: any) => state.bonusTries);
+  // const bonusTries = useAccountStore((state: any) => state.bonusTries);
   const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
@@ -138,10 +142,10 @@ export const GetBitz = () => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const tweetText = `url=https://explorer.itheum.io/getbitz?r=${address}&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"} `;
-
+  const tweetText = `url=https://explorer.itheum.io/getbitz?v=2&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
+  ///TODO add ?r=${address}
   const [usingReferralCode, setUsingReferralCode] = useState<string>("");
-  const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
+  // const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -156,6 +160,14 @@ export const GetBitz = () => {
   // Debug / Tests
   // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
   const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowMessage(false);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -445,7 +457,11 @@ export const GetBitz = () => {
 
     // user is logged in and we are checking if they have the data nft to proceed with a play
     if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
-      return <div> </div>;
+      return (
+        <div className="relative">
+          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+        </div>
+      );
     }
 
     // user is logged in does not have the data nft, so take them to the marketplace
@@ -866,9 +882,26 @@ export const GetBitz = () => {
         </div>
       )}
 
-      {gamePlayImageSprites()}
+      <div className="relative w-full">
+        <div
+          onClick={() => scrollToSection("bounties")}
+          className="text-black md:font-bold text-xs md:text-base z-[6] select-none cursor-pointer absolute mt-3 right-3 md:mt-4 md:right-6 flex flex-row items-center justify-center p-1 md:p-2 border border-white rounded-3xl hover:scale-110 bg-white hover:bg-[#35d9fa]/10  transition-all duration-500">
+          <motion.div
+            layout="position"
+            transition={{ layout: { duration: 0.5, type: "spring" } }}
+            animate={{}}
+            className="flex flex-row justify-center items-center  ">
+            {showMessage && "Data Bounties"}
+            {!showMessage && <ArrowBigDownDash className="w-4 h-4 md:h-8 md:w-8 " />}
+          </motion.div>
+        </div>
+        <div className="absolute -z-1 w-full">
+          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+        </div>
+        {gamePlayImageSprites()}
+      </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
+      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
         <h2 className="text-center text-white mb-[1rem]">SPECIAL LAUNCH WINDOW PERKS</h2>
         To celebrate the launch of Itheum {`<BiTz>`} XP, the {`<BiTz>`} Generator God has got into a generous mood! For the first month only (April 1, 2024 -
         May 1, 2024), check out these special LAUNCH WINDOW perks:
@@ -883,7 +916,7 @@ export const GetBitz = () => {
           <li className="my-5">
             {" "}
             4. Got Memes for burning? Join our{" "}
-            <a className="!text-[#7a98df] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
+            <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
               Discord Meme Channel
             </a>{" "}
             and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
@@ -969,7 +1002,9 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardAllTime.length > 0 ? (
-                    leaderBoardTable(leaderBoardAllTime)
+ 
+                    <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
+ 
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -986,7 +1021,9 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardMonthly.length > 0 ? (
-                    leaderBoardTable(leaderBoardMonthly)
+ 
+                    <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
+ 
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -1039,32 +1076,47 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
   }
 }
 
-export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string) {
-  return (
-    <>
-      <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
-        <thead>
-          <tr className="border">
-            <th className="p-2">Rank</th>
-            <th className="p-2">User</th>
-            <th className="p-2">{`<BiTz>`} Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaderBoardData.map((item, rank) => (
-            <tr key={rank} className="border">
-              <td className="p-2">
-                #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-              </td>
-              <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 4)}</td>
-              <td className="p-2">{item.bits}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
-  );
-}
+// export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string, showMyPosition: boolean = false) {
+
+//   const myPosition = showMyPosition ? leaderBoardData.findIndex((item) => item.playerAddr === address) : -1;
+//   return (
+//     <div className="flex flex-col justify-center items-center w-full">
+//       {showMyPosition && <span className="text-xs text-center mb-2">Your position * {myPosition >= 0 ? myPosition + 1 : "20+"} *</span>}
+
+//       <table className="border border-[#35d9fa]/60 text-center m-auto w-[90%] max-w-[500px]">
+//         <thead>
+//           <tr className="border border-[#35d9fa]/30 ">
+//             <th className="p-2">Rank</th>
+//             <th className=" ">User</th>
+//             <th className="p-2 ">{`<BiTz>`} Points</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {leaderBoardData.map((item, rank) => (
+//             <tr key={rank} className="border border-[#35d9fa]/30 ">
+//               <td className=" p-2">
+//                 #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
+//               </td>
+//               <td className=" ">
+//                 {item.playerAddr === address ? (
+//                   "It's YOU! 🫵 🎊"
+//                 ) : (
+//                   <MXAddressLink
+//                     textStyle="!text-[#35d9fa]  hover:!text-[#35d9fa] hover:underline"
+//                     explorerAddress={explorerAddress}
+//                     address={item.playerAddr}
+//                     precision={8}
+//                   />
+//                 )}
+//               </td>
+//               <td className="p-2 ">{item.bits}</td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+// }
 
 /*
 // FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
