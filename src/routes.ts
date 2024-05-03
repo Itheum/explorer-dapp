@@ -1,10 +1,10 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
-import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
+import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
-import { PlayStationGamer, Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom } from "./pages";
+import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom } from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -43,12 +43,6 @@ export const routes: RouteWithTitleType[] = [
     title: "My Wallet",
     component: MyWallet,
     authenticatedRoute: true,
-  },
-  {
-    path: routeNames.playstationgamerpassport,
-    title: "PlayStation Gamer Passport",
-    component: PlayStationGamer,
-    authenticatedRoute: false,
   },
   {
     path: routeNames.itheumtrailblazer,

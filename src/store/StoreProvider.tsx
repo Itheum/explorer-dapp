@@ -22,11 +22,11 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
   // NFT STORE
-  const updateNfts = useNftsStore((state) => state.updateNfts);
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, updateNfts, updateIsLoading } = useNftsStore();
 
   useEffect(() => {
     async function fetchNfts() {
+      updateIsLoading(true);
       if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
         updateNfts([]);
       } else {
@@ -34,6 +34,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         const nftsT = await DataNft.ownedByAddress(address, collections);
         updateNfts(nftsT);
       }
+      updateIsLoading(false);
     }
     fetchNfts();
   }, [address, tokenLogin]);

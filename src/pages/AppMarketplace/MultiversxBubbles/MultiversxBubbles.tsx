@@ -1,57 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { MULTIVERSX_BUBBLE_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { DataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { ZoomableSvg } from "components/ZoomableSvg";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { SHOW_NFTS_STEP } from "config";
+import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { useNftsStore } from "store/nfts";
 
 export const MultiversxBubbles = () => {
-  const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
 
-  const [dataNfts, setDataNfts] = useState<DataNft[]>([]);
+  const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [file, setFile] = useState<string | null>(null);
-  const nfts = useNftsStore((state) => state.nfts);
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      fetchDataNfts();
+      fetchAppNfts();
     }
-  }, [hasPendingTransactions]);
+  }, [hasPendingTransactions, nfts]);
 
-  async function fetchDataNfts() {
-    setIsLoading(true);
-    if (MULTIVERSX_BUBBLE_TOKENS.length > 0) {
-      const _nfts: DataNft[] = await DataNft.createManyFromApi(MULTIVERSX_BUBBLE_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
-      setDataNfts(_nfts);
+  async function fetchAppNfts(activeIsLoading = true) {
+    if (activeIsLoading) {
+      setIsLoading(true);
+    }
+
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      MULTIVERSX_BUBBLE_TOKENS.slice(shownAppDataNfts.length, shownAppDataNfts.length + SHOW_NFTS_STEP).map((v) => ({
+        nonce: v.nonce,
+        tokenIdentifier: v.tokenIdentifier,
+      }))
+    );
+
+    setShownAppDataNfts((oldNfts) => oldNfts.concat(_nfts));
+    if (activeIsLoading) {
       setIsLoading(false);
-    } else {
-      setIsLoading(false);
-      toastError("No identifier for this Widget.");
     }
   }
 
   async function viewData(index: number) {
     try {
-      if (!(index >= 0 && index < dataNfts.length)) {
+      if (!(index >= 0 && index < shownAppDataNfts.length)) {
         toastError("Data is not loaded");
         return;
       }
 
-      const dataNft = dataNfts[index];
+      const dataNft = shownAppDataNfts[index];
       const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
 
@@ -125,71 +131,85 @@ export const MultiversxBubbles = () => {
   }
 
   return (
-    <HeaderComponent
-      pageTitle={"MultiversX Bubbles"}
-      hasImage={true}
-      imgSrc={headerHero}
-      altImageAttribute={"bubbleMap"}
-      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
-      dataNftCount={dataNfts.length}>
-      {dataNfts.length > 0 ? (
-        dataNfts.map((dataNft, index) => (
-          <DataNftCard
-            key={index}
-            index={index}
-            dataNft={dataNft}
-            isLoading={isLoading}
-            owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
-            viewData={viewData}
-            modalContent={
-              !owned ? (
-                <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80svh]">
-                  <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
-                  <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
-                </div>
-              ) : isFetchingDataMarshal ? (
-                <div className="flex flex-col items-center justify-center min-h-[40rem]">
-                  <div>
-                    <Loader noText />
-                    <p className="text-center text-foreground ">{"Loading..."}</p>
+    <>
+      <HeaderComponent
+        pageTitle={"MultiversX Bubbles"}
+        hasImage={true}
+        imgSrc={headerHero}
+        altImageAttribute={"bubbleMap"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        dataNftCount={shownAppDataNfts.length}>
+        {shownAppDataNfts.length > 0 ? (
+          shownAppDataNfts.map((dataNft, index) => (
+            <DataNftCard
+              key={index}
+              index={index}
+              dataNft={dataNft}
+              isLoading={isLoading || isLoadingUserNfts}
+              owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
+              viewData={viewData}
+              modalContent={
+                !owned ? (
+                  <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[50dvw] min-h-[40rem] max-h-[80svh]">
+                    <h4 className="mt-3 font-title">You do not own this Data NFT</h4>
+                    <h6>(Buy the Data NFT from the marketplace to unlock the data)</h6>
                   </div>
-                </div>
-              ) : (
-                <>
-                  <div className="flex justify-end mr-3 mb-2">
-                    {file && (
-                      <Button
-                        className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
-                        onClick={() => {
-                          if (file) {
-                            window.open(file as string, "_blank");
-                          }
-                        }}>
-                        Open in full screen
-                      </Button>
-                    )}
+                ) : isFetchingDataMarshal ? (
+                  <div className="flex flex-col items-center justify-center min-h-[40rem]">
+                    <div>
+                      <Loader noText />
+                      <p className="text-center text-foreground ">{"Loading..."}</p>
+                    </div>
                   </div>
-                  {viewDataRes &&
-                    !viewDataRes.error &&
-                    (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                      <img src={viewDataRes.data} className="w-full h-auto p-4" />
-                    ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                      <ZoomableSvg data={viewDataRes.data} preProcess={preProcess} />
-                    ) : (
-                      <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                        {viewDataRes.data}
-                      </p>
-                    ))}
-                </>
-              )
-            }
-            modalTitle={"MultiversX Bubbles"}
-            modalTitleStyle="p-4"
-          />
-        ))
-      ) : (
-        <h3 className="text-center text-white">No DataNFT</h3>
-      )}
-    </HeaderComponent>
+                ) : (
+                  <>
+                    <div className="flex justify-end mr-3 mb-2">
+                      {file && (
+                        <Button
+                          className="text-xs md:text-base text-black bg-gradient-to-r from-yellow-300 to-orange-500 py-6 sm:py-0"
+                          onClick={() => {
+                            if (file) {
+                              window.open(file as string, "_blank");
+                            }
+                          }}>
+                          Open in full screen
+                        </Button>
+                      )}
+                    </div>
+                    {viewDataRes &&
+                      !viewDataRes.error &&
+                      (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                        <img src={viewDataRes.data} className="w-full h-auto p-4" />
+                      ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                        <ZoomableSvg data={viewDataRes.data} preProcess={preProcess} />
+                      ) : (
+                        <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                          {viewDataRes.data}
+                        </p>
+                      ))}
+                  </>
+                )
+              }
+              modalTitle={"MultiversX Bubbles"}
+              modalTitleStyle="p-4"
+            />
+          ))
+        ) : (
+          <h3 className="text-center text-white">No DataNFT</h3>
+        )}
+      </HeaderComponent>
+      <div className="m-auto mb-5">
+        {shownAppDataNfts.length < MULTIVERSX_BUBBLE_TOKENS.length && (
+          <Button
+            className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+            onClick={() => {
+              fetchAppNfts(false);
+            }}
+            disabled={false}>
+            Load more
+          </Button>
+        )}
+      </div>
+    </>
   );
 };
