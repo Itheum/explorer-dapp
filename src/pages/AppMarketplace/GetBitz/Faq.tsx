@@ -1,8 +1,8 @@
 import React from "react";
 import QuestionCard from "./QuestionCard";
 
-export const BIT_GAME_WINDOW_HOURS = "3"; // how often we can play the game, need to match logic inside Data NFT
-export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "20"; // top X leaderboard winners for the monthly price
+export const BIT_GAME_WINDOW_HOURS = "6"; // how often we can play the game, need to match logic inside Data NFT
+export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "5"; // top X leaderboard winners for the monthly price
 
 const Faq: React.FC = () => {
   const faqs = [
@@ -91,7 +91,6 @@ const Faq: React.FC = () => {
       title: "What can I do with Itheum <BiTz> Points?",
       content: (
         <>
-          {" "}
           <p>
             Itheum {`<BiTz>`} is like an XP system and you collect {`<BiTz>`} each time you interact with certain features of Itheum Protocol. Like all XP
             Systems, there will be LEADERBOARD-based rewards that are tied to use cases within the Itheum protocol. At launch, the following utility will be
@@ -99,7 +98,7 @@ const Faq: React.FC = () => {
           </p>
           <ol className="mt-5 text-lg">
             <li className="my-5">
-              1. Top 5 Movers (top {BIT_GAME_TOP_LEADER_BOARD_GROUP} during LAUNCH WINDOW) from "Monthly" LEADERBOARD get Airdropped{" "}
+              1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from "Monthly" LEADERBOARD get Airdropped{" "}
               <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
                 Data NFTs
               </a>{" "}
@@ -120,6 +119,9 @@ const Faq: React.FC = () => {
               from previous and upcoming Data Creators sent randomly to users from top 100 "All Time" LEADERBOARD
             </li>
             <li className="my-5">4. Bragging rights as you climb to the top of the LEADERBOARD!</li>
+            <li>
+              5. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
+            </li>
           </ol>
           <p className="mt-5">
             This is just the start, we have a bunch of other ideas planned for {`<BiTz>`}. Got ideas for {`<BiTz>`} utility? We love to hear them:{" "}
