@@ -200,7 +200,7 @@ export function getDataBounties() {
       summary:
         "Craft a Music Data NFT featuring a dynamic playlist of at least 3 songs. Heavy weight bass like the artists: O.B.F, King Alpha, Alpha Step, Radikal Guru, Indica Dubs, Vibronics.",
       readMoreLink: "",
-      submittedOnTs: 1714138439,
+      submittedOnTs: 1714981876,
       fillPerks:
         "The creator of the bounty will receive 5 copies of the album.\n The top 3 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.\n Contributors ranked 4th and 5th will receive 2 copies each.\n Contributors ranked 6th to 20th will receive 1 copy each.\n Additionally, 12 lucky winners from the top 21 to 100 contributors will each receive 1 copy.\n 30 copies donated to BiTz Monthly Leaderboard",
     });
@@ -211,9 +211,20 @@ export function getDataBounties() {
       summary:
         "Craft  a data NFT showing the importance of data in the web3 era. This will be a series of articles showing why we need to claim ownership of our data.",
       readMoreLink: "",
-      submittedOnTs: 1714138439,
+      submittedOnTs: 1714981876,
       fillPerks:
         "The Creator of the bounty will receive 5 copies.\n The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.\n Contributors ranked 6th to 20th will receive 2 copies each.\n Contributors ranked 21st to 50th will receive 1 copy each.\n Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy.\n 50 copies donated to BiTz Monthly Leaderboard",
+    });
+    allBounties.push({
+      bountySubmitter: "erd1c7jg5lkfjxsk0y32td5z2f4edh7r8u0pwy0k67evzmeem3gzwdxsvlukc0",
+      bountyId: "b8",
+      title: "Indie/Rock Data NFT",
+      summary:
+        "Craft a Music Data NFT which should contain at least 1 song (Indie/Rock). Warm voice on a chillin' guitar, slow BPM, something to listen with joy next to a glass of wine.",
+      readMoreLink: "",
+      submittedOnTs: 1714981876,
+      fillPerks:
+        "The creator of the bounty will receive 10 copies of the album.\n The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.\n Contributors ranked 6th to 10th will receive 2 copies each.\n  Contributors ranked 11st to 35th will receive 1 copy each.\n  Additionally, 10 lucky winners from the top 36 to 100 contributors will each receive 1 copy. \n 30 copies donated to BiTz Monthly Leaderboard",
     });
     return allBounties;
   }
