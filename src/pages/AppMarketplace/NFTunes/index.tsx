@@ -63,10 +63,12 @@ export const NFTunes = () => {
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
 
   const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => nfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
 
   useEffect(() => {
     window.scrollTo(0, 80);
   }, []);
+
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchAppNfts();
@@ -80,7 +82,7 @@ export const NFTunes = () => {
     }
 
     const _nfts: DataNft[] = await DataNft.createManyFromApi(
-      NF_TUNES_TOKENS.slice(shownAppDataNfts.length, shownAppDataNfts.length + SHOW_NFTS_STEP).map((v) => ({
+      nfTunesTokens.slice(shownAppDataNfts.length, shownAppDataNfts.length + SHOW_NFTS_STEP).map((v) => ({
         nonce: v.nonce,
         tokenIdentifier: v.tokenIdentifier,
       }))
@@ -126,7 +128,9 @@ export const NFTunes = () => {
           stream: true,
         };
         setCurrentIndex(index);
-
+        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
+          dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+        }
         // start the request for the first song
         const firstSongResPromise: any = dataNft.viewDataViaMVXNativeAuth({
           mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
@@ -137,9 +141,6 @@ export const NFTunes = () => {
         });
 
         // start the request for the manifest file from marshal
-        if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
-          dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
-        }
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
 
         let blobDataType = BlobDataType.TEXT;
@@ -601,50 +602,52 @@ export const NFTunes = () => {
             <div className="flex flex-col">
               <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Music Data NFTs "} dataNftCount={shownAppDataNfts.length}>
                 {shownAppDataNfts.length > 0 ? (
-                  shownAppDataNfts.map((dataNft, index) => (
-                    <DataNftCard
-                      key={index}
-                      index={index}
-                      dataNft={dataNft}
-                      isLoading={isLoading || isLoadingUserNfts}
-                      owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
-                      viewData={viewData}
-                      modalContent={
-                        isFetchingDataMarshal ? (
-                          <div
-                            className="flex flex-col items-center justify-center"
-                            style={{
-                              minHeight: "40rem",
-                            }}>
-                            <div>
-                              <Loader noText />
-                              <p className="text-center text-foreground">Loading...</p>
+                  shownAppDataNfts.map((dataNft, index) => {
+                    return (
+                      <DataNftCard
+                        key={index}
+                        index={index}
+                        dataNft={dataNft}
+                        isLoading={isLoading || isLoadingUserNfts}
+                        owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
+                        viewData={viewData}
+                        modalContent={
+                          isFetchingDataMarshal ? (
+                            <div
+                              className="flex flex-col items-center justify-center"
+                              style={{
+                                minHeight: "40rem",
+                              }}>
+                              <div>
+                                <Loader noText />
+                                <p className="text-center text-foreground">Loading...</p>
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <>
-                            {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-                              <AudioPlayer
-                                dataNftToOpen={shownAppDataNfts[currentIndex]}
-                                songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                                tokenLogin={tokenLogin}
-                                firstSongBlobUrl={firstSongBlobUrl}
-                                chainID={chainID}
-                              />
-                            )}
-                          </>
-                        )
-                      }
-                      modalTitle={"NF-Tunes"}
-                      modalTitleStyle="p-4"
-                    />
-                  ))
+                          ) : (
+                            <>
+                              {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                                <AudioPlayer
+                                  dataNftToOpen={shownAppDataNfts[currentIndex]}
+                                  songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                                  tokenLogin={tokenLogin}
+                                  firstSongBlobUrl={firstSongBlobUrl}
+                                  chainID={chainID}
+                                />
+                              )}
+                            </>
+                          )
+                        }
+                        modalTitle={"NF-Tunes"}
+                        modalTitleStyle="p-4"
+                      />
+                    );
+                  })
                 ) : (
                   <h3 className="text-center text-white">No DataNFT</h3>
                 )}
               </HeaderComponent>
               <div className="m-auto mb-5">
-                {shownAppDataNfts.length < NF_TUNES_TOKENS.length && (
+                {shownAppDataNfts.length < nfTunesTokens.length && (
                   <Button
                     className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
                     onClick={() => {
