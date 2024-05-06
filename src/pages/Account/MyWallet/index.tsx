@@ -52,7 +52,7 @@ export const MyWallet = () => {
       },
     };
     if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
-      dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+      dataNft.updateDataNft({ dataMarshal: "https://api.itheumcloud.com/datamarshalapi/router/v1" });
     }
     res = await dataNft.viewDataViaMVXNativeAuth(arg);
     let blobDataType = BlobDataType.TEXT;
