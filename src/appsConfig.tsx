@@ -75,6 +75,7 @@ export const SUPPORTED_APPS = IS_DEVNET
       "playstationgamerpassport",
       "multiversxinfographics",
       "nftunes",
+      "nftunes-copy",
       "timecapsule",
       "getbitz",
       "bobergameroom",

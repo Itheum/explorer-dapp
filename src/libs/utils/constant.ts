@@ -33,6 +33,13 @@ export const APP_MAPPINGS = [
     img: iconNFTunes,
   },
   {
+    appName: "NF-Tunes Copy",
+    appDescription: "Listen to Music Playlists",
+    routeKey: "nftunes-copy",
+    desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
+    img: iconNFTunes,
+  },
+  {
     appName: "Bober Game Room",
     appDescription: "Play a fun Bober Video Game",
     routeKey: "bobergameroom",

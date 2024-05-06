@@ -21,10 +21,10 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { scrollToSection } from "libs/utils";
 import { useNftsStore } from "store/nfts";
-import benefitsLogo1 from "assets/img/nf-tunes/benefits-logo1.png";
-import benefitsLogo2 from "assets/img/nf-tunes/benefits-logo2.png";
-import benefitsLogo3 from "assets/img/nf-tunes/benefits-logo3.png";
-import manuImage from "assets/img/nf-tunes/manu.png";
+import benefitsLogo1 from "../../../assets/img/nf-tunes/benefits-logo1.png";
+import benefitsLogo2 from "../../../assets/img/nf-tunes/benefits-logo2.png";
+import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
+import manuImage from "../../../assets/img/nf-tunes/manu.png";
 import megaphoneLight from "../../../assets/img/nf-tunes/megaphone-light.png";
 import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
 import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
@@ -46,7 +46,7 @@ import dataLines from "../../../assets/img/zstorage/data-lines.png";
 import frontCube from "../../../assets/img/zstorage/front.png";
 import vault from "../../../assets/img/zstorage/vault-dots.png";
 
-export const NFTunes = () => {
+export const NFTunesCopy = () => {
   const { theme } = useTheme();
   const currentTheme = theme !== "system" ? theme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const { tokenLogin } = useGetLoginInfo();
