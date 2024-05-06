@@ -126,7 +126,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         /// if not previously fetched, fetch now and save the url of the blob
         if (dataNftToOpen) {
           if (!dataNftToOpen.dataMarshal || dataNftToOpen.dataMarshal === "") {
-            dataNftToOpen.updateDataNft({ dataMarshal: getApiDataMarshal(chainID ?? "D") });
+            dataNftToOpen.updateDataNft({ dataMarshal: "https://api.itheumcloud.com/datamarshalapi/router/v1" });
           }
           const res: ViewDataReturnType = await dataNftToOpen.viewDataViaMVXNativeAuth({
             mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],

@@ -129,7 +129,7 @@ export const NFTunes = () => {
         };
         setCurrentIndex(index);
         if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
-          dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
+          dataNft.updateDataNft({ dataMarshal: "https://api.itheumcloud.com/datamarshalapi/router/v1" });
         }
         // start the request for the first song
         const firstSongResPromise: any = dataNft.viewDataViaMVXNativeAuth({
