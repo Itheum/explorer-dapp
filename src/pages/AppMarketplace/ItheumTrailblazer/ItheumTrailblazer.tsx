@@ -5,66 +5,59 @@ import { TRAILBLAZER_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { DataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
-import { useGetAccount, useGetPendingTransactions } from "hooks";
+import { SHOW_NFTS_STEP } from "config";
+import { useGetPendingTransactions } from "hooks";
+import { Button } from "libComponents/Button";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
+import { useNftsStore } from "store/nfts";
 import { TrailBlazerModal } from "./components/TrailBlazerModal";
 
 export const ItheumTrailblazer = () => {
-  const { address } = useGetAccount();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
 
-  const [itDataNfts, setItDataNfts] = useState<DataNft[]>([]);
-  const [flags, setFlags] = useState<boolean[]>([]);
+  const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
+  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchAppNfts();
     }
-  }, [hasPendingTransactions]);
+  }, [hasPendingTransactions, nfts]);
 
-  useEffect(() => {
-    if (!isLoading && address) {
-      fetchMyNfts();
-    }
-  }, [isLoading, address]);
-
-  async function fetchAppNfts() {
-    setIsLoading(true);
-
-    const _nfts: DataNft[] = await DataNft.createManyFromApi(TRAILBLAZER_TOKENS.map((v) => ({ nonce: v.nonce, tokenIdentifier: v.tokenIdentifier })));
-
-    setItDataNfts(_nfts);
-    setIsLoading(false);
-  }
-
-  async function fetchMyNfts() {
-    const _dataNfts = await DataNft.ownedByAddress(address);
-    const _flags = [];
-
-    for (const cnft of itDataNfts) {
-      const matches = _dataNfts.filter((mnft) => cnft.nonce === mnft.nonce);
-      _flags.push(matches.length > 0);
+  async function fetchAppNfts(activeIsLoading = true) {
+    if (activeIsLoading) {
+      setIsLoading(true);
     }
 
-    setFlags(_flags);
+    const _nfts: DataNft[] = await DataNft.createManyFromApi(
+      TRAILBLAZER_TOKENS.slice(shownAppDataNfts.length, shownAppDataNfts.length + SHOW_NFTS_STEP).map((v) => ({
+        nonce: v.nonce,
+        tokenIdentifier: v.tokenIdentifier,
+      }))
+    );
+
+    setShownAppDataNfts((oldNfts) => oldNfts.concat(_nfts));
+    if (activeIsLoading) {
+      setIsLoading(false);
+    }
   }
 
   async function viewData(index: number) {
     try {
-      if (!(index >= 0 && index < itDataNfts.length)) {
+      if (!(index >= 0 && index < shownAppDataNfts.length)) {
         toastError("Data is not loaded");
         return;
       }
 
-      const dataNft = itDataNfts[index];
-      const _owned = flags[index];
+      const dataNft = shownAppDataNfts[index];
+      const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
 
       if (_owned) {
@@ -117,32 +110,46 @@ export const ItheumTrailblazer = () => {
   }
 
   return (
-    <HeaderComponent
-      pageTitle={"Trailblazer"}
-      hasImage={true}
-      imgSrc={headerHero}
-      altImageAttribute={"itheumTrailblazer"}
-      pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
-      dataNftCount={itDataNfts.length}>
-      {itDataNfts.length > 0 ? (
-        itDataNfts.map((dataNft, index) => (
-          <DataNftCard
-            key={index}
-            index={index}
-            dataNft={dataNft}
-            isLoading={isLoading}
-            owned={flags[index]}
-            viewData={viewData}
-            modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
-            modalTitle={"Trailblazer"}
-            modalTitleStyle="md:p-5 pt-5 pb-5 px-2"
-            hasFilter={true}
-            filterData={filterData}
-          />
-        ))
-      ) : (
-        <h3 className="text-center text-white">No Data NFTs</h3>
-      )}
-    </HeaderComponent>
+    <>
+      <HeaderComponent
+        pageTitle={"Trailblazer"}
+        hasImage={true}
+        imgSrc={headerHero}
+        altImageAttribute={"itheumTrailblazer"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        dataNftCount={TRAILBLAZER_TOKENS.length}>
+        {shownAppDataNfts.length > 0 ? (
+          shownAppDataNfts.map((dataNft, index) => (
+            <DataNftCard
+              key={index}
+              index={index}
+              dataNft={dataNft}
+              isLoading={isLoading || isLoadingUserNfts}
+              owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
+              viewData={viewData}
+              modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
+              modalTitle={"Trailblazer"}
+              modalTitleStyle="md:p-5 pt-5 pb-5 px-2"
+              hasFilter={true}
+              filterData={filterData}
+            />
+          ))
+        ) : (
+          <h3 className="text-center text-white">No Data NFTs</h3>
+        )}
+      </HeaderComponent>
+      <div className="m-auto mb-5">
+        {shownAppDataNfts.length < TRAILBLAZER_TOKENS.length && (
+          <Button
+            className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+            onClick={() => {
+              fetchAppNfts(false);
+            }}
+            disabled={false}>
+            Load more
+          </Button>
+        )}
+      </div>
+    </>
   );
 };
