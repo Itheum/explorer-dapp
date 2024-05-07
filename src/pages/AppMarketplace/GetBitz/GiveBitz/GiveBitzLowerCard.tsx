@@ -146,7 +146,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
                   step="1"
                   value={bitzVal}
                   onChange={(e) => setBitzVal(Math.min(Number(e.target.value), bitzBalance))}
-                  className="bg-[#35d9fa]/30 text-[#35d9fa] focus:none  focus:outline-none focus:border-transparent text-center border-[#35d9fa] rounded-md"
+                  className="bg-[#35d9fa]/30 text- dark:text-[#35d9fa] focus:none  focus:outline-none focus:border-transparent text-center border-[#35d9fa] rounded-md"
                 />
               </div>
 
