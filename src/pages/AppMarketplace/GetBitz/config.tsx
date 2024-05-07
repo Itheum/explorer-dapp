@@ -137,6 +137,22 @@ export function getDataBounties() {
       fillPerks:
         "The Creator of the bounty will receive 5 copies of the album.\n The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.\n Contributors ranked 6th to 20th will receive 2 copies each.\n Contributors ranked 21st to 50th will receive 1 copy each.\n Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy.\n 50 copies donated to BiTz Monthly Leaderboard",
     });
+    allBounties.push({
+      bountySubmitter: "erd12nk8jwsfrnp6zdrwsc28nnn54psfcj5rjzqmm8z2xl0xv8g8ra5q5evzw8",
+      bountyId: "b9",
+      title: "MultiversX Developers Community",
+      summary: `Infographics and data visualization about the number of developers on the Elrond / MultiversX ecosystem.\n
+        The goal is to better understand the developing ecosystem and it's evolution over the years, using only facts and not the noise on social networks.\n
+        It would be interesting to see data such as the repartition core dev / other dev, evolution of the number of releases, posts on GitHub, fixes, and new smart contracts on dev or mainet...`,
+      readMoreLink: "",
+      submittedOnTs: 1715084891,
+      fillPerks: `The creator of the bounty will receive 5 copies of the album. 
+        The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.  
+        Contributors ranked 6th to 20th will receive 2 copies each. 
+        Contributors ranked 21st to 50th will receive 1 copy each. 
+        Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
+        50 copies donated to BiTz Monthly Leaderboard`,
+    });
     return allBounties;
   } else {
     allBounties.push({
@@ -225,6 +241,22 @@ export function getDataBounties() {
       submittedOnTs: 1714981876,
       fillPerks:
         "The creator of the bounty will receive 10 copies of the album.\n The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.\n Contributors ranked 6th to 10th will receive 2 copies each.\n  Contributors ranked 11st to 35th will receive 1 copy each.\n  Additionally, 10 lucky winners from the top 36 to 100 contributors will each receive 1 copy. \n 30 copies donated to BiTz Monthly Leaderboard",
+    });
+    allBounties.push({
+      bountySubmitter: "erd12nk8jwsfrnp6zdrwsc28nnn54psfcj5rjzqmm8z2xl0xv8g8ra5q5evzw8",
+      bountyId: "b9",
+      title: "MultiversX Developers Community",
+      summary: `Infographics and data visualization about the number of developers on the Elrond / MultiversX ecosystem.\n
+        The goal is to better understand the developing ecosystem and it's evolution over the years, using only facts and not the noise on social networks.\n
+        It would be interesting to see data such as the repartition core dev / other dev, evolution of the number of releases, posts on GitHub, fixes, and new smart contracts on dev or mainet...`,
+      readMoreLink: "",
+      submittedOnTs: 1715084891,
+      fillPerks: `The creator of the bounty will receive 5 copies of the album. 
+        The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.  
+        Contributors ranked 6th to 20th will receive 2 copies each. 
+        Contributors ranked 21st to 50th will receive 1 copy each. 
+        Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
+        50 copies donated to BiTz Monthly Leaderboard`,
     });
     return allBounties;
   }
