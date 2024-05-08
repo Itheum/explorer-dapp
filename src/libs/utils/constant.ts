@@ -1,11 +1,11 @@
+import iconBober from "assets/img/bober-game-room/BoberLast.png";
+import iconDeepForest from "assets/img/deep-forest-music/preview.jpg";
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
-import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
-import iconNFTunes from "assets/img/nf-tunes-logo.png";
 import iconGetBitz from "assets/img/getbitz/expl-app-getbitz-icon.gif";
-import iconBober from "assets/img/bober-game-room/BoberLast.png";
-
+import iconNFTunes from "assets/img/nf-tunes-logo.png";
+import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
 export const ERROR_DATA_LOADING = "Data is still loading";
@@ -33,11 +33,11 @@ export const APP_MAPPINGS = [
     img: iconNFTunes,
   },
   {
-    appName: "NF-Tunes Copy",
-    appDescription: "Listen to Music Playlists",
-    routeKey: "nftunes-copy",
-    desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
-    img: iconNFTunes,
+    appName: "Deep Forest Music Data NFT Player",
+    appDescription: "The Chronicles of Deep Forest",
+    routeKey: "deepforestmusic",
+    desc: "These NFTs aren't just static pieces of digital art, they are immersive experiences. Each of the 90 NFTs is brought to life through a unique graphical Artwork.", // a bonus unreleased track and only one NFT per category is crowned with a personal message from Eric Mouquet to its owner. Yet, the allure of these music dataNFTs extends beyond their aesthetic and sentimental value. Each NFT is imbued with real-life utility, making them not just collector's items, but practical digital assets in various realms, like access to concerts, whitelisting, access to unreleased versions of the tracks, multi-track files, physical items and many more in the future.",
+    img: iconDeepForest,
   },
   {
     appName: "Bober Game Room",

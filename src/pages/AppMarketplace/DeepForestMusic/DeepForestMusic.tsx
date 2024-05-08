@@ -46,7 +46,10 @@ import dataLines from "../../../assets/img/zstorage/data-lines.png";
 import frontCube from "../../../assets/img/zstorage/front.png";
 import vault from "../../../assets/img/zstorage/vault-dots.png";
 
-export const NFTunesCopy = () => {
+// deep forest
+import iconPreview from "assets/img/deep-forest-music/preview.jpg";
+
+export const DeepForestMusic = () => {
   const { theme } = useTheme();
   const currentTheme = theme !== "system" ? theme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const { tokenLogin } = useGetLoginInfo();
@@ -178,7 +181,9 @@ export const NFTunesCopy = () => {
     <div className="flex flex-col justify-center items-center w-full overflow-hidden">
       <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
-        <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  pl-4  ">
+        <img src={iconPreview} />
+
+        {/* <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  pl-4  ">
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
@@ -217,8 +222,7 @@ export const NFTunesCopy = () => {
               <span className="text-primary text-xl text-center xl:text-start p-8 pt-16 md:pt-32">Driven by the innovation of Itheum Music Data NFTs</span>
             </div>
           </div>
-        </div>
-
+        </div> */}
         {/* Benefits of NF-Tunes */}
         <div className="flex flex-col justify-start items-center w-full gap-12 p-6 xl:p-12 xl:pb-0">
           <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
@@ -262,7 +266,6 @@ export const NFTunesCopy = () => {
             </div>
           </div>
         </div>
-
         {/* What Musicians are saying */}
         <div className="flex flex-col justify-center items-center mb-16">
           <div className="py-8 flex flex-col w-[100%] justify-center items-center xl:items-start xl:p-12 xl:pt-0">
@@ -278,7 +281,6 @@ export const NFTunesCopy = () => {
             </div>
           </div>
         </div>
-
         {/* Featured Artist Section */}
         <div
           id="featured-artist"
@@ -411,7 +413,6 @@ export const NFTunesCopy = () => {
             )}
           </div>
         </div>
-
         {/* Storage Solution Zedge Storage  */}
         <div className="flex flex-col justify-center items-center ">
           <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
@@ -517,7 +518,6 @@ export const NFTunesCopy = () => {
             </div>
           </div>
         </div>
-
         {/* Calling musicians Section */}
         <div className="flex flex-col gap-4 justify-center items-center bg-primary xl:p-32 w-full h-[100svh] text-center">
           <span className="text-secondary font-[Clash-Medium] text-2xl xl:text-6xl "> Calling all Indie Musicians!</span>
@@ -534,7 +534,6 @@ export const NFTunesCopy = () => {
             Reach Out Today
           </Link>
         </div>
-
         {/* Supported Platforms */}
         <div className="flex flex-col justify-center items-center w-full gap-12 mt-12 xl:p-12">
           <div className="py-8 flex flex-col w-[100%] justify-center items-center xl:items-start gap-12">
