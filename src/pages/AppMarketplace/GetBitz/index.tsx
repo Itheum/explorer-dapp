@@ -66,10 +66,9 @@ import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
- import LeaderBoardTable from "./LeaderBoardTable";
- 
+import LeaderBoardTable from "./LeaderBoardTable";
+
 import { useNftsStore } from "store/nfts";
- 
 
 export interface LeaderBoardItemType {
   playerAddr: string;
@@ -238,7 +237,6 @@ export const GetBitz = () => {
 
     setIsLoading(false);
   }
-  console.log(checkingIfHasGameDataNFT, hasGameDataNFT);
   // secondly, we get the user's Data NFTs and flag if the user has the required Data NFT for the game in their wallet
   async function fetchMyNfts() {
     if (gameDataNFT) {
@@ -1000,9 +998,7 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardAllTime.length > 0 ? (
- 
                     <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
- 
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
@@ -1019,9 +1015,7 @@ export const GetBitz = () => {
               ) : (
                 <>
                   {leaderBoardMonthly.length > 0 ? (
- 
                     <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
- 
                   ) : (
                     <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
                   )}
