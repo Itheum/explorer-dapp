@@ -1,51 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
-import { motion } from "framer-motion";
-import { MoveDown, Music, Music2, PlayCircle } from "lucide-react";
-import { Link } from "react-router-dom";
-import { NF_TUNES_TOKENS, FEATURED_NF_TUNES_TOKEN, IS_DEVNET } from "appsConfig";
-import disk from "assets/img/nf-tunes-logo-disk.png";
-import { DataNftCard, Loader } from "components";
+import { Music2, PlayCircle } from "lucide-react";
+import { Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
-import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Modal } from "components/Modal/Modal";
-import YouTubeEmbed from "components/YouTubeEmbed";
-import { SHOW_NFTS_STEP } from "config";
-import { useGetPendingTransactions } from "hooks";
-import { Button } from "libComponents/Button";
-import { useTheme } from "libComponents/ThemeProvider";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { scrollToSection } from "libs/utils";
 import { useNftsStore } from "store/nfts";
-import benefitsLogo1 from "../../../assets/img/nf-tunes/benefits-logo1.png";
-import benefitsLogo2 from "../../../assets/img/nf-tunes/benefits-logo2.png";
-import benefitsLogo3 from "../../../assets/img/nf-tunes/benefits-logo3.png";
-import manuImage from "../../../assets/img/nf-tunes/manu.png";
-import megaphoneLight from "../../../assets/img/nf-tunes/megaphone-light.png";
-import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
-import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
-import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
-import frameItLogoLight from "../../../assets/img/nf-tunes/platforms-logo/frame-it-light.png";
-import frameItLogo from "../../../assets/img/nf-tunes/platforms-logo/frame-it.png";
-import itheumLogoLight from "../../../assets/img/nf-tunes/platforms-logo/itheum-light.png";
-import itheumLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
-import multiversxLogoLight from "../../../assets/img/nf-tunes/platforms-logo/multiversx-light.png";
-import multiversxLogo from "../../../assets/img/nf-tunes/platforms-logo/multiversx.png";
-import pulsarLogoLight from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money-light.png";
-import pulsarLogo from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money.png";
-import xoxnoLogoLight from "../../../assets/img/nf-tunes/platforms-logo/xoxno-light.png";
-import xoxnoLogo from "../../../assets/img/nf-tunes/platforms-logo/xoxno.png";
-import stick from "../../../assets/img/nf-tunes-logo-stick.png";
-import backCube from "../../../assets/img/zstorage/back.png";
-import cubes from "../../../assets/img/zstorage/cubes.png";
-import dataLines from "../../../assets/img/zstorage/data-lines.png";
-import frontCube from "../../../assets/img/zstorage/front.png";
-import vault from "../../../assets/img/zstorage/vault-dots.png";
-
+import album1 from "assets/img/deep-forest-music/1.jpg";
+import album2 from "assets/img/deep-forest-music/2.jpg";
+import album3 from "assets/img/deep-forest-music/3.jpg";
+import album4 from "assets/img/deep-forest-music/4.jpg";
+import album5 from "assets/img/deep-forest-music/5.jpg";
+import album6 from "assets/img/deep-forest-music/6.jpg";
+import album7 from "assets/img/deep-forest-music/7.jpg";
+import album8 from "assets/img/deep-forest-music/8.jpg";
+import album9 from "assets/img/deep-forest-music/9.jpg";
 // deep forest
 import iconPreview from "assets/img/deep-forest-music/preview.jpg";
 import iconPreviewAudioPlayer from "assets/img/deep-forest-music/deep-forest.png";
@@ -55,67 +28,61 @@ export const DeepForestMusic = () => {
   const albums = [
     {
       title: "Eponymous",
-      image: "src/assets/img/deep-forest-music/1.jpg",
+      image: album1,
       link: "/deep-forest-music", // TODO add the link to datadex??
       ownedDataNftIndex: -1,
     },
     {
       title: "Deep Brasil",
-      image: "src/assets/img/deep-forest-music/2.jpg",
+      image: album2,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Deep Africa",
-      image: "src/assets/img/deep-forest-music/3.jpg",
+      image: album3,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Evo Devo",
-      image: "src/assets/img/deep-forest-music/4.jpg",
+      image: album4,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Epic Circuits",
-      image: "src/assets/img/deep-forest-music/5.jpg",
+      image: album5,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Deep Symphonic",
-      image: "src/assets/img/deep-forest-music/6.jpg",
+      image: album6,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Live at EMM Studios",
-      image: "src/assets/img/deep-forest-music/7.jpg",
+      image: album7,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Burning",
-      image: "src/assets/img/deep-forest-music/8.jpg",
+      image: album8,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Crystal Clear",
-      image: "src/assets/img/deep-forest-music/9.jpg",
+      image: album9,
       link: "/deep-forest-music", // TODO add the link to datadex??
     },
   ];
   const [albumsState, setAlbumsState] = useState(albums);
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
-  const { hasPendingTransactions } = useGetPendingTransactions();
-  const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
-  const [featuredArtistDataNft, setFeaturedArtistDataNft] = useState<DataNft>();
-  const [featuredDataNftIndex, setFeaturedDataNftIndex] = useState(-1);
-  const [isLoading, setIsLoading] = useState(true);
+
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-  const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
   const [dataNftToOpen, setDataNftToOpen] = useState<DataNft>();
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
-  const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => nfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
+  const { nfts } = useNftsStore();
 
   useEffect(() => {
     window.scrollTo(0, 80);
@@ -148,7 +115,6 @@ export const DeepForestMusic = () => {
       setFirstSongBlobUrl(undefined);
 
       const dataNft = new DataNft(nfts[index]);
-      console.log("dataNft", dataNft);
       setIsFetchingDataMarshal(true);
       const audioPlayerModalTrigger = document.getElementById("audio-player-modal-trigger");
       if (audioPlayerModalTrigger) {
@@ -168,7 +134,6 @@ export const DeepForestMusic = () => {
         },
         stream: true,
       };
-      setCurrentIndex(index);
       setDataNftToOpen(dataNft);
       if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
         dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
@@ -206,7 +171,6 @@ export const DeepForestMusic = () => {
       // await the first song response and set the firstSongBlobUrl state
       const firstSongRes: ViewDataReturnType = await firstSongResPromise;
       const blobUrl = URL.createObjectURL(firstSongRes.data);
-      console.log("blobUrl", blobUrl);
       setFirstSongBlobUrl(blobUrl);
     } catch (err) {
       console.error(err);
@@ -221,34 +185,35 @@ export const DeepForestMusic = () => {
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
         <div className="flex flex-col w-[90%] md:w-[70%] p-10">
           <img src={iconPreview} className="rounded-2xl" />
-          <Modal
-            openTrigger={
-              <button className="h-64 bottom-0 right-0 flex rounded-full justify-center w-full mt-[-11rem]">
-                Preview <PlayCircle className="scale-[3] cursor-pointer text-secondary dark:text-primary" />
-              </button>
-            }
-            closeOnOverlayClick={true}
-            title={"Music Data Nft Preview"}
-            hasFilter={false}
-            filterData={[]}
-            titleClassName={"p-8"}>
-            <>
-              <AudioPlayer
-                previewUrl={"src/assets/img/deep-forest-music/previewSongs.mp3"}
-                songs={[
-                  {
-                    "idx": 1,
-                    "description": "The Chronicles of Deep Forest - 30 Years Anniversary by Eric Mouquet | Grammy Award Winner",
-                    "category": "Preview",
-                    "album": "EtherealEchoes",
-                    "cover_art_url": iconPreviewAudioPlayer,
-                    "title": "Deep Forest Music Preview",
-                  },
-                ]}
-              />
-            </>
-          </Modal>
-
+          <div className="relative flex -mt-10 w-full items-center  justify-end p-2">
+            <Modal
+              openTrigger={
+                <button className="text-sm   md:text-lg bottom-0 right-0 rounded-full justify-center gap-1 flex flex-row">
+                  Preview <PlayCircle className="cursor-pointer text-secondary dark:text-primary" />
+                </button>
+              }
+              closeOnOverlayClick={true}
+              title={"Music Data Nft Preview"}
+              hasFilter={false}
+              filterData={[]}
+              titleClassName={"p-8"}>
+              <>
+                <AudioPlayer
+                  previewUrl={"src/assets/img/deep-forest-music/previewSongs.mp3"}
+                  songs={[
+                    {
+                      "idx": 1,
+                      "description": "The Chronicles of Deep Forest - 30 Years Anniversary by Eric Mouquet | Grammy Award Winner",
+                      "category": "Preview",
+                      "album": "EtherealEchoes",
+                      "cover_art_url": iconPreviewAudioPlayer,
+                      "title": "Deep Forest Music Preview",
+                    },
+                  ]}
+                />
+              </>
+            </Modal>{" "}
+          </div>
           {/* <p> Deep Forest Music </p>
           <p>
             These NFTs aren't just static pieces of digital art, they are immersive experiences. Each of the 90 NFTs is brought to life through a unique
@@ -275,7 +240,7 @@ export const DeepForestMusic = () => {
         title={dataNftToOpen?.title}
         hasFilter={false}
         filterData={[]}
-        titleClassName={"p-4 "}>
+        titleClassName={"p-4"}>
         {isFetchingDataMarshal ? (
           <div
             className="flex flex-col items-center justify-center"

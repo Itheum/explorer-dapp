@@ -32,7 +32,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       } else {
         const collections = SUPPORTED_COLLECTIONS;
         const nftsT = await DataNft.ownedByAddress(address, collections);
-        console.log("nftsT", nftsT);
         updateNfts(nftsT);
       }
       updateIsLoading(false);
