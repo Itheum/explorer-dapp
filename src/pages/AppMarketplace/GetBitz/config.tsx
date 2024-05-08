@@ -16,6 +16,8 @@ export interface GiveBitzDataBounty {
   readMoreLink: string;
   submittedOnTs: number;
   fillPerks: string;
+  receivedBitzSum?: number;
+  giverCounts?: number;
 }
 
 export function getCreatorCampaigns() {

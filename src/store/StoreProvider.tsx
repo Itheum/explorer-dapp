@@ -2,10 +2,12 @@ import React, { PropsWithChildren, useEffect } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { GET_BITZ_TOKEN } from "appsConfig";
+import { SUPPORTED_COLLECTIONS } from "config";
 import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "./account";
+import { useNftsStore } from "./nfts";
 import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz";
 
 export const StoreProvider = ({ children }: PropsWithChildren) => {
@@ -18,6 +20,24 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
   const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
+
+  // NFT STORE
+  const { nfts, updateNfts, updateIsLoading } = useNftsStore();
+
+  useEffect(() => {
+    async function fetchNfts() {
+      updateIsLoading(true);
+      if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
+        updateNfts([]);
+      } else {
+        const collections = SUPPORTED_COLLECTIONS;
+        const nftsT = await DataNft.ownedByAddress(address, collections);
+        updateNfts(nftsT);
+      }
+      updateIsLoading(false);
+    }
+    fetchNfts();
+  }, [address, tokenLogin]);
 
   useEffect(() => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
@@ -34,8 +54,8 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
 
       // does the logged in user actually OWN the bitz game data nft
-      const _myDataNfts = await DataNft.ownedByAddress(address);
-      const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitzGameDataNFT.nonce === dNft.nonce);
+      const _myDataNfts = nfts;
+      const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitzGameDataNFT.nonce === dNft.nonce && bitzGameDataNFT.collection === dNft.collection);
       const hasGameDataNFT = hasRequiredDataNFT ? true : false;
 
       // only get the bitz balance if the user owns the token
@@ -80,7 +100,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         updateCollectedBitzSum(-1);
       }
     })();
-  }, [address, tokenLogin]);
+  }, [address, tokenLogin, nfts]);
 
   return <>{children}</>;
 };

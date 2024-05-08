@@ -4,15 +4,16 @@ import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import axios, { AxiosError } from "axios";
 import { GET_BITZ_TOKEN } from "appsConfig";
+import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
 import { Loader } from "components";
 import { useGetAccount } from "hooks";
+import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
 import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
 import PowerUpBounty from "./PowerUpBounty";
 import { getDataBounties, GiveBitzDataBounty } from "../config";
-import { LeaderBoardItemType, leaderBoardTable, viewDataJSONCore } from "../index";
-import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
-import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
+import { LeaderBoardItemType, viewDataJSONCore } from "../index";
+import LeaderBoardTable from "../LeaderBoardTable";
 
 type GiveBitzBaseProps = {
   gameDataNFT: DataNft;
@@ -29,12 +30,25 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
+  const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
 
   useEffect(() => {
     const highlighters = document.querySelectorAll("[data-highlighter]");
     highlighters.forEach((highlighter) => {
       new Highlighter(highlighter);
     });
+    const fetchDataBounties = async () => {
+      const _dataBounties: GiveBitzDataBounty[] = await Promise.all(
+        getDataBounties().map(async (item: GiveBitzDataBounty) => {
+          const response = await fetchBitSumAndGiverCounts({ getterAddr: item.bountySubmitter, campaignId: item.bountyId });
+          return { ...item, receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts };
+        })
+      );
+      const sortedDataBounties = _dataBounties.sort((a, b) => (b.receivedBitzSum ?? 0) - (a.receivedBitzSum ?? 0));
+      setDataBounties(sortedDataBounties);
+    };
+
+    fetchDataBounties();
   }, []);
 
   useEffect(() => {
@@ -123,6 +137,28 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
     setGiverLeaderBoardIsLoading(false);
   }
 
+  async function fetchBitSumAndGiverCounts({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }): Promise<any> {
+    const callConfig = {
+      headers: {
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+      },
+    };
+
+    try {
+      console.log("AXIOS CALL -----> xpGamePrivate/getterBitSumAndGiverCounts");
+      const { data } = await axios.get<any[]>(
+        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
+        callConfig
+      );
+
+      return data;
+      // setGiverLeaderBoard(_toLeaderBoardTypeArr);
+    } catch (err) {
+      const message = "Getting sum and giver count failed :" + address + "  " + campaignId + (err as AxiosError).message;
+      console.error(message);
+    }
+  }
+
   // fetch the given bits for a specific getter (creator campaign or bounty id)
   async function fetchGivenBitsForGetter({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
     const callConfig = {
@@ -166,7 +202,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           playerAddr: i.giverAddr,
           bits: i.bits,
         };
-
         return item;
       });
 
@@ -178,8 +213,34 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
     }
   }
 
+  // find the data bounty with the given id and update its total received amount
+  const updateDataBountyTotalReceivedAmount = (id: string, bitsVal: number, isNewGiver: number) => {
+    setDataBounties((prevDataBounties) => {
+      return prevDataBounties.map((dataBounty) => {
+        if (dataBounty.bountyId === id) {
+          return {
+            ...dataBounty,
+            receivedBitzSum: (dataBounty.receivedBitzSum ?? 0) + bitsVal,
+            giverCounts: (dataBounty.giverCounts ?? 0) + isNewGiver,
+          };
+        }
+        return dataBounty;
+      });
+    });
+  };
+
   // send bits to creator or bounty
-  async function sendPowerUp({ bitsVal, bitsToWho, bitsToCampaignId }: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string }) {
+  async function sendPowerUp({
+    bitsVal,
+    bitsToWho,
+    bitsToCampaignId,
+    isNewGiver,
+  }: {
+    bitsVal: number;
+    bitsToWho: string;
+    bitsToCampaignId: string;
+    isNewGiver: number;
+  }) {
     if (tokenLogin) {
       try {
         const viewDataArgs = {
@@ -201,6 +262,9 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
             throw new Error("Error: Not possible to sent power-up. As error code returned. Do you have enough BiTz to give?");
           } else {
+            fetchMyGivenBitz();
+            fetchGiverLeaderBoard();
+            updateDataBountyTotalReceivedAmount(bitsToCampaignId, bitsVal, isNewGiver);
             return true;
           }
         } else {
@@ -232,17 +296,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
       )}
 
       <div id="giveLeaderboard" className="h-[1700px] md:h-[1000px] flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
-        {/* <Vortex
-          containerClassName="h-full w-full overflow-hidden"
-          backgroundColor="transparent"
-          rangeY={300} /// TOOD SET THE HEIGHT OF THE DIV
-          particleCount={100}
-          baseRadius={4}
-          baseHue={120}
-          baseSpeed={0.3}
-          rangeSpeed={0.3}
-          rangeRadius={10}
-          className="flex items-center flex-col justify-center px-2 md:px-10  py-4 w-full h-full"> */}
         <h3 className="text-center mb-[1rem]">POWER-UP LEADERBOARD</h3>
 
         {giverLeaderBoardIsLoading ? (
@@ -250,13 +303,12 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         ) : (
           <>
             {giverLeaderBoard && giverLeaderBoard.length > 0 ? (
-              leaderBoardTable(giverLeaderBoard, address)
+              <LeaderBoardTable leaderBoardData={giverLeaderBoard} address={address} />
             ) : (
               <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
             )}
           </>
         )}
-        {/* </Vortex> */}
       </div>
 
       {/* <>
@@ -305,17 +357,18 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         <div
           className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center md:justify-start w-full antialiased pt-4 relative h-[100%] "
           style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
-          {getDataBounties().map((item: GiveBitzDataBounty) => (
-            <PowerUpBounty
-              key={item.bountyId}
-              {...item}
-              sendPowerUp={sendPowerUp}
-              fetchGivenBitsForGetter={fetchGivenBitsForGetter}
-              fetchGetterLeaderBoard={fetchGetterLeaderBoard}
-              fetchMyGivenBitz={fetchMyGivenBitz}
-              fetchGiverLeaderBoard={fetchGiverLeaderBoard}
-            />
-          ))}
+          {dataBounties &&
+            dataBounties.map((item: GiveBitzDataBounty) => {
+              return (
+                <PowerUpBounty
+                  key={item.bountyId}
+                  {...item}
+                  sendPowerUp={sendPowerUp}
+                  fetchGivenBitsForGetter={fetchGivenBitsForGetter}
+                  fetchGetterLeaderBoard={fetchGetterLeaderBoard}
+                />
+              );
+            })}
         </div>
         <div className="mt-8 group max-w-[60rem]" data-highlighter>
           <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/50  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
