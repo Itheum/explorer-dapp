@@ -51,9 +51,10 @@ export const HoverEffect = ({
                   className="absolute z-[100] text-emerald-900 fill-black/80 w-16 h-0 hover:cursor-pointer group-hover:h-16 transition-all duration-500"
                 />
               ) : (
-                <button onClick={() => console.log("FIND ME")} className="bottom-0 right-0 gap-1 absolute bg-emerald-900/80 rounded-2xl px-2 flex flex-row">
-                  Find <Search className="w-4" />
-                </button>
+                // <button onClick={() => console.log("FIND ME")} className="bottom-0 right-0 gap-1 absolute bg-emerald-900/80 rounded-2xl px-2 flex flex-row">
+                //   Find <Search className="w-4" />
+                // </button>
+                <></>
               )}
             </div>
             <CardTitle>{item.title}</CardTitle>
