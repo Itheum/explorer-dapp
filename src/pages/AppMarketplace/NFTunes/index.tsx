@@ -399,7 +399,7 @@ export const NFTunes = () => {
                 </div>
               </div>
             </div>
-            {IS_DEVNET && (
+            {
               <div className="flex flex-row w-full justify-center">
                 <button
                   onClick={() => scrollToSection("data-nfts")}
@@ -408,7 +408,7 @@ export const NFTunes = () => {
                   <MoveDown />
                 </button>
               </div>
-            )}
+            }
           </div>
         </div>
 
@@ -597,7 +597,7 @@ export const NFTunes = () => {
             </div>
           </div>
         </div>
-        {IS_DEVNET && (
+        {
           <div id="data-nfts" className="flex justify-center items-center p-16 ">
             <div className="flex flex-col">
               <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Music Data NFTs "} dataNftCount={shownAppDataNfts.length}>
@@ -660,7 +660,7 @@ export const NFTunes = () => {
               </div>
             </div>
           </div>
-        )}
+        }
       </div>
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
     </div>
