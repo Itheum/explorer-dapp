@@ -23,4 +23,4 @@ export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
 
 export const SUPPORTED_COLLECTIONS = IS_DEVNET
   ? ["DATANFTFT-e0b917", "DNFTPHMA-9e2b1c", "OASISMUSIC-9b3433", "OASMUSICPL-47b186", "FOOWLDMSC-5ee8ec"]
-  : ["DATANFTFT-e936d4"];
+  : ["DATANFTFT-e936d4", "DFEE-72425b"];
