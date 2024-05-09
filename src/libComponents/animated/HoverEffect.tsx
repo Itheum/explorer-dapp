@@ -47,12 +47,10 @@ export const HoverEffect = ({
               <img
                 onClick={() => {
                   if (item.ownedDataNftIndex && item.ownedDataNftIndex >= 0) viewData(item.ownedDataNftIndex ?? 0);
+                  else window.open("https://nft.ici.ro/ethereal-echoes", "_blank");
                 }}
                 src={item.image}
-                className={cn(
-                  "group-hover:scale-110 transition-all duration-500 rounded-2xl",
-                  item.ownedDataNftIndex && item.ownedDataNftIndex >= 0 ? "cursor-pointer" : ""
-                )}
+                className="group-hover:scale-110 transition-all duration-500 rounded-2xl cursor-pointer"
               />
               {item.ownedDataNftIndex && item.ownedDataNftIndex >= 0 ? (
                 <PlayCircle
