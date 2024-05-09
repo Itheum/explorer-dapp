@@ -45,6 +45,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         })
       );
       const sortedDataBounties = _dataBounties.sort((a, b) => (b.receivedBitzSum ?? 0) - (a.receivedBitzSum ?? 0));
+
       setDataBounties(sortedDataBounties);
     };
 
@@ -150,12 +151,11 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
         callConfig
       );
-
       return data;
-      // setGiverLeaderBoard(_toLeaderBoardTypeArr);
     } catch (err) {
       const message = "Getting sum and giver count failed :" + address + "  " + campaignId + (err as AxiosError).message;
       console.error(message);
+      return false;
     }
   }
 
@@ -357,7 +357,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         <div
           className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center md:justify-start w-full antialiased pt-4 relative h-[100%] "
           style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
-          {dataBounties &&
+          {dataBounties ? (
             dataBounties.map((item: GiveBitzDataBounty) => {
               return (
                 <PowerUpBounty
@@ -368,7 +368,10 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
                   fetchGetterLeaderBoard={fetchGetterLeaderBoard}
                 />
               );
-            })}
+            })
+          ) : (
+            <Loader />
+          )}
         </div>
         <div className="mt-8 group max-w-[60rem]" data-highlighter>
           <div className="relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/50  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden">
