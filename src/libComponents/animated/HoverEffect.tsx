@@ -44,11 +44,20 @@ export const HoverEffect = ({
           </AnimatePresence>
           <Card>
             <div className="relative flex justify-center items-center group">
-              <img src={item.image} className="group-hover:scale-110 transition-all duration-500  rounded-2xl" />
+              <img
+                onClick={() => {
+                  if (item.ownedDataNftIndex && item.ownedDataNftIndex >= 0) viewData(item.ownedDataNftIndex ?? 0);
+                }}
+                src={item.image}
+                className={cn(
+                  "group-hover:scale-110 transition-all duration-500 rounded-2xl",
+                  item.ownedDataNftIndex && item.ownedDataNftIndex >= 0 ? "cursor-pointer" : ""
+                )}
+              />
               {item.ownedDataNftIndex && item.ownedDataNftIndex >= 0 ? (
                 <PlayCircle
                   onClick={() => viewData(item.ownedDataNftIndex ?? 0)}
-                  className="absolute z-[100] text-teal-900 fill-black/80 w-16 h-0 hover:cursor-pointer group-hover:h-16 transition-all duration-500"
+                  className="absolute z-[100] text-white fill-black/80 w-24 h-16 hover:cursor-pointer group-hover:h-24 transition-all duration-500"
                 />
               ) : (
                 <Link
