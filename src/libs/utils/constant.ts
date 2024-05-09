@@ -1,5 +1,5 @@
 import iconBober from "assets/img/bober-game-room/BoberLast.png";
-import iconDeepForest from "assets/img/deep-forest-music/preview.jpg";
+import iconDeepForest from "assets/img/deep-forest-music/header.png";
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
@@ -36,7 +36,7 @@ export const APP_MAPPINGS = [
     appName: "Deep Forest Music Data NFT Player",
     appDescription: "The Chronicles of Deep Forest",
     routeKey: "deepforestmusic",
-    desc: "These NFTs aren't just static pieces of digital art, they are immersive experiences. Each of the 90 NFTs is brought to life through a unique graphical Artwork.", // a bonus unreleased track and only one NFT per category is crowned with a personal message from Eric Mouquet to its owner. Yet, the allure of these music dataNFTs extends beyond their aesthetic and sentimental value. Each NFT is imbued with real-life utility, making them not just collector's items, but practical digital assets in various realms, like access to concerts, whitelisting, access to unreleased versions of the tracks, multi-track files, physical items and many more in the future.",
+    desc: "Experience Grammy Award winner Deep Forest's timeless music reimagined in a limited edition 90-piece Music Data NFT collection",
     img: iconDeepForest,
   },
   {

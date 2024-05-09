@@ -14,7 +14,7 @@ export const HoverEffect = ({
     description?: string;
     image?: string;
     ownedDataNftIndex?: number;
-    link: string;
+    link?: string;
   }[];
   className?: string;
   viewData: (index: number) => void;
@@ -28,7 +28,7 @@ export const HoverEffect = ({
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-emerald-900/[0.6] block  rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-teal-950/[0.6] block  rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -48,13 +48,15 @@ export const HoverEffect = ({
               {item.ownedDataNftIndex && item.ownedDataNftIndex >= 0 ? (
                 <PlayCircle
                   onClick={() => viewData(item.ownedDataNftIndex ?? 0)}
-                  className="absolute z-[100] text-emerald-900 fill-black/80 w-16 h-0 hover:cursor-pointer group-hover:h-16 transition-all duration-500"
+                  className="absolute z-[100] text-teal-900 fill-black/80 w-16 h-0 hover:cursor-pointer group-hover:h-16 transition-all duration-500"
                 />
               ) : (
-                // <button onClick={() => console.log("FIND ME")} className="bottom-0 right-0 gap-1 absolute bg-emerald-900/80 rounded-2xl px-2 flex flex-row">
-                //   Find <Search className="w-4" />
-                // </button>
-                <></>
+                <Link
+                  to={"https://nft.ici.ro/ethereal-echoes"}
+                  target="_blank"
+                  className="hover:scale-125 transition-all bottom-0 right-0 gap-1 absolute bg-teal-900/80 rounded-2xl px-2 flex flex-row">
+                  Find <Search className="w-4" />
+                </Link>
               )}
             </div>
             <CardTitle>{item.title}</CardTitle>
@@ -68,8 +70,7 @@ export const HoverEffect = ({
 
 export const Card = ({ className, children }: { className?: string; children: React.ReactNode }) => {
   return (
-    <div
-      className={cn("rounded-2xl h-full w-full p-4 overflow-hidden border border-emerald-900/[0.5] group-hover:border-emerald-900 relative z-20", className)}>
+    <div className={cn("rounded-2xl h-full w-full p-4 overflow-hidden border border-teal-900/[0.5] group-hover:border-teal-900 relative z-20", className)}>
       <div className="relative z-50">
         <div className=" ">{children}</div>
       </div>

@@ -2,14 +2,8 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { Music2, PlayCircle } from "lucide-react";
-import { Loader } from "components";
-import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
-import { Modal } from "components/Modal/Modal";
-import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { useNftsStore } from "store/nfts";
 import album1 from "assets/img/deep-forest-music/1.jpg";
 import album2 from "assets/img/deep-forest-music/2.jpg";
 import album3 from "assets/img/deep-forest-music/3.jpg";
@@ -20,63 +14,60 @@ import album7 from "assets/img/deep-forest-music/7.jpg";
 import album8 from "assets/img/deep-forest-music/8.jpg";
 import album9 from "assets/img/deep-forest-music/9.jpg";
 // deep forest
-import iconPreview from "assets/img/deep-forest-music/preview.jpg";
+import deepForestPreviewMix from "assets/img/deep-forest-music/deep-forest-preview-mix.mp3";
 import iconPreviewAudioPlayer from "assets/img/deep-forest-music/deep-forest.png";
+import iconPreview from "assets/img/deep-forest-music/header.png";
+import { Loader } from "components";
+import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
+import { Modal } from "components/Modal/Modal";
 import { HoverEffect } from "libComponents/animated/HoverEffect";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { useNftsStore } from "store/nfts";
 
 export const DeepForestMusic = () => {
   const albums = [
     {
       title: "Eponymous",
       image: album1,
-      link: "/deep-forest-music", // TODO add the link to datadex??
       ownedDataNftIndex: -1,
     },
     {
       title: "Deep Brasil",
       image: album2,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Deep Africa",
       image: album3,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Evo Devo",
       image: album4,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Epic Circuits",
       image: album5,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Deep Symphonic",
       image: album6,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Live at EMM Studios",
       image: album7,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Burning",
       image: album8,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
     {
       title: "Crystal Clear",
       image: album9,
-      link: "/deep-forest-music", // TODO add the link to datadex??
     },
   ];
   const [albumsState, setAlbumsState] = useState(albums);
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
-
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
@@ -181,14 +172,14 @@ export const DeepForestMusic = () => {
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full overflow-hidden">
-      <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#4a6741,#00755E,#00755E,#19351E,#1C3C13,#4a6741)] animate-gradient bg-[length:200%_auto]"></div>
+      <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
         <div className="flex flex-col w-[90%] md:w-[70%] p-10">
           <img src={iconPreview} className="rounded-2xl" />
           <div className="relative flex -mt-10 w-full items-center  justify-end p-2">
             <Modal
               openTrigger={
-                <button className="text-sm   md:text-lg bottom-0 right-0 rounded-full justify-center gap-1 flex flex-row">
+                <button className="text-sm hover:scale-125 transition-all duration-300 md:text-lg bottom-0 right-0 rounded-full justify-center gap-1 flex flex-row">
                   Preview <PlayCircle className="cursor-pointer text-secondary dark:text-primary" />
                 </button>
               }
@@ -199,7 +190,7 @@ export const DeepForestMusic = () => {
               titleClassName={"p-8"}>
               <>
                 <AudioPlayer
-                  previewUrl={"src/assets/img/deep-forest-music/previewSongs.mp3"}
+                  previewUrl={deepForestPreviewMix}
                   songs={[
                     {
                       "idx": 1,
@@ -228,8 +219,7 @@ export const DeepForestMusic = () => {
             <Music2 />
           </div>
           <div className="relative ">
-            {" "}
-            <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#4a6741,#00755E,#00755E,#19351E,#1C3C13,#4a6741)] animate-gradient bg-[length:200%_auto]"></div>
+            <div className="w-full h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
             <HoverEffect items={albumsState} viewData={viewData} className="text-base text-foreground font-medium pt-2" />
           </div>
         </div>
@@ -266,7 +256,7 @@ export const DeepForestMusic = () => {
           </>
         )}
       </Modal>
-      <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#4a6741,#00755E,#00755E,#19351E,#1C3C13,#4a6741)] animate-gradient bg-[length:200%_auto]"></div>
+      <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
     </div>
   );
 };
