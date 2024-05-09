@@ -55,14 +55,14 @@ export const HoverEffect = ({
               {item.ownedDataNftIndex && item.ownedDataNftIndex >= 0 ? (
                 <PlayCircle
                   onClick={() => viewData(item.ownedDataNftIndex ?? 0)}
-                  className="absolute z-[100] text-white fill-black/80 w-24 h-16 hover:cursor-pointer group-hover:h-24 transition-all duration-500"
+                  className="absolute z-[100] text-white fill-black/90 w-36 h-16 md:h-36 hover:cursor-pointer  transition-all duration-500"
                 />
               ) : (
                 <Link
                   to={"https://nft.ici.ro/ethereal-echoes"}
                   target="_blank"
-                  className="hover:scale-125 transition-all bottom-0 right-0 gap-1 absolute bg-teal-900/80 rounded-2xl px-2 flex flex-row">
-                  Find <Search className="w-4" />
+                  className="hover:scale-125 transition-all bottom-0 right-0 gap-1 p-1 absolute bg-teal-900/80 rounded-2xl px-2 flex flex-row md:text-xl">
+                  Find <Search className="w-8" />
                 </Link>
               )}
             </div>
