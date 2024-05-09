@@ -4,12 +4,8 @@ import { getHealthCheckFromBackendApi, getTrendingFromBackendApi } from "libs/ba
 import React, { useEffect, useState } from "react";
 import { ThreeDCard } from "./ThreeDCard";
 import toast from "react-hot-toast";
+import { Loader } from "./sdkDappComponents";
 
-// interface NftItem {
-//   title: string;
-//   supply: number;
-//   price: number;
-// }
 type TrendingDataCreationNftsType = {
   nonce: number;
   tokenIdentifier: string;
@@ -23,6 +19,7 @@ const TrendingSection: React.FC = () => {
   const { chainID } = useGetNetworkConfig();
   const [trendingDataNfts, setTrendingDataNfts] = useState<TrendingDataNftsType[]>([]);
   const [isApiUp, setIsApiUp] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchApiHealthCheck() {
@@ -44,6 +41,7 @@ const TrendingSection: React.FC = () => {
   }, [isApiUp]);
 
   async function fetchTrendingNfts() {
+    setIsLoading(true);
     DataNft.setNetworkConfig(chainID === "1" ? "mainnet" : "devnet");
     const getTrendingData = await getTrendingFromBackendApi(chainID);
     const _trendingData: Array<TrendingDataCreationNftsType> = [];
@@ -61,6 +59,7 @@ const TrendingSection: React.FC = () => {
       }
     });
     setTrendingDataNfts(trending as TrendingDataNftsType[]);
+    setIsLoading(false);
   }
 
   return (
@@ -69,7 +68,13 @@ const TrendingSection: React.FC = () => {
         <div>
           <h2 className="mt-12 py-2 mb-0 ">Trending Offers</h2>
           <div className="w-full flex flex-row flex-wrap items-center justify-center md:items-start md:justify-start">
-            {trendingDataNfts &&
+            {isLoading ? (
+              <Loader className="h-[20rem]" />
+            ) : trendingDataNfts?.length === 0 ? (
+              <div className="flex flex-col items-center justify-center w-full h-[20rem]">
+                <h3 className="text-lg">No trending offers available</h3>
+              </div>
+            ) : (
               trendingDataNfts
                 .slice(0, 10)
                 .map((nft, index) => (
@@ -81,7 +86,8 @@ const TrendingSection: React.FC = () => {
                     nftImgUrl={nft.nftImgUrl || ""}
                     rating={nft.rating}
                   />
-                ))}
+                ))
+            )}
           </div>
         </div>
       ) : (

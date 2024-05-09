@@ -9,6 +9,7 @@ import { Address } from "@multiversx/sdk-core/out";
 import toast from "react-hot-toast";
 import { convertWeiToEsdt } from "libs/utils";
 import { IS_DEVNET } from "appsConfig";
+import { Loader } from "./sdkDappComponents";
 
 export interface RecentDataNFTType {
   index: BigNumber.Value;
@@ -30,8 +31,9 @@ export interface RecentDataNFTType {
 
 const RecentDataNFTsSection: React.FC = () => {
   const { chainID } = useGetNetworkConfig();
-  const [latestOffers, setLatestOffers] = useState<RecentDataNFTType[]>();
+  const [latestOffers, setLatestOffers] = useState<RecentDataNFTType[]>([]);
   const [isApiUp, setIsApiUp] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchApiHealthCheck() {
@@ -54,7 +56,7 @@ const RecentDataNFTsSection: React.FC = () => {
 
   const apiWrapper = async () => {
     DataNft.setNetworkConfig(IS_DEVNET ? "devnet" : "mainnet");
-
+    setIsLoading(true);
     try {
       const offers = await getRecentOffersFromBackendApi(chainID);
       const recentNonces = offers.map((nft: any) => ({ nonce: nft.offeredTokenNonce }));
@@ -88,6 +90,7 @@ const RecentDataNFTsSection: React.FC = () => {
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -96,7 +99,13 @@ const RecentDataNFTsSection: React.FC = () => {
         <div>
           <h2 className="mt-12 py-2 mb-0">Recent Data NFTs</h2>
           <div className="w-full flex flex-row flex-wrap items-center justify-center md:items-start md:justify-start">
-            {latestOffers &&
+            {isLoading ? (
+              <Loader className="h-[20rem]" />
+            ) : latestOffers?.length === 0 ? (
+              <div className="flex flex-col items-center justify-center w-full h-[20rem]">
+                <h3 className="text-lg">No recent offers available</h3>
+              </div>
+            ) : (
               latestOffers
                 .slice(0, 10)
                 .map((nft, index) => (
@@ -110,7 +119,8 @@ const RecentDataNFTsSection: React.FC = () => {
                     wantedTokenAmount={Number(convertWeiToEsdt(nft.wantedTokenAmount))}
                     offerIndex={Number(nft.index)}
                   />
-                ))}
+                ))
+            )}
           </div>
         </div>
       ) : (

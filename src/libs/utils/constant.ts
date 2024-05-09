@@ -1,11 +1,11 @@
+import iconBober from "assets/img/bober-game-room/BoberLast.png";
+import iconDeepForest from "assets/img/deep-forest-music/header.png";
 import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
-import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
-import iconNFTunes from "assets/img/nf-tunes-logo.png";
 import iconGetBitz from "assets/img/getbitz/expl-app-getbitz-icon.gif";
-import iconBober from "assets/img/bober-game-room/BoberLast.png";
-
+import iconNFTunes from "assets/img/nf-tunes-logo.png";
+import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
 export const ERROR_DATA_LOADING = "Data is still loading";
@@ -31,6 +31,13 @@ export const APP_MAPPINGS = [
     routeKey: "nftunes",
     desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
     img: iconNFTunes,
+  },
+  {
+    appName: "Deep Forest Music Data NFT Player",
+    appDescription: "The Chronicles of Deep Forest",
+    routeKey: "deepforestmusic",
+    desc: "Experience Grammy Award winner Deep Forest's timeless music reimagined in a limited edition 90-piece Music Data NFT collection",
+    img: iconDeepForest,
   },
   {
     appName: "Bober Game Room",

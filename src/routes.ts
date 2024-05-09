@@ -5,6 +5,7 @@ import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
 import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom } from "./pages";
+import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
 
 export const routeNames = {
   home: "/",
@@ -17,6 +18,7 @@ export const routeNames = {
   multiversxbubbles: "/multiversx-bubbles",
   multiversxinfographics: "/multiversx-infographics",
   nftunes: "/nftunes",
+  deepforestmusic: "/deep-forest-music-data-nft",
   timecapsule: "/timecapsule",
   getbitz: "/getbitz",
   bobergameroom: "/bobergameroom",
@@ -66,6 +68,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.nftunes,
     title: "NFTunes",
     component: NFTunes,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.deepforestmusic,
+    title: "Deep Forest Music Data NFT",
+    component: DeepForestMusic,
     authenticatedRoute: false,
   },
   {

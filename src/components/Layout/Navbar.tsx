@@ -33,6 +33,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
 import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
 import { useAccountStore } from "../../store/account";
+import { cn } from "libs/utils";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
@@ -176,7 +177,7 @@ export const Navbar = () => {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Data Widgets</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <ul className={cn("grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]", isLoggedIn ? "" : "!w-[400px]")}>
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                   <Link
                     to={returnRoute(item.routeKey)}
@@ -239,17 +240,19 @@ export const Navbar = () => {
               </NavigationMenuItem>
             </>
           ) : (
-            <NavigationMenuItem>
-              <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center">
-                  <Button
-                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
-                    variant="outline">
-                    Login
-                  </Button>
-                </div>
-              </Link>
-            </NavigationMenuItem>
+            <>
+              <NavigationMenuItem>
+                <Link to={routeNames.unlock} state={{ from: location.pathname }}>
+                  <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center">
+                    <Button
+                      className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
+                      variant="outline">
+                      Login
+                    </Button>
+                  </div>
+                </Link>
+              </NavigationMenuItem>{" "}
+            </>
           )}
           <NavigationMenuItem>
             <SwitchButton />

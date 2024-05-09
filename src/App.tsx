@@ -10,6 +10,7 @@ import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./libComponents/ThemeProvider";
 import { StoreProvider } from "./store/StoreProvider";
+import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
 
 export const App = () => {
   return (
@@ -38,6 +39,7 @@ export const App = () => {
                 <Route path={`${routeNames.itheumtrailblazer}/:targetNonce/:targetMessageToBeSigned`} element={<ItheumTrailblazer />} />
                 <Route path={`${routeNames.multiversxinfographics}/:targetNonce/:targetMessageToBeSigned`} element={<MultiversxInfographics />} />
                 <Route path={`${routeNames.nftunes}/:targetNonce/:targetMessageToBeSigned`} element={<NFTunes />} />
+                <Route path={`${routeNames.deepforestmusic}/:targetNonce/:targetMessageToBeSigned`} element={<DeepForestMusic />} />
                 <Route path={`${routeNames.timecapsule}/:targetNonce/:targetMessageToBeSigned`} element={<TimeCapsule />} />
                 <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                 <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
