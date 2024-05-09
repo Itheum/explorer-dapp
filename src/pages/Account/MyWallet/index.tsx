@@ -224,7 +224,6 @@ export const MyWallet = () => {
             className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
             onClick={() => {
               setNumberOfNftsShown(numberOfNftsShown + SHOW_NFTS_STEP);
-              console.log(nfts.length, numberOfNftsShown);
             }}
             disabled={false}>
             Load more
