@@ -44,8 +44,10 @@ export const Home = () => {
           </div>
         ))}
       </div>
-      <TrandingSection />
-      <RecentDataNFTsSection />
+      <div className="flex flex-col">
+        <TrandingSection />
+        <RecentDataNFTsSection />
+      </div>
     </HeaderComponent>
   );
 };
