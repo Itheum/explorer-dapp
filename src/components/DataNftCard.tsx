@@ -64,7 +64,7 @@ export function DataNftCard({
           "border-[0.5px]  dark:border-slate-100/30 border-slate-300  bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]"
         )}>
         <CardContent className="flex flex-col p-3">
-          <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[15rem]  md:h-[18rem] mx-auto" />
+          <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[15rem]  md:h-[18rem]" />
 
           <div className="md:h-[15rem] h-[13rem]">
             <div className="grid grid-cols-12 mb-1">
