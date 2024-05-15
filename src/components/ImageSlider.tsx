@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Image } from "lucide-react";
-import { cn } from "libs/utils";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "libComponents/Button";
-import NftMediaComponent from "./NftMediaComponent";
 
 interface ImageSliderProps {
   media: { url: string; type: string }[];

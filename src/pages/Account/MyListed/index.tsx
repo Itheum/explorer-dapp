@@ -12,6 +12,7 @@ import { Card, CardContent } from "libComponents/Card";
 import { ExternalLink } from "lucide-react";
 import ImageSlider from "components/ImageSlider";
 import NftMediaComponent from "components/NftMediaComponent";
+import { NftMedia } from "libs/types";
 
 export const MyListed = () => {
   const {
@@ -76,11 +77,7 @@ export const MyListed = () => {
                 <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px] pb-5">
                   <CardContent className="flex flex-col p-6 ">
                     <div className="mb-4">
-                      {dataNft.extraAssets.length > 0 ? (
-                        <ImageSlider imageUrls={dataNft.media.map((mediaObj: any) => mediaObj.url) ?? [dataNft.nftImgUrl]} autoSlide />
-                      ) : (
-                        <NftMediaComponent nftMediaUrl={dataNft.nftImgUrl} isLoading={isLoading} mediaStyle="mb-8  base:max-h-[15rem] md:max-h-[18rem] " />
-                      )}
+                      <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[15rem]  md:h-[18rem]" />
                     </div>
                     <div className="xl:h-[300px] h-[315px]">
                       <div className="mb-1">
