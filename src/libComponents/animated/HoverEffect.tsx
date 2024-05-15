@@ -44,18 +44,25 @@ export const HoverEffect = ({
           </AnimatePresence>
           <Card>
             <div className="relative flex justify-center items-center group">
-              <img src={item.image} className="group-hover:scale-110 transition-all duration-500  rounded-2xl" />
+              <img
+                onClick={() => {
+                  if (item.ownedDataNftIndex && item.ownedDataNftIndex >= 0) viewData(item.ownedDataNftIndex ?? 0);
+                  else window.open("https://nft.ici.ro/ethereal-echoes", "_blank");
+                }}
+                src={item.image}
+                className="group-hover:scale-110 transition-all duration-500 rounded-2xl cursor-pointer"
+              />
               {item.ownedDataNftIndex && item.ownedDataNftIndex >= 0 ? (
                 <PlayCircle
                   onClick={() => viewData(item.ownedDataNftIndex ?? 0)}
-                  className="absolute z-[100] text-teal-900 fill-black/80 w-16 h-0 hover:cursor-pointer group-hover:h-16 transition-all duration-500"
+                  className="absolute z-[100] text-white fill-black/90 w-36 h-16 md:h-36 hover:cursor-pointer  transition-all duration-500"
                 />
               ) : (
                 <Link
                   to={"https://nft.ici.ro/ethereal-echoes"}
                   target="_blank"
-                  className="hover:scale-125 transition-all bottom-0 right-0 gap-1 absolute bg-teal-900/80 rounded-2xl px-2 flex flex-row">
-                  Find <Search className="w-4" />
+                  className="hover:scale-125 transition-all bottom-0 right-0 gap-1 p-1 absolute bg-teal-900/80 rounded-2xl px-2 flex flex-row md:text-xl">
+                  Find <Search className="w-8" />
                 </Link>
               )}
             </div>

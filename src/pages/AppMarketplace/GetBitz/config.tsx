@@ -260,6 +260,52 @@ export function getDataBounties() {
         Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
         50 copies donated to BiTz Monthly Leaderboard`,
     });
+
+    allBounties.push({
+      bountySubmitter: "erd13ga0m7hjvjg9x47ngzv7mehamh4klctdn4m0gufwr4ukfg9x5yqs45gnga",
+      bountyId: "b10",
+      title: "Me and my tradition",
+      summary: `Data NFT bounty focused on digitizing and immortalizing vanishing cultural traditions and practices.
+      Each participant would need to record rituals, ceremonies, traditional crafts, or oral histories. Each verified contribution could be transformed into a unique NFT, with rewards including a portion of NFT sales, or biTz point that are funding for community-led cultural preservation projects, or access to immersive experiences showcasing these traditions.
+       It's a way to celebrate and safeguard cultural diversity while empowering communities to preserve their heritage for future generations.`,
+      readMoreLink: "",
+      submittedOnTs: 1715329474,
+      fillPerks: `The creator of the bounty will receive 5 copies. 
+        The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.  
+        Contributors ranked 6th to 20th will receive 2 copies each. 
+        Contributors ranked 21st to 50th will receive 1 copy each. 
+        Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
+        50 copies donated to BiTz Monthly Leaderboard`,
+    });
+
+    allBounties.push({
+      bountySubmitter: "erd18qxupz0zfffk3pa034pxlsu7tttjw93aey3wlxc7jew8fe4epj6sly56ya",
+      bountyId: "b11",
+      title: "Music Data NFT",
+      summary: `Craft a Music Data NFT featuring a dynamic playlist of at least 3 songs. The playlist can evolve over time based on community input`,
+      readMoreLink: "",
+      submittedOnTs: 1715329474,
+      fillPerks: `The creator of the bounty will receive 5 copies of the album. 
+        The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.  
+        Contributors ranked 6th to 20th will receive 2 copies each. 
+        Contributors ranked 21st to 50th will receive 1 copy each. 
+        Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
+        50 copies donated to BiTz Monthly Leaderboard`,
+    });
+    allBounties.push({
+      bountySubmitter: "erd1dzmvw7gfrfv6tjxvah9rmwd45xqzs6q098925ucmsu69s48776dqlytnn2",
+      bountyId: "b12",
+      title: "EGLD Fear&Greed Index",
+      summary: `A EGLD market sentiment gauge, similar to the BTC Fear&Greed Index.`,
+      readMoreLink: "",
+      submittedOnTs: 1715329474,
+      fillPerks: `The creator of the bounty will receive 5 copies. 
+        The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.  
+        Contributors ranked 6th to 20th will receive 2 copies each. 
+        Contributors ranked 21st to 50th will receive 1 copy each. 
+        Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
+        50 copies donated to BiTz Monthly Leaderboard`,
+    });
     return allBounties;
   }
 }

@@ -176,10 +176,10 @@ export const DeepForestMusic = () => {
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
         <div className="flex flex-col w-[90%] md:w-[70%] p-10">
           <img src={iconPreview} className="rounded-2xl" />
-          <div className="relative flex -mt-10 w-full items-center  justify-end p-2">
+          <div className="relative flex -mt-10 w-full items-center  justify-end p-2 px-4">
             <Modal
               openTrigger={
-                <button className="text-sm hover:scale-125 transition-all duration-300 md:text-lg bottom-0 right-0 rounded-full justify-center gap-1 flex flex-row">
+                <button className="text-sm hover:scale-125 transition-all duration-300 md:text-xl bottom-0 right-0 rounded-full justify-center gap-1 flex flex-row">
                   Preview <PlayCircle className="cursor-pointer text-secondary dark:text-primary" />
                 </button>
               }
@@ -205,14 +205,7 @@ export const DeepForestMusic = () => {
               </>
             </Modal>{" "}
           </div>
-          {/* <p> Deep Forest Music </p>
-          <p>
-            These NFTs aren't just static pieces of digital art, they are immersive experiences. Each of the 90 NFTs is brought to life through a unique
-            graphical Artwork, a bonus unreleased track and only one NFT per category is crowned with a personal message from Eric Mouquet to its owner. Yet,
-            the allure of these music dataNFTs extends beyond their aesthetic and sentimental value. Each NFT is imbued with real-life utility, making them not
-            just collector's items, but practical digital assets in various realms, like access to concerts, whitelisting, access to unreleased versions of the
-            tracks, multi-track files, physical items and many more in the future.
-          </p> */}
+
           <div className="flex text-foreground flex-row rounded-lg mt-8 p-1  text-center gap-4 text-2xl md:w-[50%]  xl:text-3xl justify-center md:justify-start items-center ">
             <Music2 />
             <span>Albums</span>
