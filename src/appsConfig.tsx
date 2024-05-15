@@ -49,6 +49,7 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
   : [
       { tokenIdentifier: "DATANFTFT-e936d4", nonce: 4 },
       { tokenIdentifier: "DATANFTFT-e936d4", nonce: 9 },
+      { tokenIdentifier: "DATANFTFT-e936d4", nonce: 10 },
       ...Array.from({ length: 91 }, (_, i) => ({ tokenIdentifier: "DFEE-72425b", nonce: i })),
     ];
 
