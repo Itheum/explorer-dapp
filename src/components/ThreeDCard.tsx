@@ -15,12 +15,19 @@ interface ThreeDCardProps {
 
 export function ThreeDCard(props: ThreeDCardProps) {
   const { tokenIdentifier, title, nftImgUrl, supply, rating, wantedTokenAmount, offerIndex } = props;
+
   return (
     <CardContainer className="inter-var h-84 w-64 mx-2" containerClassName="py-8">
       <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
         <CardItem translateZ="100" className=" w-full flex flex-row items-center justify-center mt-4">
           <a href={`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}${offerIndex ? "/offer-" + offerIndex : ""}`} target="_blank" className="cursor-pointer">
-            <img src={nftImgUrl} className="h-48 w-48 object-cover rounded-3xl group-hover/card:shadow-xl" alt="thumbnail" />
+            {nftImgUrl.includes(".mp4") ? (
+              <div className="flex relative h-48 w-48 rounded-3xl overflow-hidden justify-center items-center">
+                <video autoPlay loop src={nftImgUrl} className="scale-[1.8]  "></video>
+              </div>
+            ) : (
+              <img src={nftImgUrl} className="h-48 w-48 object-cover rounded-3xl group-hover/card:shadow-xl" alt="thumbnail" />
+            )}
           </a>
         </CardItem>
         <CardItem translateZ="50" className=" max-w-48 elipsis truncate mt-4 text-md font-bold text-neutral-600 dark:text-white">

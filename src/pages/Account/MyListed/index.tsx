@@ -10,6 +10,9 @@ import { createNftId } from "libs/utils/token";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Card, CardContent } from "libComponents/Card";
 import { ExternalLink } from "lucide-react";
+import ImageSlider from "components/ImageSlider";
+import NftMediaComponent from "components/NftMediaComponent";
+import { NftMedia } from "libs/types";
 
 export const MyListed = () => {
   const {
@@ -29,10 +32,8 @@ export const MyListed = () => {
 
     const _totalOfferCount = await dataNftMarket.viewAddressTotalOffers(new Address(address));
     setOfferCount(_totalOfferCount);
-
     const _offers = await dataNftMarket.viewAddressListedOffers(new Address(address));
     setOffers(_offers);
-
     setIsLoading(false);
   }
 
@@ -74,13 +75,13 @@ export const MyListed = () => {
             return (
               <div className="mb-3" key={`o-c-${index}`}>
                 <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px] pb-5">
-                  <CardContent className="flex flex-col p-4">
+                  <CardContent className="flex flex-col p-6 ">
                     <div className="mb-4">
-                      <img src={isDataNftLoaded ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"} alt="dataNftImage" />
+                      <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[15rem]  md:h-[18rem]" />
                     </div>
                     <div className="xl:h-[300px] h-[315px]">
                       <div className="mb-1">
-                        <h5 className="text-center !text-xl !font-[Clash-Medium] pb-2">Offer Detail</h5>
+                        <h5 className="text-start !text-xl !font-[Clash-Medium] pb-2">Offer Detail</h5>
                       </div>
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Identifier:</span>
@@ -101,7 +102,7 @@ export const MyListed = () => {
                         <span className="col-span-8 text-left">{offer.quantity}</span>
                       </div>
 
-                      <div className="mt-4 mb-1">
+                      <div className="mt-4 mb-1 text-start">
                         <h5 className="text-center !text-xl !font-[Clash-Medium] pb-2">Data NFT Detail</h5>
                       </div>
                       <div className="grid grid-cols-12 mb-1">
