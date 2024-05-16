@@ -35,6 +35,13 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
             "relative bg-[#35d9fa]/80 dark:bg-[#35d9fa]/60  rounded-3xl p-[2px] before:absolute before:w-96 before:h-96 before:-left-48 before:-top-48 before:bg-[#35d9fa]  before:rounded-full before:opacity-0 before:pointer-events-none before:transition-opacity before:duration-500 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:hover:opacity-20 before:z-30 before:blur-[100px] after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity after:duration-500 after:[background:_radial-gradient(250px_circle_at_var(--mouse-x)_var(--mouse-y),theme(colors.sky.400),transparent)] after:group-hover:opacity-100 after:z-10 overflow-hidden",
             finalizedDataNftIdentifier ? " bg-[#35d9fa]/40   dark:bg-[#35d9fa]/20" : ""
           )}>
+          {finalizedDataNftIdentifier && (
+            <div className="ribbon absolute -top-2 -right-2 h-40 w-40 overflow-hidden before:absolute before:top-0 before:right-0 before:-z-[1] before:border-4 before:border-blue-500 after:absolute after:left-0 after:bottom-0 after:-z-[1] after:border-4 after:border-blue-500">
+              <div className="absolute z-[100] -right-14 top-[43px] w-60 rotate-45 bg-gradient-to-br from-[#022629]/80 via-[#2495AC] to-[#35d9fa] py-2.5 text-center text-white shadow-md">
+                Finalized
+              </div>
+            </div>
+          )}
           <div className="relative h-full bg-neutral-950/40 dark:bg-neutral-950/60  rounded-[inherit] z-20 overflow-hidden p-4 md:p-8">
             <div className="flex justify-between items-center text-sm md:text-base">
               <div className=" bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30  ">
