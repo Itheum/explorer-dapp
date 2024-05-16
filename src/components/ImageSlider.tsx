@@ -56,14 +56,7 @@ const ImageSlider: React.FC<ImageSliderProps> = (props) => {
             position: "absolute",
           }}>
           {media[imageIndex].type.includes("video") ? (
-            <video
-              autoPlay
-              loop
-              muted
-              controls
-              webkit-playsinline
-              playsInline
-              className=" md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto">
+            <video autoPlay loop muted webkit-playsinline playsInline className=" md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto">
               <source src={media[imageIndex]?.url} type="video/mp4" />
             </video>
           ) : (
@@ -86,14 +79,7 @@ const ImageSlider: React.FC<ImageSliderProps> = (props) => {
               setImageIndex(nextImageIndex);
             }}>
             {media[nextImageIndex].type.includes("video") ? (
-              <video
-                autoPlay
-                loop
-                muted
-                controls
-                webkit-playsinline
-                playsInline
-                className=" md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto">
+              <video autoPlay loop muted webkit-playsinline playsInline className=" md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto">
                 <source src={media[nextImageIndex]?.url} type="video/mp4" />
               </video>
             ) : (
