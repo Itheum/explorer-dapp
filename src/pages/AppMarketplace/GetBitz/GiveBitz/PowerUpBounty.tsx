@@ -110,10 +110,20 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                   target="_blank"
                   className="relative z-[100] mt-2 text-[#35d9fa] hover:underline text-xs md:text-sm  flex flex-row gap-1 justify-center items-center">
                   Fill this bounty as a Data NFT!
-                  <ExternalLinkIcon width={12} />
+                  <ExternalLinkIcon width={15} />
                 </Link>
               ) : (
-                <div className="h-6"></div>
+                <div className="flex flex-row gap-2 justify-between items-center">
+                  <div className="text-center items-center bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30">Finalized</div>
+
+                  <Link
+                    to={MARKETPLACE_DETAILS_PAGE + finalizedDataNftIdentifier}
+                    target="_blank"
+                    className="relative z-[100]  text-[#35d9fa] hover:underline text-xs md:text-sm  flex flex-row gap-1 justify-center items-center">
+                    View Collection
+                    <ExternalLinkIcon width={15} />
+                  </Link>
+                </div>
               )}
             </>
           </div>
