@@ -25,11 +25,12 @@ const NftMediaComponent: React.FC<NftMediaComponentProps> = (props) => {
       ) : (
         <div className=" flex">
           <ImageSlider
+            autoSlide={true}
             media={nftMedia.map((item) => ({
               url: item.url,
               type: item.fileType,
             }))}
-          />{" "}
+          />
         </div>
       )}
     </div>
