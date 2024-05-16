@@ -31,12 +31,9 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
-
+  const [fetchingDataBountiesReceivedSum, setFetchingDataBountiesReceivedSum] = useState<boolean>(true);
   useEffect(() => {
-    const highlighters = document.querySelectorAll("[data-highlighter]");
-    highlighters.forEach((highlighter) => {
-      new Highlighter(highlighter);
-    });
+    setFetchingDataBountiesReceivedSum(true);
     const fetchDataBounties = async () => {
       const _dataBounties: GiveBitzDataBounty[] = await Promise.all(
         getDataBounties().map(async (item: GiveBitzDataBounty) => {
@@ -48,9 +45,16 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
       setDataBounties(sortedDataBounties);
     };
-
     fetchDataBounties();
+    setFetchingDataBountiesReceivedSum(false);
   }, []);
+
+  useEffect(() => {
+    const highlighters = document.querySelectorAll("[data-highlighter]");
+    highlighters.forEach((highlighter) => {
+      new Highlighter(highlighter);
+    });
+  }, [dataBounties]);
 
   useEffect(() => {
     if (!chainID) {
@@ -357,12 +361,12 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         <div
           className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center md:justify-start w-full antialiased pt-4 relative h-[100%] "
           style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
-          {dataBounties ? (
+          {!fetchingDataBountiesReceivedSum ? (
             dataBounties.map((item: GiveBitzDataBounty) => {
               return (
                 <PowerUpBounty
                   key={item.bountyId}
-                  {...item}
+                  bounty={item}
                   sendPowerUp={sendPowerUp}
                   fetchGivenBitsForGetter={fetchGivenBitsForGetter}
                   fetchGetterLeaderBoard={fetchGetterLeaderBoard}

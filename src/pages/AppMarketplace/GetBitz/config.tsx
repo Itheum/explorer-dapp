@@ -18,6 +18,7 @@ export interface GiveBitzDataBounty {
   fillPerks: string;
   receivedBitzSum?: number;
   giverCounts?: number;
+  finalizedDataNftIdentifier?: string;
 }
 
 export function getCreatorCampaigns() {
@@ -74,6 +75,7 @@ export function getDataBounties() {
       readMoreLink: "https://docs.itheum.io/data-bounties/top-itheum-flippers",
       submittedOnTs: 1712713989,
       fillPerks: "Top 20 Leaderboard gets Data NFT once bounty launches. 10 Data NFTs to be dropped to random winners of top 100 Leaderboard.",
+      finalizedDataNftIdentifier: "DATANFTFT-e936d4-0a",
     });
 
     allBounties.push({
@@ -84,6 +86,7 @@ export function getDataBounties() {
       readMoreLink: "https://docs.itheum.io/data-bounties/top-ride-flippers",
       submittedOnTs: 1712713989,
       fillPerks: "Top 20 Leaderboard gets Data NFT once bounty launches. 10 Data NFTs to be dropped to random winners of top 100 Leaderboard.",
+      finalizedDataNftIdentifier: "DATANFTFT-e936d4-0a",
     });
     allBounties.push({
       bountySubmitter: "erd1lgyz209038gh8l2zfxq68kzl9ljz0p22hv6l0ev8fydhx8s9cwasdtrua2",
@@ -154,6 +157,8 @@ export function getDataBounties() {
         Contributors ranked 21st to 50th will receive 1 copy each. 
         Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
         50 copies donated to BiTz Monthly Leaderboard`,
+
+      finalized: true,
     });
     return allBounties;
   } else {
@@ -167,6 +172,7 @@ export function getDataBounties() {
       submittedOnTs: 1714138439,
       fillPerks:
         "The Creator of the bounty will receive 5 copies of the album.\n The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.\n Contributors ranked 6th to 20th will receive 2 copies each.\n Contributors ranked 21st to 50th will receive 1 copy each.\n Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy.\n 50 copies donated to BiTz Monthly Leaderboard",
+      finalizedDataNftIdentifier: "DATANFTFT-e936d4-09",
     });
     allBounties.push({
       bountySubmitter: "erd1lgyz209038gh8l2zfxq68kzl9ljz0p22hv6l0ev8fydhx8s9cwasdtrua2",
@@ -177,6 +183,7 @@ export function getDataBounties() {
       submittedOnTs: 1714138439,
       fillPerks:
         "The Creator of the bounty will receive 5 copies of the album.\n The top 5 contributors on the GiveBiTz leaderboard for this bounty will each receive 3 copies.\n Contributors ranked 6th to 20th will receive 2 copies each.\n Contributors ranked 21st to 50th will receive 1 copy each.\n Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy.\n 50 copies donated to BiTz Monthly Leaderboard",
+      finalizedDataNftIdentifier: "DATANFTFT-e936d4-0a",
     });
     allBounties.push({
       bountySubmitter: "erd108t4gdwdhwx2xhj5q0e6pujurk0kdyzxxh69987e873n83xumazshe0l3r",

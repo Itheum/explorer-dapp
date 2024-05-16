@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft";
 import { Address } from "@multiversx/sdk-core/out";
+import { ExternalLink } from "lucide-react";
 import { Loader, MXAddressLink } from "components";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
+import NftMediaComponent from "components/NftMediaComponent";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetNetworkConfig, useGetPendingTransactions } from "hooks";
+import { Card, CardContent } from "libComponents/Card";
 import { dataNftMarket } from "libs/mvx";
+import { NftMedia } from "libs/types";
 import { convertToLocalString } from "libs/utils";
 import { createNftId } from "libs/utils/token";
-import { HeaderComponent } from "components/Layout/HeaderComponent";
-import { Card, CardContent } from "libComponents/Card";
-import { ExternalLink } from "lucide-react";
-import ImageSlider from "components/ImageSlider";
-import NftMediaComponent from "components/NftMediaComponent";
-import { NftMedia } from "libs/types";
 
 export const MyListed = () => {
   const {
