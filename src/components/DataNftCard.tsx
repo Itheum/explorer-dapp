@@ -3,12 +3,13 @@ import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { cn } from "libs/utils";
-import ImageSlider from "./ImageSlider";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
+import NftMediaComponent from "./NftMediaComponent";
 import { Button } from "../libComponents/Button";
 import { Card, CardContent, CardFooter } from "../libComponents/Card";
 import { IFilterData } from "../libComponents/Filter";
+import { NftMedia } from "libs/types";
 
 export function DataNftCard({
   index,
@@ -48,7 +49,6 @@ export function DataNftCard({
   function goToMarketplace(tokenIdentifier: string) {
     window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
   }
-
   return (
     <div className="mb-3">
       <Card
@@ -57,18 +57,7 @@ export function DataNftCard({
           "border-[0.5px]  dark:border-slate-100/30 border-slate-300  bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]"
         )}>
         <CardContent className="flex flex-col p-3">
-          {dataNft.media && dataNft.media[0] && (dataNft.media[0] as any).url && (dataNft.media[0] as any).fileType.includes("video") ? (
-            <video autoPlay loop src={(dataNft.media[0] as any).url} className=" mb-8 md:w-auto rounded-3xl base:h-[15rem] md:h-[18rem]"></video>
-          ) : dataNft.extraAssets.length > 0 ? (
-            <ImageSlider imageUrls={dataNft.media.map((mediaObj: any) => mediaObj.url) ?? [dataNft.nftImgUrl]} autoSlide />
-          ) : (
-            <div className="mb-8 flex justify-center base:max-h-[15rem] md:max-h-[18rem] object-cover">
-              <img
-                className="md:w-auto base:w-[15rem] rounded-3xl"
-                src={!isLoading ? dataNft.nftImgUrl : "https://media.elrond.com/nfts/thumbnail/default.png"}
-              />
-            </div>
-          )}
+          <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[15rem]  md:h-[18rem]" />
 
           <div className="md:h-[15rem] h-[13rem]">
             <div className="grid grid-cols-12 mb-1">
