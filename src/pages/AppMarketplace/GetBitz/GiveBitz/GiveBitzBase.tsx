@@ -14,6 +14,7 @@ import PowerUpBounty from "./PowerUpBounty";
 import { getDataBounties, GiveBitzDataBounty } from "../config";
 import { LeaderBoardItemType, viewDataJSONCore } from "../index";
 import LeaderBoardTable from "../LeaderBoardTable";
+import { FlaskRound } from "lucide-react";
 
 type GiveBitzBaseProps = {
   gameDataNFT: DataNft;
@@ -25,6 +26,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const { tokenLogin } = useGetLoginInfo();
   const givenBitzSum = useAccountStore((state: any) => state.givenBitzSum);
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
+  const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
+
   const { chainID } = useGetNetworkConfig();
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
@@ -265,6 +268,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             fetchMyGivenBitz();
             fetchGiverLeaderBoard();
             updateDataBountyTotalReceivedAmount(bitsToCampaignId, bitsVal, isNewGiver);
+            updateBitzBalance(bitzBalance - bitsVal);
             return true;
           }
         } else {
@@ -348,7 +352,13 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
       <div id="bounties" className="flex flex-col w-full items-center justify-center">
         <div className="flex flex-col mt-10 mb-8 items-center justify-center ">
-          <span className="text-foreground text-4xl mb-2">Power-up Data Bounties</span>
+          <div className="flex flex-col md:flex-row items-center justify-center ">
+            <span className="text-foreground text-4xl mb-2 text-center">Power-up Data Bounties </span>
+            <div className="flex flex-row ml-8 text-foreground text-4xl ">
+              {bitzBalance === -2 ? `...` : <>{bitzBalance === -1 ? "0" : `${bitzBalance}`}</>}
+              <FlaskRound className=" w-10 h-10 fill-[#35d9fa]" />
+            </div>
+          </div>
           <span className="text-base text-foreground/75 text-center ">
             Power-Up Data Bounties (Ideas for new Data NFTs) with your BiTz XP, Climb Bounty Leaderboards and get bonus rewards if your Bounty is realized.
           </span>
