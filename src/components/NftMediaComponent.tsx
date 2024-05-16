@@ -16,8 +16,10 @@ const NftMediaComponent: React.FC<NftMediaComponentProps> = (props) => {
       {nftMedia.length === 0 && <img src="https://media.elrond.com/nfts/thumbnail/default.png" />}
       {nftMedia.length === 1 ? (
         <div className={cn("flex justify-center rounded-3xl overflow-hidden", mediaStyle)}>
-          {nftMedia[0].fileType === "video/mp4" ? (
-            <video autoPlay loop src={nftMedia[0]?.url} className="scale-[1.8]" />
+          {nftMedia[0]?.fileType === "video/mp4" ? (
+            <video autoPlay loop muted controls webkit-playsinline playsInline className="scale-[1.8]">
+              <source src={nftMedia[0]?.url} type="video/mp4" />
+            </video>
           ) : (
             <img className="rounded-3xl" src={!isLoading ? nftMedia[0]?.url : "https://media.elrond.com/nfts/thumbnail/default.png"} />
           )}

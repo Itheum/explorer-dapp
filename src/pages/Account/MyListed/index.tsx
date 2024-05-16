@@ -76,7 +76,7 @@ export const MyListed = () => {
                 <Card className="border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] xl:w-[330px] w-[296px] pb-5">
                   <CardContent className="flex flex-col p-6 ">
                     <div className="mb-4">
-                      <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[15rem]  md:h-[18rem]" />
+                      <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-2 base:h-[15rem] md:h-[18rem]" />
                     </div>
                     <div className="xl:h-[300px] h-[315px]">
                       <div className="mb-1">
@@ -102,7 +102,7 @@ export const MyListed = () => {
                       </div>
 
                       <div className="mt-4 mb-1 text-start">
-                        <h5 className="text-center !text-xl !font-[Clash-Medium] pb-2">Data NFT Detail</h5>
+                        <h5 className="text-start !text-xl !font-[Clash-Medium] pb-2">Data NFT Detail</h5>
                       </div>
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Title:</span>
