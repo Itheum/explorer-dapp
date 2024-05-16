@@ -112,7 +112,7 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                   Fill this bounty as a Data NFT!
                   <ExternalLinkIcon width={15} />
                 </Link>
-              ) : (
+              ) : !address ? (
                 <div className="flex flex-row gap-2 justify-between items-center">
                   <div className="text-center items-center bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30">Finalized</div>
 
@@ -124,6 +124,8 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                     <ExternalLinkIcon width={15} />
                   </Link>
                 </div>
+              ) : (
+                <div className="h-6"> </div>
               )}
             </>
           </div>
