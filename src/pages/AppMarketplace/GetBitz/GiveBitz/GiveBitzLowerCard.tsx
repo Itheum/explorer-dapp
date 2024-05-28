@@ -128,16 +128,28 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
             transition={{ duration: 0.6, delay: 0.1 }}>
             <div>Give More BiTz</div>
             <div className="mb-3 mt-1 w-full">
-              <input
-                type="range"
-                id="rangeBitz"
-                min="0"
-                max={bitzBalance}
-                step="1"
-                value={bitzVal}
-                onChange={(e) => setBitzVal(Number(e.target.value))}
-                className="accent-black dark:accent-white w-full cursor-pointer custom-range-slider"
-              />
+              <div className="flex flex-row gap-2 justify-center items-center">
+                <input
+                  type="range"
+                  id="rangeBitz"
+                  min="0"
+                  max={bitzBalance}
+                  step="1"
+                  value={bitzVal}
+                  onChange={(e) => setBitzVal(Number(e.target.value))}
+                  className="accent-black dark:accent-white w-full cursor-pointer custom-range-slider"
+                />
+                <input
+                  type="number"
+                  min="0"
+                  max={bitzBalance}
+                  step="1"
+                  value={bitzVal}
+                  onChange={(e) => setBitzVal(Math.min(Number(e.target.value), bitzBalance))}
+                  className="bg-[#35d9fa]/30 text- dark:text-[#35d9fa] focus:none  focus:outline-none focus:border-transparent text-center border-[#35d9fa] rounded-md"
+                />
+              </div>
+
               <div className="flex flex-row items-center md:gap-2">
                 <input
                   type="checkbox"

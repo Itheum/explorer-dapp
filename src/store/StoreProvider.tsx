@@ -43,6 +43,13 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
       return;
     }
+    const nativeAuthTokenData = decodeNativeAuthToken(tokenLogin.nativeAuthToken);
+    if (nativeAuthTokenData.extraInfo.timestamp) {
+      const currentTime = new Date().getTime();
+      if (currentTime > (nativeAuthTokenData.extraInfo.timestamp + nativeAuthTokenData.ttl) * 1000) {
+        return;
+      }
+    }
     // add all the balances into the loading phase
     updateBitzBalance(-2);
     updateGivenBitzSum(-2);
