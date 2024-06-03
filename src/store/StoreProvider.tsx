@@ -62,9 +62,10 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
       // does the logged in user actually OWN the bitz game data nft
       const _myDataNfts = nfts;
+
+      // maybe add here a check if the array is empty or not
       const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitzGameDataNFT.nonce === dNft.nonce && bitzGameDataNFT.collection === dNft.collection);
       const hasGameDataNFT = hasRequiredDataNFT ? true : false;
-
       // only get the bitz balance if the user owns the token
       if (hasGameDataNFT) {
         const viewDataArgs = {
@@ -101,7 +102,8 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
           updateBonusTries(getBitzGameResult.data.gamePlayResult.bonusTriesBeforeThisPlay || 0); // bonus tries awarded to user (currently only via referral code rewards)
         }
       } else {
-        updateBitzBalance(-1);
+        // enters here bcs cant find the bitz game data nft or is undefined
+        nfts.length > 0 && updateBitzBalance(-1);
         updateGivenBitzSum(-1);
         updateCooldown(-1);
         updateCollectedBitzSum(-1);
