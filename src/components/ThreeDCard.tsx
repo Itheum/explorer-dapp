@@ -23,7 +23,7 @@ export function ThreeDCard(props: ThreeDCardProps) {
           <a href={`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}${offerIndex ? "/offer-" + offerIndex : ""}`} target="_blank" className="cursor-pointer">
             {nftImgUrl.includes(".mp4") ? (
               <div className="flex relative h-48 w-48 rounded-3xl overflow-hidden justify-center items-center">
-                <video autoPlay loop muted webkit-playsinline playsInline className="scale-[1.8]  ">
+                <video autoPlay loop muted webkit-playsinline={"true"} playsInline className="scale-[1.8]  ">
                   <source src={nftImgUrl} type="video/mp4" />
                 </video>
               </div>
