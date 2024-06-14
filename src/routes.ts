@@ -6,6 +6,7 @@ import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
 import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom } from "./pages";
 import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
+import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 
 export const routeNames = {
   home: "/",
@@ -22,6 +23,7 @@ export const routeNames = {
   timecapsule: "/timecapsule",
   getbitz: "/getbitz",
   bobergameroom: "/bobergameroom",
+  spreadsheetnfts: "/spreadsheetnfts",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -92,6 +94,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.bobergameroom,
     title: "Bober Game Room",
     component: BoberGameRoom,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.spreadsheetnfts,
+    title: "Spreadsheet NFTs",
+    component: SpreadsheetNfts,
     authenticatedRoute: false,
   },
 ];

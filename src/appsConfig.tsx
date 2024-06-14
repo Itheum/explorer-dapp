@@ -11,8 +11,8 @@ export const TRAILBLAZER_TOKENS: app_token[] = IS_DEVNET
   ? [
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 1 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 266 },
-      // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 423 },
-      // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 453 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 350 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 351 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 1 }];
 
@@ -65,6 +65,8 @@ export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
   ? [
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 57 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 266 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 350 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 351 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
 
@@ -76,6 +78,14 @@ export const BOBER_GAME_ROOM_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 257 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 8 }];
+
+export const SPREADSHEET_NFTS_TOKENS: app_token[] = IS_DEVNET
+  ? [
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 352 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 353 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 354 },
+    ]
+  : [];
 
 export const GET_BITZ_TOKEN: app_token = IS_DEVNET ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 } : { tokenIdentifier: "DATANFTFT-e936d4", nonce: 7 };
 
@@ -91,5 +101,16 @@ export const SUPPORTED_APPS = IS_DEVNET
       "timecapsule",
       "getbitz",
       "bobergameroom",
+      "spreadsheetnfts",
     ]
-  : ["itheumtrailblazer", "multiversxbubbles", "multiversxinfographics", "nftunes", "deepforestmusic", "timecapsule", "getbitz", "bobergameroom"];
+  : [
+      "itheumtrailblazer",
+      "multiversxbubbles",
+      "multiversxinfographics",
+      "nftunes",
+      "deepforestmusic",
+      "timecapsule",
+      "getbitz",
+      "bobergameroom",
+      "spreadsheetnfts",
+    ];
