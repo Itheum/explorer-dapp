@@ -29,7 +29,7 @@ import "./GetBitz.css";
 import aladinRugg from "assets/img/getbitz/aladin.png";
 import FingerPoint from "assets/img/getbitz/finger-point.gif";
 import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.png";
-import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft.gif";
+import ImgGetDataNFT from "assets/img/getbitz/getbitz-get-datanft-v2.gif";
 import ImgLoadingGame from "assets/img/getbitz/getbitz-loading.gif";
 import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
 import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
