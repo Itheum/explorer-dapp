@@ -157,8 +157,6 @@ export function getDataBounties() {
         Contributors ranked 21st to 50th will receive 1 copy each. 
         Additionally, 5 lucky winners from the top 51 to 100 contributors will each receive 1 copy. 
         50 copies donated to BiTz Monthly Leaderboard`,
-
-      finalized: true,
     });
     return allBounties;
   } else {
