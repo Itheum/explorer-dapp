@@ -85,6 +85,7 @@ export const SPREADSHEET_NFTS_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 353 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 354 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 355 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 357 },
     ]
   : [];
 
