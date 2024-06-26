@@ -59,6 +59,8 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
       ...Array.from({ length: 91 }, (_, i) => ({ tokenIdentifier: "DFEE-72425b", nonce: i })),
     ];
 
+export const NF_PODCSAT_TOKENS: app_token[] = IS_DEVNET ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 326 }] : [];
+
 export const PLAYSTATION_GAMER_PASSPORT_TOKENS: app_token[] = [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 24 }];
 
 export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
