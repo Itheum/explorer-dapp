@@ -11,8 +11,8 @@ export const TRAILBLAZER_TOKENS: app_token[] = IS_DEVNET
   ? [
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 1 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 266 },
-      // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 423 },
-      // { tokenIdentifier: "DATANFTFT-e0b917", nonce: 453 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 350 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 351 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 1 }];
 
@@ -47,7 +47,7 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 301 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 324 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 326 },
-
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 357 },
       ...Array.from({ length: 4 }, (_, i) => ({ tokenIdentifier: "OASMUSICPL-47b186", nonce: i })),
       ...Array.from({ length: 19 }, (_, i) => ({ tokenIdentifier: "FOOWLDMSC-5ee8ec", nonce: i })),
     ]
@@ -67,6 +67,8 @@ export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
   ? [
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 57 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 266 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 350 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 351 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
 
@@ -79,7 +81,14 @@ export const BOBER_GAME_ROOM_TOKENS: app_token[] = IS_DEVNET
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 8 }];
 
-export const SPREADSHEET_NFTS_TOKENS: app_token[] = IS_DEVNET ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 352 }] : [];
+export const SPREADSHEET_NFTS_TOKENS: app_token[] = IS_DEVNET
+  ? [
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 352 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 353 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 354 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 355 },
+    ]
+  : [];
 
 export const GET_BITZ_TOKEN: app_token = IS_DEVNET ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 } : { tokenIdentifier: "DATANFTFT-e936d4", nonce: 7 };
 
