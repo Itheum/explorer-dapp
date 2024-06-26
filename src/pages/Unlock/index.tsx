@@ -1,6 +1,7 @@
 import React from "react";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useLocation } from "react-router-dom";
 import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton, LedgerLoginButton } from "components";
 import { walletConnectV2ProjectId } from "config";
@@ -39,10 +40,10 @@ const UnlockPage = () => {
     <div className="flex flex-auto items-center -z-1">
       <div className="m-auto" data-testid="unlockPage">
         <div className=" rounded-2xl my-4 text-center dark:bg-[#0a0a0a] bg-slate-100 drop-shadow-2xl">
-          <div className=" py-10 px-5 px-sm-2 mx-lg-4">
-            <h4 className="mb-4 font-weight-bold">Login</h4>
+          <div className="pt-10 pb-5 px-5 px-sm-2 mx-lg-4">
+            <h4 className="mb-4 font-weight-bold">MultiversX Login</h4>
 
-            <div className="flex flex-col min-w-[20rem] gap-4 px-3">
+            <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
               <WalletConnectLoginButton
                 className="w-full !m-0"
                 loginButtonText="xPortal App"
@@ -57,6 +58,13 @@ const UnlockPage = () => {
                 className="w-full !m-0"
                 customWalletAddress={import.meta.env.VITE_ENV_NETWORK === "mainnet" ? "https://xalias.com" : "https://devnet.xalias.com"}
                 {...commonProps}></WebWalletLoginButton>
+            </div>
+          </div>
+          <div className="pb-10 pt-5 px-5 px-sm-2 mx-lg-4">
+            <h4 className="mb-4 font-weight-bold">Solana Login</h4>
+
+            <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
+              <WalletMultiButton className="w-full !m-0" />
             </div>
           </div>
         </div>
