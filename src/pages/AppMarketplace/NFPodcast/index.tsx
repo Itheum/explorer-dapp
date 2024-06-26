@@ -196,7 +196,7 @@ export const NFPodcast = () => {
         {
           <div id="data-nfts" className="flex justify-center items-center p-16 ">
             <div className="flex flex-col">
-              <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Music Data NFTs"} dataNftCount={shownAppDataNfts.length}>
+              <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Podcast Data NFTs"} dataNftCount={shownAppDataNfts.length}>
                 {shownAppDataNfts.length > 0 ? (
                   shownAppDataNfts.map((dataNft, index) => {
                     return (
