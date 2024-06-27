@@ -1,12 +1,13 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
+import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
+import { NFPodcast } from "pages/AppMarketplace/NFPodcast";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
+import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
 import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom } from "./pages";
-import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
-import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 
 export const routeNames = {
   home: "/",
@@ -24,6 +25,7 @@ export const routeNames = {
   getbitz: "/getbitz",
   bobergameroom: "/bobergameroom",
   spreadsheetnfts: "/spreadsheetnfts",
+  nfpodcast: "/nfpodcast",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -100,6 +102,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.spreadsheetnfts,
     title: "Spreadsheet NFTs",
     component: SpreadsheetNfts,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.nfpodcast,
+    title: "NFPodcast",
+    component: NFPodcast,
     authenticatedRoute: false,
   },
 ];
