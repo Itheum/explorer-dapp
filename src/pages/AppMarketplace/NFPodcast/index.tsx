@@ -54,7 +54,6 @@ export const NFPodcast = () => {
     }
   }, [hasPendingTransactions, nfts]);
 
-  // get the nfts that are able to open nfTunes app
   async function fetchAppNfts(activeIsLoading = true) {
     if (activeIsLoading) {
       setIsLoading(true);
@@ -233,7 +232,7 @@ export const NFPodcast = () => {
                             </>
                           )
                         }
-                        modalTitle={"NF-Tunes"}
+                        modalTitle={"NF-Podcast"}
                         modalTitleStyle="p-4"
                       />
                     );
