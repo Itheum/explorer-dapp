@@ -5,8 +5,9 @@ import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 import iconGetBitz from "assets/img/getbitz/expl-app-getbitz-icon.gif";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
-import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
+import iconNFPodcast from "assets/img/nf-podcast/NF-Podcast1.png";
 import iconSpreadsheetNfts from "assets/img/spreadsheet-nfts/header.png";
+import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
 export const ERROR_DATA_LOADING = "Data is still loading";
@@ -82,13 +83,19 @@ export const APP_MAPPINGS = [
     desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
     img: iconTimeCapsule,
   },
-
   {
     appName: "Spreadsheet NFTs",
     appDescription: "Explore Data NFTs that have entire datasets inside of them",
     routeKey: "spreadsheetnfts",
     desc: "Explore Data NFTs that have entire datasets inside of them",
     img: iconSpreadsheetNfts,
+  },
+  {
+    appName: "NF-Podcast",
+    appDescription: "Listen to Podcasts",
+    routeKey: "nfpodcast",
+    desc: "Explore the world of podcasts through Data NFTs. Listen to podcasts and explore the world of Data NFTs through this app.",
+    img: iconNFPodcast,
   },
 ];
 
