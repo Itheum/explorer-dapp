@@ -269,7 +269,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
         if (giveBitzGameResult) {
           if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
-            throw new Error("Error: Not possible to sent power-up. As error code returned. Do you have enough BiTz to give?");
+            throw new Error("Error: Not possible to send power-up. Error code returned. Do you have enough BiTz to give?");
           } else {
             fetchMyGivenBitz();
             fetchGiverLeaderBoard();
@@ -277,7 +277,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
             return true;
           }
         } else {
-          throw new Error("Error: Not possible to sent power-up");
+          throw new Error("Error: Not possible to send power-up");
         }
       } catch (err) {
         console.error(err);
