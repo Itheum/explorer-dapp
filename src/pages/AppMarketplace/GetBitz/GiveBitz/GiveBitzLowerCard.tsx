@@ -18,16 +18,17 @@ interface GiveBitzLowerCardProps {
   sendPowerUp: (args: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string; isNewGiver: number }) => Promise<boolean>;
   fetchGivenBitsForGetter: (args: { getterAddr: string; campaignId: string }) => Promise<number>;
   fetchGetterLeaderBoard: () => void;
+  isSendingPowerUp: boolean;
+  setIsSendingPowerUp: any;
 }
 
 const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
-  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard } = props;
+  const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard, isSendingPowerUp, setIsSendingPowerUp } = props;
   const [isPowerUpSuccess, setIsPowerUpSuccess] = useState(false);
   const [tweetText, setTweetText] = useState("");
   const [termsOfUseCheckbox, setTermsOfUseCheckbox] = useState(false);
   const [bitzVal, setBitzVal] = useState<number>(0);
   const [bitzGivenToCreator, setBitzGivenToCreator] = useState<number>(-1);
-  const [powerUpSending, setPowerUpSending] = useState<boolean>(false);
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
   }, []);
 
   async function handlePowerUp() {
-    setPowerUpSending(true);
+    setIsSendingPowerUp(true);
     setIsPowerUpSuccess(false);
     setTweetText("");
     const bitzSent = bitzVal;
@@ -81,7 +82,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
     }
 
     setBitzVal(0); // reset the figure the user sent
-    setPowerUpSending(false);
+    setIsSendingPowerUp(false);
   }
 
   return (
@@ -171,14 +172,14 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
             </div>
 
             <button
-              disabled={!(bitzVal > 0) || powerUpSending || !termsOfUseCheckbox}
+              disabled={!(bitzVal > 0) || isSendingPowerUp || !termsOfUseCheckbox}
               className="disabled:cursor-not-allowed hover:scale-110 transition-all flex items-center justify-center disabled:bg-[#35d9fa]/30 bg-[#35d9fa]   mt-10 w-[12rem] md:w-[15rem] mx-auto rounded-3xl h-10"
               onClick={() => {
                 setIsPowerUpSuccess(false);
                 setTweetText("");
                 handlePowerUp();
               }}>
-              {!powerUpSending ? (
+              {!isSendingPowerUp ? (
                 <div className=" flex items-center m-[2px] p-2 justify-center text-foreground bg-neutral-950/30 dark:bg-neutral-950  w-full h-full rounded-3xl">
                   {bitzBalance === -1 ? "No bitz to send" : `Send ${bitzVal} BiTz Power Up`}
                 </div>

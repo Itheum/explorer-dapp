@@ -7,19 +7,21 @@ import stampFinalized from "assets/img/getbitz/givebitz/stampFinalized.png";
 import { MXAddressLink } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount } from "hooks";
+import { cn } from "libs/utils";
 import GiveBitzLowerCard from "./GiveBitzLowerCard";
 import { GiveBitzDataBounty } from "../config";
-import { cn } from "libs/utils";
 
 type PowerUpBountyProps = {
   bounty: GiveBitzDataBounty;
   sendPowerUp: any;
   fetchGivenBitsForGetter: any;
   fetchGetterLeaderBoard: any;
+  isSendingPowerUp: boolean;
+  setIsSendingPowerUp: any;
 };
 
 const PowerUpBounty = (props: PowerUpBountyProps) => {
-  const { bounty, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard } = props;
+  const { bounty, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard, isSendingPowerUp, setIsSendingPowerUp } = props;
   const { bountySubmitter, bountyId, title, summary, readMoreLink, submittedOnTs, fillPerks, giverCounts, receivedBitzSum, finalizedDataNftIdentifier } =
     bounty;
   const {
@@ -106,6 +108,8 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                       sendPowerUp={sendPowerUp}
                       fetchGivenBitsForGetter={fetchGivenBitsForGetter}
                       fetchGetterLeaderBoard={fetchGetterLeaderBoard}
+                      isSendingPowerUp={isSendingPowerUp}
+                      setIsSendingPowerUp={setIsSendingPowerUp}
                     />
                   )}
                 </>
