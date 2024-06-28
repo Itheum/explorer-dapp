@@ -81,28 +81,30 @@ const BonusBitzHistory: React.FC = () => {
             {isHistoryLoading ? (
               <Loader />
             ) : (
-              <table className="border border-[#35d9fa]/60 text-center m-auto w-[90%] max-w-[500px]">
-                <thead>
-                  <tr className="border border-[#35d9fa]/30 ">
-                    <th className="p-2">When</th>
-                    <th className="p-2">Reward</th>
-                    <th className="p-2 ">{`<BiTz>`} Points</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bonusBitzHistory.length > 0 ? (
-                    bonusBitzHistory.map((item, index) => (
-                      <tr key={index} className="border border-[#35d9fa]/30 ">
-                        <td className="p-2">{item.on < oneMonthAgo ? new Date(item.on * 1000).toDateString() : timeSince(item.on) + " ago"}</td>
-                        <td className="p-2">{item.reward}</td>
-                        <td className="p-2 text-lime-400 font-bold">+ {item.amount}</td>
+              <>
+                {bonusBitzHistory.length > 0 ? (
+                  <table className="border border-[#35d9fa]/60 text-center m-auto w-[90%] max-w-[500px]">
+                    <thead>
+                      <tr className="border border-[#35d9fa]/30 ">
+                        <th className="p-2">When</th>
+                        <th className="p-2">Reward</th>
+                        <th className="p-2 ">{`<BiTz>`} Points</th>
                       </tr>
-                    ))
-                  ) : (
-                    <div className="text-center">No Bonus BiTz received yet!</div>
-                  )}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                      {bonusBitzHistory.map((item, index) => (
+                        <tr key={index} className="border border-[#35d9fa]/30 ">
+                          <td className="p-2">{item.on < oneMonthAgo ? new Date(item.on * 1000).toDateString() : timeSince(item.on) + " ago"}</td>
+                          <td className="p-2">{item.reward}</td>
+                          <td className="p-2 text-lime-400 font-bold">+ {item.amount}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="text-center">No Bonus BiTz received yet!</div>
+                )}
+              </>
             )}
           </div>
         </div>
