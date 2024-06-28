@@ -3,6 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import axios, { AxiosError } from "axios";
+import { FlaskRound } from "lucide-react";
 import { GET_BITZ_TOKEN } from "appsConfig";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
 import { Loader } from "components";
@@ -11,10 +12,10 @@ import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
 import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
 import PowerUpBounty from "./PowerUpBounty";
+import BonusBitzHistory from "../BonusBitzHistory";
 import { getDataBounties, GiveBitzDataBounty } from "../config";
 import { LeaderBoardItemType, viewDataJSONCore } from "../index";
 import LeaderBoardTable from "../LeaderBoardTable";
-import { FlaskRound } from "lucide-react";
 
 type GiveBitzBaseProps = {
   gameDataNFT: DataNft;
@@ -26,6 +27,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const { tokenLogin } = useGetLoginInfo();
   const givenBitzSum = useAccountStore((state: any) => state.givenBitzSum);
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
+  const bonusBitzSum = useAccountStore((state: any) => state.bonusBitzSum);
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
 
   const { chainID } = useGetNetworkConfig();
@@ -100,7 +102,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         updateGivenBitzSum(sumGivenBits);
 
         if (sumGivenBits > 0) {
-          updateBitzBalance(collectedBitzSum - sumGivenBits); // update new balance (collected bits - given bits)
+          updateBitzBalance(collectedBitzSum + bonusBitzSum - sumGivenBits);
         }
       } catch (err) {
         const message = "Getting my sum givenBits failed:" + (err as AxiosError).message;
@@ -267,16 +269,15 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
         if (giveBitzGameResult) {
           if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
-            throw new Error("Error: Not possible to sent power-up. As error code returned. Do you have enough BiTz to give?");
+            throw new Error("Error: Not possible to send power-up. Error code returned. Do you have enough BiTz to give?");
           } else {
             fetchMyGivenBitz();
             fetchGiverLeaderBoard();
             updateDataBountyTotalReceivedAmount(bitsToCampaignId, bitsVal, isNewGiver);
-            updateBitzBalance(bitzBalance - bitsVal);
             return true;
           }
         } else {
-          throw new Error("Error: Not possible to sent power-up");
+          throw new Error("Error: Not possible to send power-up");
         }
       } catch (err) {
         console.error(err);
@@ -303,7 +304,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
       )}
 
-      <div id="giveLeaderboard" className="h-[1700px] md:h-[1000px] flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
+      <div id="giveLeaderboard" className="h-fit flex flex-col max-w-[100%] border border-[#35d9fa] mb-[3rem] rounded-[1rem] p-8">
         <h3 className="text-center mb-[1rem]">POWER-UP LEADERBOARD</h3>
 
         {giverLeaderBoardIsLoading ? (
@@ -318,6 +319,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
           </>
         )}
       </div>
+
+      <BonusBitzHistory />
 
       {/* <>
         <div className="flex flex-col mt-10 mb-8 items-center justify-center">
