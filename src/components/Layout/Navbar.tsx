@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { FlaskRound, Gift, Home, Menu, Store, Wallet } from "lucide-react";
 import Countdown from "react-countdown";
@@ -8,6 +8,7 @@ import logo192 from "assets/img/logo192.png";
 import { CopyAddress } from "components/CopyAddress";
 import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
+import { cn } from "libs/utils";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
@@ -33,7 +34,6 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
 import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
 import { useAccountStore } from "../../store/account";
-import { cn } from "libs/utils";
 
 export const Navbar = () => {
   const isLoggedIn = useGetIsLoggedIn();
