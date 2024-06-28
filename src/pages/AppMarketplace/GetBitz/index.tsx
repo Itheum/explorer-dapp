@@ -333,24 +333,20 @@ export const GetBitz = () => {
         )
       );
 
-      const sumGivenBits = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
-
+      let sumScoreBitzBefore = viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay || 0;
+      sumScoreBitzBefore = sumScoreBitzBefore < 0 ? 0 : sumScoreBitzBefore;
+      let sumScoreBitzAfter = viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay || 0;
+      sumScoreBitzAfter = sumScoreBitzAfter < 0 ? 0 : sumScoreBitzAfter;
+      let sumGivenBitz = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
+      sumGivenBitz = sumGivenBitz < 0 ? 0 : sumGivenBitz;
+      let sumBonusBitz = viewDataPayload.data?.bitsMain?.bitsBonusSum || 0;
+      sumBonusBitz = sumBonusBitz < 0 ? 0 : sumBonusBitz;
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
-        if (sumGivenBits > 0) {
-          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay - sumGivenBits); // won some bis, minus given bits and show
-        } else {
-          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay); // won some bis, not given anything yet
-        }
-
-        updateCollectedBitzSum(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
+        updateBitzBalance(sumScoreBitzAfter + sumBonusBitz - sumGivenBitz); // won some bis, minus given bits and show
+        updateCollectedBitzSum(sumScoreBitzAfter);
       } else {
-        if (sumGivenBits > 0) {
-          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // did not win bits, minus given bits from current and show
-        } else {
-          updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay); // did not win bits, not given anything yet
-        }
-
-        updateCollectedBitzSum(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay);
+        updateBitzBalance(sumScoreBitzBefore + sumBonusBitz - sumGivenBitz); // did not win bits, minus given bits from current and show
+        updateCollectedBitzSum(sumScoreBitzBefore);
       }
 
       // how many bonus tries does the user have
