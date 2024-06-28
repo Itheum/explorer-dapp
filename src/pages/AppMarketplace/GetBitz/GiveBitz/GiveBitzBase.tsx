@@ -37,6 +37,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
   const [fetchingDataBountiesReceivedSum, setFetchingDataBountiesReceivedSum] = useState<boolean>(true);
+  const [isSendingPowerUp, setIsSendingPowerUp] = useState<boolean>(false);
   useEffect(() => {
     setFetchingDataBountiesReceivedSum(true);
     const fetchDataBounties = async () => {
@@ -383,6 +384,8 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
                   sendPowerUp={sendPowerUp}
                   fetchGivenBitsForGetter={fetchGivenBitsForGetter}
                   fetchGetterLeaderBoard={fetchGetterLeaderBoard}
+                  isSendingPowerUp={isSendingPowerUp}
+                  setIsSendingPowerUp={setIsSendingPowerUp}
                 />
               );
             })
