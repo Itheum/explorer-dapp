@@ -49,6 +49,7 @@
   },
   "scripts": {
     "start": "vite dev",
+    "dev": "vite dev",
     "build": "tsc & vite build",
     "serve": "tsc & vite preview",
     "test": "vitest",
