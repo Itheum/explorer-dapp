@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { FlaskRound, Gift, Home, Menu, Store, Wallet } from "lucide-react";
 import Countdown from "react-countdown";

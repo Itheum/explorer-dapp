@@ -19,6 +19,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
   const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
+  const updateBonusBitzSum = useAccountStore((state) => state.updateBonusBitzSum);
   const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
   // NFT STORE
@@ -40,23 +41,26 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   }, [address, tokenLogin]);
 
   useEffect(() => {
-    if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
-      return;
-    }
-    const nativeAuthTokenData = decodeNativeAuthToken(tokenLogin.nativeAuthToken);
-    if (nativeAuthTokenData.extraInfo.timestamp) {
-      const currentTime = new Date().getTime();
-      if (currentTime > (nativeAuthTokenData.extraInfo.timestamp + nativeAuthTokenData.ttl) * 1000) {
+    (async () => {
+      if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
         return;
       }
-    }
-    // add all the balances into the loading phase
-    updateBitzBalance(-2);
-    updateGivenBitzSum(-2);
-    updateCooldown(-2);
-    updateCollectedBitzSum(-2);
 
-    (async () => {
+      const nativeAuthTokenData = decodeNativeAuthToken(tokenLogin.nativeAuthToken);
+      if (nativeAuthTokenData.extraInfo.timestamp) {
+        const currentTime = new Date().getTime();
+        if (currentTime > (nativeAuthTokenData.extraInfo.timestamp + nativeAuthTokenData.ttl) * 1000) {
+          return;
+        }
+      }
+      
+      // add all the balances into the loading phase
+      updateBitzBalance(-2);
+      updateGivenBitzSum(-2);
+      updateCooldown(-2);
+      updateCollectedBitzSum(-2);
+      updateBonusBitzSum(-2);
+
       // get the bitz game data nft details
       const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
 
@@ -79,15 +83,16 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
         const getBitzGameResult = await viewDataJSONCore(viewDataArgs, bitzGameDataNFT);
         if (getBitzGameResult) {
-          const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
-
-          if (sumGivenBits > 0) {
-            updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay - sumGivenBits); // collected bits - given bits
-            updateGivenBitzSum(sumGivenBits); // given bits -- for power-ups
-          } else {
-            updateBitzBalance(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits - not given bits yet
-            updateGivenBitzSum(0); // given bits - not given bits yet
-          }
+          let sumScoreBitz = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
+          sumScoreBitz = sumScoreBitz < 0 ? 0 : sumScoreBitz;
+          let sumGivenBitz = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
+          sumGivenBitz = sumGivenBitz < 0 ? 0 : sumGivenBitz;
+          let sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
+          sumBonusBitz = sumBonusBitz < 0 ? 0 : sumBonusBitz;
+          console.log(sumScoreBitz, sumBonusBitz, sumGivenBitz);
+          updateBitzBalance(sumScoreBitz + sumBonusBitz - sumGivenBitz);
+          updateGivenBitzSum(sumGivenBitz);
+          updateBonusBitzSum(sumBonusBitz);
 
           updateCooldown(
             computeRemainingCooldown(
@@ -105,6 +110,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         updateGivenBitzSum(-1);
         updateCooldown(-1);
         updateCollectedBitzSum(-1);
+        updateBonusBitzSum(-1);
       }
     })();
   }, [address, tokenLogin, nfts]);
