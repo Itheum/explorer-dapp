@@ -73,7 +73,7 @@ export const DeepForestMusic = () => {
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
   const [dataNftToOpen, setDataNftToOpen] = useState<DataNft>();
-  const { nfts } = useNftsStore();
+  const { mvxNfts: nfts } = useNftsStore();
 
   useEffect(() => {
     window.scrollTo(0, 80);

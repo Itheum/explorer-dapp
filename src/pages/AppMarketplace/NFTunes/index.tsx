@@ -62,7 +62,7 @@ export const NFTunes = () => {
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
 
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => nfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
 
   useEffect(() => {

@@ -1,12 +1,15 @@
 import React from "react";
-import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useGetAccount, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
+import { logout } from "@multiversx/sdk-dapp/utils/logout";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton, LedgerLoginButton } from "components";
 import { walletConnectV2ProjectId } from "config";
+import { Button } from "libComponents/Button";
 import { getApi } from "libs/utils";
 import { routeNames } from "routes";
+import { ArrowBigLeft } from "lucide-react";
 
 // find a route name based on a pathname that comes in via React Router Link params
 function getRouteNameBasedOnPathNameParam(pathname: string) {
@@ -23,45 +26,74 @@ function getRouteNameBasedOnPathNameParam(pathname: string) {
 }
 const UnlockPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { chainID } = useGetNetworkConfig();
+  const { address } = useGetAccount();
+  const isLoggedInMvX = !!address;
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
     expirySeconds: 3600,
   };
   const commonProps = {
-    callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
+    // callbackRoute: getRouteNameBasedOnPathNameParam(location?.state?.from),
     nativeAuth: {
       ...nativeAuthProps,
     },
+  };
+
+  const handleLogout = () => {
+    logout(location.pathname, undefined, false);
+  };
+
+  const handleGoBack = () => {
+    navigate(location.state?.from || "/");
+    // navigate(-1); // This will take the user back to the previous page
   };
 
   return (
     <div className="flex flex-auto items-center -z-1">
       <div className="m-auto" data-testid="unlockPage">
         <div className=" rounded-2xl my-4 text-center dark:bg-[#0a0a0a] bg-slate-100 drop-shadow-2xl">
+          <Button
+            className="mt-4" // Add your styling here
+            onClick={handleGoBack}>
+            <ArrowBigLeft /> Go Back
+          </Button>
           <div className="pt-10 pb-5 px-5 px-sm-2 mx-lg-4">
-            <h4 className="mb-4 font-weight-bold">MultiversX Login</h4>
-
+            <h4 className="mb-4 font-weight-bold">MultiversX</h4>
             <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
-              <WalletConnectLoginButton
-                className="w-full !m-0"
-                loginButtonText="xPortal App"
-                {...commonProps}
-                {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})}
-              />
-              <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
-              <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
-              <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
-              <WebWalletLoginButton
-                loginButtonText={"Google (xAlias)"}
-                className="w-full !m-0"
-                customWalletAddress={import.meta.env.VITE_ENV_NETWORK === "mainnet" ? "https://xalias.com" : "https://devnet.xalias.com"}
-                {...commonProps}></WebWalletLoginButton>
+              {isLoggedInMvX ? (
+                <div className="w-full flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
+                  <Button
+                    className="w-full dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
+                    variant="outline"
+                    onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <WalletConnectLoginButton
+                    className="w-full !m-0"
+                    loginButtonText="xPortal App"
+                    {...commonProps}
+                    {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})}
+                  />
+                  <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
+                  <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
+                  <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
+                  <WebWalletLoginButton
+                    loginButtonText={"Google (xAlias)"}
+                    className="w-full !m-0"
+                    customWalletAddress={import.meta.env.VITE_ENV_NETWORK === "mainnet" ? "https://xalias.com" : "https://devnet.xalias.com"}
+                    {...commonProps}></WebWalletLoginButton>
+                </>
+              )}
             </div>
           </div>
           <div className="pb-10 pt-5 px-5 px-sm-2 mx-lg-4">
-            <h4 className="mb-4 font-weight-bold">Solana Login</h4>
+            <h4 className="mb-4 font-weight-bold">Solana</h4>
 
             <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
               <WalletMultiButton className="w-full !m-0" />
