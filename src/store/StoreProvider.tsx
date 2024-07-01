@@ -41,24 +41,26 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   }, [address, tokenLogin]);
 
   useEffect(() => {
-    if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
-      return;
-    }
-    const nativeAuthTokenData = decodeNativeAuthToken(tokenLogin.nativeAuthToken);
-    if (nativeAuthTokenData.extraInfo.timestamp) {
-      const currentTime = new Date().getTime();
-      if (currentTime > (nativeAuthTokenData.extraInfo.timestamp + nativeAuthTokenData.ttl) * 1000) {
+    (async () => {
+      if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
         return;
       }
-    }
-    // add all the balances into the loading phase
-    updateBitzBalance(-2);
-    updateGivenBitzSum(-2);
-    updateCooldown(-2);
-    updateCollectedBitzSum(-2);
-    updateBonusBitzSum(-2);
 
-    (async () => {
+      const nativeAuthTokenData = decodeNativeAuthToken(tokenLogin.nativeAuthToken);
+      if (nativeAuthTokenData.extraInfo.timestamp) {
+        const currentTime = new Date().getTime();
+        if (currentTime > (nativeAuthTokenData.extraInfo.timestamp + nativeAuthTokenData.ttl) * 1000) {
+          return;
+        }
+      }
+      
+      // add all the balances into the loading phase
+      updateBitzBalance(-2);
+      updateGivenBitzSum(-2);
+      updateCooldown(-2);
+      updateCollectedBitzSum(-2);
+      updateBonusBitzSum(-2);
+
       // get the bitz game data nft details
       const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
 
