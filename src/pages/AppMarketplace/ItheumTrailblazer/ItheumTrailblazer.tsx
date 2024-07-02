@@ -3,7 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { TRAILBLAZER_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
-import { DataNftCard, Loader } from "components";
+import { MvxDataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
@@ -119,7 +119,7 @@ export const ItheumTrailblazer = () => {
         dataNftCount={TRAILBLAZER_TOKENS.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
-            <DataNftCard
+            <MvxDataNftCard
               key={index}
               index={index}
               dataNft={dataNft}

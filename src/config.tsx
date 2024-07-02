@@ -15,6 +15,8 @@ export const SHOW_NFTS_STEP = 10;
 
 export const MARKETPLACE_DETAILS_PAGE = IS_DEVNET ? "https://test.datadex.itheum.io/datanfts/marketplace/" : "https://datadex.itheum.io/datanfts/marketplace/";
 
+export const DRIP_PAGE = "https://drip.haus/itheum";
+
 export const CREATOR_PROFILE_PAGE =
   import.meta.env.VITE_ENV_NETWORK && import.meta.env.VITE_ENV_NETWORK === EnvironmentsEnum.devnet
     ? "https://test.datadex.itheum.io/profile/"

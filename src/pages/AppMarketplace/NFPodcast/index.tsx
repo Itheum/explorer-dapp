@@ -6,7 +6,7 @@ import { Music, Music2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { NF_PODCAST_TOKENS } from "appsConfig";
 import disk from "assets/img/nf-tunes-logo-disk.png";
-import { DataNftCard, Loader } from "components";
+import { MvxDataNftCard, Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
@@ -199,7 +199,7 @@ export const NFPodcast = () => {
                 {shownAppDataNfts.length > 0 ? (
                   shownAppDataNfts.map((dataNft, index) => {
                     return (
-                      <DataNftCard
+                      <MvxDataNftCard
                         key={index}
                         index={index}
                         dataNft={dataNft}

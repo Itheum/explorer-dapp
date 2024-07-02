@@ -3,7 +3,7 @@ import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { SPREADSHEET_NFTS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/spreadsheet-nfts/banner.jpg";
-import { DataNftCard, Loader } from "components";
+import { MvxDataNftCard, Loader } from "components";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
@@ -112,7 +112,7 @@ export const SpreadsheetNfts = () => {
         dataNftCount={shownAppDataNfts.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
-            <DataNftCard
+            <MvxDataNftCard
               key={index}
               index={index}
               dataNft={dataNft}

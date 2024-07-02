@@ -9,7 +9,7 @@ import benefitsLogo1 from "assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "assets/img/nf-tunes/benefits-logo3.png";
 import disk from "assets/img/nf-tunes-logo-disk.png";
-import { DataNftCard, Loader } from "components";
+import { MvxDataNftCard, Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Modal } from "components/Modal/Modal";
@@ -227,7 +227,7 @@ export const NFTunes = () => {
                 {shownAppDataNfts.length > 0 ? (
                   shownAppDataNfts.map((dataNft, index) => {
                     return (
-                      <DataNftCard
+                      <MvxDataNftCard
                         key={index}
                         index={index}
                         dataNft={dataNft}
@@ -418,7 +418,7 @@ export const NFTunes = () => {
                 <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
                 <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
                   {featuredArtistDataNft ? (
-                    <DataNftCard
+                    <MvxDataNftCard
                       cardStyles="text-white"
                       index={featuredDataNftIndex}
                       dataNft={featuredArtistDataNft}

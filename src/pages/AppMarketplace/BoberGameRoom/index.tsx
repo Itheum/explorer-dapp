@@ -3,7 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { BOBER_GAME_ROOM_TOKENS } from "appsConfig";
 import headerImg from "assets/img/bober-game-room/BoberCover.png";
-import { DataNftCard } from "components";
+import { MvxDataNftCard } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
@@ -100,7 +100,7 @@ export const BoberGameRoom: React.FC = () => {
         dataNftCount={shownAppDataNfts.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
-            <DataNftCard
+            <MvxDataNftCard
               key={index}
               index={index}
               dataNft={dataNft}
