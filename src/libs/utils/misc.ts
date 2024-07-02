@@ -79,3 +79,11 @@ export const getApiWeb2Apps = (chainID: string) => {
 
   return import.meta.env[envKey] || defaultUrl;
 };
+
+export const getApiSolNft = () => {
+  if (import.meta.env.VITE_ENV_NETWORK === "mainnet") {
+    return "https://bitzxp.itheum.io/api";
+  } else {
+    return "https://test.bitzxp.itheum.io/api";
+  }
+};

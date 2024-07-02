@@ -22,7 +22,7 @@ export const SpreadsheetNfts = () => {
 
   const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {

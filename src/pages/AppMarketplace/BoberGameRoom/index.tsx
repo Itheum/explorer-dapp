@@ -21,7 +21,7 @@ export const BoberGameRoom: React.FC = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [data, setData] = useState<any>();
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {

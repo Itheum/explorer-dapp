@@ -1,10 +1,11 @@
 import React, { PropsWithChildren, useEffect } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { GET_BITZ_TOKEN } from "appsConfig";
-import { SUPPORTED_COLLECTIONS } from "config";
+import { SUPPORTED_MVX_COLLECTIONS, SUPPORTED_SOL_COLLECTIONS } from "config";
 import { useGetAccount } from "hooks";
-import { decodeNativeAuthToken } from "libs/utils";
+import { decodeNativeAuthToken, getApiSolNft } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "./account";
 import { useNftsStore } from "./nfts";
@@ -13,6 +14,10 @@ import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz";
 export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
+
+  const { publicKey } = useWallet();
+  const addressSol = publicKey?.toBase58();
+  const isLoggedInSol = !!addressSol;
 
   // ACCOUNT STORE
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
@@ -23,22 +28,37 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
   // NFT STORE
-  const { nfts, updateNfts, updateIsLoading } = useNftsStore();
+  const { mvxNfts, updateMvxNfts, updateIsLoadingMvx, solNfts, updateSolNfts, updateIsLoadingSol } = useNftsStore();
 
   useEffect(() => {
-    async function fetchNfts() {
-      updateIsLoading(true);
+    async function fetchMvxNfts() {
+      updateIsLoadingMvx(true);
       if (!address || !(tokenLogin && tokenLogin.nativeAuthToken)) {
-        updateNfts([]);
+        updateMvxNfts([]);
       } else {
-        const collections = SUPPORTED_COLLECTIONS;
+        const collections = SUPPORTED_MVX_COLLECTIONS;
         const nftsT = await DataNft.ownedByAddress(address, collections);
-        updateNfts(nftsT);
+        updateMvxNfts(nftsT);
       }
-      updateIsLoading(false);
+      updateIsLoadingMvx(false);
     }
-    fetchNfts();
+    fetchMvxNfts();
   }, [address, tokenLogin]);
+
+  useEffect(() => {
+    async function fetchSolNfts() {
+      updateIsLoadingSol(true);
+      if (!addressSol) {
+        updateSolNfts([]);
+      } else {
+        const resp = await fetch(`${getApiSolNft()}/fetchNfts?publicKeyb58=${addressSol}`);
+        const data = await resp.json();
+        updateSolNfts(data.nfts);
+      }
+      updateIsLoadingSol(false);
+    }
+    fetchSolNfts();
+  }, [publicKey]);
 
   useEffect(() => {
     (async () => {
@@ -53,7 +73,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
           return;
         }
       }
-      
+
       // add all the balances into the loading phase
       updateBitzBalance(-2);
       updateGivenBitzSum(-2);
@@ -65,7 +85,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
 
       // does the logged in user actually OWN the bitz game data nft
-      const _myDataNfts = nfts;
+      const _myDataNfts = mvxNfts;
       const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitzGameDataNFT.nonce === dNft.nonce && bitzGameDataNFT.collection === dNft.collection);
       const hasGameDataNFT = hasRequiredDataNFT ? true : false;
 
@@ -113,7 +133,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         updateBonusBitzSum(-1);
       }
     })();
-  }, [address, tokenLogin, nfts]);
+  }, [address, tokenLogin, mvxNfts]);
 
   return <>{children}</>;
 };

@@ -39,7 +39,7 @@ export const MultiversxInfographics = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
 
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
