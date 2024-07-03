@@ -61,10 +61,13 @@ export const decodeNativeAuthToken = (accessToken: string) => {
 };
 
 export const getApiDataMarshal = (chainID: string) => {
-  const envKey = chainID === "1" ? "VITE_ENV_DATAMARSHAL_MAINNET_API" : "VITE_ENV_DATAMARSHAL_DEVNET_API";
-  const defaultUrl = chainID === "1" ? "https://api.itheumcloud.com/datamarshalapi/router/v1" : "https://api.itheumcloud-stg.com/datamarshalapi/router/v1";
+  const envKey = chainID.includes("1") ? "VITE_ENV_DATAMARSHAL_MAINNET_API" : "VITE_ENV_DATAMARSHAL_DEVNET_API";
+  const defaultUrl = chainID.includes("1")
+    ? "https://api.itheumcloud.com/datamarshalapi/router/v1"
+    : "https://api.itheumcloud-stg.com/datamarshalapi/router/v1";
   return import.meta.env[envKey] || defaultUrl;
 };
+
 export const sleep = (sec: number) => {
   return new Promise<void>((resolve) => {
     setTimeout(() => {

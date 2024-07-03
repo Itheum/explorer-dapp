@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import bs58 from "bs58";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
@@ -9,12 +10,14 @@ import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { MvxDataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
+import { SolDataNftCard } from "components/SolDataNftCard";
 import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { useNftsStore } from "store/nfts";
-import { SolDataNftCard } from "components/SolDataNftCard";
+import { SolEnvEnum, itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export const MyWallet = () => {
   const { tokenLogin } = useGetLoginInfo();
@@ -30,6 +33,7 @@ export const MyWallet = () => {
   const [mvxNetworkSelected, setMvxNetworkSelected] = useState<boolean>(true);
   const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
+  const { publicKey, signMessage } = useWallet();
 
   useEffect(() => {
     setShownMvxDataNfts(mvxNfts.slice(0, numberOfMvxNftsShown));
@@ -39,7 +43,7 @@ export const MyWallet = () => {
     setShownSolDataNfts(solNfts.slice(0, numberOfSolNftsShown));
   }, [numberOfSolNftsShown, solNfts]);
 
-  async function viewNormalData(index: number) {
+  async function viewDataMvx(index: number) {
     if (!(index >= 0 && index < shownMvxDataNfts.length)) {
       toastError("Data is not loaded");
       return;
@@ -129,6 +133,98 @@ export const MyWallet = () => {
     setIsFetchingDataMarshal(false);
   }
 
+  async function viewDataSol(index: number) {
+    if (!(index >= 0 && index < shownSolDataNfts.length)) {
+      toastError("Data is not loaded");
+      return;
+    }
+
+    setIsFetchingDataMarshal(true);
+    setViewDataRes(undefined);
+
+    const dataNft = shownSolDataNfts[index];
+    try {
+      console.log(import.meta.env.VITE_ENV_NETWORK as SolEnvEnum);
+      const preAccessNonce = await itheumSolPreaccess();
+      const message = new TextEncoder().encode(preAccessNonce);
+      if (signMessage === undefined) throw new Error("signMessage is undefiend");
+      const signature = await signMessage(message);
+      if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
+      const encodedSignature = bs58.encode(signature);
+
+      const viewDataArgs = {
+        headers: {},
+        fwdHeaderKeys: [],
+      };
+
+      const res = await itheumSolViewData(dataNft.id, preAccessNonce, encodedSignature, publicKey, viewDataArgs.fwdHeaderKeys, viewDataArgs.headers);
+
+      const contentType = res.headers.get("content-type");
+      let blobDataType = BlobDataType.TEXT;
+      let finalResp;
+      if (res.ok) {
+        const blob = await res.blob();
+        if (contentType?.includes("image")) {
+          if (contentType == "image/svg+xml") {
+            setIsAutoOpenFormat(false);
+            blobDataType = BlobDataType.SVG;
+            finalResp = DOMPurify.sanitize(await blob.text());
+            setIsDomPurified(true);
+          } else {
+            setIsAutoOpenFormat(false);
+            blobDataType = BlobDataType.IMAGE;
+            finalResp = window.URL.createObjectURL(await res.blob());
+          }
+        } else if (contentType?.includes("audio")) {
+          setIsAutoOpenFormat(false);
+          finalResp = window.URL.createObjectURL(blob);
+          blobDataType = BlobDataType.AUDIO;
+        } else if (contentType?.includes("application/pdf")) {
+          const pdfObject = window.URL.createObjectURL(blob);
+          finalResp = pdfObject;
+          blobDataType = BlobDataType.PDF;
+          window.open(pdfObject, "_blank");
+          setIsAutoOpenFormat(true);
+        } else if (contentType?.includes("application/json")) {
+          setIsAutoOpenFormat(false);
+          const purifiedJSONStr = DOMPurify.sanitize(await blob.text());
+          finalResp = JSON.stringify(JSON.parse(purifiedJSONStr), null, 4);
+          setIsDomPurified(true);
+        } else if (contentType?.includes("text/plain")) {
+          setIsAutoOpenFormat(false);
+          finalResp = DOMPurify.sanitize(await blob.text());
+          setIsDomPurified(true);
+        } else if (contentType?.includes("video/mp4")) {
+          setIsAutoOpenFormat(false);
+          const videoObject = window.URL.createObjectURL(blob);
+          finalResp = videoObject;
+          blobDataType = BlobDataType.VIDEO;
+        } else if (contentType?.includes("text/html")) {
+          const blobUrl = URL.createObjectURL(blob);
+          window.open(blobUrl, "_blank");
+        } else {
+          setIsAutoOpenFormat(false);
+          // we don't support that format
+          finalResp = "Sorry, this file type is currently not supported by the Explorer File Viewer. The file type is: " + contentType;
+        }
+      } else {
+        console.error(res.status + " " + res.statusText);
+        toastError(res.status + " " + res.statusText);
+      }
+
+      const viewDataPayload: ExtendedViewDataReturnType = {
+        data: finalResp,
+        contentType: contentType!,
+        blobDataType,
+      };
+
+      setViewDataRes(viewDataPayload);
+      setIsFetchingDataMarshal(false);
+    } catch (err) {
+      toastError((err as Error).message);
+    }
+  }
+
   if ((isLoadingMvx && mvxNetworkSelected) || (isLoadingSol && !mvxNetworkSelected)) {
     return <Loader />;
   }
@@ -146,7 +242,7 @@ export const MyWallet = () => {
                 dataNft={dataNft}
                 isLoading={isLoadingMvx}
                 owned={true}
-                viewData={viewNormalData}
+                viewData={viewDataMvx}
                 isWallet={true}
                 showBalance={true}
                 modalContent={
@@ -241,7 +337,7 @@ export const MyWallet = () => {
                 dataNft={dataNft}
                 isLoading={isLoadingSol}
                 owned={true}
-                viewData={viewNormalData}
+                viewData={viewDataSol}
                 isWallet={true}
                 modalContent={
                   <>
