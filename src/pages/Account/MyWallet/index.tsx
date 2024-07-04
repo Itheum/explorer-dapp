@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useWallet } from "@solana/wallet-adapter-react";
 import bs58 from "bs58";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
@@ -13,11 +14,11 @@ import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
+import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, sleep, toastError } from "libs/utils";
+import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
-import { SolEnvEnum, itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
-import { useWallet } from "@solana/wallet-adapter-react";
 
 export const MyWallet = () => {
   const { tokenLogin } = useGetLoginInfo();
@@ -34,6 +35,13 @@ export const MyWallet = () => {
   const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
   const { publicKey, signMessage } = useWallet();
+
+  const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
+  const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
+  const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
+  const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
+  const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
+  const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
 
   useEffect(() => {
     setShownMvxDataNfts(mvxNfts.slice(0, numberOfMvxNftsShown));
@@ -144,20 +152,30 @@ export const MyWallet = () => {
 
     const dataNft = shownSolDataNfts[index];
     try {
-      console.log(import.meta.env.VITE_ENV_NETWORK as SolEnvEnum);
-      const preAccessNonce = await itheumSolPreaccess();
-      const message = new TextEncoder().encode(preAccessNonce);
-      if (signMessage === undefined) throw new Error("signMessage is undefiend");
-      const signature = await signMessage(message);
-      if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
-      const encodedSignature = bs58.encode(signature);
-
+      let usedPreAccessNonce = solPreaccessNonce;
+      let usedPreAccessSignature = solPreaccessSignature;
+      if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
+        const preAccessNonce = await itheumSolPreaccess();
+        const message = new TextEncoder().encode(preAccessNonce);
+        if (signMessage === undefined) throw new Error("signMessage is undefiend");
+        const signature = await signMessage(message);
+        if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
+        const encodedSignature = bs58.encode(signature);
+        updateSolPreaccessNonce(preAccessNonce);
+        updateSolSignedPreaccess(encodedSignature);
+        updateSolPreaccessTimestamp(Date.now());
+        usedPreAccessNonce = preAccessNonce;
+        usedPreAccessSignature = encodedSignature;
+      }
+      console.log("Preaccess nonce: " + solPreaccessNonce);
+      console.log("Signature: " + solPreaccessSignature);
+      console.log("Timestamp: " + solPreaccessTimestamp);
       const viewDataArgs = {
         headers: {},
         fwdHeaderKeys: [],
       };
-
-      const res = await itheumSolViewData(dataNft.id, preAccessNonce, encodedSignature, publicKey, viewDataArgs.fwdHeaderKeys, viewDataArgs.headers);
+      if (!publicKey) throw new Error("Missing data for viewData");
+      const res = await itheumSolViewData(dataNft.id, usedPreAccessNonce, usedPreAccessSignature, publicKey, viewDataArgs.fwdHeaderKeys, viewDataArgs.headers);
 
       const contentType = res.headers.get("content-type");
       let blobDataType = BlobDataType.TEXT;
