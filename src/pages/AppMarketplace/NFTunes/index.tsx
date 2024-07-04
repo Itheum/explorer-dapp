@@ -50,6 +50,7 @@ import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useAccountStore } from "store/account";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
+import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -90,6 +91,12 @@ export const NFTunes = () => {
       fetchMvxAppNfts();
     }
   }, [hasPendingTransactions, mvxNfts]);
+
+  useEffect(() => {
+    if (!hasPendingTransactions) {
+      setShownSolDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.json_uri.includes("NFTunes")));
+    }
+  }, [solNfts]);
 
   // get the nfts that are able to open nfTunes app
   async function fetchMvxAppNfts(activeIsLoading = true) {
@@ -266,7 +273,7 @@ export const NFTunes = () => {
                               </div>
                             ) : (
                               <>
-                                {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                                {mvxNetworkSelected && viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
                                   <AudioPlayer
                                     dataNftToOpen={shownMvxAppDataNfts[currentIndex]}
                                     songs={dataMarshalResponse ? dataMarshalResponse.data : []}
@@ -314,11 +321,10 @@ export const NFTunes = () => {
                               </div>
                             ) : (
                               <>
-                                {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-                                  <AudioPlayer
-                                    dataNftToOpen={shownMvxAppDataNfts[currentIndex]}
+                                {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentIndex > -1 && (
+                                  <SolAudioPlayer
+                                    dataNftToOpen={shownSolDataNfts[currentIndex]}
                                     songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                                    tokenLogin={tokenLogin}
                                     firstSongBlobUrl={firstSongBlobUrl}
                                     chainID={chainID}
                                   />

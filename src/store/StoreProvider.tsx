@@ -53,7 +53,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       } else {
         const resp = await fetch(`${getApiSolNft()}/fetchNfts?publicKeyb58=${addressSol}`);
         const data = await resp.json();
-        console.log(data.nfts);
         updateSolNfts(data.nfts);
       }
       updateIsLoadingSol(false);
