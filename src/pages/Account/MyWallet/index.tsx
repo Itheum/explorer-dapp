@@ -167,9 +167,6 @@ export const MyWallet = () => {
         usedPreAccessNonce = preAccessNonce;
         usedPreAccessSignature = encodedSignature;
       }
-      console.log("Preaccess nonce: " + solPreaccessNonce);
-      console.log("Signature: " + solPreaccessSignature);
-      console.log("Timestamp: " + solPreaccessTimestamp);
       const viewDataArgs = {
         headers: {},
         fwdHeaderKeys: [],
