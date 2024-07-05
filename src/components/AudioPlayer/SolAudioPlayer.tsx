@@ -162,7 +162,9 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
             usedPreAccessSignature,
             publicKey,
             viewDataArgs.fwdHeaderKeys,
-            viewDataArgs.headers
+            viewDataArgs.headers,
+            true,
+            index
           );
 
           if (res.ok) {

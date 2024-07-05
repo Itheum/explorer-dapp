@@ -20,10 +20,18 @@ export async function itheumSolViewData(
   signature: string,
   address: PublicKey,
   fwdHeaderKeys?: string[],
-  headers?: any
+  headers?: any,
+  streamInLine?: boolean,
+  nestedIdxToStream?: number
 ): Promise<Response> {
   const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SolEnvEnum.devnet : SolEnvEnum.mainnet;
   let accessUrl = `${getApiDataMarshal(chainId)}/access?nonce=${nonce}&NFTId=${assetId}&signature=${signature}&chainId=${chainId}&accessRequesterAddr=${address.toBase58()}`;
+  if (streamInLine) {
+    accessUrl += `&streamInLine=1`;
+  }
+  if (nestedIdxToStream !== undefined) {
+    accessUrl += `&nestedIdxToStream=${nestedIdxToStream}`;
+  }
   if (fwdHeaderKeys && fwdHeaderKeys.length > 0) {
     accessUrl += `&fwdHeaderKeys=${fwdHeaderKeys.join(",")}`;
   }

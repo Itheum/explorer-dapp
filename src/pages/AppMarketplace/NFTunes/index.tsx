@@ -51,6 +51,8 @@ import { useAccountStore } from "store/account";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
+import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import bs58 from "bs58";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -124,7 +126,7 @@ export const NFTunes = () => {
   }
 
   // after pressing the button to view data open modal
-  async function viewData(index: number) {
+  async function viewMvxData(index: number) {
     try {
       if (!(index >= 0 && index < shownMvxAppDataNfts.length)) {
         toastError("Data is not loaded");
@@ -197,6 +199,83 @@ export const NFTunes = () => {
     }
   }
 
+  async function viewSolData(index: number) {
+    try {
+      if (!(index >= 0 && index < shownSolDataNfts.length)) {
+        toastError("Data is not loaded");
+        return;
+      }
+      setFirstSongBlobUrl(undefined);
+      setIsFetchingDataMarshal(true);
+
+      const dataNft = shownSolDataNfts[index];
+
+      let usedPreAccessNonce = solPreaccessNonce;
+      let usedPreAccessSignature = solPreaccessSignature;
+      if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
+        const preAccessNonce = await itheumSolPreaccess();
+        const message = new TextEncoder().encode(preAccessNonce);
+        if (signMessage === undefined) throw new Error("signMessage is undefiend");
+        const signature = await signMessage(message);
+        if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
+        const encodedSignature = bs58.encode(signature);
+        updateSolPreaccessNonce(preAccessNonce);
+        updateSolSignedPreaccess(encodedSignature);
+        updateSolPreaccessTimestamp(Date.now());
+        usedPreAccessNonce = preAccessNonce;
+        usedPreAccessSignature = encodedSignature;
+      }
+      const viewDataArgs = {
+        headers: {},
+        fwdHeaderKeys: [],
+      };
+      if (!publicKey) throw new Error("Missing data for viewData");
+      setCurrentIndex(index);
+      // start the request for the first song
+      const firstSongResPromise = itheumSolViewData(
+        dataNft.id,
+        usedPreAccessNonce,
+        usedPreAccessSignature,
+        publicKey,
+        viewDataArgs.fwdHeaderKeys,
+        viewDataArgs.headers,
+        true,
+        1
+      );
+
+      // start the request for the manifest file from marshal
+      const res = await itheumSolViewData(dataNft.id, usedPreAccessNonce, usedPreAccessSignature, publicKey, viewDataArgs.fwdHeaderKeys, viewDataArgs.headers);
+
+      let blobDataType = BlobDataType.TEXT;
+      if (res.ok) {
+        const contentType = res.headers.get("content-type") ?? "";
+        if (contentType.search("application/json") >= 0) {
+          const data = await res.json();
+          const viewDataPayload: ExtendedViewDataReturnType = {
+            data,
+            contentType,
+            blobDataType,
+          };
+          setDataMarshalResponse(data);
+          setViewDataRes(viewDataPayload);
+          setIsFetchingDataMarshal(false);
+
+          // await the first song response and set the firstSongBlobUrl state
+          const firstSongRes = await firstSongResPromise;
+          const blobUrl = URL.createObjectURL(await firstSongRes.blob());
+          setFirstSongBlobUrl(blobUrl);
+        }
+      } else {
+        console.error(res.status + " " + res.statusText);
+        toastError(res.status + " " + res.statusText);
+      }
+    } catch (err) {
+      console.error(err);
+      toastError((err as Error).message);
+      setIsFetchingDataMarshal(false);
+    }
+  }
+
   return (
     <div className="flex flex-col justify-center items-center w-full overflow-hidden">
       <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
@@ -258,7 +337,7 @@ export const NFTunes = () => {
                           dataNft={dataNft}
                           isLoading={isLoadingMvx}
                           owned={mvxNfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
-                          viewData={viewData}
+                          viewData={viewMvxData}
                           modalContent={
                             isFetchingDataMarshal ? (
                               <div
@@ -306,7 +385,7 @@ export const NFTunes = () => {
                           dataNft={dataNft}
                           isLoading={isLoadingSol}
                           owned={true}
-                          viewData={viewData}
+                          viewData={viewSolData}
                           modalContent={
                             isFetchingDataMarshal ? (
                               <div
@@ -505,7 +584,7 @@ export const NFTunes = () => {
                       dataNft={featuredArtistDataNft}
                       isLoading={isLoadingMvx}
                       owned={mvxNfts.find((nft) => nft.tokenIdentifier === featuredArtistDataNft.tokenIdentifier) ? true : false}
-                      viewData={viewData}
+                      viewData={viewMvxData}
                       modalContent={
                         isFetchingDataMarshal ? (
                           <div
