@@ -96,7 +96,7 @@ export const NFTunes = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      setShownSolDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.json_uri.includes("NFTunes")));
+      setShownSolDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.json_uri.includes("Music")));
     }
   }, [solNfts]);
 
