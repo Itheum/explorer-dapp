@@ -84,6 +84,7 @@ export const getApiWeb2Apps = (chainID: string) => {
 };
 
 export const getApiSolNft = () => {
+  return "https://deploy-preview-40--get-bitz-sol.netlify.app/api";
   if (import.meta.env.VITE_ENV_NETWORK === "mainnet") {
     return "https://bitzxp.itheum.io/api";
   } else {

@@ -8,7 +8,7 @@ export enum SolEnvEnum {
 
 export async function itheumSolPreaccess() {
   const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SolEnvEnum.devnet : SolEnvEnum.mainnet;
-  const preaccessUrl = `${getApiDataMarshal(chainId)}/preaccess?chainId=${chainId}`;
+  const preaccessUrl = `${getApiDataMarshal(SolEnvEnum.mainnet)}/preaccess?chainId=${chainId}`;
   const response = await fetch(preaccessUrl);
   const data = await response.json();
   return data.nonce;
@@ -25,7 +25,7 @@ export async function itheumSolViewData(
   nestedIdxToStream?: number
 ): Promise<Response> {
   const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SolEnvEnum.devnet : SolEnvEnum.mainnet;
-  let accessUrl = `${getApiDataMarshal(chainId)}/access?nonce=${nonce}&NFTId=${assetId}&signature=${signature}&chainId=${chainId}&accessRequesterAddr=${address.toBase58()}`;
+  let accessUrl = `${getApiDataMarshal(SolEnvEnum.mainnet)}/access?nonce=${nonce}&NFTId=${assetId}&signature=${signature}&chainId=${chainId}&accessRequesterAddr=${address.toBase58()}`;
   if (streamInLine) {
     accessUrl += `&streamInLine=1`;
   }
