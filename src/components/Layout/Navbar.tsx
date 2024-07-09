@@ -1,5 +1,6 @@
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { FlaskRound, Gift, Home, Menu, Store, Wallet } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
@@ -36,10 +37,15 @@ import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
 import { useAccountStore } from "../../store/account";
 
 export const Navbar = () => {
-  const isLoggedIn = useGetIsLoggedIn();
+  const { publicKey } = useWallet();
+  const addressSol = publicKey?.toBase58();
+  const isLoggedInSol = !!addressSol;
+
+  const isLoggedInMvx = useGetIsLoggedIn();
+  const { address: addressMvx } = useGetAccount();
+
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
-  const { address } = useGetAccount();
 
   const FlaskBottleAnimation = () => {
     return (
@@ -105,10 +111,6 @@ export const Navbar = () => {
         </Popover>
       </div>
     );
-  };
-
-  const handleLogout = () => {
-    logout(`${window.location.origin}`, undefined, false);
   };
 
   const ClaimBitzButton = () => (
@@ -177,7 +179,7 @@ export const Navbar = () => {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Data Widgets</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className={cn("grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]", isLoggedIn ? "" : "!w-[400px]")}>
+              <ul className={cn("grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]", isLoggedInMvx ? "" : "!w-[400px]")}>
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                   <Link
                     to={returnRoute(item.routeKey)}
@@ -192,20 +194,22 @@ export const Navbar = () => {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          {isLoggedIn ? (
+          {(isLoggedInMvx || isLoggedInSol) && (
             <>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Account</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    <Link
-                      to={routeNames.mylisted}
-                      className={
-                        "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                      }>
-                      <div className="text-md font-medium leading-none ">My Listed</div>
-                      <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60  font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
-                    </Link>
+                    {isLoggedInMvx && (
+                      <Link
+                        to={routeNames.mylisted}
+                        className={
+                          "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        }>
+                        <div className="text-md font-medium leading-none ">My Listed</div>
+                        <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60  font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
+                      </Link>
+                    )}
                     <Link
                       to={routeNames.mywallet}
                       title={"My Wallet"}
@@ -215,10 +219,18 @@ export const Navbar = () => {
                       <div className="text-md font-medium leading-none   ">My Wallet</div>
                       <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60   font-[Satoshi-Light] pt-0.5">View RAW Data</p>
                     </Link>
-                    <div className="flex flex-col p-3">
-                      <p className="text-sm font-medium leading-none pb-0.5">My Address Quick Copy</p>
-                      <CopyAddress address={address} precision={6} />
-                    </div>
+                    {isLoggedInMvx && (
+                      <div className="flex flex-col p-3">
+                        <p className="text-sm font-medium leading-none pb-0.5">MvX Address Quick Copy</p>
+                        <CopyAddress address={addressMvx} precision={6} />
+                      </div>
+                    )}
+                    {isLoggedInSol && (
+                      <div className="flex flex-col p-3">
+                        <p className="text-sm font-medium leading-none pb-0.5">SOL Address Quick Copy</p>
+                        <CopyAddress address={addressSol} precision={6} />
+                      </div>
+                    )}
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
@@ -226,34 +238,19 @@ export const Navbar = () => {
               <NavigationMenuItem>
                 <BitzDropdown />
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to={routeNames.home}>
-                  <div className="flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
-                    <Button
-                      className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
-                      variant="outline"
-                      onClick={handleLogout}>
-                      Logout
-                    </Button>
-                  </div>
-                </Link>
-              </NavigationMenuItem>
-            </>
-          ) : (
-            <>
-              <NavigationMenuItem>
-                <Link to={routeNames.unlock} state={{ from: location.pathname }}>
-                  <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center">
-                    <Button
-                      className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
-                      variant="outline">
-                      Login
-                    </Button>
-                  </div>
-                </Link>
-              </NavigationMenuItem>{" "}
             </>
           )}
+          <NavigationMenuItem>
+            <Link to={routeNames.unlock} state={{ from: location.pathname }}>
+              <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center">
+                <Button
+                  className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
+                  variant="outline">
+                  Manage Login
+                </Button>
+              </div>
+            </Link>
+          </NavigationMenuItem>
           <NavigationMenuItem>
             <SwitchButton />
           </NavigationMenuItem>
@@ -263,7 +260,7 @@ export const Navbar = () => {
       <div className="md:!hidden !visible">
         <DropdownMenu>
           <div className="flex flex-row">
-            {isLoggedIn ? (
+            {isLoggedInMvx ? (
               <BitzDropdown />
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
@@ -304,7 +301,7 @@ export const Navbar = () => {
                 </Link>
               ))}
             </DropdownMenuGroup>
-            {isLoggedIn ? (
+            {(isLoggedInMvx || isLoggedInSol) && (
               <>
                 <DropdownMenuLabel className="flex flex-row items-center">
                   <Wallet className="mr-2 h-4 w-4" />
@@ -312,9 +309,11 @@ export const Navbar = () => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup className="">
-                  <Link to={routeNames.mylisted}>
-                    <DropdownMenuItem className=" ">My Listed</DropdownMenuItem>
-                  </Link>
+                  {isLoggedInMvx && (
+                    <Link to={routeNames.mylisted}>
+                      <DropdownMenuItem className=" ">My Listed</DropdownMenuItem>
+                    </Link>
+                  )}
                   <Link to={routeNames.mywallet}>
                     <DropdownMenuItem className=" ">My Wallet</DropdownMenuItem>
                   </Link>
@@ -330,25 +329,30 @@ export const Navbar = () => {
                     </div>
                   </Link>
                 </DropdownMenuGroup>
-                <DropdownMenuItem className="gap-4">
-                  <CopyAddress address={address} precision={6} />
-                </DropdownMenuItem>{" "}
-                <DropdownMenuSeparator />{" "}
-                <DropdownMenuGroup>
-                  <Link to={routeNames.home} className="w-full flex justify-center items-center">
-                    <div className="w-[80px] bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-lg justify-center items-center">
-                      <Button
-                        className="dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-lg font-medium tracking-wide"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleLogout}>
-                        Logout
-                      </Button>
-                    </div>
-                  </Link>
-                </DropdownMenuGroup>
+                {isLoggedInMvx && (
+                  <DropdownMenuItem className="gap-4">
+                    <CopyAddress address={addressMvx} precision={6} />
+                  </DropdownMenuItem>
+                )}
+                {isLoggedInSol && (
+                  <DropdownMenuItem className="gap-4">
+                    <CopyAddress address={addressSol || ""} precision={6} />
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
               </>
-            ) : null}
+            )}
+            <DropdownMenuGroup>
+              <div className="m-auto bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg w-fit">
+                <Link to={routeNames.unlock} state={{ from: location.pathname }}>
+                  <Button
+                    className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
+                    variant="outline">
+                    Manage Login
+                  </Button>
+                </Link>
+              </div>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

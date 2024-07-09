@@ -3,7 +3,7 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { MULTIVERSX_BUBBLE_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
-import { DataNftCard, Loader } from "components";
+import { MvxDataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { ZoomableSvg } from "components/ZoomableSvg";
 import { SHOW_NFTS_STEP } from "config";
@@ -24,7 +24,7 @@ export const MultiversxBubbles = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [file, setFile] = useState<string | null>(null);
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -141,7 +141,7 @@ export const MultiversxBubbles = () => {
         dataNftCount={shownAppDataNfts.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
-            <DataNftCard
+            <MvxDataNftCard
               key={index}
               index={index}
               dataNft={dataNft}

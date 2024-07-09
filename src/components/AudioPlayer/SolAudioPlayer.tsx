@@ -1,26 +1,36 @@
 import { useEffect, useState } from "react";
-import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
+import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
+import { useWallet } from "@solana/wallet-adapter-react";
+import bs58 from "bs58";
 import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, XCircle } from "lucide-react";
+import toast from "react-hot-toast";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
-import toast from "react-hot-toast";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import { toastError } from "libs/utils";
+import { useAccountStore } from "store/account";
 
-type AudioPlayerProps = {
-  dataNftToOpen?: DataNft;
+type SolAudioPlayerProps = {
+  dataNftToOpen?: DasApiAsset;
   songs?: any;
-  tokenLogin?: any;
   firstSongBlobUrl?: string;
   previewUrl?: string;
   chainID?: string;
 };
 
-export const AudioPlayer = (props: AudioPlayerProps) => {
-  const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl, chainID } = props;
+export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
+  const { dataNftToOpen, songs, firstSongBlobUrl, previewUrl, chainID } = props;
+
+  const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
+  const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
+  const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
+  const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
+  const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
+  const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
 
   useEffect(() => {
     if (firstSongBlobUrl)
@@ -100,6 +110,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState("00:00");
   const [isLoaded, setIsLoaded] = useState(false);
+  const { publicKey, signMessage } = useWallet();
 
   // map to keep the already fetched songs
   const [songSource, setSongSource] = useState<{ [key: number]: string }>({});
@@ -125,23 +136,40 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         }));
         /// if not previously fetched, fetch now and save the url of the blob
         if (dataNftToOpen) {
-          if (!dataNftToOpen.dataMarshal || dataNftToOpen.dataMarshal === "") {
-            dataNftToOpen.updateDataNft({ dataMarshal: getApiDataMarshal(chainID ?? "D") });
+          let usedPreAccessNonce = solPreaccessNonce;
+          let usedPreAccessSignature = solPreaccessSignature;
+          if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
+            const preAccessNonce = await itheumSolPreaccess();
+            const message = new TextEncoder().encode(preAccessNonce);
+            if (signMessage === undefined) throw new Error("signMessage is undefiend");
+            const signature = await signMessage(message);
+            if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
+            const encodedSignature = bs58.encode(signature);
+            updateSolPreaccessNonce(preAccessNonce);
+            updateSolSignedPreaccess(encodedSignature);
+            updateSolPreaccessTimestamp(Date.now());
+            usedPreAccessNonce = preAccessNonce;
+            usedPreAccessSignature = encodedSignature;
           }
-          const res: ViewDataReturnType = await dataNftToOpen.viewDataViaMVXNativeAuth({
-            mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken).origin],
-            mvxNativeAuthMaxExpirySeconds: 3600,
+          const viewDataArgs = {
+            headers: {},
+            fwdHeaderKeys: [],
+          };
+          if (!publicKey) throw new Error("Missing data for viewData");
+          const res = await itheumSolViewData(
+            dataNftToOpen.id,
+            usedPreAccessNonce,
+            usedPreAccessSignature,
+            publicKey,
+            viewDataArgs.fwdHeaderKeys,
+            viewDataArgs.headers,
+            true,
+            index
+          );
 
-            fwdHeaderMapLookup: {
-              "authorization": `Bearer ${tokenLogin?.nativeAuthToken}`,
-            },
-
-            stream: true,
-            nestedIdxToStream: index, ///   get the song for the current index
-          });
-
-          if (!res.error) {
-            const blobUrl = URL.createObjectURL(res.data);
+          if (res.ok) {
+            const blob = await res.blob();
+            const blobUrl = URL.createObjectURL(blob);
 
             setSongSource((prevState) => ({
               ...prevState, // keep all other key-value pairs
@@ -150,7 +178,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           } else {
             setSongSource((prevState) => ({
               ...prevState,
-              [index]: "Error: " + res.error,
+              [index]: "Error: " + res.status + " " + res.statusText,
             }));
           }
         }

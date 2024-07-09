@@ -120,7 +120,7 @@ export const GetBitz = () => {
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showMessage, setShowMessage] = useState<boolean>(true);
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
   // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);

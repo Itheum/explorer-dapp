@@ -2,7 +2,7 @@ import { Moon, Sun } from "lucide-react";
 
 import { Button } from "../../libComponents/Button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../libComponents/DropdownMenu";
-import { useTheme } from "../../libComponents/ThemeProvider";
+import { useTheme } from "../../contexts/ThemeProvider";
 
 export function SwitchButton() {
   const { setTheme } = useTheme();

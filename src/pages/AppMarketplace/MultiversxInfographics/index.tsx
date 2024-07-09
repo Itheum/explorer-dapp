@@ -5,7 +5,7 @@ import type { PDFDocumentProxy } from "pdfjs-dist";
 import { Document, Page, pdfjs } from "react-pdf";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
-import { DataNftCard, Loader } from "components";
+import { MvxDataNftCard, Loader } from "components";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
@@ -39,7 +39,7 @@ export const MultiversxInfographics = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
 
-  const { nfts, isLoading: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -161,7 +161,7 @@ export const MultiversxInfographics = () => {
         dataNftCount={shownAppDataNfts.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
-            <DataNftCard
+            <MvxDataNftCard
               key={index}
               index={index}
               dataNft={dataNft}
