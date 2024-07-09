@@ -96,7 +96,7 @@ export const NFTunes = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      setShownSolDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.json_uri.includes("Music")));
+      setShownSolDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.metadata.name.includes("Music")));
     }
   }, [solNfts]);
 
@@ -375,7 +375,7 @@ export const NFTunes = () => {
                 </HeaderComponent>
               )}
               {!mvxNetworkSelected && (
-                <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Solana Music Data NFTs"} dataNftCount={shownMvxAppDataNfts.length}>
+                <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Solana Music Data NFTs"} dataNftCount={shownSolDataNfts.length}>
                   {shownSolDataNfts.length > 0 ? (
                     shownSolDataNfts.map((dataNft, index) => {
                       return (
