@@ -3,7 +3,7 @@ import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { motion } from "framer-motion";
 import { MoveDown, Music, Music2, PlayCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { NF_TUNES_TOKENS, FEATURED_NF_TUNES_TOKEN } from "appsConfig";
 import benefitsLogo1 from "assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "assets/img/nf-tunes/benefits-logo2.png";
@@ -53,6 +53,7 @@ import { SolDataNftCard } from "components/SolDataNftCard";
 import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
 import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
 import bs58 from "bs58";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -69,12 +70,15 @@ export const NFTunes = () => {
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
 
-  const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx, updateIsLoadingSol } = useNftsStore();
+  const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
 
-  const [mvxNetworkSelected, setMvxNetworkSelected] = useState<boolean>(true);
-  const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
-  const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
+  // get query param called chain
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
+  const mvxNetworkSelected = defaultChain === "multiversx";
+  const [shownSolAppDataNfts, setShownSolAppDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
   const { publicKey, signMessage } = useWallet();
 
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
@@ -96,7 +100,7 @@ export const NFTunes = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      setShownSolDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.metadata.name.includes("Music")));
+      setShownSolAppDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.metadata.name.includes("Music")));
     }
   }, [solNfts]);
 
@@ -201,14 +205,14 @@ export const NFTunes = () => {
 
   async function viewSolData(index: number) {
     try {
-      if (!(index >= 0 && index < shownSolDataNfts.length)) {
+      if (!(index >= 0 && index < shownSolAppDataNfts.length)) {
         toastError("Data is not loaded");
         return;
       }
       setFirstSongBlobUrl(undefined);
       setIsFetchingDataMarshal(true);
 
-      const dataNft = shownSolDataNfts[index];
+      const dataNft = shownSolAppDataNfts[index];
 
       let usedPreAccessNonce = solPreaccessNonce;
       let usedPreAccessSignature = solPreaccessSignature;
@@ -282,7 +286,7 @@ export const NFTunes = () => {
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
         <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  pl-4  ">
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
-            <MvxSolSwitch toggleState={mvxNetworkSelected} setToggleState={() => setMvxNetworkSelected(!mvxNetworkSelected)} />
+            <MvxSolSwitch />
             <div className="flex-row flex items-center">
               <span className="text-5xl xl:text-[8rem] text-primary">NF-Tunes</span>
               <img className="max-h-[30%] mb-6" src={currentTheme === "dark" ? musicNote : musicNoteBlack} />
@@ -375,9 +379,9 @@ export const NFTunes = () => {
                 </HeaderComponent>
               )}
               {!mvxNetworkSelected && (
-                <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Solana Music Data NFTs"} dataNftCount={shownSolDataNfts.length}>
-                  {shownSolDataNfts.length > 0 ? (
-                    shownSolDataNfts.map((dataNft, index) => {
+                <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Solana Music Data NFTs"} dataNftCount={shownSolAppDataNfts.length}>
+                  {shownSolAppDataNfts.length > 0 ? (
+                    shownSolAppDataNfts.map((dataNft, index) => {
                       return (
                         <SolDataNftCard
                           key={index}
@@ -402,7 +406,7 @@ export const NFTunes = () => {
                               <>
                                 {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentIndex > -1 && (
                                   <SolAudioPlayer
-                                    dataNftToOpen={shownSolDataNfts[currentIndex]}
+                                    dataNftToOpen={shownSolAppDataNfts[currentIndex]}
                                     songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                     firstSongBlobUrl={firstSongBlobUrl}
                                     chainID={chainID}

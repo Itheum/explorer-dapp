@@ -19,6 +19,7 @@ import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, sleep, toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 
 export const MyWallet = () => {
   const { tokenLogin } = useGetLoginInfo();
@@ -31,7 +32,8 @@ export const MyWallet = () => {
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol } = useNftsStore();
   const [numberOfMvxNftsShown, setNumberOfMvxNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownMvxDataNfts, setShownMvxDataNfts] = useState<DataNft[]>(mvxNfts.slice(0, SHOW_NFTS_STEP));
-  const [mvxNetworkSelected, setMvxNetworkSelected] = useState<boolean>(true);
+  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
+  const mvxNetworkSelected = defaultChain === "multiversx";
   const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
   const { publicKey, signMessage } = useWallet();
@@ -246,7 +248,7 @@ export const MyWallet = () => {
 
   return (
     <>
-      <MvxSolSwitch toggleState={mvxNetworkSelected} setToggleState={() => setMvxNetworkSelected(!mvxNetworkSelected)} />
+      <MvxSolSwitch />
       {mvxNetworkSelected && (
         <HeaderComponent pageTitle={"My MultiversX Data NFTs"} hasImage={false} pageSubtitle={"My MultiversX Data NFTs"} dataNftCount={mvxNfts.length}>
           {shownMvxDataNfts.length > 0 ? (
