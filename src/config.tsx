@@ -1,4 +1,5 @@
 import { IS_DEVNET } from "appsConfig";
+import exp from "constants";
 import { EnvironmentsEnum } from "libs/types";
 
 export const ELROND_NETWORK = import.meta.env.VITE_ENV_NETWORK || EnvironmentsEnum.devnet;
@@ -14,6 +15,8 @@ export const SHOW_NFTS_STEP = 10;
 
 export const MARKETPLACE_DETAILS_PAGE = IS_DEVNET ? "https://test.datadex.itheum.io/datanfts/marketplace/" : "https://datadex.itheum.io/datanfts/marketplace/";
 
+export const DRIP_PAGE = "https://drip.haus/itheum";
+
 export const CREATOR_PROFILE_PAGE =
   import.meta.env.VITE_ENV_NETWORK && import.meta.env.VITE_ENV_NETWORK === EnvironmentsEnum.devnet
     ? "https://test.datadex.itheum.io/profile/"
@@ -21,6 +24,8 @@ export const CREATOR_PROFILE_PAGE =
 
 export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
 
-export const SUPPORTED_COLLECTIONS = IS_DEVNET
+export const SUPPORTED_MVX_COLLECTIONS = IS_DEVNET
   ? ["DATANFTFT-e0b917", "DNFTPHMA-9e2b1c", "OASISMUSIC-9b3433", "OASMUSICPL-47b186", "FOOWLDMSC-5ee8ec"]
   : ["DATANFTFT-e936d4", "DFEE-72425b"];
+
+export const SUPPORTED_SOL_COLLECTIONS = IS_DEVNET ? ["6MgvQSDUU3Z2a5MQqPeStUyCo1AXrB8xJhyBc8YYH3uk"] : ["me2Sj97xewgEodSCRs31jFEyA1m3FQFzziqVXK9SVHX"];
