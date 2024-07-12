@@ -235,9 +235,7 @@ export const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
-                <BitzDropdown />
-              </NavigationMenuItem>
+              <NavigationMenuItem>{isLoggedInMvx && <BitzDropdown />}</NavigationMenuItem>
             </>
           )}
           <NavigationMenuItem>
