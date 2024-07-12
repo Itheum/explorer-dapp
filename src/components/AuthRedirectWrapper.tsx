@@ -7,11 +7,11 @@ export const AuthRedirectWrapper = ({ children }: PropsWithChildren) => {
   const isLoggedIn = useGetIsLoggedIn();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate(routeNames.home);
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     navigate(routeNames.home);
+  //   }
+  // }, [isLoggedIn]);
 
   return <>{children}</>;
 };

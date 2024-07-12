@@ -48,7 +48,7 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.mywallet,
     title: "My Wallet",
     component: MyWallet,
-    authenticatedRoute: true,
+    authenticatedRoute: false,
   },
   {
     path: routeNames.itheumtrailblazer,
