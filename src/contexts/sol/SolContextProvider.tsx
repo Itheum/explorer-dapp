@@ -3,32 +3,46 @@ import { WalletAdapterNetwork, WalletError } from "@solana/wallet-adapter-base";
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
+import "@solana/wallet-adapter-react-ui/styles.css";
+import { TipLinkWalletAdapter } from "@tiplink/wallet-adapter";
+import {
+  WalletModalProvider as TipLinkWalletModalProvider,
+  WalletDisconnectButton,
+  WalletMultiButton,
+  TipLinkWalletAutoConnectV2,
+} from "@tiplink/wallet-adapter-react-ui";
+import { useSearchParams } from "react-router-dom";
 import { SolAutoConnectProvider, useSolAutoConnect } from "./SolAutoConnectProvider";
 import { SolNetworkConfigurationProvider, useNetworkConfiguration } from "./SolNetworkConfigurationProvider";
-import "@solana/wallet-adapter-react-ui/styles.css";
-// import { notify } from "../utils/notifications";
 
 const SolWalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { autoConnect } = useSolAutoConnect();
   const { networkConfiguration } = useNetworkConfiguration();
   const network = networkConfiguration as WalletAdapterNetwork;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const wallets = useMemo(() => [], [network]);
+  const wallets = useMemo(
+    () => [
+      new TipLinkWalletAdapter({
+        title: "Itheum Explorer",
+        clientId: "df83f3c6-9727-4d23-9f0b-e23785848800",
+        theme: "system",
+      }),
+    ],
+    [network]
+  );
 
   const onError = useCallback((error: WalletError) => {
-    // notify({
-    //   type: "error",
-    //   message: error.message ? `${error.name}: ${error.message}` : error.name,
-    // });
     console.error(error);
   }, []);
 
   return (
-    // TODO: updates needed for updating and referencing endpoint: wallet adapter rework
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} onError={onError} autoConnect={autoConnect}>
-        <WalletModalProvider>{children}</WalletModalProvider>
+        <TipLinkWalletAutoConnectV2 isReady query={searchParams}>
+          <WalletModalProvider>{children}</WalletModalProvider>
+        </TipLinkWalletAutoConnectV2>
       </WalletProvider>
     </ConnectionProvider>
   );
