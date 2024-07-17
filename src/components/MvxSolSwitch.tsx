@@ -1,10 +1,13 @@
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useGetAccountInfo } from "hooks";
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 
 export function MvxSolSwitch() {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const { address: mvxAddress } = useGetAccountInfo();
+  const { publicKey } = useWallet();
   const defaultChain = useLocalStorageStore((state) => state.defaultChain);
   const setDefaultChain = useLocalStorageStore((state) => state.setDefaultChain);
 
@@ -18,6 +21,12 @@ export function MvxSolSwitch() {
       setDefaultChain("solana");
     } else if (chainParam === "multiversx") {
       setDefaultChain("multiversx");
+    } else {
+      if (mvxAddress && !publicKey) {
+        setDefaultChain("multiversx");
+      } else {
+        setDefaultChain("solana");
+      }
     }
   }, []);
 
