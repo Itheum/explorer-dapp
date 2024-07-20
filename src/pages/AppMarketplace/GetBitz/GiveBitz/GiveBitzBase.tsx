@@ -38,6 +38,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
   const [fetchingDataBountiesReceivedSum, setFetchingDataBountiesReceivedSum] = useState<boolean>(true);
   const [isSendingPowerUp, setIsSendingPowerUp] = useState<boolean>(false);
+
   useEffect(() => {
     setFetchingDataBountiesReceivedSum(true);
     const fetchDataBounties = async () => {
@@ -373,7 +374,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         </div>
 
         <div
-          className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center md:items-start justify-center md:justify-start w-full antialiased pt-4 relative h-[100%] "
+          className="flex flex-col md:flex-row md:flex-wrap gap-1 items-center md:items-start justify-center md:justify-start w-full antialiased pt-4 relative h-[100%] "
           style={{ backgroundImage: `url(${bounty})`, objectFit: "scale-down", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}>
           {!fetchingDataBountiesReceivedSum ? (
             dataBounties.map((item: GiveBitzDataBounty) => {
