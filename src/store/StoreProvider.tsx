@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -18,6 +18,9 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { publicKey } = useWallet();
   const addressSol = publicKey?.toBase58();
   const isLoggedInSol = !!addressSol;
+
+  // flag to check locally if we got the MVX NFTs
+  const [mvxNFTsFetched, setMvxNFTsFetched] = useState<boolean>(false);
 
   // ACCOUNT STORE
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
@@ -41,6 +44,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         updateMvxNfts(nftsT);
       }
       updateIsLoadingMvx(false);
+      setMvxNFTsFetched(true);
     }
     fetchMvxNfts();
   }, [address, tokenLogin]);
@@ -67,6 +71,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       }
 
       const nativeAuthTokenData = decodeNativeAuthToken(tokenLogin.nativeAuthToken);
+
       if (nativeAuthTokenData.extraInfo.timestamp) {
         const currentTime = new Date().getTime();
         if (currentTime > (nativeAuthTokenData.extraInfo.timestamp + nativeAuthTokenData.ttl) * 1000) {
@@ -81,59 +86,70 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       updateCollectedBitzSum(-2);
       updateBonusBitzSum(-2);
 
-      // get the bitz game data nft details
-      const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
+      if (mvxNFTsFetched && mvxNfts.length > 0) {
+        // get the bitz game data nft details
+        const bitzGameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
 
-      // does the logged in user actually OWN the bitz game data nft
-      const _myDataNfts = mvxNfts;
-      const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitzGameDataNFT.nonce === dNft.nonce && bitzGameDataNFT.collection === dNft.collection);
-      const hasGameDataNFT = hasRequiredDataNFT ? true : false;
+        // does the logged in user actually OWN the bitz game data nft
+        const _myDataNfts = mvxNfts;
+        const hasRequiredDataNFT = _myDataNfts.find((dNft) => bitzGameDataNFT.nonce === dNft.nonce && bitzGameDataNFT.collection === dNft.collection);
+        const hasGameDataNFT = hasRequiredDataNFT ? true : false;
 
-      // only get the bitz balance if the user owns the token
-      if (hasGameDataNFT) {
-        const viewDataArgs = {
-          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
-          mvxNativeAuthMaxExpirySeconds: 3600,
-          fwdHeaderMapLookup: {
-            "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
-            "dmf-custom-only-state": "1",
-          },
-          fwdHeaderKeys: "authorization, dmf-custom-only-state",
-        };
+        // only get the bitz balance if the user owns the token
+        if (hasGameDataNFT) {
+          const viewDataArgs = {
+            mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
+            mvxNativeAuthMaxExpirySeconds: 3600,
+            fwdHeaderMapLookup: {
+              "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+              "dmf-custom-only-state": "1",
+            },
+            fwdHeaderKeys: "authorization, dmf-custom-only-state",
+          };
 
-        const getBitzGameResult = await viewDataJSONCore(viewDataArgs, bitzGameDataNFT);
-        if (getBitzGameResult) {
-          let sumScoreBitz = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
-          sumScoreBitz = sumScoreBitz < 0 ? 0 : sumScoreBitz;
-          let sumGivenBitz = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
-          sumGivenBitz = sumGivenBitz < 0 ? 0 : sumGivenBitz;
-          let sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
-          sumBonusBitz = sumBonusBitz < 0 ? 0 : sumBonusBitz;
-          console.log(sumScoreBitz, sumBonusBitz, sumGivenBitz);
-          updateBitzBalance(sumScoreBitz + sumBonusBitz - sumGivenBitz);
-          updateGivenBitzSum(sumGivenBitz);
-          updateBonusBitzSum(sumBonusBitz);
+          const getBitzGameResult = await viewDataJSONCore(viewDataArgs, bitzGameDataNFT);
 
-          updateCooldown(
-            computeRemainingCooldown(
-              getBitzGameResult.data.gamePlayResult.lastPlayedBeforeThisPlay,
-              getBitzGameResult.data.gamePlayResult.configCanPlayEveryMSecs
-            )
-          );
+          if (getBitzGameResult) {
+            let sumScoreBitz = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
+            sumScoreBitz = sumScoreBitz < 0 ? 0 : sumScoreBitz;
+            let sumGivenBitz = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
+            sumGivenBitz = sumGivenBitz < 0 ? 0 : sumGivenBitz;
+            let sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
+            sumBonusBitz = sumBonusBitz < 0 ? 0 : sumBonusBitz;
 
-          updateCollectedBitzSum(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits by playing
+            // console.log(sumScoreBitz, sumBonusBitz, sumGivenBitz);
 
-          updateBonusTries(getBitzGameResult.data.gamePlayResult.bonusTriesBeforeThisPlay || 0); // bonus tries awarded to user (currently only via referral code rewards)
+            updateBitzBalance(sumScoreBitz + sumBonusBitz - sumGivenBitz);
+            updateGivenBitzSum(sumGivenBitz);
+            updateBonusBitzSum(sumBonusBitz);
+
+            updateCooldown(
+              computeRemainingCooldown(
+                getBitzGameResult.data.gamePlayResult.lastPlayedBeforeThisPlay,
+                getBitzGameResult.data.gamePlayResult.configCanPlayEveryMSecs
+              )
+            );
+
+            updateCollectedBitzSum(getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay); // collected bits by playing
+
+            updateBonusTries(getBitzGameResult.data.gamePlayResult.bonusTriesBeforeThisPlay || 0); // bonus tries awarded to user (currently only via referral code rewards)
+          }
+        } else {
+          resetBitzValsToZero();
         }
-      } else {
-        updateBitzBalance(-1);
-        updateGivenBitzSum(-1);
-        updateCooldown(-1);
-        updateCollectedBitzSum(-1);
-        updateBonusBitzSum(-1);
+      } else if (mvxNFTsFetched && mvxNfts.length === 0) {
+        resetBitzValsToZero();
       }
     })();
-  }, [address, tokenLogin, mvxNfts]);
+  }, [address, tokenLogin, mvxNfts, mvxNFTsFetched]);
+
+  function resetBitzValsToZero() {
+    updateBitzBalance(-1);
+    updateGivenBitzSum(-1);
+    updateCooldown(-1);
+    updateCollectedBitzSum(-1);
+    updateBonusBitzSum(-1);
+  }
 
   return <>{children}</>;
 };

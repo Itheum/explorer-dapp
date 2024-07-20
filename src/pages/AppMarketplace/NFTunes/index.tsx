@@ -340,6 +340,7 @@ export const NFTunes = () => {
                           index={index}
                           dataNft={dataNft}
                           isLoading={isLoadingMvx}
+                          isDataWidget={true}
                           owned={mvxNfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
                           viewData={viewMvxData}
                           modalContent={
@@ -388,6 +389,7 @@ export const NFTunes = () => {
                           index={index}
                           dataNft={dataNft}
                           isLoading={isLoadingSol}
+                          isDataWidget={true}
                           owned={true}
                           viewData={viewSolData}
                           modalContent={
@@ -587,6 +589,7 @@ export const NFTunes = () => {
                       index={featuredDataNftIndex}
                       dataNft={featuredArtistDataNft}
                       isLoading={isLoadingMvx}
+                      isDataWidget={true}
                       owned={mvxNfts.find((nft) => nft.tokenIdentifier === featuredArtistDataNft.tokenIdentifier) ? true : false}
                       viewData={viewMvxData}
                       modalContent={

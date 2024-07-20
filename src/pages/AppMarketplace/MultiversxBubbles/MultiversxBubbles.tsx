@@ -146,6 +146,7 @@ export const MultiversxBubbles = () => {
               index={index}
               dataNft={dataNft}
               isLoading={isLoading || isLoadingUserNfts}
+              isDataWidget={true}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               viewData={viewData}
               modalContent={

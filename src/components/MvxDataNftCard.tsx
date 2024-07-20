@@ -18,6 +18,7 @@ export function MvxDataNftCard({
   owned,
   isWallet,
   viewData,
+  isDataWidget = false,
   showBalance = false,
   modalContent,
   modalTitle,
@@ -33,6 +34,7 @@ export function MvxDataNftCard({
   owned: boolean;
   isWallet?: boolean;
   viewData: (e: number) => void;
+  isDataWidget?: boolean;
   showBalance?: boolean;
   modalContent?: React.ReactElement;
   modalTitle?: string;
@@ -131,7 +133,7 @@ export function MvxDataNftCard({
                       className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
                       variant="ghost"
                       onClick={() => viewData(index)}>
-                      View Data
+                      {isDataWidget ? "Open App" : "View Data"}
                     </Button>
                   }
                   closeOnOverlayClick={false}
