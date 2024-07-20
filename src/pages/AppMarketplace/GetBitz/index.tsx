@@ -202,7 +202,9 @@ export const GetBitz = () => {
   useEffect(() => {
     setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
     setBurnFireGlow(burnProgress * 0.1);
-    if (burnProgress === 10) {
+
+    // we can sloe the burn by updating the value here...
+    if (burnProgress === 25) {
       setIsMemeBurnHappening(false);
       playGame();
     }
@@ -550,7 +552,7 @@ export const GetBitz = () => {
 
           <div
             className={cn(
-              "select-none flex justify-center items-center mt-[2rem]  w-[100%] h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
+              "select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
               _isMemeBurnHappening ? "cursor-none" : ""
             )}>
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
@@ -560,12 +562,12 @@ export const GetBitz = () => {
                   onClick={() => {
                     setIsMemeBurnHappening(true);
                   }}>
-                  <p className="lg:text-md">Welcome Back Itheum OG!</p>
-                  <p className="lg:text-md mt-2 lg:mt-5">
-                    Ready to grab yourself some of them <span className=" lg:text-3xl">🤤</span> {`<BiTz>`} points?
+                  <p className="text-[16px] lg:text-xl">Welcome Back Itheum OG!</p>
+                  <p className="text-[16px] mt-2 lg:text-xl lg:mt-5">
+                    Ready to grab yourself some of them <span className="lg:text-3xl">🤤</span> {`<BiTz>`} points?
                   </p>
-                  <p className="font-bold lg:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!</p>
-                  <p className="font-bold mt-2 lg:mt-5">Click here when you are ready...</p>
+                  <p className="text-[18px] font-bold lg:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!</p>
+                  <p className="text-[16px] font-bold mt-2 lg:mt-5 lg:text-xl">Click here when you are ready...</p>
                   <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
                 </div>
               </>
@@ -841,33 +843,6 @@ export const GetBitz = () => {
     }
   }
 
-  function leaderBoardTable(leaderBoardData: LeaderBoardItemType[]) {
-    return (
-      <>
-        <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
-          <thead>
-            <tr className="border">
-              <th className="p-2">Rank</th>
-              <th className="p-2">User</th>
-              <th className="p-2">{`<BiTz>`} Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderBoardData.map((item, rank) => (
-              <tr key={rank} className="border">
-                <td className="p-2">
-                  #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-                </td>
-                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 8)}</td>
-                <td className="p-2">{item.bits}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-    );
-  }
-
   return (
     <>
       {usingReferralCode !== "" && (
@@ -877,7 +852,8 @@ export const GetBitz = () => {
       )}
 
       <div className="relative w-full">
-        <div
+        {/* <div
+          id="data_bounties_jump_to_button"
           onClick={() => scrollToSection("bounties")}
           className="text-black md:font-bold text-xs md:text-base z-[6] select-none cursor-pointer absolute mt-3 right-3 md:mt-4 md:right-6 flex flex-row items-center justify-center p-1 md:p-2 border border-white rounded-3xl hover:scale-110 bg-white hover:bg-[#35d9fa]/10  transition-all duration-500">
           <motion.div
@@ -888,7 +864,7 @@ export const GetBitz = () => {
             {showMessage && "Data Bounties"}
             {!showMessage && <ArrowBigDownDash className="w-4 h-4 md:h-8 md:w-8 " />}
           </motion.div>
-        </div>
+        </div> */}
         <div className="absolute -z-1 w-full">
           <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
         </div>
@@ -1063,167 +1039,3 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
     return undefined;
   }
 }
-
-// export function leaderBoardTable(leaderBoardData: LeaderBoardItemType[], address: string, showMyPosition: boolean = false) {
-
-//   const myPosition = showMyPosition ? leaderBoardData.findIndex((item) => item.playerAddr === address) : -1;
-//   return (
-//     <div className="flex flex-col justify-center items-center w-full">
-//       {showMyPosition && <span className="text-xs text-center mb-2">Your position * {myPosition >= 0 ? myPosition + 1 : "20+"} *</span>}
-
-//       <table className="border border-[#35d9fa]/60 text-center m-auto w-[90%] max-w-[500px]">
-//         <thead>
-//           <tr className="border border-[#35d9fa]/30 ">
-//             <th className="p-2">Rank</th>
-//             <th className=" ">User</th>
-//             <th className="p-2 ">{`<BiTz>`} Points</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {leaderBoardData.map((item, rank) => (
-//             <tr key={rank} className="border border-[#35d9fa]/30 ">
-//               <td className=" p-2">
-//                 #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-//               </td>
-//               <td className=" ">
-//                 {item.playerAddr === address ? (
-//                   "It's YOU! 🫵 🎊"
-//                 ) : (
-//                   <MXAddressLink
-//                     textStyle="!text-[#35d9fa]  hover:!text-[#35d9fa] hover:underline"
-//                     explorerAddress={explorerAddress}
-//                     address={item.playerAddr}
-//                     precision={8}
-//                   />
-//                 )}
-//               </td>
-//               <td className="p-2 ">{item.bits}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
-
-/*
-// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
-// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
-// FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
-
-async function __viewDataViaMVXNativeAuth(p: any) {
-  try {
-    // S: run any format specific validation
-    // const { allPassed, validationMessages } = (0, utils_1.validateSpecificParamsViewData)({
-    //     mvxNativeAuthOrigins: p.mvxNativeAuthOrigins,
-    //     mvxNativeAuthMaxExpirySeconds: p.mvxNativeAuthMaxExpirySeconds,
-    //     fwdHeaderKeys: p.fwdHeaderKeys,
-    //     fwdHeaderMapLookup: p.fwdHeaderMapLookup,
-    //     fwdAllHeaders: p.fwdAllHeaders,
-    //     stream: p.stream,
-    //     nestedIdxToStream: p.nestedIdxToStream,
-    //     asDeputyOnAppointerAddr: p.asDeputyOnAppointerAddr,
-    //     _fwdHeaderMapLookupMustContainBearerAuthHeader: true,
-    //     _mandatoryParamsList: [
-    //         'mvxNativeAuthOrigins',
-    //         'mvxNativeAuthMaxExpirySeconds',
-    //         'fwdHeaderMapLookup'
-    //     ]
-    // });
-    // if (!allPassed) {
-    //     throw new Error(`params have validation issues = ${validationMessages}`);
-    // }
-    // E: run any format specific validation...
-    // convert mvxNativeAuthOrigins from a string array to API required base64 format
-    let mvxNativeAuthOriginsToBase64 = p.mvxNativeAuthOrigins.join(","); // convert the array to a string
-    mvxNativeAuthOriginsToBase64 = mvxNativeAuthOriginsToBase64.trim().replaceAll(" ", ""); // remove all spaces
-    mvxNativeAuthOriginsToBase64 = Buffer.from(mvxNativeAuthOriginsToBase64).toString("base64");
-    let chainId = "ED";
-    // if (this.overrideDataMarshalChainId === '') {
-    //     chainId =
-    //         DataNft.networkConfiguration.chainID === 'D'
-    //             ? 'ED'
-    //             : DataNft.networkConfiguration.chainID;
-    // }
-    // else if (this.overrideDataMarshalChainId === 'D') {
-    //     chainId = 'ED';
-    // }
-    // else {
-    //     chainId = this.overrideDataMarshalChainId;
-    // }
-    // debugger;
-    // let dataMarshal;
-    // if (this.overrideDataMarshal === '') {
-    //     dataMarshal = this.dataMarshal;
-    // }
-    // else {
-    //     dataMarshal = this.overrideDataMarshal;
-    // }
-
-    const dataMarshal = "http://localhost:4000/datamarshalapi/router/v1";
-
-    // construct the api url
-    // https://api.itheumcloud-stg.com/datamarshalapi/router/v1/access?NFTId=DATANFTFT-e0b917-c6&chainId=ED&mvxNativeAuthEnable=1&mvxNativeAuthMaxExpirySeconds=3600&mvxNativeAuthOrigins=aHR0cHM6Ly9sb2NhbGhvc3Q6MzAwMA==&fwdHeaderKeys=authorization,%20dmf-custom-only-state
-
-    let url = `${dataMarshal}/access?NFTId=DATANFTFT-e0b917-c6&chainId=${chainId}&mvxNativeAuthEnable=1&mvxNativeAuthMaxExpirySeconds=${p.mvxNativeAuthMaxExpirySeconds}&mvxNativeAuthOrigins=${mvxNativeAuthOriginsToBase64}`;
-    const fetchConfig = {
-      method: "GET",
-      headers: {},
-    };
-    // S: append optional params if found
-    if (typeof p.stream !== "undefined") {
-      url += p.stream ? "&streamInLine=1" : "";
-    }
-    if (typeof p.fwdAllHeaders !== "undefined") {
-      url += p.fwdAllHeaders ? "&fwdAllHeaders=1" : "";
-    }
-    if (typeof p.nestedIdxToStream !== "undefined") {
-      url += `&nestedIdxToStream=${p.nestedIdxToStream}`;
-    }
-    // if fwdHeaderMapLookup exists, send these headers and values to the data marshal for forwarding
-    if (typeof p.fwdHeaderMapLookup !== "undefined" && Object.keys(p.fwdHeaderMapLookup).length > 0) {
-      // authorization WILL be present based on validation, so let's fwd this as a request header param
-      fetchConfig.headers = {};
-      fetchConfig.headers["authorization"] = p.fwdHeaderMapLookup["authorization"];
-      // ... and forward any OTHER params user wanted to forward to the origin server via the marshal
-      if (typeof p.fwdHeaderKeys !== "undefined") {
-        url += `&fwdHeaderKeys=${p.fwdHeaderKeys}`;
-        Object.keys(p.fwdHeaderMapLookup).forEach((headerKey) => {
-          // already appended above so skip it...
-          if (headerKey !== "authorization") {
-            fetchConfig.headers[headerKey] = p.fwdHeaderMapLookup?.[headerKey];
-          }
-        });
-      }
-    }
-    if (typeof p.asDeputyOnAppointerAddr !== "undefined") {
-      url += `&asDeputyOnAppointerAddr=${p.asDeputyOnAppointerAddr}`;
-    }
-    // E: append optional params...
-    const response = await fetch(url, fetchConfig);
-    const contentType = response.headers.get("content-type");
-    const data = await response.blob();
-    // if the marshal returned a error, we should throw it here so that the SDK integrator can handle it
-    // ... if we don't, the marshal error response is just passed through as a normal data stream response
-    // ... and the user won't know what went wrong
-    // try {
-    //     (0, utils_1.checkStatus)(response);
-    // }
-    // catch (e) {
-    //     // as it's a data marshal error, we get it's payload which is in JSON and send that thrown as text
-    //     const errorPayload = await data.text();
-    //     throw new Error(`${e.toString()}. Detailed error trace follows : ${errorPayload}`);
-    // }
-    return {
-      data: data,
-      contentType: contentType || "",
-    };
-  } catch (err) {
-    // return {
-    //     data: undefined,
-    //     contentType: '',
-    //     error: err?.message
-    // };
-  }
-}
-*/

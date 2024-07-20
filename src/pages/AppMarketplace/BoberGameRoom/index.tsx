@@ -105,6 +105,7 @@ export const BoberGameRoom: React.FC = () => {
               index={index}
               dataNft={dataNft}
               isLoading={isLoading || isLoadingUserNfts}
+              isDataWidget={true}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               modalStyles={"md:h-[95svh] sm:h-[100svh]"}
               viewData={viewData}
