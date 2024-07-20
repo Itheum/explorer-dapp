@@ -124,6 +124,7 @@ export const ItheumTrailblazer = () => {
               index={index}
               dataNft={dataNft}
               isLoading={isLoading || isLoadingUserNfts}
+              isDataWidget={true}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               viewData={viewData}
               modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}

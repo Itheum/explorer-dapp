@@ -12,6 +12,7 @@ export function SolDataNftCard({
   dataNft,
   owned,
   isLoading,
+  isDataWidget = false,
   isWallet,
   viewData,
   modalContent,
@@ -27,6 +28,7 @@ export function SolDataNftCard({
   owned: boolean;
   isWallet?: boolean;
   isLoading?: boolean;
+  isDataWidget?: boolean;
   viewData: (e: number) => void;
   modalContent?: React.ReactElement;
   modalTitle?: string;
@@ -97,7 +99,7 @@ export function SolDataNftCard({
                       className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
                       variant="ghost"
                       onClick={() => viewData(index)}>
-                      View Data
+                      {isDataWidget ? "Open App" : "View Data"}
                     </Button>
                   }
                   closeOnOverlayClick={false}

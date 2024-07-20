@@ -15,9 +15,9 @@ export function returnRoute(routeKey: string) {
 export const Home = () => {
   return (
     <HeaderComponent
-      pageTitle={"Data Widgets"}
+      pageTitle={"Data Widget Marketplace"}
       subTitle={
-        "Itheum Data Widgets are lightweight apps powered by Data NFTs, enabling creative ways to open, visualize and discover the potential of the raw data found within Data NFTs."
+        "Itheum Data Widgets are lightweight apps powered by Data NFTs, allowing creative ways to open, visualize, and discover the potential of raw data."
       }
       hasImage={false}>
       <div className="flex flex-col">
