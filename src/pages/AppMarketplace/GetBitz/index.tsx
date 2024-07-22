@@ -110,7 +110,9 @@ const MEME_IMGS = [
   Meme29,
 ];
 
-export const GetBitz = () => {
+export const GetBitz = (props: any) => {
+  const { modelMode } = props;
+
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
@@ -851,7 +853,7 @@ export const GetBitz = () => {
         </div>
       )}
 
-      <div className="relative w-full">
+      <div className={`${modelMode ? "scale-75" : ""} relative w-full`}>
         {/* <div
           id="data_bounties_jump_to_button"
           onClick={() => scrollToSection("bounties")}
@@ -871,29 +873,31 @@ export const GetBitz = () => {
         {gamePlayImageSprites()}
       </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
-        <h2 className="text-center text-white mb-[1rem]">Get BiTz Perks</h2>
+      {!modelMode && (
+        <>
+          <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
+            <h2 className="text-center text-white mb-[1rem]">Get BiTz Perks</h2>
 
-        <ol className="mt-5">
-          <li className="my-5">
-            1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from "Monthly" LEADERBOARD get Airdropped Data NFTs from previous and upcoming Data Creators.
-          </li>
-          <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
-          <li className="my-5">
-            3. Got Memes for burning? Join our{" "}
-            <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
-              Discord Meme Channel
-            </a>{" "}
-            and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
-          </li>
-          <li className="my-5">
-            4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
-          </li>
-        </ol>
-        <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
-      </div>
+            <ol className="mt-5">
+              <li className="my-5">
+                1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from "Monthly" LEADERBOARD get Airdropped Data NFTs from previous and upcoming Data Creators.
+              </li>
+              <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
+              <li className="my-5">
+                3. Got Memes for burning? Join our{" "}
+                <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
+                  Discord Meme Channel
+                </a>{" "}
+                and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
+              </li>
+              <li className="my-5">
+                4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
+              </li>
+            </ol>
+            <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
+          </div>
 
-      {/* {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
+          {/* {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
         <div id="referral" className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
           <h2 className="text-center text-white mb-[1rem]">{`<BiTz>`} XP Referrals : Get Bonus Points!</h2>
           <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
@@ -943,64 +947,68 @@ export const GetBitz = () => {
         </div>
       )} */}
 
-      <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
-        <div className="leaderBoard">
-          <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
+          <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
+            <div className="leaderBoard">
+              <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
 
-          {address && leaderBoardAllTime.length > 0 && (
-            <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
-              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:border-r-4 border-[#171717]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Current All-Time Rank</p>
-                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">{myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}</p>
-              </div>
-              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
-                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
-                  {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="md:flex">
-            <div className="my-[1rem] allTime md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">All Time</h3>
-              {leaderBoardIsLoading ? (
-                <Loader />
-              ) : (
-                <>
-                  {leaderBoardAllTime.length > 0 ? (
-                    <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
-                  ) : (
-                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
-                  )}
-                </>
+              {address && leaderBoardAllTime.length > 0 && (
+                <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+                  <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:border-r-4 border-[#171717]">
+                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Current All-Time Rank</p>
+                    <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
+                      {myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
+                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
+                    <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
+                      {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
+                    </p>
+                  </div>
+                </div>
               )}
-            </div>
 
-            <div className="my-[1rem] monthly md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">
-                Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
-              </h3>
-              {leaderBoardIsLoading ? (
-                <Loader />
-              ) : (
-                <>
-                  {leaderBoardMonthly.length > 0 ? (
-                    <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
+              <div className="md:flex">
+                <div className="my-[1rem] allTime md:flex-1">
+                  <h3 className="text-center text-white mb-[1rem]">All Time</h3>
+                  {leaderBoardIsLoading ? (
+                    <Loader />
                   ) : (
-                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                    <>
+                      {leaderBoardAllTime.length > 0 ? (
+                        <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
+                      ) : (
+                        <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
+                </div>
+
+                <div className="my-[1rem] monthly md:flex-1">
+                  <h3 className="text-center text-white mb-[1rem]">
+                    Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
+                  </h3>
+                  {leaderBoardIsLoading ? (
+                    <Loader />
+                  ) : (
+                    <>
+                      {leaderBoardMonthly.length > 0 ? (
+                        <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
+                      ) : (
+                        <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
+          {leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
 
-      <Faq />
+          <Faq />
+        </>
+      )}
     </>
   );
 };

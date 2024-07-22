@@ -53,8 +53,8 @@ const Faq: React.FC = () => {
             may be a follow-up Series of {`<BiTz>`} Data NFTs launched and airdropped as well.
           </p>
           <p className="mt-5">
-            Once you have the Data NFT in your wallet, you can play the Game every 6 Hours ({BIT_GAME_WINDOW_HOURS} Hours in "Launch Window"). You have to burn
-            a Meme and sacrifice it to the {`<BiTz>`} Generator God and then based on pure random chance, you win {`<BiTz>`}!
+            Once you have the Data NFT in your wallet, you can play the Game every ({BIT_GAME_WINDOW_HOURS} Hours in "Launch Window"). You have to burn a Meme
+            and sacrifice it to the {`<BiTz>`} Generator God and then based on pure random chance, you win {`<BiTz>`}!
           </p>
           <p className="mt-5">You DO NOT need to spend any gas to Play the Get {`<BiTz>`} ! SAY WAT?!</p>
           <p className="mt-5">
