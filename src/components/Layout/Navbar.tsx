@@ -126,7 +126,15 @@ export const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>{isLoggedInMvx && <BitzDropdown />}</NavigationMenuItem>
+              <NavigationMenuItem>
+                {isLoggedInMvx && (
+                  <BitzDropdown
+                    handlePlayActionBtn={() => {
+                      setShowPlayBitzModel(true);
+                    }}
+                  />
+                )}
+              </NavigationMenuItem>
             </>
           )}
           <NavigationMenuItem>
@@ -160,11 +168,16 @@ export const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
+      {/* Mobile Menu */}
       <div className="md:!hidden !visible">
         <DropdownMenu>
           <div className="flex flex-row">
             {isLoggedInMvx ? (
-              <BitzDropdown />
+              <BitzDropdown
+                handlePlayActionBtn={() => {
+                  setShowPlayBitzModel(true);
+                }}
+              />
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] w-full rounded-lg justify-center">
