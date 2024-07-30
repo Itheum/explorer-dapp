@@ -2,6 +2,7 @@ export * from "./Dashboard";
 export * from "./Home";
 export * from "./NotFound";
 export * from "./Unlock";
+export * from "./Analytics/AnalyticsPage";
 //Widgets
 export * from "./AppMarketplace/MultiversxBubbles/MultiversxBubbles";
 export * from "./AppMarketplace/MultiversxInfographics";

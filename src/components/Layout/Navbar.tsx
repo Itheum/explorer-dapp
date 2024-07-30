@@ -32,7 +32,7 @@ import {
 } from "../../libComponents/NavigationMenu";
 import { useAccountStore } from "../../store/account";
 import { BitzDropdown } from "../BitzShortcuts/BitzShortcuts";
-import { PathwaysModal } from "../PathwaysModal/PathwaysModal";
+// import { PathwaysModal } from "../PathwaysModal/PathwaysModal";
 import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
 export const Navbar = () => {
@@ -43,7 +43,7 @@ export const Navbar = () => {
   const { address: addressMvx } = useGetAccount();
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
 
-  const [showPathwaysModel, setShowPathwaysModel] = useState<boolean>(false);
+  // const [showPathwaysModel, setShowPathwaysModel] = useState<boolean>(false);
   const [showPlayBitzModel, setShowPlayBitzModel] = useState<boolean>(false);
 
   return (
@@ -67,8 +67,15 @@ export const Navbar = () => {
               Home
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem className="cursor-pointer">
+            <Link
+              to={routeNames.analytics}
+              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+              Analytics
+            </Link>
+          </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Data Widgets</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Data Widget Apps</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className={cn("grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]", isLoggedInMvx ? "" : "!w-[400px]")}>
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
@@ -148,20 +155,20 @@ export const Navbar = () => {
               </div>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem
+          {/* <NavigationMenuItem
             className="cursor-pointer"
             onClick={() => {
               setShowPathwaysModel(true);
             }}>
             Pathways
-          </NavigationMenuItem>
-          <NavigationMenuItem
+          </NavigationMenuItem> */}
+          {/* <NavigationMenuItem
             className="cursor-pointer"
             onClick={() => {
               setShowPlayBitzModel(true);
             }}>
             PlayBitz
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <SwitchButton />
           </NavigationMenuItem>
@@ -207,7 +214,7 @@ export const Navbar = () => {
             </DropdownMenuGroup>
             <DropdownMenuLabel className="flex flex-row items-center">
               <Store className="mr-2 h-4 w-4" />
-              <span>Data Widget Marketplace</span>
+              <span>Data Widget Apps</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
@@ -273,7 +280,7 @@ export const Navbar = () => {
         </DropdownMenu>
       </div>
 
-      <PathwaysModal showPathwaysModel={showPathwaysModel} handleHidePathwaysModel={() => setShowPathwaysModel(false)} />
+      {/* <PathwaysModal showPathwaysModel={showPathwaysModel} handleHidePathwaysModel={() => setShowPathwaysModel(false)} /> */}
       {showPlayBitzModel && <PlayBitzModal showPlayBitzModel={showPlayBitzModel} handleHideBitzModel={() => setShowPlayBitzModel(false)} />}
     </div>
   );

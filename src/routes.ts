@@ -7,11 +7,12 @@ import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
-import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom } from "./pages";
+import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom, AnalyticsPage } from "./pages";
 
 export const routeNames = {
   home: "/",
   unlock: "/unlock",
+  analytics: "/analytics",
   mylisted: "/my-listed",
   mywallet: "/my-wallet",
   playstationgamerpassport: "/gamer-passport",
@@ -37,6 +38,11 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.home,
     title: "Home",
     component: Home,
+  },
+  {
+    path: routeNames.analytics,
+    title: "Analytics",
+    component: AnalyticsPage,
   },
   {
     path: routeNames.mylisted,
