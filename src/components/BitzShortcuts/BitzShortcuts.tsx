@@ -3,6 +3,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { FlaskRound, Gift } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link, useLocation } from "react-router-dom";
+import { isMostLikelyMobile } from "libs/utils/misc";
 import { Button } from "../../libComponents/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
 import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
@@ -78,9 +79,9 @@ export const ClaimBitzButton = (props: any) => {
   return (
     <Link
       className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px]"
-      to={cooldown === -2 || isGetBitzAppPage() || !handlePlayActionBtn ? "/getbitz" : "#"}
+      to={cooldown === -2 || isGetBitzAppPage() || isMostLikelyMobile() || !handlePlayActionBtn ? "/getbitz" : "#"}
       onClick={() => {
-        if (cooldown > -2 && !isGetBitzAppPage() && handlePlayActionBtn) {
+        if (cooldown > -2 && !isGetBitzAppPage() && !isMostLikelyMobile() && handlePlayActionBtn) {
           handlePlayActionBtn();
         } else {
           return;
@@ -99,7 +100,7 @@ export const ClaimBitzButton = (props: any) => {
                   <PopoverPrimitive.PopoverClose asChild>
                     <div className="flex flex-row justify-center items-center">
                       <Gift className="mx-2 text-[#35d9fa]" />
-                      <span> Collect your {`<BiTz>`} </span>
+                      <span className="text-[12px] md:text-sm"> Collect your X {`<BiTz>`} </span>
                     </div>
                   </PopoverPrimitive.PopoverClose>
                 );
@@ -120,7 +121,7 @@ export const ClaimBitzButton = (props: any) => {
           <PopoverPrimitive.PopoverClose asChild>
             <div className="flex flex-row justify-center items-center">
               <Gift className="mx-2 text-[#35d9fa]" />
-              <span> Collect your {`<BiTz>`} </span>
+              <span className="text-[12px] md:text-sm"> Collect your {`<BiTz>`} </span>
             </div>
           </PopoverPrimitive.PopoverClose>
         )}
