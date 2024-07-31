@@ -88,10 +88,6 @@ export const NFTunes = () => {
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 80);
-  // }, []);
-
   useEffect(() => {
     if (!hasPendingTransactions) {
       fetchMvxAppNfts();

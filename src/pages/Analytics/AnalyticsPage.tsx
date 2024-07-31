@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { CartesianGrid, Legend, Tooltip, ResponsiveContainer, XAxis, YAxis, AreaChart, Area } from "recharts";
+import { LoadingGraph, getAggregatedAnalyticsData } from "./AnalyticsShared";
 import { HeaderComponent } from "../../components/Layout/HeaderComponent";
 
 export const AnalyticsPage = () => {
@@ -11,11 +11,13 @@ export const AnalyticsPage = () => {
   const [dataLakeDataVolumeGrowthData, setDataLakeDataVolumeGrowthData] = useState<any[]>([]);
 
   useEffect(() => {
-    async function getNorthStarMetricsData() {
-      const responseAggregated = await axios.get(
-        "https://misc-dev-s3-data-nft-stats-harvestor-file-db.s3.eu-central-1.amazonaws.com/output/data-nft-stats-aggregated.json"
-      );
-      const dataAggregated = responseAggregated.data;
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+    async function getDataAndInitGraphData() {
+      const dataAggregated = await getAggregatedAnalyticsData();
 
       // aggregations data
       const chainSupplyDataT = [];
@@ -70,7 +72,7 @@ export const AnalyticsPage = () => {
       // E: load aggregated data
     }
 
-    getNorthStarMetricsData();
+    getDataAndInitGraphData();
   }, []);
 
   return (
@@ -98,8 +100,8 @@ export const AnalyticsPage = () => {
                     <AreaChart data={fullChainSupplyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#31b3cd" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#31b3cd" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -131,7 +133,7 @@ export const AnalyticsPage = () => {
                           return <span style={{ color }}>{labelsForKey[value]}</span>;
                         }}
                       />
-                      <Area type="monotone" dataKey="mvx_supply" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area type="monotone" dataKey="mvx_supply" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
                       <Area type="monotone" dataKey="sol_supply" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" stackId={1} />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -149,8 +151,8 @@ export const AnalyticsPage = () => {
                     <AreaChart data={fullChainCirculatingSupplyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#31b3cd" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#31b3cd" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -182,7 +184,7 @@ export const AnalyticsPage = () => {
                           return <span style={{ color }}>{labelsForKey[value]}</span>;
                         }}
                       />
-                      <Area type="monotone" dataKey="mvx_supply" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area type="monotone" dataKey="mvx_supply" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
                       <Area type="monotone" dataKey="sol_supply" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" stackId={1} />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -205,8 +207,8 @@ export const AnalyticsPage = () => {
                     <AreaChart data={fullChainMarshalUsageData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#31b3cd" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#31b3cd" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -238,7 +240,7 @@ export const AnalyticsPage = () => {
                           return <span style={{ color }}>{labelsForKey[value]}</span>;
                         }}
                       />
-                      <Area type="monotone" dataKey="mvx" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area type="monotone" dataKey="mvx" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
                       <Area type="monotone" dataKey="sol" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" stackId={1} />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -268,7 +270,7 @@ export const AnalyticsPage = () => {
                       <YAxis hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value, "Users"]} wrapperStyle={{ color: "#333" }} />
-                      <Area type="monotone" dataKey="totalUsers" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area type="monotone" dataKey="totalUsers" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -286,7 +288,7 @@ export const AnalyticsPage = () => {
                       <YAxis label="Total Volume (Bytes)" hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value, "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />
-                      <Area type="monotone" dataKey="totalBytes" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area type="monotone" dataKey="totalBytes" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -296,15 +298,5 @@ export const AnalyticsPage = () => {
         </div>
       </div>
     </HeaderComponent>
-  );
-};
-
-const LoadingGraph = () => {
-  return (
-    <div className="flex items-center justify-center w-[100%] h-[280px]">
-      <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-900 bg-[#CCCCCC] rounded-full animate-pulse dark:bg-[#4d5259] dark:text-blue-300">
-        loading...
-      </div>
-    </div>
   );
 };
