@@ -13,15 +13,11 @@ export const AnalyticsSnapshot = () => {
       // aggregations data
       const chainSupplyDataT = [];
       const chainMarshalUsageDataT = [];
-      const dataLakeUserGrowthDataT = [];
-      const dataLakeDataVolumeGrowthDataT = [];
 
       // S: load aggregated data
       for (const day of Object.keys(dataAggregated)) {
         const chainSupplyDataI: any = { name: day };
         const chainMarshalUsageDataI = { name: day, mvx: -1, sol: -1 };
-        const dataLakeUserGrowthDataI: any = { name: day };
-        const dataLakeDataVolumeGrowthDataI: any = { name: day };
 
         for (const nft of Object.keys(dataAggregated[day])) {
           switch (nft) {
@@ -37,15 +33,7 @@ export const AnalyticsSnapshot = () => {
 
               chainMarshalUsageDataT.push(chainMarshalUsageDataI);
               break;
-            case "data_lake_metrics":
-              dataLakeUserGrowthDataI["totalUsers"] = dataAggregated[day][nft]["totalUsers"];
-              dataLakeDataVolumeGrowthDataI["totalBytes"] = dataAggregated[day][nft]["totalBytes"];
-
-              dataLakeUserGrowthDataT.push(dataLakeUserGrowthDataI);
-              dataLakeDataVolumeGrowthDataT.push(dataLakeDataVolumeGrowthDataI);
-              break;
             default:
-              console.log("default case hit");
               break;
           }
         }

@@ -99,3 +99,7 @@ export const getApiSolNft = () => {
     return "https://test.bitzxp.itheum.io/api";
   }
 };
+
+export const isMostLikelyMobile = () => {
+  return window?.screen?.width <= 450;
+};
