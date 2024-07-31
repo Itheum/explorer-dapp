@@ -44,9 +44,10 @@ export const NFPodcast = () => {
 
   const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
-  useEffect(() => {
-    window.scrollTo(0, 80);
-  }, []);
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 
   useEffect(() => {
     if (!hasPendingTransactions) {

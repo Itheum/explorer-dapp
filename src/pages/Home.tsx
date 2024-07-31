@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { SUPPORTED_APPS } from "appsConfig";
+import { SUPPORTED_APPS, FEATURED_APPS } from "appsConfig";
 import RecentDataNFTsSection from "components/RecentDataNftsSection";
-import TrandingSection from "components/TrendingSection";
+import TrendingSection from "components/TrendingSection";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
+import { AnalyticsSnapshot } from "../pages/Analytics/AnalyticsSnapshot";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
@@ -14,41 +15,94 @@ export function returnRoute(routeKey: string) {
 
 export const Home = () => {
   return (
-    <HeaderComponent
-      pageTitle={"Data Widget Marketplace"}
-      subTitle={
-        "Itheum Data Widgets are lightweight apps powered by Data NFTs, allowing creative ways to open, visualize, and discover the potential of raw data."
-      }
-      hasImage={false}>
+    <HeaderComponent pageTitle={""} hasImage={false}>
       <div className="flex flex-col">
-        <div className="flex flex-row flex-wrap gap-x-8">
-          {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
-            <div key={item.routeKey} className="mb-10 w-[341px]">
-              <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
-                <Link to={returnRoute(item.routeKey)}>
-                  <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
-                </Link>
-              </div>
-              <h3 className="!font-[Clash-Medium]">{item.appName}</h3>
-              <p className="h-[100px] text-foreground font-[Satoshi-Light] mt-1">{item.desc}</p>
-              <div className="pt-5">
-                <Link to={returnRoute(item.routeKey)} className="text-base hover:!no-underline hover:text-black">
-                  <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
-                    <div className="bg-background rounded-md">
-                      <Button className="text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                        Launch
-                      </Button>
+        <div className="">
+          <h2 className="!text-2xl md:!text-3xl">Featured Data Widget Apps</h2>
+          <div className="flex flex-row flex-wrap gap-x-8 mt-5">
+            {APP_MAPPINGS.filter((app) => FEATURED_APPS.includes(app.routeKey)).map((item) => (
+              <div key={item.routeKey} className="mb-10 w-[341px]">
+                <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
+                  <Link to={returnRoute(item.routeKey)}>
+                    <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
+                  </Link>
+                </div>
+                <h3 className="!font-[Clash-Medium]">{item.appName}</h3>
+                <p className="h-[100px] text-foreground font-[Satoshi-Light] mt-1">{item.desc}</p>
+                <div className="pt-5">
+                  <Link to={returnRoute(item.routeKey)} className="text-base hover:!no-underline hover:text-black">
+                    <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
+                      <div className="bg-background rounded-md">
+                        <Button className="text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                          Launch
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
+        <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+
+        <div className="">
+          <h2 className="!text-2xl !text-3xl">Protocol Activity</h2>
+          <div className="flex flex-row flex-wrap gap-x-8 mt-5">
+            <AnalyticsSnapshot />
+          </div>
+          <div className="pt-10 flex justify-center">
+            <Link to={routeNames.analytics} className="text-base hover:!no-underline hover:text-black">
+              <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
+                <div className="bg-background rounded-md">
+                  <Button className="text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    View All
+                  </Button>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+
+        <div className="mt-5">
+          <h2 className="!text-2xl !text-3xl">All Data Widget Apps</h2>
+          <div className="flex flex-row flex-wrap gap-x-8 mt-5">
+            {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.filter((i) => !FEATURED_APPS.includes(i)).includes(app.routeKey)).map((item) => (
+              <div key={item.routeKey} className="mb-10 w-[341px]">
+                <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
+                  <Link to={returnRoute(item.routeKey)}>
+                    <img className="w-[464.29px] h-[250px] rounded-t-[30px]" src={item.img} alt="Apps" />
+                  </Link>
+                </div>
+                <h3 className="!font-[Clash-Medium]">{item.appName}</h3>
+                <p className="h-[100px] text-foreground font-[Satoshi-Light] mt-1">{item.desc}</p>
+                <div className="pt-5">
+                  <Link to={returnRoute(item.routeKey)} className="text-base hover:!no-underline hover:text-black">
+                    <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
+                      <div className="bg-background rounded-md">
+                        <Button className="text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                          Launch
+                        </Button>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+
         <div className="flex flex-col">
-          <TrandingSection />
+          <TrendingSection />
           <RecentDataNFTsSection />
         </div>
+
+        <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
       </div>
     </HeaderComponent>
   );

@@ -1,8 +1,6 @@
-import React from "react";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
+import React, { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { FlaskRound, Gift, Home, Menu, Store, Wallet } from "lucide-react";
-import Countdown from "react-countdown";
+import { Home, Menu, Store, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -32,128 +30,21 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
-import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
-import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
 import { useAccountStore } from "../../store/account";
+import { BitzDropdown } from "../BitzShortcuts/BitzShortcuts";
+// import { PathwaysModal } from "../PathwaysModal/PathwaysModal";
+import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
 export const Navbar = () => {
   const { publicKey } = useWallet();
   const addressSol = publicKey?.toBase58();
   const isLoggedInSol = !!addressSol;
-
   const isLoggedInMvx = useGetIsLoggedIn();
   const { address: addressMvx } = useGetAccount();
-
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
-  const cooldown = useAccountStore((state: any) => state.cooldown);
 
-  const FlaskBottleAnimation = () => {
-    return (
-      <div className="relative w-full h-full ">
-        {cooldown <= 0 && cooldown != -2 && (
-          <>
-            <div
-              className="absolute rounded-full w-[0.4rem] h-[0.4rem] top-[-15px] left-[10px] bg-[#35d9fa] animate-ping-slow"
-              style={{ animationDelay: "1s" }}></div>
-            <div
-              className="absolute rounded-full w-[0.3rem] h-[0.3rem] top-[-8px]  left-[4px] bg-[#35d9fa]  animate-ping-slow"
-              style={{ animationDelay: "0.5s" }}></div>
-            <div className="absolute rounded-full w-1 h-1 top-[-5px] left-[13px]  bg-[#35d9fa] animate-ping-slow"></div>
-          </>
-        )}
-        <FlaskRound className="fill-[#35d9fa]" />
-      </div>
-    );
-  };
-
-  const BitzDropdown = () => {
-    return (
-      <div className=" shadow-sm shadow-[#35d9fa]  rounded-lg justify-center cursor-pointer">
-        <Popover>
-          <PopoverTrigger>
-            <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
-              {bitzBalance === -2 ? (
-                <span className="flex items-center gap-0.5 blinkMe text-lg">
-                  ... <FlaskBottleAnimation />
-                </span>
-              ) : (
-                <>
-                  {bitzBalance === -1 ? (
-                    <div className="flex items-center gap-0.5 text-base">
-                      0 <FlaskBottleAnimation />
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-0.5 text-base">
-                      {bitzBalance} <FlaskBottleAnimation />
-                    </div>
-                  )}
-                </>
-              )}
-            </Button>
-          </PopoverTrigger>
-
-          <PopoverContent className="w-[15rem] md:w-[25rem]">
-            <PopoverPrimitive.Arrow className="fill-border w-5 h-3" />
-            <div className="flex flex-col justify-center p-3 w-full">
-              <div className="flex justify-center w-full py-4">
-                <div className="flex w-16 h-16 justify-center items-center border border-b-border rounded-lg shadow-inner shadow-sky-400">
-                  <FlaskRound className="w-7 h-7 fill-[#35d9fa]" />
-                </div>
-              </div>
-              <p className="text-xl md:text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
-              <p className="text-xs md:text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
-                {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game Data
-                Widget. Top LEADERBOARD climbers get special perks and drops!
-              </p>
-              <ClaimBitzButton />
-            </div>
-          </PopoverContent>
-        </Popover>
-      </div>
-    );
-  };
-
-  const ClaimBitzButton = () => (
-    <Link className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] " to={"/getbitz"}>
-      <span className="absolute hover:bg-[#35d9fa] inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
-      <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-[#35d9fa] w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium   backdrop-blur-3xl">
-        {cooldown === -2 ? (
-          <span className="blinkMe">...</span>
-        ) : cooldown > 0 ? (
-          <Countdown
-            date={cooldown}
-            renderer={(props: { hours: number; minutes: number; seconds: number; completed: boolean }) => {
-              if (props.completed) {
-                return (
-                  <PopoverPrimitive.PopoverClose>
-                    <div className="flex  flex-row justify-center items-center">
-                      <Gift className="mx-2 text-[#35d9fa]" />
-                      <span> Collect your {`<BiTz>`} </span>
-                    </div>
-                  </PopoverPrimitive.PopoverClose>
-                );
-              } else {
-                return (
-                  <span className="ml-1 text-center">
-                    Play again in <br></br>
-                    {props.hours > 0 ? <>{`${props.hours} ${props.hours === 1 ? " Hour " : " Hours "}`}</> : ""}
-                    {props.minutes > 0 ? props.minutes + " Min " : ""} {props.seconds} Sec
-                  </span>
-                );
-              }
-            }}
-          />
-        ) : (
-          <PopoverPrimitive.PopoverClose>
-            <div className="flex  flex-row justify-center items-center">
-              <Gift className="mx-2 text-[#35d9fa]" />
-              <span> Collect your {`<BiTz>`} </span>
-            </div>
-          </PopoverPrimitive.PopoverClose>
-        )}
-      </span>
-    </Link>
-  );
+  // const [showPathwaysModel, setShowPathwaysModel] = useState<boolean>(false);
+  const [showPlayBitzModel, setShowPlayBitzModel] = useState<boolean>(false);
 
   return (
     <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">
@@ -176,8 +67,15 @@ export const Navbar = () => {
               Home
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem className="cursor-pointer">
+            <Link
+              to={routeNames.analytics}
+              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+              Analytics
+            </Link>
+          </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Data Widgets</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Data Widget Apps</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className={cn("grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]", isLoggedInMvx ? "" : "!w-[400px]")}>
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
@@ -206,7 +104,7 @@ export const Navbar = () => {
                         className={
                           "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         }>
-                        <div className="text-md font-medium leading-none ">My Listed</div>
+                        <div className="text-md font-medium leading-none">My Listed</div>
                         <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60  font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
                       </Link>
                     )}
@@ -216,8 +114,8 @@ export const Navbar = () => {
                       className={
                         "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       }>
-                      <div className="text-md font-medium leading-none   ">My Wallet</div>
-                      <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60   font-[Satoshi-Light] pt-0.5">View RAW Data</p>
+                      <div className="text-md font-medium leading-none">My Wallet</div>
+                      <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60 font-[Satoshi-Light] pt-0.5">View RAW Data</p>
                     </Link>
                     {isLoggedInMvx && (
                       <div className="flex flex-col p-3">
@@ -235,7 +133,15 @@ export const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>{isLoggedInMvx && <BitzDropdown />}</NavigationMenuItem>
+              <NavigationMenuItem>
+                {isLoggedInMvx && (
+                  <BitzDropdown
+                    handlePlayActionBtn={() => {
+                      setShowPlayBitzModel(true);
+                    }}
+                  />
+                )}
+              </NavigationMenuItem>
             </>
           )}
           <NavigationMenuItem>
@@ -249,17 +155,36 @@ export const Navbar = () => {
               </div>
             </Link>
           </NavigationMenuItem>
+          {/* <NavigationMenuItem
+            className="cursor-pointer"
+            onClick={() => {
+              setShowPathwaysModel(true);
+            }}>
+            Pathways
+          </NavigationMenuItem> */}
+          {/* <NavigationMenuItem
+            className="cursor-pointer"
+            onClick={() => {
+              setShowPlayBitzModel(true);
+            }}>
+            PlayBitz
+          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <SwitchButton />
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
 
+      {/* Mobile Menu */}
       <div className="md:!hidden !visible">
         <DropdownMenu>
           <div className="flex flex-row">
             {isLoggedInMvx ? (
-              <BitzDropdown />
+              <BitzDropdown
+                handlePlayActionBtn={() => {
+                  setShowPlayBitzModel(true);
+                }}
+              />
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] w-full rounded-lg justify-center">
@@ -289,7 +214,7 @@ export const Navbar = () => {
             </DropdownMenuGroup>
             <DropdownMenuLabel className="flex flex-row items-center">
               <Store className="mr-2 h-4 w-4" />
-              <span>Data Widget Marketplace</span>
+              <span>Data Widget Apps</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
@@ -309,15 +234,15 @@ export const Navbar = () => {
                 <DropdownMenuGroup className="">
                   {isLoggedInMvx && (
                     <Link to={routeNames.mylisted}>
-                      <DropdownMenuItem className=" ">My Listed</DropdownMenuItem>
+                      <DropdownMenuItem>My Listed</DropdownMenuItem>
                     </Link>
                   )}
                   <Link to={routeNames.mywallet}>
-                    <DropdownMenuItem className=" ">My Wallet</DropdownMenuItem>
+                    <DropdownMenuItem>My Wallet</DropdownMenuItem>
                   </Link>
                   <Link to={routeNames.getbitz}>
                     <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
-                      <DropdownMenuItem className="  dark:!text-black">
+                      <DropdownMenuItem className="dark:!text-black">
                         {bitzBalance === -2 ? (
                           <span className="blinkMe">{`... <BiTz> Points`}</span>
                         ) : (
@@ -354,6 +279,9 @@ export const Navbar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* <PathwaysModal showPathwaysModel={showPathwaysModel} handleHidePathwaysModel={() => setShowPathwaysModel(false)} /> */}
+      {showPlayBitzModel && <PlayBitzModal showPlayBitzModel={showPlayBitzModel} handleHideBitzModel={() => setShowPlayBitzModel(false)} />}
     </div>
   );
 };
