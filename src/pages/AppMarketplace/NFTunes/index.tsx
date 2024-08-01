@@ -100,7 +100,7 @@ export const NFTunes = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      setShownSolAppDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.metadata.name.includes("Music")));
+      setShownSolAppDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.metadata.name.includes("MUS")));
     }
   }, [solNfts]);
 
