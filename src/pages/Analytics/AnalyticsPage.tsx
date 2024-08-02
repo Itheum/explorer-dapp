@@ -58,7 +58,7 @@ export const AnalyticsPage = () => {
               dataLakeDataVolumeGrowthDataT.push(dataLakeDataVolumeGrowthDataI);
               break;
             default:
-              console.log("default case hit");
+              // console.log("default case hit");
               break;
           }
         }

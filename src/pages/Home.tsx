@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS, FEATURED_APPS } from "appsConfig";
+import GamerPassportHero from "assets/img/gamer-passport/gamer-passport-adaptor-hero.png";
 import RecentDataNFTsSection from "components/RecentDataNftsSection";
 import TrendingSection from "components/TrendingSection";
 import { APP_MAPPINGS } from "libs/utils/constant";
@@ -8,7 +9,6 @@ import { routeNames } from "routes";
 import { HeaderComponent } from "../components/Layout/HeaderComponent";
 import { Button } from "../libComponents/Button";
 import { AnalyticsSnapshot } from "../pages/Analytics/AnalyticsSnapshot";
-import GamerPassportHero from "assets/img/gamer-passport/gamer-passport-adaptor-hero.png";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
