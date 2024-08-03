@@ -17,3 +17,27 @@ export async function getAggregatedAnalyticsData() {
 
   return dataAggregated;
 }
+
+export function normalizeDataForMarshalUsage(dayData: any, day: string) {
+  const chainMarshalUsageDataI = { name: day, mvx: -1, sol: -1 };
+
+  let mvxNumbers = dayData["marshal_usage_events"]["mvx"];
+  let solNumbers = dayData["marshal_usage_events"]["sol"];
+
+  // on some days we had 0 incorrectly aggregated in raw data.
+  // ... convert them to null so that the graph will "connectNulls"
+  if (mvxNumbers === 0) {
+    mvxNumbers = null;
+    console.log(`ERR: mvx marshal events for ${day} was 0`);
+  }
+
+  if (solNumbers === 0) {
+    solNumbers = null;
+    console.log(`ERR: sol marshal events for ${day} was 0`);
+  }
+
+  chainMarshalUsageDataI["mvx"] = mvxNumbers;
+  chainMarshalUsageDataI["sol"] = solNumbers;
+
+  return chainMarshalUsageDataI;
+}

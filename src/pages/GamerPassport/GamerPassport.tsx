@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { faThumbsUp, faHeartCrack } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton, WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
+import axios from "axios";
 import { CartesianGrid, Tooltip, ResponsiveContainer, XAxis, YAxis, AreaChart, Area } from "recharts";
 import hero from "assets/img/gamer-passport/gamer-passport-adaptor-hero.png";
+import { CopyAddress } from "components/CopyAddress";
 import { Button } from "libComponents/Button";
+import { getApiWeb2Apps } from "libs/utils";
 import { HeaderComponent } from "../../components/Layout/HeaderComponent";
 import { LoadingGraph, getAggregatedAnalyticsData } from "../Analytics/AnalyticsShared";
-import axios from "axios";
-import { getApiWeb2Apps } from "libs/utils";
 
 export const GamerPassport = () => {
+  const { publicKey } = useWallet();
+  const addressSol = publicKey?.toBase58();
+
   const [dataLakeUserGrowthData, setDataLakeUserGrowthData] = useState<any[]>([]);
   const [dataLakeDataVolumeGrowthData, setDataLakeDataVolumeGrowthData] = useState<any[]>([]);
 
@@ -73,19 +79,30 @@ export const GamerPassport = () => {
     getDataAndInitGraphData();
   }, []);
 
+  useEffect(() => {
+    // is user logged into Solana?
+    if (!addressSol) {
+      setStep2Passed(false);
+      setStep2SolanaAddress("");
+    } else {
+      setStep2Passed(true);
+      setStep2SolanaAddress(addressSol);
+    }
+  }, [addressSol]);
+
   return (
     <HeaderComponent pageTitle={""} subTitle={""} hasImage={false}>
       <div className="w-[100%] bg-green-000">
         <div id="hero" className="mt-10 bg-red-000 h-[500px] bg-no-repeat bg-contain bg-top bg-fixed rounded-3xl" style={{ "backgroundImage": `url(${hero})` }}>
           <div className="flex flex-col bg-red-000 h-[100%] justify-center items-center">
             <h1 className="">Gamer Passport</h1>
-            <h2 className="!text-xl w-[400px] text-center mt-2">On-board as a gamer and earn monthly rewards for sharing your gaming data</h2>
+            <h2 className="!text-xl w-[500px] text-center mt-2">Play games like you normally do and earn monthly rewards for sharing your gaming data</h2>
           </div>
         </div>
 
         <div id="data-stats" className="mt-10">
           <h2 className="!text-3xl text-center">Plug into the Gaming Data Realm</h2>
-          <p className="opacity-50 text-center">
+          <p className="opacity-50 text-center mt-2 mb-5">
             The Itheum Data Realm is a bulk pool of 'Passive' Data collected from users, the realm will be populated by various forms of data but it is
             currently actively being populated by gaming data. Data Coalition DAOs broker the trade of the bulk data and share earnings with users who
             contribute their data to the pool.
@@ -108,7 +125,17 @@ export const GamerPassport = () => {
                       <YAxis hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value, "Users"]} wrapperStyle={{ color: "#333" }} />
-                      <Area type="monotone" dataKey="totalUsers" stroke="#006ee4" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="totalUsers"
+                        stroke="#006ee4"
+                        fillOpacity={1}
+                        fill="url(#colorUv)"
+                        stackId={1}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -126,7 +153,17 @@ export const GamerPassport = () => {
                       <YAxis label="Total Volume (Bytes)" hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value, "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />
-                      <Area type="monotone" dataKey="totalBytes" stroke="#006ee4" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="totalBytes"
+                        stroke="#006ee4"
+                        fillOpacity={1}
+                        fill="url(#colorUv)"
+                        stackId={1}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -137,25 +174,26 @@ export const GamerPassport = () => {
           <div className="mt-2 bg-red-000 flex flex-col justify-around space-x-4 md:flex-row">
             <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
               <p className="text-3xl">Supported Platforms</p>
-              <p className="text-xl">Live: PlayStation, Coming: XBOX, Steam</p>
+              <p className="text-2xl mt-1">Live: PlayStation</p>
+              <p className="text-xl mt-1 opacity-50">Coming: XBOX, Steam</p>
             </div>
             <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
               <p className="text-3xl">Reward Pool</p>
-              <p className="text-2xl">1,000,000 ITHEUM</p>
+              <p className="text-4xl mt-2">1,000,000 ITHEUM</p>
             </div>
             <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
               <p className="text-3xl">Rewards Emitted</p>
-              <p className="text-2xl">100 ITHEUM</p>
+              <p className="text-4xl mt-2">0</p>
             </div>
           </div>
         </div>
 
         <div id="join-process" className="mt-10">
           <h2 className="!text-3xl text-center">Joining is simple as 1-2-3</h2>
-          <p className="opacity-50 text-center">Check if you are eligible, login with your Google Account and you're in! Told you it's easy...</p>
+          <p className="opacity-50 text-center mt-2 mb-5">Check if you are eligible, login with your Google Account and you're in! Told you it's easy...</p>
 
           <div className="mt-2 bg-red-000 flex flex-col justify-around space-x-4 md:flex-row">
-            <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
+            <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[250px]">
               <p className="text-3xl">1.</p>
               {step1Passed ? (
                 <>
@@ -166,7 +204,7 @@ export const GamerPassport = () => {
                 </>
               ) : (
                 <>
-                  <p className="text-md w-[80%] text-center">We are currently onboarding PlayStation Gamers, do you plan?</p>
+                  <p className="text-md w-[80%] text-center">We are currently onboarding PlayStation Gamers, do you plan bruh? check your eligibility</p>
                   <div
                     onClick={() => {
                       setShowActionModalStep1(true);
@@ -176,30 +214,27 @@ export const GamerPassport = () => {
                 </>
               )}
             </div>
-            <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
+            <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[250px]">
               <p className="text-3xl">2.</p>
               {step2Passed ? (
                 <>
                   <FontAwesomeIcon fade={true} color="#4691e2" icon={faThumbsUp} size="3x" className="m-2" />
-                  <p className="text-md w-[80%] text-center">
-                    W00T, you passed this step, your solana address is <span className="text-[#4691e2]">{step2SolanaAddress}</span>
-                  </p>
+                  <div className="text-md w-[80%] flex flex-col items-center mb-5">
+                    <p className="mb-2">W00T, you passed this step, your solana address is </p>
+                    <span className="text-[#4691e2]">{<CopyAddress address={step2SolanaAddress} precision={6} />}</span>
+                  </div>
+                  <WalletDisconnectButton>Disconnect Wallet</WalletDisconnectButton>
                 </>
               ) : (
                 <>
-                  <p className="text-md w-[80%] text-center">Create or link a Solana wallet using Google + TipLink</p>
-                  <div
-                    onClick={() => {
-                      setStep2SolanaAddress("sol12345");
-                      setStep2Passed(true);
-                      setStep3InProgress(true);
-                    }}>
-                    <ActionButton mlAdjustment={"-ml-20"} btnText="Sign up with Google" disableBtn={!step2InProgress} />
-                  </div>
+                  <p className="text-md w-[80%] text-center mb-5">
+                    Create or link a Solana wallet. Hate crypto wallets? No worries, use your Google account via TipLink
+                  </p>
+                  <WalletMultiButton>Phantom or Google via TipLink</WalletMultiButton>
                 </>
               )}
             </div>
-            <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
+            <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[250px]">
               <p className="text-3xl">3.</p>
               {step3Passed ? (
                 <>
@@ -208,7 +243,9 @@ export const GamerPassport = () => {
                 </>
               ) : (
                 <>
-                  <p className="text-md w-[80%] text-center">Read and agree to terms of use</p>
+                  <p className="text-md w-[80%] text-center">
+                    We don't handle any sensitive data, but we still need to make your read some boring terms of use (sorry)
+                  </p>
                   <div
                     onClick={() => {
                       setShowActionModalStep3(true);
@@ -223,30 +260,34 @@ export const GamerPassport = () => {
 
         <div id="benefits" className="mt-10">
           <h2 className="!text-3xl text-center">Why should you join?</h2>
-          <p className="opacity-50 text-center">Cause gaming data ownership is the future! blah blah blah... but seriously, there are some cool perks!</p>
+          <p className="opacity-50 text-center mt-2 mb-5">
+            Cause gaming data ownership is the future! blah blah blah... but seriously, there are some cool perks!
+          </p>
           <div className="mt-2 bg-red-000 flex flex-col justify-around space-x-4 md:flex-row">
             <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
-              <p className="text-2xl w-[80%] text-center">Free data insight on your gaming data</p>
+              <p className="text-2xl w-[80%] text-center">Compare Yourself to Other Top Gamers</p>
               <p className="text-md w-[80%] text-center">Compare your performance to other gamers, see what other gamers like you are playing etc</p>
             </div>
             <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
-              <p className="text-2xl w-[80%] text-center">Seamless!</p>
+              <p className="text-2xl w-[80%] text-center">Seamless! Works in the "Background"</p>
               <p className="text-md w-[80%] text-center">
                 You data is collected passively, so you don't need to do anything! Just play games like you normally do
               </p>
             </div>
             <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] bg-red-000 flex-1 h-[200px]">
-              <p className="text-2xl w-[80%] text-center">Earn $ITHEUM rewards</p>
-              <p className="text-md w-[80%] text-center">Your data is valuable, earn rewards for playing games just like you usually do</p>
+              <p className="text-2xl w-[80%] text-center">Earn $ITHEUM Rewards based on Data Volume</p>
+              <p className="text-md w-[80%] text-center">
+                Your data is valuable, earn rewards for being active on your gaming platform. More playing + more data = more rewards!
+              </p>
             </div>
           </div>
         </div>
 
         <div id="how-it-works" className="mt-10">
-          <h2 className="!text-2xl text-center">I earn rewards for my gaming data? What black magic is this?!</h2>
-          <p className="opacity-50 text-center">
-            Yes, your data is valuable and it is exploited by big corporations, Itheum wants to break this cycle... here is how the "black magic" works under
-            the hood:
+          <h2 className="!text-2xl text-center">I earn rewards for my gaming data? What VOODOO is this?!</h2>
+          <p className="opacity-50 text-center mt-2 mb-5">
+            Yes, your data is valuable and it is exploited by big corporations, Itheum wants to break this cycle... here is how the "VOODOO" works under the
+            hood:
           </p>
 
           <div className="mt-2 bg-red-000 flex flex-col justify-around space-x-4 md:flex-row">
@@ -272,6 +313,11 @@ export const GamerPassport = () => {
           </div>
         </div>
 
+        <div id="FAQ" className="mt-10">
+          <h2 className="!text-2xl text-center">FAQ</h2>
+          <p className="opacity-50 text-center mt-2 mb-5">I'm sure you have many questions so here is a list of common ones</p>
+        </div>
+
         <div id="footer" className="mt-10 p-10"></div>
 
         <ActionModalStep1
@@ -279,7 +325,13 @@ export const GamerPassport = () => {
           handleHideActionModel={() => setShowActionModalStep1(false)}
           handleStep1Passed={(val: boolean) => {
             setStep1Passed(val);
-            setStep2InProgress(true);
+
+            // user may already be logged in, so after step 1 -> step 3
+            if (!step2Passed) {
+              setStep2InProgress(true);
+            } else {
+              setStep3InProgress(true);
+            }
           }}
           handleStep1PSNUserName={setStep1PSNUserName}
         />
@@ -357,17 +409,14 @@ const ActionModalStep1 = (props: any) => {
               <>
                 <div>
                   <p>We are currently onboarding PlayStation gamers who has an eligible PSN account.</p>
-                  <p className="mt-5">Eligibility Criteria:</p>
+                  <p className="font-bold underline mt-5">Eligibility Criteria</p>
                   <ol>
                     <li>1. A (PlayStation) PSN account</li>
                     <li>2. Have reasonable gaming activity and data sharing settings on your account</li>
                   </ol>
                 </div>
                 <div className="mt-8">
-                  <p>Enter your PSN (PlayStation Network) username:</p>
-                  <p className="text-sm text-red-400">
-                    * Make sure you enter YOUR username as you will be asked to provide ownership of it to claim your rewards!
-                  </p>
+                  <p className="font-bold underline mt-5">Enter your PSN (PlayStation Network) username</p>
                   <input
                     type="string"
                     value={psnUserName}
@@ -375,7 +424,9 @@ const ActionModalStep1 = (props: any) => {
                     className="text-black p-2 w-[250px] rounded-sm mt-2"
                     placeholder="foo_bar"
                   />
-
+                  <p className="text-sm text-red-400 mt-3">
+                    * Make sure you enter YOUR username as you will be asked to provide ownership of it to claim your rewards! Bruh, we will find out!
+                  </p>
                   <div
                     onClick={() => {
                       if (!eligibilityCheckLoading) {
@@ -502,15 +553,37 @@ const ActionModalStep3 = (props: any) => {
             {!userSaveToLogAttempted && (
               <>
                 <div>
-                  <p>Agree to the following terms:</p>
+                  <p className="font-bold italic opacity-80">
+                    Itheum is all about empowering you with data ownership! so we want to be fully transparent on how you data is collected and used. (it would
+                    be ironic if we don't right?). Everything you need to know about your data is below:
+                  </p>
+                </div>
+                <div className="mt-4">
+                  <p className="font-bold underline">Please read and agree to the following terms</p>
                   <ol className="mt-2">
-                    <li>1. You are using YOUR PSN username</li>
-                    <li>2. You consent to us storing your username securely</li>
-                    <li>3. All these other terms...</li>
+                    <li>1. You are using YOUR PSN username (no rewards if you don't! we will find out)</li>
+                    <li>
+                      2. You consent to us storing your PSN username and data securely{" "}
+                      <a
+                        className="!text-[#7a98df] hover:underline"
+                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/playstation/your-data"
+                        target="blank">
+                        as detailed here
+                      </a>
+                    </li>
+                    <li>
+                      3. All{" "}
+                      <a
+                        className="!text-[#7a98df] hover:underline"
+                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/playstation/terms"
+                        target="blank">
+                        these other terms
+                      </a>
+                    </li>
                   </ol>
                 </div>
                 <div className="mt-4">
-                  <p>Your Details:</p>
+                  <p className="font-bold underline">Your Details</p>
                   <p>PSN Username : {step1PSNUserName}</p>
                   <p>Solana Address : {step2SolanaAddress}</p>
                 </div>
@@ -522,7 +595,7 @@ const ActionModalStep3 = (props: any) => {
                       }
                     }}>
                     <ActionButton
-                      btnText={saveToLogLoading ? "ET Calling Home..." : "Let me in, I agree to terms and want to join!"}
+                      btnText={saveToLogLoading ? "ET Calling Home..." : "Let me in already, I agree to terms and want to join!"}
                       disableBtn={!saveToLogLoading ? false : true}
                     />
                   </div>
@@ -533,13 +606,13 @@ const ActionModalStep3 = (props: any) => {
             {userSavedToLog && (
               <>
                 <FontAwesomeIcon fade={true} color="#4691e2" icon={faThumbsUp} size="3x" className="m-2" />
-                <p className="text-lg font-bold">Your details have been submitted and are being reviewed by our BOTs (humans).</p>
+                <p className="text-lg font-bold">Your details have been submitted and are being reviewed by our BOTs (unpaid interns).</p>
                 <p className="mt-2">
                   If all is good (most likely yes), you will be added to the program. Reach out to us on{" "}
                   <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/discord" target="blank">
                     discord
                   </a>{" "}
-                  should you have any questions
+                  should you have any questions.
                 </p>
                 <div className="mt-8">
                   <div
