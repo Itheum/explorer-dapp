@@ -46,7 +46,7 @@ export const AnalyticsSnapshot = () => {
   return (
     <div className="w-[100%] bg-green-000">
       <div className="bg-red-000">
-        <div className="bg-red-000 flex flex-col md:flex-row space-x-10">
+        <div className="bg-red-000 flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-10">
           <div className="flex-1 bg-red-000 border-dotted border border-[#CCCCCC] dark:border-[#4a4a4a]">
             <div className="min-h-[300px]">
               {(fullChainSupplyData.length > 0 && (
@@ -109,7 +109,7 @@ export const AnalyticsSnapshot = () => {
                   </AreaChart>
                 </ResponsiveContainer>
               )) || <LoadingGraph />}
-              <h2 className="!text-lg text-center">Data NFT Supply</h2>
+              <h2 className="!text-lg text-center mb-5">Data NFT Supply</h2>
             </div>
           </div>
 
@@ -175,7 +175,7 @@ export const AnalyticsSnapshot = () => {
                   </AreaChart>
                 </ResponsiveContainer>
               )) || <LoadingGraph />}
-              <h2 className="!text-lg text-center">Data Marshal Brokerage Events</h2>
+              <h2 className="!text-lg text-center mb-5">Data Marshal Brokerage Events</h2>
             </div>
           </div>
         </div>

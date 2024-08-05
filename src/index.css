@@ -235,3 +235,7 @@ h6 {
   z-index: 1000;
   position: relative;
 }
+
+.wallet-adapter-modal-title {
+  color: #ffffff !important;
+}
