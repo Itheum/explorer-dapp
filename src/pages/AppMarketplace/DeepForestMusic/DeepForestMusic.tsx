@@ -75,9 +75,10 @@ export const DeepForestMusic = () => {
   const [dataNftToOpen, setDataNftToOpen] = useState<DataNft>();
   const { mvxNfts: nfts } = useNftsStore();
 
-  useEffect(() => {
-    window.scrollTo(0, 80);
-  }, []);
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 
   useEffect(() => {
     checkDeepForestOwnedAlbums();

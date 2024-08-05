@@ -66,13 +66,14 @@ const TrendingSection: React.FC = () => {
     <>
       {isApiUp ? (
         <div>
-          <h2 className="mt-12 py-2 mb-0 ">Trending Offers</h2>
-          <div className="w-full flex flex-row flex-wrap items-center justify-center md:items-start md:justify-start">
+          <h2 className="mt-12 py-2 mb-0 !text-3xl text-center">Trending Offers</h2>
+          <div
+            className={`w-full flex flex-row flex-wrap items-center justify-center md:items-start md:justify-around ${!isLoading ? "md:after:content-[''] md:after:flex-auto" : ""}`}>
             {isLoading ? (
               <Loader className="h-[20rem]" />
             ) : trendingDataNfts?.length === 0 ? (
               <div className="flex flex-col items-center justify-center w-full h-[20rem]">
-                <h3 className="text-lg">No trending offers available</h3>
+                <h3 className="text-lg">No trending offers available...</h3>
               </div>
             ) : (
               trendingDataNfts

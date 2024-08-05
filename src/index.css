@@ -148,6 +148,7 @@ h6 {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings:
@@ -199,6 +200,7 @@ h6 {
     opacity: 0;
   }
 }
+
 .animate-ping-slow {
   animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
@@ -225,4 +227,15 @@ h6 {
 .after\:\[background\:_radial-gradient\(250px_circle_at_var\(--mouse-x\)_var\(--mouse-y\)\2c theme\(colors\.slate\.400\)\2c transparent\)\]::after {
   content: var(--tw-content);
   background: radial-gradient(250px circle at var(--mouse-x) var(--mouse-y), #94a3b8, transparent);
+}
+
+/* This is to make sure the tsparticle animations for bitz always appear on top */
+#confetti,
+#fireworks {
+  z-index: 1000;
+  position: relative;
+}
+
+.wallet-adapter-modal-title {
+  color: #ffffff !important;
 }
