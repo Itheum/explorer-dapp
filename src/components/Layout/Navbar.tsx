@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Home, Menu, Store, Wallet } from "lucide-react";
+import { Home, Menu, Store, Wallet, Gamepad2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -209,6 +209,14 @@ export const Navbar = () => {
                 <DropdownMenuItem>
                   <Home className="mr-2 h-4 w-4" />
                   <span>Home</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <Link to={routeNames.gamerpassport}>
+                <DropdownMenuItem>
+                  <Gamepad2 className="mr-2 h-4 w-4" />
+                  <span>Gamer Passport</span>
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>

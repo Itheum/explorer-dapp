@@ -353,7 +353,7 @@ export const AnalyticsPage = () => {
                       <XAxis dataKey="name" />
                       <YAxis label="Total Volume (Bytes)" hide />
                       <CartesianGrid strokeDasharray="3 3" />
-                      <Tooltip formatter={(value, name) => [value, "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />
+                      <Tooltip formatter={(value, name) => [value.toLocaleString(), "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />
                       <Area
                         connectNulls
                         animationDuration={3000}

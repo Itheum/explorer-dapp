@@ -29,14 +29,12 @@ import megaphoneLight from "../../../assets/img/nf-tunes/megaphone-light.png";
 import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
 import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
 import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
-import frameItLogoLight from "../../../assets/img/nf-tunes/platforms-logo/frame-it-light.png";
-import frameItLogo from "../../../assets/img/nf-tunes/platforms-logo/frame-it.png";
 import itheumLogoLight from "../../../assets/img/nf-tunes/platforms-logo/itheum-light.png";
 import itheumLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
 import multiversxLogoLight from "../../../assets/img/nf-tunes/platforms-logo/multiversx-light.png";
 import multiversxLogo from "../../../assets/img/nf-tunes/platforms-logo/multiversx.png";
-import pulsarLogoLight from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money-light.png";
-import pulsarLogo from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money.png";
+import dripLogo from "../../../assets/img/nf-tunes/platforms-logo/drip.png";
+import tensorLogo from "../../../assets/img/nf-tunes/platforms-logo/tensor.png";
 import xoxnoLogoLight from "../../../assets/img/nf-tunes/platforms-logo/xoxno-light.png";
 import xoxnoLogo from "../../../assets/img/nf-tunes/platforms-logo/xoxno.png";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
@@ -456,7 +454,7 @@ export const NFTunes = () => {
               <Music2 className="text-secondary" />
             </div>
             <div className="flex flex-col xl:flex-row justify-start items-center gap-8 w-full">
-              <div className="flex flex-col gap-4 p-8 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+              <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo1} />
                 </div>
@@ -466,7 +464,7 @@ export const NFTunes = () => {
                   time and your NFT holders receive the latest content instantly.{" "}
                 </span>
               </div>
-              <div className="flex flex-col gap-4 p-8 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+              <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo2} />
                 </div>
@@ -476,7 +474,7 @@ export const NFTunes = () => {
                   with your audience.{" "}
                 </span>
               </div>
-              <div className="flex flex-col gap-4 p-8 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+              <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-start w-full">
                   <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                     <img src={benefitsLogo3} />
@@ -795,27 +793,21 @@ export const NFTunes = () => {
                 <img src={currentTheme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
+              <Link
+                to={`https://tensor.trade/trade/itheum_drip`}
+                target="_blank"
+                className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                <img className="rounded-sm" src={dripLogo} alt="Drip Haus logo" />
+              </Link>
               <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
                   <img src={currentTheme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
                 </Link>
-                <Link to={"https://www.frameit.gg/"} target="_blank">
-                  <img src={currentTheme === "dark" ? frameItLogo : frameItLogoLight} alt="frame it logo" />
+                <Link to={"https://tensor.trade/trade/itheum_drip"} target="_blank">
+                  <img className="rounded-sm" src={tensorLogo} alt="Tensor logo" />
                 </Link>
               </div>
-              <Link
-                to={"https://pulsar.money/"}
-                target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={currentTheme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
-              </Link>
-              <Link
-                to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
-                target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <span className="text-xl text-primary w-[60%] text-center">xPand DAO</span>
-              </Link>
               <Link
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"
