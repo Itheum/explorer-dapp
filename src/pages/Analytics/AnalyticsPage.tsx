@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CartesianGrid, Legend, Tooltip, ResponsiveContainer, XAxis, YAxis, AreaChart, Area } from "recharts";
-import { LoadingGraph, getAggregatedAnalyticsData } from "./AnalyticsShared";
+import { LoadingGraph, getAggregatedAnalyticsData, normalizeDataForMarshalUsage } from "./AnalyticsShared";
 import { HeaderComponent } from "../../components/Layout/HeaderComponent";
 
 export const AnalyticsPage = () => {
@@ -30,7 +30,6 @@ export const AnalyticsPage = () => {
       for (const day of Object.keys(dataAggregated)) {
         const chainSupplyDataI: any = { name: day };
         const chainCirculatingSupplyDataI: any = { name: day };
-        const chainMarshalUsageDataI = { name: day, mvx: -1, sol: -1 };
         const dataLakeUserGrowthDataI: any = { name: day };
         const dataLakeDataVolumeGrowthDataI: any = { name: day };
 
@@ -45,10 +44,7 @@ export const AnalyticsPage = () => {
               chainCirculatingSupplyDataT.push(chainCirculatingSupplyDataI);
               break;
             case "marshal_usage_events":
-              chainMarshalUsageDataI["mvx"] = dataAggregated[day]["marshal_usage_events"]["mvx"];
-              chainMarshalUsageDataI["sol"] = dataAggregated[day]["marshal_usage_events"]["sol"];
-
-              chainMarshalUsageDataT.push(chainMarshalUsageDataI);
+              chainMarshalUsageDataT.push(normalizeDataForMarshalUsage(dataAggregated[day], day));
               break;
             case "data_lake_metrics":
               dataLakeUserGrowthDataI["totalUsers"] = dataAggregated[day][nft]["totalUsers"];
@@ -58,7 +54,7 @@ export const AnalyticsPage = () => {
               dataLakeDataVolumeGrowthDataT.push(dataLakeDataVolumeGrowthDataI);
               break;
             default:
-              console.log("default case hit");
+              // console.log("default case hit");
               break;
           }
         }
@@ -133,8 +129,28 @@ export const AnalyticsPage = () => {
                           return <span style={{ color }}>{labelsForKey[value]}</span>;
                         }}
                       />
-                      <Area type="monotone" dataKey="mvx_supply" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
-                      <Area type="monotone" dataKey="sol_supply" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" stackId={1} />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="mvx_supply"
+                        stroke="#31b3cd"
+                        fillOpacity={1}
+                        fill="url(#colorUv)"
+                        stackId={1}
+                      />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="sol_supply"
+                        stroke="#82ca9d"
+                        fillOpacity={1}
+                        fill="url(#colorPv)"
+                        stackId={1}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -184,8 +200,28 @@ export const AnalyticsPage = () => {
                           return <span style={{ color }}>{labelsForKey[value]}</span>;
                         }}
                       />
-                      <Area type="monotone" dataKey="mvx_supply" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
-                      <Area type="monotone" dataKey="sol_supply" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" stackId={1} />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="mvx_supply"
+                        stroke="#31b3cd"
+                        fillOpacity={1}
+                        fill="url(#colorUv)"
+                        stackId={1}
+                      />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="sol_supply"
+                        stroke="#82ca9d"
+                        fillOpacity={1}
+                        fill="url(#colorPv)"
+                        stackId={1}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -240,8 +276,28 @@ export const AnalyticsPage = () => {
                           return <span style={{ color }}>{labelsForKey[value]}</span>;
                         }}
                       />
-                      <Area type="monotone" dataKey="mvx" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
-                      <Area type="monotone" dataKey="sol" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" stackId={1} />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="mvx"
+                        stroke="#31b3cd"
+                        fillOpacity={1}
+                        fill="url(#colorUv)"
+                        stackId={1}
+                      />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="sol"
+                        stroke="#82ca9d"
+                        fillOpacity={1}
+                        fill="url(#colorPv)"
+                        stackId={1}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -270,7 +326,17 @@ export const AnalyticsPage = () => {
                       <YAxis hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value, "Users"]} wrapperStyle={{ color: "#333" }} />
-                      <Area type="monotone" dataKey="totalUsers" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="totalUsers"
+                        stroke="#31b3cd"
+                        fillOpacity={1}
+                        fill="url(#colorUv)"
+                        stackId={1}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
@@ -288,7 +354,17 @@ export const AnalyticsPage = () => {
                       <YAxis label="Total Volume (Bytes)" hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value, "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />
-                      <Area type="monotone" dataKey="totalBytes" stroke="#31b3cd" fillOpacity={1} fill="url(#colorUv)" stackId={1} />
+                      <Area
+                        connectNulls
+                        animationDuration={3000}
+                        animationEasing="ease-in"
+                        type="monotone"
+                        dataKey="totalBytes"
+                        stroke="#31b3cd"
+                        fillOpacity={1}
+                        fill="url(#colorUv)"
+                        stackId={1}
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}

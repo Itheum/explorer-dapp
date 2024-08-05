@@ -74,6 +74,13 @@ export const Navbar = () => {
               Analytics
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem className="cursor-pointer">
+            <Link
+              to={routeNames.gamerpassport}
+              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+              Gamer Passport
+            </Link>
+          </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuTrigger>Data Widget Apps</NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -161,13 +168,6 @@ export const Navbar = () => {
               setShowPathwaysModel(true);
             }}>
             Pathways
-          </NavigationMenuItem> */}
-          {/* <NavigationMenuItem
-            className="cursor-pointer"
-            onClick={() => {
-              setShowPlayBitzModel(true);
-            }}>
-            PlayBitz
           </NavigationMenuItem> */}
           <NavigationMenuItem>
             <SwitchButton />
