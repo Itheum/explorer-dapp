@@ -1,46 +1,59 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetAccount, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 import { logout } from "@multiversx/sdk-dapp/utils/logout";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { ArrowBigLeft } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton, LedgerLoginButton } from "components";
 import { walletConnectV2ProjectId } from "config";
 import { Button } from "libComponents/Button";
 import { getApi } from "libs/utils";
-import { routeNames } from "routes";
-import { ArrowBigLeft } from "lucide-react";
+// import { routeNames } from "routes";
 
-// find a route name based on a pathname that comes in via React Router Link params
-function getRouteNameBasedOnPathNameParam(pathname: string) {
-  const matchPathnameToRouteName = Object.keys(routeNames).find((i: string) => {
-    return (routeNames as any)[i] === pathname;
-  });
+// // find a route name based on a pathname that comes in via React Router Link params
+// function getRouteNameBasedOnPathNameParam(pathname: string) {
+//   const matchPathnameToRouteName = Object.keys(routeNames).find((i: string) => {
+//     return (routeNames as any)[i] === pathname;
+//   });
 
-  if (matchPathnameToRouteName && matchPathnameToRouteName !== "home") {
-    // Note: if it's home route, better UX is to go the dashboard
-    return (routeNames as any)[matchPathnameToRouteName];
-  } else {
-    return routeNames.home;
-  }
-}
+//   if (matchPathnameToRouteName && matchPathnameToRouteName !== "home") {
+//     // Note: if it's home route, better UX is to go the dashboard
+//     return (routeNames as any)[matchPathnameToRouteName];
+//   } else {
+//     return routeNames.home;
+//   }
+// }
+
 const UnlockPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { chainID } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const isLoggedInMvX = !!address;
+  const { publicKey } = useWallet();
+  const addressSol = publicKey?.toBase58();
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
     expirySeconds: 3600,
   };
+
   const commonProps = {
     // callbackRoute: location.pathname,
     nativeAuth: {
       ...nativeAuthProps,
     },
   };
+
+  // @TODO, improve this so that only when user logs in we redirect, or else logout also breaks and redirects
+  // useEffect(() => {
+  //   // is user logged into Solana?
+  //   if (addressSol) {
+  //     handleGoBack();
+  //   }
+  // }, [addressSol]);
 
   const handleLogout = () => {
     logout(location.pathname, undefined, false);

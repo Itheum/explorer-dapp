@@ -169,13 +169,6 @@ export const Navbar = () => {
             }}>
             Pathways
           </NavigationMenuItem> */}
-          {/* <NavigationMenuItem
-            className="cursor-pointer"
-            onClick={() => {
-              setShowPlayBitzModel(true);
-            }}>
-            PlayBitz
-          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <SwitchButton />
           </NavigationMenuItem>
