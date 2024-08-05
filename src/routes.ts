@@ -8,6 +8,7 @@ import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
 import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom, AnalyticsPage, GamerPassport } from "./pages";
+import GetBitzSolView from "pages/AppMarketplace/GetBitzSol";
 
 export const routeNames = {
   home: "/",
@@ -28,6 +29,7 @@ export const routeNames = {
   spreadsheetnfts: "/spreadsheetnfts",
   nfpodcast: "/nfpodcast",
   gamerpassport: "/gamerpassport",
+  getbitzsol: "/getbitzsol",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -100,6 +102,12 @@ export const routes: RouteWithTitleType[] = [
     authenticatedRoute: false,
   },
   {
+    path: routeNames.getbitzsol,
+    title: "Get Bitz",
+    component: GetBitzSolView,
+    authenticatedRoute: false,
+  },
+  {
     path: routeNames.bobergameroom,
     title: "Bober Game Room",
     component: BoberGameRoom,
@@ -125,7 +133,7 @@ export const routes: RouteWithTitleType[] = [
 ];
 
 export const mappedRoutes = routes.map((route) => {
-  const title = route.title ? `${route.title} • MultiversX ${dAppName}` : `MultiversX ${dAppName}`;
+  const title = route.title ? `${route.title} • ${dAppName}` : `${dAppName}`;
 
   const requiresAuth = Boolean(route.authenticatedRoute);
   const wrappedComponent = withPageTitle(title, route.component);

@@ -11,6 +11,7 @@ import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./contexts/ThemeProvider";
 import { StoreProvider } from "./store/StoreProvider";
+import GetBitzSolView from "pages/AppMarketplace/GetBitzSol";
 
 export const App = () => {
   return (
@@ -32,6 +33,7 @@ export const App = () => {
                   <Route path={`${routeNames.timecapsule}/:targetNonce/:targetMessageToBeSigned`} element={<TimeCapsule />} />
                   <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
                   <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
+                  <Route path={`${routeNames.getbitzsol}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitzSolView />} />
                   <Route path={`${routeNames.bobergameroom}/:targetNonce/:targetMessageToBeSigned`} element={<BoberGameRoom />} />
                   <Route path="*" element={<PageNotFound />} />
                 </Routes>

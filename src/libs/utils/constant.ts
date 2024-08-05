@@ -21,6 +21,13 @@ export const APP_MAPPINGS = [
     img: iconGetBitz,
   },
   {
+    appName: "Get <BiTz> Points on Solana",
+    appDescription: "Collect Itheum <BiTz> Points",
+    routeKey: "getbitzsol",
+    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTz> points, <BiTz> points are like Data Ownership OG XP. Let's Get <BiTz>!",
+    img: iconGetBitz,
+  },
+  {
     appName: "TrailBlazer",
     appDescription: "TrailBlazer Quest App",
     routeKey: "itheumtrailblazer",
