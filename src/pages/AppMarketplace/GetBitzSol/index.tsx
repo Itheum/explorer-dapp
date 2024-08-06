@@ -159,7 +159,12 @@ const GetBitzSolView = () => {
 
   useEffect(() => {
     if (publicKey) {
-      setNfts(IS_DEVNET ? solNfts : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2")));
+      setNfts(
+        IS_DEVNET
+          ? solNfts.filter((nft) => !nft.content.metadata.name.includes("NFTunes"))
+          : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
+      );
+      solNfts.filter((nft) => !nft.content.metadata.name.includes("NFTunes"));
     }
   }, [publicKey, solNfts]);
 
@@ -181,6 +186,7 @@ const GetBitzSolView = () => {
         };
         (async () => {
           const getBitzGameResult = await viewData(viewDataArgs, nfts[0]);
+          console.log(getBitzGameResult);
           if (getBitzGameResult) {
             console.log(getBitzGameResult);
             const bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
@@ -399,13 +405,12 @@ const GetBitzSolView = () => {
         viewDataArgs.headers
       );
       const rest = await res.json();
-      console.log(rest);
       let blobDataType = BlobDataType.TEXT;
       let data;
       if (res.ok) {
         const contentType = res.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
-          data = await res.json();
+          data = rest;
         }
         return { data, blobDataType, contentType };
       } else {
