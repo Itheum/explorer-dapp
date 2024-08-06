@@ -67,13 +67,11 @@ export const NFTunes = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
-
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
 
   // get query param called chain
   const [searchParams, setSearchParams] = useSearchParams();
-
   const defaultChain = useLocalStorageStore((state) => state.defaultChain);
   const mvxNetworkSelected = defaultChain === "multiversx";
   const [shownSolAppDataNfts, setShownSolAppDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
@@ -85,6 +83,13 @@ export const NFTunes = () => {
   const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -574,58 +579,61 @@ export const NFTunes = () => {
                   )}
                 </Modal>
               </div>
-              <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
-                <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
-                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
-                  {featuredArtistDataNft ? (
-                    <MvxDataNftCard
-                      cardStyles="text-white"
-                      index={featuredDataNftIndex}
-                      dataNft={featuredArtistDataNft}
-                      isLoading={isLoadingMvx}
-                      isDataWidget={true}
-                      owned={mvxNfts.find((nft) => nft.tokenIdentifier === featuredArtistDataNft.tokenIdentifier) ? true : false}
-                      viewData={viewMvxData}
-                      modalContent={
-                        isFetchingDataMarshal ? (
-                          <div
-                            className="flex flex-col items-center justify-center"
-                            style={{
-                              minHeight: "40rem",
-                            }}>
-                            <div>
-                              <Loader noText />
-                              <p className="text-center text-foreground">Loading...</p>
+              {mvxNetworkSelected && (
+                <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
+                  <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
+                  <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
+                    {featuredArtistDataNft ? (
+                      <MvxDataNftCard
+                        cardStyles="text-white"
+                        index={featuredDataNftIndex}
+                        dataNft={featuredArtistDataNft}
+                        isLoading={isLoadingMvx}
+                        isDataWidget={true}
+                        owned={mvxNfts.find((nft) => nft.tokenIdentifier === featuredArtistDataNft.tokenIdentifier) ? true : false}
+                        viewData={viewMvxData}
+                        modalContent={
+                          isFetchingDataMarshal ? (
+                            <div
+                              className="flex flex-col items-center justify-center"
+                              style={{
+                                minHeight: "40rem",
+                              }}>
+                              <div>
+                                <Loader noText />
+                                <p className="text-center text-foreground">Loading...</p>
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <>
-                            {viewDataRes && !viewDataRes.error && tokenLogin && featuredDataNftIndex > -1 && (
-                              <AudioPlayer
-                                dataNftToOpen={shownMvxAppDataNfts[featuredDataNftIndex]}
-                                songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                                tokenLogin={tokenLogin}
-                                firstSongBlobUrl={firstSongBlobUrl}
-                                chainID={chainID}
-                              />
-                            )}
-                          </>
-                        )
-                      }
-                      modalTitle={"NF-Tunes"}
-                      modalTitleStyle="p-4"
-                    />
-                  ) : isLoadingMvx ? (
-                    <div className="mt-32 ">
-                      <Loader noText />
-                      <p className="text-center text-foreground">Loading...</p>
-                    </div>
-                  ) : (
-                    <h3 className="text-center mt-32 text-white">No Data NFT yet</h3>
-                  )}
+                          ) : (
+                            <>
+                              {viewDataRes && !viewDataRes.error && tokenLogin && featuredDataNftIndex > -1 && (
+                                <AudioPlayer
+                                  dataNftToOpen={shownMvxAppDataNfts[featuredDataNftIndex]}
+                                  songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                                  tokenLogin={tokenLogin}
+                                  firstSongBlobUrl={firstSongBlobUrl}
+                                  chainID={chainID}
+                                />
+                              )}
+                            </>
+                          )
+                        }
+                        modalTitle={"NF-Tunes"}
+                        modalTitleStyle="p-4"
+                      />
+                    ) : isLoadingMvx ? (
+                      <div className="mt-32 ">
+                        <Loader noText />
+                        <p className="text-center text-foreground">Loading...</p>
+                      </div>
+                    ) : (
+                      <h3 className="text-center mt-32 text-white">No Data NFT yet</h3>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
+
             {
               <div className="flex flex-row w-full justify-center">
                 <button

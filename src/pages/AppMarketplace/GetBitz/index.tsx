@@ -163,17 +163,17 @@ export const GetBitz = (props: any) => {
   const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     const timeout = setTimeout(() => {
       setShowMessage(false);
     }, 3000);
 
     return () => clearTimeout(timeout);
   }, []);
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
 
   useEffect(() => {
     if (!hasPendingTransactions) {

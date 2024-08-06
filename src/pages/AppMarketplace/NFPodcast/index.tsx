@@ -41,13 +41,14 @@ export const NFPodcast = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
-
   const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
