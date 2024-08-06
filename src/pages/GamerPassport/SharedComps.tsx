@@ -65,7 +65,7 @@ export function VolumeChartAnalytics({
                     <stop offset="95%" stopColor="#006ee4" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="name" />
+                <XAxis dataKey="name" hide />
                 <YAxis hide />
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip formatter={(value, name) => [value, "Users"]} wrapperStyle={{ color: "#333" }} />
@@ -97,7 +97,7 @@ export function VolumeChartAnalytics({
           {(dataLakeDataVolumeGrowthData.length > 0 && (
             <ResponsiveContainer minWidth={"100%"} height={300} style={{ marginBottom: "2.5rem" }}>
               <AreaChart data={dataLakeDataVolumeGrowthData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <XAxis dataKey="name" />
+                <XAxis dataKey="name" hide />
                 <YAxis label="Total Volume (Bytes)" hide />
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip formatter={(value, name) => [value.toLocaleString(), "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />

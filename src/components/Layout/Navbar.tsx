@@ -213,6 +213,14 @@ export const Navbar = () => {
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
+              <Link to={routeNames.analytics}>
+                <DropdownMenuItem>
+                  <Gamepad2 className="mr-2 h-4 w-4" />
+                  <span>Analytics</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
               <Link to={routeNames.gamerpassport}>
                 <DropdownMenuItem>
                   <Gamepad2 className="mr-2 h-4 w-4" />
