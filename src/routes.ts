@@ -1,14 +1,14 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
 import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
+import GetBitz from "pages/AppMarketplace/GetBitz";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFPodcast } from "pages/AppMarketplace/NFPodcast";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
-import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitzMvx, BoberGameRoom, AnalyticsPage, GamerPassport } from "./pages";
-import GetBitzSol from "pages/AppMarketplace/GetBitz/GetBitzSol";
+import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, BoberGameRoom, AnalyticsPage, GamerPassport } from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -29,7 +29,6 @@ export const routeNames = {
   spreadsheetnfts: "/spreadsheetnfts",
   nfpodcast: "/nfpodcast",
   gamerpassport: "/gamerpassport",
-  getbitzsol: "/getbitzsol",
 };
 
 interface RouteWithTitleType extends RouteType {
@@ -98,13 +97,7 @@ export const routes: RouteWithTitleType[] = [
   {
     path: routeNames.getbitz,
     title: "Get Bitz",
-    component: GetBitzMvx,
-    authenticatedRoute: false,
-  },
-  {
-    path: routeNames.getbitzsol,
-    title: "Get Bitz",
-    component: GetBitzSol,
+    component: GetBitz,
     authenticatedRoute: false,
   },
   {

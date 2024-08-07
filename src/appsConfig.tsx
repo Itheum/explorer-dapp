@@ -111,7 +111,6 @@ export const SUPPORTED_APPS = IS_DEVNET
       "bobergameroom",
       "spreadsheetnfts",
       "nfpodcast",
-      "getbitzsol",
     ]
   : [
       "itheumtrailblazer",
@@ -124,5 +123,4 @@ export const SUPPORTED_APPS = IS_DEVNET
       "bobergameroom",
       "spreadsheetnfts",
       "nfpodcast",
-      "getbitzsol",
     ];

@@ -72,10 +72,6 @@ export const faqs = [
           <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/getxp" target="blank">
             Get {`<BiTz>`} dApp
           </a>{" "}
-          or on{" "}
-          <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/getbitzsol" target="blank">
-            the Explorer dApp
-          </a>{" "}
         </p>
       </>
     ),
