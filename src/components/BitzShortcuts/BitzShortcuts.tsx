@@ -1,18 +1,24 @@
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { FlaskRound, Gift } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link, useLocation } from "react-router-dom";
+import { useGetIsLoggedIn } from "hooks";
 import { isMostLikelyMobile } from "libs/utils/misc";
+import { BIT_GAME_WINDOW_HOURS } from "pages/AppMarketplace/GetBitz/common/interfaces";
+import useSolBitzStore from "store/solBitz";
 import { Button } from "../../libComponents/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
-import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz/GetBitzMvx";
 import { useAccountStore } from "../../store/account";
 
 export const BitzDropdown = (props: any) => {
   const { skipNavBarPopOverOption, showOnlyClaimBitzButton, handlePlayActionBtn } = props;
-  const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
+  const mvxBitzBalance = useAccountStore((state: any) => state.bitzBalance);
+  const isLoggedInMvx = useGetIsLoggedIn();
+  const solBitzBalance = useSolBitzStore((state: any) => state.bitzBalance);
+  const { connected: isLoggedInSol } = useWallet();
 
   return (
     <div className={`${!skipNavBarPopOverOption ? "shadow-sm shadow-[#35d9fa] rounded-lg justify-center cursor-pointer" : ""}`}>
@@ -23,23 +29,42 @@ export const BitzDropdown = (props: any) => {
           <>
             <PopoverTrigger>
               <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
-                {bitzBalance === -2 ? (
-                  <span className="flex items-center gap-0.5 blinkMe text-lg">
-                    ... <FlaskBottleAnimation cooldown={cooldown} />
-                  </span>
-                ) : (
-                  <>
-                    {bitzBalance === -1 ? (
-                      <div className="flex items-center gap-0.5 text-base">
-                        0 <FlaskBottleAnimation cooldown={cooldown} />
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-0.5 text-base">
-                        {bitzBalance} <FlaskBottleAnimation cooldown={cooldown} />
-                      </div>
-                    )}
-                  </>
-                )}
+                {isLoggedInMvx &&
+                  (mvxBitzBalance === -2 ? (
+                    <div className="flex items-center gap-0.5 blinkMe text-lg mr-1">
+                      MvX: ... <FlaskBottleAnimation cooldown={cooldown} />
+                    </div>
+                  ) : (
+                    <>
+                      {mvxBitzBalance === -1 ? (
+                        <div className="flex items-center gap-0.5 text-base mr-1">
+                          MvX: 0 <FlaskBottleAnimation cooldown={cooldown} />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-0.5 text-base mr-1">
+                          MvX: {mvxBitzBalance} <FlaskBottleAnimation cooldown={cooldown} />
+                        </div>
+                      )}
+                    </>
+                  ))}
+                {isLoggedInSol &&
+                  (solBitzBalance === -2 ? (
+                    <div className="flex items-center gap-0.5 blinkMe text-lg ml-1">
+                      SOL: ... <FlaskBottleAnimation cooldown={cooldown} />
+                    </div>
+                  ) : (
+                    <>
+                      {solBitzBalance === -1 ? (
+                        <div className="flex items-center gap-0.5 text-base ml-1">
+                          SOL: 0 <FlaskBottleAnimation cooldown={cooldown} />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-0.5 text-base ml-1">
+                          SOL: {solBitzBalance} <FlaskBottleAnimation cooldown={cooldown} />
+                        </div>
+                      )}
+                    </>
+                  ))}
               </Button>
             </PopoverTrigger>
 

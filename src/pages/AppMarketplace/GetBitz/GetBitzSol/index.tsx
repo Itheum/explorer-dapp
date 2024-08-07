@@ -60,12 +60,9 @@ import GiveBitzBase from "./GiveBitzBase";
 import ImgGetDataNFT from "../../../../assets/img/getbitz/getbitz-get-datanft-v2.gif";
 import { BurningImage } from "../common/BurningImage";
 import Faq from "../common/Faq";
-import { LeaderBoardItemType } from "../common/interfaces";
+import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
 import Torch from "../common/Torch";
-
-export const BIT_GAME_WINDOW_HOURS = "6"; // how often we can play the game, need to match logic inside Data NFT
-export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "5"; // top X leaderboard winners for the monthly price
 
 const MEME_IMGS = [
   Meme1,
@@ -96,7 +93,8 @@ const MEME_IMGS = [
   Meme26,
 ];
 
-const GetBitzSol = () => {
+const GetBitzSol = (props: any) => {
+  const { modalMode } = props;
   const { publicKey, signMessage } = useWallet();
   const address = publicKey?.toBase58();
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
@@ -441,7 +439,7 @@ const GetBitzSol = () => {
           onClick={() => {
             setVisible(true);
           }}
-          className="z-5 rounded-[3rem] w-full cursor-pointer"
+          className={cn("-z-1 z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
           src={ImgLogin}
           alt={"Connect your wallet to play"}
         />
@@ -451,7 +449,11 @@ const GetBitzSol = () => {
     if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
       return (
         <div className="relative">
-          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+          <img
+            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
+            src={ImgLoadingGame}
+            alt={"Checking if you have <BiTz> Data NFT"}
+          />
         </div>
       );
     }
@@ -460,7 +462,11 @@ const GetBitzSol = () => {
     if (address && !checkingIfHasGameDataNFT && !hasGameDataNFT) {
       return (
         <div className="relative" onClick={() => {}}>
-          <img className="z-5 rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTz> Data NFT from Data NFT Marketplace"} />
+          <img
+            className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
+            src={ImgGetDataNFT}
+            alt={"Get <BiTz> Data NFT from Data NFT Marketplace"}
+          />
         </div>
       );
     }
@@ -507,7 +513,7 @@ const GetBitzSol = () => {
                   return <> </>;
                 } else {
                   return (
-                    <div className="absolute z-5 w-full h-full rounded-[3rem] bg-black/90">
+                    <div className={cn("absolute z-5 w-full h-full rounded-[3rem] bg-black/90", modalMode ? "rounded" : "")}>
                       <div className="flex w-full h-full items-center justify-center">
                         <div className="text-3xl md:text-5xl flex flex-col items-center justify-center text-white ">
                           <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
@@ -527,7 +533,7 @@ const GetBitzSol = () => {
                 setLoadBlankGameCanvas(true);
               }
             }}
-            className="rounded-[3rem] w-full cursor-pointer"
+            className={cn("rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgPlayGame}
             alt={"Start Game"}
           />
@@ -539,13 +545,18 @@ const GetBitzSol = () => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          {_isMemeBurnHappening && <Torch />}
-          <img className={cn("rounded-[3rem] w-full", _isMemeBurnHappening ? "cursor-none" : "")} src={ImgGameCanvas} alt={"Play Game"} />
+          {!modalMode && _isMemeBurnHappening && <Torch />}
+          <img
+            className={cn("rounded-[3rem] w-full", _isMemeBurnHappening && !modalMode ? "cursor-none" : "", modalMode ? "rounded" : "")}
+            src={ImgGameCanvas}
+            alt={"Play Game"}
+          />
 
           <div
             className={cn(
-              "select-none flex justify-center items-center mt-[2rem]  w-full h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
-              _isMemeBurnHappening ? "cursor-none" : ""
+              "select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
+              _isMemeBurnHappening && !modalMode ? "cursor-none" : "",
+              modalMode ? "scale-75 !mt-[35px]" : ""
             )}>
             {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
               <>
@@ -568,13 +579,13 @@ const GetBitzSol = () => {
 
             {_isMemeBurnHappening && (
               <div
-                className="z-10 relative cursor-none select-none p-8"
+                className={cn("z-10 relative cursor-none select-none p-8", modalMode ? "cursor-pointer" : "")}
                 onClick={() => {
                   setBurnProgress((prev) => prev + 1);
                 }}>
                 <p className="text-center text-md text-gray-950 text-foreground lg:text-xl ">Light up this Meme Sacrifice!</p>
                 <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
-                <BurningImage src={randomMeme} burnProgress={burnProgress} />
+                <BurningImage src={randomMeme} burnProgress={burnProgress} modalMode={modalMode} />
                 <div className="glow" style={{ opacity: burnFireGlow }}></div>
                 <div className="flame !top-[125px] lg:!top-[90px]" style={{ transform: burnFireScale }}></div>
               </div>
@@ -591,7 +602,7 @@ const GetBitzSol = () => {
             )}
           </div>
 
-          {spritLayerPointsCloud()}
+          {!modalMode && spritLayerPointsCloud()}
         </div>
       );
     }
@@ -600,10 +611,12 @@ const GetBitzSol = () => {
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
+          <img className={cn("rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
           <div
-            className="flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
-                        lg:absolute lg:p-[2rem] lg:pb-[.5rem] lg:w-[500px] lg:h-[400px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2">
+            className={cn(
+              "flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static lg:absolute lg:p-[2rem] lg:pb-[.5rem] lg:w-[500px] lg:h-[400px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
+              modalMode ? "scale-75 !mt-[35px]" : ""
+            )}>
             {_viewDataRes && !_viewDataRes.error && (
               <>
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs > 0 && (
@@ -715,7 +728,7 @@ const GetBitzSol = () => {
             )}
           </div>
 
-          {spritLayerPointsCloud()}
+          {!modalMode && spritLayerPointsCloud()}
         </div>
       );
     }
@@ -864,101 +877,100 @@ const GetBitzSol = () => {
             {!showMessage && <ArrowBigDownDash className="w-4 h-4 md:h-8 md:w-8 " />}
           </motion.div>
         </div>
-        {/* <div className="absolute -z-1">
-          <img
-            className="-z-1 rounded-[3rem] w-full cursor-pointer"
-            src={ImgLoadingGame.src}
-            alt={'Checking if you have <BiTz> Data NFT'}
-          />
-        </div> */}
         {gamePlayImageSprites()}
       </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] max-w-[100%]">
-        <h2 className="text-center text-white mb-[1rem] text-4xl">Get BiTz Perks</h2>
+      {!modalMode && (
+        <>
+          <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] max-w-[100%]">
+            <h2 className="text-center text-white mb-[1rem] text-4xl">Get BiTz Perks</h2>
 
-        <ol className="mt-5">
-          <li className="my-5">
-            1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from &quot;Monthly&quot; LEADERBOARD get Airdropped Data NFTs from previous and upcoming Data
-            Creators.
-          </li>
-          <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 &quot;All Time&quot; LEADERBOARD</li>
-          <li className="my-5">
-            3. Got Memes for burning? Join our{" "}
-            <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
-              Discord Meme Channel
-            </a>{" "}
-            and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
-          </li>
-          <li className="my-5">
-            4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
-          </li>
-        </ol>
-        <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
-      </div>
+            <ol className="mt-5">
+              <li className="my-5">
+                1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from &quot;Monthly&quot; LEADERBOARD get Airdropped Data NFTs from previous and upcoming Data
+                Creators.
+              </li>
+              <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 &quot;All Time&quot; LEADERBOARD</li>
+              <li className="my-5">
+                3. Got Memes for burning? Join our{" "}
+                <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
+                  Discord Meme Channel
+                </a>{" "}
+                and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
+              </li>
+              <li className="my-5">
+                4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
+              </li>
+            </ol>
+            <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
+          </div>
 
-      <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
-        <div className="leaderBoard">
-          <h2 className="text-center text-white mb-[1rem] text-4xl">LEADERBOARD</h2>
+          <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
+            <div className="leaderBoard">
+              <h2 className="text-center text-white mb-[1rem] text-4xl">LEADERBOARD</h2>
 
-          {address && leaderBoardAllTime.length > 0 && (
-            <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
-              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:border-r-4 border-[#171717]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Current All-Time Rank</p>
-                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">{myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}</p>
-              </div>
-              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
-                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
-                  {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="md:flex">
-            <div className="my-[1rem] allTime md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">All Time</h3>
-              {leaderBoardIsLoading ? (
-                <div className="flex justify-center items-center h-100">
-                  <Loader />
+              {address && leaderBoardAllTime.length > 0 && (
+                <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+                  <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:border-r-4 border-[#171717]">
+                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Current All-Time Rank</p>
+                    <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
+                      {myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
+                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
+                    <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
+                      {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
+                    </p>
+                  </div>
                 </div>
-              ) : (
-                <>
-                  {leaderBoardAllTime.length > 0 ? (
-                    <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address ?? ""} />
-                  ) : (
-                    <div className="text-center">{"Connect Wallet to Check"}</div>
-                  )}
-                </>
               )}
-            </div>
 
-            <div className="my-[1rem] monthly md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">
-                Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
-              </h3>
-              {leaderBoardIsLoading ? (
-                <div className="flex justify-center items-center h-100">
-                  <Loader />
-                </div>
-              ) : (
-                <>
-                  {leaderBoardMonthly.length > 0 ? (
-                    <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address ?? ""} />
+              <div className="md:flex">
+                <div className="my-[1rem] allTime md:flex-1">
+                  <h3 className="text-center text-white mb-[1rem]">All Time</h3>
+                  {leaderBoardIsLoading ? (
+                    <div className="flex justify-center items-center h-100">
+                      <Loader />
+                    </div>
                   ) : (
-                    <div className="text-center">{"Connect Wallet to Check"}</div>
+                    <>
+                      {leaderBoardAllTime.length > 0 ? (
+                        <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address ?? ""} />
+                      ) : (
+                        <div className="text-center">{"Connect Wallet to Check"}</div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
+                </div>
+
+                <div className="my-[1rem] monthly md:flex-1">
+                  <h3 className="text-center text-white mb-[1rem]">
+                    Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
+                  </h3>
+                  {leaderBoardIsLoading ? (
+                    <div className="flex justify-center items-center h-100">
+                      <Loader />
+                    </div>
+                  ) : (
+                    <>
+                      {leaderBoardMonthly.length > 0 ? (
+                        <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address ?? ""} />
+                      ) : (
+                        <div className="text-center">{"Connect Wallet to Check"}</div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {leaderBoardAllTime.length > 0 && <GiveBitzBase />}
+          {leaderBoardAllTime.length > 0 && <GiveBitzBase />}
 
-      <Faq />
+          <Faq />
+        </>
+      )}
     </div>
   );
 };

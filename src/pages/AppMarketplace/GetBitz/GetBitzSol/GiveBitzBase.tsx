@@ -13,10 +13,10 @@ import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
 import useSolBitzStore from "store/solBitz";
 import { getDataBounties } from "./configSol";
+import BonusBitzHistory from "../common/BonusBitzHistory";
 import PowerUpBounty from "../common/GiveBitz/PowerUpBounty";
 import { GiveBitzDataBounty, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
-import BonusBitzHistory from "../common/BonusBitzHistory";
 
 const GiveBitzBase = () => {
   const { publicKey, signMessage } = useWallet();

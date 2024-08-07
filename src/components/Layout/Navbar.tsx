@@ -44,7 +44,7 @@ export const Navbar = () => {
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
 
   // const [showPathwaysModel, setShowPathwaysModel] = useState<boolean>(false);
-  const [showPlayBitzModel, setShowPlayBitzModel] = useState<boolean>(false);
+  const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
 
   return (
     <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">
@@ -141,10 +141,10 @@ export const Navbar = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                {isLoggedInMvx && (
+                {(isLoggedInMvx || isLoggedInSol) && (
                   <BitzDropdown
                     handlePlayActionBtn={() => {
-                      setShowPlayBitzModel(true);
+                      setShowPlayBitzModal(true);
                     }}
                   />
                 )}
@@ -179,10 +179,10 @@ export const Navbar = () => {
       <div className="md:!hidden !visible">
         <DropdownMenu>
           <div className="flex flex-row">
-            {isLoggedInMvx ? (
+            {isLoggedInMvx || isLoggedInSol ? (
               <BitzDropdown
                 handlePlayActionBtn={() => {
-                  setShowPlayBitzModel(true);
+                  setShowPlayBitzModal(true);
                 }}
               />
             ) : (
@@ -297,7 +297,7 @@ export const Navbar = () => {
       </div>
 
       {/* <PathwaysModal showPathwaysModel={showPathwaysModel} handleHidePathwaysModel={() => setShowPathwaysModel(false)} /> */}
-      {showPlayBitzModel && <PlayBitzModal showPlayBitzModel={showPlayBitzModel} handleHideBitzModel={() => setShowPlayBitzModel(false)} />}
+      {showPlayBitzModal && <PlayBitzModal showPlayBitzModel={showPlayBitzModal} handleHideBitzModel={() => setShowPlayBitzModal(false)} />}
     </div>
   );
 };

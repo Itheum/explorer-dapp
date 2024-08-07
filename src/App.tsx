@@ -3,7 +3,7 @@ import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { Layout } from "components";
 import { MvxContextProvider } from "contexts/mvx/MvxContextProvider";
 import { SolContextProvider } from "contexts/sol/SolContextProvider";
-import { MultiversxInfographics, MyWallet, PageNotFound, Unlock, GetBitzMvx, BoberGameRoom } from "pages";
+import { MultiversxInfographics, MyWallet, PageNotFound, Unlock, BoberGameRoom } from "pages";
 import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
 import GetBitz from "pages/AppMarketplace/GetBitz";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";

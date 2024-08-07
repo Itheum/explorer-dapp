@@ -67,12 +67,9 @@ import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient"
 
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
-import { LeaderBoardItemType } from "../common/interfaces";
+import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
 import Torch from "../common/Torch";
-
-export const BIT_GAME_WINDOW_HOURS = "6"; // how often we can play the game, need to match logic inside Data NFT
-export const BIT_GAME_TOP_LEADER_BOARD_GROUP = "5"; // top X leaderboard winners for the monthly price
 
 const MEME_IMGS = [
   Meme1,
@@ -107,7 +104,7 @@ const MEME_IMGS = [
 ];
 
 export const GetBitzMvx = (props: any) => {
-  const { modelMode } = props;
+  const { modalMode } = props;
 
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
@@ -451,7 +448,7 @@ export const GetBitzMvx = (props: any) => {
     if (!address) {
       return (
         <Link className="relative" to={routeNames.unlock} state={{ from: location.pathname }}>
-          <img className={cn("-z-1 z-5 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")} src={ImgLogin} alt="Connect your wallet to play" />
+          <img className={cn("-z-1 z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgLogin} alt="Connect your wallet to play" />
         </Link>
       );
     }
@@ -461,7 +458,7 @@ export const GetBitzMvx = (props: any) => {
       return (
         <div className="relative">
           <img
-            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
+            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgLoadingGame}
             alt="Checking if you have <BiTz> Data NFT"
           />
@@ -480,7 +477,7 @@ export const GetBitzMvx = (props: any) => {
             }
           }}>
           <img
-            className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
+            className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgGetDataNFT}
             alt="Get <BiTz> Data NFT from Data NFT Marketplace"
           />
@@ -530,7 +527,7 @@ export const GetBitzMvx = (props: any) => {
                   return <> </>;
                 } else {
                   return (
-                    <div className={cn("absolute z-5 w-full h-full rounded-[3rem] bg-black/90", modelMode ? "rounded" : "")}>
+                    <div className={cn("absolute z-5 w-full h-full rounded-[3rem] bg-black/90", modalMode ? "rounded" : "")}>
                       <div className="flex w-full h-full items-center justify-center">
                         <div className="text-3xl md:text-5xl flex flex-col items-center justify-center text-white ">
                           <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
@@ -548,7 +545,7 @@ export const GetBitzMvx = (props: any) => {
             onClick={() => {
               setLoadBlankGameCanvas(true);
             }}
-            className={cn("rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
+            className={cn("rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgPlayGame}
             alt={"Start Game"}
           />
@@ -560,9 +557,9 @@ export const GetBitzMvx = (props: any) => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          {!modelMode && _isMemeBurnHappening && <Torch />}
+          {!modalMode && _isMemeBurnHappening && <Torch />}
           <img
-            className={cn("rounded-[3rem] w-full", _isMemeBurnHappening && !modelMode ? "cursor-none" : "", modelMode ? "rounded" : "")}
+            className={cn("rounded-[3rem] w-full", _isMemeBurnHappening && !modalMode ? "cursor-none" : "", modalMode ? "rounded" : "")}
             src={ImgGameCanvas}
             alt={"Play Game"}
           />
@@ -570,8 +567,8 @@ export const GetBitzMvx = (props: any) => {
             <div
               className={cn(
                 "select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
-                _isMemeBurnHappening && !modelMode ? "cursor-none" : "",
-                modelMode ? "scale-75 !mt-[35px]" : ""
+                _isMemeBurnHappening && !modalMode ? "cursor-none" : "",
+                modalMode ? "scale-75 !mt-[35px]" : ""
               )}>
               {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
                 <>
@@ -596,13 +593,13 @@ export const GetBitzMvx = (props: any) => {
 
               {_isMemeBurnHappening && (
                 <div
-                  className={cn("z-10 relative cursor-none select-none p-8", modelMode ? "cursor-pointer" : "")}
+                  className={cn("z-10 relative cursor-none select-none p-8", modalMode ? "cursor-pointer" : "")}
                   onClick={() => {
                     setBurnProgress((prev) => prev + 1);
                   }}>
                   <p className="text-center text-md text-gray-950 text-foreground lg:text-xl ">Light up this Meme Sacrifice!</p>
                   <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
-                  <BurningImage src={randomMeme} burnProgress={burnProgress} modelMode={modelMode} />
+                  <BurningImage src={randomMeme} burnProgress={burnProgress} modalMode={modalMode} />
                   <div className="glow" style={{ opacity: burnFireGlow }}></div>
                   <div className="flame !top-[125px] lg:!top-[90px]" style={{ transform: burnFireScale }}></div>
                 </div>
@@ -619,7 +616,7 @@ export const GetBitzMvx = (props: any) => {
               )}
             </div>
 
-            {!modelMode && spritLayerPointsCloud()}
+            {!modalMode && spritLayerPointsCloud()}
           </div>
         </div>
       );
@@ -629,11 +626,11 @@ export const GetBitzMvx = (props: any) => {
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className={cn("rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")} src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
+          <img className={cn("rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
           <div
             className={cn(
               "flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static lg:absolute lg:p-[2rem] lg:pb-[.5rem] lg:w-[500px] lg:h-[400px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
-              modelMode ? "scale-75 !mt-[35px]" : ""
+              modalMode ? "scale-75 !mt-[35px]" : ""
             )}>
             {_viewDataRes && !_viewDataRes.error && (
               <>
@@ -746,7 +743,7 @@ export const GetBitzMvx = (props: any) => {
             )}
           </div>
 
-          {!modelMode && spritLayerPointsCloud()}
+          {!modalMode && spritLayerPointsCloud()}
         </div>
       );
     }
@@ -890,7 +887,7 @@ export const GetBitzMvx = (props: any) => {
         </div> */}
         <div className="absolute -z-1 w-full">
           <img
-            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
+            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgLoadingGame}
             alt={"Checking if you have <BiTz> Data NFT"}
           />
@@ -898,7 +895,7 @@ export const GetBitzMvx = (props: any) => {
         {gamePlayImageSprites()}
       </div>
 
-      {!modelMode && (
+      {!modalMode && (
         <>
           <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
             <h2 className="text-center text-white mb-[1rem]">Get BiTz Perks</h2>
