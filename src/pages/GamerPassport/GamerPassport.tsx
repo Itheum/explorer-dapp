@@ -41,6 +41,7 @@ export const GamerPassport = () => {
   const [step1InProgress] = useState<boolean>(true);
   const [step1Passed, setStep1Passed] = useState<boolean>(false);
   const [step1PSNUserName, setStep1PSNUserName] = useState<string>("");
+  const [step1PSNEligibilityCheckResults, setStep1EligibilityCheckResults] = useState<string>("");
 
   // Step 2
   const [step2Passed, setStep2Passed] = useState<boolean>(false);
@@ -99,8 +100,16 @@ export const GamerPassport = () => {
       setStep3InProgress(false);
       setAppBootingUp(false); // if user is NOT logged in, at this point the app is "booted in"
     } else {
-      // wallet connected; check if this is a user ALREADY joined an setup onboarding form if needed
-      checkIfUserHasJoined();
+      if (!step1Passed) {
+        // wallet connected; check if this is a user ALREADY joined an setup onboarding form if needed
+        // ... only do this if user is NOT in the middle on onboarding and just completed step 1
+        // ... or else, if the connect a wallet they used before it breaks
+        checkIfUserHasJoined();
+      } else {
+        setStep2Passed(true);
+        setStep2SolanaAddress(addressSol);
+        setStep3InProgress(true);
+      }
     }
   }, [addressSol]);
 
@@ -489,10 +498,12 @@ export const GamerPassport = () => {
             setStep1Passed(val);
           }}
           handleStep1PSNUserName={setStep1PSNUserName}
+          handleStep1EligibilityCheckResults={setStep1EligibilityCheckResults}
         />
 
         <ActionModalStep3
           step1PSNUserName={step1PSNUserName}
+          step1PSNEligibilityCheckResults={step1PSNEligibilityCheckResults}
           step2SolanaAddress={step2SolanaAddress}
           showActionModel={showActionModalStep3}
           handleHideActionModel={() => setShowActionModalStep3(false)}

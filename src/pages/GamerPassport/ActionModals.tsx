@@ -9,7 +9,7 @@ import { ActionButton } from "./SharedComps";
 
 export const ActionModalStep1 = (props: any) => {
   const { showActionModel, handleHideActionModel } = props;
-  const { handleStep1Passed, handleStep1PSNUserName } = props;
+  const { handleStep1Passed, handleStep1PSNUserName, handleStep1EligibilityCheckResults } = props;
 
   const [psnUserName, setPsnUserName] = useState<string>("");
   const [eligibilityCheckLoading, setEligibilityCheckLoading] = useState<boolean>(false);
@@ -34,6 +34,7 @@ export const ActionModalStep1 = (props: any) => {
     } else if (!eligibilityDecision.accountIdGood || !eligibilityDecision.titlesGood) {
       setEligibilityUserNameNotSuitable(true);
     } else {
+      handleStep1EligibilityCheckResults(JSON.stringify(eligibilityDecision));
       handleStep1Passed(true);
       handleStep1PSNUserName(psnUserName);
       handleHideActionModel();
@@ -86,6 +87,7 @@ export const ActionModalStep1 = (props: any) => {
                     * Make sure you enter YOUR username, as you will be asked to prove ownership to claim your rewards! Bruh, we will find out! 😎
                   </p>
                   <div
+                    className="mt-8"
                     onClick={() => {
                       if (psnUserName.trim().length > 2 && !eligibilityCheckLoading) {
                         checkEligibilityViaAPI();
@@ -157,7 +159,7 @@ export const ActionModalStep1 = (props: any) => {
 export const ActionModalStep3 = (props: any) => {
   const { publicKey, signMessage } = useWallet();
   const { showActionModel, handleHideActionModel } = props;
-  const { step1PSNUserName, step2SolanaAddress, handleStep3Passed } = props;
+  const { step1PSNUserName, step1PSNEligibilityCheckResults, step2SolanaAddress, handleStep3Passed } = props;
 
   const [userSaveToLogAttempted, setUserSaveToLogAttempted] = useState<boolean>(false);
   const [userSavedToLog, setUserSavedToLog] = useState<boolean>(false);
@@ -180,6 +182,7 @@ export const ActionModalStep3 = (props: any) => {
 
     const checkRes = await axios.post(`${getApiWeb2Apps()}/datadexapi/gamepassport/addNewUserToLog`, {
       "psnUsername": step1PSNUserName,
+      "eligibilityCheckResults": step1PSNEligibilityCheckResults,
       "solAddress": step2SolanaAddress,
       "signatureNonce": preAccessNonce,
       "solSignature": encodedSignature,
@@ -224,7 +227,7 @@ export const ActionModalStep3 = (props: any) => {
             {!userSaveToLogAttempted && (
               <>
                 <div>
-                  <p className="font-bold italic opacity-80">
+                  <p className="text-sm font-bold italic opacity-80">
                     Itheum is all about empowering you with data ownership! So, we want to be fully transparent about how your data is collected and used. (It
                     would be ironic if we weren't, right?).
                   </p>
@@ -259,6 +262,9 @@ export const ActionModalStep3 = (props: any) => {
                   <p>Solana Address : {step2SolanaAddress}</p>
                 </div>
                 <div className="mt-8">
+                  <p className="text-sm text-green-400 mt-3">
+                    * Note that clicking the button below will ask you to sign a message to prove wallet ownership. No gas or funds are used!
+                  </p>
                   <div
                     onClick={() => {
                       if (!saveToLogLoading) {
