@@ -1,30 +1,28 @@
 import React from "react";
+import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { ExternalLinkIcon } from "lucide-react";
 import moment from "moment-timezone";
 import { Link } from "react-router-dom";
 import stampFinalized from "assets/img/getbitz/givebitz/stampFinalized.png";
-import { SolAddressLink } from "components/SolAddressLink";
+import { MXAddressLink } from "components";
+import { MAINNET_MVX_EXPLORER_ADDRESS, MARKETPLACE_DETAILS_PAGE } from "config";
+import { useGetAccount } from "hooks";
 import { cn } from "libs/utils";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import GiveBitzLowerCard from "./GiveBitzLowerCard";
-import { GiveBitzDataBounty } from "../config";
-import { explorerAddress } from "../LeaderBoardTable";
-
-type PowerUpBountyProps = {
-  bounty: GiveBitzDataBounty;
-  sendPowerUp: any;
-  fetchGivenBitsForGetter: any;
-  fetchGetterLeaderBoard: any;
-  isSendingPowerUp: boolean;
-  setIsSendingPowerUp: any;
-};
+import { PowerUpBountyProps } from "../interfaces";
 
 const PowerUpBounty = (props: PowerUpBountyProps) => {
   const { bounty, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard, isSendingPowerUp, setIsSendingPowerUp } = props;
   const { bountySubmitter, bountyId, title, summary, readMoreLink, submittedOnTs, fillPerks, giverCounts, receivedBitzSum, finalizedDataNftIdentifier } =
     bounty;
+  const { address: mvxAddress } = useGetAccount();
   const { publicKey } = useWallet();
-  const address = publicKey?.toBase58();
+  const solAddress = publicKey?.toBase58() ?? "";
+  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
+  const address = defaultChain === "multiversx" ? mvxAddress : solAddress;
+
   return (
     <div className="power-up-tile border  min-w-[260px] max-w-[360px] relative rounded-3xl">
       <div className="group" data-highlighter>
@@ -66,9 +64,9 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
               </div>
               <div className="my-2">
                 Submitted Id:{" "}
-                <SolAddressLink
+                <MXAddressLink
                   textStyle="!text-[#35d9fa]  hover:!text-[#35d9fa] hover:underline"
-                  explorerAddress={explorerAddress}
+                  explorerAddress={MAINNET_MVX_EXPLORER_ADDRESS}
                   address={bountySubmitter}
                   precision={8}
                 />
@@ -87,6 +85,13 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
                 <div className="h-[21rem]">
                   <img src={stampFinalized} alt="Finalized" className="w-40 mx-auto" />
                   <div className="text-center text-2xl bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30">Finalized</div>
+                  <Link
+                    to={MARKETPLACE_DETAILS_PAGE + finalizedDataNftIdentifier}
+                    target="_blank"
+                    className="relative z-[100] mt-16 text-[#35d9fa] hover:underline   md:text-xl  flex flex-row gap-1 justify-center items-center">
+                    View Collection
+                    <ExternalLinkIcon width={20} />
+                  </Link>
                 </div>
               ) : (
                 <>
@@ -115,6 +120,14 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
               ) : !address ? (
                 <div className="flex flex-row gap-2 justify-between items-center">
                   <div className="text-center items-center bg-[#2495AC] dark:bg-[#022629] p-1 px-3 rounded-2xl shadow-inner shadow-[#35d9fa]/30">Finalized</div>
+
+                  <Link
+                    to={MARKETPLACE_DETAILS_PAGE + finalizedDataNftIdentifier}
+                    target="_blank"
+                    className="relative z-[100]  text-[#35d9fa] hover:underline text-xs md:text-sm  flex flex-row gap-1 justify-center items-center">
+                    View Collection
+                    <ExternalLinkIcon width={15} />
+                  </Link>
                 </div>
               ) : (
                 <div className="h-6"> </div>

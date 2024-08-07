@@ -3,20 +3,20 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import bs58 from "bs58";
 import { Loader } from "lucide-react";
 import { FlaskRound } from "lucide-react";
-import { IS_DEVNET } from "appsConfig";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
 import { SUPPORTED_SOL_COLLECTIONS } from "config";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
 import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import { BlobDataType } from "libs/types";
+import { getApiWeb2Apps, sleep } from "libs/utils";
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
 import useSolBitzStore from "store/solBitz";
-import PowerUpBounty from "./PowerUpBounty";
-import BonusBitzHistory from "../BonusBitzHistory";
-import { getDataBounties, GiveBitzDataBounty } from "../config";
-import { LeaderBoardItemType } from "../index";
-import LeaderBoardTable from "../LeaderBoardTable";
-import { BlobDataType, getApiWeb2Apps, sleep } from "../utils";
+import { getDataBounties } from "./configSol";
+import PowerUpBounty from "../common/GiveBitz/PowerUpBounty";
+import { GiveBitzDataBounty, LeaderBoardItemType } from "../common/interfaces";
+import LeaderBoardTable from "../common/LeaderBoardTable";
+import BonusBitzHistory from "../common/BonusBitzHistory";
 
 const GiveBitzBase = () => {
   const { publicKey, signMessage } = useWallet();
@@ -99,7 +99,7 @@ const GiveBitzBase = () => {
       };
       try {
         console.log("GET CALL -----> xpGamePrivate/givenBits: giverAddr only");
-        const res = await fetch(`${getApiWeb2Apps(IS_DEVNET ? "devnet" : "mainnet")}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}`, callConfig);
+        const res = await fetch(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}`, callConfig);
         const data = await res.json();
         await sleep(2);
         // update stores
@@ -126,7 +126,7 @@ const GiveBitzBase = () => {
     try {
       // S: ACTUAL LOGIC
       console.log("GET CALL -----> xpGamePrivate/giverLeaderBoard");
-      const res = await fetch(`${getApiWeb2Apps(IS_DEVNET ? "devnet" : "mainnet")}/datadexapi/xpGamePrivate/giverLeaderBoard`, callConfig);
+      const res = await fetch(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/giverLeaderBoard`, callConfig);
       const data = await res.json();
       const _toLeaderBoardTypeArr: LeaderBoardItemType[] = data.map((i: any) => {
         const item: LeaderBoardItemType = {
@@ -153,7 +153,7 @@ const GiveBitzBase = () => {
     };
     try {
       const res = await fetch(
-        `${getApiWeb2Apps(IS_DEVNET ? "devnet" : "mainnet")}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
+        `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
         callConfig
       );
       const data = await res.json();
@@ -175,7 +175,7 @@ const GiveBitzBase = () => {
     try {
       console.log("GET CALL -----> xpGamePrivate/givenBits: giverAddr && getterAddr");
       const res = await fetch(
-        `${getApiWeb2Apps(IS_DEVNET ? "devnet" : "mainnet")}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}&getterAddr=${getterAddr}&campaignId=${campaignId}`,
+        `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}&getterAddr=${getterAddr}&campaignId=${campaignId}`,
         callConfig
       );
       const data = await res.json();
@@ -196,10 +196,7 @@ const GiveBitzBase = () => {
     try {
       // S: ACTUAL LOGIC
       console.log("GET CALL -----> xpGamePrivate/getterLeaderBoard : getterAddr =", getterAddr);
-      const res = await fetch(
-        `${getApiWeb2Apps(IS_DEVNET ? "devnet" : "mainnet")}/datadexapi/xpGamePrivate/getterLeaderBoard?getterAddr=${getterAddr}&campaignId=${campaignId}`,
-        callConfig
-      );
+      const res = await fetch(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/getterLeaderBoard?getterAddr=${getterAddr}&campaignId=${campaignId}`, callConfig);
       const data = await res.json();
       const _toLeaderBoardTypeArr: LeaderBoardItemType[] = data.map((i: any) => {
         const item: LeaderBoardItemType = {

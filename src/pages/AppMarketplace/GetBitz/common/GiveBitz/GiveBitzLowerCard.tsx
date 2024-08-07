@@ -4,22 +4,11 @@ import { motion } from "framer-motion";
 import { ArrowBigRightDashIcon, ExternalLinkIcon } from "lucide-react";
 import bitzLogo from "assets/img/getbitz/givebitz/flaskBottle.png";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+import { useAccountStore } from "store/account";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import useSolBitzStore from "store/solBitz";
 import GiverLeaderboard from "./GiverLeaderboard";
-
-export interface LeaderBoardGiverItemType {
-  giverAddr: string;
-  bits: number;
-}
-interface GiveBitzLowerCardProps {
-  bountySubmitter: string;
-  bountyId: string;
-  sendPowerUp: (args: { bitsVal: number; bitsToWho: string; bitsToCampaignId: string; isNewGiver: number }) => Promise<boolean>;
-  fetchGivenBitsForGetter: (args: { getterAddr: string; campaignId: string }) => Promise<number>;
-  fetchGetterLeaderBoard: () => void;
-  isSendingPowerUp: boolean;
-  setIsSendingPowerUp: any;
-}
+import { GiveBitzLowerCardProps } from "../interfaces";
 
 const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
   const { bountyId, bountySubmitter, sendPowerUp, fetchGivenBitsForGetter, fetchGetterLeaderBoard, isSendingPowerUp, setIsSendingPowerUp } = props;
@@ -28,30 +17,29 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
   const [termsOfUseCheckbox, setTermsOfUseCheckbox] = useState(false);
   const [bitzVal, setBitzVal] = useState<number>(0);
   const [bitzGivenToCreator, setBitzGivenToCreator] = useState<number>(-1);
-  const bitzBalance = useSolBitzStore((state: any) => state.bitzBalance);
+  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
+  const solBitzBalance = useSolBitzStore((state) => state.bitzBalance);
+  const mvxBitzBalance = useAccountStore((state) => state.bitzBalance);
+  const bitzBalance = defaultChain === "multiversx" ? mvxBitzBalance : solBitzBalance;
 
   useEffect(() => {
     async function fetchData() {
-      const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({
-        getterAddr: bountyId === "b20" ? "erd1lgyz209038gh8l2zfxq68kzl9ljz0p22hv6l0ev8fydhx8s9cwasdtrua2" : bountySubmitter,
-        campaignId: bountyId,
-      });
+      const _fetchGivenBitsForCreator = await fetchGivenBitsForGetter({ getterAddr: bountySubmitter, campaignId: bountyId });
       setBitzGivenToCreator(_fetchGivenBitsForCreator);
     }
     fetchData();
-  }, [bountyId, bountySubmitter, fetchGivenBitsForGetter]);
+  }, []);
 
   async function handlePowerUp() {
     setIsSendingPowerUp(true);
     setIsPowerUpSuccess(false);
     setTweetText("");
     const bitzSent = bitzVal;
-
     const _isPowerUpSuccess = await sendPowerUp({
       bitsVal: bitzVal,
-      bitsToWho: bountyId === "b20" ? "erd1lgyz209038gh8l2zfxq68kzl9ljz0p22hv6l0ev8fydhx8s9cwasdtrua2" : bountySubmitter,
+      bitsToWho: bountySubmitter,
       bitsToCampaignId: bountyId,
-      isNewGiver: bitzGivenToCreator === undefined || bitzGivenToCreator <= 0 ? 1 : 0,
+      isNewGiver: bitzGivenToCreator <= 0 ? 1 : 0,
     });
 
     if (_isPowerUpSuccess) {
@@ -102,10 +90,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
           <motion.div
             className="flex flex-col items-center justify-between w-full h-full absolute top-0 left-0"
             initial={{ x: 0 }}
-            animate={{
-              x: isPowerUpSuccess ? 0 : "100%",
-              opacity: isPowerUpSuccess ? 1 : 0,
-            }}
+            animate={{ x: isPowerUpSuccess ? 0 : "100%", opacity: isPowerUpSuccess ? 1 : 0 }}
             transition={{ duration: 0.6 }}>
             <p> Share your support for the bounty! Tweet about your contribution and help spread the word.</p>
 
@@ -131,10 +116,7 @@ const GiveBitzLowerCard: React.FC<GiveBitzLowerCardProps> = (props) => {
           <motion.div
             className="flex flex-col items-start justify-between w-full h-full absolute top-0 left-0"
             initial={{ x: 0 }}
-            animate={{
-              x: !isPowerUpSuccess ? 0 : "100%",
-              opacity: !isPowerUpSuccess ? 1 : 0,
-            }}
+            animate={{ x: !isPowerUpSuccess ? 0 : "100%", opacity: !isPowerUpSuccess ? 1 : 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}>
             <div>Give More BiTz</div>
             <div className="mb-3 mt-1 w-full">

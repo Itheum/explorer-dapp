@@ -9,7 +9,7 @@ import { decodeNativeAuthToken, getApiSolNft } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "./account";
 import { useNftsStore } from "./nfts";
-import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz";
+import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz/GetBitzMvx";
 
 export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { address } = useGetAccount();

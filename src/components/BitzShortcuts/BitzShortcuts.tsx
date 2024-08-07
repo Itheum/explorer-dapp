@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { isMostLikelyMobile } from "libs/utils/misc";
 import { Button } from "../../libComponents/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
-import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz";
+import { BIT_GAME_WINDOW_HOURS } from "../../pages/AppMarketplace/GetBitz/GetBitzMvx";
 import { useAccountStore } from "../../store/account";
 
 export const BitzDropdown = (props: any) => {

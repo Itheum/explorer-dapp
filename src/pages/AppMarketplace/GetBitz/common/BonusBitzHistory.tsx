@@ -1,21 +1,20 @@
 import React, { useEffect } from "react";
+import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Loader } from "lucide-react";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import { IS_DEVNET } from "appsConfig";
-import { SUPPORTED_SOL_COLLECTIONS } from "config";
-import { timeSince } from "libs/utils";
-import { getApiWeb2Apps, sleep } from "./utils";
-
-export interface BonusBitzHistoryItemType {
-  on: number;
-  reward: number;
-  amount: number;
-}
+import { GET_BITZ_TOKEN } from "appsConfig";
+import { Loader } from "components";
+import { createNftId, getApiWeb2Apps, sleep, timeSince } from "libs/utils";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
+import { BonusBitzHistoryItemType } from "./interfaces";
 
 const BonusBitzHistory: React.FC = () => {
+  const { address: mvxAddress } = useGetAccount();
   const { publicKey } = useWallet();
-  const address = publicKey?.toBase58();
+  const solAddress = publicKey?.toBase58() ?? "";
+  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
+  const address = defaultChain === "multiversx" ? mvxAddress : solAddress;
   const [isHistoryLoading, setHistoryIsLoading] = React.useState(false);
   const [bonusBitzHistory, setBonusBitzHistory] = React.useState<any[]>([]);
   const oneMonthAgo = Math.floor(Date.now() / 1000) - 2592000;
@@ -24,18 +23,16 @@ const BonusBitzHistory: React.FC = () => {
 
     const callConfig = {
       headers: {
-        "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-        Accept: "application/json, text/plain, */*",
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
       },
     };
 
     try {
       // S: ACTUAL LOGIC
       console.log("AXIOS CALL -----> xpGamePrivate/bonusHistoryForAddr");
-      const res = await fetch(`${getApiWeb2Apps(IS_DEVNET ? "devnet" : "mainnet")}/datadexapi/xpGamePrivate/bonusHistoryForAddr?addr=${address}`, callConfig);
-      const data = await res.json();
+      const { data } = await axios.get<any[]>(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/bonusHistoryForAddr?addr=${address}`, callConfig);
       console.log(data);
-      const bonusBitzHistoryT: BonusBitzHistoryItemType[] = data.map((i: any) => {
+      const bonusBitzHistoryT: BonusBitzHistoryItemType[] = data.map((i) => {
         const item: BonusBitzHistoryItemType = {
           amount: i.bits,
           on: Math.floor(i.on / 1000),
@@ -60,10 +57,8 @@ const BonusBitzHistory: React.FC = () => {
   useEffect(() => {
     if (address) {
       fetchBonusBitzHistory();
-    } else {
-      setBonusBitzHistory([]);
     }
-  }, [address]);
+  }, []);
 
   return (
     <>

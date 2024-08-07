@@ -7,8 +7,8 @@ import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
-import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom, AnalyticsPage, GamerPassport } from "./pages";
-import GetBitzSolView from "pages/AppMarketplace/GetBitzSol";
+import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitzMvx, BoberGameRoom, AnalyticsPage, GamerPassport } from "./pages";
+import GetBitzSol from "pages/AppMarketplace/GetBitz/GetBitzSol";
 
 export const routeNames = {
   home: "/",
@@ -98,13 +98,13 @@ export const routes: RouteWithTitleType[] = [
   {
     path: routeNames.getbitz,
     title: "Get Bitz",
-    component: GetBitz,
+    component: GetBitzMvx,
     authenticatedRoute: false,
   },
   {
     path: routeNames.getbitzsol,
     title: "Get Bitz",
-    component: GetBitzSolView,
+    component: GetBitzSol,
     authenticatedRoute: false,
   },
   {

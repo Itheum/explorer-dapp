@@ -3,7 +3,7 @@ import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { Layout } from "components";
 import { MvxContextProvider } from "contexts/mvx/MvxContextProvider";
 import { SolContextProvider } from "contexts/sol/SolContextProvider";
-import { MultiversxInfographics, MyWallet, PageNotFound, Unlock, GetBitz, BoberGameRoom } from "pages";
+import { MultiversxInfographics, MyWallet, PageNotFound, Unlock, GetBitzMvx, BoberGameRoom } from "pages";
 import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
@@ -11,7 +11,7 @@ import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { routes, routeNames } from "routes";
 import { ThemeProvider } from "./contexts/ThemeProvider";
 import { StoreProvider } from "./store/StoreProvider";
-import GetBitzSolView from "pages/AppMarketplace/GetBitzSol";
+import GetBitzSol from "pages/AppMarketplace/GetBitz/GetBitzSol";
 
 export const App = () => {
   return (
@@ -32,8 +32,8 @@ export const App = () => {
                   <Route path={`${routeNames.deepforestmusic}/:targetNonce/:targetMessageToBeSigned`} element={<DeepForestMusic />} />
                   <Route path={`${routeNames.timecapsule}/:targetNonce/:targetMessageToBeSigned`} element={<TimeCapsule />} />
                   <Route path={`${routeNames.mywallet}/:targetNonce/:targetMessageToBeSigned`} element={<MyWallet />} />
-                  <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitz />} />
-                  <Route path={`${routeNames.getbitzsol}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitzSolView />} />
+                  <Route path={`${routeNames.getbitz}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitzMvx />} />
+                  <Route path={`${routeNames.getbitzsol}/:targetNonce/:targetMessageToBeSigned`} element={<GetBitzSol />} />
                   <Route path={`${routeNames.bobergameroom}/:targetNonce/:targetMessageToBeSigned`} element={<BoberGameRoom />} />
                   <Route path="*" element={<PageNotFound />} />
                 </Routes>
