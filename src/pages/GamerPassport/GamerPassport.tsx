@@ -230,15 +230,17 @@ export const GamerPassport = () => {
           <div className="flex flex-col h-[100%] justify-center items-center">
             <h1 className="!text-white !text-2xl text-center md:!text-3xl">Gamer Passport</h1>
             <h2 className="!text-white !text-lg md:!text-xl md:w-[500px] text-center mt-2">Play your games, share your data, and score monthly rewards!</h2>
-            <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center mt-5">
-              <div className="bg-background rounded-md">
-                <Button
-                  onClick={() => scrollToSection("join-process")}
-                  className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                  Sign Up
-                </Button>
+            {!userInDataCollection && !userInReview && (
+              <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center mt-5">
+                <div className="bg-background rounded-md">
+                  <Button
+                    onClick={() => scrollToSection("join-process")}
+                    className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Sign Up
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -275,7 +277,7 @@ export const GamerPassport = () => {
                   {userCurrViewDataError && (
                     <div className="flex flex-col justify-center items-center mt-10">
                       <FontAwesomeIcon fade={true} color="#4691e2" icon={faHeartCrack} size="3x" className="m-2" />
-                      <p className="mt-2 bg-red-500 p-4 rounded-sm">{userCurrViewDataError}</p>
+                      <p className="mt-2 bg-blue-300 p-4 rounded-sm">{userCurrViewDataError}</p>
                     </div>
                   )}
 

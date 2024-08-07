@@ -34,6 +34,7 @@ const UnlockPage = () => {
   const isLoggedInMvX = !!address;
   const { publicKey } = useWallet();
   const addressSol = publicKey?.toBase58();
+  const { pathname } = useLocation();
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
@@ -41,10 +42,10 @@ const UnlockPage = () => {
   };
 
   const commonProps = {
-    // callbackRoute: location.pathname,
     nativeAuth: {
       ...nativeAuthProps,
     },
+    callbackRoute: pathname,
   };
 
   // @TODO, improve this so that only when user logs in we redirect, or else logout also breaks and redirects
@@ -90,7 +91,6 @@ const UnlockPage = () => {
                   <WalletConnectLoginButton
                     className="w-full !m-0"
                     loginButtonText="xPortal App"
-                    callbackRoute={location.pathname}
                     {...commonProps}
                     {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})}
                   />
@@ -100,7 +100,6 @@ const UnlockPage = () => {
                   <WebWalletLoginButton
                     loginButtonText={"Google (xAlias)"}
                     className="w-full !m-0"
-                    callbackRoute={location.pathname}
                     customWalletAddress={import.meta.env.VITE_ENV_NETWORK === "mainnet" ? "https://xalias.com" : "https://devnet.xalias.com"}
                     {...commonProps}></WebWalletLoginButton>
                 </>

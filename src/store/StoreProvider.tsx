@@ -117,8 +117,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
             let sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
             sumBonusBitz = sumBonusBitz < 0 ? 0 : sumBonusBitz;
 
-            // console.log(sumScoreBitz, sumBonusBitz, sumGivenBitz);
-
             updateBitzBalance(sumScoreBitz + sumBonusBitz - sumGivenBitz);
             updateGivenBitzSum(sumGivenBitz);
             updateBonusBitzSum(sumBonusBitz);
