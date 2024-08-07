@@ -81,7 +81,7 @@ export const ActionModalStep1 = (props: any) => {
                     value={psnUserName}
                     onChange={(e) => setPsnUserName(e.target.value)}
                     className="text-black p-2 w-[250px] rounded-sm mt-2"
-                    placeholder="foo_bar"
+                    placeholder="my_psn_user_name"
                   />
                   <p className="text-sm text-red-400 mt-3">
                     * Make sure you enter YOUR username, as you will be asked to prove ownership to claim your rewards! Bruh, we will find out! 😎
