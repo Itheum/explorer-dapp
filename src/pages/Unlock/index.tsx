@@ -32,9 +32,9 @@ const UnlockPage = () => {
   const { chainID } = useGetNetworkConfig();
   const { address } = useGetAccount();
   const isLoggedInMvX = !!address;
-  const { pathname } = useLocation();
   const { publicKey } = useWallet();
   const addressSol = publicKey?.toBase58();
+  const { pathname } = useLocation();
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,

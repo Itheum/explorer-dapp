@@ -9,7 +9,7 @@ import { ActionButton } from "./SharedComps";
 
 export const ActionModalStep1 = (props: any) => {
   const { showActionModel, handleHideActionModel } = props;
-  const { handleStep1Passed, handleStep1PSNUserName } = props;
+  const { handleStep1Passed, handleStep1PSNUserName, handleStep1EligibilityCheckResults } = props;
 
   const [psnUserName, setPsnUserName] = useState<string>("");
   const [eligibilityCheckLoading, setEligibilityCheckLoading] = useState<boolean>(false);
@@ -30,9 +30,11 @@ export const ActionModalStep1 = (props: any) => {
 
     if (eligibilityDecision.userNameExists) {
       setEligibilityUserNameTaken(true);
-    } else if (!eligibilityDecision.accountIdGood || !eligibilityDecision.titlesGood || !eligibilityDecision.presenceGood) {
+      // } else if (!eligibilityDecision.accountIdGood || !eligibilityDecision.titlesGood || !eligibilityDecision.presenceGood) {
+    } else if (!eligibilityDecision.accountIdGood || !eligibilityDecision.titlesGood) {
       setEligibilityUserNameNotSuitable(true);
     } else {
+      handleStep1EligibilityCheckResults(JSON.stringify(eligibilityDecision));
       handleStep1Passed(true);
       handleStep1PSNUserName(psnUserName);
       handleHideActionModel();
@@ -79,14 +81,15 @@ export const ActionModalStep1 = (props: any) => {
                     value={psnUserName}
                     onChange={(e) => setPsnUserName(e.target.value)}
                     className="text-black p-2 w-[250px] rounded-sm mt-2"
-                    placeholder="foo_bar"
+                    placeholder="my_psn_user_name"
                   />
                   <p className="text-sm text-red-400 mt-3">
-                    * Make sure you enter YOUR username as you will be asked to provide ownership of it to claim your rewards! Bruh, we will find out!
+                    * Make sure you enter YOUR username, as you will be asked to prove ownership to claim your rewards! Bruh, we will find out! 😎
                   </p>
                   <div
+                    className="mt-8"
                     onClick={() => {
-                      if (!eligibilityCheckLoading) {
+                      if (psnUserName.trim().length > 2 && !eligibilityCheckLoading) {
                         checkEligibilityViaAPI();
                       }
                     }}>
@@ -156,7 +159,7 @@ export const ActionModalStep1 = (props: any) => {
 export const ActionModalStep3 = (props: any) => {
   const { publicKey, signMessage } = useWallet();
   const { showActionModel, handleHideActionModel } = props;
-  const { step1PSNUserName, step2SolanaAddress, handleStep3Passed } = props;
+  const { step1PSNUserName, step1PSNEligibilityCheckResults, step2SolanaAddress, handleStep3Passed } = props;
 
   const [userSaveToLogAttempted, setUserSaveToLogAttempted] = useState<boolean>(false);
   const [userSavedToLog, setUserSavedToLog] = useState<boolean>(false);
@@ -179,6 +182,7 @@ export const ActionModalStep3 = (props: any) => {
 
     const checkRes = await axios.post(`${getApiWeb2Apps()}/datadexapi/gamepassport/addNewUserToLog`, {
       "psnUsername": step1PSNUserName,
+      "eligibilityCheckResults": step1PSNEligibilityCheckResults,
       "solAddress": step2SolanaAddress,
       "signatureNonce": preAccessNonce,
       "solSignature": encodedSignature,
@@ -223,31 +227,31 @@ export const ActionModalStep3 = (props: any) => {
             {!userSaveToLogAttempted && (
               <>
                 <div>
-                  <p className="font-bold italic opacity-80">
-                    Itheum is all about empowering you with data ownership! so we want to be fully transparent on how you data is collected and used. (it would
-                    be ironic if we don't right?). Everything you need to know about your data is below:
+                  <p className="text-sm font-bold italic opacity-80">
+                    Itheum is all about empowering you with data ownership! So, we want to be fully transparent about how your data is collected and used. (It
+                    would be ironic if we weren't, right?).
                   </p>
                 </div>
                 <div className="mt-4">
                   <p className="font-bold underline">Please read and agree to the following terms</p>
                   <ol className="mt-2">
-                    <li>1. You are using YOUR PSN username (no rewards if you don't! we will find out)</li>
+                    <li>1. You're using YOUR PSN username (no rewards if you don't! We have ways to find out 😜)</li>
                     <li>
                       2. You consent to us storing your PSN username and data securely{" "}
                       <a
                         className="!text-[#7a98df] hover:underline"
-                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/playstation/your-data"
+                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/data-collection-and-storage"
                         target="blank">
                         as detailed here
                       </a>
                     </li>
                     <li>
-                      3. All{" "}
+                      3. Gamer Passport{" "}
                       <a
                         className="!text-[#7a98df] hover:underline"
-                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/playstation/terms"
+                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport"
                         target="blank">
-                        these other terms
+                        terms of use
                       </a>
                     </li>
                   </ol>
@@ -258,6 +262,9 @@ export const ActionModalStep3 = (props: any) => {
                   <p>Solana Address : {step2SolanaAddress}</p>
                 </div>
                 <div className="mt-8">
+                  <p className="text-sm text-green-400 mt-3">
+                    * Note that clicking the button below will ask you to sign a message to prove wallet ownership. No gas or funds are used!
+                  </p>
                   <div
                     onClick={() => {
                       if (!saveToLogLoading) {
@@ -276,7 +283,7 @@ export const ActionModalStep3 = (props: any) => {
             {userSavedToLog && (
               <>
                 <FontAwesomeIcon fade={true} color="#4691e2" icon={faThumbsUp} size="3x" className="m-2" />
-                <p className="text-lg font-bold">Your details have been submitted and are being reviewed by our BOTs (unpaid interns).</p>
+                <p className="text-lg font-bold">Your details have been submitted and are being reviewed by our BOTs (unpaid interns 🤖).</p>
                 <p className="mt-2">
                   If all is good (most likely yes), you will be added to the program. Reach out to us on{" "}
                   <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/discord" target="blank">
