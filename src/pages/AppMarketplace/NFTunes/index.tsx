@@ -20,8 +20,6 @@ import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
 import { scrollToSection } from "libs/utils";
 import { useNftsStore } from "store/nfts";
 import manuImage from "assets/img/nf-tunes/manu.png";
