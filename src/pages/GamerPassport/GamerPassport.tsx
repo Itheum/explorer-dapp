@@ -7,11 +7,14 @@ import axios from "axios";
 import moment from "moment-timezone";
 import hero from "assets/img/gamer-passport/gamer-passport-adaptor-hero.png";
 import { CopyAddress } from "components/CopyAddress";
+import FAQAccordion from "components/FAQAccordion/FAQAccordion";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Button } from "libComponents/Button";
 import { itheumSolPreaccess } from "libs/sol/SolViewData";
+import { scrollToSection } from "libs/utils";
 import { getApiWeb2Apps } from "libs/utils";
 import { ActionModalStep1, ActionModalStep3 } from "./ActionModals";
-import { ActionButton, GameTitleSnapShotGrid, VolumeChartAnalytics } from "./SharedComps";
+import { ActionButton, GameTitleSnapShotGrid, VolumeChartAnalytics, faqList } from "./SharedComps";
 import { getAggregatedAnalyticsData } from "../Analytics/AnalyticsShared";
 
 export const GamerPassport = () => {
@@ -121,7 +124,7 @@ export const GamerPassport = () => {
         if (joinedDecision.success) {
           if (joinedDecision.inReview) {
             setUserInReview(true);
-          } else if (joinedDecision.InDataCollection) {
+          } else if (joinedDecision.inDataCollection) {
             setUserInDataCollection(true);
           }
         } else {
@@ -218,6 +221,15 @@ export const GamerPassport = () => {
           <div className="flex flex-col bg-red-000 h-[100%] justify-center items-center">
             <h1 className="!text-white !text-2xl text-center md:!text-3xl">Gamer Passport</h1>
             <h2 className="!text-white !text-lg md:!text-xl md:w-[500px] text-center mt-2">Play your games, share your data, and score monthly rewards!</h2>
+            <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center mt-5">
+              <div className="bg-background rounded-md">
+                <Button
+                  onClick={() => scrollToSection("join-process")}
+                  className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                  Sign Up
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -463,8 +475,7 @@ export const GamerPassport = () => {
             </div>
 
             <div id="FAQ" className="mt-10">
-              <h2 className="!text-2xl text-center">FAQ</h2>
-              <p className="opacity-50 text-center mt-2 mb-5">I'm sure you have many questions so here is a list of common ones</p>
+              <FAQAccordion faqList={faqList} borderStyleStr="border-dotted border-2 border-[#006ee4]" />
             </div>
           </div>
         )}

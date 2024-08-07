@@ -30,7 +30,8 @@ export const ActionModalStep1 = (props: any) => {
 
     if (eligibilityDecision.userNameExists) {
       setEligibilityUserNameTaken(true);
-    } else if (!eligibilityDecision.accountIdGood || !eligibilityDecision.titlesGood || !eligibilityDecision.presenceGood) {
+      // } else if (!eligibilityDecision.accountIdGood || !eligibilityDecision.titlesGood || !eligibilityDecision.presenceGood) {
+    } else if (!eligibilityDecision.accountIdGood || !eligibilityDecision.titlesGood) {
       setEligibilityUserNameNotSuitable(true);
     } else {
       handleStep1Passed(true);
@@ -82,11 +83,11 @@ export const ActionModalStep1 = (props: any) => {
                     placeholder="foo_bar"
                   />
                   <p className="text-sm text-red-400 mt-3">
-                    * Make sure you enter YOUR username as you will be asked to provide ownership of it to claim your rewards! Bruh, we will find out!
+                    * Make sure you enter YOUR username, as you will be asked to prove ownership to claim your rewards! Bruh, we will find out! 😎
                   </p>
                   <div
                     onClick={() => {
-                      if (!eligibilityCheckLoading) {
+                      if (psnUserName.trim().length > 2 && !eligibilityCheckLoading) {
                         checkEligibilityViaAPI();
                       }
                     }}>
@@ -224,30 +225,30 @@ export const ActionModalStep3 = (props: any) => {
               <>
                 <div>
                   <p className="font-bold italic opacity-80">
-                    Itheum is all about empowering you with data ownership! so we want to be fully transparent on how you data is collected and used. (it would
-                    be ironic if we don't right?). Everything you need to know about your data is below:
+                    Itheum is all about empowering you with data ownership! So, we want to be fully transparent about how your data is collected and used. (It
+                    would be ironic if we weren't, right?).
                   </p>
                 </div>
                 <div className="mt-4">
                   <p className="font-bold underline">Please read and agree to the following terms</p>
                   <ol className="mt-2">
-                    <li>1. You are using YOUR PSN username (no rewards if you don't! we will find out)</li>
+                    <li>1. You're using YOUR PSN username (no rewards if you don't! We have ways to find out 😜)</li>
                     <li>
                       2. You consent to us storing your PSN username and data securely{" "}
                       <a
                         className="!text-[#7a98df] hover:underline"
-                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/playstation/your-data"
+                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/data-collection-and-storage"
                         target="blank">
                         as detailed here
                       </a>
                     </li>
                     <li>
-                      3. All{" "}
+                      3. Gamer Passport{" "}
                       <a
                         className="!text-[#7a98df] hover:underline"
-                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport/playstation/terms"
+                        href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/gamer-passport"
                         target="blank">
-                        these other terms
+                        terms of use
                       </a>
                     </li>
                   </ol>
@@ -276,7 +277,7 @@ export const ActionModalStep3 = (props: any) => {
             {userSavedToLog && (
               <>
                 <FontAwesomeIcon fade={true} color="#4691e2" icon={faThumbsUp} size="3x" className="m-2" />
-                <p className="text-lg font-bold">Your details have been submitted and are being reviewed by our BOTs (unpaid interns).</p>
+                <p className="text-lg font-bold">Your details have been submitted and are being reviewed by our BOTs (unpaid interns 🤖).</p>
                 <p className="mt-2">
                   If all is good (most likely yes), you will be added to the program. Reach out to us on{" "}
                   <a className="!text-[#7a98df] hover:underline" href="https://itheum.io/discord" target="blank">
