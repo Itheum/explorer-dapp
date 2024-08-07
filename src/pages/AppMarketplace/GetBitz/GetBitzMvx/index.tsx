@@ -159,6 +159,11 @@ export const GetBitzMvx = (props: any) => {
   const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     const timeout = setTimeout(() => {
       setShowMessage(false);
     }, 3000);

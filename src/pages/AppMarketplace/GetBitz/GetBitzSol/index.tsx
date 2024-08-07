@@ -224,6 +224,11 @@ const GetBitzSol = () => {
   }, [publicKey, nfts]);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     const timeout = setTimeout(() => {
       setShowMessage(false);
     }, 3000);
