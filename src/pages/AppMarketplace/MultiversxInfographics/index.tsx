@@ -17,7 +17,7 @@ import { useNftsStore } from "store/nfts";
 import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
 import { Button } from "../../../libComponents/Button";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
 
 const options = {
   cMapUrl: "/cmaps/",
@@ -32,15 +32,12 @@ export const MultiversxInfographics = () => {
   const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { chainID } = useGetNetworkConfig();
-
   const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-
   const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
-
   const [file, setFile] = useState<PDFFile>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1); //setting 1 to show first page

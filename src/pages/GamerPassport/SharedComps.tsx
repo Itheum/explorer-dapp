@@ -124,6 +124,28 @@ export function VolumeChartAnalytics({
 
 export const faqList = [
   {
+    title: "I've joined, but my submission is being reviewed, what next?",
+    content: (
+      <>
+        <p>
+          Once your submission is received, it can take around 12 hours for your submission to be approved and for the first data snapshot to be collected and
+          to appear on this app page. So, please come back in some time and it should be available. (We are working to speed things up)
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "I've joined, but no data is shown yet, how long will it take?",
+    content: (
+      <>
+        <p>
+          Once your submission is approved, it can take around 12 hours for your first data snapshot to be collected and to appear on this app page. So, please
+          come back in some time and it should be available. (We are working to speed things up)
+        </p>
+      </>
+    ),
+  },
+  {
     title: "I'm not a PlayStation gamer, can I join?",
     content: (
       <>
@@ -208,7 +230,7 @@ export const faqList = [
     ),
   },
   {
-    title: "I've joined and I want to increase the amount of data I generate to get more rewards, can I do this?",
+    title: "I want to increase the amount of data I generate to get more rewards, can I do this?",
     content: (
       <p>
         Right now, we’re in passive data collection mode, automatically gathering data from your connected platforms. But stay tuned! We're working on letting

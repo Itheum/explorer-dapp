@@ -222,12 +222,12 @@ export const GamerPassport = () => {
 
   return (
     <HeaderComponent pageTitle={""} subTitle={""} hasImage={false}>
-      <div className="w-[100%] bg-green-000">
+      <div className="w-[100%]">
         <div
           id="hero"
-          className="mt-2 bg-red-100 h-[200px] md:h-[400px] bg-no-repeat bg-cover md:bg-contain bg-top md:bg-fixed rounded-3xl"
+          className="mt-2 h-[200px] md:h-[400px] bg-no-repeat bg-cover md:bg-contain bg-top md:bg-fixed rounded-3xl"
           style={{ "backgroundImage": `url(${hero})` }}>
-          <div className="flex flex-col bg-red-000 h-[100%] justify-center items-center">
+          <div className="flex flex-col h-[100%] justify-center items-center">
             <h1 className="!text-white !text-2xl text-center md:!text-3xl">Gamer Passport</h1>
             <h2 className="!text-white !text-lg md:!text-xl md:w-[500px] text-center mt-2">Play your games, share your data, and score monthly rewards!</h2>
             <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center mt-5">
@@ -270,12 +270,12 @@ export const GamerPassport = () => {
             )}
 
             {userInDataCollection && (
-              <div id="my-data-snapshot" className="flex flex-col justify-center items-center bg-red-000">
+              <div id="my-data-snapshot" className="flex flex-col justify-center items-center">
                 <div className="flex flex-col justify-center items-center">
                   {userCurrViewDataError && (
                     <div className="flex flex-col justify-center items-center mt-10">
                       <FontAwesomeIcon fade={true} color="#4691e2" icon={faHeartCrack} size="3x" className="m-2" />
-                      <p className="mt-2 bg-red-500 p-4 rounded-sm">Something is broken : {userCurrViewDataError}</p>
+                      <p className="mt-2 bg-red-500 p-4 rounded-sm">{userCurrViewDataError}</p>
                     </div>
                   )}
 
@@ -292,7 +292,7 @@ export const GamerPassport = () => {
                         <h3 className="!text-2xl text-center">You are plugged into the Gaming Data Realm</h3>
                       </div>
 
-                      <div className="mt-10 bg-red-000 flex flex-col md:flex-row bg-red-000 w-[100%]">
+                      <div className="mt-10 flex flex-col md:flex-row w-[100%]">
                         <VolumeChartAnalytics
                           dataLakeUserGrowthData={dataLakeUserGrowthData}
                           dataLakeDataVolumeGrowthData={dataLakeDataVolumeGrowthData}
@@ -300,16 +300,16 @@ export const GamerPassport = () => {
                         />
                       </div>
 
-                      <div className="mt-2 bg-red-000 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row w-[100%]">
-                        <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[150px] p-3 md:p-0">
+                      <div className="mt-2 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row w-[100%]">
+                        <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[150px] p-3 md:p-0">
                           <p className="text-xl">Last Snapshot</p>
                           <p className="text-lg mt-1 opacity-50">{moment(userCurrViewData.updatedOn).format("LLLL")}</p>
                         </div>
-                        <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[150px] p-3 md:p-0">
+                        <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[150px] p-3 md:p-0">
                           <p className="text-xl">Data Volume Contributed (bytes)</p>
                           <p className="text-xl mt-2">{userCurrViewData.totalBytes.toLocaleString()}</p>
                         </div>
-                        <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[150px] p-3 md:p-0">
+                        <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[150px] p-3 md:p-0">
                           <p className="text-xl">Your $ITHEUM Rewards</p>
                           <FontAwesomeIcon fade={true} color="#4691e2" icon={faBatteryQuarter} size="3x" className="m-2" />
                           <p className="">Charging...</p>
@@ -336,22 +336,22 @@ export const GamerPassport = () => {
                 The Itheum Data Realm is a big pool of 'Passive' Data from users, mainly filled with gaming data right now. Data Coalition DAOs handle the trade
                 and share the earnings with the users who contribute.
               </p>
-              <div className="mt-10 bg-red-000 flex flex-col md:flex-row">
+              <div className="mt-10 flex flex-col md:flex-row">
                 <VolumeChartAnalytics dataLakeUserGrowthData={dataLakeUserGrowthData} dataLakeDataVolumeGrowthData={dataLakeDataVolumeGrowthData} />
               </div>
 
-              <div className="mt-2 bg-red-000 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+              <div className="mt-2 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl">Supported Platforms</p>
                   <p className="md:text-3xl mt-1">Live: PlayStation</p>
                   <p className="md:text-lg mt-1 opacity-50">Coming: XBOX, Steam</p>
                 </div>
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl">Reward Pool</p>
                   <p className="md:text-3xl mt-2">1,000,000 ITHEUM</p>
                   <p className="">* reserved for first 500 gamers</p>
                 </div>
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl">Rewards Emitted</p>
                   <FontAwesomeIcon fade={true} color="#4691e2" icon={faBatteryQuarter} size="3x" className="m-2" />
                   <p className="">Charging...</p>
@@ -366,8 +366,8 @@ export const GamerPassport = () => {
                   Check if you are eligible, login with your Google Account and you're in! Told you it's easy...
                 </p>
 
-                <div className="mt-2 bg-red-000 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
-                  <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[250px] p-3 md:p-0">
+                <div className="mt-2 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
+                  <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[250px] p-3 md:p-0">
                     <p className="md:text-3xl">1.</p>
                     {step1Passed ? (
                       <>
@@ -388,7 +388,7 @@ export const GamerPassport = () => {
                       </>
                     )}
                   </div>
-                  <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[250px] p-3 md:p-0">
+                  <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[250px] p-3 md:p-0">
                     <p className="md:text-3xl">2.</p>
                     {step2Passed ? (
                       <>
@@ -408,7 +408,7 @@ export const GamerPassport = () => {
                       </>
                     )}
                   </div>
-                  <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[250px] p-3 md:p-0">
+                  <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[250px] p-3 md:p-0">
                     <p className="md:text-3xl">3.</p>
                     {step3Passed ? (
                       <>
@@ -440,16 +440,16 @@ export const GamerPassport = () => {
               <p className="opacity-50 text-center mt-2 mb-5">
                 Cause gaming data ownership is the future! blah blah blah... but seriously, there are some cool perks!
               </p>
-              <div className="mt-2 bg-red-000 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+              <div className="mt-2 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl w-[80%] text-center">Compare Yourself to Top Gamers</p>
                   <p className="text-sm file:md:text-md w-[80%] text-center">See how you stack up against other gamers and check out what they're playing</p>
                 </div>
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl w-[80%] text-center">Effortless! Works in the "Background</p>
                   <p className="text-sm md:text-md w-[80%] text-center">Your data is collected passively, so just keep playing games like usual!</p>
                 </div>
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl w-[80%] text-center">Earn $ITHEUM Rewards for Your Data</p>
                   <p className="text-sm md:text-md w-[80%] text-center">Your data's gold! Play more, share more, and rack up the rewards!</p>
                 </div>
@@ -462,34 +462,35 @@ export const GamerPassport = () => {
                 Yep, your data is gold, and Itheum wants to break the cycle of big corporations exploiting it. Here’s the "VOODOO" behind the scenes:
               </p>
 
-              <div className="mt-2 bg-red-000 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+              <div className="mt-2 flex flex-col justify-around space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl w-[80%] text-center">Itheum Data Realm</p>
                   <p className="text-sm md:text-md w-[80%] text-center">
                     We're filling our Data Realm with your passive gaming data. Right now, you share your data, and we reward you with $ITHEUM from the
                     protocol.
                   </p>
                 </div>
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl w-[80%] text-center">Data Coalition DAO</p>
                   <p className="text-sm md:text-md w-[80%] text-center">
                     When the data realm is full, a Data Coalition DAO (DC DAO) will take charge of the giant data pool.
                   </p>
                 </div>
-                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl bg-red-000 flex-1 h-[200px] p-3 md:p-0">
+                <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl w-[80%] text-center">Bulk Data Broker</p>
                   <p className="text-sm md:text-md w-[80%] text-center">The DC DAO will trade your data with AI companies and share the earnings with you.</p>
                 </div>
               </div>
             </div>
-
-            <div id="FAQ" className="mt-10">
-              <FAQAccordion faqList={faqList} borderStyleStr="border-dotted border-2 border-[#006ee4]" />
-            </div>
           </div>
         )}
 
-        <div id="footer" className="mt-10 p-10"></div>
+        <>
+          <div id="FAQ" className="mt-10">
+            <FAQAccordion faqList={faqList} borderStyleStr="border-dotted border-2 border-[#006ee4]" />
+          </div>
+          <div id="footer" className="mt-10 p-10"></div>
+        </>
 
         <ActionModalStep1
           showActionModel={showActionModalStep1}
