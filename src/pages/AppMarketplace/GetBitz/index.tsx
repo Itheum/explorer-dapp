@@ -110,7 +110,9 @@ const MEME_IMGS = [
   Meme29,
 ];
 
-export const GetBitz = () => {
+export const GetBitz = (props: any) => {
+  const { modelMode } = props;
+
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
@@ -161,15 +163,16 @@ export const GetBitz = () => {
   const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     const timeout = setTimeout(() => {
       setShowMessage(false);
     }, 3000);
 
     return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -304,6 +307,7 @@ export const GetBitz = () => {
           animation = await fireworks({ background: "transparent", sounds: true });
         } else {
           animation = await confetti({
+            zIndex: 10000,
             spread: 360,
             ticks: 100,
             gravity: 0,
@@ -446,7 +450,7 @@ export const GetBitz = () => {
     if (!address) {
       return (
         <Link className="relative" to={routeNames.unlock} state={{ from: location.pathname }}>
-          <img className="z-5 rounded-[3rem] w-full cursor-pointer" src={ImgLogin} alt={"Connect your wallet to play"} />
+          <img className={cn("-z-1 z-5 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")} src={ImgLogin} alt="Connect your wallet to play" />
         </Link>
       );
     }
@@ -455,7 +459,11 @@ export const GetBitz = () => {
     if ((address && checkingIfHasGameDataNFT && !hasGameDataNFT) || cooldown === -2) {
       return (
         <div className="relative">
-          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+          <img
+            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
+            src={ImgLoadingGame}
+            alt="Checking if you have <BiTz> Data NFT"
+          />
         </div>
       );
     }
@@ -470,7 +478,11 @@ export const GetBitz = () => {
               goToMarketplace(gameDataNFT.tokenIdentifier);
             }
           }}>
-          <img className="z-5 rounded-[3rem] w-full cursor-pointer" src={ImgGetDataNFT} alt={"Get <BiTz> Data NFT from Data NFT Marketplace"} />
+          <img
+            className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
+            src={ImgGetDataNFT}
+            alt="Get <BiTz> Data NFT from Data NFT Marketplace"
+          />
         </div>
       );
     }
@@ -517,7 +529,7 @@ export const GetBitz = () => {
                   return <> </>;
                 } else {
                   return (
-                    <div className="absolute z-5 w-full h-full rounded-[3rem] bg-black/90">
+                    <div className={cn("absolute z-5 w-full h-full rounded-[3rem] bg-black/90", modelMode ? "rounded" : "")}>
                       <div className="flex w-full h-full items-center justify-center">
                         <div className="text-3xl md:text-5xl flex flex-col items-center justify-center text-white ">
                           <p className="my-4 text-xl md:text-3xl "> You can play again in: </p>{" "}
@@ -535,7 +547,7 @@ export const GetBitz = () => {
             onClick={() => {
               setLoadBlankGameCanvas(true);
             }}
-            className="rounded-[3rem] w-full cursor-pointer"
+            className={cn("rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
             src={ImgPlayGame}
             alt={"Start Game"}
           />
@@ -547,59 +559,67 @@ export const GetBitz = () => {
     if (_loadBlankGameCanvas && !_gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          {_isMemeBurnHappening && <Torch />}
-          <img className={cn("rounded-[3rem] w-full", _isMemeBurnHappening ? "cursor-none" : "")} src={ImgGameCanvas} alt={"Play Game"} />
+          {!modelMode && _isMemeBurnHappening && <Torch />}
+          <img
+            className={cn("rounded-[3rem] w-full", _isMemeBurnHappening && !modelMode ? "cursor-none" : "", modelMode ? "rounded" : "")}
+            src={ImgGameCanvas}
+            alt={"Play Game"}
+          />
+          <div>
+            <div
+              className={cn(
+                "select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
+                _isMemeBurnHappening && !modelMode ? "cursor-none" : "",
+                modelMode ? "scale-75 !mt-[35px]" : ""
+              )}>
+              {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
+                <>
+                  <div
+                    className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
+                    onClick={() => {
+                      setIsMemeBurnHappening(true);
+                    }}>
+                    <p className="text-[16px] lg:text-xl">Welcome Back Itheum OG!</p>
+                    <p className="text-[16px] mt-2 lg:text-xl lg:mt-5">
+                      Ready to grab yourself some of them <span className="lg:text-3xl">🤤</span> {`<BiTz>`} points?
+                    </p>
+                    <p className="text-[18px] font-bold lg:text-2xl mt-5">
+                      But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!
+                    </p>
+                    <p className="text-[16px] font-bold mt-2 lg:mt-5 lg:text-xl">Click here when you are ready...</p>
+                    <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
+                  </div>
+                </>
+              )) ||
+                null}
 
-          <div
-            className={cn(
-              "select-none flex justify-center items-center mt-[2rem] w-[100%] h-[350px] md:h-[400px] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50 static lg:absolute lg:pb-[.5rem] lg:w-[500px] lg:h-[420px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
-              _isMemeBurnHappening ? "cursor-none" : ""
-            )}>
-            {(!_isFetchingDataMarshal && !_isMemeBurnHappening && (
-              <>
+              {_isMemeBurnHappening && (
                 <div
-                  className="text-center text-xl text-gray-950 text-foreground cursor-pointer"
+                  className={cn("z-10 relative cursor-none select-none p-8", modelMode ? "cursor-pointer" : "")}
                   onClick={() => {
-                    setIsMemeBurnHappening(true);
+                    setBurnProgress((prev) => prev + 1);
                   }}>
-                  <p className="text-[16px] lg:text-xl">Welcome Back Itheum OG!</p>
-                  <p className="text-[16px] mt-2 lg:text-xl lg:mt-5">
-                    Ready to grab yourself some of them <span className="lg:text-3xl">🤤</span> {`<BiTz>`} points?
-                  </p>
-                  <p className="text-[18px] font-bold lg:text-2xl mt-5">But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!</p>
-                  <p className="text-[16px] font-bold mt-2 lg:mt-5 lg:text-xl">Click here when you are ready...</p>
-                  <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
+                  <p className="text-center text-md text-gray-950 text-foreground lg:text-xl ">Light up this Meme Sacrifice!</p>
+                  <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
+                  <BurningImage src={randomMeme} burnProgress={burnProgress} modelMode={modelMode} />
+                  <div className="glow" style={{ opacity: burnFireGlow }}></div>
+                  <div className="flame !top-[125px] lg:!top-[90px]" style={{ transform: burnFireScale }}></div>
                 </div>
-              </>
-            )) ||
-              null}
+              )}
 
-            {_isMemeBurnHappening && (
-              <div
-                className="z-10 relative cursor-none select-none p-8"
-                onClick={() => {
-                  setBurnProgress((prev) => prev + 1);
-                }}>
-                <p className="text-center text-md text-gray-950 text-foreground lg:text-xl ">Light up this Meme Sacrifice!</p>
-                <p className="text-gray-950 text-sm text-center mb-[1rem]">Click to burn</p>
-                <BurningImage src={randomMeme} burnProgress={burnProgress} />
-                <div className="glow" style={{ opacity: burnFireGlow }}></div>
-                <div className="flame !top-[125px] lg:!top-[90px]" style={{ transform: burnFireScale }}></div>
-              </div>
-            )}
+              {_isFetchingDataMarshal && (
+                <div>
+                  <p className="text-center text-md text-gray-950 text-foreground lg:text-xl mb-[1rem]">
+                    Did the {`<BiTz>`} Generator God like that Meme Sacrifice? Only time will tell...
+                  </p>
+                  <p className="text-gray-950 text-sm text-center mb-[1rem]">Hang tight, result incoming</p>
+                  <img className="w-[160px] lg:w-[230px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
+                </div>
+              )}
+            </div>
 
-            {_isFetchingDataMarshal && (
-              <div>
-                <p className="text-center text-md text-gray-950 text-foreground lg:text-xl mb-[1rem]">
-                  Did the {`<BiTz>`} Generator God like that Meme Sacrifice? Only time will tell...
-                </p>
-                <p className="text-gray-950 text-sm text-center mb-[1rem]">Hang tight, result incoming</p>
-                <img className="w-[160px] lg:w-[230px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
-              </div>
-            )}
+            {!modelMode && spritLayerPointsCloud()}
           </div>
-
-          {spritLayerPointsCloud()}
         </div>
       );
     }
@@ -608,10 +628,12 @@ export const GetBitz = () => {
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className="rounded-[3rem] w-full cursor-pointer" src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
+          <img className={cn("rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")} src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
           <div
-            className="flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static
-                        lg:absolute lg:p-[2rem] lg:pb-[.5rem] lg:w-[500px] lg:h-[400px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2">
+            className={cn(
+              "flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static lg:absolute lg:p-[2rem] lg:pb-[.5rem] lg:w-[500px] lg:h-[400px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
+              modelMode ? "scale-75 !mt-[35px]" : ""
+            )}>
             {_viewDataRes && !_viewDataRes.error && (
               <>
                 {_viewDataRes.data.gamePlayResult.triedTooSoonTryAgainInMs > 0 && (
@@ -723,7 +745,7 @@ export const GetBitz = () => {
             )}
           </div>
 
-          {spritLayerPointsCloud()}
+          {!modelMode && spritLayerPointsCloud()}
         </div>
       );
     }
@@ -866,34 +888,40 @@ export const GetBitz = () => {
           </motion.div>
         </div> */}
         <div className="absolute -z-1 w-full">
-          <img className="-z-1 rounded-[3rem] w-full cursor-pointer" src={ImgLoadingGame} alt={"Checking if you have <BiTz> Data NFT"} />
+          <img
+            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modelMode ? "rounded" : "")}
+            src={ImgLoadingGame}
+            alt={"Checking if you have <BiTz> Data NFT"}
+          />
         </div>
         {gamePlayImageSprites()}
       </div>
 
-      <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
-        <h2 className="text-center text-white mb-[1rem]">Get BiTz Perks</h2>
+      {!modelMode && (
+        <>
+          <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
+            <h2 className="text-center text-white mb-[1rem]">Get BiTz Perks</h2>
 
-        <ol className="mt-5">
-          <li className="my-5">
-            1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from "Monthly" LEADERBOARD get Airdropped Data NFTs from previous and upcoming Data Creators.
-          </li>
-          <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
-          <li className="my-5">
-            3. Got Memes for burning? Join our{" "}
-            <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
-              Discord Meme Channel
-            </a>{" "}
-            and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
-          </li>
-          <li className="my-5">
-            4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
-          </li>
-        </ol>
-        <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
-      </div>
+            <ol className="mt-5">
+              <li className="my-5">
+                1. Top {BIT_GAME_TOP_LEADER_BOARD_GROUP} Movers from "Monthly" LEADERBOARD get Airdropped Data NFTs from previous and upcoming Data Creators.
+              </li>
+              <li className="my-5">2. Extra 3 bonus drops of Data NFTs sent randomly to users from top 100 "All Time" LEADERBOARD</li>
+              <li className="my-5">
+                3. Got Memes for burning? Join our{" "}
+                <a className="!text-[#35d9fa] hover:underline" href="https://discord.com/channels/869901313616527360/922340575594831872" target="blank">
+                  Discord Meme Channel
+                </a>{" "}
+                and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
+              </li>
+              <li className="my-5">
+                4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
+              </li>
+            </ol>
+            <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
+          </div>
 
-      {/* {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
+          {/* {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
         <div id="referral" className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
           <h2 className="text-center text-white mb-[1rem]">{`<BiTz>`} XP Referrals : Get Bonus Points!</h2>
           <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
@@ -943,64 +971,68 @@ export const GetBitz = () => {
         </div>
       )} */}
 
-      <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
-        <div className="leaderBoard">
-          <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
+          <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
+            <div className="leaderBoard">
+              <h2 className="text-center text-white mb-[1rem]">LEADERBOARD</h2>
 
-          {address && leaderBoardAllTime.length > 0 && (
-            <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
-              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:border-r-4 border-[#171717]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Current All-Time Rank</p>
-                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">{myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}</p>
-              </div>
-              <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
-                <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
-                <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
-                  {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="md:flex">
-            <div className="my-[1rem] allTime md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">All Time</h3>
-              {leaderBoardIsLoading ? (
-                <Loader />
-              ) : (
-                <>
-                  {leaderBoardAllTime.length > 0 ? (
-                    <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
-                  ) : (
-                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
-                  )}
-                </>
+              {address && leaderBoardAllTime.length > 0 && (
+                <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
+                  <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:border-r-4 border-[#171717]">
+                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Current All-Time Rank</p>
+                    <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
+                      {myRankOnAllTimeLeaderBoard === "-2" ? `...` : myRankOnAllTimeLeaderBoard}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
+                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
+                    <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
+                      {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
+                    </p>
+                  </div>
+                </div>
               )}
-            </div>
 
-            <div className="my-[1rem] monthly md:flex-1">
-              <h3 className="text-center text-white mb-[1rem]">
-                Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
-              </h3>
-              {leaderBoardIsLoading ? (
-                <Loader />
-              ) : (
-                <>
-                  {leaderBoardMonthly.length > 0 ? (
-                    <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
+              <div className="md:flex">
+                <div className="my-[1rem] allTime md:flex-1">
+                  <h3 className="text-center text-white mb-[1rem]">All Time</h3>
+                  {leaderBoardIsLoading ? (
+                    <Loader />
                   ) : (
-                    <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                    <>
+                      {leaderBoardAllTime.length > 0 ? (
+                        <LeaderBoardTable leaderBoardData={leaderBoardAllTime} address={address} />
+                      ) : (
+                        <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
+                </div>
+
+                <div className="my-[1rem] monthly md:flex-1">
+                  <h3 className="text-center text-white mb-[1rem]">
+                    Monthly ({leaderBoardMonthString.replace("_", "-20")}) {inDateStringDebugMode && <span className="text-red-100"> IN DEBUG MODE!</span>}
+                  </h3>
+                  {leaderBoardIsLoading ? (
+                    <Loader />
+                  ) : (
+                    <>
+                      {leaderBoardMonthly.length > 0 ? (
+                        <LeaderBoardTable leaderBoardData={leaderBoardMonthly} address={address} />
+                      ) : (
+                        <div className="text-center">{!chainID ? "Connect Wallet to Check" : "No Data Yet"!}</div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
+          {leaderBoardAllTime.length > 0 && gameDataNFT && <GiveBitzBase gameDataNFT={gameDataNFT} />}
 
-      <Faq />
+          <Faq />
+        </>
+      )}
     </>
   );
 };

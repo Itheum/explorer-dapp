@@ -20,8 +20,6 @@ import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
 import { scrollToSection } from "libs/utils";
 import { useNftsStore } from "store/nfts";
 import manuImage from "assets/img/nf-tunes/manu.png";
@@ -29,14 +27,12 @@ import megaphoneLight from "../../../assets/img/nf-tunes/megaphone-light.png";
 import megaphone from "../../../assets/img/nf-tunes/megaphone.png";
 import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
 import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
-import frameItLogoLight from "../../../assets/img/nf-tunes/platforms-logo/frame-it-light.png";
-import frameItLogo from "../../../assets/img/nf-tunes/platforms-logo/frame-it.png";
 import itheumLogoLight from "../../../assets/img/nf-tunes/platforms-logo/itheum-light.png";
 import itheumLogo from "../../../assets/img/nf-tunes/platforms-logo/itheum.png";
 import multiversxLogoLight from "../../../assets/img/nf-tunes/platforms-logo/multiversx-light.png";
 import multiversxLogo from "../../../assets/img/nf-tunes/platforms-logo/multiversx.png";
-import pulsarLogoLight from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money-light.png";
-import pulsarLogo from "../../../assets/img/nf-tunes/platforms-logo/pulsar-money.png";
+import dripLogo from "../../../assets/img/nf-tunes/platforms-logo/drip.png";
+import tensorLogo from "../../../assets/img/nf-tunes/platforms-logo/tensor.png";
 import xoxnoLogoLight from "../../../assets/img/nf-tunes/platforms-logo/xoxno-light.png";
 import xoxnoLogo from "../../../assets/img/nf-tunes/platforms-logo/xoxno.png";
 import stick from "../../../assets/img/nf-tunes-logo-stick.png";
@@ -69,13 +65,11 @@ export const NFTunes = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
-
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
 
   // get query param called chain
   const [searchParams, setSearchParams] = useSearchParams();
-
   const defaultChain = useLocalStorageStore((state) => state.defaultChain);
   const mvxNetworkSelected = defaultChain === "multiversx";
   const [shownSolAppDataNfts, setShownSolAppDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
@@ -88,9 +82,12 @@ export const NFTunes = () => {
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 80);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -460,7 +457,7 @@ export const NFTunes = () => {
               <Music2 className="text-secondary" />
             </div>
             <div className="flex flex-col xl:flex-row justify-start items-center gap-8 w-full">
-              <div className="flex flex-col gap-4 p-8 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+              <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo1} />
                 </div>
@@ -470,7 +467,7 @@ export const NFTunes = () => {
                   time and your NFT holders receive the latest content instantly.{" "}
                 </span>
               </div>
-              <div className="flex flex-col gap-4 p-8 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+              <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo2} />
                 </div>
@@ -480,7 +477,7 @@ export const NFTunes = () => {
                   with your audience.{" "}
                 </span>
               </div>
-              <div className="flex flex-col gap-4 p-8 items-start w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
+              <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-start w-full">
                   <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                     <img src={benefitsLogo3} />
@@ -580,58 +577,61 @@ export const NFTunes = () => {
                   )}
                 </Modal>
               </div>
-              <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
-                <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
-                <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
-                  {featuredArtistDataNft ? (
-                    <MvxDataNftCard
-                      cardStyles="text-white"
-                      index={featuredDataNftIndex}
-                      dataNft={featuredArtistDataNft}
-                      isLoading={isLoadingMvx}
-                      isDataWidget={true}
-                      owned={mvxNfts.find((nft) => nft.tokenIdentifier === featuredArtistDataNft.tokenIdentifier) ? true : false}
-                      viewData={viewMvxData}
-                      modalContent={
-                        isFetchingDataMarshal ? (
-                          <div
-                            className="flex flex-col items-center justify-center"
-                            style={{
-                              minHeight: "40rem",
-                            }}>
-                            <div>
-                              <Loader noText />
-                              <p className="text-center text-foreground">Loading...</p>
+              {mvxNetworkSelected && (
+                <div className="flex flex-col w-[30%] min-w-[20rem] justify-center items-center">
+                  <span className="text-secondary dark:text-primary text-center text-2xl">Own Manu’s Music Data NFT </span>
+                  <div className="scale-[0.9] -mt-6 pt-4 xl:pt-0 rounded-[2.37rem]">
+                    {featuredArtistDataNft ? (
+                      <MvxDataNftCard
+                        cardStyles="text-white"
+                        index={featuredDataNftIndex}
+                        dataNft={featuredArtistDataNft}
+                        isLoading={isLoadingMvx}
+                        isDataWidget={true}
+                        owned={mvxNfts.find((nft) => nft.tokenIdentifier === featuredArtistDataNft.tokenIdentifier) ? true : false}
+                        viewData={viewMvxData}
+                        modalContent={
+                          isFetchingDataMarshal ? (
+                            <div
+                              className="flex flex-col items-center justify-center"
+                              style={{
+                                minHeight: "40rem",
+                              }}>
+                              <div>
+                                <Loader noText />
+                                <p className="text-center text-foreground">Loading...</p>
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <>
-                            {viewDataRes && !viewDataRes.error && tokenLogin && featuredDataNftIndex > -1 && (
-                              <AudioPlayer
-                                dataNftToOpen={shownMvxAppDataNfts[featuredDataNftIndex]}
-                                songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                                tokenLogin={tokenLogin}
-                                firstSongBlobUrl={firstSongBlobUrl}
-                                chainID={chainID}
-                              />
-                            )}
-                          </>
-                        )
-                      }
-                      modalTitle={"NF-Tunes"}
-                      modalTitleStyle="p-4"
-                    />
-                  ) : isLoadingMvx ? (
-                    <div className="mt-32 ">
-                      <Loader noText />
-                      <p className="text-center text-foreground">Loading...</p>
-                    </div>
-                  ) : (
-                    <h3 className="text-center mt-32 text-white">No Data NFT yet</h3>
-                  )}
+                          ) : (
+                            <>
+                              {viewDataRes && !viewDataRes.error && tokenLogin && featuredDataNftIndex > -1 && (
+                                <AudioPlayer
+                                  dataNftToOpen={shownMvxAppDataNfts[featuredDataNftIndex]}
+                                  songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                                  tokenLogin={tokenLogin}
+                                  firstSongBlobUrl={firstSongBlobUrl}
+                                  chainID={chainID}
+                                />
+                              )}
+                            </>
+                          )
+                        }
+                        modalTitle={"NF-Tunes"}
+                        modalTitleStyle="p-4"
+                      />
+                    ) : isLoadingMvx ? (
+                      <div className="mt-32 ">
+                        <Loader noText />
+                        <p className="text-center text-foreground">Loading...</p>
+                      </div>
+                    ) : (
+                      <h3 className="text-center mt-32 text-white">No Data NFT yet</h3>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
+
             {
               <div className="flex flex-row w-full justify-center">
                 <button
@@ -799,27 +799,21 @@ export const NFTunes = () => {
                 <img src={currentTheme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
                 <span className="w-[40%] text-center">Itheum Data DEX</span>
               </Link>
+              <Link
+                to={`https://tensor.trade/trade/itheum_drip`}
+                target="_blank"
+                className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
+                <img className="rounded-sm" src={dripLogo} alt="Drip Haus logo" />
+              </Link>
               <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
                 <span className=" text-center">NFT Marketplaces</span>
                 <Link to={"https://xoxno.com/"} target="_blank">
                   <img src={currentTheme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
                 </Link>
-                <Link to={"https://www.frameit.gg/"} target="_blank">
-                  <img src={currentTheme === "dark" ? frameItLogo : frameItLogoLight} alt="frame it logo" />
+                <Link to={"https://tensor.trade/trade/itheum_drip"} target="_blank">
+                  <img className="rounded-sm" src={tensorLogo} alt="Tensor logo" />
                 </Link>
               </div>
-              <Link
-                to={"https://pulsar.money/"}
-                target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={currentTheme === "dark" ? pulsarLogo : pulsarLogoLight} alt="pulsar" />
-              </Link>
-              <Link
-                to={"https://docs.itheum.io/product-docs/protocol/governance/itheum-xpand-dao/itheum-xpand-grants-program"}
-                target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <span className="text-xl text-primary w-[60%] text-center">xPand DAO</span>
-              </Link>
               <Link
                 to={"https://multiversx.com/ecosystem/projects"}
                 target="_blank"

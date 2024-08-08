@@ -13,7 +13,6 @@ import album6 from "assets/img/deep-forest-music/6.jpg";
 import album7 from "assets/img/deep-forest-music/7.jpg";
 import album8 from "assets/img/deep-forest-music/8.jpg";
 import album9 from "assets/img/deep-forest-music/9.jpg";
-// deep forest
 import deepForestPreviewMix from "assets/img/deep-forest-music/deep-forest-preview-mix.mp3";
 import iconPreviewAudioPlayer from "assets/img/deep-forest-music/deep-forest.png";
 import iconPreview from "assets/img/deep-forest-music/header.png";
@@ -76,7 +75,10 @@ export const DeepForestMusic = () => {
   const { mvxNfts: nfts } = useNftsStore();
 
   useEffect(() => {
-    window.scrollTo(0, 80);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   useEffect(() => {
@@ -172,7 +174,7 @@ export const DeepForestMusic = () => {
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full overflow-hidden">
-      <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
+      <div className="w-full h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
         <div className="flex flex-col w-[90%] md:w-[70%] p-10">
           <img src={iconPreview} className="rounded-2xl" />
@@ -187,7 +189,7 @@ export const DeepForestMusic = () => {
               title={"Music Data Nft Preview"}
               hasFilter={false}
               filterData={[]}
-              titleClassName={"p-8"}>
+              titleClassName={"p-4 !text-xl md:!text-3xl"}>
               <>
                 <AudioPlayer
                   previewUrl={deepForestPreviewMix}
@@ -223,7 +225,7 @@ export const DeepForestMusic = () => {
         title={dataNftToOpen?.title}
         hasFilter={false}
         filterData={[]}
-        titleClassName={"p-4"}>
+        titleClassName={"p-4 !text-xl md:!text-3xl"}>
         {isFetchingDataMarshal ? (
           <div
             className="flex flex-col items-center justify-center"

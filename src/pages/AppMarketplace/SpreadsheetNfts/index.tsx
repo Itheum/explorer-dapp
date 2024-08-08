@@ -19,10 +19,16 @@ export const SpreadsheetNfts = () => {
   const [owned, setOwned] = useState<boolean>(false);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [viewDataRes, setViewDataRes] = useState<ViewDataReturnType>();
-
   const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   useEffect(() => {
     if (!hasPendingTransactions) {

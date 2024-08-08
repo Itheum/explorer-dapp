@@ -15,8 +15,6 @@ import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
 import { scrollToSection } from "libs/utils";
 import { useNftsStore } from "store/nfts";
 import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
@@ -41,11 +39,13 @@ export const NFPodcast = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
-
   const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
   useEffect(() => {
-    window.scrollTo(0, 80);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   useEffect(() => {
