@@ -101,7 +101,9 @@ const GetBitzSol = (props: any) => {
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const [showMessage, setShowMessage] = useState<boolean>(true);
   const { solNfts } = useNftsStore();
-  const [nfts, setNfts] = useState(IS_DEVNET ? solNfts : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2")));
+  const [nfts, setNfts] = useState(
+    IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
+  );
 
   // store based state
   const bitzStore = useSolBitzStore();
@@ -109,12 +111,14 @@ const GetBitzSol = (props: any) => {
   const bitzBalance = bitzStore.bitzBalance;
   const bonusBitzSum = bitzStore.bonusBitzSum;
   const collectedBitzSum = bitzStore.collectedBitzSum;
+  const populatedBitzStore = bitzStore.populatedBitzStore;
   const updateBitzBalance = bitzStore.updateBitzBalance;
   const updateCooldown = bitzStore.updateCooldown;
   const updateCollectedBitzSum = bitzStore.updateCollectedBitzSum;
   const updateGivenBitzSum = bitzStore.updateGivenBitzSum;
   const updateBonusBitzSum = bitzStore.updateBonusBitzSum;
   const updateBonusTries = bitzStore.updateBonusTries;
+  const updatePopulatedBitzStore = bitzStore.updatePopulatedBitzStore;
 
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
@@ -132,7 +136,6 @@ const GetBitzSol = (props: any) => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const [populatedBitzStore, setPopulatedBitzStore] = useState<boolean>(false);
   const tweetText = `url=https://bitzxp.itheum.io/getbitz?v=2&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz %23DRiP %23Solana" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
   ///TODO add ?r=${address}
   const [usingReferralCode, setUsingReferralCode] = useState<string>("");
@@ -155,15 +158,13 @@ const GetBitzSol = (props: any) => {
   useEffect(() => {
     if (publicKey) {
       setNfts(
-        IS_DEVNET
-          ? solNfts.filter((nft) => !nft.content.metadata.name.includes("NFTunes"))
-          : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
+        IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
       );
-      solNfts.filter((nft) => !nft.content.metadata.name.includes("NFTunes"));
     }
   }, [publicKey, solNfts]);
 
   useEffect(() => {
+    console.log(populatedBitzStore);
     if (nfts === undefined) return;
     if (!populatedBitzStore) {
       if (publicKey && nfts.length > 0) {
@@ -171,7 +172,7 @@ const GetBitzSol = (props: any) => {
         updateCooldown(-2);
         updateGivenBitzSum(-2);
         updateCollectedBitzSum(-2);
-        setPopulatedBitzStore(true);
+        updatePopulatedBitzStore(true);
 
         const viewDataArgs = {
           headers: {
@@ -183,7 +184,6 @@ const GetBitzSol = (props: any) => {
           const getBitzGameResult = await viewData(viewDataArgs, nfts[0]);
           console.log(getBitzGameResult);
           if (getBitzGameResult) {
-            console.log(getBitzGameResult);
             const bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
             const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
             const sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
@@ -211,15 +211,15 @@ const GetBitzSol = (props: any) => {
         updateCooldown(-1);
         updateCollectedBitzSum(-1);
         if (!address) {
-          setPopulatedBitzStore(false);
+          updatePopulatedBitzStore(false);
         }
       }
     } else {
       if (!address) {
-        setPopulatedBitzStore(false);
+        updatePopulatedBitzStore(false);
       }
     }
-  }, [publicKey, nfts]);
+  }, [publicKey, nfts, populatedBitzStore]);
 
   useEffect(() => {
     window.scrollTo({
@@ -382,6 +382,7 @@ const GetBitzSol = (props: any) => {
     try {
       let usedPreAccessNonce = solPreaccessNonce;
       let usedPreAccessSignature = solPreaccessSignature;
+      console.log(solPreaccessNonce, solPreaccessSignature, solPreaccessTimestamp);
       if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
         const preAccessNonce = await itheumSolPreaccess();
         const message = new TextEncoder().encode(preAccessNonce);
