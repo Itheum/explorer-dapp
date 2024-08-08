@@ -32,7 +32,6 @@ import {
 } from "../../libComponents/NavigationMenu";
 import { useAccountStore } from "../../store/account";
 import { BitzDropdown } from "../BitzShortcuts/BitzShortcuts";
-// import { PathwaysModal } from "../PathwaysModal/PathwaysModal";
 import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
 export const Navbar = () => {
@@ -42,8 +41,6 @@ export const Navbar = () => {
   const isLoggedInMvx = useGetIsLoggedIn();
   const { address: addressMvx } = useGetAccount();
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
-
-  // const [showPathwaysModel, setShowPathwaysModel] = useState<boolean>(false);
   const [showPlayBitzModel, setShowPlayBitzModel] = useState<boolean>(false);
 
   return (

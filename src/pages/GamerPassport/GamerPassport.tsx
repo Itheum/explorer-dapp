@@ -52,10 +52,10 @@ export const GamerPassport = () => {
   const [step3Passed, setStep3Passed] = useState<boolean>(false);
 
   useEffect(() => {
-    // window.scrollTo({
-    //   top: 0,
-    //   behavior: "smooth",
-    // });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
     async function getDataAndInitGraphData() {
       const dataAggregated = await getAggregatedAnalyticsData();
