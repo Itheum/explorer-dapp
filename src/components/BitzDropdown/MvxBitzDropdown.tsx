@@ -1,24 +1,19 @@
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { FlaskRound, Gift } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link, useLocation } from "react-router-dom";
 import { useGetIsLoggedIn } from "hooks";
 import { isMostLikelyMobile } from "libs/utils/misc";
 import { BIT_GAME_WINDOW_HOURS } from "pages/AppMarketplace/GetBitz/common/interfaces";
-import useSolBitzStore from "store/solBitz";
 import { Button } from "../../libComponents/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
 import { useAccountStore } from "../../store/account";
 
-export const BitzDropdown = (props: any) => {
+export const MvxBitzDropdown = (props: any) => {
   const { skipNavBarPopOverOption, showOnlyClaimBitzButton, handlePlayActionBtn } = props;
   const cooldown = useAccountStore((state: any) => state.cooldown);
   const mvxBitzBalance = useAccountStore((state: any) => state.bitzBalance);
-  const isLoggedInMvx = useGetIsLoggedIn();
-  const solBitzBalance = useSolBitzStore((state: any) => state.bitzBalance);
-  const { connected: isLoggedInSol } = useWallet();
 
   return (
     <div className={`${!skipNavBarPopOverOption ? "shadow-sm shadow-[#35d9fa] rounded-lg justify-center cursor-pointer" : ""}`}>
@@ -28,44 +23,32 @@ export const BitzDropdown = (props: any) => {
         ) : (
           <>
             <PopoverTrigger>
-              <Button className="text-sm tracking-wide hover:bg-transparent" variant="ghost">
-                {isLoggedInMvx &&
-                  (mvxBitzBalance === -2 ? (
-                    <div className="flex items-center gap-0.5 blinkMe text-lg mr-1">
-                      MvX: ... <FlaskBottleAnimation cooldown={cooldown} />
+              <div className="flex flex-row items-center px-1.5">
+                <svg width="16" height="16" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M158.482 149.928L228.714 112.529L216.919 90L152.575 115.854C150.923 116.523 149.077 116.523 147.425 115.854L83.0814 90L71.25 112.602L141.482 150L71.25 187.398L83.0814 210L147.425 183.948C149.077 183.279 150.923 183.279 152.575 183.948L216.919 209.874L228.75 187.272L158.482 149.928Z"
+                    fill="#23F7DD"></path>
+                </svg>
+                <Button className="text-sm tracking-wide hover:bg-transparent px-0.5" variant="ghost">
+                  {mvxBitzBalance === -2 ? (
+                    <div className="flex items-center gap-0.5 blinkMe text-lg">
+                      ... <FlaskBottleAnimation cooldown={cooldown} />
                     </div>
                   ) : (
                     <>
                       {mvxBitzBalance === -1 ? (
-                        <div className="flex items-center gap-0.5 text-base mr-1">
-                          MvX: 0 <FlaskBottleAnimation cooldown={cooldown} />
+                        <div className="flex items-center gap-0.5 text-base">
+                          0 <FlaskBottleAnimation cooldown={cooldown} />
                         </div>
                       ) : (
-                        <div className="flex items-center gap-0.5 text-base mr-1">
-                          MvX: {mvxBitzBalance} <FlaskBottleAnimation cooldown={cooldown} />
+                        <div className="flex items-center gap-0.5 text-base">
+                          {mvxBitzBalance} <FlaskBottleAnimation cooldown={cooldown} />
                         </div>
                       )}
                     </>
-                  ))}
-                {isLoggedInSol &&
-                  (solBitzBalance === -2 ? (
-                    <div className="flex items-center gap-0.5 blinkMe text-lg ml-1">
-                      SOL: ... <FlaskBottleAnimation cooldown={cooldown} />
-                    </div>
-                  ) : (
-                    <>
-                      {solBitzBalance === -1 ? (
-                        <div className="flex items-center gap-0.5 text-base ml-1">
-                          SOL: 0 <FlaskBottleAnimation cooldown={cooldown} />
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-0.5 text-base ml-1">
-                          SOL: {solBitzBalance} <FlaskBottleAnimation cooldown={cooldown} />
-                        </div>
-                      )}
-                    </>
-                  ))}
-              </Button>
+                  )}
+                </Button>
+              </div>
             </PopoverTrigger>
 
             {!skipNavBarPopOverOption && (

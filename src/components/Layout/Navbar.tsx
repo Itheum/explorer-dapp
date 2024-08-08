@@ -4,6 +4,7 @@ import { Home, Menu, Store, Wallet, Gamepad2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
+import { SolBitzDropdown } from "components/BitzDropdown/SolBitzDropdown";
 import { CopyAddress } from "components/CopyAddress";
 import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
@@ -11,6 +12,7 @@ import { cn } from "libs/utils";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
 import {
@@ -31,7 +33,7 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useAccountStore } from "../../store/account";
-import { BitzDropdown } from "../BitzShortcuts/BitzShortcuts";
+import { MvxBitzDropdown } from "../BitzDropdown/MvxBitzDropdown";
 // import { PathwaysModal } from "../PathwaysModal/PathwaysModal";
 import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
@@ -42,6 +44,7 @@ export const Navbar = () => {
   const isLoggedInMvx = useGetIsLoggedIn();
   const { address: addressMvx } = useGetAccount();
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
+  const setDefaultChain = useLocalStorageStore((state) => state.setDefaultChain);
 
   // const [showPathwaysModel, setShowPathwaysModel] = useState<boolean>(false);
   const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
@@ -141,9 +144,20 @@ export const Navbar = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                {(isLoggedInMvx || isLoggedInSol) && (
-                  <BitzDropdown
+                {isLoggedInMvx && (
+                  <MvxBitzDropdown
                     handlePlayActionBtn={() => {
+                      setDefaultChain("multiversx");
+                      setShowPlayBitzModal(true);
+                    }}
+                  />
+                )}
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                {isLoggedInSol && (
+                  <SolBitzDropdown
+                    handlePlayActionBtn={() => {
+                      setDefaultChain("solana");
                       setShowPlayBitzModal(true);
                     }}
                   />
@@ -180,11 +194,21 @@ export const Navbar = () => {
         <DropdownMenu>
           <div className="flex flex-row">
             {isLoggedInMvx || isLoggedInSol ? (
-              <BitzDropdown
-                handlePlayActionBtn={() => {
-                  setShowPlayBitzModal(true);
-                }}
-              />
+              isLoggedInMvx ? (
+                <MvxBitzDropdown
+                  handlePlayActionBtn={() => {
+                    setDefaultChain("multiversx");
+                    setShowPlayBitzModal(true);
+                  }}
+                />
+              ) : (
+                <SolBitzDropdown
+                  handlePlayActionBtn={() => {
+                    setDefaultChain("solana");
+                    setShowPlayBitzModal(true);
+                  }}
+                />
+              )
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] w-full rounded-lg justify-center">
