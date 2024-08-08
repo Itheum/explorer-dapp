@@ -6,7 +6,6 @@ import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
 import { SolBitzDropdown } from "components/BitzDropdown/SolBitzDropdown";
 import { CopyAddress } from "components/CopyAddress";
-import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { cn } from "libs/utils";
 import { APP_MAPPINGS } from "libs/utils/constant";
@@ -34,7 +33,6 @@ import {
 } from "../../libComponents/NavigationMenu";
 import { useAccountStore } from "../../store/account";
 import { MvxBitzDropdown } from "../BitzDropdown/MvxBitzDropdown";
-// import { PathwaysModal } from "../PathwaysModal/PathwaysModal";
 import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
 export const Navbar = () => {
@@ -46,7 +44,6 @@ export const Navbar = () => {
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const setDefaultChain = useLocalStorageStore((state) => state.setDefaultChain);
 
-  // const [showPathwaysModel, setShowPathwaysModel] = useState<boolean>(false);
   const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
 
   return (
