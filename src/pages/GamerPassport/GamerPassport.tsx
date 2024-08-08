@@ -350,8 +350,8 @@ export const GamerPassport = () => {
                 </div>
                 <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl">Reward Pool</p>
-                  <p className="md:text-3xl mt-2">1,000,000 ITHEUM</p>
-                  <p className="">* reserved for first 500 gamers</p>
+                  <p className="md:text-3xl mt-2">$ITHEUM Tokens</p>
+                  <p className="text-sm mt-2">* only for first 500 gamers who join</p>
                 </div>
                 <div className="flex flex-col justify-center items-center border-dotted border-2 border-[#006ee4] rounded-3xl flex-1 h-[200px] p-3 md:p-0">
                   <p className="md:text-2xl">Rewards Emitted</p>

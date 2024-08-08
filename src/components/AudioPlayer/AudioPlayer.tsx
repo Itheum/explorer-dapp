@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft/out";
 import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, XCircle } from "lucide-react";
+import toast from "react-hot-toast";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
-import toast from "react-hot-toast";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
@@ -21,6 +21,50 @@ type AudioPlayerProps = {
 
 export const AudioPlayer = (props: AudioPlayerProps) => {
   const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl, chainID } = props;
+
+  const theme = localStorage.getItem("explorer-ui-theme");
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [currentTime, setCurrentTime] = useState("00:00");
+  const [displayPlaylist, setDisplayPlaylist] = useState(false);
+  const [audio] = useState(new Audio());
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.5);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState("00:00");
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [songSource, setSongSource] = useState<{ [key: number]: string }>({}); // map to keep the already fetched songs
+  const settings = {
+    infinite: false,
+    speed: 1000,
+    slidesToShow: 4,
+    responsive: [
+      {
+        breakpoint: 1800,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 980,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+
+      {
+        breakpoint: 730,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 550,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
   useEffect(() => {
     if (firstSongBlobUrl)
@@ -55,54 +99,35 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     };
   }, []);
 
-  let settings = {
-    infinite: false,
-    speed: 1000,
-    slidesToShow: 4,
-    responsive: [
-      {
-        breakpoint: 1800,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 980,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
+  useEffect(() => {
+    updateProgress();
+  }, [audio.src]);
 
-      {
-        breakpoint: 730,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 550,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
+  useEffect(() => {
+    if (firstSongBlobUrl)
+      setSongSource((prevState) => ({
+        ...prevState, // keep all other key-value pairs
+        [1]: firstSongBlobUrl, // update the value of the first index
+      }));
+  }, [firstSongBlobUrl]);
 
-  const theme = localStorage.getItem("explorer-ui-theme");
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [currentTime, setCurrentTime] = useState("00:00");
-  const [displayPlaylist, setDisplayPlaylist] = useState(false);
+  useEffect(() => {
+    audio.pause();
+    audio.src = "";
+    setIsPlaying(false);
+    setIsLoaded(false);
+    handleChangeSong();
+  }, [currentTrackIndex, songSource[songs[currentTrackIndex]?.idx]]);
 
-  const [audio] = useState(new Audio());
-
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState("00:00");
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // map to keep the already fetched songs
-  const [songSource, setSongSource] = useState<{ [key: number]: string }>({});
+  useEffect(() => {
+    if (previewUrl) {
+      audio.pause();
+      audio.src = previewUrl;
+      setIsPlaying(false);
+      setIsLoaded(false);
+      handleChangeSong();
+    }
+  }, [previewUrl]);
 
   /// format time as minutes:seconds
   const formatTime = (_seconds: number) => {
@@ -171,18 +196,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     if (isNaN(_percentage)) _percentage = 0;
     setProgress(_percentage);
   };
-
-  useEffect(() => {
-    updateProgress();
-  }, [audio.src]);
-
-  useEffect(() => {
-    if (firstSongBlobUrl)
-      setSongSource((prevState) => ({
-        ...prevState, // keep all other key-value pairs
-        [1]: firstSongBlobUrl, // update the value of the first index
-      }));
-  }, [firstSongBlobUrl]);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -263,24 +276,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     return true;
   };
 
-  useEffect(() => {
-    audio.pause();
-    audio.src = "";
-    setIsPlaying(false);
-    setIsLoaded(false);
-    handleChangeSong();
-  }, [currentTrackIndex, songSource[songs[currentTrackIndex]?.idx]]);
-
-  useEffect(() => {
-    if (previewUrl) {
-      audio.pause();
-      audio.src = previewUrl;
-      setIsPlaying(false);
-      setIsLoaded(false);
-      handleChangeSong();
-    }
-  }, [previewUrl]);
-
   const showPlaylist = () => {
     if (previewUrl) {
       toast.error("This is just a preview. You have to buy the Music Data Nft to see all the songs.", {
@@ -327,11 +322,10 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                         />
                       </div>
 
-                      <div className="w-8/12 flex flex-col items-center justify-center">
-                        <h6 className=" truncate text-base text-foreground">{song.title}</h6>
-
-                        <p className="truncate text-sm text-center text-foreground">{song.artist}</p>
-                        <p className="text-xs text-center text-muted-foreground">{song.album}</p>
+                      <div className="w-8/12 flex flex-col items-center justify-center md:items-start">
+                        <h6 className="!w-[90px] md:!w-[90%] truncate !text-sm text-foreground">{song.title}</h6>
+                        <p className="!w-[90px] md:!w-[90%] truncate !text-sm text-foreground">{song.artist}</p>
+                        <p className="!w-[90px] md:!w-[90%] text-xs text-muted-foreground">{song.album}</p>
                       </div>
                     </div>
                   );
@@ -435,19 +429,19 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                               setCurrentTrackIndex(index);
                             }}
                             className="mx-auto w-32 xl:w-64 select-none flex flex-col xl:flex-row items-center justify-center bg-[#fafafa]/25 dark:bg-[#0f0f0f]/25 cursor-pointer transition-shadow duration-300 shadow-xl hover:shadow-inner hover:shadow-teal-200 rounded-2xl text-foreground border-[1px] border-foreground/40">
-                            <div className="w-[80%] xl:w-[40%] justify-center">
+                            <div className="w-[70%] xl:w-[40%] justify-center">
                               <img
                                 src={song.cover_art_url}
                                 alt="Album Cover"
-                                className="h-24 p-2 rounded-md"
+                                className="h-20 p-2 rounded-md m-auto"
                                 onError={({ currentTarget }) => {
                                   currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                                 }}
                               />
                             </div>
-                            <div className=" xl:w-[60%] flex flex-col justify-center text-center  ">
-                              <h6 className=" text-base text-foreground truncate ">{song.title}</h6>
-                              <p className="font-sans text-base font-medium leading-6 text-muted-foreground truncate">{song.artist}</p>
+                            <div className="xl:w-[60%] flex flex-col justify-center text-center">
+                              <h6 className="!w-[90px] md:!w-auto !text-sm text-foreground truncate mr-2 text-center md:text-left">{song.title}</h6>
+                              <p className="font-sans text-sm font-medium leading-6 text-muted-foreground truncate text-center md:text-left">{song.artist}</p>
                             </div>
                           </div>
                         </div>
