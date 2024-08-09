@@ -17,6 +17,7 @@ import BonusBitzHistory from "../common/BonusBitzHistory";
 import PowerUpBounty from "../common/GiveBitz/PowerUpBounty";
 import { GiveBitzDataBounty, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
+import { IS_DEVNET } from "appsConfig";
 
 const GiveBitzBase = () => {
   const { publicKey, signMessage } = useWallet();
@@ -27,7 +28,10 @@ const GiveBitzBase = () => {
   const bitzBalance = useSolBitzStore((state: any) => state.bitzBalance);
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-  const nfts = useNftsStore((state) => state.solNfts);
+  const solNfts = useNftsStore((state) => state.solNfts);
+  const [nfts, setNfts] = useState(
+    IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
+  );
   const bitzStore = useSolBitzStore();
   const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
   const [fetchingDataBountiesReceivedSum, setFetchingDataBountiesReceivedSum] = useState<boolean>(true);
@@ -39,6 +43,14 @@ const GiveBitzBase = () => {
   const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
+
+  useEffect(() => {
+    if (publicKey) {
+      setNfts(
+        IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
+      );
+    }
+  }, [publicKey, solNfts]);
 
   useEffect(() => {
     setFetchingDataBountiesReceivedSum(true);

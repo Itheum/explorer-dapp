@@ -7,7 +7,7 @@ import logo192 from "assets/img/logo192.png";
 import { SolBitzDropdown } from "components/BitzDropdown/SolBitzDropdown";
 import { CopyAddress } from "components/CopyAddress";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
-import { cn } from "libs/utils";
+import { cn, sleep } from "libs/utils";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
@@ -143,8 +143,9 @@ export const Navbar = () => {
               <NavigationMenuItem>
                 {isLoggedInMvx && (
                   <MvxBitzDropdown
-                    handlePlayActionBtn={() => {
-                      setDefaultChain("multiversx");
+                    handlePlayActionBtn={async () => {
+                      await setDefaultChain("multiversx");
+                      await sleep(0.2);
                       setShowPlayBitzModal(true);
                     }}
                   />
@@ -153,8 +154,9 @@ export const Navbar = () => {
               <NavigationMenuItem>
                 {isLoggedInSol && (
                   <SolBitzDropdown
-                    handlePlayActionBtn={() => {
-                      setDefaultChain("solana");
+                    handlePlayActionBtn={async () => {
+                      await setDefaultChain("solana");
+                      await sleep(0.2);
                       setShowPlayBitzModal(true);
                     }}
                   />
@@ -193,15 +195,17 @@ export const Navbar = () => {
             {isLoggedInMvx || isLoggedInSol ? (
               isLoggedInMvx ? (
                 <MvxBitzDropdown
-                  handlePlayActionBtn={() => {
-                    setDefaultChain("multiversx");
+                  handlePlayActionBtn={async () => {
+                    await setDefaultChain("multiversx");
+                    await sleep(0.2);
                     setShowPlayBitzModal(true);
                   }}
                 />
               ) : (
                 <SolBitzDropdown
-                  handlePlayActionBtn={() => {
-                    setDefaultChain("solana");
+                  handlePlayActionBtn={async () => {
+                    await setDefaultChain("solana");
+                    await sleep(0.2);
                     setShowPlayBitzModal(true);
                   }}
                 />
