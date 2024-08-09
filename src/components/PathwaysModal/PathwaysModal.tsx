@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useGetIsLoggedIn } from "hooks";
 import { routeNames } from "routes";
-import { BitzDropdown } from "../BitzShortcuts/BitzShortcuts";
+import { MvxBitzDropdown } from "../BitzDropdown/MvxBitzDropdown";
 
 type PathwaysModalProps = {
   showPathwaysModel: boolean;
@@ -174,10 +174,10 @@ export const PathwaysModal: React.FC<PathwaysModalProps> = (props) => {
                       {isLoggedInMvx ? (
                         <div className="flex flex-col items-center justify-center scale-125">
                           <p className="mb-2">Your BiTx XP:</p>
-                          <BitzDropdown skipNavBarPopOverOption={true} />
+                          <MvxBitzDropdown skipNavBarPopOverOption={true} />
 
                           <div onClick={handleHidePathwaysModel}>
-                            <BitzDropdown skipNavBarPopOverOption={true} showOnlyClaimBitzButton={true} />
+                            <MvxBitzDropdown skipNavBarPopOverOption={true} showOnlyClaimBitzButton={true} />
                           </div>
                         </div>
                       ) : (
