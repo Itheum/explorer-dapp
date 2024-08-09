@@ -1,13 +1,14 @@
 import { dAppName } from "config";
 import { RouteType } from "libs/types";
 import { DeepForestMusic } from "pages/AppMarketplace/DeepForestMusic/DeepForestMusic";
+import GetBitz from "pages/AppMarketplace/GetBitz";
 import { ItheumTrailblazer } from "pages/AppMarketplace/ItheumTrailblazer/ItheumTrailblazer";
 import { NFPodcast } from "pages/AppMarketplace/NFPodcast";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
 import { withPageTitle } from "./components/PageTitle";
-import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, GetBitz, BoberGameRoom, AnalyticsPage, GamerPassport } from "./pages";
+import { Home, MyListed, MyWallet, MultiversxBubbles, MultiversxInfographics, BoberGameRoom, AnalyticsPage, GamerPassport } from "./pages";
 
 export const routeNames = {
   home: "/",
@@ -125,7 +126,7 @@ export const routes: RouteWithTitleType[] = [
 ];
 
 export const mappedRoutes = routes.map((route) => {
-  const title = route.title ? `${route.title} • MultiversX ${dAppName}` : `MultiversX ${dAppName}`;
+  const title = route.title ? `${route.title} • ${dAppName}` : `${dAppName}`;
 
   const requiresAuth = Boolean(route.authenticatedRoute);
   const wrappedComponent = withPageTitle(title, route.component);

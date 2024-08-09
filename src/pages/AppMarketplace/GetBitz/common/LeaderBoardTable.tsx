@@ -1,7 +1,8 @@
 import React from "react";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { MXAddressLink } from "components";
-import { LeaderBoardItemType } from ".";
+import { SolAddressLink } from "components/SolAddressLink";
+import { LeaderBoardItemType } from "./interfaces";
 
 interface LeaderBoardTableProps {
   leaderBoardData: LeaderBoardItemType[];
@@ -37,12 +38,23 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = (props) => {
                 {item.playerAddr === address ? (
                   "It's YOU! 🫵 🎊"
                 ) : (
-                  <MXAddressLink
-                    textStyle="!text-[#35d9fa]  hover:!text-[#35d9fa] hover:underline"
-                    explorerAddress={explorerAddress}
-                    address={item.playerAddr}
-                    precision={4}
-                  />
+                  <>
+                    {item.playerAddr.startsWith("erd") ? (
+                      <MXAddressLink
+                        textStyle="!text-[#35d9fa]  hover:!text-[#35d9fa] hover:underline"
+                        explorerAddress={explorerAddress}
+                        address={item.playerAddr}
+                        precision={4}
+                      />
+                    ) : (
+                      <SolAddressLink
+                        textStyle="!text-[#35d9fa]  hover:!text-[#35d9fa] hover:underline"
+                        explorerAddress={explorerAddress}
+                        address={item.playerAddr}
+                        precision={4}
+                      />
+                    )}
+                  </>
                 )}
               </td>
               <td className="p-2 ">{item.bits}</td>
