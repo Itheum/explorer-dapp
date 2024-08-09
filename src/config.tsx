@@ -22,7 +22,9 @@ export const CREATOR_PROFILE_PAGE =
     ? "https://test.datadex.itheum.io/profile/"
     : "https://datadex.itheum.io/profile/";
 
-export const MAINNET_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
+export const MAINNET_MVX_EXPLORER_ADDRESS = "https://explorer.multiversx.com";
+
+export const MAINNET_SOL_EXPLORER_ADDRESS = "https://explorer.solana.com/";
 
 export const SUPPORTED_MVX_COLLECTIONS = IS_DEVNET
   ? ["DATANFTFT-e0b917", "DNFTPHMA-9e2b1c", "OASISMUSIC-9b3433", "OASMUSICPL-47b186", "FOOWLDMSC-5ee8ec"]

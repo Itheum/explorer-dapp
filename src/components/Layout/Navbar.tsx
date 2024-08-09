@@ -4,13 +4,14 @@ import { Home, Menu, Store, Wallet, Gamepad2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
+import { SolBitzDropdown } from "components/BitzDropdown/SolBitzDropdown";
 import { CopyAddress } from "components/CopyAddress";
-import { logout } from "helpers";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
-import { cn } from "libs/utils";
+import { cn, sleep } from "libs/utils";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { SwitchButton } from "./SwitchButton";
 import { Button } from "../../libComponents/Button";
 import {
@@ -31,7 +32,7 @@ import {
   navigationMenuTriggerStyle,
 } from "../../libComponents/NavigationMenu";
 import { useAccountStore } from "../../store/account";
-import { BitzDropdown } from "../BitzShortcuts/BitzShortcuts";
+import { MvxBitzDropdown } from "../BitzDropdown/MvxBitzDropdown";
 import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
 export const Navbar = () => {
@@ -41,7 +42,9 @@ export const Navbar = () => {
   const isLoggedInMvx = useGetIsLoggedIn();
   const { address: addressMvx } = useGetAccount();
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
-  const [showPlayBitzModel, setShowPlayBitzModel] = useState<boolean>(false);
+  const setDefaultChain = useLocalStorageStore((state) => state.setDefaultChain);
+
+  const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
 
   return (
     <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">
@@ -139,9 +142,22 @@ export const Navbar = () => {
 
               <NavigationMenuItem>
                 {isLoggedInMvx && (
-                  <BitzDropdown
-                    handlePlayActionBtn={() => {
-                      setShowPlayBitzModel(true);
+                  <MvxBitzDropdown
+                    handlePlayActionBtn={async () => {
+                      await setDefaultChain("multiversx");
+                      await sleep(0.2);
+                      setShowPlayBitzModal(true);
+                    }}
+                  />
+                )}
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                {isLoggedInSol && (
+                  <SolBitzDropdown
+                    handlePlayActionBtn={async () => {
+                      await setDefaultChain("solana");
+                      await sleep(0.2);
+                      setShowPlayBitzModal(true);
                     }}
                   />
                 )}
@@ -176,12 +192,24 @@ export const Navbar = () => {
       <div className="md:!hidden !visible">
         <DropdownMenu>
           <div className="flex flex-row">
-            {isLoggedInMvx ? (
-              <BitzDropdown
-                handlePlayActionBtn={() => {
-                  setShowPlayBitzModel(true);
-                }}
-              />
+            {isLoggedInMvx || isLoggedInSol ? (
+              isLoggedInMvx ? (
+                <MvxBitzDropdown
+                  handlePlayActionBtn={async () => {
+                    await setDefaultChain("multiversx");
+                    await sleep(0.2);
+                    setShowPlayBitzModal(true);
+                  }}
+                />
+              ) : (
+                <SolBitzDropdown
+                  handlePlayActionBtn={async () => {
+                    await setDefaultChain("solana");
+                    await sleep(0.2);
+                    setShowPlayBitzModal(true);
+                  }}
+                />
+              )
             ) : (
               <Link to={routeNames.unlock} state={{ from: location.pathname }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] w-full rounded-lg justify-center">
@@ -294,7 +322,7 @@ export const Navbar = () => {
       </div>
 
       {/* <PathwaysModal showPathwaysModel={showPathwaysModel} handleHidePathwaysModel={() => setShowPathwaysModel(false)} /> */}
-      {showPlayBitzModel && <PlayBitzModal showPlayBitzModel={showPlayBitzModel} handleHideBitzModel={() => setShowPlayBitzModel(false)} />}
+      {showPlayBitzModal && <PlayBitzModal showPlayBitzModel={showPlayBitzModal} handleHideBitzModel={() => setShowPlayBitzModal(false)} />}
     </div>
   );
 };

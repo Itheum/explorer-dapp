@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import clickHere from "assets/img/getbitz/click-here.gif";
 import { cn } from "libs/utils";
 
-export const BurningImage: React.FC<{ src: string; burnProgress: number; modelMode?: boolean }> = ({ src, burnProgress, modelMode }) => {
+export const BurningImage: React.FC<{ src: string; burnProgress: number; modalMode?: boolean }> = ({ src, burnProgress, modalMode }) => {
   const burningImageVariants = {
     initial: {
       opacity: 1,
@@ -27,7 +27,7 @@ export const BurningImage: React.FC<{ src: string; burnProgress: number; modelMo
   };
 
   return (
-    <div className={cn("cursor-none relative select-none", modelMode ? "cursor-pointer" : "")}>
+    <div className={cn("cursor-none relative select-none", modalMode ? "cursor-pointer" : "")}>
       <motion.img
         className="rounded-[.1rem] w-[250px] max-h-[250px] md:w-[310px] md:max-h-[310px] m-auto -z-1"
         src={src}
