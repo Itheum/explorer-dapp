@@ -3,7 +3,6 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { FlaskRound, Gift } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link, useLocation } from "react-router-dom";
-import { useGetIsLoggedIn } from "hooks";
 import { isMostLikelyMobile } from "libs/utils/misc";
 import { BIT_GAME_WINDOW_HOURS } from "pages/AppMarketplace/GetBitz/common/interfaces";
 import { Button } from "../../libComponents/Button";

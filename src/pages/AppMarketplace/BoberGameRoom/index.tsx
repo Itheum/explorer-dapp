@@ -96,7 +96,7 @@ export const BoberGameRoom: React.FC = () => {
         hasImage={true}
         imgSrc={headerImg}
         altImageAttribute={"boberGameRoom"}
-        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum App"}
         dataNftCount={shownAppDataNfts.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (

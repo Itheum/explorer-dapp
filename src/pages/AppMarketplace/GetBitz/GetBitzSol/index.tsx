@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
@@ -10,14 +9,14 @@ import { motion } from "framer-motion";
 import { ArrowBigDownDash, Loader, MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { IS_DEVNET } from "appsConfig";
+
+// Image Layers
 import aladinRugg from "assets/img/getbitz/aladin.png";
 import FingerPoint from "assets/img/getbitz/finger-point.gif";
 import ImgGameCanvas from "assets/img/getbitz/getbitz-game-canvas.png";
 import ImgLoadingGame from "assets/img/getbitz/getbitz-loading.gif";
 import ImgLogin from "assets/img/getbitz/getbitz-login.gif";
 import ImgPlayGame from "assets/img/getbitz/getbitz-play.gif";
-
-// Image Layers
 
 // Memes
 import Meme1 from "assets/img/getbitz/memes/1.jpg";
@@ -46,6 +45,7 @@ import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import Meme7 from "assets/img/getbitz/memes/7.jpg";
 import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
+
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { SUPPORTED_SOL_COLLECTIONS } from "config";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
@@ -95,6 +95,7 @@ const MEME_IMGS = [
 
 const GetBitzSol = (props: any) => {
   const { modalMode } = props;
+
   const { publicKey, signMessage } = useWallet();
   const address = publicKey?.toBase58();
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
@@ -104,6 +105,7 @@ const GetBitzSol = (props: any) => {
   const [nfts, setNfts] = useState(
     IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
   );
+  const { setVisible } = useWalletModal();
 
   // store based state
   const bitzStore = useSolBitzStore();
@@ -164,8 +166,8 @@ const GetBitzSol = (props: any) => {
   }, [publicKey, solNfts]);
 
   useEffect(() => {
-    console.log(populatedBitzStore);
     if (nfts === undefined) return;
+
     if (!populatedBitzStore) {
       if (publicKey && nfts.length > 0) {
         updateBitzBalance(-2);
@@ -182,7 +184,7 @@ const GetBitzSol = (props: any) => {
         };
         (async () => {
           const getBitzGameResult = await viewData(viewDataArgs, nfts[0]);
-          console.log(getBitzGameResult);
+
           if (getBitzGameResult) {
             const bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
             const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
@@ -279,6 +281,7 @@ const GetBitzSol = (props: any) => {
       }
     }
   }, [address, leaderBoardAllTime]);
+
   // secondly, we get the user's Data NFTs and flag if the user has the required Data NFT for the game in their wallet
   async function checkIfHasGameDataNft() {
     const _dataNfts = nfts;
@@ -382,7 +385,7 @@ const GetBitzSol = (props: any) => {
     try {
       let usedPreAccessNonce = solPreaccessNonce;
       let usedPreAccessSignature = solPreaccessSignature;
-      console.log(solPreaccessNonce, solPreaccessSignature, solPreaccessTimestamp);
+
       if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
         const preAccessNonce = await itheumSolPreaccess();
         const message = new TextEncoder().encode(preAccessNonce);
@@ -426,21 +429,20 @@ const GetBitzSol = (props: any) => {
     }
   }
 
-  const { setVisible } = useWalletModal();
   function gamePlayImageSprites() {
     let _viewDataRes = viewDataRes;
-
     let _loadBlankGameCanvas = loadBlankGameCanvas;
     let _gameDataFetched = gameDataFetched;
     let _isFetchingDataMarshal = isFetchingDataMarshal;
     let _isMemeBurnHappening = isMemeBurnHappening;
+
     if (!address) {
       return (
         <img
           onClick={() => {
             setVisible(true);
           }}
-          className={cn("-z-1 z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
+          className={cn("-z-1 relative z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
           src={ImgLogin}
           alt={"Connect your wallet to play"}
         />
@@ -462,7 +464,17 @@ const GetBitzSol = (props: any) => {
     // user is logged in does not have the data nft, so take them to the marketplace
     if (address && !checkingIfHasGameDataNFT && !hasGameDataNFT) {
       return (
-        <div className="relative" onClick={() => {}}>
+        <div
+          className="relative"
+          onClick={() => {
+            if (
+              confirm(
+                "Get BiTz XP Data NFTs from the Tensor NFT Marketplace.\n\nWe will now take you to the Tensor Marketplace, just filter the collection and select any NFT with the Trait - 'itheum.io/getxp'.\n\nThese Data NFTs will then let you play this BiTz XP game and collect XP.\n\n Make sure you enable popups in your browser now"
+              ) == true
+            ) {
+              window.open("https://www.tensor.trade/trade/itheum_drip")?.focus();
+            }
+          }}>
           <img
             className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgGetDataNFT}
@@ -830,33 +842,6 @@ const GetBitzSol = (props: any) => {
     }
   }
 
-  function leaderBoardTable(leaderBoardData: LeaderBoardItemType[]) {
-    return (
-      <>
-        <table className="border border-primary/50 text-center m-auto w-[90%] max-w-[500px]">
-          <thead>
-            <tr className="border">
-              <th className="p-2">Rank</th>
-              <th className="p-2">User</th>
-              <th className="p-2">{`<BiTz>`} Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderBoardData.map((item, rank) => (
-              <tr key={rank} className="border">
-                <td className="p-2">
-                  #{rank + 1} {rank + 1 === 1 && <span> 🥇</span>} {rank + 1 === 2 && <span> 🥈</span>} {rank + 1 === 3 && <span> 🥉</span>}
-                </td>
-                <td className="p-2">{item.playerAddr === address ? "It's YOU! 🫵 🎊" : shortenAddress(item.playerAddr, 8)}</td>
-                <td className="p-2">{item.bits}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-    );
-  }
-
   return (
     <div>
       {usingReferralCode !== "" && (
@@ -866,17 +851,12 @@ const GetBitzSol = (props: any) => {
       )}
 
       <div className="relative w-full">
-        <div
-          onClick={() => scrollToSection("bounties")}
-          className="text-black md:font-bold text-xs md:text-base z-[6] select-none cursor-pointer absolute mt-3 right-3 md:mt-4 md:right-6 flex flex-row items-center justify-center p-1 md:p-2 border border-white rounded-3xl hover:scale-110 bg-white hover:bg-[#35d9fa]/10  transition-all duration-500">
-          <motion.div
-            layout="position"
-            transition={{ layout: { duration: 0.5, type: "spring" } }}
-            animate={{}}
-            className="flex flex-row justify-center items-center  ">
-            {showMessage && "Data Bounties"}
-            {!showMessage && <ArrowBigDownDash className="w-4 h-4 md:h-8 md:w-8 " />}
-          </motion.div>
+        <div className="absolute -z-1 w-full">
+          <img
+            className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
+            src={ImgLoadingGame}
+            alt={"Checking if you have <BiTz> Data NFT"}
+          />
         </div>
         {gamePlayImageSprites()}
       </div>

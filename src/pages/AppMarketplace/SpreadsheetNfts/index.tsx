@@ -114,7 +114,7 @@ export const SpreadsheetNfts = () => {
         hasImage={true}
         imgSrc={headerHero}
         altImageAttribute={"spreadsheetNfts"}
-        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum App"}
         dataNftCount={shownAppDataNfts.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
