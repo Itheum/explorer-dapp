@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { GetBitzMvx } from "pages";
 import GetBitz from "pages/AppMarketplace/GetBitz";
 
 type PathwaysModalProps = {

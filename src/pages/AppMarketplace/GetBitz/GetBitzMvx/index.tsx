@@ -62,9 +62,9 @@ import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import Meme7 from "assets/img/getbitz/memes/7.jpg";
 import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
+
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
 import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
@@ -136,7 +136,7 @@ export const GetBitzMvx = (props: any) => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const tweetText = `url=https://explorer.itheum.io/getbitz?v=2&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
+  const tweetText = `url=https://explorer.itheum.io/getbitz?v=3&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
   ///TODO add ?r=${address}
   const [usingReferralCode, setUsingReferralCode] = useState<string>("");
   // const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
@@ -167,11 +167,6 @@ export const GetBitzMvx = (props: any) => {
 
     return () => clearTimeout(timeout);
   }, []);
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
 
   useEffect(() => {
     if (!hasPendingTransactions) {
@@ -397,58 +392,20 @@ export const GetBitzMvx = (props: any) => {
 
   function gamePlayImageSprites() {
     let _viewDataRes = viewDataRes;
-
     let _loadBlankGameCanvas = loadBlankGameCanvas;
     let _gameDataFetched = gameDataFetched;
     let _isFetchingDataMarshal = isFetchingDataMarshal;
     let _isMemeBurnHappening = isMemeBurnHappening;
 
-    // if (!viewDataRes && !bypassDebug) {
-    //   // for local UI debugging
-    //   _loadBlankGameCanvas = true;
-    //   _gameDataFetched = false;
-    //   _isFetchingDataMarshal = false;
-    //   _isMemeBurnHappening = true;
-
-    //   _viewDataRes = {
-    //     contentType: "string",
-    //     data: {
-    //       bitsMain: {
-    //         bitsGivenSum: -1, // the total bits the user has given out to others. You need to deduct this from bitsScoreBeforePlay / bitsScoreAfterPlay to actual bits balance
-    //       },
-    //       giveBits: {
-    //         bitsScoreToGive: -1, // how much shall we give?
-    //         bitsScoreGiveTo: -1, // who did we give it to?
-    //         bitsScoreGiveToCampaignId: -1, // which campaign to give it to?
-    //         bitsScoreBeforeGive: -1, // the balance of bits we have given to bitsScoreGiveTo BEFORE this change
-    //         bitsScoreAfterGive: -1, // the balance of bits we have given to bitsScoreGiveTo AFTER this change
-    //       },
-    //       gamePlayResult: {
-    //         bitsScoreBeforePlay: -1,
-    //         bitsScoreAfterPlay: -1,
-    //         bitsScoreMonthBeforePlay: -1, // for currently month only
-    //         bitsScoreMonthAfterPlay: -1, // for currently month only
-    //         bitsWon: -1,
-    //         userWonMaxBits: -1, // the user just won the maximum bits
-    //         lastPlayedBeforeThisPlay: -1, // the timestamp before this one where we played an committed to db (i.e UPDATE_FULL_GAME_PLAY_ROUND)
-    //         lastPlayedAndCommitted: -1, // the latest timestamp if we played an committed to db (i.e UPDATE_FULL_GAME_PLAY_ROUND)
-    //         configCanPlayEveryMSecs: -1,
-    //         triedTooSoonTryAgainInMs: -1,
-    //         currentMonthString: "MMYYString", // the MMYY string we are in for monthly leaderboard
-    //         bonusPlayModeWin: -1, // are we in bonus play mode and won bits in bitsWon
-    //         bonusTriesBeforeThisPlay: -1, // how many bonus tries I have left before this play
-    //         bonusTriesAfterThisPlay: -1, // how many bonus tries I have left after I used a bonus try in bonusPlayModeWin
-    //         commandsExecuted: [],
-    //       },
-    //     },
-    //   };
-    // }
-
     // user is not logged in, ask them to connect wallet
     if (!address) {
       return (
         <Link className="relative" to={routeNames.unlock} state={{ from: location.pathname }}>
-          <img className={cn("-z-1 z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgLogin} alt="Connect your wallet to play" />
+          <img
+            className={cn("-z-1 relative z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
+            src={ImgLogin}
+            alt="Connect your wallet to play"
+          />
         </Link>
       );
     }
@@ -872,19 +829,6 @@ export const GetBitzMvx = (props: any) => {
       )}
 
       <div className="relative w-full">
-        {/* <div
-          id="data_bounties_jump_to_button"
-          onClick={() => scrollToSection("bounties")}
-          className="text-black md:font-bold text-xs md:text-base z-[6] select-none cursor-pointer absolute mt-3 right-3 md:mt-4 md:right-6 flex flex-row items-center justify-center p-1 md:p-2 border border-white rounded-3xl hover:scale-110 bg-white hover:bg-[#35d9fa]/10  transition-all duration-500">
-          <motion.div
-            layout="position"
-            transition={{ layout: { duration: 0.5, type: "spring" } }}
-            animate={{}}
-            className="flex flex-row justify-center items-center  ">
-            {showMessage && "Data Bounties"}
-            {!showMessage && <ArrowBigDownDash className="w-4 h-4 md:h-8 md:w-8 " />}
-          </motion.div>
-        </div> */}
         <div className="absolute -z-1 w-full">
           <img
             className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
@@ -918,56 +862,6 @@ export const GetBitzMvx = (props: any) => {
             </ol>
             <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
           </div>
-
-          {/* {address && leaderBoardAllTime.length > 0 && gameDataNFT && (
-        <div id="referral" className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem]">
-          <h2 className="text-center text-white mb-[1rem]">{`<BiTz>`} XP Referrals : Get Bonus Points!</h2>
-          <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
-            <p className="flex items-end md:text-lg md:mr-[1rem]">Bonus Referral Game Plays you have Earned</p>
-            <p className="text-lg md:text-xl dark:text-[#35d9fa] font-bold">{bonusTries === -1 ? "N/A" : <>{bonusTries === -2 ? "0" : bonusTries}</>}</p>
-          </div>
-          <p>
-            With the Referral system you can invite others to join in on the Itheum {`<BiTz>`} XP fun. (Your Referral code is your public wallet address FYI)
-          </p>
-          <p>
-            Each time someone new joins the Itheum {`<BiTz>`} XP system using your referral code,{" "}
-            <span className="text-bold dark:text-[#35d9fa]">they will get rewarded with 1 BONUS chance</span> when they play and{" "}
-            <span className="text-bold dark:text-[#35d9fa]">you will get rewarded with 2 BONUS chances</span> to Get {`<BiTz>`} and climb the LEADERBOARDS. And
-            these{" "}
-            <span>BONUS changes have a higher probability (than regular game play changes) to get larger scores between 15-25 and NO 0 point RUGS!! w👀t!</span>
-          </p>
-          <p className="text-bold text-lg mt-5">How can you share your Referral code?</p>
-          <ol className="mt-5">
-            <li className="my-5">
-              1) You referral code is attached to all Give {`<BiTz>`} or Get {`<BiTz>`} Social Media post links that are shown to you when you complete an
-              action. All you need to do is click on the X button shown to you after any action and share it.
-            </li>
-            <li className="my-5">
-              2) You can also share this unique invite link with others :{" "}
-              <a className="!text-[#7a98df] hover:underline" href={`https://explorer.itheum.io/getbitz?r=${address}`} target="blank">
-                Your invite link
-              </a>{" "}
-            </li>
-            <li className="my-5 flex flex-row gap-4 items-center">
-              3) Or you can share a tweet now using your referral code here:{" "}
-              <HoverBorderGradient className="-z-1">
-                <a
-                  className="z-1 bg-black text-white  rounded-3xl gap-2 flex flex-row justify-center items-center"
-                  href={"https://twitter.com/intent/tweet?" + tweetTextReferral}
-                  data-size="large"
-                  target="_blank">
-                  <span className=" [&>svg]:h-4 [&>svg]:w-4 z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
-                      <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
-                    </svg>
-                  </span>
-                  <p className="z-10">Tweet</p>
-                </a>
-              </HoverBorderGradient>
-            </li>
-          </ol>
-        </div>
-      )} */}
 
           <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
             <div className="leaderBoard">

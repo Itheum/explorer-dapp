@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Home, Menu, Store, Wallet, Gamepad2 } from "lucide-react";
+import { Home, Menu, Store, Wallet, Gamepad2, AreaChart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -82,7 +82,7 @@ export const Navbar = () => {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Data Widget Apps</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Apps</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className={cn("grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]", isLoggedInMvx ? "" : "!w-[400px]")}>
                 {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
@@ -144,7 +144,7 @@ export const Navbar = () => {
                 {isLoggedInMvx && (
                   <MvxBitzDropdown
                     handlePlayActionBtn={async () => {
-                      await setDefaultChain("multiversx");
+                      setDefaultChain("multiversx");
                       await sleep(0.2);
                       setShowPlayBitzModal(true);
                     }}
@@ -155,7 +155,7 @@ export const Navbar = () => {
                 {isLoggedInSol && (
                   <SolBitzDropdown
                     handlePlayActionBtn={async () => {
-                      await setDefaultChain("solana");
+                      setDefaultChain("solana");
                       await sleep(0.2);
                       setShowPlayBitzModal(true);
                     }}
@@ -175,13 +175,6 @@ export const Navbar = () => {
               </div>
             </Link>
           </NavigationMenuItem>
-          {/* <NavigationMenuItem
-            className="cursor-pointer"
-            onClick={() => {
-              setShowPathwaysModel(true);
-            }}>
-            Pathways
-          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <SwitchButton />
           </NavigationMenuItem>
@@ -196,7 +189,7 @@ export const Navbar = () => {
               isLoggedInMvx ? (
                 <MvxBitzDropdown
                   handlePlayActionBtn={async () => {
-                    await setDefaultChain("multiversx");
+                    setDefaultChain("multiversx");
                     await sleep(0.2);
                     setShowPlayBitzModal(true);
                   }}
@@ -204,7 +197,7 @@ export const Navbar = () => {
               ) : (
                 <SolBitzDropdown
                   handlePlayActionBtn={async () => {
-                    await setDefaultChain("solana");
+                    setDefaultChain("solana");
                     await sleep(0.2);
                     setShowPlayBitzModal(true);
                   }}
@@ -240,7 +233,7 @@ export const Navbar = () => {
             <DropdownMenuGroup>
               <Link to={routeNames.analytics}>
                 <DropdownMenuItem>
-                  <Gamepad2 className="mr-2 h-4 w-4" />
+                  <AreaChart className="mr-2 h-4 w-4" />
                   <span>Analytics</span>
                 </DropdownMenuItem>
               </Link>
@@ -255,7 +248,7 @@ export const Navbar = () => {
             </DropdownMenuGroup>
             <DropdownMenuLabel className="flex flex-row items-center">
               <Store className="mr-2 h-4 w-4" />
-              <span>Data Widget Apps</span>
+              <span>Apps</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
