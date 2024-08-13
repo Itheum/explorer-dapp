@@ -154,7 +154,7 @@ export const MultiversxInfographics = () => {
         hasImage={true}
         imgSrc={headerHero}
         altImageAttribute={"mvxInfographics"}
-        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum Itheum App"}
         dataNftCount={shownAppDataNfts.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (

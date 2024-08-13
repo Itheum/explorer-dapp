@@ -115,7 +115,7 @@ export const ItheumTrailblazer = () => {
         hasImage={true}
         imgSrc={headerHero}
         altImageAttribute={"itheumTrailblazer"}
-        pageSubtitle={"Data NFTs that Unlock this Itheum Data Widget"}
+        pageSubtitle={"Data NFTs that Unlock this Itheum App"}
         dataNftCount={TRAILBLAZER_TOKENS.length}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (

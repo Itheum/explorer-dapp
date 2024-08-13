@@ -7,7 +7,6 @@ import bs58 from "bs58";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
-
 import { MvxDataNftCard, Loader } from "components";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
@@ -16,10 +15,10 @@ import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
 import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, sleep, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
-import { useNftsStore } from "store/nfts";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
+import { useNftsStore } from "store/nfts";
 
 export const MyWallet = () => {
   const { tokenLogin } = useGetLoginInfo();
@@ -28,7 +27,6 @@ export const MyWallet = () => {
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [isAutoOpenFormat, setIsAutoOpenFormat] = useState<boolean>(false);
   const [isDomPurified, setIsDomPurified] = useState<boolean>(false);
-
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol } = useNftsStore();
   const [numberOfMvxNftsShown, setNumberOfMvxNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownMvxDataNfts, setShownMvxDataNfts] = useState<DataNft[]>(mvxNfts.slice(0, SHOW_NFTS_STEP));
@@ -37,7 +35,6 @@ export const MyWallet = () => {
   const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
   const { publicKey, signMessage } = useWallet();
-
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
   const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
@@ -249,6 +246,7 @@ export const MyWallet = () => {
   return (
     <>
       <MvxSolSwitch />
+
       {mvxNetworkSelected && (
         <HeaderComponent pageTitle={"My MultiversX Data NFTs"} hasImage={false} pageSubtitle={"My MultiversX Data NFTs"} dataNftCount={mvxNfts.length}>
           {shownMvxDataNfts.length > 0 ? (
@@ -271,8 +269,8 @@ export const MyWallet = () => {
                         <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
                         original file (at your own risk). <br />
                         <br />
-                        Alternatively, <strong>as the safest option, only use official apps in the Data Widget Marketplace</strong> (accessible via the Header
-                        Menu in this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
+                        Alternatively, <strong>as the safest option, only use official apps in the Apps Marketplace</strong> (accessible via the Header Menu in
+                        this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
                       </div>
                     )}
 
@@ -344,6 +342,7 @@ export const MyWallet = () => {
           )}
         </HeaderComponent>
       )}
+
       {!mvxNetworkSelected && (
         <HeaderComponent pageTitle={"My Solana Data NFTs"} hasImage={false} pageSubtitle={"My Solana Data NFTs"} dataNftCount={solNfts.length}>
           {shownSolDataNfts.length > 0 ? (
@@ -365,8 +364,8 @@ export const MyWallet = () => {
                         <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
                         original file (at your own risk). <br />
                         <br />
-                        Alternatively, <strong>as the safest option, only use official apps in the Data Widget Marketplace</strong> (accessible via the Header
-                        Menu in this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
+                        Alternatively, <strong>as the safest option, only use official apps in the Apps Marketplace</strong> (accessible via the Header Menu in
+                        this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
                       </div>
                     )}
 
@@ -438,6 +437,7 @@ export const MyWallet = () => {
           )}
         </HeaderComponent>
       )}
+
       <div className="m-auto mb-5">
         {mvxNetworkSelected && numberOfMvxNftsShown < mvxNfts.length && (
           <Button

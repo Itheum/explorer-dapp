@@ -17,7 +17,7 @@ export const APP_MAPPINGS = [
     appName: "Get <BiTz> Points",
     appDescription: "Collect Itheum <BiTz> Points",
     routeKey: "getbitz",
-    desc: "Consider yourself a Itheum OG and data ownership pioneer? Open this app to get <BiTz> points, <BiTz> points are like Data Ownership OG XP. Let's Get <BiTz>!",
+    desc: "Open this app to get <BiTz> XP by playing a simple meme burning gaming. <BiTz> XP is a proof-of-activity system for the Itheum Protocol can swap to ITHEUM airdrops in future ;)",
     img: iconGetBitz,
   },
   {
@@ -31,14 +31,14 @@ export const APP_MAPPINGS = [
     appName: "NF-Tunes",
     appDescription: "Listen to Music Playlists",
     routeKey: "nftunes",
-    desc: "Explore a multisensory journey with this app, extending art beyond visuals. Through vibrations, it unveils the creative potentials of Data NFTs, offering a unique and immersive experience.",
+    desc: "Listen to music from indie musicians with this app. All music is unlocked from Music Data NFTs. Like what you hear? why not support the musician by owning a Music Data NFT.",
     img: iconNFTunes,
   },
   {
     appName: "Deep Forest Music Data NFT Player",
     appDescription: "The Chronicles of Deep Forest",
     routeKey: "deepforestmusic",
-    desc: "Experience Grammy Award winner Deep Forest's timeless music reimagined in a limited edition 90-piece Music Data NFT collection",
+    desc: "Experience Grammy Award winner Deep Forest's timeless music reimagined in a limited edition 90-piece Music Data NFT collection.",
     img: iconDeepForest,
   },
   {

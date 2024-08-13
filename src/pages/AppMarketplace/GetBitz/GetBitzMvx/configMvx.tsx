@@ -59,8 +59,8 @@ export const faqs = [
           <a className="!text-[#7a98df] hover:underline" href="https://datadex.itheum.io/datanfts/marketplace/market" target="blank">
             Data DEX
           </a>{" "}
-          to explore and "favorite" the Data NFTs and Data Creators you like or if you use features like "Data Uptime Checks" or use Data Widgets inside the
-          Itheum Explorer, all these Itheum Protocol "activity" will have {`<BiTz>`} bonus points attached to it and sent to you!
+          to explore and "favorite" the Data NFTs and Data Creators you like or if you use features like "Data Uptime Checks" or use Apps inside the Itheum
+          Explorer, all these Itheum Protocol "activity" will have {`<BiTz>`} bonus points attached to it and sent to you!
         </p>
       </>
     ),
@@ -71,7 +71,7 @@ export const faqs = [
       <>
         {" "}
         <p>
-          Currently, you can play it on Itheum Explorer's Get {`<BiTz>`} Data Widget{" "}
+          Currently, you can play it on Itheum Explorer's Get {`<BiTz>`} App{" "}
           <a className="!text-[#7a98df] hover:underline" href="https://explorer.itheum.io/getbitz" target="blank">
             explorer.itheum.io/getbitz
           </a>

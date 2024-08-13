@@ -44,10 +44,10 @@ export const AnalyticsSnapshot = () => {
   }, []);
 
   return (
-    <div className="w-[100%] bg-green-000">
-      <div className="bg-red-000">
-        <div className="bg-red-000 flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-10">
-          <div className="flex-1 bg-red-000 border-dotted border border-[#CCCCCC] dark:border-[#6a6a6a] rounded-3xl">
+    <div className="w-[100%]">
+      <div className="">
+        <div className=" flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-10">
+          <div className="flex-1 border-dotted border border-[#CCCCCC] dark:border-[#6a6a6a] rounded-3xl overflow-hidden">
             <div className="min-h-[300px]">
               {(fullChainSupplyData.length > 0 && (
                 <ResponsiveContainer minWidth="100%" minHeight={300} style={{ marginBottom: "2.5rem" }}>
