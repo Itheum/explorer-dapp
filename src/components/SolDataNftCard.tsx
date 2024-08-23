@@ -41,6 +41,7 @@ export function SolDataNftCard({
   function goToDrip() {
     window.open(DRIP_PAGE)?.focus();
   }
+
   const imageSrc: string = (dataNft.content.links && dataNft.content.links["image" as any] ? dataNft.content.links["image" as any] : "") as string;
   const title = dataNft.content.metadata.name;
   const description = dataNft.content.metadata.description ?? "";
@@ -49,14 +50,11 @@ export function SolDataNftCard({
   return (
     <div className="mb-3">
       <Card
-        className={cn(
-          cardStyles,
-          "border-[0.5px]  dark:border-slate-100/30 border-slate-300  bg-transparent rounded-[2.37rem] base:w-[18.5rem] md:w-[20.6rem]"
-        )}>
+        className={cn(cardStyles, "border-[0.5px]  dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18rem] md:w-[19rem]")}>
         <CardContent className="flex flex-col p-3">
           <img src={imageSrc} className="mb-8 base:h-[15rem] md:h-[18rem] rounded-3xl" />
 
-          <div className="md:h-[15rem] h-[13rem]">
+          <div>
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 base:text-sm md:text-base">Title:</span>
               <span className="col-span-8 text-left base:text-sm md:text-base">{title}</span>
