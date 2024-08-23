@@ -34,7 +34,7 @@ export function MvxSolSwitch() {
   return (
     <>
       <div className="my-5 mx-3">
-        <p className="items-center cursor-pointer my-2 text-sm opacity-50">This app works on multiple chains. Swap between them:</p>
+        <p className="items-center cursor-pointer my-2 text-sm opacity-50">This app works on multiple chains:</p>
         <label className="inline-flex items-center cursor-pointer">
           <div className="me-3 text-xl font-medium text-gray-900 dark:text-gray-300 flex">
             <svg className="mt-[1px]" width="25" height="25" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">

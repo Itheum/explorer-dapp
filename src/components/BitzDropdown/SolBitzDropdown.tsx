@@ -107,7 +107,7 @@ export const ClaimBitzButton = (props: any) => {
                   <PopoverPrimitive.PopoverClose asChild>
                     <div className="flex flex-row justify-center items-center">
                       <Gift className="mx-2 text-[#35d9fa]" />
-                      <span className="text-[12px] md:text-sm"> Collect your X {`<BiTz>`} </span>
+                      <span className="text-[12px] md:text-sm"> Collect Your {`<BiTz>`} XP </span>
                     </div>
                   </PopoverPrimitive.PopoverClose>
                 );
@@ -128,7 +128,7 @@ export const ClaimBitzButton = (props: any) => {
           <PopoverPrimitive.PopoverClose asChild>
             <div className="flex flex-row justify-center items-center">
               <Gift className="mx-2 text-[#35d9fa]" />
-              <span className="text-[12px] md:text-sm"> Collect your {`<BiTz>`} </span>
+              <span className="text-[12px] md:text-sm"> Collect Your {`<BiTz>`} XP </span>
             </div>
           </PopoverPrimitive.PopoverClose>
         )}
