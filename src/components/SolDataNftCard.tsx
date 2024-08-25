@@ -49,39 +49,38 @@ export function SolDataNftCard({
   const royalties = dataNft.royalty;
   return (
     <div className="mb-3">
-      <Card
-        className={cn(cardStyles, "border-[0.5px]  dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18rem] md:w-[19rem]")}>
+      <Card className={cn(cardStyles, "border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18rem] md:w-[19rem]")}>
         <CardContent className="flex flex-col p-3">
           <img src={imageSrc} className="mb-8 base:h-[15rem] md:h-[18rem] rounded-3xl" />
 
           <div>
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Title:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">{title}</span>
+              <span className="col-span-4 opacity-6 text-sm">Title:</span>
+              <span className="col-span-8 text-left text-sm">{title}</span>
             </div>
-            <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Description:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">
-                {description.length > 20 ? description.slice(0, 22) + " ..." : description}
-              </span>
-            </div>
+            {description && description.trim() !== "" && (
+              <div className="grid grid-cols-12 mb-1">
+                <span className="col-span-4 opacity-6 text-sm">Description:</span>
+                <span className="col-span-8 text-left text-sm">{description.length > 20 ? description.slice(0, 22) + " ..." : description}</span>
+              </div>
+            )}
 
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">ID:</span>
+              <span className="col-span-4 opacity-6 text-sm">ID:</span>
               <div className="col-span-8 w-full items-center justify-center">
-                <p className="flex flex-row w-full items-center mb-0 base:text-sm md:text-base">{id.slice(0, 6) + " ... " + id.slice(-6)}</p>
+                <p className="flex flex-row w-full items-center mb-0 text-sm">{id.slice(0, 6) + " ... " + id.slice(-6)}</p>
               </div>
             </div>
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Royalties:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">{royalties.percent * 100}%</span>
+              <span className="col-span-4 opacity-6 text-sm">Royalties:</span>
+              <span className="col-span-8 text-left text-sm">{royalties.percent * 100}%</span>
             </div>
           </div>
 
           <div className="">
             {!isWallet ? (
               <div className="pt-5 pb-3 text-center">
-                <h6 className="base:!text-sm md:!text-base" style={{ visibility: owned ? "visible" : "hidden" }}>
+                <h6 className="!text-sm" style={{ visibility: owned ? "visible" : "hidden" }}>
                   You have this Data NFT
                 </h6>
               </div>
@@ -94,7 +93,7 @@ export function SolDataNftCard({
                 <Modal
                   openTrigger={
                     <Button
-                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight !text-sm hover:opacity-80 hover:text-black"
                       variant="ghost"
                       onClick={() => viewData(index)}>
                       {isDataWidget ? "Open App" : "View Data"}

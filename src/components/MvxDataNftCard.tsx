@@ -60,61 +60,61 @@ export function MvxDataNftCard({
 
           <div>
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Title:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.title}</span>
+              <span className="col-span-4 opacity-6 text-sm">Title:</span>
+              <span className="col-span-8 text-left text-sm">{dataNft.title}</span>
             </div>
+            {dataNft.description && dataNft.description.trim() !== "" && (
+              <div className="grid grid-cols-12 mb-1">
+                <span className="col-span-4 opacity-6 text-sm">Description:</span>
+                <span className="col-span-8 text-left text-sm">
+                  {dataNft.description.length > 20 ? dataNft.description.slice(0, 22) + " ..." : dataNft.description}
+                </span>
+              </div>
+            )}
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Description:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">
-                {dataNft.description.length > 20 ? dataNft.description.slice(0, 22) + " ..." : dataNft.description}
-              </span>
-            </div>
-            <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Creator:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">
+              <span className="col-span-4 opacity-6 text-sm">Creator:</span>
+              <span className="col-span-8 text-left text-sm">
                 {<MXAddressLink explorerAddress={explorerAddress} address={dataNft.creator} precision={6} />}
               </span>
             </div>
             {dataNft.creationTime && (
               <div className="grid grid-cols-12 mb-1">
-                <span className="col-span-4 opacity-6 base:text-sm md:text-base">Created At:</span>
-                <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.creationTime.toLocaleString()}</span>
+                <span className="col-span-4 opacity-6 text-sm">Created At:</span>
+                <span className="col-span-8 text-left text-sm">{dataNft.creationTime.toLocaleString()}</span>
               </div>
             )}
 
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Identifier:</span>
+              <span className="col-span-4 opacity-6 text-sm">Identifier:</span>
               <div className="col-span-8 w-full items-center justify-center">
                 <a
                   href={`${MARKETPLACE_DETAILS_PAGE}${dataNft.tokenIdentifier}`}
                   className="flex flex-row items-center text-decoration-none !text-blue-500"
                   target="_blank">
-                  <p className="flex flex-row w-full items-center mb-0 base:text-sm md:text-base">{dataNft.tokenIdentifier}</p>
+                  <p className="flex flex-row w-full items-center mb-0 text-sm">{dataNft.tokenIdentifier}</p>
                 </a>
               </div>
             </div>
             {showBalance && (
               <div className="grid grid-cols-12 mb-1">
-                <span className="col-span-4 opacity-6 base:text-sm md:text-base">Balance:</span>
-                <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.balance !== 0 ? dataNft.balance.toString() : "1"}</span>
+                <span className="col-span-4 opacity-6 text-sm">Balance:</span>
+                <span className="col-span-8 text-left text-sm">{dataNft.balance !== 0 ? dataNft.balance.toString() : "1"}</span>
               </div>
             )}
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Total Supply:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">{dataNft.supply.toString()}</span>
+              <span className="col-span-4 opacity-6 text-sm">Total Supply:</span>
+              <span className="col-span-8 text-left text-sm">{dataNft.supply.toString()}</span>
             </div>
             <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 base:text-sm md:text-base">Royalties:</span>
-              <span className="col-span-8 text-left base:text-sm md:text-base">
-                {isNaN(dataNft.royalties) ? "0%" : (dataNft.royalties * 100).toFixed(2) + "%"}
-              </span>
+              <span className="col-span-4 opacity-6 text-sm">Royalties:</span>
+              <span className="col-span-8 text-left text-sm">{isNaN(dataNft.royalties) ? "0%" : (dataNft.royalties * 100).toFixed(2) + "%"}</span>
             </div>
           </div>
 
           <div className="">
             {!isWallet ? (
               <div className="pt-5 pb-3 text-center">
-                <h6 className="base:!text-sm md:!text-base" style={{ visibility: owned ? "visible" : "hidden" }}>
+                <h6 className="!text-sm" style={{ visibility: owned ? "visible" : "hidden" }}>
                   You have this Data NFT
                 </h6>
               </div>
@@ -127,7 +127,7 @@ export function MvxDataNftCard({
                 <Modal
                   openTrigger={
                     <Button
-                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight !text-sm hover:opacity-80 hover:text-black"
                       variant="ghost"
                       onClick={() => viewData(index)}>
                       {isDataWidget ? "Open App" : "View Data"}

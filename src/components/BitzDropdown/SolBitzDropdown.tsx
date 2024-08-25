@@ -97,7 +97,7 @@ export const ClaimBitzButton = (props: any) => {
       <span className="absolute hover:bg-[#35d9fa] inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF03,#45d4ff_50%,#111111_50%)]" />
       <span className="inline-flex h-full hover:bg-gradient-to-tl from-background to-[#35d9fa] w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium backdrop-blur-3xl">
         {cooldown === -2 ? (
-          <span className="blinkMe">Click to play BiTz</span>
+          <span className="blinkMe">Click to Get BiTz XP</span>
         ) : cooldown > 0 ? (
           <Countdown
             date={cooldown}

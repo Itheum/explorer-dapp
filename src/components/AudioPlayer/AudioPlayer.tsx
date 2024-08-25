@@ -291,7 +291,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   return (
-    <div className="bg-white dark:bg-black">
+    <div className="bg-gradient-to-br from-[#00C79740] to-[#3D00EA20] bg-blend-multiply">
       <div className="bg-[#1b1b1b10] backdrop-contrast-[1.10]">
         <div className="p-2 md:p-12 relative overflow-hidden">
           {displayPlaylist ? (
