@@ -230,15 +230,11 @@ export const GamerPassport = () => {
           <h1 className="!text-white !text-2xl text-center md:!text-3xl">Gamer Passport</h1>
           <h2 className="!text-white !text-lg md:!text-xl md:w-[500px] text-center mt-2">Play your games, share your data, and score monthly rewards!</h2>
           {!userInDataCollection && !userInReview && (
-            <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center mt-5">
-              <div className="bg-background rounded-md">
-                <Button
-                  onClick={() => scrollToSection("join-process")}
-                  className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                  Sign Up
-                </Button>
-              </div>
-            </div>
+            <Button
+              onClick={() => scrollToSection("join-process")}
+              className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mt-3">
+              Sign Up
+            </Button>
           )}
 
           <>

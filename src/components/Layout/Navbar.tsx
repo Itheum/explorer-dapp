@@ -62,16 +62,9 @@ export const Navbar = () => {
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
-              to={routeNames.home}
+              to={routeNames.nftunes}
               className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
-              Home
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem className="cursor-pointer">
-            <Link
-              to={routeNames.analytics}
-              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
-              Analytics
+              NF-Tunes
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="cursor-pointer">
@@ -79,6 +72,13 @@ export const Navbar = () => {
               to={routeNames.gamerpassport}
               className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
               Gamer Passport
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem className="cursor-pointer">
+            <Link
+              to={routeNames.analytics}
+              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+              Analytics
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>

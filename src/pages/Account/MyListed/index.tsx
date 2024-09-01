@@ -108,12 +108,14 @@ export const MyListed = () => {
                         <span className="col-span-4 opacity-6">Title:</span>
                         <span className="col-span-8 text-left">{isDataNftLoaded && dataNft.title}</span>
                       </div>
-                      <div className="grid grid-cols-12 mb-1">
-                        <span className="col-span-4 opacity-6">Description:</span>
-                        <span className="col-span-8 text-left">
-                          {isDataNftLoaded && (dataNft.description.length > 20 ? dataNft.description.slice(0, 20) + " ..." : dataNft.description)}
-                        </span>
-                      </div>
+                      {dataNft.description && dataNft.description.trim() !== "" && (
+                        <div className="grid grid-cols-12 mb-1">
+                          <span className="col-span-4 opacity-6">Description:</span>
+                          <span className="col-span-8 text-left">
+                            {isDataNftLoaded && (dataNft.description.length > 20 ? dataNft.description.slice(0, 20) + " ..." : dataNft.description)}
+                          </span>
+                        </div>
+                      )}
                       <div className="grid grid-cols-12 mb-1">
                         <span className="col-span-4 opacity-6">Creator:</span>
                         <span className="col-span-8 text-left">

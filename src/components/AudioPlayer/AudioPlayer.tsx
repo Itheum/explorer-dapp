@@ -67,15 +67,19 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   useEffect(() => {
-    if (firstSongBlobUrl)
+    if (firstSongBlobUrl) {
       setSongSource((prevState) => ({
         ...prevState, // keep all other key-value pairs
         [1]: firstSongBlobUrl, // update the value of the first index
       }));
+    }
+
     audio.addEventListener("ended", function () {
       setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
     });
+
     audio.addEventListener("timeupdate", updateProgress);
+
     audio.addEventListener("canplaythrough", function () {
       // Audio is ready to be played
       setIsLoaded(true);
@@ -83,6 +87,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       // play the song
       if (audio.currentTime == 0) togglePlay();
     });
+
     if (songs) {
       songs?.forEach((song: any) => {
         if (song.idx === 1) return;
@@ -90,6 +95,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
       });
       updateProgress();
     }
+
     return () => {
       audio.pause();
       audio.removeEventListener("timeupdate", updateProgress);
@@ -129,7 +135,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     }
   }, [previewUrl]);
 
-  /// format time as minutes:seconds
+  // format time as minutes:seconds
   const formatTime = (_seconds: number) => {
     const minutes = Math.floor(_seconds / 60);
     const remainingSeconds = Math.floor(_seconds % 60);
@@ -140,7 +146,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     return `${formattedMinutes}:${formattedSeconds}`;
   };
 
-  /// fetch song from Marshal
+  // fetch song from Marshal
   const fetchMarshalForSong = async (index: number) => {
     if (songSource[index] === undefined) {
       try {
@@ -291,7 +297,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   };
 
   return (
-    <div className="bg-white dark:bg-black">
+    <div className="bg-gradient-to-br from-[#00C79740] to-[#3D00EA20] bg-blend-multiply">
       <div className="bg-[#1b1b1b10] backdrop-contrast-[1.10]">
         <div className="p-2 md:p-12 relative overflow-hidden">
           {displayPlaylist ? (
@@ -356,7 +362,6 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
                     <div className="flex flex-col select-text">
                       <div>
                         <span className="font-sans text-lg font-medium leading-7 text-foreground">{songs[currentTrackIndex]?.title}</span>{" "}
-                        <span className="ml-2 font-sans text-base font-medium text-muted-foreground">{songs[currentTrackIndex]?.date.split("T")[0]}</span>
                       </div>
 
                       <span className="font-sans text-base font-medium text-foreground/60">{songs[currentTrackIndex]?.category}</span>

@@ -5,7 +5,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { GET_BITZ_TOKEN } from "appsConfig";
 import { SUPPORTED_MVX_COLLECTIONS, SUPPORTED_SOL_COLLECTIONS } from "config";
 import { useGetAccount } from "hooks";
-import { decodeNativeAuthToken, getApiSolNft } from "libs/utils";
+import { decodeNativeAuthToken, getApiSolNft, getApiWeb2Apps } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "./account";
 import { useNftsStore } from "./nfts";
@@ -14,7 +14,6 @@ import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz/GetBitzMvx";
 export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
-
   const { publicKey } = useWallet();
   const addressSol = publicKey?.toBase58();
   const isLoggedInSol = !!addressSol;
@@ -52,13 +51,15 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     async function fetchSolNfts() {
       updateIsLoadingSol(true);
+
       if (!addressSol) {
         updateSolNfts([]);
       } else {
-        const resp = await fetch(`${getApiSolNft()}/fetchNfts?publicKeyb58=${addressSol}`);
+        const resp = await fetch(`${getApiWeb2Apps()}/datadexapi/bespoke/sol/getDataNFTsByOwner?publicKeyb58=${addressSol}`);
         const data = await resp.json();
         updateSolNfts(data.nfts);
       }
+
       updateIsLoadingSol(false);
     }
     fetchSolNfts();
