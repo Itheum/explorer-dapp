@@ -42,6 +42,27 @@ export const APP_MAPPINGS = [
     img: iconDeepForest,
   },
   {
+    appName: "Time Capsule",
+    appDescription: "Preserve Memories Forever",
+    routeKey: "timecapsule",
+    desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
+    img: iconTimeCapsule,
+  },
+  {
+    appName: "Spreadsheet NFTs",
+    appDescription: "Explore Data NFTs that have entire datasets inside of them",
+    routeKey: "spreadsheetnfts",
+    desc: "Explore Data NFTs that have entire datasets inside of them",
+    img: iconSpreadsheetNfts,
+  },
+  {
+    appName: "NF-Podcast",
+    appDescription: "Listen to Podcasts",
+    routeKey: "nfpodcast",
+    desc: "Explore the world of podcasts through Data NFTs. Listen to podcasts and explore the world of Data NFTs through this app.",
+    img: iconNFPodcast,
+  },
+  {
     appName: "Bober Game Room",
     appDescription: "Play a fun Bober Video Game",
     routeKey: "bobergameroom",
@@ -75,27 +96,6 @@ export const APP_MAPPINGS = [
     routeKey: "multiversxinfographics",
     desc: 'This app visualizes dynamic and evolving data streams rendered into PDF files that showcase unique MultiversX ecosystem "alpha", insights, and education.',
     img: iconInfrographics,
-  },
-  {
-    appName: "Time Capsule",
-    appDescription: "Preserve Memories Forever",
-    routeKey: "timecapsule",
-    desc: "Capture, archive, and relive historic social media events through photos and videos, preserving memories for future generations. Join the nostalgia journey!",
-    img: iconTimeCapsule,
-  },
-  {
-    appName: "Spreadsheet NFTs",
-    appDescription: "Explore Data NFTs that have entire datasets inside of them",
-    routeKey: "spreadsheetnfts",
-    desc: "Explore Data NFTs that have entire datasets inside of them",
-    img: iconSpreadsheetNfts,
-  },
-  {
-    appName: "NF-Podcast",
-    appDescription: "Listen to Podcasts",
-    routeKey: "nfpodcast",
-    desc: "Explore the world of podcasts through Data NFTs. Listen to podcasts and explore the world of Data NFTs through this app.",
-    img: iconNFPodcast,
   },
 ];
 
