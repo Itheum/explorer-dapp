@@ -31,7 +31,7 @@ export const SolBitzDropdown = (props: any) => {
                   {isLoggedInSol &&
                     (solBitzBalance === -2 ? (
                       <div className="flex items-center gap-0.5 blinkMe text-lg">
-                        ... <FlaskBottleAnimation cooldown={cooldown} />
+                        <FlaskBottleAnimation cooldown={cooldown} />
                       </div>
                     ) : (
                       <>

@@ -22,6 +22,9 @@ export function SolDataNftCard({
   filterData,
   cardStyles,
   modalStyles,
+  openActionBtnText,
+  openActionFireLogic,
+  hideIsInWalletSection,
 }: {
   index: number;
   dataNft: DasApiAsset;
@@ -37,6 +40,9 @@ export function SolDataNftCard({
   filterData?: Array<IFilterData>;
   cardStyles?: string;
   modalStyles?: string;
+  openActionBtnText?: string;
+  openActionFireLogic?: any;
+  hideIsInWalletSection?: boolean;
 }) {
   function goToDrip() {
     window.open(DRIP_PAGE)?.focus();
@@ -47,6 +53,7 @@ export function SolDataNftCard({
   const description = dataNft.content.metadata.description ?? "";
   const id = dataNft.id.toString();
   const royalties = dataNft.royalty;
+
   return (
     <div className="mb-3">
       <Card className={cn(cardStyles, "border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18rem] md:w-[19rem]")}>
@@ -54,14 +61,13 @@ export function SolDataNftCard({
           <img src={imageSrc} className="mb-8 base:h-[15rem] md:h-[18rem] rounded-3xl" />
 
           <div>
-            <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 text-sm">Title:</span>
-              <span className="col-span-8 text-left text-sm">{title}</span>
+            <div className="grid grid-cols-12 mb-2 mt-2">
+              <span className="col-span-12 text-left text-md">{title}</span>
             </div>
+
             {description && description.trim() !== "" && (
               <div className="grid grid-cols-12 mb-1">
-                <span className="col-span-4 opacity-6 text-sm">Description:</span>
-                <span className="col-span-8 text-left text-sm">{description.length > 20 ? description.slice(0, 22) + " ..." : description}</span>
+                <span className="col-span-12 text-left text-sm">{description.length > 68 ? description.slice(0, 70) + " ..." : description}</span>
               </div>
             )}
 
@@ -71,6 +77,7 @@ export function SolDataNftCard({
                 <p className="flex flex-row w-full items-center mb-0 text-sm">{id.slice(0, 6) + " ... " + id.slice(-6)}</p>
               </div>
             </div>
+
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 text-sm">Royalties:</span>
               <span className="col-span-8 text-left text-sm">{royalties.percent * 100}%</span>
@@ -78,14 +85,18 @@ export function SolDataNftCard({
           </div>
 
           <div className="">
-            {!isWallet ? (
-              <div className="pt-5 pb-3 text-center">
-                <h6 className="!text-sm" style={{ visibility: owned ? "visible" : "hidden" }}>
-                  You have this Data NFT
-                </h6>
-              </div>
-            ) : (
-              <div></div>
+            {!hideIsInWalletSection && (
+              <>
+                {!isWallet ? (
+                  <div className="pt-5 pb-3 text-center">
+                    <h6 className="!text-sm" style={{ visibility: owned ? "visible" : "hidden" }}>
+                      You have this Data NFT
+                    </h6>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+              </>
             )}
 
             <CardFooter className="flex w-full justify-center py-2 text-center">
@@ -95,8 +106,14 @@ export function SolDataNftCard({
                     <Button
                       className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight !text-sm hover:opacity-80 hover:text-black"
                       variant="ghost"
-                      onClick={() => viewData(index)}>
-                      {isDataWidget ? "Open App" : "View Data"}
+                      onClick={() => {
+                        viewData(index);
+
+                        if (openActionFireLogic) {
+                          openActionFireLogic();
+                        }
+                      }}>
+                      {openActionBtnText ? openActionBtnText : isDataWidget ? "Open App" : "View Data"}
                     </Button>
                   }
                   closeOnOverlayClick={false}

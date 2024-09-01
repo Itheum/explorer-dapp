@@ -98,8 +98,7 @@ const RecentDataNFTsSection: React.FC = () => {
       {isApiUp ? (
         <div>
           <h2 className="mt-12 py-2 mb-0 !text-3xl text-center">Recent Data NFTs</h2>
-          <div
-            className={`w-full flex flex-row flex-wrap items-center justify-center md:items-start md:justify-around ${!isLoading ? "md:after:content-[''] md:after:flex-auto" : ""}`}>
+          <div className={`w-full flex flex-row flex-wrap items-center justify-center`}>
             {isLoading ? (
               <Loader className="h-[20rem]" />
             ) : latestOffers?.length === 0 ? (

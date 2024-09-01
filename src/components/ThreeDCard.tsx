@@ -41,7 +41,7 @@ export function ThreeDCard(props: ThreeDCardProps) {
           </CardItem>
         )}
         {wantedTokenAmount && (
-          <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
+          <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300 text-[12px]">
             {` Unlock for ${wantedTokenAmount === 0 ? "Free" : `${wantedTokenAmount} ITHEUM/NFT`}`}
           </CardItem>
         )}
