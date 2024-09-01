@@ -308,7 +308,7 @@ export const NFTunes = () => {
                     "title": "Sip of Nostalgia",
                     "stream":
                       "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94991.audio_SipofNostalgia.mp3",
-                    "airdrop": "https://drip.haus/itheum",
+                    "airdrop": "https://x.com/itheum/status/1829117957198196930",
                   },
                   {
                     "idx": 2,
@@ -319,7 +319,7 @@ export const NFTunes = () => {
                       "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/9473.image_MugenCafe.jpg",
                     "title": "Mugen Cafe",
                     "stream": "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94303.audio_MugenCafe.mp3",
-                    "airdrop": "https://drip.haus/itheum",
+                    "airdrop": "https://x.com/itheum/status/1829117957198196930",
                   },
                   {
                     "idx": 3,
@@ -330,7 +330,7 @@ export const NFTunes = () => {
                       "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94952.image_DarkRoast.jpg",
                     "title": "Dark Roast",
                     "stream": "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94602.audio_DarkRoast.mp3",
-                    "airdrop": "https://drip.haus/itheum",
+                    "airdrop": "https://x.com/itheum/status/1829117957198196930",
                   },
                   {
                     "idx": 4,
