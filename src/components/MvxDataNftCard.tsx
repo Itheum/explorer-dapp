@@ -72,8 +72,9 @@ export function MvxDataNftCard({
 
             {dataNft.description && dataNft.description.trim() !== "" && (
               <div className="grid grid-cols-12 mb-1">
-                <span className="col-span-12 text-left text-sm">
+                <span className="tooltip col-span-12 text-left text-sm">
                   {dataNft.description.length > 36 ? dataNft.description.slice(0, 38) + " ..." : dataNft.description}
+                  {dataNft.description.length > 36 && <span className="tooltiptext">{dataNft.description}</span>}
                 </span>
               </div>
             )}
@@ -139,7 +140,7 @@ export function MvxDataNftCard({
                 <Modal
                   openTrigger={
                     <Button
-                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight !text-sm hover:opacity-80 hover:text-black"
+                      className="!text-black bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight !text-sm hover:opacity-80 hover:text-black"
                       variant="ghost"
                       onClick={() => {
                         viewData(index);

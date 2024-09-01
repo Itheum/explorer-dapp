@@ -51,14 +51,13 @@ export function SolDataNftCard({
   const imageSrc: string = (dataNft.content.links && dataNft.content.links["image" as any] ? dataNft.content.links["image" as any] : "") as string;
   const title = dataNft.content.metadata.name;
   const description = dataNft.content.metadata.description ?? "";
-  const id = dataNft.id.toString();
-  const royalties = dataNft.royalty;
+  // const id = dataNft.id.toString();
 
   return (
     <div className="mb-3">
       <Card className={cn(cardStyles, "border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18rem] md:w-[19rem]")}>
         <CardContent className="flex flex-col p-3">
-          <img src={imageSrc} className="mb-8 base:h-[15rem] md:h-[18rem] rounded-3xl" />
+          <img src={imageSrc} className="base:h-[15rem] md:h-[18rem] rounded-3xl p-5" />
 
           <div>
             <div className="grid grid-cols-12 mb-2 mt-2">
@@ -67,24 +66,15 @@ export function SolDataNftCard({
 
             {description && description.trim() !== "" && (
               <div className="grid grid-cols-12 mb-1">
-                <span className="col-span-12 text-left text-sm">{description.length > 68 ? description.slice(0, 70) + " ..." : description}</span>
+                <span className="tooltip col-span-12 text-left text-sm">
+                  {description.length > 64 ? description.slice(0, 66) + " ..." : description}{" "}
+                  {description.length > 64 && <span className="tooltiptext">{description}</span>}
+                </span>
               </div>
             )}
-
-            <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 text-sm">ID:</span>
-              <div className="col-span-8 w-full items-center justify-center">
-                <p className="flex flex-row w-full items-center mb-0 text-sm">{id.slice(0, 6) + " ... " + id.slice(-6)}</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-12 mb-1">
-              <span className="col-span-4 opacity-6 text-sm">Royalties:</span>
-              <span className="col-span-8 text-left text-sm">{royalties.percent * 100}%</span>
-            </div>
           </div>
 
-          <div className="">
+          <div>
             {!hideIsInWalletSection && (
               <>
                 {!isWallet ? (
@@ -104,7 +94,7 @@ export function SolDataNftCard({
                 <Modal
                   openTrigger={
                     <Button
-                      className="bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight !text-sm hover:opacity-80 hover:text-black"
+                      className="!text-black bg-gradient-to-r from-yellow-300 to-orange-500 border-0 text-background rounded-lg font-medium tracking-tight !text-sm hover:opacity-80 hover:text-black"
                       variant="ghost"
                       onClick={() => {
                         viewData(index);

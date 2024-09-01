@@ -281,14 +281,14 @@ export const NFTunes = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full overflow-hidden">
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
-      <div className="flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
+      <div className="flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem] pb-6">
         <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-2 xl:pt-4 mb-16 xl:mb-32 pl-4">
           <div className="flex flex-col w-full xl:w-[60%]">
             <MvxSolSwitch />
           </div>
 
           <div className="flex flex-col w-full xl:w-[100%] mt-3 mb-[80px]">
-            <div className="bg-greens-200">
+            <div>
               <div className="px-2">NF-Tunes Radio</div>
               <RadioPlayer
                 stopRadioNow={stopRadio}
@@ -426,7 +426,7 @@ export const NFTunes = () => {
                           }
                           modalTitle="Music Player"
                           modalTitleStyle="p-4"
-                          openActionBtnText="Listen"
+                          openActionBtnText="Play Album"
                           openActionFireLogic={() => {
                             setStopRadio(true);
                           }}
@@ -483,7 +483,7 @@ export const NFTunes = () => {
                           }
                           modalTitle="Music Player"
                           modalTitleStyle="p-4"
-                          openActionBtnText="Listen"
+                          openActionBtnText="Play Album"
                           openActionFireLogic={() => {
                             setStopRadio(true);
                           }}
@@ -523,14 +523,14 @@ export const NFTunes = () => {
         </div>
 
         {/* Benefits of NF-Tunes */}
-        <div className="flex flex-col justify-start items-center w-full gap-12 p-6 xl:p-12 xl:pb-0">
+        <div className="flex flex-col justify-center items-center w-full gap-12 p-6 xl:p-12 xl:pb-0">
           <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
             <div className="flex flex-row rounded-lg mb-12 px-8 xl:px-16 text-center gap-4 bg-primary md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music2 className="text-secondary" />
               <span className="text-secondary">Benefits of NF-Tunes</span>
               <Music2 className="text-secondary" />
             </div>
-            <div className="flex flex-col xl:flex-row justify-start items-center gap-8 w-full">
+            <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full">
               <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
                 <div className="flex justify-center items-center rounded-full h-24 w-24 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
                   <img src={benefitsLogo1} />
@@ -703,63 +703,6 @@ export const NFTunes = () => {
             className="mt-10 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg  max-w-[50%] text-white ">
             Reach Out Today
           </Link>
-        </div>
-
-        {/* Supported Platforms */}
-        <div className="flex flex-col justify-center items-center w-full gap-12 mt-12 xl:p-12">
-          <div className="py-8 flex flex-col w-[100%] justify-center items-center xl:items-start gap-12">
-            <div className="flex flex-row w-[80%] xl:w-[60%] rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl justify-center items-center ">
-              <span className="text-secondary">
-                Platforms for
-                <span className="ml-2 font-bold bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]">
-                  Music Data NFTs
-                </span>
-              </span>
-              <Music className="text-secondary" />
-            </div>
-            <div className="text-2xl xl:text-5xl xl:w-[60%]  ">
-              Music Data NFTs:<br></br> Universally
-              <span className="ml-2 font-bold bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]">
-                Accessible
-              </span>
-              ,<br></br>
-              <span className="text-muted-foreground"> Just Like</span>
-              <span className="ml-2 font-bold bg-clip-text text-transparent bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]">
-                Regular NFTs
-              </span>
-            </div>
-            <div className="flex flex-col xl:flex-row gap-8 justify-center items-center w-full">
-              <Link
-                to={`https://datadex.itheum.io/datanfts/marketplace/market`}
-                target="_blank"
-                className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={currentTheme === "dark" ? itheumLogo : itheumLogoLight} alt="itheum logo" />
-                <span className="w-[40%] text-center">Itheum Data DEX</span>
-              </Link>
-              <Link
-                to={`https://tensor.trade/trade/itheum_drip`}
-                target="_blank"
-                className="hover:scale-110 transition duration-700 flex flex-row gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img className="rounded-sm" src={dripLogo} alt="Drip Haus logo" />
-              </Link>
-              <div className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <span className=" text-center">NFT Marketplaces</span>
-                <Link to={"https://xoxno.com/"} target="_blank">
-                  <img src={currentTheme === "dark" ? xoxnoLogo : xoxnoLogoLight} alt="xoxno logo" />
-                </Link>
-                <Link to={"https://tensor.trade/trade/itheum_drip"} target="_blank">
-                  <img className="rounded-sm" src={tensorLogo} alt="Tensor logo" />
-                </Link>
-              </div>
-              <Link
-                to={"https://multiversx.com/ecosystem/projects"}
-                target="_blank"
-                className="hover:scale-110 transition duration-700  flex flex-col gap-2 items-center shadow-inner shadow-gray-600 justify-center bg-gradient-to-t from-gray-400 dark:from-black from-20%  to-background  to-70% brightness-125 rounded-full w-52 h-52  ">
-                <img src={currentTheme === "dark" ? multiversxLogo : multiversxLogoLight} alt="multiversx logo" />
-                <span className="w-[60%] text-lg font-semibold text-center"> Ecosystem</span>
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
 
