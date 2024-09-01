@@ -312,6 +312,16 @@ export const NFTunes = () => {
                   },
                   {
                     "idx": 2,
+                    "artist": "7g0Strike",
+                    "category": "DnB",
+                    "album": "Love in Disasters",
+                    "cover_art_url": "https://gateway.lighthouse.storage/ipfs/QmQa8nPFvD6KaPCRgNn6umcSDVpG3W4sVGYKko5s7g9J6E/92171.image_SeismicPulse.jpg",
+                    "title": "Seismic Pulse",
+                    "stream": "https://gateway.lighthouse.storage/ipfs/QmQa8nPFvD6KaPCRgNn6umcSDVpG3W4sVGYKko5s7g9J6E/9241.audio_SeismicPulse.mp3",
+                    "buy": "https://drip.haus/itheum/set/5baed2d8-9f49-41bc-af9e-a2364f79c32a",
+                  },
+                  {
+                    "idx": 3,
                     "artist": "Hachi Mugen",
                     "category": "Lofi Hip Hop",
                     "album": "Digital EP",
@@ -322,7 +332,7 @@ export const NFTunes = () => {
                     "airdrop": "https://x.com/itheum/status/1829117957198196930",
                   },
                   {
-                    "idx": 3,
+                    "idx": 4,
                     "artist": "Hachi Mugen",
                     "category": "Lofi Hip Hop",
                     "album": "Digital EP",
@@ -333,7 +343,7 @@ export const NFTunes = () => {
                     "airdrop": "https://x.com/itheum/status/1829117957198196930",
                   },
                   {
-                    "idx": 4,
+                    "idx": 5,
                     "category": "MIX",
                     "artist": "YFGP",
                     "album": "Mixes",
