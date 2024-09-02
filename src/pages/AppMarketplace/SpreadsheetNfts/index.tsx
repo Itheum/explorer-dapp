@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { SPREADSHEET_NFTS_TOKENS } from "appsConfig";
-import headerHero from "assets/img/spreadsheet-nfts/banner.jpg";
+import headerHero from "assets/img/spreadsheet-nfts/banner.png";
 import { MvxDataNftCard, Loader } from "components";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
@@ -156,7 +156,7 @@ export const SpreadsheetNfts = () => {
             />
           ))
         ) : (
-          <h3 className="text-center text-white">No DataNFT</h3>
+          <h3 className="text-center text-white m-auto mt-2">No Data NFTs found that can unlock this app</h3>
         )}
       </HeaderComponent>
       <div className="m-auto mb-5">

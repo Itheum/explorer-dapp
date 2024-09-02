@@ -5,7 +5,15 @@ import { motion } from "framer-motion";
 import { Music, Music2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { NF_PODCAST_TOKENS } from "appsConfig";
+import musicNoteBlack from "assets/img/nf-tunes/music-note-black.png";
+import musicNote from "assets/img/nf-tunes/music-note-white.png";
 import disk from "assets/img/nf-tunes-logo-disk.png";
+import stick from "assets/img/nf-tunes-logo-stick.png";
+import backCube from "assets/img/zstorage/back.png";
+import cubes from "assets/img/zstorage/cubes.png";
+import dataLines from "assets/img/zstorage/data-lines.png";
+import frontCube from "assets/img/zstorage/front.png";
+import vault from "assets/img/zstorage/vault-dots.png";
 import { MvxDataNftCard, Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
@@ -15,16 +23,7 @@ import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import { scrollToSection } from "libs/utils";
 import { useNftsStore } from "store/nfts";
-import musicNoteBlack from "../../../assets/img/nf-tunes/music-note-black.png";
-import musicNote from "../../../assets/img/nf-tunes/music-note-white.png";
-import stick from "../../../assets/img/nf-tunes-logo-stick.png";
-import backCube from "../../../assets/img/zstorage/back.png";
-import cubes from "../../../assets/img/zstorage/cubes.png";
-import dataLines from "../../../assets/img/zstorage/data-lines.png";
-import frontCube from "../../../assets/img/zstorage/front.png";
-import vault from "../../../assets/img/zstorage/vault-dots.png";
 
 export const NFPodcast = () => {
   const { theme } = useTheme();
@@ -153,21 +152,14 @@ export const NFPodcast = () => {
         <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  pl-4  ">
           <div className="flex flex-col w-full xl:w-[60%] gap-6">
             <div className="flex-row flex items-center">
-              <span className="text-5xl xl:text-[8rem] text-primary">NF-Podcast</span>
+              <span className="text-4xl xl:text-[6rem] text-primary">NF-Podcast</span>
               <img className="max-h-[30%] mb-6" src={currentTheme === "dark" ? musicNote : musicNoteBlack} />
             </div>
             <div className="flex flex-row justify-between">
-              <span className="text-base md:text-2xl text-primary text-light w-[70%]">
+              <span className="text-base md:text-xl text-primary text-light w-[70%]">
                 Empowering content creators to engage with their communities and discover alternative avenues for content distribution
               </span>
             </div>
-
-            <button
-              onClick={() => scrollToSection("data-nfts")}
-              className="hover:scale-110 transition duration-700 text-sm md:text-xl p-2 md:p-4 rounded-lg  max-w-[50%] xl:max-w-[35%] text-white
-           bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-40% to-[#5D3899] to-100%">
-              Visualize NF-Podcasts
-            </button>
           </div>
 
           <div className="flex flex-col xl:flex-row  w-full justify-between items-center h-full">
@@ -175,8 +167,8 @@ export const NFPodcast = () => {
               <Music className="md:scale-[2] mb-8 ml-[14%] text-primary" />
             </div>
 
-            <div className="relative min-h-[10rem] h-full w-full xl:-mt-[15%] -z-10">
-              <div className="absolute w-[60%] max-w-[500px]  -mt-[10%] left-[20%] xl:left-[35%] h-[300px] xl:h-[500px] bg-gradient-to-br from-[#737373] from-20% via-[#A76262] via-40% to-[#5D3899] to-80% rounded-full filter blur-2xl opacity-25   "></div>
+            <div className="relative min-h-[10rem] h-full w-full xl:-mt-[5%] -z-10">
+              <div className="absolute w-[60%] max-w-[500px] -mt-[10%] left-[20%] xl:left-[35%] h-[300px] xl:h-[500px] bg-gradient-to-br from-[#737373] from-20% via-[#A76262] via-40% to-[#5D3899] to-80% rounded-full filter blur-2xl opacity-25   "></div>
               <img className="animate-spin-slow w-[60%] left-[20%] xl:left-[40%] max-w-[350px] absolute" src={disk} alt="disk" />
               <img className="absolute left-[60%] lg:left-[50%] xl:left-[70%] top-[-30px] xl:top-[-50px] w-[30%] max-w-[200px]" src={stick} alt="stick" />
             </div>

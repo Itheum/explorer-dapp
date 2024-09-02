@@ -8,6 +8,7 @@ import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken, getApiSolNft, getApiWeb2Apps } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "./account";
+import { useAppsStore } from "./apps";
 import { useNftsStore } from "./nfts";
 import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz/GetBitzMvx";
 
@@ -21,7 +22,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   // flag to check locally if we got the MVX NFTs
   const [mvxNFTsFetched, setMvxNFTsFetched] = useState<boolean>(false);
 
-  // ACCOUNT STORE
+  // ACCOUNT Store
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
@@ -29,7 +30,10 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateBonusBitzSum = useAccountStore((state) => state.updateBonusBitzSum);
   const updateBonusTries = useAccountStore((state) => state.updateBonusTries);
 
-  // NFT STORE
+  // APPs Store
+  const updateNfTunesRadioFirstTrackCachedBlob = useAppsStore((state) => state.updateNfTunesRadioFirstTrackCachedBlob);
+
+  // NFT Store
   const { mvxNfts, updateMvxNfts, updateIsLoadingMvx, solNfts, updateSolNfts, updateIsLoadingSol } = useNftsStore();
 
   useEffect(() => {
