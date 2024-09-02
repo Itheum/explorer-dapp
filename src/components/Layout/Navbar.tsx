@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Home, Menu, Store, Wallet, Gamepad2, AreaChart } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -7,13 +7,7 @@ import logo192 from "assets/img/logo192.png";
 import { SolBitzDropdown } from "components/BitzDropdown/SolBitzDropdown";
 import { CopyAddress } from "components/CopyAddress";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
-import { cn, sleep } from "libs/utils";
-import { APP_MAPPINGS } from "libs/utils/constant";
-import { returnRoute } from "pages/Home";
-import { routeNames } from "routes";
-import { useLocalStorageStore } from "store/LocalStorageStore.ts";
-import { SwitchButton } from "./SwitchButton";
-import { Button } from "../../libComponents/Button";
+import { Button } from "libComponents/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +16,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../libComponents/DropdownMenu";
+} from "libComponents/DropdownMenu";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -30,8 +24,16 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "../../libComponents/NavigationMenu";
-import { useAccountStore } from "../../store/account";
+} from "libComponents/NavigationMenu";
+import { cn, sleep } from "libs/utils";
+import { APP_MAPPINGS } from "libs/utils/constant";
+import { returnRoute } from "pages/Home";
+import { routeNames } from "routes";
+import { useAccountStore } from "store/account";
+import { useAppsStore } from "store/apps";
+import { useLocalStorageStore } from "store/LocalStorageStore.ts";
+import { SwitchButton } from "./SwitchButton";
+import { getNFTuneFirstTrackBlobData } from "../../pages/AppMarketplace/NFTunes";
 import { MvxBitzDropdown } from "../BitzDropdown/MvxBitzDropdown";
 import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
@@ -43,8 +45,29 @@ export const Navbar = () => {
   const { address: addressMvx } = useGetAccount();
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const setDefaultChain = useLocalStorageStore((state) => state.setDefaultChain);
-
   const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
+  const appsStore = useAppsStore();
+  const updateNfTunesRadioFirstTrackCachedBlob = appsStore.updateNfTunesRadioFirstTrackCachedBlob;
+
+  useEffect(() => {
+    // lets get the 1st song blob for NFTunes Radio, so we can store in the "browser" cache for fast playback
+    // ... we do it here as the NavBar loads first always
+    async function cacheFirstNFTuneRadioTrack() {
+      const nfTunesRadioFirstTrackCachedBlob = appsStore.nfTunesRadioFirstTrackCachedBlob;
+
+      if (nfTunesRadioFirstTrackCachedBlob === "") {
+        const trackBlobUrl = await getNFTuneFirstTrackBlobData();
+
+        if (trackBlobUrl !== "") {
+          console.log("NFTune Radio 1st Song Data Cached...");
+        }
+
+        updateNfTunesRadioFirstTrackCachedBlob(trackBlobUrl || "");
+      }
+    }
+
+    cacheFirstNFTuneRadioTrack();
+  }, []);
 
   return (
     <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem] h-20">

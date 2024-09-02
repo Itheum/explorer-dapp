@@ -6,6 +6,7 @@ import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { toastError } from "libs/utils";
+import { useAppsStore } from "store/apps";
 import { Button } from "../../libComponents/Button";
 
 type RadioPlayerProps = {
@@ -27,6 +28,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   const [duration, setDuration] = useState("00:00");
   const [isLoaded, setIsLoaded] = useState(false);
   const [songSource, setSongSource] = useState<{ [key: number]: string }>({}); // map to keep the already fetched songs
+  const appsStore = useAppsStore();
 
   useEffect(() => {
     audio.addEventListener("ended", function () {
@@ -106,13 +108,40 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
         [index]: "Fetching", // update the value of specific key
       }));
 
-      const blob = await fetch(songs[index - 1].stream).then((r) => r.blob());
-      const blobUrl = URL.createObjectURL(blob);
+      let errMsg = null;
+      let blobUrl = "";
 
-      setSongSource((prevState) => ({
-        ...prevState, // keep all other key-value pairs
-        [index]: blobUrl, // update the value of specific key
-      }));
+      try {
+        const trackIndex = index - 1;
+        const nfTunesRadioFirstTrackCachedBlob = appsStore.nfTunesRadioFirstTrackCachedBlob;
+
+        // if we have cached the first song blob when Explorer loaded, then just load that from the cache direct to start the playback fast
+        if (trackIndex === 0 && nfTunesRadioFirstTrackCachedBlob && nfTunesRadioFirstTrackCachedBlob.trim() !== "") {
+          blobUrl = nfTunesRadioFirstTrackCachedBlob;
+          console.log(`Track ${trackIndex} Loaded from cache`);
+          console.log("nfTunesRadioFirstTrackCachedBlob ", nfTunesRadioFirstTrackCachedBlob);
+        } else {
+          console.log(`Track ${trackIndex} Loading on-Demand`);
+          const blob = await fetch(songs[trackIndex].stream).then((r) => r.blob());
+          blobUrl = URL.createObjectURL(blob);
+        }
+
+        console.log("blobUrl ", blobUrl);
+      } catch (error: any) {
+        errMsg = error.toString();
+      }
+
+      if (!errMsg) {
+        setSongSource((prevState) => ({
+          ...prevState, // keep all other key-value pairs
+          [index]: blobUrl, // update the value of specific key
+        }));
+      } else {
+        setSongSource((prevState) => ({
+          ...prevState,
+          [index]: "Error: " + errMsg,
+        }));
+      }
     } catch (err) {
       setSongSource((prevState) => ({
         ...prevState,
