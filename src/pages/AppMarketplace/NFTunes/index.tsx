@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
+import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useWallet } from "@solana/wallet-adapter-react";
+import axios from "axios";
+import bs58 from "bs58";
 import { motion } from "framer-motion";
 import { Music, Music2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -8,46 +12,35 @@ import { NF_TUNES_TOKENS } from "appsConfig";
 import benefitsLogo1 from "assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "assets/img/nf-tunes/benefits-logo3.png";
-import disk from "assets/img/nf-tunes-logo-disk.png";
-import { MvxDataNftCard, Loader } from "components";
-import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
-import { RadioPlayer } from "components/AudioPlayer/RadioPlayer";
-import { HeaderComponent } from "components/Layout/HeaderComponent";
-import YouTubeEmbed from "components/YouTubeEmbed";
-import { SHOW_NFTS_STEP } from "config";
-import { useTheme } from "contexts/ThemeProvider";
-import { useGetPendingTransactions } from "hooks";
-import { Button } from "libComponents/Button";
-import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
-import { useNftsStore } from "store/nfts";
 import megaphoneLight from "assets/img/nf-tunes/megaphone-light.png";
 import megaphone from "assets/img/nf-tunes/megaphone.png";
 import musicNoteBlack from "assets/img/nf-tunes/music-note-black.png";
 import musicNote from "assets/img/nf-tunes/music-note-white.png";
-import itheumLogoLight from "assets/img/nf-tunes/platforms-logo/itheum-light.png";
-import itheumLogo from "assets/img/nf-tunes/platforms-logo/itheum.png";
-import multiversxLogoLight from "assets/img/nf-tunes/platforms-logo/multiversx-light.png";
-import multiversxLogo from "assets/img/nf-tunes/platforms-logo/multiversx.png";
-import dripLogo from "assets/img/nf-tunes/platforms-logo/drip.png";
-import tensorLogo from "assets/img/nf-tunes/platforms-logo/tensor.png";
-import xoxnoLogoLight from "assets/img/nf-tunes/platforms-logo/xoxno-light.png";
-import xoxnoLogo from "assets/img/nf-tunes/platforms-logo/xoxno.png";
+import disk from "assets/img/nf-tunes-logo-disk.png";
 import stick from "assets/img/nf-tunes-logo-stick.png";
 import backCube from "assets/img/zstorage/back.png";
 import cubes from "assets/img/zstorage/cubes.png";
 import dataLines from "assets/img/zstorage/data-lines.png";
 import frontCube from "assets/img/zstorage/front.png";
 import vault from "assets/img/zstorage/vault-dots.png";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
-import { useAccountStore } from "store/account";
+import { MvxDataNftCard, Loader } from "components";
+import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
+import { RadioPlayer } from "components/AudioPlayer/RadioPlayer";
+import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
-import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
+import YouTubeEmbed from "components/YouTubeEmbed";
+import { SHOW_NFTS_STEP } from "config";
+import { useTheme } from "contexts/ThemeProvider";
+import { useGetPendingTransactions } from "hooks";
+import { Button } from "libComponents/Button";
 import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
-import bs58 from "bs58";
+import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
+import { decodeNativeAuthToken, getApiDataMarshal, toastError, getApiWeb2Apps } from "libs/utils";
+import { useAccountStore } from "store/account";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
+import { useNftsStore } from "store/nfts";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -64,6 +57,8 @@ export const NFTunes = () => {
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
   const [stopRadio, setStopRadio] = useState<boolean>(false);
+  const [radioTracksLoading, setRadioTracksLoading] = useState<boolean>(false);
+  const [radioTracks, setRadioTracks] = useState<any[]>([]);
 
   // get query param called chain
   const [searchParams, setSearchParams] = useSearchParams();
@@ -83,6 +78,17 @@ export const NFTunes = () => {
       top: 0,
       behavior: "smooth",
     });
+
+    async function getRadioTracksData() {
+      setRadioTracksLoading(true);
+
+      const allRadioTracks = await getRadioStreamsData();
+
+      setRadioTracks(allRadioTracks);
+      setRadioTracksLoading(false);
+    }
+
+    getRadioTracksData();
   }, []);
 
   useEffect(() => {
@@ -290,70 +296,21 @@ export const NFTunes = () => {
           <div className="flex flex-col w-full xl:w-[100%] mt-3 mb-[80px]">
             <div>
               <div className="px-2">NF-Tunes Radio</div>
-              <RadioPlayer
-                stopRadioNow={stopRadio}
-                onPlayHappened={(isPlaying: boolean) => {
-                  if (isPlaying) {
-                    setStopRadio(false);
-                  }
-                }}
-                songs={[
-                  {
-                    "idx": 1,
-                    "artist": "Hachi Mugen",
-                    "category": "Lofi Hip Hop",
-                    "album": "Digital EP",
-                    "cover_art_url":
-                      "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94451.image_SipofNostalgia.jpg",
-                    "title": "Sip of Nostalgia",
-                    "stream":
-                      "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94991.audio_SipofNostalgia.mp3",
-                    "airdrop": "https://x.com/itheum/status/1829117957198196930",
-                  },
-                  {
-                    "idx": 2,
-                    "artist": "7g0Strike",
-                    "category": "DnB",
-                    "album": "Love in Disasters",
-                    "cover_art_url": "https://gateway.lighthouse.storage/ipfs/QmQa8nPFvD6KaPCRgNn6umcSDVpG3W4sVGYKko5s7g9J6E/92171.image_SeismicPulse.jpg",
-                    "title": "Seismic Pulse",
-                    "stream": "https://gateway.lighthouse.storage/ipfs/QmQa8nPFvD6KaPCRgNn6umcSDVpG3W4sVGYKko5s7g9J6E/9241.audio_SeismicPulse.mp3",
-                    "buy": "https://drip.haus/itheum/set/5baed2d8-9f49-41bc-af9e-a2364f79c32a",
-                  },
-                  {
-                    "idx": 3,
-                    "artist": "Hachi Mugen",
-                    "category": "Lofi Hip Hop",
-                    "album": "Digital EP",
-                    "cover_art_url":
-                      "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/9473.image_MugenCafe.jpg",
-                    "title": "Mugen Cafe",
-                    "stream": "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94303.audio_MugenCafe.mp3",
-                    "airdrop": "https://x.com/itheum/status/1829117957198196930",
-                  },
-                  {
-                    "idx": 4,
-                    "artist": "Hachi Mugen",
-                    "category": "Lofi Hip Hop",
-                    "album": "Digital EP",
-                    "cover_art_url":
-                      "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94952.image_DarkRoast.jpg",
-                    "title": "Dark Roast",
-                    "stream": "https://gateway.lighthouse.storage/ipfs/bafybeibyaadr632jyehayikqvkjivaedtg6rvo3hxvdn4oh5hlryen2s6i/94602.audio_DarkRoast.mp3",
-                    "airdrop": "https://x.com/itheum/status/1829117957198196930",
-                  },
-                  {
-                    "idx": 5,
-                    "category": "MIX",
-                    "artist": "YFGP",
-                    "album": "Mixes",
-                    "title": "DustyMix",
-                    "stream": "https://dataassetsm.yfgpmusic.com/file_storagem/1_hour_boom_bap_mix101.mp3",
-                    "cover_art_url": "https://dataassetsm.yfgpmusic.com/file_storagem/1_hour_boom_bap_mix101cover_art.webp",
-                    "buy": "https://drip.haus/itheum/set/325fab5f-83ad-4fdb-9a89-aba05452f54b",
-                  },
-                ]}
-              />
+              {radioTracksLoading || radioTracks.length === 0 ? (
+                <div className="select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25 border-[1px] border-foreground/40 relative md:w-[100%] flex flex-col rounded-xl mt-2 p-3">
+                  {radioTracksLoading ? "Radio service powering up..." : "Radio service unavailable."}
+                </div>
+              ) : (
+                <RadioPlayer
+                  stopRadioNow={stopRadio}
+                  onPlayHappened={(isPlaying: boolean) => {
+                    if (isPlaying) {
+                      setStopRadio(false);
+                    }
+                  }}
+                  songs={radioTracks}
+                />
+              )}
             </div>
           </div>
 
@@ -720,3 +677,37 @@ export const NFTunes = () => {
     </div>
   );
 };
+
+export async function getRadioStreamsData(firstNTracks?: number) {
+  try {
+    let getRadioStreamAPI = `${getApiWeb2Apps()}/datadexapi/bespoke/nfTunes/getRadioStreams`;
+
+    if (firstNTracks) {
+      getRadioStreamAPI += `?firstNTracks=${firstNTracks}`;
+    }
+
+    const tracksRes = await axios.get(getRadioStreamAPI);
+    const tracksData = tracksRes.data;
+
+    return tracksData;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+export async function getNFTuneFirstTrackBlobData() {
+  try {
+    const firstNFTuneRadioTrackData = await getRadioStreamsData(1);
+
+    if (firstNFTuneRadioTrackData && firstNFTuneRadioTrackData.length > 0) {
+      const blob = await fetch(firstNFTuneRadioTrackData[0].stream).then((r) => r.blob());
+      const blobUrl = URL.createObjectURL(blob);
+
+      return blobUrl;
+    }
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+}
