@@ -12,10 +12,15 @@ export const Dashboard = () => {
     network: { explorerAddress },
   } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
-
   const [scAddress, setScAddress] = useState<string>("");
   const [marketRequirements, setMarketRequirements] = useState<MarketplaceRequirements>();
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!hasPendingTransactions) {
+      fetchMarketplaceRequirements();
+    }
+  }, [hasPendingTransactions]);
 
   async function fetchMarketplaceRequirements() {
     setIsLoading(true);
@@ -27,12 +32,6 @@ export const Dashboard = () => {
 
     setIsLoading(false);
   }
-
-  useEffect(() => {
-    if (!hasPendingTransactions) {
-      fetchMarketplaceRequirements();
-    }
-  }, [hasPendingTransactions]);
 
   if (isLoading) {
     return <Loader />;

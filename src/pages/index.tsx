@@ -4,6 +4,7 @@ export * from "./NotFound";
 export * from "./Unlock";
 export * from "./Analytics/AnalyticsPage";
 export * from "./GamerPassport/GamerPassport";
+export * from "./AIWorkforce/AIWorkforce";
 //Widgets
 export * from "./AppMarketplace/MultiversxBubbles/MultiversxBubbles";
 export * from "./AppMarketplace/MultiversxInfographics";
