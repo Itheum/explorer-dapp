@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment-timezone";
 import { getApiWeb2Apps } from "libs/utils";
 
 export const LoadingGraph = () => {
@@ -40,4 +41,8 @@ export function normalizeDataForMarshalUsage(dayData: any, day: string) {
   chainMarshalUsageDataI["sol"] = solNumbers;
 
   return chainMarshalUsageDataI;
+}
+
+export function formatYAxisDate(tickItem: any) {
+  return moment(tickItem).format("MM-DD-YY");
 }
