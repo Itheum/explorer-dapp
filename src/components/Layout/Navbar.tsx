@@ -99,6 +99,13 @@ export const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem className="cursor-pointer">
             <Link
+              to={routeNames.aiworkforce}
+              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
+              AI Workforce
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem className="cursor-pointer">
+            <Link
               to={routeNames.analytics}
               className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
               Analytics
