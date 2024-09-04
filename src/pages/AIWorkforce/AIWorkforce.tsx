@@ -180,3 +180,34 @@ export const AIWorkforce = () => {
     </div>
   );
 };
+
+export const AIWorkforceTopN = ({ showItems }: { showItems?: number }) => {
+  const [appBootingUp, setAppBootingUp] = useState<boolean>(true);
+  const [rankedWorkforce, setRankedWorkforce] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function getDataAndInitGraphData() {
+      setAppBootingUp(true);
+      const workforceDataList = await getWorkforceData();
+      setRankedWorkforce(workforceDataList);
+      setAppBootingUp(false);
+    }
+
+    getDataAndInitGraphData();
+  }, []);
+
+  async function getWorkforceData() {
+    const apiResponse = await axios.get(`${backendApi()}/workforce?size=${showItems || 5}`);
+    const dataResponse = apiResponse.data;
+
+    return dataResponse;
+  }
+
+  return (
+    <div className="w-[100%] py-2">
+      <div className="mt-1 mb-10">
+        <div className="flex flex-col justify-center items-center">{appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} />}</div>
+      </div>
+    </div>
+  );
+};
