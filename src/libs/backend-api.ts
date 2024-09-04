@@ -3,11 +3,19 @@ import axios from "axios";
 import { TrendingNft } from "./types";
 import { uxConfig } from "./utils/constant";
 
-export const backendApi = (chainID: string) => {
-  const envKey = chainID === "1" ? "VITE_ENV_BACKEND_MAINNET_API" : "VITE_ENV_BACKEND_API";
-  const defaultUrl = chainID === "1" ? "https://production-itheum-api.up.railway.app" : "https://staging-itheum-api.up.railway.app";
+export const backendApi = (chainID?: string) => {
+  if (!chainID) {
+    if (import.meta.env.VITE_ENV_NETWORK === "mainnet") {
+      return "https://production-itheum-api.up.railway.app";
+    } else {
+      return "https://staging-itheum-api.up.railway.app";
+    }
+  } else {
+    const envKey = chainID === "1" ? "VITE_ENV_BACKEND_MAINNET_API" : "VITE_ENV_BACKEND_API";
+    const defaultUrl = chainID === "1" ? "https://production-itheum-api.up.railway.app" : "https://staging-itheum-api.up.railway.app";
 
-  return import.meta.env[envKey] || defaultUrl;
+    return import.meta.env[envKey] || defaultUrl;
+  }
 };
 
 export async function getHealthCheckFromBackendApi(chainID: string): Promise<boolean> {

@@ -97,11 +97,6 @@ const UnlockPage = () => {
                   <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
                   <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
                   <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
-                  <WebWalletLoginButton
-                    loginButtonText={"Google (xAlias)"}
-                    className="w-full !m-0"
-                    customWalletAddress={import.meta.env.VITE_ENV_NETWORK === "mainnet" ? "https://xalias.com" : "https://devnet.xalias.com"}
-                    {...commonProps}></WebWalletLoginButton>
                 </>
               )}
             </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CartesianGrid, Legend, Tooltip, ResponsiveContainer, XAxis, YAxis, AreaChart, Area } from "recharts";
-import { LoadingGraph, getAggregatedAnalyticsData, normalizeDataForMarshalUsage } from "./AnalyticsShared";
+import { LoadingGraph, getAggregatedAnalyticsData, normalizeDataForMarshalUsage, formatYAxisDate } from "./AnalyticsShared";
 import { HeaderComponent } from "../../components/Layout/HeaderComponent";
 
 export const AnalyticsPage = () => {
@@ -104,7 +104,7 @@ export const AnalyticsPage = () => {
                           <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <XAxis dataKey="name" />
+                      <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
                       <YAxis />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip
@@ -175,7 +175,7 @@ export const AnalyticsPage = () => {
                           <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <XAxis dataKey="name" />
+                      <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
                       <YAxis />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip
@@ -251,7 +251,7 @@ export const AnalyticsPage = () => {
                           <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <XAxis dataKey="name" />
+                      <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
                       <YAxis />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip
@@ -322,7 +322,7 @@ export const AnalyticsPage = () => {
                 {(dataLakeUserGrowthData.length > 0 && (
                   <ResponsiveContainer minWidth={"100%"} height={300} style={{ marginBottom: "2.5rem" }}>
                     <AreaChart data={dataLakeUserGrowthData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                      <XAxis dataKey="name" />
+                      <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
                       <YAxis hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value, "Users"]} wrapperStyle={{ color: "#333" }} />
@@ -350,7 +350,7 @@ export const AnalyticsPage = () => {
                 {(dataLakeDataVolumeGrowthData.length > 0 && (
                   <ResponsiveContainer minWidth={"100%"} height={300} style={{ marginBottom: "2.5rem" }}>
                     <AreaChart data={dataLakeDataVolumeGrowthData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                      <XAxis dataKey="name" />
+                      <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
                       <YAxis label="Total Volume (Bytes)" hide />
                       <CartesianGrid strokeDasharray="3 3" />
                       <Tooltip formatter={(value, name) => [value.toLocaleString(), "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />

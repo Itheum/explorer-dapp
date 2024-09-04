@@ -8,6 +8,7 @@ import TrendingSection from "components/TrendingSection";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { routeNames } from "routes";
 import { Button } from "../libComponents/Button";
+import { AIWorkforceTopN } from "../pages/AIWorkforce/AIWorkforce";
 import { AnalyticsSnapshot } from "../pages/Analytics/AnalyticsSnapshot";
 
 export function returnRoute(routeKey: string) {
@@ -50,7 +51,7 @@ export const Home = () => {
         </div>
       </div>
 
-      <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+      <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
       <div className="">
         <h2 className="!text-2xl md:!text-3xl text-center">Featured Apps</h2>
@@ -80,7 +81,27 @@ export const Home = () => {
         </div>
       </div>
 
-      <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+      <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
+
+      <div className="">
+        <h2 className="!text-2xl md:!text-3xl text-center">Top 5 Ranked Itheum AI Workforce</h2>
+        <div className="flex flex-row flex-wrap gap-x-8 mt-5">
+          <AIWorkforceTopN showItems={5} />
+        </div>
+        <div className="flex justify-center">
+          <Link to={routeNames.aiworkforce} className="text-base hover:!no-underline hover:text-black">
+            <div className="w-[7.5rem] relative bg-gradient-to-r from-yellow-300 to-orange-500 px-[1px] py-[1px] rounded-md justify-center">
+              <div className="bg-background rounded-md">
+                <Button className="text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                  View All
+                </Button>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
       <div className="">
         <h2 className="!text-2xl md:!text-3xl text-center">Protocol Activity</h2>
@@ -100,7 +121,7 @@ export const Home = () => {
         </div>
       </div>
 
-      <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+      <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
       <div className="mt-5">
         <h2 className="!text-2xl md:!text-3xl text-center">All Apps</h2>
@@ -130,14 +151,14 @@ export const Home = () => {
         </div>
       </div>
 
-      <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+      <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
       <div className="flex flex-col">
         <TrendingSection />
         <RecentDataNFTsSection />
       </div>
 
-      <hr className="w-48 h-1 mx-auto my-4 bg-gray-300 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+      <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
     </div>
   );
 };
