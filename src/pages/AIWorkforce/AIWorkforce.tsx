@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Button } from "libComponents/Button";
@@ -131,6 +132,7 @@ import { WorkersSnapShotGrid } from "./SharedComps";
 export const AIWorkforce = () => {
   const [appBootingUp, setAppBootingUp] = useState<boolean>(true);
   const [rankedWorkforce, setRankedWorkforce] = useState<any[]>([]);
+  const { address: mxAddress } = useGetAccount();
 
   useEffect(() => {
     window.scrollTo({
@@ -175,7 +177,9 @@ export const AIWorkforce = () => {
       </div>
 
       <div className="mt-5 mb-20">
-        <div className="flex flex-col justify-center items-center">{appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} />}</div>
+        <div className="flex flex-col justify-center items-center">
+          {appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} myAddress={mxAddress} />}
+        </div>
       </div>
     </div>
   );
