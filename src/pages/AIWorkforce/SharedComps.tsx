@@ -1,6 +1,6 @@
 import React from "react";
 
-export function WorkersSnapShotGrid({ snapShotData }: { snapShotData: any[] }) {
+export function WorkersSnapShotGrid({ snapShotData, myAddress }: { snapShotData: any[]; myAddress?: string }) {
   const flattenedFixedData: any[] = [];
 
   if (snapShotData) {
@@ -20,10 +20,17 @@ export function WorkersSnapShotGrid({ snapShotData }: { snapShotData: any[] }) {
                 Rank: {idx + 1}
               </span>
             </div>
+            {myAddress && myAddress === worker.address && (
+              <span className="absolute flex h-6 w-6">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+              </span>
+            )}
             <div className="group">
               <img className="h-auto max-w-full" src={worker.vaultImg} alt={worker.vault} />
-              <div className="h-[95px] -mt-[95px] bg-black opacity-75 p-[10px] pl-[15px] rounded-b-3xl text-white hidden group-hover:block">
-                <p className="text-[10px]">{worker.vault}</p>
+              <div className="h-[100px] -mt-[100px] bg-black opacity-75 p-[10px] pl-[15px] rounded-b-3xl text-white hidden group-hover:block">
+                <p className="text-[10px]">
+                  {worker.vault} {myAddress && myAddress === worker.address && <span className="text-[10px]">(This is you!)</span>}
+                </p>
                 <p className="text-[10px]">Rank Score: {worker.rankScore?.toLocaleString()}</p>
                 <p className="text-[10px]">Total Bond: {worker.bondAmount?.toLocaleString()}</p>
                 <p className="text-[10px]">Liveliness Score: {worker.livelinessScore?.toLocaleString()}</p>

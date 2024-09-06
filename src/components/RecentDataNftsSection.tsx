@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, Offer } from "@itheum/sdk-mx-data-nft/out";
-import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
-import { getHealthCheckFromBackendApi, getRecentOffersFromBackendApi } from "../libs/backend-api";
-import { ThreeDCard } from "./ThreeDCard";
 import { IAddress } from "@multiversx/sdk-core/out";
-import BigNumber from "bignumber.js";
 import { Address } from "@multiversx/sdk-core/out";
+import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import BigNumber from "bignumber.js";
 import toast from "react-hot-toast";
-import { convertWeiToEsdt } from "libs/utils";
 import { IS_DEVNET } from "appsConfig";
+import { convertWeiToEsdt } from "libs/utils";
 import { Loader } from "./sdkDappComponents";
+import { ThreeDCard } from "./ThreeDCard";
+import { getHealthCheckFromBackendApi, getRecentOffersFromBackendApi } from "../libs/backend-api";
 
 export interface RecentDataNFTType {
   index: BigNumber.Value;
