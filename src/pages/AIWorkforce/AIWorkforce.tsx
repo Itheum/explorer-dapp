@@ -151,7 +151,7 @@ export const AIWorkforce = () => {
   }, []);
 
   async function getWorkforceData() {
-    const apiResponse = await axios.get(`${backendApi()}/workforce?size=50`);
+    const apiResponse = await axios.get(`${backendApi()}/workforce?size=150`);
     const dataResponse = apiResponse.data;
 
     return dataResponse;
