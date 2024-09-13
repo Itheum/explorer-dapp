@@ -72,9 +72,16 @@ export function MvxDataNftCard({
 
             {dataNft.description && dataNft.description.trim() !== "" && (
               <div className="grid grid-cols-12 mb-1">
-                <span className="tooltip col-span-12 text-left text-sm">
+                <span className="col-span-12 text-left text-sm">
                   {dataNft.description.length > 36 ? dataNft.description.slice(0, 38) + " ..." : dataNft.description}
-                  {dataNft.description.length > 36 && <span className="tooltiptext">{dataNft.description}</span>}
+                  <div className="tooltip hidden md:block">
+                    {dataNft.description.length > 36 && (
+                      <>
+                        <span className="ml-2 italic hover:underline cursor-pointer text-xs opacity-45">[ more ]</span>
+                        <span className="tooltiptext">{dataNft.description}</span>
+                      </>
+                    )}
+                  </div>
                 </span>
               </div>
             )}

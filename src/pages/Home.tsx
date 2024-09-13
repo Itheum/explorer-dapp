@@ -86,7 +86,7 @@ export const Home = () => {
       <div className="">
         <h2 className="!text-2xl md:!text-3xl text-center">Top 5 Ranked Itheum AI Workforce</h2>
         <div className="flex flex-row flex-wrap gap-x-8 mt-5">
-          <AIWorkforceTopN showItems={5} />
+          <AIWorkforceTopN showItems={6} />
         </div>
         <div className="flex justify-center">
           <Link to={routeNames.aiworkforce} className="text-base hover:!no-underline hover:text-black">
