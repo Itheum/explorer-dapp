@@ -1,4 +1,7 @@
 import React from "react";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CREATOR_PROFILE_PAGE } from "config";
 
 export function WorkersSnapShotGrid({ snapShotData, myAddress }: { snapShotData: any[]; myAddress?: string }) {
   const flattenedFixedData: any[] = [];
@@ -10,7 +13,7 @@ export function WorkersSnapShotGrid({ snapShotData, myAddress }: { snapShotData:
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+    <div className="grid grid-cols-3 md:grid-cols-6 gap-8">
       {flattenedFixedData &&
         flattenedFixedData.length > 0 &&
         flattenedFixedData.map((worker: any, idx: number) => (
@@ -21,20 +24,21 @@ export function WorkersSnapShotGrid({ snapShotData, myAddress }: { snapShotData:
               </span>
             </div>
             {myAddress && myAddress === worker.address && (
-              <span className="absolute flex h-6 w-6">
+              <span className="absolute flex h-8 w-8">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
               </span>
             )}
             <div className="group">
               <img className="h-auto max-w-full" src={worker.vaultImg} alt={worker.vault} />
-              <div className="h-[100px] -mt-[100px] bg-black opacity-75 p-[10px] pl-[15px] rounded-b-3xl text-white hidden group-hover:block">
-                <p className="text-[10px]">
-                  {worker.vault} {myAddress && myAddress === worker.address && <span className="text-[10px]">(This is you!)</span>}
-                </p>
-                <p className="text-[10px]">Rank Score: {worker.rankScore?.toLocaleString()}</p>
-                <p className="text-[10px]">Total Bond: {worker.bondAmount?.toLocaleString()}</p>
-                <p className="text-[10px]">Liveliness Score: {worker.livelinessScore?.toLocaleString()}</p>
-                <p className="text-[10px]">BiTz XP: {worker.bitzXp?.toLocaleString()}</p>
+              <div className="text-[10px] h-[100px] -mt-[100px] bg-black opacity-75 p-[10px] pl-[15px] rounded-b-3xl text-white hidden group-hover:block">
+                <a className="hover:underline" href={`${CREATOR_PROFILE_PAGE}/profile/${worker.address}`} target="_blank">
+                  Creator Profile {myAddress && myAddress === worker.address && <span className="">(This is you!)</span>}
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                </a>
+                <p className="">Rank Score: {worker.rankScore?.toLocaleString()}</p>
+                <p className="">Total Bond: {worker.bondAmount?.toLocaleString()}</p>
+                <p className="">Liveliness Score: {worker.livelinessScore?.toLocaleString()}</p>
+                <p className="">BiTz XP: {worker.bitzXp?.toLocaleString()}</p>
               </div>
             </div>
           </div>

@@ -51,7 +51,6 @@ export function SolDataNftCard({
   const imageSrc: string = (dataNft.content.links && dataNft.content.links["image" as any] ? dataNft.content.links["image" as any] : "") as string;
   const title = dataNft.content.metadata.name;
   const description = dataNft.content.metadata.description ?? "";
-  // const id = dataNft.id.toString();
 
   return (
     <div className="mb-3">
@@ -66,10 +65,17 @@ export function SolDataNftCard({
 
             {description && description.trim() !== "" && (
               <div className="grid grid-cols-12 mb-1">
-                <span className="tooltip col-span-12 text-left text-sm">
-                  {description.length > 64 ? description.slice(0, 66) + " ..." : description}{" "}
-                  {description.length > 64 && <span className="tooltiptext">{description}</span>}
-                </span>
+                <div className="col-span-12 text-left text-sm">
+                  {description.length > 53 ? description.slice(0, 55) + " ..." : description}
+                  <div className="tooltip !hidden md:!inline-block">
+                    {description.length > 53 && (
+                      <>
+                        <span className="ml-2 italic hover:underline cursor-pointer text-xs opacity-45">[ more ]</span>
+                        <span className="tooltiptext">{description}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>

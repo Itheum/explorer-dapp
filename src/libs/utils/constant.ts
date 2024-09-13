@@ -4,8 +4,8 @@ import iconBubbleMaps from "assets/img/expl-app-bubblemaps-icon.png";
 import iconInfrographics from "assets/img/expl-app-infographics-icon.png";
 import iconTrailblazer from "assets/img/expl-app-trailblazer-icon.png";
 import iconGetBitz from "assets/img/getbitz/expl-app-getbitz-icon.gif";
-import iconNFTunes from "assets/img/nf-tunes-logo.png";
 import iconNFPodcast from "assets/img/nf-podcast/NF-Podcast1.png";
+import iconNFTunes from "assets/img/nf-tunes-logo.png";
 import iconSpreadsheetNfts from "assets/img/spreadsheet-nfts/header.png";
 import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
@@ -21,18 +21,18 @@ export const APP_MAPPINGS = [
     img: iconGetBitz,
   },
   {
-    appName: "TrailBlazer",
-    appDescription: "TrailBlazer Quest App",
-    routeKey: "itheumtrailblazer",
-    desc: "Hardcore community members unlock Project Alpha by owning TrailBlazer Data NFTs that unlock private quests.",
-    img: iconTrailblazer,
-  },
-  {
     appName: "NF-Tunes",
     appDescription: "Listen to Music Playlists",
     routeKey: "nftunes",
     desc: "Listen to music from indie musicians with this app. Like what you hear? why not support the musician by owning a Music Data NFT.",
     img: iconNFTunes,
+  },
+  {
+    appName: "TrailBlazer",
+    appDescription: "TrailBlazer Quest App",
+    routeKey: "itheumtrailblazer",
+    desc: "Hardcore community members unlock Project Alpha by owning TrailBlazer Data NFTs that unlock private quests.",
+    img: iconTrailblazer,
   },
   {
     appName: "Deep Forest Music",

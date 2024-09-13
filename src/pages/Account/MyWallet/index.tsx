@@ -248,7 +248,7 @@ export const MyWallet = () => {
       <MvxSolSwitch />
 
       {mvxNetworkSelected && (
-        <HeaderComponent pageTitle={"My MultiversX Data NFTs"} hasImage={false} pageSubtitle={"My MultiversX Data NFTs"} dataNftCount={mvxNfts.length}>
+        <HeaderComponent pageTitle={"My MultiversX Data NFTs"} hasImage={false} pageSubtitle={"Total Data NFTs"} dataNftCount={mvxNfts.length}>
           {shownMvxDataNfts.length > 0 ? (
             shownMvxDataNfts.map((dataNft, index) => (
               <MvxDataNftCard
@@ -334,7 +334,7 @@ export const MyWallet = () => {
             <h4 className="no-items">
               <div>
                 You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting the
-                <a href={`${MARKETPLACE_DETAILS_PAGE}`} className="ml-2 address-link text-decoration-none" target="_blank">
+                <a href={`${MARKETPLACE_DETAILS_PAGE}`} className="ml-2 address-link underline hover:no-underline" target="_blank">
                   Data DEX
                 </a>
               </div>
@@ -344,7 +344,7 @@ export const MyWallet = () => {
       )}
 
       {!mvxNetworkSelected && (
-        <HeaderComponent pageTitle={"My Solana Data NFTs"} hasImage={false} pageSubtitle={"My Solana Data NFTs"} dataNftCount={solNfts.length}>
+        <HeaderComponent pageTitle={"My Solana Data NFTs"} hasImage={false} pageSubtitle={"Total Data NFTs"} dataNftCount={solNfts.length}>
           {shownSolDataNfts.length > 0 ? (
             shownSolDataNfts.map((dataNft, index) => (
               <SolDataNftCard
@@ -429,8 +429,8 @@ export const MyWallet = () => {
             <h4 className="no-items">
               <div>
                 You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting
-                <a href={DRIP_PAGE} className="ml-2 address-link text-decoration-none" target="_blank">
-                  DRiP
+                <a href={DRIP_PAGE} className="ml-2 address-link underline hover:no-underline" target="_blank">
+                  DRiP Haus
                 </a>
               </div>
             </h4>
