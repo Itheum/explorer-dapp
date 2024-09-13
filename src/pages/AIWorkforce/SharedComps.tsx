@@ -31,7 +31,7 @@ export function WorkersSnapShotGrid({ snapShotData, myAddress }: { snapShotData:
             <div className="group">
               <img className="h-auto max-w-full" src={worker.vaultImg} alt={worker.vault} />
               <div className="text-[10px] h-[100px] -mt-[100px] bg-black opacity-75 p-[10px] pl-[15px] rounded-b-3xl text-white hidden group-hover:block">
-                <a className="hover:underline" href={`${CREATOR_PROFILE_PAGE}/profile/${worker.address}`} target="_blank">
+                <a className="hover:underline" href={`${CREATOR_PROFILE_PAGE}${worker.address}`} target="_blank">
                   Creator Profile {myAddress && myAddress === worker.address && <span className="">(This is you!)</span>}
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                 </a>
