@@ -173,7 +173,7 @@ export const DeepForestMusic = () => {
   }
 
   return (
-    <div className="relative flex flex-col justify-center items-center w-full overflow-hidden">
+    <div className="relative flex flex-col justify-center items-center w-full overflow-hidden md:overflow-visible">
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
         <div className="flex flex-col w-[90%] md:w-[70%] p-10">

@@ -146,7 +146,7 @@ export const NFPodcast = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center w-full overflow-hidden">
+    <div className="flex flex-col justify-center items-center w-full overflow-hidden md:overflow-visible">
       <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
       <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
         <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-8 xl:pt-16 mb-16 xl:mb-32  pl-4  ">
