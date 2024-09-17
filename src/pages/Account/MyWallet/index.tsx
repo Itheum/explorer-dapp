@@ -3,7 +3,6 @@ import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
-import bs58 from "bs58";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
@@ -13,7 +12,7 @@ import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
-import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
@@ -150,34 +149,37 @@ export const MyWallet = () => {
     setViewDataRes(undefined);
 
     const dataNft = shownSolDataNfts[index];
+
     try {
-      let usedPreAccessNonce = solPreaccessNonce;
-      let usedPreAccessSignature = solPreaccessSignature;
-      if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
-        const preAccessNonce = await itheumSolPreaccess();
-        const message = new TextEncoder().encode(preAccessNonce);
-        if (signMessage === undefined) throw new Error("signMessage is undefiend");
-        const signature = await signMessage(message);
-        if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
-        const encodedSignature = bs58.encode(signature);
-        updateSolPreaccessNonce(preAccessNonce);
-        updateSolSignedPreaccess(encodedSignature);
-        updateSolPreaccessTimestamp(Date.now());
-        usedPreAccessNonce = preAccessNonce;
-        usedPreAccessSignature = encodedSignature;
-      }
+      const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+        solPreaccessNonce,
+        solPreaccessSignature,
+        solPreaccessTimestamp,
+        signMessage,
+        publicKey,
+        updateSolPreaccessNonce,
+        updateSolSignedPreaccess,
+        updateSolPreaccessTimestamp,
+      });
+
       const viewDataArgs = {
         headers: {},
         fwdHeaderKeys: [],
       };
-      if (!publicKey) throw new Error("Missing data for viewData");
+
+      if (!publicKey) {
+        throw new Error("Missing data for viewData");
+      }
+
       const res = await itheumSolViewData(dataNft.id, usedPreAccessNonce, usedPreAccessSignature, publicKey, viewDataArgs.fwdHeaderKeys, viewDataArgs.headers);
 
       const contentType = res.headers.get("content-type");
       let blobDataType = BlobDataType.TEXT;
       let finalResp;
+
       if (res.ok) {
         const blob = await res.blob();
+
         if (contentType?.includes("image")) {
           if (contentType == "image/svg+xml") {
             setIsAutoOpenFormat(false);

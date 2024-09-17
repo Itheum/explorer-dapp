@@ -4,9 +4,8 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
 import { fireworks } from "@tsparticles/fireworks";
-import bs58 from "bs58";
 import { motion } from "framer-motion";
-import { ArrowBigDownDash, Loader, MousePointerClick } from "lucide-react";
+import { Loader, MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { IS_DEVNET } from "appsConfig";
 
@@ -49,9 +48,9 @@ import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { SUPPORTED_SOL_COLLECTIONS } from "config";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType } from "libs/types";
-import { cn, getApiWeb2Apps, scrollToSection, shortenAddress, sleep } from "libs/utils";
+import { cn, getApiWeb2Apps, sleep } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
@@ -383,23 +382,21 @@ const GetBitzSol = (props: any) => {
 
   async function viewData(viewDataArgs: any, requiredDataNFT: any) {
     try {
-      let usedPreAccessNonce = solPreaccessNonce;
-      let usedPreAccessSignature = solPreaccessSignature;
+      const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+        solPreaccessNonce,
+        solPreaccessSignature,
+        solPreaccessTimestamp,
+        signMessage,
+        publicKey,
+        updateSolPreaccessNonce,
+        updateSolSignedPreaccess,
+        updateSolPreaccessTimestamp,
+      });
 
-      if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
-        const preAccessNonce = await itheumSolPreaccess();
-        const message = new TextEncoder().encode(preAccessNonce);
-        if (signMessage === undefined) throw new Error("signMessage is undefiend");
-        const signature = await signMessage(message);
-        if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
-        const encodedSignature = bs58.encode(signature);
-        updateSolPreaccessNonce(preAccessNonce);
-        updateSolSignedPreaccess(encodedSignature);
-        updateSolPreaccessTimestamp(Date.now());
-        usedPreAccessNonce = preAccessNonce;
-        usedPreAccessSignature = encodedSignature;
+      if (!publicKey) {
+        throw new Error("Missing data for viewData");
       }
-      if (!publicKey) throw new Error("Missing data for viewData");
+
       const res = await itheumSolViewData(
         requiredDataNFT.id,
         usedPreAccessNonce,
@@ -408,14 +405,17 @@ const GetBitzSol = (props: any) => {
         viewDataArgs.fwdHeaderKeys,
         viewDataArgs.headers
       );
+
       const rest = await res.json();
       let blobDataType = BlobDataType.TEXT;
       let data;
+
       if (res.ok) {
         const contentType = res.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
           data = rest;
         }
+
         return { data, blobDataType, contentType };
       } else {
         console.log("viewData threw catch error");
