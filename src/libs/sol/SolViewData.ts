@@ -1,4 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
+import bs58 from "bs58";
 import { getApiDataMarshal } from "libs/utils";
 
 export enum SolEnvEnum {
@@ -44,4 +45,68 @@ export async function itheumSolViewDataInNewTab(assetId: string, nonce: string, 
   const data = await response.blob();
   const url = window.URL.createObjectURL(data);
   window.open(url, "_blank");
+}
+
+/*
+This method will get the Solana Data Marshal access nonce and Signature
+from local app cache (so we don't have to keep asking for a signature)
+or if the cache is not suitable, then get a fresh nonce and sig and cache it again
+*/
+export async function getOrCacheAccessNonceAndSignature({
+  solPreaccessNonce,
+  solPreaccessSignature,
+  solPreaccessTimestamp,
+  signMessage,
+  publicKey,
+  updateSolPreaccessNonce,
+  updateSolSignedPreaccess,
+  updateSolPreaccessTimestamp,
+}: {
+  solPreaccessNonce: string;
+  solPreaccessSignature: string;
+  solPreaccessTimestamp: number;
+  signMessage: any;
+  publicKey: any;
+  updateSolPreaccessNonce: any;
+  updateSolSignedPreaccess: any;
+  updateSolPreaccessTimestamp: any;
+}) {
+  let usedPreAccessNonce = solPreaccessNonce;
+  let usedPreAccessSignature = solPreaccessSignature;
+
+  // Marshal Access lasts for 30 Mins. We cache it for this amount of time
+  const minsMarshalAllowsForNonceCaching = 20;
+
+  if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + minsMarshalAllowsForNonceCaching * 60 * 1000 < Date.now()) {
+    const preAccessNonce = await itheumSolPreaccess();
+    const message = new TextEncoder().encode(preAccessNonce);
+
+    if (signMessage === undefined) {
+      throw new Error("signMessage is undefined");
+    }
+
+    const signature = await signMessage(message);
+
+    if (!preAccessNonce || !signature || !publicKey) {
+      throw new Error("Missing data for viewData");
+    }
+
+    const encodedSignature = bs58.encode(signature);
+
+    updateSolPreaccessNonce(preAccessNonce);
+    updateSolSignedPreaccess(encodedSignature);
+    updateSolPreaccessTimestamp(Date.now()); // in MS
+
+    usedPreAccessNonce = preAccessNonce;
+    usedPreAccessSignature = encodedSignature;
+
+    console.log("------> Access NOT FROM Cache");
+  } else {
+    console.log("------> Access FROM Cache");
+  }
+
+  return {
+    usedPreAccessNonce,
+    usedPreAccessSignature,
+  };
 }
