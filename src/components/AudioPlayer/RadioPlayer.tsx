@@ -5,9 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
+import { Button } from "libComponents/Button";
 import { toastError } from "libs/utils";
 import { useAppsStore } from "store/apps";
-import { Button } from "../../libComponents/Button";
 
 type RadioPlayerProps = {
   songs?: any;
@@ -251,7 +251,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
       getAlbumActionText = "Buy Album";
     } else if (currSongObj?.airdrop) {
       getAlbumActionLink = currSongObj.airdrop;
-      getAlbumActionText = "Get Album for Free";
+      getAlbumActionText = "Get Album for Free!";
     }
   }
 

@@ -37,9 +37,11 @@ import { Button } from "libComponents/Button";
 import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError, getApiWeb2Apps } from "libs/utils";
+import { scrollToSection } from "libs/utils/ui";
 import { useAccountStore } from "store/account";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
+import { FeaturedArtistsAndAlbums } from "./FeaturedArtistsAndAlbums";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -56,6 +58,7 @@ export const NFTunes = () => {
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
   const [stopRadio, setStopRadio] = useState<boolean>(false);
+  const [stopPreviewPlaying, setStopPreviewPlaying] = useState<boolean>(false);
   const [radioTracksLoading, setRadioTracksLoading] = useState<boolean>(false);
   const [radioTracks, setRadioTracks] = useState<any[]>([]);
 
@@ -287,7 +290,20 @@ export const NFTunes = () => {
             <MvxSolSwitch />
           </div>
 
-          <div className="flex flex-col w-full xl:w-[100%] mt-3 mb-[80px]">
+          {/* New Artists Join CTA */}
+          <div className="flex flex-col md:flex-row items-center justify-between p-[15px] rounded-lg w-full bg-primary text-primary-foreground">
+            <img className="w-[50px] md:w-70px" src={currentTheme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
+            <p className="text-lg md:text-xl my-3 md:my-0">Are you an Indie Musician? NF-Tunes is growing fast and we are onboarding new musicians!</p>
+            <Button
+              onClick={() => {
+                scrollToSection("join-nf-tunes");
+              }}
+              className="w-[240px] hover:scale-110 transition duration-700 text-sm md:text-lg text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg text-white">
+              Learn More and Join
+            </Button>
+          </div>
+
+          <div className="flex flex-col w-full xl:w-[100%] mt-10 mb-[80px]">
             <div>
               <div className="px-2">NF-Tunes Radio</div>
               {radioTracksLoading || radioTracks.length === 0 ? (
@@ -300,6 +316,10 @@ export const NFTunes = () => {
                   onPlayHappened={(isPlaying: boolean) => {
                     if (isPlaying) {
                       setStopRadio(false);
+                    }
+
+                    if (!stopPreviewPlaying) {
+                      setStopPreviewPlaying(true);
                     }
                   }}
                   songs={radioTracks}
@@ -343,144 +363,165 @@ export const NFTunes = () => {
         </div>
 
         {/* Nfts shown here */}
-        <div id="data-nfts" className="flex justify-center items-center p-16 ">
-          <div className="flex flex-col">
-            {mvxNetworkSelected && (
-              <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Your Music Data NFTs"} dataNftCount={shownMvxAppDataNfts.length}>
-                <div className="flex flex-col md:flex-row flex-wrap justify-center">
-                  {shownMvxAppDataNfts.length > 0 ? (
-                    shownMvxAppDataNfts.map((dataNft, index) => {
-                      return (
-                        <MvxDataNftCard
-                          key={index}
-                          index={index}
-                          dataNft={dataNft}
-                          isLoading={isLoadingMvx}
-                          isDataWidget={true}
-                          owned={mvxNfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
-                          viewData={viewMvxData}
-                          modalContent={
-                            isFetchingDataMarshal ? (
-                              <div
-                                className="flex flex-col items-center justify-center"
-                                style={{
-                                  minHeight: "40rem",
-                                }}>
-                                <div>
-                                  <Loader noText />
-                                  <p className="text-center text-foreground">Loading...</p>
-                                </div>
-                              </div>
-                            ) : (
-                              <>
-                                {mvxNetworkSelected && viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-                                  <AudioPlayer
-                                    dataNftToOpen={shownMvxAppDataNfts[currentIndex]}
-                                    songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                                    tokenLogin={tokenLogin}
-                                    firstSongBlobUrl={firstSongBlobUrl}
-                                    chainID={chainID}
-                                  />
-                                )}
-                              </>
-                            )
-                          }
-                          modalTitle="Music Player"
-                          modalTitleStyle="p-4"
-                          openActionBtnText="Play Album"
-                          openActionFireLogic={() => {
-                            setStopRadio(true);
-                          }}
-                          cardStyles="mx-3"
-                          hideIsInWalletSection={true}
-                        />
-                      );
-                    })
-                  ) : (
-                    <h3 className="text-center text-white">&nbsp;</h3>
+        {shownMvxAppDataNfts.length > 0 ||
+          (shownSolAppDataNfts.length > 0 && (
+            <div id="data-nfts" className="flex justify-center items-center p-16">
+              <div className="flex flex-col">
+                {mvxNetworkSelected && (
+                  <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Your Music Data NFTs"} dataNftCount={shownMvxAppDataNfts.length}>
+                    <div className="flex flex-col md:flex-row flex-wrap justify-center">
+                      {shownMvxAppDataNfts.length > 0 ? (
+                        shownMvxAppDataNfts.map((dataNft, index) => {
+                          return (
+                            <MvxDataNftCard
+                              key={index}
+                              index={index}
+                              dataNft={dataNft}
+                              isLoading={isLoadingMvx}
+                              isDataWidget={true}
+                              owned={mvxNfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
+                              viewData={viewMvxData}
+                              modalContent={
+                                isFetchingDataMarshal ? (
+                                  <div
+                                    className="flex flex-col items-center justify-center"
+                                    style={{
+                                      minHeight: "40rem",
+                                    }}>
+                                    <div>
+                                      <Loader noText />
+                                      <p className="text-center text-foreground">Loading...</p>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <>
+                                    {mvxNetworkSelected && viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                                      <AudioPlayer
+                                        dataNftToOpen={shownMvxAppDataNfts[currentIndex]}
+                                        songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                                        tokenLogin={tokenLogin}
+                                        firstSongBlobUrl={firstSongBlobUrl}
+                                        chainID={chainID}
+                                      />
+                                    )}
+                                  </>
+                                )
+                              }
+                              modalTitle="Music Player"
+                              modalTitleStyle="p-4"
+                              openActionBtnText="Play Album"
+                              openActionFireLogic={() => {
+                                setStopRadio(true);
+                                setStopPreviewPlaying(true);
+                              }}
+                              cardStyles="mx-3"
+                              hideIsInWalletSection={true}
+                            />
+                          );
+                        })
+                      ) : (
+                        <h3 className="text-center text-white">&nbsp;</h3>
+                      )}
+                    </div>
+                  </HeaderComponent>
+                )}
+
+                {!mvxNetworkSelected && (
+                  <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Your Music Data NFTs"} dataNftCount={shownSolAppDataNfts.length}>
+                    <div className="flex flex-col md:flex-row flex-wrap justify-center">
+                      {shownSolAppDataNfts.length > 0 ? (
+                        shownSolAppDataNfts.map((dataNft, index) => {
+                          return (
+                            <SolDataNftCard
+                              key={index}
+                              index={index}
+                              dataNft={dataNft}
+                              isLoading={isLoadingSol}
+                              isDataWidget={true}
+                              owned={true}
+                              viewData={viewSolData}
+                              modalContent={
+                                isFetchingDataMarshal ? (
+                                  <div
+                                    className="flex flex-col items-center justify-center"
+                                    style={{
+                                      minHeight: "40rem",
+                                    }}>
+                                    <div>
+                                      <Loader noText />
+                                      <p className="text-center text-foreground">Loading...</p>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <>
+                                    {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentIndex > -1 && (
+                                      <SolAudioPlayer
+                                        dataNftToOpen={shownSolAppDataNfts[currentIndex]}
+                                        songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                                        firstSongBlobUrl={firstSongBlobUrl}
+                                        chainID={chainID}
+                                      />
+                                    )}
+                                  </>
+                                )
+                              }
+                              modalTitle="Music Player"
+                              modalTitleStyle="p-4"
+                              openActionBtnText="Play Album"
+                              openActionFireLogic={() => {
+                                setStopRadio(true);
+                                setStopPreviewPlaying(true);
+                              }}
+                              cardStyles="mx-3"
+                              hideIsInWalletSection={true}
+                            />
+                          );
+                        })
+                      ) : (
+                        <h3 className="text-center text-white">&nbsp;</h3>
+                      )}
+                    </div>
+                  </HeaderComponent>
+                )}
+
+                <div className="m-auto mb-5">
+                  {mvxNetworkSelected && shownMvxAppDataNfts.length < nfTunesTokens.length && (
+                    <Button
+                      className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+                      onClick={() => {
+                        fetchMvxAppNfts(false);
+                      }}
+                      disabled={false}>
+                      Load more
+                    </Button>
+                  )}
+                  {!mvxNetworkSelected && shownMvxAppDataNfts.length < nfTunesTokens.length && (
+                    <Button
+                      className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
+                      onClick={() => {}}
+                      disabled={false}>
+                      Load more
+                    </Button>
                   )}
                 </div>
-              </HeaderComponent>
-            )}
-
-            {!mvxNetworkSelected && (
-              <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Your Music Data NFTs"} dataNftCount={shownSolAppDataNfts.length}>
-                <div className="flex flex-col md:flex-row flex-wrap justify-center">
-                  {shownSolAppDataNfts.length > 0 ? (
-                    shownSolAppDataNfts.map((dataNft, index) => {
-                      return (
-                        <SolDataNftCard
-                          key={index}
-                          index={index}
-                          dataNft={dataNft}
-                          isLoading={isLoadingSol}
-                          isDataWidget={true}
-                          owned={true}
-                          viewData={viewSolData}
-                          modalContent={
-                            isFetchingDataMarshal ? (
-                              <div
-                                className="flex flex-col items-center justify-center"
-                                style={{
-                                  minHeight: "40rem",
-                                }}>
-                                <div>
-                                  <Loader noText />
-                                  <p className="text-center text-foreground">Loading...</p>
-                                </div>
-                              </div>
-                            ) : (
-                              <>
-                                {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentIndex > -1 && (
-                                  <SolAudioPlayer
-                                    dataNftToOpen={shownSolAppDataNfts[currentIndex]}
-                                    songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                                    firstSongBlobUrl={firstSongBlobUrl}
-                                    chainID={chainID}
-                                  />
-                                )}
-                              </>
-                            )
-                          }
-                          modalTitle="Music Player"
-                          modalTitleStyle="p-4"
-                          openActionBtnText="Play Album"
-                          openActionFireLogic={() => {
-                            setStopRadio(true);
-                          }}
-                          cardStyles="mx-3"
-                          hideIsInWalletSection={true}
-                        />
-                      );
-                    })
-                  ) : (
-                    <h3 className="text-center text-white">&nbsp;</h3>
-                  )}
-                </div>
-              </HeaderComponent>
-            )}
-
-            <div className="m-auto mb-5">
-              {mvxNetworkSelected && shownMvxAppDataNfts.length < nfTunesTokens.length && (
-                <Button
-                  className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
-                  onClick={() => {
-                    fetchMvxAppNfts(false);
-                  }}
-                  disabled={false}>
-                  Load more
-                </Button>
-              )}
-              {!mvxNetworkSelected && shownMvxAppDataNfts.length < nfTunesTokens.length && (
-                <Button
-                  className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
-                  onClick={() => {}}
-                  disabled={false}>
-                  Load more
-                </Button>
-              )}
+              </div>
             </div>
-          </div>
+          ))}
+
+        {/* Artists and their Albums */}
+        <div className="mt-[50px] w-full">
+          <FeaturedArtistsAndAlbums
+            stopPreviewPlayingNow={stopPreviewPlaying}
+            onPlayHappened={(isPlaying: boolean) => {
+              if (isPlaying) {
+                setStopPreviewPlaying(false);
+              }
+
+              if (!stopRadio) {
+                setStopRadio(true);
+              }
+            }}
+          />
         </div>
 
         {/* Benefits of NF-Tunes */}
@@ -527,12 +568,37 @@ export const NFTunes = () => {
           </div>
         </div>
 
+        {/* Calling musicians Section */}
+        <div id="join-nf-tunes" className="flex flex-col gap-4 justify-center items-center bg-primary w-full px-[20px] py-[50px] text-center">
+          <span className="text-secondary font-[Clash-Medium] text-2xl xl:text-6xl"> Calling all Indie Musicians!</span>
+          <span className="xl:w-[50%] text-primary-foreground xl:text-2xl ">
+            Be a true Web3 music innovator! We provide you with full support to launch your music on NF-Tunes
+          </span>
+
+          <img className="w-[200px] md:w-400px" src={currentTheme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
+
+          <div className="flex flex-col md:flex-row">
+            <Link
+              to={`https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/other/nf-tunes-bizdev-deck-V1.pdf`}
+              target="_blank"
+              className="mt-10 md:mx-3 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg md:max-w-[50%] text-white">
+              Why NF-Tunes? <div className="text-sm">(Perks and Benefits)</div>
+            </Link>
+            <Link
+              to={`https://share-eu1.hsforms.com/1h2V8AgnkQJKp3tstayTsEAf5yjc`}
+              target="_blank"
+              className="flex items-center mt-5 md:mt-10 md:mx-3 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg md:max-w-[50%] text-white">
+              Reach Out Today
+            </Link>
+          </div>
+        </div>
+
         {/* What Musicians are saying */}
-        <div className="flex flex-col justify-center items-center mb-16">
+        <div className="flex flex-col gap-4 justify-center items-center bg-primary w-full px-[20px] md:py-[50px] text-center">
           <div className="py-8 flex flex-col w-[100%] justify-center items-center xl:items-start xl:p-12 xl:pt-0">
             <div className="flex flex-col xl:flex-row w-full items-center justify-center h-[300px]">
               <div className="flex flex-col gap-8 xl:w-[50%] justify-start items-center xl:items-start w-[330px] md:w-[auto]">
-                <div className="text-primary text-2xl xl:text-4xl">Hear what Indie Musicians are saying about Music Data NFTs and NF-Tunes</div>
+                <div className="text-2xl xl:text-4xl text-primary-foreground">Hear what Indie Musicians are saying about Music Data NFTs and NF-Tunes</div>
               </div>
               <div className="flex justify-center items-center h-[30rem] w-full xl:w-[50%]">
                 <div className="w-[380px] h-[170px] md:w-[480px] md:h-[270px]">
@@ -544,7 +610,7 @@ export const NFTunes = () => {
         </div>
 
         {/* Storage Solution Zedge Storage  */}
-        <div className="flex flex-col justify-center items-center ">
+        <div className="flex flex-col justify-center items-center mt-10">
           <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
             <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music2 className="text-secondary" />
@@ -566,7 +632,7 @@ export const NFTunes = () => {
                 <Link
                   to={`https://www.zedgestorage.com/itheum-music-data-nft`}
                   target="_blank"
-                  className="hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%]   text-white ">
+                  className="hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30%  to-[#5D3899] to-95% rounded-lg  max-w-[50%] text-white">
                   Try Zedge Storage today
                 </Link>
               </div>
@@ -647,23 +713,6 @@ export const NFTunes = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Calling musicians Section */}
-        <div className="flex flex-col gap-4 justify-center items-center bg-primary xl:p-32 w-full h-[100svh] text-center">
-          <span className="text-secondary font-[Clash-Medium] text-2xl xl:text-6xl "> Calling all Indie Musicians!</span>
-          <span className="xl:w-[50%] text-primary-foreground xl:text-2xl ">
-            Explore the possibilities with NF-Tunes — we're here to assist you in onboarding and minting your Music Data NFTs.
-          </span>
-
-          <img src={currentTheme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
-
-          <Link
-            to={`https://share-eu1.hsforms.com/1h2V8AgnkQJKp3tstayTsEAf5yjc`}
-            target="_blank"
-            className="mt-10 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg  max-w-[50%] text-white ">
-            Reach Out Today
-          </Link>
         </div>
       </div>
 
