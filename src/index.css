@@ -183,12 +183,6 @@ h6 {
   @apply text-foreground !important;
 }
 
-.bg-manu-image {
-  background-image: url("./assets/img/nf-tunes/bg-manu.jpg");
-  background-size: cover;
-  background-position: top;
-}
-
 @keyframes ping {
   0% {
     transform: scale(0.1);
