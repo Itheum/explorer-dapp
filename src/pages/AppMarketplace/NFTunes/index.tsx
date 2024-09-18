@@ -4,7 +4,6 @@ import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import axios from "axios";
-import bs58 from "bs58";
 import { motion } from "framer-motion";
 import { Music, Music2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -35,7 +34,7 @@ import { SHOW_NFTS_STEP } from "config";
 import { useTheme } from "contexts/ThemeProvider";
 import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
-import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError, getApiWeb2Apps } from "libs/utils";
 import { useAccountStore } from "store/account";
@@ -214,22 +213,16 @@ export const NFTunes = () => {
 
       const dataNft = shownSolAppDataNfts[index];
 
-      let usedPreAccessNonce = solPreaccessNonce;
-      let usedPreAccessSignature = solPreaccessSignature;
-
-      if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
-        const preAccessNonce = await itheumSolPreaccess();
-        const message = new TextEncoder().encode(preAccessNonce);
-        if (signMessage === undefined) throw new Error("signMessage is undefiend");
-        const signature = await signMessage(message);
-        if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
-        const encodedSignature = bs58.encode(signature);
-        updateSolPreaccessNonce(preAccessNonce);
-        updateSolSignedPreaccess(encodedSignature);
-        updateSolPreaccessTimestamp(Date.now());
-        usedPreAccessNonce = preAccessNonce;
-        usedPreAccessSignature = encodedSignature;
-      }
+      const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+        solPreaccessNonce,
+        solPreaccessSignature,
+        solPreaccessTimestamp,
+        signMessage,
+        publicKey,
+        updateSolPreaccessNonce,
+        updateSolSignedPreaccess,
+        updateSolPreaccessTimestamp,
+      });
 
       const viewDataArgs = {
         headers: {},
@@ -238,6 +231,7 @@ export const NFTunes = () => {
 
       if (!publicKey) throw new Error("Missing data for viewData");
       setCurrentIndex(index);
+
       // start the request for the first song
       const firstSongResPromise = itheumSolViewData(
         dataNft.id,

@@ -10,7 +10,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { itheumSolPreaccess, itheumSolViewData } from "libs/sol/SolViewData";
+import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { toastError } from "libs/utils";
 import { useAccountStore } from "store/account";
 
@@ -163,28 +163,29 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
           ...prevState, // keep all other key-value pairs
           [index]: "Fetching", // update the value of specific key
         }));
-        /// if not previously fetched, fetch now and save the url of the blob
+
+        // if not previously fetched, fetch now and save the url of the blob
         if (dataNftToOpen) {
-          let usedPreAccessNonce = solPreaccessNonce;
-          let usedPreAccessSignature = solPreaccessSignature;
-          if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + 60 * 80 * 1000 < Date.now()) {
-            const preAccessNonce = await itheumSolPreaccess();
-            const message = new TextEncoder().encode(preAccessNonce);
-            if (signMessage === undefined) throw new Error("signMessage is undefiend");
-            const signature = await signMessage(message);
-            if (!preAccessNonce || !signature || !publicKey) throw new Error("Missing data for viewData");
-            const encodedSignature = bs58.encode(signature);
-            updateSolPreaccessNonce(preAccessNonce);
-            updateSolSignedPreaccess(encodedSignature);
-            updateSolPreaccessTimestamp(Date.now());
-            usedPreAccessNonce = preAccessNonce;
-            usedPreAccessSignature = encodedSignature;
-          }
+          const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+            solPreaccessNonce,
+            solPreaccessSignature,
+            solPreaccessTimestamp,
+            signMessage,
+            publicKey,
+            updateSolPreaccessNonce,
+            updateSolSignedPreaccess,
+            updateSolPreaccessTimestamp,
+          });
+
           const viewDataArgs = {
             headers: {},
             fwdHeaderKeys: [],
           };
-          if (!publicKey) throw new Error("Missing data for viewData");
+
+          if (!publicKey) {
+            throw new Error("Missing data for viewData");
+          }
+
           const res = await itheumSolViewData(
             dataNftToOpen.id,
             usedPreAccessNonce,
@@ -216,6 +217,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
           ...prevState,
           [index]: "Error: " + (err as Error).message,
         }));
+
         console.error("error : ", err);
       }
     }
