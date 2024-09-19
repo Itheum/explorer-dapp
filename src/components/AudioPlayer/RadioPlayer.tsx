@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX } from "lucide-react";
+import { Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Gift, ShoppingCart } from "lucide-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
@@ -242,6 +242,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   let currSongObj = null;
   let getAlbumActionText = null;
   let getAlbumActionLink = null;
+  let isAlbumForFree = false;
 
   if (songs && songs.length > 0) {
     currSongObj = songs[currentTrackIndex];
@@ -252,6 +253,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
     } else if (currSongObj?.airdrop) {
       getAlbumActionLink = currSongObj.airdrop;
       getAlbumActionText = "Get Album for Free!";
+      isAlbumForFree = true;
     }
   }
 
@@ -282,12 +284,15 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
               <div className="flex mt-3 md:mt-0 flex-grow justify-end">
                 <div className="flex flex-col">
                   <Button
-                    className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100"
+                    className={`!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100`}
                     variant="ghost"
                     onClick={() => {
                       window.open(getAlbumActionLink)?.focus();
                     }}>
-                    {getAlbumActionText}
+                    <>
+                      {isAlbumForFree ? <Gift /> : <ShoppingCart />}
+                      <span className="ml-2">{getAlbumActionText}</span>
+                    </>
                   </Button>
                 </div>
               </div>
