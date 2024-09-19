@@ -80,10 +80,16 @@ export const NFTunes = () => {
   const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    const isFeaturedArtistDeepLink = searchParams.get("featured-artist");
+
+    if (isFeaturedArtistDeepLink) {
+      scrollToSection("featured-artist");
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
 
     async function getRadioTracksData() {
       setRadioTracksLoading(true);
@@ -366,9 +372,33 @@ export const NFTunes = () => {
           </div>
         </div>
 
+        {/* Artists and their Albums */}
+        <div id="featured-artist" className="mt-[50px] w-full">
+          <FeaturedArtistsAndAlbums
+            mvxNetworkSelected={mvxNetworkSelected}
+            mySolAppDataNfts={shownSolAppDataNfts}
+            viewData={viewSolData}
+            openActionFireLogic={() => {
+              setLaunchBaseLevelMusicPlayer(true);
+              setStopRadio(true);
+              setStopPreviewPlaying(true);
+            }}
+            stopPreviewPlayingNow={stopPreviewPlaying}
+            onPlayHappened={(isPlaying: boolean) => {
+              if (isPlaying) {
+                setStopPreviewPlaying(false);
+              }
+
+              if (!stopRadio) {
+                setStopRadio(true);
+              }
+            }}
+          />
+        </div>
+
         {/* Data NFT list shown here */}
         {(shownMvxAppDataNfts.length > 0 || shownSolAppDataNfts.length > 0) && (
-          <div id="data-nfts" className="flex justify-center items-center p-16">
+          <div id="data-nfts" className="flex justify-center items-center pb-16">
             <div className="flex flex-col">
               {mvxNetworkSelected && (
                 <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs`}>
@@ -510,30 +540,6 @@ export const NFTunes = () => {
             </div>
           </div>
         )}
-
-        {/* Artists and their Albums */}
-        <div className="mt-[50px] w-full">
-          <FeaturedArtistsAndAlbums
-            mvxNetworkSelected={mvxNetworkSelected}
-            mySolAppDataNfts={shownSolAppDataNfts}
-            viewData={viewSolData}
-            openActionFireLogic={() => {
-              setLaunchBaseLevelMusicPlayer(true);
-              setStopRadio(true);
-              setStopPreviewPlaying(true);
-            }}
-            stopPreviewPlayingNow={stopPreviewPlaying}
-            onPlayHappened={(isPlaying: boolean) => {
-              if (isPlaying) {
-                setStopPreviewPlaying(false);
-              }
-
-              if (!stopRadio) {
-                setStopRadio(true);
-              }
-            }}
-          />
-        </div>
 
         {/* Benefits of NF-Tunes */}
         <div className="flex flex-col justify-center items-center w-full gap-12 p-6 xl:p-12 xl:pb-0">
