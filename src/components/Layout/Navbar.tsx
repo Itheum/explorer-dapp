@@ -92,13 +92,6 @@ export const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem className="cursor-pointer">
             <Link
-              to={routeNames.gamerpassport}
-              className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
-              Gamer Passport
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem className="cursor-pointer">
-            <Link
               to={routeNames.aiworkforce}
               className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
               AI Workforce
@@ -126,6 +119,16 @@ export const Navbar = () => {
                     <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60 font-[Satoshi-Light] pt-0.5 ">{item?.appDescription}</p>
                   </Link>
                 ))}
+                <Link
+                  to={routeNames.gamerpassport}
+                  className={
+                    "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                  }>
+                  <div className="text-md font-medium leading-none text-foreground">Gamer Passport</div>
+                  <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60 font-[Satoshi-Light] pt-0.5 ">
+                    Earn rewards for playing games and sharing data
+                  </p>
+                </Link>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>

@@ -7,6 +7,7 @@ const dataset = [
   {
     artistId: "ar1",
     name: "Hachi Mugen",
+    slug: "hachi-mugen",
     bio: "Music saved my life. Not everyone gets a second chance. The Ethereal Enclave collapsed and mostly everyone was left for dead or thought to be now what’s left is us. Those who see opportunity despite tragedy and loss... We were BORN TO R1S3. Hachi Mugen was BORN TO R1S3. Welcome to my story.",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
     dripLink: "https://drip.haus/mugenhachi",
@@ -26,6 +27,7 @@ const dataset = [
   {
     artistId: "ar2",
     name: "YFGP",
+    slug: "yfgp",
     bio: "Sound Effects/Music Designer for Commercial, NFTs, Games, Videos, Clips",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/manu.jpg",
     dripLink: "",
@@ -54,6 +56,7 @@ const dataset = [
   {
     artistId: "ar3",
     name: "7g0Strike",
+    slug: "7g0strike",
     bio: "Mastering AI Tools to Craft cool content for everyone to access!",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
     dripLink: "",
