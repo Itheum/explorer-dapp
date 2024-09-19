@@ -7,6 +7,7 @@ const dataset = [
   {
     artistId: "ar1",
     name: "Hachi Mugen",
+    slug: "hachi-mugen",
     bio: "Music saved my life. Not everyone gets a second chance. The Ethereal Enclave collapsed and mostly everyone was left for dead or thought to be now what’s left is us. Those who see opportunity despite tragedy and loss... We were BORN TO R1S3. Hachi Mugen was BORN TO R1S3. Welcome to my story.",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
     dripLink: "https://drip.haus/mugenhachi",
@@ -26,6 +27,7 @@ const dataset = [
   {
     artistId: "ar2",
     name: "YFGP",
+    slug: "yfgp",
     bio: "Sound Effects/Music Designer for Commercial, NFTs, Games, Videos, Clips",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/manu.jpg",
     dripLink: "",
@@ -54,6 +56,7 @@ const dataset = [
   {
     artistId: "ar3",
     name: "7g0Strike",
+    slug: "7g0strike",
     bio: "Mastering AI Tools to Craft cool content for everyone to access!",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
     dripLink: "",
@@ -73,6 +76,7 @@ const dataset = [
 ];
 
 type FeaturedArtistsAndAlbumsProps = {
+  mvxNetworkSelected: boolean;
   mySolAppDataNfts?: DasApiAsset[];
   viewData: (e: number) => void;
   openActionFireLogic?: any;
@@ -81,7 +85,7 @@ type FeaturedArtistsAndAlbumsProps = {
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
-  const { mySolAppDataNfts, viewData, openActionFireLogic, stopPreviewPlayingNow, onPlayHappened } = props;
+  const { mvxNetworkSelected, mySolAppDataNfts, viewData, openActionFireLogic, stopPreviewPlayingNow, onPlayHappened } = props;
   const [audio] = useState(new Audio());
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<boolean>(false);
   const [previewPlayingForAlbumId, setPreviewPlayingForAlbumId] = useState<string | undefined>();
@@ -118,18 +122,12 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
   useEffect(() => {
     if (mySolAppDataNfts && mySolAppDataNfts.length > 0) {
-      console.log("mySolAppDataNfts ");
-      console.log(mySolAppDataNfts);
-
       const nameToIndexMap = mySolAppDataNfts.reduce((t: any, solDataNft: DasApiAsset, idx: number) => {
         if (solDataNft?.content?.metadata?.name) {
           t[solDataNft.content.metadata.name] = idx;
         }
         return t;
       }, {});
-
-      console.log("nameToIndexMap");
-      console.log(nameToIndexMap);
 
       setOwnedSolDataNftNameAndIndexMap(nameToIndexMap);
     }
@@ -180,7 +178,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
         </div>
 
         <div className="flex flex-col md:flex-row w-[100%] items-start bgg-purple-900">
-          <div className="artist-list flex py-2 md:pt-0 md:flex-col md:justify-center items-center w-[350px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
+          <div className="artist-list flex py-2 md:pt-0 md:flex-col md:justify-center items-center w-[320px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
             {dataset.map((artist: any) => (
               <div
                 key={artist.artistId}
@@ -195,15 +193,15 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
             ))}
           </div>
 
-          <div className="artist-profile flex flex-col xl:flex-row justify-center items-center gap-8 w-full bbg-blue-700">
+          <div className="artist-profile flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
             <div className="flex flex-col gap-4 p-8 items-start md:w-[90%] bg-background rounded-xl border border-primary/50 min-h-[350px]">
               {!artistProfile ? (
                 <div>Loading</div>
               ) : (
                 <>
-                  <div className="artist-bio w-full">
+                  <div className="artist-bio w-[300px] md:w-full">
                     <div
-                      className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[250px] md:w-[100%] bg-no-repeat bg-contain md:bg-cover rounded-xl"
+                      className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[250px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
                       style={{
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
@@ -222,7 +220,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                     </div>
                   </div>
 
-                  <div className="album-list w-full">
+                  <div className="album-list w-[300px] md:w-full">
                     <p className="mt-10 mb-5 text-xl font-bold">NF-Tunes Discography</p>
 
                     {artistProfile.albums.map((album: any, idx: number) => (
@@ -232,8 +230,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                           {`${album.title}`}
                         </h3>
                         <p className="">{album.desc}</p>
-                        {/* <p className="">previewIsReadyToPlay {previewIsReadyToPlay.toString()}</p> */}
-                        <div className="album-actions mt-3 flex">
+                        <div className="album-actions mt-3 flex flex-col md:flex-row space-y-2 md:space-y-0">
                           {album.ctaPreviewStream && (
                             <Button
                               disabled={isPreviewPlaying && !previewIsReadyToPlay}
@@ -254,45 +251,50 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               )}
                             </Button>
                           )}
-                          {/* {checkOwnershipOfAlbum(album.solNftNameDrip) > -1 && (
-                            <Button
-                              className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
-                              onClick={() => {
-                                viewData(checkOwnershipOfAlbum(album.solNftNameDrip));
+                          {!mvxNetworkSelected && (
+                            <>
+                              {checkOwnershipOfAlbum(album.solNftNameDrip) > -1 && (
+                                <Button
+                                  disabled={isPreviewPlaying && !previewIsReadyToPlay}
+                                  className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
+                                  onClick={() => {
+                                    viewData(checkOwnershipOfAlbum(album.solNftNameDrip));
 
-                                if (openActionFireLogic) {
-                                  openActionFireLogic();
-                                }
-                              }}>
-                              <>
-                                <Music2 />
-                                <span className="ml-2">Play Album</span>
-                              </>
-                            </Button>
-                          )} */}
-                          {album.ctaBuy && (
-                            <Button
-                              className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                              onClick={() => {
-                                window.open(album.ctaBuy)?.focus();
-                              }}>
-                              <>
-                                <ShoppingCart />
-                                <span className="ml-2">Buy Album</span>
-                              </>
-                            </Button>
-                          )}
-                          {album.ctaAirdrop && (
-                            <Button
-                              className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                              onClick={() => {
-                                window.open(album.ctaAirdrop)?.focus();
-                              }}>
-                              <>
-                                <Gift />
-                                <span className="ml-2">Get Album for Free!</span>
-                              </>
-                            </Button>
+                                    if (openActionFireLogic) {
+                                      openActionFireLogic();
+                                    }
+                                  }}>
+                                  <>
+                                    <Music2 />
+                                    <span className="ml-2">Play Album</span>
+                                  </>
+                                </Button>
+                              )}
+                              {album.ctaBuy && (
+                                <Button
+                                  className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                                  onClick={() => {
+                                    window.open(album.ctaBuy)?.focus();
+                                  }}>
+                                  <>
+                                    <ShoppingCart />
+                                    <span className="ml-2">{checkOwnershipOfAlbum(album.solNftNameDrip) > -1 ? "Buy More Album Copies" : "Buy Album"}</span>
+                                  </>
+                                </Button>
+                              )}
+                              {album.ctaAirdrop && (
+                                <Button
+                                  className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                                  onClick={() => {
+                                    window.open(album.ctaAirdrop)?.focus();
+                                  }}>
+                                  <>
+                                    <Gift />
+                                    <span className="ml-2">Get Album for Free!</span>
+                                  </>
+                                </Button>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>

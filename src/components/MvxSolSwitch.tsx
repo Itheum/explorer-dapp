@@ -18,6 +18,7 @@ export function MvxSolSwitch() {
 
   useEffect(() => {
     const chainParam = searchParams.get("chain");
+
     if (chainParam === "solana") {
       setDefaultChain("solana");
     } else if (chainParam === "multiversx") {

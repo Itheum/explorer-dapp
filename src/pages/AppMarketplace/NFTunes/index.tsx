@@ -27,6 +27,7 @@ import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
 import { RadioPlayer } from "components/AudioPlayer/RadioPlayer";
 import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
+import { Modal } from "components/Modal/Modal";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import YouTubeEmbed from "components/YouTubeEmbed";
@@ -52,7 +53,7 @@ export const NFTunes = () => {
   const [shownMvxAppDataNfts, setShownMvxAppDataNfts] = useState<DataNft[]>([]);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
-  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [currentDataNftIndex, setCurrentDataNftIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
@@ -75,11 +76,20 @@ export const NFTunes = () => {
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
 
+  // control the visibility base level music player model
+  const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
+
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    const isFeaturedArtistDeepLink = searchParams.get("featured-artist");
+
+    if (isFeaturedArtistDeepLink) {
+      scrollToSection("featured-artist");
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
 
     async function getRadioTracksData() {
       setRadioTracksLoading(true);
@@ -154,7 +164,7 @@ export const NFTunes = () => {
           stream: true,
         };
 
-        setCurrentIndex(index);
+        setCurrentDataNftIndex(index);
 
         if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
           dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
@@ -233,7 +243,7 @@ export const NFTunes = () => {
       };
 
       if (!publicKey) throw new Error("Missing data for viewData");
-      setCurrentIndex(index);
+      setCurrentDataNftIndex(index);
 
       // start the request for the first song
       const firstSongResPromise = itheumSolViewData(
@@ -362,9 +372,33 @@ export const NFTunes = () => {
           </div>
         </div>
 
+        {/* Artists and their Albums */}
+        <div id="featured-artist" className="mt-[50px] w-full">
+          <FeaturedArtistsAndAlbums
+            mvxNetworkSelected={mvxNetworkSelected}
+            mySolAppDataNfts={shownSolAppDataNfts}
+            viewData={viewSolData}
+            openActionFireLogic={() => {
+              setLaunchBaseLevelMusicPlayer(true);
+              setStopRadio(true);
+              setStopPreviewPlaying(true);
+            }}
+            stopPreviewPlayingNow={stopPreviewPlaying}
+            onPlayHappened={(isPlaying: boolean) => {
+              if (isPlaying) {
+                setStopPreviewPlaying(false);
+              }
+
+              if (!stopRadio) {
+                setStopRadio(true);
+              }
+            }}
+          />
+        </div>
+
         {/* Data NFT list shown here */}
         {(shownMvxAppDataNfts.length > 0 || shownSolAppDataNfts.length > 0) && (
-          <div id="data-nfts" className="flex justify-center items-center p-16">
+          <div id="data-nfts" className="flex justify-center items-center pb-16">
             <div className="flex flex-col">
               {mvxNetworkSelected && (
                 <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs`}>
@@ -394,9 +428,9 @@ export const NFTunes = () => {
                                 </div>
                               ) : (
                                 <>
-                                  {mvxNetworkSelected && viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
+                                  {mvxNetworkSelected && viewDataRes && !viewDataRes.error && tokenLogin && currentDataNftIndex > -1 && (
                                     <AudioPlayer
-                                      dataNftToOpen={shownMvxAppDataNfts[currentIndex]}
+                                      dataNftToOpen={shownMvxAppDataNfts[currentDataNftIndex]}
                                       songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                       tokenLogin={tokenLogin}
                                       firstSongBlobUrl={firstSongBlobUrl}
@@ -453,9 +487,9 @@ export const NFTunes = () => {
                                 </div>
                               ) : (
                                 <>
-                                  {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentIndex > -1 && (
+                                  {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentDataNftIndex > -1 && (
                                     <SolAudioPlayer
-                                      dataNftToOpen={shownSolAppDataNfts[currentIndex]}
+                                      dataNftToOpen={shownSolAppDataNfts[currentDataNftIndex]}
                                       songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                       firstSongBlobUrl={firstSongBlobUrl}
                                       chainID={chainID}
@@ -506,28 +540,6 @@ export const NFTunes = () => {
             </div>
           </div>
         )}
-
-        {/* Artists and their Albums */}
-        <div className="mt-[50px] w-full">
-          <FeaturedArtistsAndAlbums
-            mySolAppDataNfts={shownSolAppDataNfts}
-            viewData={viewSolData}
-            openActionFireLogic={() => {
-              setStopRadio(true);
-              setStopPreviewPlaying(true);
-            }}
-            stopPreviewPlayingNow={stopPreviewPlaying}
-            onPlayHappened={(isPlaying: boolean) => {
-              if (isPlaying) {
-                setStopPreviewPlaying(false);
-              }
-
-              if (!stopRadio) {
-                setStopRadio(true);
-              }
-            }}
-          />
-        </div>
 
         {/* Benefits of NF-Tunes */}
         <div className="flex flex-col justify-center items-center w-full gap-12 p-6 xl:p-12 xl:pb-0">
@@ -614,12 +626,12 @@ export const NFTunes = () => {
           </div>
         </div>
 
-        {/* Storage Solution Zedge Storage  */}
+        {/* Storage Solution Zedge Storage */}
         <div className="flex flex-col justify-center items-center mt-10">
           <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
             <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
               <Music2 className="text-secondary" />
-              <span className="text-secondary ">Storage Solution for your Music Data NFT</span>
+              <span className="text-secondary">Storage Solution for your Music Data NFT</span>
               <Music2 className="text-secondary" />
             </div>
             <div className="flex flex-col xl:flex-row  w-full h-[100vsh] items-center justify-center">
@@ -720,6 +732,45 @@ export const NFTunes = () => {
           </div>
         </div>
       </div>
+
+      {/* The base level modal music player that children components can trigger (Solana Only) */}
+      <>
+        <Modal
+          triggerOpen={launchBaseLevelMusicPlayer}
+          triggerOnClose={() => {
+            setLaunchBaseLevelMusicPlayer(false);
+          }}
+          closeOnOverlayClick={false}
+          title={"Music Player"}
+          hasFilter={false}
+          filterData={[]}
+          modalClassName={""}
+          titleClassName={"p-4"}>
+          {isFetchingDataMarshal ? (
+            <div
+              className="flex flex-col items-center justify-center"
+              style={{
+                minHeight: "40rem",
+              }}>
+              <div>
+                <Loader noText />
+                <p className="text-center text-foreground">Loading...</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentDataNftIndex > -1 && (
+                <SolAudioPlayer
+                  dataNftToOpen={shownSolAppDataNfts[currentDataNftIndex]}
+                  songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                  firstSongBlobUrl={firstSongBlobUrl}
+                  chainID={chainID}
+                />
+              )}
+            </>
+          )}
+        </Modal>
+      </>
 
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
     </div>

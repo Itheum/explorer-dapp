@@ -19,31 +19,33 @@ export const Home = () => {
     <div className="flex flex-col py-2">
       <div className="flex flex-col md:flex-row">
         <div
-          id="nf-tunes-cta"
-          className="flex-1 border-[0.5px] border-neutral-500/90 mt-2 md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+          id="nf-tunes-cta-1"
+          className="flex-1 flex border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
           style={{
             "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
           }}>
-          <div className="flex flex-col bg-red-000 h-[100%] justify-center items-center">
-            <h1 className="!text-white !text-xl text-center md:!text-3xl mb-2">YFGP "Retrofy" Digital EP Live!</h1>
-            <h2 className="!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music Stream</h2>
+          <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+            <h1 className="!text-white !text-lg text-center md:!text-3xl mb-2">YFGP "Retrofy" Digital EP Launch!</h1>
+            <h2 className="!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music</h2>
             <Link to={routeNames.nftunes} className="text-base hover:!no-underline hover:text-black">
               <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                Listen Now
+                Listen and Get Free Airdrop
               </Button>
             </Link>
           </div>
         </div>
         <div
           id="gamer-passport-cta"
-          className="flex-1 border-[0.5px] border-neutral-500/90 mt-2 md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-          style={{ "backgroundImage": `url(${GamerPassportHero})` }}>
-          <div className="flex flex-col bg-red-000 h-[100%] justify-center items-center">
-            <h1 className="!text-white !text-xl text-center md:!text-3xl mb-2">Gamer Passport is Live</h1>
-            <h2 className="!text-white !text-sm text-center md:!text-xl mb-5">Earn $ITHEUM rewards for playing games</h2>
-            <Link to={routeNames.gamerpassport} className="text-base hover:!no-underline hover:text-black">
+          className="flex-1 flex border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+          style={{
+            "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/hachi-mugen_mugen-cafe.jpg)`,
+          }}>
+          <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+            <h1 className="!text-white !text-lg text-center md:!text-3xl mb-2">"Mugen Cafe" Digital EP is Live</h1>
+            <h2 className="!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music</h2>
+            <Link to={`${routeNames.nftunes}/?featured-artist=hachi-mugen`} className="text-base hover:!no-underline hover:text-black">
               <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                Join Now
+                Listen Now
               </Button>
             </Link>
           </div>
@@ -83,7 +85,7 @@ export const Home = () => {
       <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
       <div className="">
-        <h2 className="!text-2xl md:!text-3xl text-center">Top 5 Ranked Itheum AI Workforce</h2>
+        <h2 className="!text-2xl md:!text-3xl text-center">Top Ranked Itheum AI Workforce</h2>
         <div className="flex flex-row flex-wrap gap-x-8 mt-5">
           <AIWorkforceTopN showItems={6} />
         </div>
