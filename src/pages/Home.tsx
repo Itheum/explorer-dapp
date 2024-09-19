@@ -2,7 +2,6 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS, FEATURED_APPS } from "appsConfig";
 import GamerPassportHero from "assets/img/gamer-passport/gamer-passport-adaptor-hero.png";
-import NFTunesHero from "assets/img/nf-tunes/feature-music-hero.jpg";
 import RecentDataNFTsSection from "components/RecentDataNftsSection";
 import TrendingSection from "components/TrendingSection";
 import { APP_MAPPINGS } from "libs/utils/constant";
@@ -20,13 +19,13 @@ export const Home = () => {
     <div className="flex flex-col py-2">
       <div className="flex flex-col md:flex-row">
         <div
-          id="gamer-passport-cta"
+          id="nf-tunes-cta"
           className="flex-1 border-[0.5px] border-neutral-500/90 mt-2 md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
           style={{
-            "backgroundImage": `url(${NFTunesHero})`,
+            "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
           }}>
           <div className="flex flex-col bg-red-000 h-[100%] justify-center items-center">
-            <h1 className="!text-white !text-xl text-center md:!text-3xl mb-2">"Mugen Cafe" Digital EP is Live</h1>
+            <h1 className="!text-white !text-xl text-center md:!text-3xl mb-2">YFGP "Retrofy" Digital EP Live!</h1>
             <h2 className="!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music Stream</h2>
             <Link to={routeNames.nftunes} className="text-base hover:!no-underline hover:text-black">
               <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
@@ -36,7 +35,7 @@ export const Home = () => {
           </div>
         </div>
         <div
-          id="nf-tunes-cta"
+          id="gamer-passport-cta"
           className="flex-1 border-[0.5px] border-neutral-500/90 mt-2 md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
           style={{ "backgroundImage": `url(${GamerPassportHero})` }}>
           <div className="flex flex-col bg-red-000 h-[100%] justify-center items-center">

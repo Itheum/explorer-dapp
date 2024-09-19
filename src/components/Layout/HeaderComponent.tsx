@@ -56,9 +56,9 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
           )}
         </div>
         <div>
-          {pageSubtitle && dataNftCount ? (
+          {pageSubtitle ? (
             <h4 className="my-4 text-center text-2xl">
-              {pageSubtitle}: {dataNftCount}
+              {pageSubtitle} {dataNftCount && `: ${dataNftCount}`}
             </h4>
           ) : (
             <></>
