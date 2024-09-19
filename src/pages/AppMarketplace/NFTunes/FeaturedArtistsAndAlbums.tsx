@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Music2, Pause, Play, Loader2 } from "lucide-react";
+import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
+import { Music2, Pause, Play, Loader2, Gift, ShoppingCart } from "lucide-react";
 import { Button } from "libComponents/Button";
 
 const dataset = [
@@ -13,7 +14,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar1_a1",
-        nftName: "MUSG3 - Mugen Cafe EP",
+        solNftNameDrip: "MUSG3 - Mugen Cafe EP",
         title: "Mugen Cafe",
         desc: "Cafe-style, laid-back, Lo-fi tracks to sooth your soothe",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmU82pDyHJRey4YfwtyDDdgwFtubCd5Xg4wPwfKJR8JppQ",
@@ -32,7 +33,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar2_a1",
-        nftName: "",
+        solNftNameDrip: "",
         title: "Retrofy",
         desc: "Old-school instrumentals, fat boom-bap drums, 8-bit sounds, lofi flavor, and chill vibes. Take you back to the golden days with nostalgia-filled frequencies!",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmegnmMCUMAWaW4BdPBQvWFcXcNffKLa4DJo3jYpMg9Z6j",
@@ -41,7 +42,7 @@ const dataset = [
       },
       {
         albumId: "ar2_a2",
-        nftName: "MUSG2 - Cranium Beats",
+        solNftNameDrip: "MUSG2 - Cranium Beats",
         title: "Cranium Beats",
         desc: "Dark Hip Hop Instrumentals Ultimate Album, produced by YFGP; sample-based with underground flavor and dark vibes!",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmRmMRDD8nEnmDpwpmnoadHrdbWrWradTg3jb4FnN1aWUv",
@@ -60,7 +61,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar3_a1",
-        nftName: "MUSG1 - DnB Music",
+        solNftNameDrip: "MUSG1 - DnB Music",
         title: "7g0Strike Cafe",
         desc: "Blends lyrics about natural disasters and love, crafted entirely with AI tools",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmPRwT6Xt3pqtz7RbBfvaVevkZqgzXpKnVg5Hc115QBzfe",
@@ -72,18 +73,22 @@ const dataset = [
 ];
 
 type FeaturedArtistsAndAlbumsProps = {
+  mySolAppDataNfts?: DasApiAsset[];
+  viewData: (e: number) => void;
+  openActionFireLogic?: any;
   stopPreviewPlayingNow?: boolean;
   onPlayHappened?: any;
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
-  const { stopPreviewPlayingNow, onPlayHappened } = props;
+  const { mySolAppDataNfts, viewData, openActionFireLogic, stopPreviewPlayingNow, onPlayHappened } = props;
   const [audio] = useState(new Audio());
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<boolean>(false);
   const [previewPlayingForAlbumId, setPreviewPlayingForAlbumId] = useState<string | undefined>();
   const [previewIsReadyToPlay, setPreviewIsReadyToPlay] = useState(false);
   const [selArtistId, setSelArtistId] = useState<string>("ar1");
   const [artistProfile, setArtistProfile] = useState<any>(null);
+  const [ownedSolDataNftNameAndIndexMap, setOwnedSolDataNftNameAndIndexMap] = useState<any>(null);
 
   useEffect(() => {
     audio.addEventListener("canplaythrough", function () {
@@ -112,6 +117,25 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }, [selArtistId]);
 
   useEffect(() => {
+    if (mySolAppDataNfts && mySolAppDataNfts.length > 0) {
+      console.log("mySolAppDataNfts ");
+      console.log(mySolAppDataNfts);
+
+      const nameToIndexMap = mySolAppDataNfts.reduce((t: any, solDataNft: DasApiAsset, idx: number) => {
+        if (solDataNft?.content?.metadata?.name) {
+          t[solDataNft.content.metadata.name] = idx;
+        }
+        return t;
+      }, {});
+
+      console.log("nameToIndexMap");
+      console.log(nameToIndexMap);
+
+      setOwnedSolDataNftNameAndIndexMap(nameToIndexMap);
+    }
+  }, [mySolAppDataNfts]);
+
+  useEffect(() => {
     if (stopPreviewPlayingNow) {
       playPausePreview(); // with no params wil always go into the stop logic
     }
@@ -136,6 +160,16 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     }
   }
 
+  function checkOwnershipOfAlbum(solNftName: string) {
+    let albumInOwnershipListIndex = -1; // note -1 means we don't own it
+
+    if (ownedSolDataNftNameAndIndexMap && ownedSolDataNftNameAndIndexMap[solNftName]) {
+      albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[solNftName];
+    }
+
+    return albumInOwnershipListIndex;
+  }
+
   return (
     <div className="flex flex-col justify-center items-center w-full p-6 xl:pb-0 bbg-blue-900">
       <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
@@ -146,7 +180,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
         </div>
 
         <div className="flex flex-col md:flex-row w-[100%] items-start bgg-purple-900">
-          <div className="artist-list flex py-2 md:flex-col md:justify-center items-center w-[350px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
+          <div className="artist-list flex py-2 md:pt-0 md:flex-col md:justify-center items-center w-[350px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
             {dataset.map((artist: any) => (
               <div
                 key={artist.artistId}
@@ -203,7 +237,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                           {album.ctaPreviewStream && (
                             <Button
                               disabled={isPreviewPlaying && !previewIsReadyToPlay}
-                              className="!text-white text-sm mx-2 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95%"
+                              className="!text-white text-sm mx-2 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer"
                               onClick={() => {
                                 playPausePreview(album.ctaPreviewStream, album.albumId);
                               }}>
@@ -220,22 +254,44 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               )}
                             </Button>
                           )}
-                          {album.ctaBuy && (
+                          {/* {checkOwnershipOfAlbum(album.solNftNameDrip) > -1 && (
                             <Button
                               className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
                               onClick={() => {
-                                window.open("")?.focus();
+                                viewData(checkOwnershipOfAlbum(album.solNftNameDrip));
+
+                                if (openActionFireLogic) {
+                                  openActionFireLogic();
+                                }
                               }}>
-                              Buy Album
+                              <>
+                                <Music2 />
+                                <span className="ml-2">Play Album</span>
+                              </>
+                            </Button>
+                          )} */}
+                          {album.ctaBuy && (
+                            <Button
+                              className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                              onClick={() => {
+                                window.open(album.ctaBuy)?.focus();
+                              }}>
+                              <>
+                                <ShoppingCart />
+                                <span className="ml-2">Buy Album</span>
+                              </>
                             </Button>
                           )}
                           {album.ctaAirdrop && (
                             <Button
-                              className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
+                              className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
                               onClick={() => {
-                                window.open("")?.focus();
+                                window.open(album.ctaAirdrop)?.focus();
                               }}>
-                              Get Album for Free!
+                              <>
+                                <Gift />
+                                <span className="ml-2">Get Album for Free!</span>
+                              </>
                             </Button>
                           )}
                         </div>
