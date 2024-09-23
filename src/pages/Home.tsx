@@ -29,7 +29,7 @@ export const Home = () => {
             <h2 className="!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music</h2>
             <Link to={routeNames.nftunes} className="text-base hover:!no-underline hover:text-black">
               <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                Listen and Get Free Airdrop
+                Listen Now
               </Button>
             </Link>
           </div>
