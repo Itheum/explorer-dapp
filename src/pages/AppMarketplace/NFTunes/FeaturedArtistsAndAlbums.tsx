@@ -35,12 +35,12 @@ const dataset = [
     albums: [
       {
         albumId: "ar2_a1",
-        solNftNameDrip: "",
+        solNftNameDrip: "MUSG4 - Retrofy YFGP",
         title: "Retrofy",
         desc: "Old-school instrumentals, fat boom-bap drums, 8-bit sounds, lofi flavor, and chill vibes. Take you back to the golden days with nostalgia-filled frequencies!",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmegnmMCUMAWaW4BdPBQvWFcXcNffKLa4DJo3jYpMg9Z6j",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/df074d5e-030f-4338-a2d6-ce430c6a86a9",
+        ctaAirdrop: "",
       },
       {
         albumId: "ar2_a2",
