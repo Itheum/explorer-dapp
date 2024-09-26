@@ -79,6 +79,8 @@ export const NFTunes = () => {
   // control the visibility base level music player model
   const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
 
+  const CACHE_DURATION_SECONDS = 300; // 5 minutes
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -156,6 +158,7 @@ export const NFTunes = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
           stream: true,
+          cacheDurationSeconds: CACHE_DURATION_SECONDS,
         };
 
         setCurrentDataNftIndex(index);
@@ -171,6 +174,7 @@ export const NFTunes = () => {
           fwdHeaderMapLookup: { "authorization": `Bearer ${tokenLogin?.nativeAuthToken}` },
           stream: true,
           nestedIdxToStream: 1, // get the song for the first index
+          // cacheDurationSeconds: CACHE_DURATION_SECONDS, // REQUIRES SDK UPDATE
         });
 
         // start the request for the manifest file from marshal
@@ -248,11 +252,22 @@ export const NFTunes = () => {
         viewDataArgs.fwdHeaderKeys,
         viewDataArgs.headers,
         true,
-        1
+        1,
+        CACHE_DURATION_SECONDS
       );
 
       // start the request for the manifest file from marshal
-      const res = await itheumSolViewData(dataNft.id, usedPreAccessNonce, usedPreAccessSignature, publicKey, viewDataArgs.fwdHeaderKeys, viewDataArgs.headers);
+      const res = await itheumSolViewData(
+        dataNft.id,
+        usedPreAccessNonce,
+        usedPreAccessSignature,
+        publicKey,
+        viewDataArgs.fwdHeaderKeys,
+        viewDataArgs.headers,
+        false,
+        0,
+        CACHE_DURATION_SECONDS
+      );
 
       let blobDataType = BlobDataType.TEXT;
 
