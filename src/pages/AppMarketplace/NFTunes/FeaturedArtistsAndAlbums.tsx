@@ -73,6 +73,27 @@ const dataset = [
       },
     ],
   },
+  {
+    artistId: "ar4",
+    name: "LLLUNA01",
+    slug: "llluna01",
+    bio: "LLLUNA01, a multimedia and multi-genre artist emerging from the streets of Los Angeles. From ghettos to galaxies, he has established himself as a creative force with a diverse skill set focusing on Audio, Visuals, and Culture. From the underground to professionalism, LLLUNA01 looks to help move the music industry forward with education, culture, and technology.",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/llluna01.jpg",
+    dripLink: "https://drip.haus/llluna01",
+    xLink: "https://twitter.com/0xLuna01",
+    webLink: "https://linktr.ee/llluna01",
+    albums: [
+      {
+        albumId: "ar4_a1",
+        solNftNameDrip: "MUSG5 - Diaspora EP",
+        title: "Diaspora EP",
+        desc: "Diaspora by LLLUNA01 fuses Dubstep, Trap, and Drum & Bass Jungle into a high-energy, bass-heavy journey through global underground sounds.",
+        ctaPreviewStream: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/music/preview/llluna01-diaspora.mp3",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
+      },
+    ],
+  },
 ];
 
 type FeaturedArtistsAndAlbumsProps = {
@@ -81,11 +102,12 @@ type FeaturedArtistsAndAlbumsProps = {
   viewData: (e: number) => void;
   openActionFireLogic?: any;
   stopPreviewPlayingNow?: boolean;
+  featuredArtistDeepLinkSlug?: string;
   onPlayHappened?: any;
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
-  const { mvxNetworkSelected, mySolAppDataNfts, viewData, openActionFireLogic, stopPreviewPlayingNow, onPlayHappened } = props;
+  const { mvxNetworkSelected, mySolAppDataNfts, viewData, openActionFireLogic, stopPreviewPlayingNow, featuredArtistDeepLinkSlug, onPlayHappened } = props;
   const [audio] = useState(new Audio());
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<boolean>(false);
   const [previewPlayingForAlbumId, setPreviewPlayingForAlbumId] = useState<string | undefined>();
@@ -119,6 +141,16 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
     setArtistProfile(dataset.find((i) => i.artistId === selArtistId));
   }, [selArtistId]);
+
+  useEffect(() => {
+    if (featuredArtistDeepLinkSlug) {
+      const findArtistBySlug = dataset.find((i) => i.slug === featuredArtistDeepLinkSlug);
+
+      if (findArtistBySlug) {
+        setSelArtistId(findArtistBySlug.artistId);
+      }
+    }
+  }, [featuredArtistDeepLinkSlug]);
 
   useEffect(() => {
     if (mySolAppDataNfts && mySolAppDataNfts.length > 0) {
@@ -206,16 +238,30 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
                     <p className="artist-who mt-2">{artistProfile.bio}</p>
-                    <div className="flex mt-2">
+                    <div className="flex mt-5">
                       {artistProfile.dripLink && (
-                        <a className="underline hover:no-underline mx-2" href={artistProfile.dripLink} target="_blank">
-                          Artist on Drip
-                        </a>
+                        <>
+                          +{" "}
+                          <a className="underline hover:no-underline mx-2" href={artistProfile.dripLink} target="_blank">
+                            Artist on Drip
+                          </a>
+                        </>
                       )}
                       {artistProfile.xLink && (
-                        <a className="underline hover:no-underline mx-2" href={artistProfile.xLink} target="_blank">
-                          Artist on X
-                        </a>
+                        <>
+                          +{" "}
+                          <a className="underline hover:no-underline mx-2" href={artistProfile.xLink} target="_blank">
+                            Artist on X
+                          </a>
+                        </>
+                      )}
+                      {artistProfile.webLink && (
+                        <>
+                          +{" "}
+                          <a className="underline hover:no-underline mx-2" href={artistProfile.webLink} target="_blank">
+                            Artist Web
+                          </a>
+                        </>
                       )}
                     </div>
                   </div>

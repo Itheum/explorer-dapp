@@ -59,9 +59,11 @@ export const NFTunes = () => {
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
   const [stopRadio, setStopRadio] = useState<boolean>(false);
+  const [noRadioAutoPlay, setNoRadioAutoPlay] = useState<boolean>(false);
   const [stopPreviewPlaying, setStopPreviewPlaying] = useState<boolean>(false);
   const [radioTracksLoading, setRadioTracksLoading] = useState<boolean>(false);
   const [radioTracks, setRadioTracks] = useState<any[]>([]);
+  const [featuredArtistDeepLinkSlug, setFeaturedArtistDeepLinkSlug] = useState<string | undefined>();
 
   // get query param called chain
   const [searchParams, setSearchParams] = useSearchParams();
@@ -84,6 +86,8 @@ export const NFTunes = () => {
 
     if (isFeaturedArtistDeepLink) {
       scrollToSection("featured-artist");
+      setNoRadioAutoPlay(true); // don't auto-play radio when we deep scroll to artist as its confusing
+      setFeaturedArtistDeepLinkSlug(isFeaturedArtistDeepLink.trim());
     } else {
       window.scrollTo({
         top: 0,
@@ -322,6 +326,7 @@ export const NFTunes = () => {
                 </div>
               ) : (
                 <RadioPlayer
+                  noAutoPlay={noRadioAutoPlay}
                   stopRadioNow={stopRadio}
                   onPlayHappened={(isPlaying: boolean) => {
                     if (isPlaying) {
@@ -384,6 +389,7 @@ export const NFTunes = () => {
               setStopPreviewPlaying(true);
             }}
             stopPreviewPlayingNow={stopPreviewPlaying}
+            featuredArtistDeepLinkSlug={featuredArtistDeepLinkSlug}
             onPlayHappened={(isPlaying: boolean) => {
               if (isPlaying) {
                 setStopPreviewPlaying(false);

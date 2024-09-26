@@ -12,11 +12,12 @@ import { useAppsStore } from "store/apps";
 type RadioPlayerProps = {
   songs?: any;
   stopRadioNow?: boolean;
+  noAutoPlay?: boolean;
   onPlayHappened?: any;
 };
 
 export const RadioPlayer = (props: RadioPlayerProps) => {
-  const { songs, stopRadioNow, onPlayHappened } = props;
+  const { songs, stopRadioNow, onPlayHappened, noAutoPlay } = props;
 
   const theme = localStorage.getItem("explorer-ui-theme");
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -27,6 +28,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState("00:00");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [firstMusicQueueDone, setFirstMusicQueueDone] = useState(false);
   const [songSource, setSongSource] = useState<{ [key: number]: string }>({}); // map to keep the already fetched songs
   const appsStore = useAppsStore();
 
@@ -167,8 +169,18 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
       }
     } else {
       if (audio.readyState >= 2) {
-        // Audio is loaded, play it.
-        audio.play();
+        if (!firstMusicQueueDone) {
+          // its the first time the radio loaded and the first track is ready
+          setFirstMusicQueueDone(true);
+
+          if (!noAutoPlay) {
+            // Audio is loaded, play it if user did not stop auto play
+            audio.play();
+          }
+        } else {
+          // Audio is loaded, play it.
+          audio.play();
+        }
       } else {
         toastError("Audio not ready yet. Waiting for loading to complete...");
         return;
