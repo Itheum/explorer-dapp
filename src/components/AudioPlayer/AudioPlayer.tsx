@@ -169,6 +169,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
 
             stream: true,
             nestedIdxToStream: index, ///   get the song for the current index
+            cacheDurationSeconds: 300, // 5 minutes
           });
 
           if (!res.error) {
