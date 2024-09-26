@@ -174,7 +174,7 @@ export const NFTunes = () => {
           fwdHeaderMapLookup: { "authorization": `Bearer ${tokenLogin?.nativeAuthToken}` },
           stream: true,
           nestedIdxToStream: 1, // get the song for the first index
-          // cacheDurationSeconds: CACHE_DURATION_SECONDS, // REQUIRES SDK UPDATE
+          cacheDurationSeconds: CACHE_DURATION_SECONDS,
         });
 
         // start the request for the manifest file from marshal
