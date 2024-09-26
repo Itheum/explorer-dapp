@@ -129,9 +129,13 @@ import { WorkersSnapShotGrid } from "./SharedComps";
 //   },
 // ];
 
+const WORKFORCE_API_PAGE_SIZE = 150;
+
 export const AIWorkforce = () => {
   const [appBootingUp, setAppBootingUp] = useState<boolean>(true);
+  const [workforcePageLoading, setWorkforcePageLoading] = useState<boolean>(true);
   const [rankedWorkforce, setRankedWorkforce] = useState<any[]>([]);
+  const [workforceFetchedCount, setWorkforceFetchedCount] = useState<number>(0);
   const { address: mxAddress } = useGetAccount();
 
   useEffect(() => {
@@ -142,8 +146,9 @@ export const AIWorkforce = () => {
 
     async function getDataAndInitGraphData() {
       setAppBootingUp(true);
-      const workforceDataList = await getWorkforceData();
-      setRankedWorkforce(workforceDataList);
+
+      await getWorkforceData();
+
       setAppBootingUp(false);
     }
 
@@ -151,10 +156,20 @@ export const AIWorkforce = () => {
   }, []);
 
   async function getWorkforceData() {
-    const apiResponse = await axios.get(`${backendApi()}/workforce?size=150`);
-    const dataResponse = apiResponse.data;
+    setWorkforcePageLoading(true);
 
-    return dataResponse;
+    const apiResponse = await axios.get(`${backendApi()}/workforce?size=${WORKFORCE_API_PAGE_SIZE}&from=${workforceFetchedCount}`);
+    const workforceDataList = apiResponse.data;
+
+    if (workforceDataList.length > 0) {
+      let loadedCount = workforceFetchedCount;
+      loadedCount = loadedCount + workforceDataList.length;
+
+      setWorkforceFetchedCount(loadedCount);
+      setRankedWorkforce([...rankedWorkforce, ...workforceDataList]);
+    }
+
+    setWorkforcePageLoading(false);
   }
 
   return (
@@ -180,6 +195,17 @@ export const AIWorkforce = () => {
         <div className="flex flex-col justify-center items-center">
           {appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} myAddress={mxAddress} />}
         </div>
+      </div>
+
+      <div className="m-auto mb-10 flex">
+        <Button
+          className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black m-auto"
+          onClick={() => {
+            getWorkforceData();
+          }}
+          disabled={workforceFetchedCount % WORKFORCE_API_PAGE_SIZE > 0 || workforcePageLoading}>
+          {workforceFetchedCount % WORKFORCE_API_PAGE_SIZE === 0 ? "Load more" : "All Loaded"}
+        </Button>
       </div>
     </div>
   );
