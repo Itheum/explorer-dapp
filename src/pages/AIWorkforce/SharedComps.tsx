@@ -30,15 +30,17 @@ export function WorkersSnapShotGrid({ snapShotData, myAddress }: { snapShotData:
             )}
             <div className="group">
               <img className="h-auto max-w-full" src={worker.vaultImg} alt={worker.vault} />
-              <div className="text-[10px] h-[100px] -mt-[100px] bg-black opacity-75 p-[10px] pl-[15px] rounded-b-3xl text-white hidden group-hover:block">
+              <div className="text-[10px] h-[100px] -mt-[100px] bg-black opacity-75 p-[10px] pl-[15px] md:rounded-b-3xl text-white hidden group-hover:block">
                 <a className="hover:underline" href={`${CREATOR_PROFILE_PAGE}${worker.address}`} target="_blank">
                   Creator Profile {myAddress && myAddress === worker.address && <span className="">(This is you!)</span>}
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                 </a>
-                <p className="">Rank Score: {worker.rankScore?.toLocaleString()}</p>
-                <p className="">Total Bond: {worker.bondAmount?.toLocaleString()}</p>
-                <p className="">Liveliness Score: {worker.livelinessScore?.toLocaleString()}</p>
-                <p className="">BiTz XP: {worker.bitzXp?.toLocaleString()}</p>
+                <div className="hidden md:block">
+                  <p className="">Rank Score: {worker.rankScore?.toLocaleString()}</p>
+                  <p className="">Total Bond: {worker.bondAmount?.toLocaleString()}</p>
+                  <p className="">Liveliness Score: {worker.livelinessScore?.toLocaleString()}</p>
+                  <p className="">BiTz XP: {worker.bitzXp?.toLocaleString()}</p>
+                </div>
               </div>
             </div>
           </div>

@@ -26,12 +26,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const scrollToSection = (sectionId: string) => {
+export const scrollToSection = (sectionId: string, addMoreOffset?: number) => {
   const section = document.getElementById(sectionId);
 
   if (section) {
     window.scrollTo({
-      top: section.offsetTop,
+      top: section.offsetTop + (addMoreOffset || 0),
       behavior: "smooth",
     });
   }

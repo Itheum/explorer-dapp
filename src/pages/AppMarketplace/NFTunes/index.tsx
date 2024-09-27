@@ -85,7 +85,7 @@ export const NFTunes = () => {
     const isFeaturedArtistDeepLink = searchParams.get("featured-artist");
 
     if (isFeaturedArtistDeepLink) {
-      scrollToSection("featured-artist");
+      scrollToSection("featured-artist", 220);
       setNoRadioAutoPlay(true); // don't auto-play radio when we deep scroll to artist as its confusing
       setFeaturedArtistDeepLinkSlug(isFeaturedArtistDeepLink.trim());
     } else {
@@ -378,7 +378,7 @@ export const NFTunes = () => {
         </div>
 
         {/* Artists and their Albums */}
-        <div id="featured-artist" className="mt-[50px] w-full">
+        <div id="featured-artist" className="md:mt-[50px] w-full">
           <FeaturedArtistsAndAlbums
             mvxNetworkSelected={mvxNetworkSelected}
             mySolAppDataNfts={shownSolAppDataNfts}
@@ -562,8 +562,7 @@ export const NFTunes = () => {
                 </div>
                 <span className="text-primary text-2xl min-h-24">Transform your music streams into NFT Masterpieces</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
-                  Release single music tracks or entire playlists, mixes, or extended compositions through a unified Music Data NFT. Update your music at any
-                  time and your NFT holders receive the latest content instantly.{" "}
+                  Release single tracks, playlists, or mixes through a unified Music Data NFT, allowing instant updates for NFT holders with the latest content.{" "}
                 </span>
               </div>
               <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
@@ -572,8 +571,7 @@ export const NFTunes = () => {
                 </div>
                 <span className="text-primary text-2xl min-h-24">Cultivate a DeGeN Fan Community for Your Music NFTs</span>
                 <span className="text-primary text-sm h-40 md:h-32 font-[Clash-Light]">
-                  Explore the availability of Music Data NFTs across various NFT platforms, connecting you with "new fans" and fostering a direct relationship
-                  with your audience.{" "}
+                  Discover Music Data NFTs on various platforms, connecting with new fans and building direct relationships with your audience.{" "}
                 </span>
               </div>
               <div className="flex flex-col gap-4 p-8 items-start md:w-[80%] xl:w-[30%] bg-background rounded-[3rem] border border-primary/50">
