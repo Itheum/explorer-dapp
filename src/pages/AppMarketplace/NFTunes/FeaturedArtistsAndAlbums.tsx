@@ -28,7 +28,7 @@ const dataset = [
     artistId: "ar2",
     name: "YFGP",
     slug: "yfgp",
-    bio: "Sound Effects/Music Designer for Commercial, NFTs, Games, Videos, Clips",
+    bio: "YFGP is a cutting-edge sound effects and music designer from Romania, known for merging unique music and art. Specializing in creating for commercials, NFTs, games, and videos, YFGP brings a fresh approach to digital and multimedia projects.",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/manu.jpg",
     dripLink: "",
     xLink: "https://x.com/Manu_Sounds",
@@ -57,7 +57,7 @@ const dataset = [
     artistId: "ar3",
     name: "7g0Strike",
     slug: "7g0strike",
-    bio: "Mastering AI Tools to Craft cool content for everyone to access!",
+    bio: "7g0Strike transforms into a generative music artist, using AI tools to create unique tracks. By blending creativity with technology, 7g0Strike shows how AI can inspire new forms of artistic expression for everyone to experience.",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
     dripLink: "",
     xLink: "",
@@ -201,16 +201,16 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }
 
   return (
-    <div className="flex flex-col justify-center items-center w-full p-6 xl:pb-0 bbg-blue-900">
+    <div className="flex flex-col justify-center items-center w-full p-3 md:p-6 xl:pb-0 bbg-blue-900">
       <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
-        <div className="flex flex-row rounded-lg mb-12 px-8 xl:px-16 text-center gap-4 bg-primary md:text-2xl xl:text-3xl justify-center items-center ">
+        <div className="flex flex-row rounded-lg mb-6 md:mb-12 px-8 xl:px-16 text-center gap-4 bg-primary md:text-2xl xl:text-3xl justify-center items-center ">
           <Music2 className="text-secondary" />
           <span className="text-secondary">Featured Artists & Albums</span>
           <Music2 className="text-secondary" />
         </div>
 
         <div className="flex flex-col md:flex-row w-[100%] items-start bgg-purple-900">
-          <div className="artist-list flex py-2 md:pt-0 md:flex-col md:justify-center items-center w-[320px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
+          <div className="artist-list flex py-2 pb-5 mb-5 md:mb-0 md:pt-0 md:flex-col md:justify-center items-center w-[320px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
             {dataset.map((artist: any) => (
               <div
                 key={artist.artistId}
@@ -237,31 +237,31 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                       style={{
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
-                    <p className="artist-who mt-2">{artistProfile.bio}</p>
-                    <div className="flex mt-5">
+                    <p className="artist-who mt-5">{artistProfile.bio}</p>
+                    <div className="flex flex-col md:flex-row mt-5">
                       {artistProfile.dripLink && (
-                        <>
-                          +{" "}
+                        <div>
+                          +
                           <a className="underline hover:no-underline mx-2" href={artistProfile.dripLink} target="_blank">
                             Artist on Drip
                           </a>
-                        </>
+                        </div>
                       )}
                       {artistProfile.xLink && (
-                        <>
-                          +{" "}
+                        <div>
+                          +
                           <a className="underline hover:no-underline mx-2" href={artistProfile.xLink} target="_blank">
                             Artist on X
                           </a>
-                        </>
+                        </div>
                       )}
                       {artistProfile.webLink && (
-                        <>
-                          +{" "}
+                        <div>
+                          +
                           <a className="underline hover:no-underline mx-2" href={artistProfile.webLink} target="_blank">
                             Artist Web
                           </a>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>

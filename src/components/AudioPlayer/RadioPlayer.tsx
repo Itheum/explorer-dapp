@@ -296,7 +296,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
               <div className="flex mt-3 md:mt-0 flex-grow justify-end">
                 <div className="flex flex-col">
                   <Button
-                    className={`!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100`}
+                    className={`${isAlbumForFree ? "!text-white" : "!text-black"}  text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100`}
                     variant="ghost"
                     onClick={() => {
                       window.open(getAlbumActionLink)?.focus();
