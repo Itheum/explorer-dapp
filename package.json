@@ -8,7 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "6.5.2",
     "@fortawesome/free-solid-svg-icons": "6.5.2",
     "@fortawesome/react-fontawesome": "0.2.2",
-    "@itheum/sdk-mx-data-nft": "3.5.1",
+    "@itheum/sdk-mx-data-nft": "3.7.0-alpha.6",
     "@metaplex-foundation/digital-asset-standard-api": "1.0.3",
     "@metaplex-foundation/mpl-bubblegum": "3.1.2",
     "@metaplex-foundation/mpl-token-metadata": "3.2.1",
