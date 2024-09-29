@@ -194,7 +194,8 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
             viewDataArgs.fwdHeaderKeys,
             viewDataArgs.headers,
             true,
-            index
+            index,
+            300 //  5 min cache
           );
 
           if (res.ok) {
