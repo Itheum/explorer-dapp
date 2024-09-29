@@ -4,6 +4,7 @@ import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks
 import { SPREADSHEET_NFTS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/spreadsheet-nfts/banner.png";
 import { MvxDataNftCard, Loader } from "components";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
 import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
@@ -109,6 +110,8 @@ export const SpreadsheetNfts = () => {
 
   return (
     <>
+      <HelmetPageMeta title="Itheum Spreadsheets App" shortTitle="Itheum Spreadsheets App" desc="Use this app to open spreadsheet Data NFTs." />
+
       <HeaderComponent
         pageTitle={"Spreadsheet NFTs"}
         hasImage={true}
@@ -159,6 +162,7 @@ export const SpreadsheetNfts = () => {
           <h3 className="text-center text-white m-auto mt-2">No Data NFTs found that can unlock this app</h3>
         )}
       </HeaderComponent>
+
       <div className="m-auto mb-5">
         {shownAppDataNfts.length < SPREADSHEET_NFTS_TOKENS.length && (
           <Button

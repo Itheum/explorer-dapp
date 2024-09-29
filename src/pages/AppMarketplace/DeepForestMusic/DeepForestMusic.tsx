@@ -18,6 +18,7 @@ import iconPreviewAudioPlayer from "assets/img/deep-forest-music/deep-forest.png
 import iconPreview from "assets/img/deep-forest-music/header.png";
 import { Loader } from "components";
 import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { Modal } from "components/Modal/Modal";
 import { HoverEffect } from "libComponents/animated/HoverEffect";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
@@ -173,85 +174,93 @@ export const DeepForestMusic = () => {
   }
 
   return (
-    <div className="relative flex flex-col justify-center items-center w-full overflow-hidden md:overflow-visible">
-      <div className="w-full h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
-      <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
-        <div className="flex flex-col w-[90%] md:w-[70%] p-10">
-          <img src={iconPreview} className="rounded-2xl" />
-          <div className="relative flex -mt-10 w-full items-center  justify-end p-2 px-4">
-            <Modal
-              openTrigger={
-                <button className="text-sm hover:scale-125 transition-all duration-300 md:text-xl bottom-0 right-0 rounded-full justify-center gap-1 flex flex-row">
-                  Preview <PlayCircle className="cursor-pointer text-secondary dark:text-primary" />
-                </button>
-              }
-              closeOnOverlayClick={true}
-              title={"Music Data Nft Preview"}
-              hasFilter={false}
-              filterData={[]}
-              titleClassName={"p-4 !text-xl md:!text-3xl"}>
-              <>
-                <AudioPlayer
-                  previewUrl={deepForestPreviewMix}
-                  songs={[
-                    {
-                      "idx": 1,
-                      "description": "The Chronicles of Deep Forest - 30 Years Anniversary by Eric Mouquet | Grammy Award Winner",
-                      "category": "Preview",
-                      "album": "EtherealEchoes",
-                      "cover_art_url": iconPreviewAudioPlayer,
-                      "title": "Deep Forest Music Preview",
-                    },
-                  ]}
-                />
-              </>
-            </Modal>{" "}
-          </div>
+    <>
+      <HelmetPageMeta
+        title="Deep Forest Grammy Music App"
+        shortTitle="Deep Forest Grammy Music App"
+        desc="Listen to Grammy Award winner Deep Forest's Music Data NFT Collection"
+      />
 
-          <div className="flex text-foreground flex-row rounded-lg mt-8 p-1  text-center gap-4 text-2xl md:w-[50%]  xl:text-3xl justify-center md:justify-start items-center ">
-            <Music2 />
-            <span>Albums</span>
-            <Music2 />
-          </div>
-          <div className="relative ">
-            <div className="w-full h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
-            <HoverEffect items={albumsState} viewData={viewData} className="text-base text-foreground font-medium pt-2" />
-          </div>
-        </div>
-      </div>
-      <Modal
-        openTrigger={<button id="audio-player-modal-trigger"></button>}
-        closeOnOverlayClick={true}
-        title={dataNftToOpen?.title}
-        hasFilter={false}
-        filterData={[]}
-        titleClassName={"p-4 !text-xl md:!text-3xl"}>
-        {isFetchingDataMarshal ? (
-          <div
-            className="flex flex-col items-center justify-center"
-            style={{
-              minHeight: "40rem",
-            }}>
-            <div>
-              <Loader noText />
-              <p className="text-center text-foreground">Loading...</p>
+      <div className="relative flex flex-col justify-center items-center w-full overflow-hidden md:overflow-visible">
+        <div className="w-full h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
+        <div className=" flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem]">
+          <div className="flex flex-col w-[90%] md:w-[70%] p-10">
+            <img src={iconPreview} className="rounded-2xl" />
+            <div className="relative flex -mt-10 w-full items-center  justify-end p-2 px-4">
+              <Modal
+                openTrigger={
+                  <button className="text-sm hover:scale-125 transition-all duration-300 md:text-xl bottom-0 right-0 rounded-full justify-center gap-1 flex flex-row">
+                    Preview <PlayCircle className="cursor-pointer text-secondary dark:text-primary" />
+                  </button>
+                }
+                closeOnOverlayClick={true}
+                title={"Music Data Nft Preview"}
+                hasFilter={false}
+                filterData={[]}
+                titleClassName={"p-4 !text-xl md:!text-3xl"}>
+                <>
+                  <AudioPlayer
+                    previewUrl={deepForestPreviewMix}
+                    songs={[
+                      {
+                        "idx": 1,
+                        "description": "The Chronicles of Deep Forest - 30 Years Anniversary by Eric Mouquet | Grammy Award Winner",
+                        "category": "Preview",
+                        "album": "EtherealEchoes",
+                        "cover_art_url": iconPreviewAudioPlayer,
+                        "title": "Deep Forest Music Preview",
+                      },
+                    ]}
+                  />
+                </>
+              </Modal>{" "}
+            </div>
+
+            <div className="flex text-foreground flex-row rounded-lg mt-8 p-1  text-center gap-4 text-2xl md:w-[50%]  xl:text-3xl justify-center md:justify-start items-center ">
+              <Music2 />
+              <span>Albums</span>
+              <Music2 />
+            </div>
+            <div className="relative ">
+              <div className="w-full h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
+              <HoverEffect items={albumsState} viewData={viewData} className="text-base text-foreground font-medium pt-2" />
             </div>
           </div>
-        ) : (
-          <>
-            {viewDataRes && !viewDataRes.error && tokenLogin && (
-              <AudioPlayer
-                dataNftToOpen={dataNftToOpen}
-                songs={dataMarshalResponse ? dataMarshalResponse.data : []}
-                tokenLogin={tokenLogin}
-                firstSongBlobUrl={firstSongBlobUrl}
-                chainID={chainID}
-              />
-            )}
-          </>
-        )}
-      </Modal>
-      <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
-    </div>
+        </div>
+        <Modal
+          openTrigger={<button id="audio-player-modal-trigger"></button>}
+          closeOnOverlayClick={true}
+          title={dataNftToOpen?.title}
+          hasFilter={false}
+          filterData={[]}
+          titleClassName={"p-4 !text-xl md:!text-3xl"}>
+          {isFetchingDataMarshal ? (
+            <div
+              className="flex flex-col items-center justify-center"
+              style={{
+                minHeight: "40rem",
+              }}>
+              <div>
+                <Loader noText />
+                <p className="text-center text-foreground">Loading...</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {viewDataRes && !viewDataRes.error && tokenLogin && (
+                <AudioPlayer
+                  dataNftToOpen={dataNftToOpen}
+                  songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                  tokenLogin={tokenLogin}
+                  firstSongBlobUrl={firstSongBlobUrl}
+                  chainID={chainID}
+                />
+              )}
+            </>
+          )}
+        </Modal>
+        <div className="w-full  h-[2px] bg-[linear-gradient(to_right,#166B6A,#02292F,#00755E,#02292F,#166B6A)] animate-gradient bg-[length:200%_auto]"></div>
+      </div>
+    </>
   );
 };
