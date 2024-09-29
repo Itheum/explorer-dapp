@@ -3,6 +3,7 @@ import React from "react";
 type Props = {
   link: string | undefined;
 };
+
 export const IFrameModal: React.FC<Props> = (props: any) => {
   const { link } = props;
   const handleIframeClick = (e: React.MouseEvent<HTMLIFrameElement, MouseEvent>) => {

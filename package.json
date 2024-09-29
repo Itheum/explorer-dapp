@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer is a DApp for the public to explore and visualize data within the Itheum protocol",
-  "version": "1.23.8",
+  "version": "1.23.9",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -50,6 +50,7 @@
     "react-calendar-heatmap": "1.9.0",
     "react-countdown": "2.3.5",
     "react-dom": "18.2.0",
+    "react-helmet": "^6.1.0",
     "react-hot-toast": "2.4.1",
     "react-inlinesvg": "3.0.3",
     "react-pdf": "9.1.0",
@@ -86,6 +87,7 @@
     "@types/node": "18.19.34",
     "@types/react": "18.2.79",
     "@types/react-dom": "18.2.25",
+    "@types/react-helmet": "^6.1.11",
     "@types/react-router-dom": "5.3.3",
     "@types/react-slick": "0.23.13",
     "@types/react-vertical-timeline-component": "3.3.6",

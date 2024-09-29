@@ -6,6 +6,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { MULTIVERSX_INFOGRAPHICS_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-infographs.png";
 import { MvxDataNftCard, Loader } from "components";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
@@ -149,6 +150,8 @@ export const MultiversxInfographics = () => {
 
   return (
     <>
+      <HelmetPageMeta title="MultiversX Infographic App" shortTitle="MultiversX Infographic App" desc="MultiversX Infographic App" />
+
       <HeaderComponent
         pageTitle={"MultiversX Infographics"}
         hasImage={true}
@@ -226,6 +229,7 @@ export const MultiversxInfographics = () => {
           <h3 className="text-center text-white">No DataNFT</h3>
         )}
       </HeaderComponent>
+
       <div className="m-auto mb-5">
         {shownAppDataNfts.length < MULTIVERSX_INFOGRAPHICS_TOKENS.length && (
           <Button

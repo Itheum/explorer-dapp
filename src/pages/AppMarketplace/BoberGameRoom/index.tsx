@@ -4,6 +4,7 @@ import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { BOBER_GAME_ROOM_TOKENS } from "appsConfig";
 import headerImg from "assets/img/bober-game-room/BoberCover.png";
 import { MvxDataNftCard } from "components";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
@@ -15,7 +16,6 @@ import { BoberModal } from "./components/BoberModal";
 export const BoberGameRoom: React.FC = () => {
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
-
   const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
@@ -91,6 +91,8 @@ export const BoberGameRoom: React.FC = () => {
 
   return (
     <>
+      <HelmetPageMeta title="Bober Room Game App" shortTitle="Bober Room Game App" desc="Bober Room Game App" />
+
       <HeaderComponent
         pageTitle={"Bober Game Room"}
         hasImage={true}
@@ -118,6 +120,7 @@ export const BoberGameRoom: React.FC = () => {
           <h3 className="text-center text-white">No Data NFTs</h3>
         )}
       </HeaderComponent>
+
       <div className="m-auto mb-5">
         {shownAppDataNfts.length < BOBER_GAME_ROOM_TOKENS.length && (
           <Button

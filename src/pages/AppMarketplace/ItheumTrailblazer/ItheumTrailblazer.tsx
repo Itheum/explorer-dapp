@@ -4,6 +4,7 @@ import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks
 import { TRAILBLAZER_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-trailblazer.png";
 import { MvxDataNftCard, Loader } from "components";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
@@ -17,7 +18,6 @@ export const ItheumTrailblazer = () => {
   const { hasPendingTransactions } = useGetPendingTransactions();
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
-
   const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
@@ -110,6 +110,8 @@ export const ItheumTrailblazer = () => {
 
   return (
     <>
+      <HelmetPageMeta title="Itheum Trailblazer App" shortTitle="Itheum Trailblazer App" desc="Itheum Trailblazer App" />
+
       <HeaderComponent
         pageTitle={"Trailblazer"}
         hasImage={true}
@@ -138,6 +140,7 @@ export const ItheumTrailblazer = () => {
           <h3 className="text-center text-white">No Data NFTs</h3>
         )}
       </HeaderComponent>
+
       <div className="m-auto mb-5">
         {shownAppDataNfts.length < TRAILBLAZER_TOKENS.length && (
           <Button
