@@ -85,12 +85,12 @@ const dataset = [
     albums: [
       {
         albumId: "ar4_a1",
-        solNftNameDrip: "MUSG5 - Diaspora EP",
+        solNftNameDrip: "MUSG5 - Diaspora EP - LLLUNA01",
         title: "Diaspora EP",
         desc: "Diaspora by LLLUNA01 fuses Dubstep, Trap, and Drum & Bass Jungle into a high-energy, bass-heavy journey through global underground sounds.",
         ctaPreviewStream: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/music/preview/llluna01-diaspora.mp3",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/3866c693-3505-4ec1-b81f-7a4db8e4747d",
+        ctaAirdrop: "",
       },
     ],
   },
