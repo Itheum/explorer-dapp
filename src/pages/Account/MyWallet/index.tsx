@@ -7,6 +7,7 @@ import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
 import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { MvxDataNftCard, Loader } from "components";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
@@ -247,6 +248,8 @@ export const MyWallet = () => {
 
   return (
     <>
+      <HelmetPageMeta title="Collected Itheum Data NFTs" shortTitle="Collected Itheum Data NFTs" desc="Your collected Itheum Data NFTs" />
+
       <MvxSolSwitch />
 
       {mvxNetworkSelected && (

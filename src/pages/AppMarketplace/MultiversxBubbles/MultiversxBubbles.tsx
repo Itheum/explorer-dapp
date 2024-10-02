@@ -4,6 +4,7 @@ import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks
 import { MULTIVERSX_BUBBLE_TOKENS } from "appsConfig";
 import headerHero from "assets/img/custom-app-header-bubblemaps.png";
 import { MvxDataNftCard, Loader } from "components";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { ZoomableSvg } from "components/ZoomableSvg";
 import { SHOW_NFTS_STEP } from "config";
@@ -17,7 +18,6 @@ export const MultiversxBubbles = () => {
   const { tokenLogin } = useGetLoginInfo();
   const { chainID } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
-
   const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
@@ -132,6 +132,8 @@ export const MultiversxBubbles = () => {
 
   return (
     <>
+      <HelmetPageMeta title="MultiversX Bubbles App" shortTitle="MultiversX Bubbles App" desc="MultiversX Bubbles App" />
+
       <HeaderComponent
         pageTitle={"MultiversX Bubbles"}
         hasImage={true}
@@ -199,6 +201,7 @@ export const MultiversxBubbles = () => {
           <h3 className="text-center text-white">No DataNFT</h3>
         )}
       </HeaderComponent>
+
       <div className="m-auto mb-5">
         {shownAppDataNfts.length < MULTIVERSX_BUBBLE_TOKENS.length && (
           <Button

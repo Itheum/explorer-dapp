@@ -4,6 +4,7 @@ import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks
 import { TIMECAPSULE_TOKENS } from "appsConfig";
 import headerHero from "assets/img/timecapsule/custom-app-header-timecapsule.png";
 import { MvxDataNftCard, Loader } from "components";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
@@ -101,6 +102,8 @@ export const TimeCapsule = () => {
 
   return (
     <>
+      <HelmetPageMeta title="Itheum Time Capsule App" shortTitle="Itheum Time Capsule App" desc="Own memories as collectibles." />
+
       <HeaderComponent
         pageTitle={"Time Capsule"}
         hasImage={true}
@@ -128,6 +131,7 @@ export const TimeCapsule = () => {
           <h3 className="text-center text-white">No Data NFTs</h3>
         )}
       </HeaderComponent>
+
       <div className="m-auto mb-5">
         {shownAppDataNfts.length < TIMECAPSULE_TOKENS.length && (
           <Button

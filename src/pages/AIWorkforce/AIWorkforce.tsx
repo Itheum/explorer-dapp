@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import HelmetPageMeta from "components/HelmetPageMeta";
 import { Button } from "libComponents/Button";
 import { backendApi } from "libs/backend-api";
 import { WorkersSnapShotGrid } from "./SharedComps";
@@ -50,41 +51,50 @@ export const AIWorkforce = () => {
   }
 
   return (
-    <div className="w-[100%] py-2">
-      <div id="hero" className="mt-2 pt-3 h-[200px] md:h-[180px] rounded-3xl">
-        <div className="flex flex-col h-[100%] justify-center items-center">
-          <div className="w-80% md:w-[60%]">
-            <h1 className="!text-xl text-center md:!text-2xl">Join the Itheum AI Workforce</h1>
-            <h2 className="!text-sm md:!text-xl text-center mt-2">
-              Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Workforce as a Data Provider
-            </h2>
+    <>
+      <HelmetPageMeta
+        title="Itheum AI Workforce"
+        shortTitle="Itheum AI Workforce"
+        desc="Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Workforce as a Data Provider"
+        shareImgUrl="https://explorer.itheum.io/socialshare/itheum_aiworkforce_social_hero.png"
+      />
+
+      <div className="w-[100%] py-2">
+        <div id="hero" className="mt-2 pt-3 h-[200px] md:h-[180px] rounded-3xl">
+          <div className="flex flex-col h-[100%] justify-center items-center">
+            <div className="w-80% md:w-[60%]">
+              <h1 className="!text-xl text-center md:!text-2xl">Join the Itheum AI Workforce</h1>
+              <h2 className="!text-sm md:!text-xl text-center mt-2">
+                Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Workforce as a Data Provider
+              </h2>
+            </div>
+
+            <Link to="https://datadex.itheum.io/nfmeid" target="_blank" className="my-5 text-base hover:!no-underline hover:text-black">
+              <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                Mint NFMe ID Now
+              </Button>
+            </Link>
           </div>
+        </div>
 
-          <Link to="https://datadex.itheum.io/nfmeid" target="_blank" className="my-5 text-base hover:!no-underline hover:text-black">
-            <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-              Mint NFMe ID Now
-            </Button>
-          </Link>
+        <div className="mt-5 mb-20">
+          <div className="flex flex-col justify-center items-center">
+            {appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} myAddress={mxAddress} />}
+          </div>
+        </div>
+
+        <div className="m-auto mb-10 flex">
+          <Button
+            className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black m-auto"
+            onClick={() => {
+              getWorkforceData();
+            }}
+            disabled={workforceFetchedCount % WORKFORCE_API_PAGE_SIZE > 0 || workforcePageLoading}>
+            {workforceFetchedCount % WORKFORCE_API_PAGE_SIZE === 0 ? "Load more" : "All Loaded"}
+          </Button>
         </div>
       </div>
-
-      <div className="mt-5 mb-20">
-        <div className="flex flex-col justify-center items-center">
-          {appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} myAddress={mxAddress} />}
-        </div>
-      </div>
-
-      <div className="m-auto mb-10 flex">
-        <Button
-          className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black m-auto"
-          onClick={() => {
-            getWorkforceData();
-          }}
-          disabled={workforceFetchedCount % WORKFORCE_API_PAGE_SIZE > 0 || workforcePageLoading}>
-          {workforceFetchedCount % WORKFORCE_API_PAGE_SIZE === 0 ? "Load more" : "All Loaded"}
-        </Button>
-      </div>
-    </div>
+    </>
   );
 };
 
