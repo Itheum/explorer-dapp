@@ -6,8 +6,8 @@ import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import BigNumber from "bignumber.js";
 import toast from "react-hot-toast";
 import { IS_DEVNET } from "appsConfig";
+import { PulseLoader } from "libComponents/animated/PulseLoader";
 import { convertWeiToEsdt } from "libs/utils";
-import { Loader } from "./sdkDappComponents";
 import { ThreeDCard } from "./ThreeDCard";
 import { getHealthCheckFromBackendApi, getRecentOffersFromBackendApi } from "../libs/backend-api";
 
@@ -57,6 +57,7 @@ const RecentDataNFTsSection: React.FC = () => {
   const apiWrapper = async () => {
     DataNft.setNetworkConfig(IS_DEVNET ? "devnet" : "mainnet");
     setIsLoading(true);
+
     try {
       const offers = await getRecentOffersFromBackendApi(chainID);
       const recentNonces = offers.map((nft: any) => ({ nonce: nft.offeredTokenNonce }));
@@ -95,12 +96,12 @@ const RecentDataNFTsSection: React.FC = () => {
 
   return (
     <>
-      {isApiUp ? (
+      {!isApiUp ? (
         <div>
           <h2 className="mt-12 py-2 mb-0 !text-3xl text-center">Recent Data NFTs</h2>
           <div className={`w-full flex flex-row flex-wrap items-center justify-center`}>
             {isLoading ? (
-              <Loader className="h-[20rem]" />
+              <PulseLoader cusStyle="my-10" />
             ) : latestOffers?.length === 0 ? (
               <div className="flex flex-col items-center justify-center w-full h-[20rem]">
                 <h3 className="text-lg">No recent offers available...</h3>

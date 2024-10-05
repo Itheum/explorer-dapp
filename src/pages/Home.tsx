@@ -26,16 +26,15 @@ export const Home = () => {
       <div className="flex flex-col py-2">
         <div className="mt-2">
           <h1 className="!text-2xl md:!text-3xl text-center">NF-Tunes Releases</h1>
-          <h2 className="!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music</h2>
-          <div className="flex flex-col md:flex-row">
+          <h2 className="dark:!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music</h2>
+          <div className="flex flex-col md:flex-row flex-wrap-reverse p-2 rounded-md">
             <div
-              id="nf-tunes-cta-1"
-              className="flex-1 flex border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/llluna01-diaspora.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-white !text-lg text-center md:!text-3xl mb-5">Llluna01 "Diaspora" Digital EP Launch!</h1>
+                <h1 className="!text-white !text-lg text-center md:!text-3xl mb-5">Llluna01 "Diaspora" EP Launch!</h1>
                 <Link to={`${routeNames.nftunes}/?featured-artist=llluna01`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
@@ -44,13 +43,12 @@ export const Home = () => {
               </div>
             </div>
             <div
-              id="nf-tunes-cta-2"
-              className="flex-1 flex border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-white !text-lg text-center md:!text-3xl mb-5">"Retrofy" Digital EP is Live!</h1>
+                <h1 className="!text-white !text-lg text-center md:!text-3xl mb-5">"Retrofy" EP is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?featured-artist=yfgp`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
@@ -59,16 +57,32 @@ export const Home = () => {
               </div>
             </div>
             <div
-              id="nf-tunes-cta-3"
-              className="flex-1 flex border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/hachi-mugen_mugen-cafe.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-white !text-lg text-center md:!text-3xl mb-5">"Mugen Cafe" Digital EP is Live</h1>
+                <h1 className="!text-white !text-lg text-center md:!text-3xl mb-5">"Mugen Cafe" EP is Live</h1>
                 <Link to={`${routeNames.nftunes}/?featured-artist=hachi-mugen`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              style={{
+                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/stephen-snodgrass.jpg)`,
+              }}>
+              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+                <h1 className="!text-white !text-lg text-center md:!text-3xl mb-5">Stephen Snodgrass "Two Weeks" EP Launch!</h1>
+                <Link
+                  to={`https://datadex.itheum.io/datanfts/marketplace/DATANFTFT-e936d4-ae`}
+                  target="_blank"
+                  className="text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Buy Now
                   </Button>
                 </Link>
               </div>
