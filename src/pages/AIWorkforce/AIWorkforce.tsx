@@ -3,6 +3,7 @@ import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import HelmetPageMeta from "components/HelmetPageMeta";
+import { PulseLoader } from "libComponents/animated/PulseLoader";
 import { Button } from "libComponents/Button";
 import { backendApi } from "libs/backend-api";
 import { WorkersSnapShotGrid } from "./SharedComps";
@@ -79,19 +80,25 @@ export const AIWorkforce = () => {
 
         <div className="mt-5 mb-20">
           <div className="flex flex-col justify-center items-center">
-            {appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} myAddress={mxAddress} />}
-          </div>
-        </div>
+            {appBootingUp ? (
+              <PulseLoader />
+            ) : (
+              <>
+                <WorkersSnapShotGrid snapShotData={rankedWorkforce} myAddress={mxAddress} />
 
-        <div className="m-auto mb-10 flex">
-          <Button
-            className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black m-auto"
-            onClick={() => {
-              getWorkforceData();
-            }}
-            disabled={workforceFetchedCount % WORKFORCE_API_PAGE_SIZE > 0 || workforcePageLoading}>
-            {workforceFetchedCount % WORKFORCE_API_PAGE_SIZE === 0 ? "Load more" : "All Loaded"}
-          </Button>
+                <div className="m-auto my-10 flex">
+                  <Button
+                    className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black m-auto"
+                    onClick={() => {
+                      getWorkforceData();
+                    }}
+                    disabled={workforceFetchedCount % WORKFORCE_API_PAGE_SIZE > 0 || workforcePageLoading}>
+                    {workforceFetchedCount % WORKFORCE_API_PAGE_SIZE === 0 ? "Load more" : "All Loaded"}
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -123,7 +130,9 @@ export const AIWorkforceTopN = ({ showItems }: { showItems?: number }) => {
   return (
     <div className="w-[100%] py-2">
       <div className="mt-1 mb-10">
-        <div className="flex flex-col justify-center items-center">{appBootingUp ? <>Loading</> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} />}</div>
+        <div className="flex flex-col justify-center items-center">
+          {appBootingUp ? <PulseLoader /> : <WorkersSnapShotGrid snapShotData={rankedWorkforce} />}
+        </div>
       </div>
     </div>
   );
