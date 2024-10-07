@@ -96,10 +96,10 @@ const RecentDataNFTsSection: React.FC = () => {
 
   return (
     <>
-      {!isApiUp ? (
+      {isApiUp ? (
         <div>
-          <h2 className="mt-12 py-2 mb-0 !text-3xl text-center">Recent Data NFTs</h2>
-          <div className={`w-full flex flex-row flex-wrap items-center justify-center`}>
+          <h2 className="mt-12 py-2 mb-0 !text-2xl text-center">Recently Listed Data NFTs</h2>
+          <div className={`w-full flex flex-row flex-wrap items-center justify-center md:justify-normal`}>
             {isLoading ? (
               <PulseLoader cusStyle="my-10" />
             ) : latestOffers?.length === 0 ? (
@@ -107,9 +107,8 @@ const RecentDataNFTsSection: React.FC = () => {
                 <h3 className="text-lg">No recent offers available...</h3>
               </div>
             ) : (
-              latestOffers
-                .slice(0, 10)
-                .map((nft, index) => (
+              <>
+                {latestOffers.slice(0, 10).map((nft, index) => (
                   <ThreeDCard
                     key={index}
                     chainID={chainID}
@@ -120,7 +119,8 @@ const RecentDataNFTsSection: React.FC = () => {
                     wantedTokenAmount={Number(convertWeiToEsdt(nft.wantedTokenAmount))}
                     offerIndex={Number(nft.index)}
                   />
-                ))
+                ))}
+              </>
             )}
           </div>
         </div>
