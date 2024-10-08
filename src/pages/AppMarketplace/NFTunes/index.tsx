@@ -83,10 +83,10 @@ export const NFTunes = () => {
   const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
 
   useEffect(() => {
-    const isFeaturedArtistDeepLink = searchParams.get("featured-artist");
+    const isFeaturedArtistDeepLink = searchParams.get("artist-profile");
 
     if (isFeaturedArtistDeepLink) {
-      scrollToSection("featured-artist", 220);
+      scrollToSection("artist-profile", 50);
       setNoRadioAutoPlay(true); // don't auto-play radio when we deep scroll to artist as its confusing
       setFeaturedArtistDeepLinkSlug(isFeaturedArtistDeepLink.trim());
     } else {
@@ -400,10 +400,11 @@ export const NFTunes = () => {
           </div>
 
           {/* Artists and their Albums */}
-          <div id="featured-artist" className="md:mt-[50px] w-full">
+          <div id="artist-profile" className="md:mt-[50px] w-full">
             <FeaturedArtistsAndAlbums
               mvxNetworkSelected={mvxNetworkSelected}
               mySolAppDataNfts={shownSolAppDataNfts}
+              myShownMvxAppDataNfts={shownMvxAppDataNfts}
               viewData={viewSolData}
               openActionFireLogic={() => {
                 setLaunchBaseLevelMusicPlayer(true);

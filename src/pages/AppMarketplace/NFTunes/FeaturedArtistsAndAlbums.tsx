@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { Music2, Pause, Play, Loader2, Gift, ShoppingCart } from "lucide-react";
 import { Button } from "libComponents/Button";
@@ -94,11 +95,79 @@ const dataset = [
       },
     ],
   },
+
+  {
+    artistId: "ar5",
+    name: "Stephen Snodgrass",
+    slug: "stephen-snodgrass",
+    bio: "SF-based musician/recording artist, photographer and videographer, creating Music NFT's on the blockchain",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/stephen-snodgrass.jpg",
+    dripLink: "",
+    xLink: "https://x.com/the_economystic",
+    webLink: "",
+    albums: [
+      {
+        albumId: "ar5_a1",
+        solNftNameDrip: "",
+        mvxDataNftId: "DATANFTFT-e936d4-ae",
+        title: "Two Weeks",
+        desc: "A collection of 3 songs, was composed and recorded by myself over the course of two weeks in the Summer of 2024. The first song of the EP, Otherside, is the first song I ever wrote back in the Summer of 2021. All vocals and instrumentation performed by Stephen Snodgrass.",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/Qme3F97bs7MtkdshibxauHHDNLSvKtvw3nhJ3NiQXpGkGR",
+        ctaBuy: "https://datadex.itheum.io/datanfts/marketplace/DATANFTFT-e936d4-ae",
+        ctaAirdrop: "",
+      },
+    ],
+  },
+  {
+    artistId: "ar6",
+    name: "Deep Forest",
+    slug: "deep-forest",
+    bio: "Deep Forest, founded by composer, musician, and producer Eric Mouquet, is a pioneering group in electronic and world music and the first French artist to win a Grammy in 1995 for the album Bohème (Best World Music Album), and has also received a World Music Award and an MTV Award.",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/deep-forest.jpg",
+    dripLink: "",
+    xLink: "https://twitter.com/deep_forest",
+    webLink: "https://www.deep-forest.fr/",
+    albums: [
+      {
+        albumId: "ar6_a1",
+        solNftNameDrip: "",
+        mvxDataNftId: "DFEE-72425b",
+        title: "Ethereal Echoes",
+        desc: "The Chronicles of Deep Forest – an exclusive digital EP released to celebrate the 30th anniversary of their Grammy win.",
+        ctaPreviewStream: "https://explorer.itheum.io/assets/deep-forest-preview-mix-D_1v3lz4.mp3",
+        ctaBuy: "https://datadex.itheum.io/datanfts/marketplace/DFEE-72425b-13",
+        ctaAirdrop: "",
+      },
+    ],
+  },
+  {
+    artistId: "ar7",
+    name: "3OE",
+    slug: "3oe",
+    bio: "Shaped by space and time, we create immersive soundscapes that reflect shifting moods and environments. Each piece is a journey through evolving expressions, offering a pleasant musical experience.",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/3oe.jpg",
+    dripLink: "",
+    xLink: "",
+    webLink: "",
+    albums: [
+      {
+        albumId: "ar7_a1",
+        solNftNameDrip: "",
+        mvxDataNftId: "",
+        title: "Eternal Echo",
+        desc: "This is the premier Digital EP from 3OE which delivers  immersive soundscapes for a pleasant musical experience.",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmVc3L5J2x6RTuxTD3W5f83AEMXD6b9v2DELu5R9vhiStt",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
+      },
+    ],
+  },
 ];
 
 type FeaturedArtistsAndAlbumsProps = {
   mvxNetworkSelected: boolean;
   mySolAppDataNfts?: DasApiAsset[];
+  myShownMvxAppDataNfts?: DataNft[];
   viewData: (e: number) => void;
   openActionFireLogic?: any;
   stopPreviewPlayingNow?: boolean;
@@ -107,7 +176,16 @@ type FeaturedArtistsAndAlbumsProps = {
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
-  const { mvxNetworkSelected, mySolAppDataNfts, viewData, openActionFireLogic, stopPreviewPlayingNow, featuredArtistDeepLinkSlug, onPlayHappened } = props;
+  const {
+    mvxNetworkSelected,
+    mySolAppDataNfts,
+    myShownMvxAppDataNfts,
+    viewData,
+    openActionFireLogic,
+    stopPreviewPlayingNow,
+    featuredArtistDeepLinkSlug,
+    onPlayHappened,
+  } = props;
   const [audio] = useState(new Audio());
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<boolean>(false);
   const [previewPlayingForAlbumId, setPreviewPlayingForAlbumId] = useState<string | undefined>();
@@ -115,6 +193,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [selArtistId, setSelArtistId] = useState<string>("ar1");
   const [artistProfile, setArtistProfile] = useState<any>(null);
   const [ownedSolDataNftNameAndIndexMap, setOwnedSolDataNftNameAndIndexMap] = useState<any>(null);
+  const [ownedMvxDataNftNameAndIndexMap, setOwnedMvxDataNftNameAndIndexMap] = useState<any>(null);
 
   useEffect(() => {
     audio.addEventListener("canplaythrough", function () {
@@ -166,6 +245,19 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }, [mySolAppDataNfts]);
 
   useEffect(() => {
+    if (myShownMvxAppDataNfts && myShownMvxAppDataNfts.length > 0) {
+      const nameToIndexMap = myShownMvxAppDataNfts.reduce((t: any, mvxDataNft: DataNft, idx: number) => {
+        if (mvxDataNft?.tokenIdentifier) {
+          t[mvxDataNft?.tokenIdentifier] = idx;
+        }
+        return t;
+      }, {});
+
+      setOwnedMvxDataNftNameAndIndexMap(nameToIndexMap);
+    }
+  }, [myShownMvxAppDataNfts]);
+
+  useEffect(() => {
     if (stopPreviewPlayingNow) {
       playPausePreview(); // with no params wil always go into the stop logic
     }
@@ -190,22 +282,29 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     }
   }
 
-  function checkOwnershipOfAlbum(solNftName: string) {
+  function checkOwnershipOfAlbum(album: any) {
     let albumInOwnershipListIndex = -1; // note -1 means we don't own it
 
-    if (ownedSolDataNftNameAndIndexMap && ownedSolDataNftNameAndIndexMap[solNftName]) {
-      albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[solNftName];
+    if (!mvxNetworkSelected) {
+      if (album?.solNftNameDrip && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftNameDrip] !== "undefined") {
+        albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftNameDrip];
+      }
+    } else {
+      // @TODO Support play of MVX items
+      // if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap && typeof ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId] !== "undefined") {
+      //   albumInOwnershipListIndex = ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId];
+      // }
     }
 
     return albumInOwnershipListIndex;
   }
 
   return (
-    <div className="flex flex-col justify-center items-center w-full p-3 md:p-6 xl:pb-0 bbg-blue-900">
+    <div className="flex flex-col justify-center items-center w-full p-3 md:p-6 xl:pb-0">
       <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
         <div className="flex flex-row rounded-lg mb-6 md:mb-12 px-8 xl:px-16 text-center gap-4 bg-primary md:text-2xl xl:text-3xl justify-center items-center ">
           <Music2 className="text-secondary" />
-          <span className="text-secondary">Featured Artists & Albums</span>
+          <span className="text-secondary">Artists & Albums</span>
           <Music2 className="text-secondary" />
         </div>
 
@@ -297,51 +396,49 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               )}
                             </Button>
                           )}
-                          {!mvxNetworkSelected && (
-                            <>
-                              {checkOwnershipOfAlbum(album.solNftNameDrip) > -1 && (
-                                <Button
-                                  disabled={isPreviewPlaying && !previewIsReadyToPlay}
-                                  className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
-                                  onClick={() => {
-                                    viewData(checkOwnershipOfAlbum(album.solNftNameDrip));
+                          <>
+                            {checkOwnershipOfAlbum(album) > -1 && (
+                              <Button
+                                disabled={isPreviewPlaying && !previewIsReadyToPlay}
+                                className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
+                                onClick={() => {
+                                  viewData(checkOwnershipOfAlbum(album));
 
-                                    if (openActionFireLogic) {
-                                      openActionFireLogic();
-                                    }
-                                  }}>
-                                  <>
-                                    <Music2 />
-                                    <span className="ml-2">Play Album</span>
-                                  </>
-                                </Button>
-                              )}
-                              {album.ctaBuy && (
-                                <Button
-                                  className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                  onClick={() => {
-                                    window.open(album.ctaBuy)?.focus();
-                                  }}>
-                                  <>
-                                    <ShoppingCart />
-                                    <span className="ml-2">{checkOwnershipOfAlbum(album.solNftNameDrip) > -1 ? "Buy More Album Copies" : "Buy Album"}</span>
-                                  </>
-                                </Button>
-                              )}
-                              {album.ctaAirdrop && (
-                                <Button
-                                  className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                  onClick={() => {
-                                    window.open(album.ctaAirdrop)?.focus();
-                                  }}>
-                                  <>
-                                    <Gift />
-                                    <span className="ml-2">Get Album for Free!</span>
-                                  </>
-                                </Button>
-                              )}
-                            </>
-                          )}
+                                  if (openActionFireLogic) {
+                                    openActionFireLogic();
+                                  }
+                                }}>
+                                <>
+                                  <Music2 />
+                                  <span className="ml-2">Play Album</span>
+                                </>
+                              </Button>
+                            )}
+                            {album.ctaBuy && (
+                              <Button
+                                className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                                onClick={() => {
+                                  window.open(album.ctaBuy)?.focus();
+                                }}>
+                                <>
+                                  <ShoppingCart />
+                                  <span className="ml-2">{checkOwnershipOfAlbum(album) > -1 ? "Buy More Album Copies" : "Buy Album"}</span>
+                                </>
+                              </Button>
+                            )}
+                            {album.ctaAirdrop && (
+                              <Button
+                                className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                                onClick={() => {
+                                  window.open(album.ctaAirdrop)?.focus();
+                                }}>
+                                <>
+                                  <Gift />
+                                  <span className="ml-2">Get Album for Free!</span>
+                                </>
+                              </Button>
+                            )}
+                          </>
                         </div>
                       </div>
                     ))}

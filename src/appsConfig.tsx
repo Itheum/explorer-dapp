@@ -100,8 +100,6 @@ export const SPREADSHEET_NFTS_TOKENS: app_token[] = IS_DEVNET
 
 export const GET_BITZ_TOKEN: app_token = IS_DEVNET ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 } : { tokenIdentifier: "DATANFTFT-e936d4", nonce: 7 };
 
-export const FEATURED_APPS = IS_DEVNET ? ["getbitz", "nftunes", "itheumtrailblazer"] : ["getbitz", "nftunes", "itheumtrailblazer"];
-
 export const SUPPORTED_APPS = IS_DEVNET
   ? [
       "itheumtrailblazer",
@@ -117,15 +115,4 @@ export const SUPPORTED_APPS = IS_DEVNET
       "spreadsheetnfts",
       "nfpodcast",
     ]
-  : [
-      "itheumtrailblazer",
-      "multiversxbubbles",
-      "multiversxinfographics",
-      "nftunes",
-      "deepforestmusic",
-      "timecapsule",
-      "getbitz",
-      "bobergameroom",
-      "spreadsheetnfts",
-      "nfpodcast",
-    ];
+  : ["itheumtrailblazer", "nftunes", "deepforestmusic", "timecapsule", "getbitz", "spreadsheetnfts", "nfpodcast"];

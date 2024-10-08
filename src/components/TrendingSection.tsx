@@ -67,10 +67,10 @@ const TrendingSection: React.FC = () => {
 
   return (
     <>
-      {!isApiUp ? (
+      {isApiUp ? (
         <div>
-          <h2 className="mt-12 py-2 mb-0 !text-3xl text-center">Trending Offers</h2>
-          <div className={`w-full flex flex-row flex-wrap items-center justify-center`}>
+          <h2 className="mt-12 py-2 mb-0 !text-2xl text-center">Trending Data NFT Offers</h2>
+          <div className={`w-full flex flex-row flex-wrap items-center justify-center md:justify-normal`}>
             {isLoading ? (
               <PulseLoader cusStyle="my-10" />
             ) : trendingDataNfts?.length === 0 ? (
@@ -78,9 +78,8 @@ const TrendingSection: React.FC = () => {
                 <h3 className="text-lg">No trending offers available...</h3>
               </div>
             ) : (
-              trendingDataNfts
-                .slice(0, 10)
-                .map((nft, index) => (
+              <>
+                {trendingDataNfts.slice(0, 10).map((nft, index) => (
                   <ThreeDCard
                     key={index}
                     chainID={chainID}
@@ -89,7 +88,8 @@ const TrendingSection: React.FC = () => {
                     nftImgUrl={nft.nftImgUrl || ""}
                     rating={nft.rating}
                   />
-                ))
+                ))}
+              </>
             )}
           </div>
         </div>
