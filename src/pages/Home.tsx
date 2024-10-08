@@ -34,7 +34,7 @@ export const Home = () => {
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/deep-forest.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg text-center md:!text-3xl mb-5">Grammy Winner Deep Forest's "Ethereal Echoes" EP is Live!</h1>
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Grammy Winner Deep Forest's "Ethereal Echoes" EP is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=deep-forest`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
@@ -48,7 +48,7 @@ export const Home = () => {
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/llluna01-diaspora.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg text-center md:!text-3xl mb-5">Llluna01 "Diaspora" is Live!</h1>
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Llluna01 "Diaspora" is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=llluna01`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
@@ -62,7 +62,7 @@ export const Home = () => {
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg text-center md:!text-3xl mb-5">"Retrofy" EP is Live!</h1>
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">"Retrofy" EP is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=yfgp`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
@@ -76,10 +76,10 @@ export const Home = () => {
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/3oe.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg text-center md:!text-3xl mb-5">3OE EP Launch!</h1>
-                <Link to={`https://drip.haus/itheum`} target="_blank" className="text-base hover:!no-underline hover:text-black">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">3OE EP is Live!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=3oe`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Get Free Airdrop
+                    Listen Now
                   </Button>
                 </Link>
               </div>
@@ -90,7 +90,7 @@ export const Home = () => {
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/hachi-mugen_mugen-cafe.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg text-center md:!text-3xl mb-5">"Mugen Cafe" EP is Live!</h1>
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">"Mugen Cafe" EP is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=hachi-mugen`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
@@ -104,7 +104,7 @@ export const Home = () => {
                 "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/stephen-snodgrass.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg text-center md:!text-3xl mb-5">Stephen Snodgrass "Two Weeks" EP Launch!</h1>
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Stephen Snodgrass "Two Weeks" is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=stephen-snodgrass`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
