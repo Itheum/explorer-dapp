@@ -118,7 +118,6 @@ const dataset = [
       },
     ],
   },
-
   {
     artistId: "ar6",
     name: "Deep Forest",
@@ -138,6 +137,28 @@ const dataset = [
         ctaPreviewStream: "https://explorer.itheum.io/assets/deep-forest-preview-mix-D_1v3lz4.mp3",
         ctaBuy: "https://datadex.itheum.io/datanfts/marketplace/DFEE-72425b-13",
         ctaAirdrop: "",
+      },
+    ],
+  },
+  {
+    artistId: "ar7",
+    name: "3OE",
+    slug: "3oe",
+    bio: "Shaped by space and time, we create immersive soundscapes that reflect shifting moods and environments. Each piece is a journey through evolving expressions, offering a pleasant musical experience.",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/3oe.jpg",
+    dripLink: "",
+    xLink: "",
+    webLink: "",
+    albums: [
+      {
+        albumId: "ar7_a1",
+        solNftNameDrip: "",
+        mvxDataNftId: "",
+        title: "Eternal Echo",
+        desc: "This is the premier Digital EP from 3OE which delivers  immersive soundscapes for a pleasant musical experience.",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmVc3L5J2x6RTuxTD3W5f83AEMXD6b9v2DELu5R9vhiStt",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
       },
     ],
   },
