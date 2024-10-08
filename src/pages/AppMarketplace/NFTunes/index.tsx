@@ -327,7 +327,7 @@ export const NFTunes = () => {
             </div>
 
             {/* New Artists Join CTA */}
-            <div className="flex flex-col md:flex-row items-center justify-between p-[15px] rounded-lg w-full bg-primary text-primary-foreground">
+            <div className="flex flex-col md:flex-row items-center justify-between p-[15px] rounded-lg w-full bg-[#333] dark:bg-primary text-primary-foreground">
               <img className="w-[50px] md:w-70px" src={currentTheme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
               <p className="text-lg md:text-xl my-3 md:my-0">Are you an Indie Musician? NF-Tunes is growing fast and we are onboarding new musicians!</p>
               <Button
@@ -482,7 +482,7 @@ export const NFTunes = () => {
                           );
                         })
                       ) : (
-                        <h3 className="text-center text-white">&nbsp;</h3>
+                        <>&nbsp;</>
                       )}
                     </div>
                   </HeaderComponent>
@@ -573,7 +573,7 @@ export const NFTunes = () => {
           {/* Benefits of NF-Tunes */}
           <div className="flex flex-col justify-center items-center w-full gap-12 p-6 xl:p-12 xl:pb-0">
             <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
-              <div className="flex flex-row rounded-lg mb-12 px-8 xl:px-16 text-center gap-4 bg-primary md:text-2xl xl:text-3xl  justify-center items-center ">
+              <div className="flex flex-row rounded-lg mb-12 px-8 xl:px-16 text-center gap-4 bg-[#333] dark:bg-primary md:text-2xl xl:text-3xl  justify-center items-center ">
                 <Music2 className="text-secondary" />
                 <span className="text-secondary">Benefits of NF-Tunes</span>
                 <Music2 className="text-secondary" />
@@ -614,7 +614,9 @@ export const NFTunes = () => {
           </div>
 
           {/* Calling Musicians Section */}
-          <div id="join-nf-tunes" className="flex flex-col gap-4 justify-center items-center bg-primary w-full px-[20px] py-[50px] text-center">
+          <div
+            id="join-nf-tunes"
+            className="flex flex-col gap-4 justify-center items-center bg-[#333] dark:bg-primary w-full px-[20px] py-[50px] text-center rounded-t-lg">
             <span className="text-secondary font-[Clash-Medium] text-2xl xl:text-6xl"> Calling all Indie Musicians!</span>
             <span className="xl:w-[50%] text-primary-foreground xl:text-2xl ">
               Be a true Web3 music innovator! We provide you with full support to launch your music on NF-Tunes
@@ -639,7 +641,7 @@ export const NFTunes = () => {
           </div>
 
           {/* What Musicians are saying */}
-          <div className="flex flex-col gap-4 justify-center items-center bg-primary w-full px-[20px] md:py-[50px] text-center">
+          <div className="flex flex-col gap-4 justify-center items-center bg-[#333] dark:bg-primary w-full px-[20px] md:py-[50px] text-center rounded-b-lg">
             <div className="py-8 flex flex-col w-[100%] justify-center items-center xl:items-start xl:p-12 xl:pt-0">
               <div className="flex flex-col xl:flex-row w-full items-center justify-center h-[300px]">
                 <div className="flex flex-col gap-8 xl:w-[50%] justify-start items-center xl:items-start w-[330px] md:w-[auto]">
@@ -657,7 +659,7 @@ export const NFTunes = () => {
           {/* Storage Solution Zedge Storage */}
           <div className="flex flex-col justify-center items-center mt-10">
             <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
-              <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
+              <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-[#333] dark:bg-foreground md:text-2xl xl:text-3xl justify-center items-center ">
                 <Music2 className="text-secondary" />
                 <span className="text-secondary">Storage Solution for your Music Data NFT</span>
                 <Music2 className="text-secondary" />

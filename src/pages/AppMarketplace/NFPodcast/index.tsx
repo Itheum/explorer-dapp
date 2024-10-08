@@ -192,11 +192,11 @@ export const NFPodcast = () => {
             </div>
           </div>
 
-          {/*Nfts shown here*/}
+          {/* Nfts shown here */}
           {
             <div id="data-nfts" className="flex justify-center items-center p-16 ">
               <div className="flex flex-col">
-                <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={"Podcast Data NFTs"} dataNftCount={shownAppDataNfts.length}>
+                <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={`You have collected ${shownAppDataNfts.length} Podcast Data NFTs`}>
                   {shownAppDataNfts.length > 0 ? (
                     shownAppDataNfts.map((dataNft, index) => {
                       return (
@@ -240,11 +240,12 @@ export const NFPodcast = () => {
                       );
                     })
                   ) : (
-                    <h3 className="text-center text-white">No Data NFTs</h3>
+                    <>&nbsp;</>
                   )}
                 </HeaderComponent>
+
                 <div className="m-auto mb-5">
-                  {shownAppDataNfts.length < NF_PODCAST_TOKENS.length && (
+                  {shownAppDataNfts.length > 0 && shownAppDataNfts.length < NF_PODCAST_TOKENS.length && (
                     <Button
                       className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
                       onClick={() => {
@@ -262,7 +263,7 @@ export const NFPodcast = () => {
           {/* Storage Solution Zedge Storage  */}
           <div className="flex flex-col justify-center items-center ">
             <div className=" py-8 flex flex-col w-[100%] justify-center items-center xl:items-start p-8 xl:p-12">
-              <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
+              <div className="flex flex-row rounded-lg mb-4 px-8 xl:px-16 text-center gap-4 bg-[#333] dark:bg-foreground md:text-2xl xl:text-3xl  justify-center items-center ">
                 <Music2 className="text-secondary" />
                 <span className="text-secondary ">Storage Solution for your Podcast Data NFT</span>
                 <Music2 className="text-secondary" />

@@ -95,7 +95,6 @@ const dataset = [
       },
     ],
   },
-
   {
     artistId: "ar5",
     name: "Stephen Snodgrass",
@@ -152,13 +151,13 @@ const dataset = [
     albums: [
       {
         albumId: "ar7_a1",
-        solNftNameDrip: "",
+        solNftNameDrip: "MUSG6 - Eternal Echo - 3OE",
         mvxDataNftId: "",
         title: "Eternal Echo",
-        desc: "This is the premier Digital EP from 3OE which delivers  immersive soundscapes for a pleasant musical experience.",
+        desc: "This is the premier Digital EP from 3OE - it delivers immersive soundscapes for a pleasant musical experience.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmVc3L5J2x6RTuxTD3W5f83AEMXD6b9v2DELu5R9vhiStt",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/6f744afb-cc1f-4a66-8b85-aaa34da9af9f",
+        ctaAirdrop: "",
       },
     ],
   },
@@ -302,7 +301,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   return (
     <div className="flex flex-col justify-center items-center w-full p-3 md:p-6 xl:pb-0">
       <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
-        <div className="flex flex-row rounded-lg mb-6 md:mb-12 px-8 xl:px-16 text-center gap-4 bg-primary md:text-2xl xl:text-3xl justify-center items-center ">
+        <div className="flex flex-row rounded-lg mb-6 md:mb-12 px-8 xl:px-16 text-center gap-4 bg-[#333] dark:bg-primary md:text-2xl xl:text-3xl justify-center items-center ">
           <Music2 className="text-secondary" />
           <span className="text-secondary">Artists & Albums</span>
           <Music2 className="text-secondary" />
