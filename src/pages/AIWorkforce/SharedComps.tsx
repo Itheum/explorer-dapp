@@ -19,7 +19,7 @@ export function WorkersSnapShotGrid({ snapShotData, myAddress }: { snapShotData:
         flattenedFixedData.map((worker: any, idx: number) => (
           <div key={idx}>
             <div className="flex justify-center">
-              <span className="bg-yellow-100 text-yellow-800 text-xs md:text-sm font-medium rounded dark:bg-yellow-900 dark:text-yellow-300 p-1">
+              <span className="bg-[#fdde47] mb-1 text-yellow-800 text-xs md:text-sm font-medium rounded dark:bg-yellow-900 dark:text-yellow-300 p-1">
                 Rank: {idx + 1}
               </span>
             </div>
