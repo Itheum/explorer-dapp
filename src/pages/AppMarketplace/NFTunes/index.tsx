@@ -635,7 +635,7 @@ export const NFTunes = () => {
                 to={`https://share-eu1.hsforms.com/1h2V8AgnkQJKp3tstayTsEAf5yjc`}
                 target="_blank"
                 className="flex items-center mt-5 md:mt-10 md:mx-3 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg md:max-w-[50%] text-white">
-                Reach Out Today
+                Launch Your Music!
               </Link>
             </div>
           </div>
