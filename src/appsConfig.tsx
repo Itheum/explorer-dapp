@@ -97,7 +97,7 @@ export const SPREADSHEET_NFTS_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 608 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 610 },
     ]
-  : [];
+  : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 185 }];
 
 export const GET_BITZ_TOKEN: app_token = IS_DEVNET ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 } : { tokenIdentifier: "DATANFTFT-e936d4", nonce: 7 };
 
