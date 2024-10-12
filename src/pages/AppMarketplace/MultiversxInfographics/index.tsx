@@ -158,7 +158,8 @@ export const MultiversxInfographics = () => {
         imgSrc={headerHero}
         altImageAttribute={"mvxInfographics"}
         pageSubtitle={"Data NFTs that Unlock this Itheum Itheum App"}
-        dataNftCount={shownAppDataNfts.length}>
+        dataNftCount={shownAppDataNfts.length}
+        alwaysLeftAlignBodyContentOnMD={true}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
             <MvxDataNftCard
@@ -226,7 +227,7 @@ export const MultiversxInfographics = () => {
             />
           ))
         ) : (
-          <h3 className="text-center text-white">No DataNFT</h3>
+          <h3 className="text-center text-white">No Data NFT</h3>
         )}
       </HeaderComponent>
 

@@ -15,5 +15,4 @@ export * from "./AppMarketplace/TimeCapsule/TimeCapsule";
 export * from "./AppMarketplace/GetBitz/GetBitzMvx";
 export * from "./AppMarketplace/BoberGameRoom";
 //Account
-export * from "./Account/MyListed";
 export * from "./Account/MyWallet";

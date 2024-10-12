@@ -384,7 +384,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               }}>
                               {isPreviewPlaying && previewPlayingForAlbumId === album.albumId ? (
                                 <>
-                                  {!previewIsReadyToPlay ? <Loader2 /> : <Pause />}
+                                  {!previewIsReadyToPlay ? <Loader2 className="animate-spin" /> : <Pause />}
                                   <span className="ml-2">Stop Playing Preview</span>
                                 </>
                               ) : (

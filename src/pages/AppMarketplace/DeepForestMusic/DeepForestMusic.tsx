@@ -22,7 +22,8 @@ import HelmetPageMeta from "components/HelmetPageMeta";
 import { Modal } from "components/Modal/Modal";
 import { HoverEffect } from "libComponents/animated/HoverEffect";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
+import { toastClosableError } from "libs/utils/uiShared";
 import { useNftsStore } from "store/nfts";
 
 export const DeepForestMusic = () => {
@@ -103,9 +104,10 @@ export const DeepForestMusic = () => {
   async function viewData(index: number) {
     try {
       if (!(index >= 0)) {
-        toastError("Data is not loaded");
+        toastClosableError("Data is not loaded");
         return;
       }
+
       setFirstSongBlobUrl(undefined);
 
       const dataNft = new DataNft(nfts[index]);
@@ -152,8 +154,9 @@ export const DeepForestMusic = () => {
         }
       } else {
         console.error(res.error);
-        toastError(res.error);
+        toastClosableError(res.error);
       }
+
       const viewDataPayload: ExtendedViewDataReturnType = {
         ...res,
         blobDataType,
@@ -168,7 +171,7 @@ export const DeepForestMusic = () => {
       setFirstSongBlobUrl(blobUrl);
     } catch (err) {
       console.error(err);
-      toastError((err as Error).message);
+      toastClosableError((err as Error).message);
       setIsFetchingDataMarshal(false);
     }
   }

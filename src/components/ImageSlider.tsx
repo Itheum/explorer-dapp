@@ -10,7 +10,7 @@ interface ImageSliderProps {
   onLoad?: () => void;
 }
 
-//Spring animation parameters
+// Spring animation parameters
 const spring = {
   type: "spring",
   stiffness: 300,
@@ -44,8 +44,8 @@ const ImageSlider: React.FC<ImageSliderProps> = (props) => {
   }
 
   return (
-    <div className="mb-8 w-full justify-center base:h-[15rem] md:h-[18rem] relative ">
-      <div className="perspective-1200 transform-style-preserve-3d ">
+    <div className="mb-8 w-full justify-center base:h-[12rem] md:h-[15rem] relative">
+      <div className="perspective-1200 transform-style-preserve-3d">
         <motion.div
           transition={spring}
           style={{
@@ -62,11 +62,11 @@ const ImageSlider: React.FC<ImageSliderProps> = (props) => {
               muted
               webkit-playsinline={"true"}
               playsInline
-              className=" md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto">
+              className=" md:w-auto base:w-[12rem] rounded-3xl base:h-[12rem] md:h-[15rem] mx-auto">
               <source src={media[imageIndex]?.url} type="video/mp4" />
             </video>
           ) : (
-            <img className="md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto" src={media[imageIndex].url} onLoad={onLoad} />
+            <img className="md:w-auto base:w-[12rem] rounded-3xl base:h-[12rem] md:h-[15rem] mx-auto" src={media[imageIndex].url} onLoad={onLoad} />
           )}
         </motion.div>
         {makeFlip && (
@@ -91,11 +91,11 @@ const ImageSlider: React.FC<ImageSliderProps> = (props) => {
                 muted
                 webkit-playsinline={"true"}
                 playsInline
-                className=" md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto">
+                className=" md:w-auto base:w-[12rem] rounded-3xl base:h-[12rem] md:h-[15rem] mx-auto">
                 <source src={media[nextImageIndex]?.url} type="video/mp4" />
               </video>
             ) : (
-              <img className="md:w-auto base:w-[15rem] rounded-3xl base:h-[15rem] md:h-[18rem] mx-auto" src={media[nextImageIndex].url} onLoad={onLoad} />
+              <img className="md:w-auto base:w-[12rem] rounded-3xl base:h-[12rem] md:h-[15rem] mx-auto" src={media[nextImageIndex].url} onLoad={onLoad} />
             )}
           </motion.div>
         )}

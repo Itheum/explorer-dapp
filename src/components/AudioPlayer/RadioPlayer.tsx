@@ -6,7 +6,7 @@ import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { Button } from "libComponents/Button";
-import { toastError } from "libs/utils";
+import { toastClosableError } from "libs/utils/uiShared";
 import { useAppsStore } from "store/apps";
 
 type RadioPlayerProps = {
@@ -127,8 +127,6 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
           const blob = await fetch(songs[trackIndex].stream).then((r) => r.blob());
           blobUrl = URL.createObjectURL(blob);
         }
-
-        console.log("blobUrl ", blobUrl);
       } catch (error: any) {
         errMsg = error.toString();
       }
@@ -182,7 +180,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
           audio.play();
         }
       } else {
-        toastError("Audio not ready yet. Waiting for loading to complete...");
+        toastClosableError("Audio not ready yet. Waiting for loading to complete...");
         return;
       }
     }
@@ -235,7 +233,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
     if (songSource[index]) {
       // if we previously fetched the song and it was an error, show again the exact error.
       if (songSource[index].includes("Error:")) {
-        toastError(songSource[index]);
+        toastClosableError(songSource[index]);
       } else if (!(songSource[index] === "Fetching")) {
         audio.src = songSource[index];
         audio.load();

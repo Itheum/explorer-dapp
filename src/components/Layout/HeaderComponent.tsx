@@ -13,6 +13,8 @@ type HeaderProps = {
   pageSubtitle?: string;
   headerImgStyle?: string;
   dataNftCount?: number;
+  alwaysCenterTitleAndSubTitle?: boolean;
+  alwaysLeftAlignBodyContentOnMD?: boolean;
   children: React.ReactNode;
 };
 export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
@@ -29,13 +31,16 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
     pageSubtitle,
     headerImgStyle,
     dataNftCount,
+    alwaysCenterTitleAndSubTitle,
+    alwaysLeftAlignBodyContentOnMD,
     children,
   } = props;
   return (
     <div className="flex justify-center py-4">
       <div className="flex flex-col w-full">
-        <h1 className="py-4 mb-0">{pageTitle}</h1>
-        {subTitle && <p className="mb-3">{subTitle}</p>}
+        <h1 className={`p-0 mb-3 text-center ${alwaysCenterTitleAndSubTitle ? "md:text-center" : "md:text-left"}`}>{pageTitle}</h1>
+        {subTitle && <p className={`mb-3 text-center ${alwaysCenterTitleAndSubTitle ? "md:text-center" : "md:text-left"}`}>{subTitle}</p>}
+
         <div
           className={
             hasImage
@@ -55,15 +60,19 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
             <video src={videoSrc} className="rounded-[3rem] 3xl:h-[375px] w-full" autoPlay loop />
           )}
         </div>
+
         <div>
           {pageSubtitle ? (
-            <h4 className="my-4 text-center text-2xl">
+            <h4 className={`my-5 !text-xl text-center ${alwaysCenterTitleAndSubTitle ? "md:text-center" : "md:text-left"}`}>
               {pageSubtitle} {dataNftCount && `: ${dataNftCount}`}
             </h4>
           ) : (
             <></>
           )}
-          <div className="flex flex-wrap base:flex-row flex-col justify-center md:justify-normal gap-x-8 ">{children}</div>
+          <div
+            className={`flex flex-wrap base:flex-row flex-col justify-center ${alwaysLeftAlignBodyContentOnMD ? "md:justify-start" : "md:justify-around"} gap-x-8`}>
+            {children}
+          </div>
         </div>
       </div>
     </div>
