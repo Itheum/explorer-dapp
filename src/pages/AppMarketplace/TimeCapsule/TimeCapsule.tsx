@@ -111,7 +111,8 @@ export const TimeCapsule = () => {
         imgSrc={headerHero}
         altImageAttribute={"Time Capsule"}
         pageSubtitle={"Data NFTs that Unlock this Itheum App"}
-        dataNftCount={shownAppDataNfts.length}>
+        dataNftCount={shownAppDataNfts.length}
+        alwaysLeftAlignBodyContentOnMD={true}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
             <MvxDataNftCard
