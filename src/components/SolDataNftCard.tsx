@@ -56,7 +56,7 @@ export function SolDataNftCard({
     <div className="mb-3">
       <Card className={cn(cardStyles, "border-[0.5px] dark:border-slate-100/30 border-slate-300 bg-transparent rounded-[2.37rem] base:w-[18rem] md:w-[19rem]")}>
         <CardContent className="flex flex-col p-3">
-          <img src={imageSrc} className="base:h-[15rem] md:h-[18rem] rounded-3xl p-5" />
+          <img src={imageSrc} className="base:h-[12rem] md:h-[15rem] rounded-3xl p-5" />
 
           <div>
             <div className="grid grid-cols-12 mb-2 mt-2">

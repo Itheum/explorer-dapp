@@ -9,8 +9,9 @@ import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import "react-vertical-timeline-component/style.min.css";
+import { toastClosableError } from "libs/utils/uiShared";
 import { useNftsStore } from "store/nfts";
 import { TrailBlazerModal } from "./components/TrailBlazerModal";
 
@@ -52,7 +53,7 @@ export const ItheumTrailblazer = () => {
   async function viewData(index: number) {
     try {
       if (!(index >= 0 && index < shownAppDataNfts.length)) {
-        toastError("Data is not loaded");
+        toastClosableError("Data is not loaded");
         return;
       }
 
@@ -87,7 +88,7 @@ export const ItheumTrailblazer = () => {
       }
     } catch (err) {
       console.error(err);
-      toastError((err as Error).message);
+      toastClosableError((err as Error).message);
       setIsFetchingDataMarshal(false);
     }
   }

@@ -15,7 +15,8 @@ import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
 import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
+import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
@@ -52,7 +53,7 @@ export const MyWallet = () => {
 
   async function viewDataMvx(index: number) {
     if (!(index >= 0 && index < shownMvxDataNfts.length)) {
-      toastError("Data is not loaded");
+      toastClosableError("Data is not loaded");
       return;
     }
 
@@ -61,6 +62,7 @@ export const MyWallet = () => {
 
     const dataNft = shownMvxDataNfts[index];
     let res: any;
+
     if (!(tokenLogin && tokenLogin.nativeAuthToken)) {
       throw Error("No nativeAuth token");
     }
@@ -128,7 +130,7 @@ export const MyWallet = () => {
       }
     } else {
       console.error(res.error);
-      toastError(res.error);
+      toastClosableError(res.error);
     }
 
     const viewDataPayload: ExtendedViewDataReturnType = {
@@ -142,7 +144,7 @@ export const MyWallet = () => {
 
   async function viewDataSol(index: number) {
     if (!(index >= 0 && index < shownSolDataNfts.length)) {
-      toastError("Data is not loaded");
+      toastClosableError("Data is not loaded");
       return;
     }
 
@@ -226,7 +228,7 @@ export const MyWallet = () => {
         }
       } else {
         console.error(res.status + " " + res.statusText);
-        toastError(res.status + " " + res.statusText);
+        toastClosableError(res.status + " " + res.statusText);
       }
 
       const viewDataPayload: ExtendedViewDataReturnType = {
@@ -238,7 +240,7 @@ export const MyWallet = () => {
       setViewDataRes(viewDataPayload);
       setIsFetchingDataMarshal(false);
     } catch (err) {
-      toastError((err as Error).message);
+      toastClosableError((err as Error).message);
     }
   }
 
@@ -253,7 +255,10 @@ export const MyWallet = () => {
       <MvxSolSwitch />
 
       {mvxNetworkSelected && (
-        <HeaderComponent pageTitle={"My MultiversX Data NFTs"} hasImage={false} pageSubtitle={"Total Data NFTs"} dataNftCount={mvxNfts.length}>
+        <HeaderComponent
+          pageTitle={"My MultiversX Data NFTs"}
+          hasImage={false}
+          pageSubtitle={mvxNfts.length > 0 ? `You have collected ${mvxNfts.length} Data NFTs` : undefined}>
           {shownMvxDataNfts.length > 0 ? (
             shownMvxDataNfts.map((dataNft, index) => (
               <MvxDataNftCard
@@ -349,7 +354,10 @@ export const MyWallet = () => {
       )}
 
       {!mvxNetworkSelected && (
-        <HeaderComponent pageTitle={"My Solana Data NFTs"} hasImage={false} pageSubtitle={"Total Data NFTs"} dataNftCount={solNfts.length}>
+        <HeaderComponent
+          pageTitle={"My Solana Data NFTs"}
+          hasImage={false}
+          pageSubtitle={solNfts.length > 0 ? `You have collected ${solNfts.length} Data NFTs` : undefined}>
           {shownSolDataNfts.length > 0 ? (
             shownSolDataNfts.map((dataNft, index) => (
               <SolDataNftCard
@@ -431,13 +439,11 @@ export const MyWallet = () => {
               />
             ))
           ) : (
-            <h4 className="no-items">
-              <div>
-                You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting
-                <a href={DRIP_PAGE} className="ml-2 address-link underline hover:no-underline" target="_blank">
-                  DRiP Haus
-                </a>
-              </div>
+            <h4 className="my-5 !text-xl text-center md:text-left">
+              You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting
+              <a href={DRIP_PAGE} className="ml-2 address-link underline hover:no-underline" target="_blank">
+                DRiP Haus
+              </a>
             </h4>
           )}
         </HeaderComponent>
@@ -454,6 +460,7 @@ export const MyWallet = () => {
             Load more
           </Button>
         )}
+
         {!mvxNetworkSelected && numberOfSolNftsShown < solNfts.length && (
           <Button
             className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"

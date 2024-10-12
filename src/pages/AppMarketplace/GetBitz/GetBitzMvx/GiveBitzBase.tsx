@@ -9,7 +9,8 @@ import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
 import { Loader } from "components";
 import { useGetAccount } from "hooks";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
-import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, toastError } from "libs/utils";
+import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId } from "libs/utils";
+import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
 import { getDataBounties } from "./configMvx";
 import { viewDataJSONCore } from "./index";
@@ -284,7 +285,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
         }
       } catch (err) {
         console.error(err);
-        toastError((err as Error).message);
+        toastClosableError((err as Error).message);
       }
     }
   }

@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { SPREADSHEET_NFTS_TOKENS } from "appsConfig";
+import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import headerHero from "assets/img/spreadsheet-nfts/banner.png";
 import { MvxDataNftCard, Loader } from "components";
 import HelmetPageMeta from "components/HelmetPageMeta";
+import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
 import { useGetPendingTransactions } from "hooks";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError } from "libs/utils";
+import { Button } from "libComponents/Button";
+import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
+import { toastClosableError } from "libs/utils/uiShared";
 import "./SpreadsheetNfts.css";
 import { useNftsStore } from "store/nfts";
-import { HeaderComponent } from "../../../components/Layout/HeaderComponent";
-import { Button } from "../../../libComponents/Button";
 
 export const SpreadsheetNfts = () => {
   const { tokenLogin } = useGetLoginInfo();
@@ -58,12 +60,14 @@ export const SpreadsheetNfts = () => {
   async function viewData(index: number) {
     try {
       if (!(index >= 0 && index < shownAppDataNfts.length)) {
-        toastError("Data is not loaded");
+        toastClosableError("Data is not loaded");
         return;
       }
+
       const dataNft = shownAppDataNfts[index];
       const _owned = nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false;
       setOwned(_owned);
+
       if (_owned) {
         setIsFetchingDataMarshal(true);
         let res: any;
@@ -92,7 +96,7 @@ export const SpreadsheetNfts = () => {
           window.open(excelObject, "_blank");
         } else {
           console.error(res.error);
-          toastError(res.error);
+          toastClosableError(res.error);
         }
 
         setViewDataRes(res);
@@ -100,7 +104,7 @@ export const SpreadsheetNfts = () => {
       }
     } catch (err) {
       console.error(err);
-      toastError((err as Error).message);
+      toastClosableError((err as Error).message);
     }
   }
 
@@ -145,10 +149,13 @@ export const SpreadsheetNfts = () => {
                 ) : (
                   <>
                     {viewDataRes && !viewDataRes.error && (
-                      <div>
-                        <div className="flex justify-center items-center">
-                          <p className="text-foreground text-4xl">File Downloaded Successfully!</p>
-                        </div>
+                      <div className="p-5">
+                        <p className="p-2">
+                          This Data NFT file should have downloaded successfully, but if your browser is prompting you to allow popups, please select{" "}
+                          <b>Always allow pop-ups</b> and then close this and click on <b>View Data</b> again. If you are on a mobile device that does not allow
+                          file downloads, please try on a desktop machine.
+                        </p>
+                        <img src={imgGuidePopup} style={{ width: "250px", height: "auto", borderRadius: "5px" }} />
                       </div>
                     )}
                   </>

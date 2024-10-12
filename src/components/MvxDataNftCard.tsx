@@ -63,7 +63,7 @@ export function MvxDataNftCard({
       <Card
         className={cn(cardStyles, "border-[0.5px] dark:border-slate-100/30 border-slate-300  bg-transparent rounded-[2.37rem] base:w-[18rem] md:w-[19rem]")}>
         <CardContent className="flex flex-col p-3">
-          <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[15rem] md:h-[18rem]" />
+          <NftMediaComponent nftMedia={dataNft.media as NftMedia[]} isLoading={isLoading} mediaStyle="mb-8 base:h-[12rem] md:h-[15rem]" />
 
           <div>
             <div className="grid grid-cols-12 mb-2 mt-2">
@@ -111,16 +111,19 @@ export function MvxDataNftCard({
                 </a>
               </div>
             </div>
+
             {showBalance && (
               <div className="grid grid-cols-12 mb-1">
                 <span className="col-span-4 opacity-6 text-sm">Balance:</span>
                 <span className="col-span-8 text-left text-sm">{dataNft.balance !== 0 ? dataNft.balance.toString() : "1"}</span>
               </div>
             )}
+
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 text-sm">Total Supply:</span>
               <span className="col-span-8 text-left text-sm">{dataNft.supply.toString()}</span>
             </div>
+
             <div className="grid grid-cols-12 mb-1">
               <span className="col-span-4 opacity-6 text-sm">Royalties:</span>
               <span className="col-span-8 text-left text-sm">{isNaN(dataNft.royalties) ? "0%" : (dataNft.royalties * 100).toFixed(2) + "%"}</span>
