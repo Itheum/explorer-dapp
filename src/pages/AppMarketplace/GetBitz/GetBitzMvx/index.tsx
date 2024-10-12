@@ -11,11 +11,12 @@ import { MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITZ_TOKEN } from "appsConfig";
+import { toastClosableError } from "libs/utils/uiShared";
 import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, toastError, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress, scrollToSection } from "libs/utils";
+import { decodeNativeAuthToken, sleep, getApiWeb2Apps, createNftId, cn, shortenAddress, scrollToSection } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { routeNames } from "routes";
 import { BurningImage } from "../common/BurningImage";
@@ -265,7 +266,7 @@ export const GetBitzMvx = (props: any) => {
     }
 
     if (!gameDataNFT) {
-      toastError("ER6: Game NFT Data is not loaded");
+      toastClosableError("ER6: Game NFT Data is not loaded");
       return;
     }
 
@@ -364,7 +365,7 @@ export const GetBitzMvx = (props: any) => {
         }
       }
     } else {
-      toastError("ER2: Did not get a response from the game server");
+      toastClosableError("ER2: Did not get a response from the game server");
       setIsFetchingDataMarshal(false);
     }
   }
@@ -372,14 +373,14 @@ export const GetBitzMvx = (props: any) => {
   async function viewData(viewDataArgs: any, requiredDataNFT: DataNft) {
     try {
       if (!gameDataNFT) {
-        toastError("ER3: Game NFT Data is not loaded");
+        toastClosableError("ER3: Game NFT Data is not loaded");
         return;
       }
 
       return viewDataJSONCore(viewDataArgs, requiredDataNFT);
     } catch (err) {
       console.error(err);
-      toastError((err as Error).message);
+      toastClosableError((err as Error).message);
       setIsFetchingDataMarshal(false);
 
       return undefined;

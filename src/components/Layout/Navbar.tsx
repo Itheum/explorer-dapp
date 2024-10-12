@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Home, Menu, Store, Wallet, Gamepad2, AreaChart } from "lucide-react";
+import { Home, Menu, Store, Wallet, Gamepad2, AreaChart, Music, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
@@ -138,16 +138,6 @@ export const Navbar = () => {
                 <NavigationMenuTrigger>Account</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {isLoggedInMvx && (
-                      <Link
-                        to={routeNames.mylisted}
-                        className={
-                          "block select-none space-y-1 rounded-md p-3 leading-none !no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        }>
-                        <div className="text-md font-medium leading-none">My Listed</div>
-                        <p className="line-clamp-2 text-sm leading-snug dark:text-foreground/60  font-[Satoshi-Light] pt-0.5">Listed Data NFT's</p>
-                      </Link>
-                    )}
                     <Link
                       to={routeNames.mywallet}
                       title={"My Wallet"}
@@ -263,6 +253,25 @@ export const Navbar = () => {
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
+
+            <DropdownMenuGroup>
+              <Link to={routeNames.nftunes}>
+                <DropdownMenuItem>
+                  <Music className="mr-2 h-4 w-4" />
+                  <span>NF-Tunes</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+
+            <DropdownMenuGroup>
+              <Link to={routeNames.aiworkforce}>
+                <DropdownMenuItem>
+                  <Bot className="mr-2 h-4 w-4" />
+                  <span>AI Workforce</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+
             <DropdownMenuGroup>
               <Link to={routeNames.analytics}>
                 <DropdownMenuItem>
@@ -271,6 +280,7 @@ export const Navbar = () => {
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
+
             <DropdownMenuGroup>
               <Link to={routeNames.gamerpassport}>
                 <DropdownMenuItem>
@@ -279,11 +289,23 @@ export const Navbar = () => {
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
-            <DropdownMenuLabel className="flex flex-row items-center">
+
+            <DropdownMenuGroup>
+              <Link to={routeNames.mywallet}>
+                <DropdownMenuItem>
+                  <Wallet className="mr-2 h-4 w-4" />
+                  <span>My Wallet</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuLabel className="flex flex-row items-center opacity-50">
               <Store className="mr-2 h-4 w-4" />
               <span>Apps</span>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
               {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
                 <Link to={returnRoute(item.routeKey)} key={item.routeKey}>
@@ -293,32 +315,7 @@ export const Navbar = () => {
             </DropdownMenuGroup>
             {(isLoggedInMvx || isLoggedInSol) && (
               <>
-                <DropdownMenuLabel className="flex flex-row items-center">
-                  <Wallet className="mr-2 h-4 w-4" />
-                  <span>Account</span>
-                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup className="">
-                  {isLoggedInMvx && (
-                    <Link to={routeNames.mylisted}>
-                      <DropdownMenuItem>My Listed</DropdownMenuItem>
-                    </Link>
-                  )}
-                  <Link to={routeNames.mywallet}>
-                    <DropdownMenuItem>My Wallet</DropdownMenuItem>
-                  </Link>
-                  <Link to={routeNames.getbitz}>
-                    <div className="bg-gradient-to-r from-[#35d9fa] to-[#7a98df] p-[1px] rounded-lg justify-center cursor-pointer">
-                      <DropdownMenuItem className="dark:!text-black">
-                        {bitzBalance === -2 ? (
-                          <span className="blinkMe">{`... <BiTz> Points`}</span>
-                        ) : (
-                          <>{bitzBalance === -1 ? "0 <BiTz> Points" : `${bitzBalance} <BiTz> Points`}</>
-                        )}
-                      </DropdownMenuItem>
-                    </div>
-                  </Link>
-                </DropdownMenuGroup>
                 {isLoggedInMvx && (
                   <DropdownMenuItem className="gap-4">
                     <CopyAddress address={addressMvx} precision={6} />
@@ -329,9 +326,9 @@ export const Navbar = () => {
                     <CopyAddress address={addressSol || ""} precision={6} />
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuSeparator />
               </>
             )}
+
             <DropdownMenuGroup>
               <div className="m-auto bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg w-fit">
                 <Link to={routeNames.unlock} state={{ from: location.pathname }}>
@@ -347,7 +344,6 @@ export const Navbar = () => {
         </DropdownMenu>
       </div>
 
-      {/* <PathwaysModal showPathwaysModel={showPathwaysModel} handleHidePathwaysModel={() => setShowPathwaysModel(false)} /> */}
       {showPlayBitzModal && <PlayBitzModal showPlayBitzModel={showPlayBitzModal} handleHideBitzModel={() => setShowPlayBitzModal(false)} />}
     </div>
   );

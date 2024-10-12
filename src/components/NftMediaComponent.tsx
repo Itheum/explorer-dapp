@@ -1,6 +1,6 @@
+import React from "react";
 import { NftMedia } from "libs/types";
 import { cn } from "libs/utils";
-import React from "react";
 import ImageSlider from "./ImageSlider";
 
 interface NftMediaComponentProps {

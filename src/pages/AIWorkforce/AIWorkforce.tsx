@@ -61,7 +61,7 @@ export const AIWorkforce = () => {
       />
 
       <div className="w-[100%] py-2">
-        <div id="hero" className="mt-2 pt-3 h-[200px] md:h-[180px] rounded-3xl">
+        <div id="hero" className="mt-2 pt-3 h-[230px] rounded-3xl">
           <div className="flex flex-col h-[100%] justify-center items-center">
             <div className="w-80% md:w-[60%]">
               <h1 className="!text-xl text-center md:!text-2xl">Join the Itheum AI Workforce</h1>
@@ -75,6 +75,13 @@ export const AIWorkforce = () => {
                 Mint NFMe ID Now
               </Button>
             </Link>
+
+            <div className="py-1 text-sm relative p-2">
+              <span className="hidden md:block absolute flex h-8 w-8 top-0 right-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+              </span>
+              <p className="text-center md:text-left">Already have a NFMeID with Liveliness? find yourself below - look out for the pulsating orb</p>
+            </div>
           </div>
         </div>
 

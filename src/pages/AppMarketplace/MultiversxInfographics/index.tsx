@@ -226,7 +226,7 @@ export const MultiversxInfographics = () => {
             />
           ))
         ) : (
-          <h3 className="text-center text-white">No DataNFT</h3>
+          <h3 className="text-center text-white">No Data NFT</h3>
         )}
       </HeaderComponent>
 

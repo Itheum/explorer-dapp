@@ -12,7 +12,7 @@ import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { CACHE_DURATION_SECONDS } from "config";
 import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
-import { toastError } from "libs/utils";
+import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
 
 type SolAudioPlayerProps = {
@@ -243,7 +243,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
         // Audio is loaded, play it.
         audio.play();
       } else {
-        toastError("Audio not ready yet. Waiting for loading to complete...");
+        toastClosableError("Audio not ready yet. Waiting for loading to complete...");
         return;
       }
     }
@@ -297,7 +297,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
     if (songSource[index]) {
       // if we previously fetched the song and it was an error, show again the exact error.
       if (songSource[index].includes("Error:")) {
-        toastError(songSource[index]);
+        toastClosableError(songSource[index]);
       } else if (!(songSource[index] === "Fetching")) {
         audio.src = songSource[index];
         audio.load();

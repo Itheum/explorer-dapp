@@ -38,8 +38,9 @@ import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, toastError, getApiWeb2Apps } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal, getApiWeb2Apps } from "libs/utils";
 import { scrollToSection } from "libs/utils/ui";
+import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
@@ -144,9 +145,10 @@ export const NFTunes = () => {
   async function viewMvxData(index: number) {
     try {
       if (!(index >= 0 && index < shownMvxAppDataNfts.length)) {
-        toastError("Data is not loaded");
+        toastClosableError("Data is not loaded");
         return;
       }
+
       setFirstSongBlobUrl(undefined);
 
       const dataNft = shownMvxAppDataNfts[index];
@@ -198,8 +200,9 @@ export const NFTunes = () => {
           }
         } else {
           console.error(res.error);
-          toastError(res.error);
+          toastClosableError(res.error);
         }
+
         const viewDataPayload: ExtendedViewDataReturnType = {
           ...res,
           blobDataType,
@@ -216,7 +219,7 @@ export const NFTunes = () => {
       }
     } catch (err) {
       console.error(err);
-      toastError((err as Error).message);
+      toastClosableError((err as Error).message);
       setIsFetchingDataMarshal(false);
     }
   }
@@ -224,7 +227,7 @@ export const NFTunes = () => {
   async function viewSolData(index: number) {
     try {
       if (!(index >= 0 && index < shownSolAppDataNfts.length)) {
-        toastError("Data is not loaded");
+        toastClosableError("Data is not loaded");
         return;
       }
 
@@ -300,11 +303,11 @@ export const NFTunes = () => {
         }
       } else {
         console.error(res.status + " " + res.statusText);
-        toastError(res.status + " " + res.statusText);
+        toastClosableError(res.status + " " + res.statusText);
       }
     } catch (err) {
       console.error(err);
-      toastError((err as Error).message);
+      toastClosableError((err as Error).message);
       setIsFetchingDataMarshal(false);
     }
   }
@@ -430,7 +433,11 @@ export const NFTunes = () => {
             <div id="data-nfts" className="flex justify-center items-center pb-16">
               <div className="flex flex-col">
                 {mvxNetworkSelected && (
-                  <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs`}>
+                  <HeaderComponent
+                    pageTitle={""}
+                    hasImage={false}
+                    pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs`}
+                    alwaysCenterTitleAndSubTitle={true}>
                     <div className="flex flex-col md:flex-row flex-wrap justify-center">
                       {shownMvxAppDataNfts.length > 0 ? (
                         shownMvxAppDataNfts.map((dataNft, index) => {
@@ -489,7 +496,11 @@ export const NFTunes = () => {
                 )}
 
                 {!mvxNetworkSelected && (
-                  <HeaderComponent pageTitle={""} hasImage={false} pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs`}>
+                  <HeaderComponent
+                    pageTitle={""}
+                    hasImage={false}
+                    pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs`}
+                    alwaysCenterTitleAndSubTitle={true}>
                     <div className="flex flex-col md:flex-row flex-wrap justify-center">
                       {shownSolAppDataNfts.length > 0 ? (
                         shownSolAppDataNfts.map((dataNft, index) => {
