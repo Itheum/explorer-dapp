@@ -99,7 +99,8 @@ export const BoberGameRoom: React.FC = () => {
         imgSrc={headerImg}
         altImageAttribute={"boberGameRoom"}
         pageSubtitle={"Data NFTs that Unlock this Itheum App"}
-        dataNftCount={shownAppDataNfts.length}>
+        dataNftCount={shownAppDataNfts.length}
+        alwaysLeftAlignBodyContentOnMD={true}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
             <MvxDataNftCard

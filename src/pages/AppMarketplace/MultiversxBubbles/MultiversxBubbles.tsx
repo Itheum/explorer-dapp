@@ -140,7 +140,8 @@ export const MultiversxBubbles = () => {
         imgSrc={headerHero}
         altImageAttribute={"bubbleMap"}
         pageSubtitle={"Data NFTs that Unlock this Itheum App"}
-        dataNftCount={shownAppDataNfts.length}>
+        dataNftCount={shownAppDataNfts.length}
+        alwaysLeftAlignBodyContentOnMD={true}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
             <MvxDataNftCard

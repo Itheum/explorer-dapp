@@ -14,6 +14,7 @@ type HeaderProps = {
   headerImgStyle?: string;
   dataNftCount?: number;
   alwaysCenterTitleAndSubTitle?: boolean;
+  alwaysLeftAlignBodyContentOnMD?: boolean;
   children: React.ReactNode;
 };
 export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
@@ -31,6 +32,7 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
     headerImgStyle,
     dataNftCount,
     alwaysCenterTitleAndSubTitle,
+    alwaysLeftAlignBodyContentOnMD,
     children,
   } = props;
   return (
@@ -67,7 +69,10 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
           ) : (
             <></>
           )}
-          <div className="flex flex-wrap base:flex-row flex-col justify-center md:justify-around gap-x-8 ">{children}</div>
+          <div
+            className={`flex flex-wrap base:flex-row flex-col justify-center ${alwaysLeftAlignBodyContentOnMD ? "md:justify-start" : "md:justify-around"} gap-x-8`}>
+            {children}
+          </div>
         </div>
       </div>
     </div>

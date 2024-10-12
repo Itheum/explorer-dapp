@@ -119,7 +119,8 @@ export const ItheumTrailblazer = () => {
         imgSrc={headerHero}
         altImageAttribute={"itheumTrailblazer"}
         pageSubtitle={"Data NFTs that Unlock this Itheum App"}
-        dataNftCount={TRAILBLAZER_TOKENS.length}>
+        dataNftCount={TRAILBLAZER_TOKENS.length}
+        alwaysLeftAlignBodyContentOnMD={true}>
         {shownAppDataNfts.length > 0 ? (
           shownAppDataNfts.map((dataNft, index) => (
             <MvxDataNftCard
