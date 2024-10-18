@@ -15,7 +15,7 @@ import dataLines from "assets/img/zstorage/data-lines.png";
 import frontCube from "assets/img/zstorage/front.png";
 import vault from "assets/img/zstorage/vault-dots.png";
 import { MvxDataNftCard, Loader } from "components";
-import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
+import { MvxAudioPlayer } from "components/AudioPlayer/MvxAudioPlayer";
 import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { SHOW_NFTS_STEP } from "config";
@@ -226,7 +226,7 @@ export const NFPodcast = () => {
                             ) : (
                               <>
                                 {viewDataRes && !viewDataRes.error && tokenLogin && currentIndex > -1 && (
-                                  <AudioPlayer
+                                  <MvxAudioPlayer
                                     dataNftToOpen={shownAppDataNfts[currentIndex]}
                                     songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                     tokenLogin={tokenLogin}
