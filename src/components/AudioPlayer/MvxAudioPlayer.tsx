@@ -12,7 +12,7 @@ import { CACHE_DURATION_SECONDS } from "config";
 import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import { toastClosableError } from "libs/utils/uiShared";
 
-type AudioPlayerProps = {
+type MvxAudioPlayerProps = {
   dataNftToOpen?: DataNft;
   songs?: any;
   tokenLogin?: any;
@@ -21,7 +21,7 @@ type AudioPlayerProps = {
   chainID?: string;
 };
 
-export const AudioPlayer = (props: AudioPlayerProps) => {
+export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
   const { dataNftToOpen, songs, tokenLogin, firstSongBlobUrl, previewUrl, chainID } = props;
 
   const theme = localStorage.getItem("explorer-ui-theme");

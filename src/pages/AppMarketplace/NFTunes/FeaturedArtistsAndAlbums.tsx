@@ -66,7 +66,7 @@ const dataset = [
       {
         albumId: "ar3_a1",
         solNftNameDrip: "MUSG1 - DnB Music",
-        title: "7g0Strike Cafe",
+        title: "Love in Disasters",
         desc: "Blends lyrics about natural disasters and love, crafted entirely with AI tools",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmPRwT6Xt3pqtz7RbBfvaVevkZqgzXpKnVg5Hc115QBzfe",
         ctaBuy: "https://drip.haus/itheum/set/5baed2d8-9f49-41bc-af9e-a2364f79c32a",
@@ -167,7 +167,8 @@ type FeaturedArtistsAndAlbumsProps = {
   mvxNetworkSelected: boolean;
   mySolAppDataNfts?: DasApiAsset[];
   myShownMvxAppDataNfts?: DataNft[];
-  viewData: (e: number) => void;
+  viewSolData: (e: number) => void;
+  viewMvxData: (e: number) => void;
   openActionFireLogic?: any;
   stopPreviewPlayingNow?: boolean;
   featuredArtistDeepLinkSlug?: string;
@@ -179,7 +180,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     mvxNetworkSelected,
     mySolAppDataNfts,
     myShownMvxAppDataNfts,
-    viewData,
+    viewSolData,
+    viewMvxData,
     openActionFireLogic,
     stopPreviewPlayingNow,
     featuredArtistDeepLinkSlug,
@@ -289,10 +291,20 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
         albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftNameDrip];
       }
     } else {
-      // @TODO Support play of MVX items
-      // if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap && typeof ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId] !== "undefined") {
-      //   albumInOwnershipListIndex = ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId];
-      // }
+      if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap) {
+        // Data NFT-FT checks
+        if (typeof ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId] !== "undefined") {
+          albumInOwnershipListIndex = ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId];
+        } else {
+          // Data NFT PH Checks (mvxDataNftId is actually the entire collection and not collection-nonce like in FT)
+          Object.keys(ownedMvxDataNftNameAndIndexMap).forEach((i) => {
+            if (i.includes(album.mvxDataNftId)) {
+              albumInOwnershipListIndex = ownedMvxDataNftNameAndIndexMap[i];
+              return;
+            }
+          });
+        }
+      }
     }
 
     return albumInOwnershipListIndex;
@@ -318,7 +330,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                     setSelArtistId(artist.artistId);
                   }
                 }}>
-                <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg md:!text-2xl text-nowrap text-center`}>{artist.name}</h2>
+                <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg lg:!text-xl text-nowrap text-center`}>{artist.name}</h2>
               </div>
             ))}
           </div>
@@ -364,7 +376,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                     </div>
                   </div>
 
-                  <div className="album-list w-[300px] md:w-full">
+                  <div className="album-list w-[300px] lg:w-full">
                     <p className="mt-10 mb-5 text-xl font-bold">NF-Tunes Discography</p>
 
                     {artistProfile.albums.map((album: any, idx: number) => (
@@ -374,7 +386,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                           {`${album.title}`}
                         </h3>
                         <p className="">{album.desc}</p>
-                        <div className="album-actions mt-3 flex flex-col md:flex-row space-y-2 md:space-y-0">
+                        <div className="album-actions mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
                           {album.ctaPreviewStream && (
                             <Button
                               disabled={isPreviewPlaying && !previewIsReadyToPlay}
@@ -401,7 +413,15 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                                 disabled={isPreviewPlaying && !previewIsReadyToPlay}
                                 className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
                                 onClick={() => {
-                                  viewData(checkOwnershipOfAlbum(album));
+                                  const albumInOwnershipListIndex = checkOwnershipOfAlbum(album);
+
+                                  if (albumInOwnershipListIndex > -1) {
+                                    if (!mvxNetworkSelected) {
+                                      viewSolData(albumInOwnershipListIndex);
+                                    } else {
+                                      viewMvxData(albumInOwnershipListIndex);
+                                    }
+                                  }
 
                                   if (openActionFireLogic) {
                                     openActionFireLogic();

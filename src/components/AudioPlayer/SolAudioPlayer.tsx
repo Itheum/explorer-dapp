@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useWallet } from "@solana/wallet-adapter-react";
-import bs58 from "bs58";
 import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import Slider from "react-slick";
