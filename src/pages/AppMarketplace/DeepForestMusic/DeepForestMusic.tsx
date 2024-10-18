@@ -17,7 +17,7 @@ import deepForestPreviewMix from "assets/img/deep-forest-music/deep-forest-previ
 import iconPreviewAudioPlayer from "assets/img/deep-forest-music/deep-forest.png";
 import iconPreview from "assets/img/deep-forest-music/header.png";
 import { Loader } from "components";
-import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
+import { MvxAudioPlayer } from "components/AudioPlayer/MvxAudioPlayer";
 import HelmetPageMeta from "components/HelmetPageMeta";
 import { Modal } from "components/Modal/Modal";
 import { HoverEffect } from "libComponents/animated/HoverEffect";
@@ -202,7 +202,7 @@ export const DeepForestMusic = () => {
                 filterData={[]}
                 titleClassName={"p-4 !text-xl md:!text-3xl"}>
                 <>
-                  <AudioPlayer
+                  <MvxAudioPlayer
                     previewUrl={deepForestPreviewMix}
                     songs={[
                       {
@@ -251,7 +251,7 @@ export const DeepForestMusic = () => {
           ) : (
             <>
               {viewDataRes && !viewDataRes.error && tokenLogin && (
-                <AudioPlayer
+                <MvxAudioPlayer
                   dataNftToOpen={dataNftToOpen}
                   songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                   tokenLogin={tokenLogin}

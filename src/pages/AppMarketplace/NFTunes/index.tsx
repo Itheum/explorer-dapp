@@ -23,7 +23,7 @@ import dataLines from "assets/img/zstorage/data-lines.png";
 import frontCube from "assets/img/zstorage/front.png";
 import vault from "assets/img/zstorage/vault-dots.png";
 import { MvxDataNftCard, Loader } from "components";
-import { AudioPlayer } from "components/AudioPlayer/AudioPlayer";
+import { MvxAudioPlayer } from "components/AudioPlayer/MvxAudioPlayer";
 import { RadioPlayer } from "components/AudioPlayer/RadioPlayer";
 import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
 import HelmetPageMeta from "components/HelmetPageMeta";
@@ -61,7 +61,7 @@ export const NFTunes = () => {
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
   const [stopRadio, setStopRadio] = useState<boolean>(false);
-  const [noRadioAutoPlay, setNoRadioAutoPlay] = useState<boolean>(false);
+  const [noRadioAutoPlay, setNoRadioAutoPlay] = useState<boolean>(true);
   const [stopPreviewPlaying, setStopPreviewPlaying] = useState<boolean>(false);
   const [radioTracksLoading, setRadioTracksLoading] = useState<boolean>(false);
   const [radioTracks, setRadioTracks] = useState<any[]>([]);
@@ -408,7 +408,8 @@ export const NFTunes = () => {
               mvxNetworkSelected={mvxNetworkSelected}
               mySolAppDataNfts={shownSolAppDataNfts}
               myShownMvxAppDataNfts={shownMvxAppDataNfts}
-              viewData={viewSolData}
+              viewSolData={viewSolData}
+              viewMvxData={viewMvxData}
               openActionFireLogic={() => {
                 setLaunchBaseLevelMusicPlayer(true);
                 setStopRadio(true);
@@ -465,7 +466,7 @@ export const NFTunes = () => {
                                 ) : (
                                   <>
                                     {mvxNetworkSelected && viewDataRes && !viewDataRes.error && tokenLogin && currentDataNftIndex > -1 && (
-                                      <AudioPlayer
+                                      <MvxAudioPlayer
                                         dataNftToOpen={shownMvxAppDataNfts[currentDataNftIndex]}
                                         songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                         tokenLogin={tokenLogin}
@@ -802,10 +803,18 @@ export const NFTunes = () => {
               </div>
             ) : (
               <>
-                {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentDataNftIndex > -1 && (
+                {!mvxNetworkSelected && viewDataRes && !viewDataRes.error && currentDataNftIndex > -1 ? (
                   <SolAudioPlayer
                     dataNftToOpen={shownSolAppDataNfts[currentDataNftIndex]}
                     songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                    firstSongBlobUrl={firstSongBlobUrl}
+                    chainID={chainID}
+                  />
+                ) : (
+                  <MvxAudioPlayer
+                    dataNftToOpen={shownMvxAppDataNfts[currentDataNftIndex]}
+                    songs={dataMarshalResponse ? dataMarshalResponse.data : []}
+                    tokenLogin={tokenLogin}
                     firstSongBlobUrl={firstSongBlobUrl}
                     chainID={chainID}
                   />
