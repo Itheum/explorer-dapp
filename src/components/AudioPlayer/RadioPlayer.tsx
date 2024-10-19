@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Gift, ShoppingCart } from "lucide-react";
+import { faHandPointer } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Loader2, Pause, Music2, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Gift, ShoppingCart } from "lucide-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
@@ -14,10 +16,15 @@ type RadioPlayerProps = {
   stopRadioNow?: boolean;
   noAutoPlay?: boolean;
   onPlayHappened?: any;
+  checkOwnershipOfAlbum: (e: any) => number;
+  mvxNetworkSelected: boolean;
+  viewSolData: (e: number) => void;
+  viewMvxData: (e: number) => void;
+  openActionFireLogic?: any;
 };
 
 export const RadioPlayer = (props: RadioPlayerProps) => {
-  const { songs, stopRadioNow, onPlayHappened, noAutoPlay } = props;
+  const { songs, stopRadioNow, onPlayHappened, noAutoPlay, checkOwnershipOfAlbum, mvxNetworkSelected, viewSolData, viewMvxData, openActionFireLogic } = props;
 
   const theme = localStorage.getItem("explorer-ui-theme");
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -31,6 +38,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   const [firstMusicQueueDone, setFirstMusicQueueDone] = useState(false);
   const [songSource, setSongSource] = useState<{ [key: number]: string }>({}); // map to keep the already fetched songs
   const appsStore = useAppsStore();
+  const [radioPlayPromptHide, setRadioPlayPromptHide] = useState(false);
 
   useEffect(() => {
     audio.addEventListener("ended", function () {
@@ -174,10 +182,20 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
           if (!noAutoPlay) {
             // Audio is loaded, play it if user did not stop auto play
             audio.play();
+
+            // once they interact with the radio play, then no longer need to sho the bouncing animation
+            if (!radioPlayPromptHide) {
+              setRadioPlayPromptHide(true);
+            }
           }
         } else {
           // Audio is loaded, play it.
           audio.play();
+
+          // once they interact with the radio play, then no longer need to sho the bouncing animation
+          if (!radioPlayPromptHide) {
+            setRadioPlayPromptHide(true);
+          }
         }
       } else {
         toastClosableError("Audio not ready yet. Waiting for loading to complete...");
@@ -259,7 +277,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
 
     if (currSongObj?.buy) {
       getAlbumActionLink = currSongObj.buy;
-      getAlbumActionText = "Buy Album";
+      getAlbumActionText = checkOwnershipOfAlbum(currSongObj) > -1 ? "Buy More Album Copies" : "Buy Album";
     } else if (currSongObj?.airdrop) {
       getAlbumActionLink = currSongObj.airdrop;
       getAlbumActionText = "Get Album for Free!";
@@ -268,8 +286,8 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   }
 
   return (
-    <div className="p-2 md:p-2 relative overflow-hidden">
-      <div className="overflow-hidden w-full flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
+    <div className="p-2 md:p-2 relative overflow-visible">
+      <div className="overflow-visible w-full flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center relative">
         <div className="select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25 border-[1px] border-foreground/40 relative md:w-[100%] flex flex-col rounded-xl">
           <div className="px-5 pt-5 pb-4 flex flex-col md:flex-row items-center">
             <img
@@ -292,9 +310,35 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
 
             {getAlbumActionLink && (
               <div className="flex mt-3 md:mt-0 flex-grow justify-end">
-                <div className="flex flex-col">
+                <div className="mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
+                  {checkOwnershipOfAlbum(songs[currentTrackIndex]) > -1 && (
+                    <Button
+                      className={`${isAlbumForFree ? "!text-white" : "!text-black"} text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 md:mr-[12px]`}
+                      variant="ghost"
+                      onClick={() => {
+                        const albumInOwnershipListIndex = checkOwnershipOfAlbum(songs[currentTrackIndex]);
+
+                        if (albumInOwnershipListIndex > -1) {
+                          if (!mvxNetworkSelected) {
+                            viewSolData(albumInOwnershipListIndex);
+                          } else {
+                            viewMvxData(albumInOwnershipListIndex);
+                          }
+                        }
+
+                        if (openActionFireLogic) {
+                          openActionFireLogic();
+                        }
+                      }}>
+                      <>
+                        <Music2 />
+                        <span className="ml-2">Play Full Album</span>
+                      </>
+                    </Button>
+                  )}
+
                   <Button
-                    className={`${isAlbumForFree ? "!text-white" : "!text-black"}  text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100`}
+                    className={`${isAlbumForFree ? "!text-white" : "!text-black"} text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100`}
                     variant="ghost"
                     onClick={() => {
                       window.open(getAlbumActionLink)?.focus();
@@ -335,23 +379,38 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
                 onChange={(e) => handleVolumeChange(Number(e.target.value))}
                 className="accent-black dark:accent-white w-[70%] cursor-pointer ml-2 "></input>
             </div>
+
             <button className="cursor-pointer" onClick={handlePrevButton}>
               <SkipBack className="w-full hover:scale-105" />
             </button>
-            <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-900/0 border border-grey-300 shadow-xl flex items-center justify-center">
-              <button onClick={togglePlay} className="focus:outline-none" disabled={!isLoaded}>
-                {!isLoaded ? (
-                  <Loader2 className="w-full text-center animate-spin hover:scale-105" />
-                ) : isPlaying ? (
-                  <Pause className="w-full text-center hover:scale-105" />
-                ) : (
-                  <Play className="w-full text-center hover:scale-105" />
-                )}
-              </button>
+
+            <div className="relative">
+              <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-900/0 border border-grey-300 shadow-xl flex items-center justify-center">
+                <button onClick={togglePlay} className="focus:outline-none" disabled={!isLoaded}>
+                  {!isLoaded ? (
+                    <Loader2 className="w-full text-center animate-spin hover:scale-105" />
+                  ) : isPlaying ? (
+                    <Pause className="w-full text-center hover:scale-105" />
+                  ) : (
+                    <Play className="w-full text-center hover:scale-105" />
+                  )}
+                </button>
+              </div>
+
+              {isLoaded && !isPlaying && !radioPlayPromptHide && (
+                <div className="animate-bounce p-3 text-sm absolute w-[100px] ml-[-18px] mt-[12px] text-center">
+                  <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                    <FontAwesomeIcon icon={faHandPointer} />
+                  </div>
+                  <span className="text-center">Play Radio</span>
+                </div>
+              )}
             </div>
+
             <button className="cursor-pointer" onClick={handleNextButton}>
               <SkipForward className="w-full hover:scale-105" />
             </button>
+
             <button className="cursor-pointer mr-2 xl:pr-8" onClick={repeatTrack}>
               <RefreshCcwDot className="w-full hover:scale-105" />
             </button>
