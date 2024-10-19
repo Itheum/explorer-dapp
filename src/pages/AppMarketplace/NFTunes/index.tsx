@@ -66,8 +66,6 @@ export const NFTunes = () => {
   const [radioTracksLoading, setRadioTracksLoading] = useState<boolean>(false);
   const [radioTracks, setRadioTracks] = useState<any[]>([]);
   const [featuredArtistDeepLinkSlug, setFeaturedArtistDeepLinkSlug] = useState<string | undefined>();
-
-  // get query param called chain
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultChain = useLocalStorageStore((state) => state.defaultChain);
   const mvxNetworkSelected = defaultChain === "multiversx";
@@ -79,6 +77,9 @@ export const NFTunes = () => {
   const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
+
+  const [ownedSolDataNftNameAndIndexMap, setOwnedSolDataNftNameAndIndexMap] = useState<any>(null);
+  const [ownedMvxDataNftNameAndIndexMap, setOwnedMvxDataNftNameAndIndexMap] = useState<any>(null);
 
   // control the visibility base level music player model
   const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
@@ -120,6 +121,32 @@ export const NFTunes = () => {
       setShownSolAppDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.metadata.name.includes("MUS")));
     }
   }, [solNfts]);
+
+  useEffect(() => {
+    if (shownSolAppDataNfts && shownSolAppDataNfts.length > 0) {
+      const nameToIndexMap = shownSolAppDataNfts.reduce((t: any, solDataNft: DasApiAsset, idx: number) => {
+        if (solDataNft?.content?.metadata?.name) {
+          t[solDataNft.content.metadata.name] = idx;
+        }
+        return t;
+      }, {});
+
+      setOwnedSolDataNftNameAndIndexMap(nameToIndexMap);
+    }
+  }, [shownSolAppDataNfts]);
+
+  useEffect(() => {
+    if (shownMvxAppDataNfts && shownMvxAppDataNfts.length > 0) {
+      const nameToIndexMap = shownMvxAppDataNfts.reduce((t: any, mvxDataNft: DataNft, idx: number) => {
+        if (mvxDataNft?.tokenIdentifier) {
+          t[mvxDataNft?.tokenIdentifier] = idx;
+        }
+        return t;
+      }, {});
+
+      setOwnedMvxDataNftNameAndIndexMap(nameToIndexMap);
+    }
+  }, [shownMvxAppDataNfts]);
 
   // get the nfts that are able to open nfTunes app
   async function fetchMvxAppNfts(activeIsLoading = true) {
@@ -312,6 +339,33 @@ export const NFTunes = () => {
     }
   }
 
+  function checkOwnershipOfAlbum(album: any) {
+    let albumInOwnershipListIndex = -1; // note -1 means we don't own it
+
+    if (!mvxNetworkSelected) {
+      if (album?.solNftNameDrip && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftNameDrip] !== "undefined") {
+        albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftNameDrip];
+      }
+    } else {
+      if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap) {
+        // Data NFT-FT checks
+        if (typeof ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId] !== "undefined") {
+          albumInOwnershipListIndex = ownedMvxDataNftNameAndIndexMap[album.mvxDataNftId];
+        } else {
+          // Data NFT PH Checks (mvxDataNftId is actually the entire collection and not collection-nonce like in FT)
+          Object.keys(ownedMvxDataNftNameAndIndexMap).forEach((i) => {
+            if (i.includes(album.mvxDataNftId)) {
+              albumInOwnershipListIndex = ownedMvxDataNftNameAndIndexMap[i];
+              return;
+            }
+          });
+        }
+      }
+    }
+
+    return albumInOwnershipListIndex;
+  }
+
   return (
     <>
       <HelmetPageMeta
@@ -363,6 +417,15 @@ export const NFTunes = () => {
                       }
                     }}
                     songs={radioTracks}
+                    checkOwnershipOfAlbum={checkOwnershipOfAlbum}
+                    mvxNetworkSelected={mvxNetworkSelected}
+                    viewSolData={viewSolData}
+                    viewMvxData={viewMvxData}
+                    openActionFireLogic={() => {
+                      setLaunchBaseLevelMusicPlayer(true);
+                      setStopRadio(true);
+                      setStopPreviewPlaying(true);
+                    }}
                   />
                 )}
               </div>
@@ -406,15 +469,8 @@ export const NFTunes = () => {
           <div id="artist-profile" className="md:mt-[50px] w-full">
             <FeaturedArtistsAndAlbums
               mvxNetworkSelected={mvxNetworkSelected}
-              mySolAppDataNfts={shownSolAppDataNfts}
-              myShownMvxAppDataNfts={shownMvxAppDataNfts}
               viewSolData={viewSolData}
               viewMvxData={viewMvxData}
-              openActionFireLogic={() => {
-                setLaunchBaseLevelMusicPlayer(true);
-                setStopRadio(true);
-                setStopPreviewPlaying(true);
-              }}
               stopPreviewPlayingNow={stopPreviewPlaying}
               featuredArtistDeepLinkSlug={featuredArtistDeepLinkSlug}
               onPlayHappened={(isPlaying: boolean) => {
@@ -425,6 +481,12 @@ export const NFTunes = () => {
                 if (!stopRadio) {
                   setStopRadio(true);
                 }
+              }}
+              checkOwnershipOfAlbum={checkOwnershipOfAlbum}
+              openActionFireLogic={() => {
+                setLaunchBaseLevelMusicPlayer(true);
+                setStopRadio(true);
+                setStopPreviewPlaying(true);
               }}
             />
           </div>
