@@ -39,6 +39,7 @@ import { Button } from "libComponents/Button";
 import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal, getApiWeb2Apps } from "libs/utils";
+import { gtagGo } from "libs/utils/misc";
 import { scrollToSection } from "libs/utils/ui";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
@@ -390,6 +391,8 @@ export const NFTunes = () => {
               <Button
                 onClick={() => {
                   scrollToSection("join-nf-tunes");
+
+                  gtagGo("NtuHm", "CTA", "LearnJoin");
                 }}
                 className="w-[240px] hover:scale-110 transition duration-700 text-sm md:text-lg text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg text-white">
                 Learn More and Join
@@ -626,15 +629,9 @@ export const NFTunes = () => {
                       className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
                       onClick={() => {
                         fetchMvxAppNfts(false);
+
+                        gtagGo("NtuHm", "LoadMore", "MVX");
                       }}
-                      disabled={false}>
-                      Load more
-                    </Button>
-                  )}
-                  {!mvxNetworkSelected && shownMvxAppDataNfts.length < nfTunesTokens.length && (
-                    <Button
-                      className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
-                      onClick={() => {}}
                       disabled={false}>
                       Load more
                     </Button>
