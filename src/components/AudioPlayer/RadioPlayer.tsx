@@ -8,6 +8,7 @@ import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { Button } from "libComponents/Button";
+import { gtagGo } from "libs/utils/misc";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAppsStore } from "store/apps";
 
@@ -321,6 +322,8 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
                         if (openActionFireLogic) {
                           openActionFireLogic();
                         }
+
+                        gtagGo("NtuRadio", "CTA", "PlayAlbum");
                       }}>
                       <>
                         <Music2 />
@@ -333,6 +336,12 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
                     className={`${isAlbumForFree ? "!text-white" : "!text-black"} text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100`}
                     variant="ghost"
                     onClick={() => {
+                      if (isAlbumForFree) {
+                        gtagGo("NtuRadio", "CTA", "GetAlbum");
+                      } else {
+                        gtagGo("NtuRadio", "CTA", "BuyAlbum");
+                      }
+
                       window.open(getAlbumActionLink)?.focus();
                     }}>
                     <>
@@ -372,13 +381,26 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
                 className="accent-black dark:accent-white w-[70%] cursor-pointer ml-2 "></input>
             </div>
 
-            <button className="cursor-pointer" onClick={handlePrevButton}>
+            <button
+              className="cursor-pointer"
+              onClick={() => {
+                handlePrevButton();
+
+                gtagGo("NtuRadio", "Controls", "Prev");
+              }}>
               <SkipBack className="w-full hover:scale-105" />
             </button>
 
             <div className="relative">
               <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-900/0 border border-grey-300 shadow-xl flex items-center justify-center">
-                <button onClick={togglePlay} className="focus:outline-none" disabled={!isLoaded}>
+                <button
+                  onClick={() => {
+                    togglePlay();
+
+                    gtagGo("NtuRadio", "Controls", "PlayToggle");
+                  }}
+                  className="focus:outline-none"
+                  disabled={!isLoaded}>
                   {!isLoaded ? (
                     <Loader2 className="w-full text-center animate-spin hover:scale-105" />
                   ) : isPlaying ? (
@@ -399,11 +421,23 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
               )}
             </div>
 
-            <button className="cursor-pointer" onClick={handleNextButton}>
+            <button
+              className="cursor-pointer"
+              onClick={() => {
+                handleNextButton();
+
+                gtagGo("NtuRadio", "Controls", "Next");
+              }}>
               <SkipForward className="w-full hover:scale-105" />
             </button>
 
-            <button className="cursor-pointer mr-2 xl:pr-8" onClick={repeatTrack}>
+            <button
+              className="cursor-pointer mr-2 xl:pr-8"
+              onClick={() => {
+                repeatTrack();
+
+                gtagGo("NtuRadio", "Controls", "Repeat");
+              }}>
               <RefreshCcwDot className="w-full hover:scale-105" />
             </button>
           </div>
