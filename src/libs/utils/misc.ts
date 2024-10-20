@@ -139,7 +139,8 @@ export const gtagGo = (category: string, action: any, label?: any, value?: any) 
     eventObj["event_value"] = value;
   }
 
-  if (window.location.hostname !== "localhost") {
+  // only track mainnet so we have good data on GA
+  if (window.location.hostname !== "localhost" && import.meta.env.VITE_ENV_NETWORK === "mainnet") {
     (window as any).gtag("event", action, eventObj);
   }
 };
