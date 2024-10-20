@@ -26,12 +26,20 @@ import { getApi } from "libs/utils";
 //   }
 // }
 
+/* 
+we use global vars here so we can maintain this state across routing back and forth to this unlock page
+these vars are used to detect a "new login", i.e a logged out user logged in. we can use this to enable
+"user accounts" type activity, i.e. check if its a new user or returning user etc
+*/
+let solGotConnected = false;
+let mvxGotConnected = false;
+
 const UnlockPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { chainID } = useGetNetworkConfig();
-  const { address } = useGetAccount();
-  const isLoggedInMvX = !!address;
+  const { address: addressMvx } = useGetAccount();
+  const isLoggedInMvX = !!addressMvx;
   const { publicKey } = useWallet();
   const addressSol = publicKey?.toBase58();
   const { pathname } = useLocation();
@@ -48,13 +56,37 @@ const UnlockPage = () => {
     callbackRoute: pathname,
   };
 
-  // @TODO, improve this so that only when user logs in we redirect, or else logout also breaks and redirects
-  // useEffect(() => {
-  //   // is user logged into Solana?
-  //   if (addressSol) {
-  //     handleGoBack();
-  //   }
-  // }, [addressSol]);
+  useEffect(() => {
+    console.log("==== effect for addressSol. addressSol = ", addressSol);
+
+    if (!addressSol) {
+      solGotConnected = false;
+    } else {
+      if (!solGotConnected) {
+        // the user came to the unlock page without a solana connection and then connected a wallet,
+        // ... i.e a non-logged in user, just logged in using SOL
+        console.log("==== User JUST logged in with addressSol = ", addressSol);
+      }
+
+      solGotConnected = true;
+    }
+  }, [addressSol]);
+
+  useEffect(() => {
+    console.log("==== effect for addressMvx. addressMvx = ", addressMvx);
+
+    if (!addressMvx) {
+      mvxGotConnected = false;
+    } else {
+      if (!mvxGotConnected) {
+        // the user came to the unlock page without a mvx connection and then connected a wallet,
+        // ... i.e a non-logged in user, just logged in using MVX
+        console.log("==== User JUST logged in with addressMvx = ", addressMvx);
+      }
+
+      mvxGotConnected = true;
+    }
+  }, [addressMvx]);
 
   const handleLogout = () => {
     logout(location.pathname, undefined, false);
