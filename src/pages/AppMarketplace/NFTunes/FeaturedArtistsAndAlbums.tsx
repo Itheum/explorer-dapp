@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Music2, Pause, Play, Loader2, Gift, ShoppingCart } from "lucide-react";
 import { Button } from "libComponents/Button";
+import { gtagGo } from "libs/utils/misc";
 
 const dataset = [
   {
@@ -269,6 +270,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                 onClick={() => {
                   if (artist.artistId !== selArtistId) {
                     setSelArtistId(artist.artistId);
+
+                    gtagGo("NtuArAl", "ViewProfile", "Artist", artist.artistId);
                   }
                 }}>
                 <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg lg:!text-xl text-nowrap text-center`}>{artist.name}</h2>
@@ -334,6 +337,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               className="!text-white text-sm mx-2 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer"
                               onClick={() => {
                                 playPausePreview(album.ctaPreviewStream, album.albumId);
+
+                                gtagGo("NtuArAl", "PlayPausePrev", "Album", album.albumId);
                               }}>
                               {isPreviewPlaying && previewPlayingForAlbumId === album.albumId ? (
                                 <>
@@ -367,6 +372,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                                   if (openActionFireLogic) {
                                     openActionFireLogic();
                                   }
+
+                                  gtagGo("NtuArAl", "PlayAlbum", "Album", album.albumId);
                                 }}>
                                 <>
                                   <Music2 />
@@ -378,6 +385,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               <Button
                                 className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
                                 onClick={() => {
+                                  gtagGo("NtuArAl", "BuyAlbum", "Album", album.albumId);
+
                                   window.open(album.ctaBuy)?.focus();
                                 }}>
                                 <>
@@ -390,6 +399,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               <Button
                                 className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
                                 onClick={() => {
+                                  gtagGo("NtuArAl", "GetAlbum", "Album", album.albumId);
+
                                   window.open(album.ctaAirdrop)?.focus();
                                 }}>
                                 <>
