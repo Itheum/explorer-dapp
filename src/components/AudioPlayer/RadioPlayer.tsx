@@ -23,8 +23,10 @@ type RadioPlayerProps = {
   openActionFireLogic?: any;
 };
 
+let firstMusicQueueDone = false;
+
 export const RadioPlayer = (props: RadioPlayerProps) => {
-  const { songs, stopRadioNow, onPlayHappened, noAutoPlay, checkOwnershipOfAlbum, mvxNetworkSelected, viewSolData, viewMvxData, openActionFireLogic } = props;
+  const { songs, stopRadioNow, onPlayHappened, checkOwnershipOfAlbum, mvxNetworkSelected, viewSolData, viewMvxData, openActionFireLogic } = props;
 
   const theme = localStorage.getItem("explorer-ui-theme");
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -35,7 +37,6 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState("00:00");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [firstMusicQueueDone, setFirstMusicQueueDone] = useState(false);
   const [songSource, setSongSource] = useState<{ [key: number]: string }>({}); // map to keep the already fetched songs
   const appsStore = useAppsStore();
   const [radioPlayPromptHide, setRadioPlayPromptHide] = useState(false);
@@ -74,6 +75,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
     }
 
     return () => {
+      firstMusicQueueDone = false; // reset it here so when user leaves app and comes back, we don't auto play again
       audio.pause();
       audio.removeEventListener("timeupdate", updateProgress);
       audio.removeEventListener("canplaythrough", function () {
@@ -129,7 +131,6 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
         if (trackIndex === 0 && nfTunesRadioFirstTrackCachedBlob && nfTunesRadioFirstTrackCachedBlob.trim() !== "") {
           blobUrl = nfTunesRadioFirstTrackCachedBlob;
           console.log(`Track ${trackIndex} Loaded from cache`);
-          console.log("nfTunesRadioFirstTrackCachedBlob ", nfTunesRadioFirstTrackCachedBlob);
         } else {
           console.log(`Track ${trackIndex} Loading on-Demand`);
           const blob = await fetch(songs[trackIndex].stream).then((r) => r.blob());
@@ -176,18 +177,9 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
     } else {
       if (audio.readyState >= 2) {
         if (!firstMusicQueueDone) {
-          // its the first time the radio loaded and the first track is ready
-          setFirstMusicQueueDone(true);
-
-          if (!noAutoPlay) {
-            // Audio is loaded, play it if user did not stop auto play
-            audio.play();
-
-            // once they interact with the radio play, then no longer need to sho the bouncing animation
-            if (!radioPlayPromptHide) {
-              setRadioPlayPromptHide(true);
-            }
-          }
+          // its the first time the radio loaded and the first track is ready, but we don't auto play
+          // ... we use a local global variable here instead of state var as its only needed once
+          firstMusicQueueDone = true;
         } else {
           // Audio is loaded, play it.
           audio.play();
