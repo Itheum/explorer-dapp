@@ -119,7 +119,7 @@ export const routes: RouteWithTitleType[] = [
   },
   {
     path: routeNames.aiworkforce,
-    title: "AI Workforce",
+    title: "AI Data Workforce",
     component: AIWorkforce,
   },
 ];
