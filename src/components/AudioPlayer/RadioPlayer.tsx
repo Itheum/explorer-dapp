@@ -26,6 +26,7 @@ type RadioPlayerProps = {
   openActionFireLogic?: any;
 };
 
+let firstInteractionWithPlayDone = false; // a simple flag so we can track usage on 1st time user clicks on play (as the usage for first track wont capture like other tracks)
 let firstMusicQueueDone = false;
 
 export const RadioPlayer = (props: RadioPlayerProps) => {
@@ -79,6 +80,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
 
     return () => {
       firstMusicQueueDone = false; // reset it here so when user leaves app and comes back, we don't auto play again
+      firstInteractionWithPlayDone = false;
       audio.pause();
       audio.removeEventListener("timeupdate", updateProgress);
       audio.removeEventListener("canplaythrough", function () {
@@ -268,7 +270,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   };
 
   const logTrackUsageMetrics = async (trackIdx?: number) => {
-    console.log(`====> log usage metrics for radioPlayPromptHide ${radioPlayPromptHide} trackIdx ${trackIdx}`);
+    console.log(`====> log usage metrics for trackIdx ${trackIdx}`);
 
     try {
       let logMetricsAPI = `${getApiWeb2Apps()}/datadexapi/nfTunesApp/logMusicTrackStreamMetrics?trackIdx=${trackIdx}`;
@@ -420,6 +422,12 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
               <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-900/0 border border-grey-300 shadow-xl flex items-center justify-center">
                 <button
                   onClick={() => {
+                    // for the first time user clicks on play only, track the usage of the first track
+                    if (!firstInteractionWithPlayDone) {
+                      firstInteractionWithPlayDone = true;
+                      logTrackUsageMetrics(1);
+                    }
+
                     togglePlay();
 
                     gtagGo("NtuRadio", "Controls", "PlayToggle");

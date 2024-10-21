@@ -326,7 +326,7 @@ export const AnalyticsPage = () => {
 
           <div className="mt-10 bg-red-000">
             <div className="mb-5 bg-red-000">
-              <h2 className="flex flex-row !text-3xl">AI Workforce</h2>
+              <h2 className="flex flex-row !text-3xl">AI Data Workforce</h2>
               <p className="opacity-50">
                 Users bond $ITHEUM tokens, mint a{" "}
                 <a className="underline hover:no-underline" href="https://datadex.itheum.io/nfmeid" target="_blank">
@@ -334,7 +334,7 @@ export const AnalyticsPage = () => {
                 </a>{" "}
                 to boost their "Liveliness" and farm reputation staking rewards as part of the{" "}
                 <a className="underline hover:no-underline" href="/aiworkforce" target="_blank">
-                  Itheum AI Workforce
+                  Itheum AI Data Workforce
                 </a>
               </p>
             </div>
@@ -345,7 +345,7 @@ export const AnalyticsPage = () => {
               <p className="opacity-50">
                 Total $ITHEUM staked by users who are part of the{" "}
                 <a className="underline hover:no-underline" href="/aiworkforce" target="_blank">
-                  Itheum AI Workforce
+                  Itheum AI Data Workforce
                 </a>
               </p>
               <div className="mt-10">

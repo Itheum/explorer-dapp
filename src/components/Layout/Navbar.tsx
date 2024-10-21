@@ -94,7 +94,7 @@ export const Navbar = () => {
             <Link
               to={routeNames.aiworkforce}
               className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
-              AI Workforce
+              AI Data Workforce
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="cursor-pointer">
@@ -267,7 +267,7 @@ export const Navbar = () => {
               <Link to={routeNames.aiworkforce}>
                 <DropdownMenuItem>
                   <Bot className="mr-2 h-4 w-4" />
-                  <span>AI Workforce</span>
+                  <span>AI Data Workforce</span>
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
