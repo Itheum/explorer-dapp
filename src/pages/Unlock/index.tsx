@@ -4,12 +4,17 @@ import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 import { logout } from "@multiversx/sdk-dapp/utils/logout";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import axios from "axios";
 import { ArrowBigLeft } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton, LedgerLoginButton } from "components";
 import { walletConnectV2ProjectId } from "config";
+import { SOL_ENV_ENUM, MVX_ENV_ENUM } from "config";
 import { Button } from "libComponents/Button";
-import { getApi } from "libs/utils";
+import { getApi, getApiWeb2Apps } from "libs/utils";
+import { toastSuccess } from "libs/utils";
+import toast from "react-hot-toast";
+
 // import { routeNames } from "routes";
 
 // // find a route name based on a pathname that comes in via React Router Link params
@@ -66,6 +71,9 @@ const UnlockPage = () => {
         // the user came to the unlock page without a solana connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using SOL
         console.log("==== User JUST logged in with addressSol = ", addressSol);
+
+        const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SOL_ENV_ENUM.devnet : SOL_ENV_ENUM.mainnet;
+        logUserLoggedInInUserAccounts(addressSol, chainId);
       }
 
       solGotConnected = true;
@@ -82,6 +90,9 @@ const UnlockPage = () => {
         // the user came to the unlock page without a mvx connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using MVX
         console.log("==== User JUST logged in with addressMvx = ", addressMvx);
+
+        const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? MVX_ENV_ENUM.devnet : MVX_ENV_ENUM.mainnet;
+        logUserLoggedInInUserAccounts(addressMvx, chainId, true);
       }
 
       mvxGotConnected = true;
@@ -95,6 +106,47 @@ const UnlockPage = () => {
   const handleGoBack = () => {
     navigate(location.state?.from || "/");
     // navigate(-1); // This will take the user back to the previous page
+  };
+
+  const logUserLoggedInInUserAccounts = async (addr: string, chainId: string, isMvx?: boolean) => {
+    try {
+      const callRes = await axios.post(`${getApiWeb2Apps()}/datadexapi/userAccounts/userLoggedIn`, {
+        addr,
+        chainId,
+      });
+
+      const userLoggedInCallData = callRes.data;
+
+      if (userLoggedInCallData?.error) {
+        console.error("User account login call failed");
+      } else {
+        const celebrateEmojis = ["🥳", "🎊", "🍾", "🥂", "🍻", "🍾"];
+
+        if (userLoggedInCallData?.newUserAccountCreated) {
+          toast.success("Welcome New User! Its Great To Have You Here.", {
+            position: "top-center",
+            duration: 6000,
+            icon: celebrateEmojis[Math.floor(Math.random() * celebrateEmojis.length)],
+          });
+        } else if (userLoggedInCallData?.existingUserAccountLastLoginUpdated) {
+          let userMessage = "";
+
+          if (isMvx) {
+            userMessage = "Welcome Back MultiversX Champion!";
+          } else {
+            userMessage = "Welcome Back Solana Legend!";
+          }
+
+          toast.success(userMessage, {
+            position: "top-center",
+            duration: 6000,
+            icon: celebrateEmojis[Math.floor(Math.random() * celebrateEmojis.length)],
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

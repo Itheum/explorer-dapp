@@ -35,3 +35,13 @@ export const SUPPORTED_SOL_COLLECTIONS = IS_DEVNET
   : ["me2Sj97xewgEodSCRs31jFEyA1m3FQFzziqVXK9SVHX"];
 
 export const CACHE_DURATION_SECONDS = 300; // 5 minutes
+
+export enum SOL_ENV_ENUM {
+  devnet = "SD",
+  mainnet = "S1",
+}
+
+export enum MVX_ENV_ENUM {
+  devnet = "ED",
+  mainnet = "E1",
+}
