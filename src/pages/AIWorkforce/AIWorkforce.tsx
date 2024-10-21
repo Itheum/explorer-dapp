@@ -54,9 +54,9 @@ export const AIWorkforce = () => {
   return (
     <>
       <HelmetPageMeta
-        title="Itheum AI Workforce"
-        shortTitle="Itheum AI Workforce"
-        desc="Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Workforce as a Data Provider"
+        title="Itheum AI Data Workforce"
+        shortTitle="Itheum AI Data Workforce"
+        desc="Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Data Workforce as a Data Provider"
         shareImgUrl="https://explorer.itheum.io/socialshare/itheum_aiworkforce_social_hero.png"
       />
 
@@ -64,9 +64,9 @@ export const AIWorkforce = () => {
         <div id="hero" className="mt-2 pt-3 h-[230px] rounded-3xl">
           <div className="flex flex-col h-[100%] justify-center items-center">
             <div className="w-80% md:w-[60%]">
-              <h1 className="!text-xl text-center md:!text-2xl">Join the Itheum AI Workforce</h1>
+              <h1 className="!text-xl text-center md:!text-2xl">Join the Itheum AI Data Workforce</h1>
               <h2 className="!text-sm md:!text-xl text-center mt-2">
-                Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Workforce as a Data Provider
+                Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Data Workforce as a Data Provider
               </h2>
             </div>
 
