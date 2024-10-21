@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { faHandPointer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import { Loader2, Pause, Music2, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Gift, ShoppingCart } from "lucide-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,6 +9,7 @@ import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { Button } from "libComponents/Button";
+import { getApiWeb2Apps } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAppsStore } from "store/apps";
@@ -185,7 +187,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
           // Audio is loaded, play it.
           audio.play();
 
-          // once they interact with the radio play, then no longer need to sho the bouncing animation
+          // once they interact with the radio play, then no longer need to show the bouncing animation
           if (!radioPlayPromptHide) {
             setRadioPlayPromptHide(true);
           }
@@ -222,6 +224,7 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
       setCurrentTrackIndex(0);
       return;
     }
+
     setCurrentTrackIndex((prevCurrentTrackIndex) => prevCurrentTrackIndex + 1);
   };
 
@@ -250,6 +253,11 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
         audio.load();
         updateProgress();
         audio.currentTime = 0;
+
+        // doing the radioPlayPromptHide checks makes sure track 1 usage does not get sent until user actually plays
+        if (radioPlayPromptHide) {
+          logTrackUsageMetrics(index);
+        }
       } else {
         return false;
       }
@@ -257,6 +265,23 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
       return false;
     }
     return true;
+  };
+
+  const logTrackUsageMetrics = async (trackIdx?: number) => {
+    console.log(`====> log usage metrics for radioPlayPromptHide ${radioPlayPromptHide} trackIdx ${trackIdx}`);
+
+    try {
+      let logMetricsAPI = `${getApiWeb2Apps()}/datadexapi/nfTunesApp/logMusicTrackStreamMetrics?trackIdx=${trackIdx}`;
+
+      const logRes = await axios.get(logMetricsAPI);
+      const logResData = logRes.data;
+
+      if (logResData?.error) {
+        console.error("NF-Tunes Radio logTrackUsageMetrics failed");
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // is it a airdrop or buy option

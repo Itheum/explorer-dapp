@@ -16,9 +16,10 @@ export const toastError = (message: string) => {
   });
 };
 
-export const toastSuccess = (message: string) => {
+export const toastSuccess = (message: string, showTopCenter?: boolean) => {
   toast.success(message, {
-    position: "top-right",
+    position: showTopCenter ? "top-center" : "top-right",
+    duration: 6000,
   });
 };
 
