@@ -1,6 +1,6 @@
 import React from "react";
-import { toastSuccess } from "libs/utils";
 import { CopyPlusIcon } from "lucide-react";
+import { toastSuccess } from "libs/utils";
 
 export function CopyAddress({ address, precision = 6 }: { address: string; precision?: number }) {
   return (

@@ -891,7 +891,7 @@ export const NFTunes = () => {
 
 export async function getRadioStreamsData(firstNTracks?: number) {
   try {
-    let getRadioStreamAPI = `${getApiWeb2Apps()}/datadexapi/bespoke/nfTunes/getRadioStreams`;
+    let getRadioStreamAPI = `${getApiWeb2Apps()}/datadexapi/nfTunesApp/getRadioStreams`;
 
     if (firstNTracks) {
       getRadioStreamAPI += `?firstNTracks=${firstNTracks}`;
