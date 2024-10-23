@@ -6,14 +6,13 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import axios from "axios";
 import { ArrowBigLeft } from "lucide-react";
+import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton, LedgerLoginButton } from "components";
 import { walletConnectV2ProjectId } from "config";
 import { SOL_ENV_ENUM, MVX_ENV_ENUM } from "config";
 import { Button } from "libComponents/Button";
 import { getApi, getApiWeb2Apps } from "libs/utils";
-import { toastSuccess } from "libs/utils";
-import toast from "react-hot-toast";
 
 // import { routeNames } from "routes";
 
