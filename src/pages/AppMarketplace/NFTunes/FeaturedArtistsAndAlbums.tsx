@@ -172,13 +172,13 @@ const dataset = [
     albums: [
       {
         albumId: "ar8_a1",
-        solNftName: "",
+        solNftName: "MUSG7 - Galactic Gravity",
         mvxDataNftId: "",
         title: "Suno",
         desc: "This is the premier Digital EP from Waveborn Luminex that delivers a unique electro pop musical experience.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmeTrvB5o5Ki8MALogN9tjHmJsai4wpBy8EYA38JHK2ceF",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/0bba5f0b-4449-458b-b717-083eefa53a2c",
+        ctaAirdrop: "",
       },
     ],
   },
