@@ -46,30 +46,35 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   const appsStore = useAppsStore();
   const [radioPlayPromptHide, setRadioPlayPromptHide] = useState(false);
 
+  function eventToAttachEnded() {
+    setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
+  }
+
+  function eventToAttachTimeUpdate() {
+    updateProgress();
+  }
+
+  function eventToAttachCanPlayThrough() {
+    // Audio is ready to be played
+    setIsLoaded(true);
+    updateProgress();
+    // play the song
+    if (audio.currentTime == 0) togglePlay();
+  }
+
+  function eventToAttachPlaying() {
+    setIsPlaying(true);
+
+    if (onPlayHappened) {
+      onPlayHappened(true);
+    }
+  }
+
   useEffect(() => {
-    audio.addEventListener("ended", function () {
-      setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
-    });
-
-    audio.addEventListener("timeupdate", function () {
-      updateProgress();
-    });
-
-    audio.addEventListener("canplaythrough", function () {
-      // Audio is ready to be played
-      setIsLoaded(true);
-      updateProgress();
-      // play the song
-      if (audio.currentTime == 0) togglePlay();
-    });
-
-    audio.addEventListener("playing", function () {
-      setIsPlaying(true);
-
-      if (onPlayHappened) {
-        onPlayHappened(true);
-      }
-    });
+    audio.addEventListener("ended", eventToAttachEnded);
+    audio.addEventListener("timeupdate", eventToAttachTimeUpdate);
+    audio.addEventListener("canplaythrough", eventToAttachCanPlayThrough);
+    audio.addEventListener("playing", eventToAttachPlaying);
 
     if (songs) {
       songs?.forEach((song: any) => {
@@ -83,10 +88,10 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
       firstMusicQueueDone = false; // reset it here so when user leaves app and comes back, we don't auto play again
       firstInteractionWithPlayDone = false;
       audio.pause();
-      audio.removeEventListener("timeupdate", updateProgress);
-      audio.removeEventListener("canplaythrough", function () {
-        setIsLoaded(false);
-      });
+      audio.removeEventListener("ended", eventToAttachEnded);
+      audio.removeEventListener("timeupdate", eventToAttachTimeUpdate);
+      audio.removeEventListener("canplaythrough", eventToAttachCanPlayThrough);
+      audio.removeEventListener("playing", eventToAttachPlaying);
     };
   }, []);
 

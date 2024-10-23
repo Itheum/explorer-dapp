@@ -212,16 +212,43 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [previewIsReadyToPlay, setPreviewIsReadyToPlay] = useState(false);
   const [selArtistId, setSelArtistId] = useState<string>("ar1");
   const [artistProfile, setArtistProfile] = useState<any>(null);
+  const [currentTime, setCurrentTime] = useState("00:00");
+  const [duration, setDuration] = useState("00:00");
+  const [progress, setProgress] = useState(0);
+
+  function eventToAttachEnded() {
+    audio.src = "";
+    audio.currentTime = 0;
+    audio.pause();
+    setPreviewIsReadyToPlay(false);
+    setIsPreviewPlaying(false);
+    setPreviewPlayingForAlbumId(undefined);
+  }
+
+  function eventToAttachTimeUpdate() {
+    updateProgress();
+  }
+
+  function eventToAttachCanPlayThrough() {
+    // Audio is ready to be played
+    setPreviewIsReadyToPlay(true);
+    // play the song
+    if (audio.currentTime == 0) {
+      audio.play();
+    }
+  }
 
   useEffect(() => {
-    audio.addEventListener("canplaythrough", function () {
-      // Audio is ready to be played
-      setPreviewIsReadyToPlay(true);
-      // play the song
-      if (audio.currentTime == 0) {
-        audio.play();
-      }
-    });
+    audio.addEventListener("ended", eventToAttachEnded);
+    audio.addEventListener("timeupdate", eventToAttachTimeUpdate);
+    audio.addEventListener("canplaythrough", eventToAttachCanPlayThrough);
+
+    return () => {
+      audio.pause();
+      audio.removeEventListener("ended", eventToAttachEnded);
+      audio.removeEventListener("timeupdate", eventToAttachTimeUpdate);
+      audio.removeEventListener("canplaythrough", eventToAttachCanPlayThrough);
+    };
   }, []);
 
   useEffect(
@@ -269,21 +296,44 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
         console.log("Music preview playing via BLOB");
 
-        audio.src = blobUrl; // ios safari seems to prefer blobs or else it does not play
+        // ios safari seems to not play the music so tried to use blobs like in the other Audio component like Radio
+        // but still does not play -- need to debug more (see https://corevo.io/the-weird-case-of-video-streaming-in-safari/)
+        audio.src = blobUrl;
       } catch (e) {
         console.log("Music preview playing via original URL");
 
         audio.src = previewStreamUrl; // this fetches the data, but it may not be ready to play yet until canplaythrough fires
       }
+
+      audio.load();
+      updateProgress();
+      audio.currentTime = 0;
     } else {
       audio.src = "";
       audio.currentTime = 0;
-      setPreviewIsReadyToPlay(false);
       audio.pause();
+      setPreviewIsReadyToPlay(false);
       setIsPreviewPlaying(false);
       setPreviewPlayingForAlbumId(undefined);
     }
   }
+
+  const updateProgress = () => {
+    setCurrentTime(audio.currentTime ? formatTime(audio.currentTime) : "00:00");
+    setDuration(audio.duration ? formatTime(audio.duration) : "00:00");
+    let _percentage = (audio.currentTime / audio.duration) * 100;
+    if (isNaN(_percentage)) _percentage = 0;
+    setProgress(_percentage);
+  };
+
+  const formatTime = (_seconds: number) => {
+    const minutes = Math.floor(_seconds / 60);
+    const remainingSeconds = Math.floor(_seconds % 60);
+    const formattedMinutes = String(minutes).padStart(2, "0"); // Ensure two digits
+    const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+  };
 
   return (
     <div className="flex flex-col justify-center items-center w-full p-3 md:p-6 xl:pb-0">
@@ -378,7 +428,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               {isPreviewPlaying && previewPlayingForAlbumId === album.albumId ? (
                                 <>
                                   {!previewIsReadyToPlay ? <Loader2 className="animate-spin" /> : <Pause />}
-                                  <span className="ml-2">Stop Playing Preview</span>
+                                  <span className="ml-2"> {currentTime} - Stop Playing </span>
                                 </>
                               ) : (
                                 <>
