@@ -7,6 +7,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { Music, Music2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useThrottledCallback } from "use-debounce";
 import { NF_TUNES_TOKENS } from "appsConfig";
 import benefitsLogo1 from "assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "assets/img/nf-tunes/benefits-logo2.png";
@@ -46,7 +47,6 @@ import { useAccountStore } from "store/account";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 import { FeaturedArtistsAndAlbums } from "./FeaturedArtistsAndAlbums";
-import { useThrottledCallback } from "use-debounce";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -491,7 +491,7 @@ export const NFTunes = () => {
                   setStopRadio(true);
                 }
               }}
-              checkOwnershipOfAlbum={debouncedCheckOwnershipOfAlbum}
+              checkOwnershipOfAlbum={checkOwnershipOfAlbum}
               openActionFireLogic={() => {
                 setLaunchBaseLevelMusicPlayer(true);
                 setStopRadio(true);
