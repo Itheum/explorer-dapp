@@ -175,7 +175,7 @@ const dataset = [
         solNftName: "",
         mvxDataNftId: "",
         title: "Suno",
-        desc: "This is the premier Digital EP from 3OE - it delivers a electro pop musical experience.",
+        desc: "This is the premier Digital EP from Waveborn Luminex that delivers a unique electro pop musical experience.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmeTrvB5o5Ki8MALogN9tjHmJsai4wpBy8EYA38JHK2ceF",
         ctaBuy: "",
         ctaAirdrop: "https://drip.haus/itheum",
