@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { faHandPointer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
@@ -19,7 +19,7 @@ type RadioPlayerProps = {
   stopRadioNow?: boolean;
   noAutoPlay?: boolean;
   onPlayHappened?: any;
-  checkOwnershipOfAlbum: (e: any) => number;
+  checkOwnershipOfAlbum: (e: any) => any;
   mvxNetworkSelected: boolean;
   viewSolData: (e: number) => void;
   viewMvxData: (e: number) => void;
@@ -29,7 +29,8 @@ type RadioPlayerProps = {
 let firstInteractionWithPlayDone = false; // a simple flag so we can track usage on 1st time user clicks on play (as the usage for first track wont capture like other tracks)
 let firstMusicQueueDone = false;
 
-export const RadioPlayer = (props: RadioPlayerProps) => {
+// @TODO figure out why memo does not work, when we play, this comp keeps rerendering
+export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps) {
   const { songs, stopRadioNow, onPlayHappened, checkOwnershipOfAlbum, mvxNetworkSelected, viewSolData, viewMvxData, openActionFireLogic } = props;
 
   const theme = localStorage.getItem("explorer-ui-theme");
@@ -291,13 +292,16 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
   let getAlbumActionText = null;
   let getAlbumActionLink = null;
   let isAlbumForFree = false;
+  let checkedOwnershipOfAlbumAndItsIndex = -1;
 
   if (songs && songs.length > 0) {
     currSongObj = songs[currentTrackIndex];
+    checkedOwnershipOfAlbumAndItsIndex = checkOwnershipOfAlbum(currSongObj);
 
     if (currSongObj?.buy) {
       getAlbumActionLink = currSongObj.buy;
-      getAlbumActionText = checkOwnershipOfAlbum(currSongObj) > -1 ? "Buy More Album Copies" : "Buy Album";
+      getAlbumActionText = checkedOwnershipOfAlbumAndItsIndex > -1 ? "Buy More Album Copies" : "Buy Album";
+      getAlbumActionText = "Buy Album";
     } else if (currSongObj?.airdrop) {
       getAlbumActionLink = currSongObj.airdrop;
       getAlbumActionText = "Get Album for Free!";
@@ -331,12 +335,12 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
             {getAlbumActionLink && (
               <div className="flex mt-3 md:mt-0 flex-grow justify-end">
                 <div className="mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
-                  {checkOwnershipOfAlbum(songs[currentTrackIndex]) > -1 && (
+                  {checkedOwnershipOfAlbumAndItsIndex > -1 && (
                     <Button
                       className={`${isAlbumForFree ? "!text-white" : "!text-black"} text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r ${isAlbumForFree ? "from-yellow-700 to-orange-800" : "from-yellow-300 to-orange-500"}  transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 md:mr-[12px]`}
                       variant="ghost"
                       onClick={() => {
-                        const albumInOwnershipListIndex = checkOwnershipOfAlbum(songs[currentTrackIndex]);
+                        const albumInOwnershipListIndex = checkedOwnershipOfAlbumAndItsIndex;
 
                         if (albumInOwnershipListIndex > -1) {
                           if (!mvxNetworkSelected) {
@@ -478,4 +482,4 @@ export const RadioPlayer = (props: RadioPlayerProps) => {
       </div>
     </div>
   );
-};
+});

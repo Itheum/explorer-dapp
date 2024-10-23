@@ -46,6 +46,7 @@ import { useAccountStore } from "store/account";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 import { FeaturedArtistsAndAlbums } from "./FeaturedArtistsAndAlbums";
+import { useThrottledCallback } from "use-debounce";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -341,11 +342,12 @@ export const NFTunes = () => {
   }
 
   function checkOwnershipOfAlbum(album: any) {
+    console.log("checkOwnershipOfAlbum");
     let albumInOwnershipListIndex = -1; // note -1 means we don't own it
 
     if (!mvxNetworkSelected) {
-      if (album?.solNftNameDrip && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftNameDrip] !== "undefined") {
-        albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftNameDrip];
+      if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
+        albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftName];
       }
     } else {
       if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap) {
@@ -366,6 +368,10 @@ export const NFTunes = () => {
 
     return albumInOwnershipListIndex;
   }
+
+  // in Radio, checkOwnershipOfAlbum get called when user clicks on play, as the radio comp is rerendering each time the progress bar moves (memo not working)
+  // ... so we throttle each call by 2000 to improve some performance
+  const debouncedCheckOwnershipOfAlbum = useThrottledCallback(checkOwnershipOfAlbum, 2000, { "trailing": false });
 
   return (
     <>
@@ -420,7 +426,7 @@ export const NFTunes = () => {
                       }
                     }}
                     songs={radioTracks}
-                    checkOwnershipOfAlbum={checkOwnershipOfAlbum}
+                    checkOwnershipOfAlbum={debouncedCheckOwnershipOfAlbum}
                     mvxNetworkSelected={mvxNetworkSelected}
                     viewSolData={viewSolData}
                     viewMvxData={viewMvxData}
@@ -485,7 +491,7 @@ export const NFTunes = () => {
                   setStopRadio(true);
                 }
               }}
-              checkOwnershipOfAlbum={checkOwnershipOfAlbum}
+              checkOwnershipOfAlbum={debouncedCheckOwnershipOfAlbum}
               openActionFireLogic={() => {
                 setLaunchBaseLevelMusicPlayer(true);
                 setStopRadio(true);
