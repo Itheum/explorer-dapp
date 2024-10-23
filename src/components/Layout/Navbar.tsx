@@ -87,7 +87,7 @@ export const Navbar = () => {
             <Link
               to={routeNames.nftunes}
               className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
-              NF-Tunes
+              NF-Tunes Web3 Music
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="cursor-pointer">
@@ -258,7 +258,7 @@ export const Navbar = () => {
               <Link to={routeNames.nftunes}>
                 <DropdownMenuItem>
                   <Music className="mr-2 h-4 w-4" />
-                  <span>NF-Tunes</span>
+                  <span>NF-Tunes Web3 Music</span>
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
