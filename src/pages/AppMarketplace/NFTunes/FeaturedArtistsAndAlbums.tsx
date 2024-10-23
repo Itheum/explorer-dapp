@@ -15,7 +15,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar1_a1",
-        solNftNameDrip: "MUSG3 - Mugen Cafe EP",
+        solNftName: "MUSG3 - Mugen Cafe EP",
         title: "Mugen Cafe",
         desc: "Cafe-style, laid-back, Lo-fi tracks to sooth your soothe",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmU82pDyHJRey4YfwtyDDdgwFtubCd5Xg4wPwfKJR8JppQ",
@@ -35,7 +35,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar2_a1",
-        solNftNameDrip: "MUSG4 - Retrofy YFGP",
+        solNftName: "MUSG4 - Retrofy YFGP",
         title: "Retrofy",
         desc: "Old-school instrumentals, fat boom-bap drums, 8-bit sounds, lofi flavor, and chill vibes. Take you back to the golden days with nostalgia-filled frequencies!",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmegnmMCUMAWaW4BdPBQvWFcXcNffKLa4DJo3jYpMg9Z6j",
@@ -44,7 +44,7 @@ const dataset = [
       },
       {
         albumId: "ar2_a2",
-        solNftNameDrip: "MUSG2 - Cranium Beats",
+        solNftName: "MUSG2 - Cranium Beats",
         title: "Cranium Beats",
         desc: "Dark Hip Hop Instrumentals Ultimate Album, produced by YFGP; sample-based with underground flavor and dark vibes!",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmRmMRDD8nEnmDpwpmnoadHrdbWrWradTg3jb4FnN1aWUv",
@@ -64,7 +64,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar3_a1",
-        solNftNameDrip: "MUSG1 - DnB Music",
+        solNftName: "MUSG1 - DnB Music",
         title: "Love in Disasters",
         desc: "Blends lyrics about natural disasters and love, crafted entirely with AI tools",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmPRwT6Xt3pqtz7RbBfvaVevkZqgzXpKnVg5Hc115QBzfe",
@@ -85,7 +85,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar4_a1",
-        solNftNameDrip: "MUSG5 - Diaspora EP - LLLUNA01",
+        solNftName: "MUSG5 - Diaspora EP - LLLUNA01",
         title: "Diaspora EP",
         desc: "Diaspora by LLLUNA01 fuses Dubstep, Trap, and Drum & Bass Jungle into a high-energy, bass-heavy journey through global underground sounds.",
         ctaPreviewStream: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/music/preview/llluna01-diaspora.mp3",
@@ -106,7 +106,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar5_a1",
-        solNftNameDrip: "",
+        solNftName: "",
         mvxDataNftId: "DATANFTFT-e936d4-ae",
         title: "Two Weeks",
         desc: "A collection of 3 songs, was composed and recorded by myself over the course of two weeks in the Summer of 2024. The first song of the EP, Otherside, is the first song I ever wrote back in the Summer of 2021. All vocals and instrumentation performed by Stephen Snodgrass.",
@@ -128,7 +128,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar6_a1",
-        solNftNameDrip: "",
+        solNftName: "",
         mvxDataNftId: "DFEE-72425b",
         title: "Ethereal Echoes",
         desc: "The Chronicles of Deep Forest – an exclusive digital EP released to celebrate the 30th anniversary of their Grammy win.",
@@ -150,7 +150,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar7_a1",
-        solNftNameDrip: "MUSG6 - Eternal Echo - 3OE",
+        solNftName: "MUSG6 - Eternal Echo - 3OE",
         mvxDataNftId: "",
         title: "Eternal Echo",
         desc: "This is the premier Digital EP from 3OE - it delivers immersive soundscapes for a pleasant musical experience.",
@@ -172,7 +172,7 @@ const dataset = [
     albums: [
       {
         albumId: "ar8_a1",
-        solNftNameDrip: "",
+        solNftName: "",
         mvxDataNftId: "",
         title: "Suno",
         desc: "This is the premier Digital EP from 3OE - it delivers a electro pop musical experience.",
@@ -191,7 +191,7 @@ type FeaturedArtistsAndAlbumsProps = {
   stopPreviewPlayingNow?: boolean;
   featuredArtistDeepLinkSlug?: string;
   onPlayHappened?: any;
-  checkOwnershipOfAlbum: (e: any) => number;
+  checkOwnershipOfAlbum: (e: any) => any;
   openActionFireLogic?: any;
 };
 
@@ -255,15 +255,26 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     }
   }, [stopPreviewPlayingNow]);
 
-  function playPausePreview(previewStreamUrl?: string, albumId?: string) {
+  async function playPausePreview(previewStreamUrl?: string, albumId?: string) {
     if (previewStreamUrl && albumId && (!isPreviewPlaying || previewPlayingForAlbumId !== albumId)) {
       onPlayHappened(true); // inform parent to stop any other playing streams on its ui
 
-      audio.src = previewStreamUrl; // this fetches the data, but it may not be ready to play yet until canplaythrough fires
       setPreviewIsReadyToPlay(false);
-
       setIsPreviewPlaying(true);
       setPreviewPlayingForAlbumId(albumId);
+
+      try {
+        const blob = await fetch(previewStreamUrl).then((r) => r.blob());
+        let blobUrl = URL.createObjectURL(blob);
+
+        console.log("Music preview playing via BLOB");
+
+        audio.src = blobUrl; // ios safari seems to prefer blobs or else it does not play
+      } catch (e) {
+        console.log("Music preview playing via original URL");
+
+        audio.src = previewStreamUrl; // this fetches the data, but it may not be ready to play yet until canplaythrough fires
+      }
     } else {
       audio.src = "";
       audio.currentTime = 0;
