@@ -160,6 +160,28 @@ const dataset = [
       },
     ],
   },
+  {
+    artistId: "ar8",
+    name: "Waveborn Luminex",
+    slug: "waveborn-luminex",
+    bio: " Waveborn Luminex emerges as a radiant force in the electronic music realm, embodying the essence of soundwaves that shape their very being. With an avatar crafted from vibrant frequencies and pulsating rhythms, they illuminate the dance floor with electrifying energy, that invites listeners to immerse themselves in a cosmic journey.",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/waveborn-luminex.jpg",
+    dripLink: "",
+    xLink: "",
+    webLink: "",
+    albums: [
+      {
+        albumId: "ar8_a1",
+        solNftNameDrip: "",
+        mvxDataNftId: "",
+        title: "Suno",
+        desc: "This is the premier Digital EP from 3OE - it delivers a electro pop musical experience.",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmeTrvB5o5Ki8MALogN9tjHmJsai4wpBy8EYA38JHK2ceF",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
+      },
+    ],
+  },
 ];
 
 type FeaturedArtistsAndAlbumsProps = {
@@ -292,36 +314,38 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
                     <p className="artist-who mt-5">{artistProfile.bio}</p>
-                    <div className="flex flex-col md:flex-row mt-5">
-                      {artistProfile.dripLink && (
-                        <div>
-                          +
-                          <a className="underline hover:no-underline mx-2" href={artistProfile.dripLink} target="_blank">
-                            Artist on Drip
-                          </a>
-                        </div>
-                      )}
-                      {artistProfile.xLink && (
-                        <div>
-                          +
-                          <a className="underline hover:no-underline mx-2" href={artistProfile.xLink} target="_blank">
-                            Artist on X
-                          </a>
-                        </div>
-                      )}
-                      {artistProfile.webLink && (
-                        <div>
-                          +
-                          <a className="underline hover:no-underline mx-2" href={artistProfile.webLink} target="_blank">
-                            Artist Web
-                          </a>
-                        </div>
-                      )}
-                    </div>
+                    {(artistProfile.dripLink !== "" || artistProfile.xLink !== "" || artistProfile.webLink !== "") && (
+                      <div className="flex flex-col md:flex-row mt-5">
+                        {artistProfile.dripLink && (
+                          <div>
+                            +
+                            <a className="underline hover:no-underline mx-2" href={artistProfile.dripLink} target="_blank">
+                              Artist on Drip
+                            </a>
+                          </div>
+                        )}
+                        {artistProfile.xLink && (
+                          <div>
+                            +
+                            <a className="underline hover:no-underline mx-2" href={artistProfile.xLink} target="_blank">
+                              Artist on X
+                            </a>
+                          </div>
+                        )}
+                        {artistProfile.webLink && (
+                          <div>
+                            +
+                            <a className="underline hover:no-underline mx-2" href={artistProfile.webLink} target="_blank">
+                              Artist Web
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="album-list w-[300px] lg:w-full">
-                    <p className="mt-10 mb-5 text-xl font-bold">NF-Tunes Discography</p>
+                    <p className="mt-5 mb-5 text-xl font-bold">NF-Tunes Discography</p>
 
                     {artistProfile.albums.map((album: any, idx: number) => (
                       <div key={album.albumId} className="album flex flex-col bbg-500 h-[100%] mb-3 p-5 border">
