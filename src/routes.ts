@@ -7,6 +7,7 @@ import { NFPodcast } from "pages/AppMarketplace/NFPodcast";
 import { NFTunes } from "pages/AppMarketplace/NFTunes";
 import { SpreadsheetNfts } from "pages/AppMarketplace/SpreadsheetNfts";
 import { TimeCapsule } from "pages/AppMarketplace/TimeCapsule/TimeCapsule";
+import { TimeCapsuleXDay } from "pages/AppMarketplace/TimeCapsuleXDay/TimeCapsuleXDay";
 import { withPageTitle } from "./components/PageTitle";
 import { Home, MyWallet, MultiversxBubbles, MultiversxInfographics, BoberGameRoom, AnalyticsPage, GamerPassport, AIWorkforce } from "./pages";
 
@@ -23,6 +24,7 @@ export const routeNames = {
   nftunes: "/nftunes",
   deepforestmusic: "/deep-forest-music-data-nft",
   timecapsule: "/timecapsule",
+  timecapsulexday: "/xday-timecapsule",
   getbitz: "/getbitz",
   bobergameroom: "/bobergameroom",
   spreadsheetnfts: "/spreadsheetnfts",
@@ -86,6 +88,12 @@ export const routes: RouteWithTitleType[] = [
     path: routeNames.timecapsule,
     title: "Time Capsule",
     component: TimeCapsule,
+    authenticatedRoute: false,
+  },
+  {
+    path: routeNames.timecapsulexday,
+    title: "MultiversX xDay Time Capsule",
+    component: TimeCapsuleXDay,
     authenticatedRoute: false,
   },
   {

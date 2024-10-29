@@ -72,7 +72,9 @@ const TrendingSection: React.FC = () => {
           <h2 className="mt-12 py-2 mb-0 !text-2xl text-center">Trending Data NFT Offers</h2>
           <div className="w-full flex flex-row flex-nowrap overflow-x-scroll overscroll-x-contain">
             {isLoading ? (
-              <PulseLoader cusStyle="my-10" />
+              <div className="flex flex-col items-center justify-center w-full h-[20rem]">
+                <PulseLoader cusStyle="my-10" />
+              </div>
             ) : trendingDataNfts?.length === 0 ? (
               <div className="flex flex-col items-center justify-center w-full h-[20rem]">
                 <h3 className="text-lg">No trending offers available...</h3>
