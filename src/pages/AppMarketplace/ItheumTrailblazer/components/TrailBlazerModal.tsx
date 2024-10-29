@@ -4,6 +4,7 @@ import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeli
 import { Loader } from "components";
 import { Modal } from "components/Modal/Modal";
 import { NoDataFound } from "components/NoDataFound";
+import YouTubeEmbed from "components/YouTubeEmbed";
 import { Button } from "libComponents/Button";
 import { Card } from "libComponents/Card";
 import { useFilterStore } from "store/FilterStore";
@@ -51,8 +52,45 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
     }
   };
 
+  /* Videos may take time to load, if the user put a unlisted YouTube as a "link" then show that with a notice to user (for better YX) */
+  const showVideoContent = (dataItem: any) => {
+    let youTubeVideoID = null;
+
+    if (dataItem?.link && dataItem.link.includes("youtdu.be")) {
+      // work with this: "https://youtu.be/6PBSGckWA1M"
+      const splitParts = dataItem.link.trim().split("/");
+      youTubeVideoID = splitParts[splitParts.length - 1];
+    }
+
+    return (
+      <>
+        {dataItem.file && dataItem["file_mimeType"] && (
+          <>
+            <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls>
+              <source src={dataItem.file} type={dataItem["file_mimeType"]}></source>
+            </video>
+
+            {youTubeVideoID && (
+              <>
+                <div className="text-[11px] mb-[20px] text-center">
+                  The above TimeCapsule videos stream from decentralized storage, giving you permanent ownership! Larger videos may load slowly, so feel free to
+                  watch on YouTube below. But remember, if YouTube disappears, your video memory still remains securely yours forever.
+                </div>
+                <div className="w-[100%] h-[170px] md:h-[270px]">
+                  <YouTubeEmbed embedId={youTubeVideoID} title={dataItem.title} />
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </>
+    );
+  };
+
   const getTileForCategory = (dataItem: any) => {
     let tileCode: any = null;
+
+    console.log(dataItem);
 
     switch (dataItem.category) {
       case "Offer":
@@ -169,11 +207,21 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
             <Card className="flex flex-col items-start justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
               <h2>{dataItem.title}</h2>
               <h3>{new Date(dataItem.date).toDateString()}</h3>
-              {dataItem.file && dataItem["file_mimeType"] && (
+
+              {showVideoContent(dataItem)}
+
+              {/* {dataItem.file && dataItem["file_mimeType"] && (
                 <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls>
                   <source src={dataItem.file} type={dataItem["file_mimeType"]}></source>
                 </video>
               )}
+
+              {dataItem.file && dataItem["file_mimeType"] && (
+                <div className="w-[380px] h-[170px] md:w-[480px] md:h-[270px]">
+                  <YouTubeEmbed embedId="6PBSGckWA1M" title={dataItem.title} />
+                </div>
+              )} */}
+
               <a href={dataItem.link} target="_blank" className="!text-blue-500">
                 See more...
               </a>
