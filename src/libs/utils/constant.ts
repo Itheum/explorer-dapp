@@ -15,7 +15,7 @@ export const ERROR_DATA_LOADING = "Data is still loading";
 
 export const APP_MAPPINGS = [
   {
-    appName: "MultiversX  Time Capsule",
+    appName: "xDay Time Capsule",
     appDescription: "Preserve MultiversX xDay Memories Forever",
     routeKey: "timecapsulexday",
     desc: "Capture, collect, archive, and relive key memories from MultiversX xDay through photos and videos, preserving memories for future generations.",
