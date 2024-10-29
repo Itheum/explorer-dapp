@@ -80,11 +80,14 @@ export const TIMECAPSULE_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 625 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 629 },
     ]
-  : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
+  : [
+      { tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 },
+      { tokenIdentifier: "DATANFTFT-e936d4", nonce: 196 },
+    ];
 
 export const TIMECAPSULE_XDAY_TOKENS: app_token[] = IS_DEVNET
   ? [{ tokenIdentifier: "DATANFTFT-e0b917", nonce: 629 }]
-  : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 5 }];
+  : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 196 }];
 
 export const BOBER_GAME_ROOM_TOKENS: app_token[] = IS_DEVNET
   ? [
