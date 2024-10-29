@@ -8,11 +8,19 @@ import iconNFPodcast from "assets/img/nf-podcast/NF-Podcast1.png";
 import iconNFTunes from "assets/img/nf-tunes-logo.png";
 import iconSpreadsheetNfts from "assets/img/spreadsheet-nfts/header.png";
 import iconTimeCapsule from "assets/img/timecapsule/expl-app-timecapsule-icon.png";
+import iconTimeCapsuleXDay from "assets/img/timecapsule/expl-app-timecapsule-xday-icon.png";
 export const ERROR_CONNECT_WALLET = "Connect your wallet";
 export const ERROR_TRANSACTION_ONGOING = "A transaction is ongoing";
 export const ERROR_DATA_LOADING = "Data is still loading";
 
 export const APP_MAPPINGS = [
+  {
+    appName: "xDay Time Capsule",
+    appDescription: "Preserve MultiversX xDay Memories Forever",
+    routeKey: "timecapsulexday",
+    desc: "Capture, collect, archive, and relive key memories from MultiversX xDay through photos and videos, preserving memories for future generations.",
+    img: iconTimeCapsuleXDay,
+  },
   {
     appName: "Get <BiTz> Points",
     appDescription: "Collect Itheum <BiTz> Points",
@@ -57,9 +65,9 @@ export const APP_MAPPINGS = [
   },
   {
     appName: "Time Capsule",
-    appDescription: "Preserve Memories Forever",
+    appDescription: "Preserve Memories from MultiversX xDay Forever",
     routeKey: "timecapsule",
-    desc: "Capture, archive, and relive historic events through photos and videos, preserving memories for future generations.",
+    desc: "Capture, collect, archive, and relive historic events through photos and videos, preserving memories for future generations.",
     img: iconTimeCapsule,
   },
   {
