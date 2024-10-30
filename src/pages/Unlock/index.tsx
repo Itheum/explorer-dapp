@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useGetAccount, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { NativeAuthConfigType } from "@multiversx/sdk-dapp/types";
 import { logout } from "@multiversx/sdk-dapp/utils/logout";
@@ -6,6 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import axios from "axios";
 import { ArrowBigLeft } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, WebWalletLoginButton, LedgerLoginButton } from "components";
@@ -38,6 +39,8 @@ these vars are used to detect a "new login", i.e a logged out user logged in. we
 let solGotConnected = false;
 let mvxGotConnected = false;
 
+const loggingInMsgs = ["Logging you in", "Taking you to Web3", "Plugging you in", "Letting you in the backdoor"];
+
 const UnlockPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,6 +50,7 @@ const UnlockPage = () => {
   const { publicKey } = useWallet();
   const addressSol = publicKey?.toBase58();
   const { pathname } = useLocation();
+  const [userAccountLoggingIn, setIsUserAccountLoggingIn] = useState<boolean>(false);
 
   const nativeAuthProps: NativeAuthConfigType = {
     apiAddress: `https://${getApi(chainID)}`,
@@ -67,6 +71,8 @@ const UnlockPage = () => {
       solGotConnected = false;
     } else {
       if (!solGotConnected) {
+        setIsUserAccountLoggingIn(true);
+
         // the user came to the unlock page without a solana connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using SOL
         console.log("==== User JUST logged in with addressSol = ", addressSol);
@@ -86,6 +92,8 @@ const UnlockPage = () => {
       mvxGotConnected = false;
     } else {
       if (!mvxGotConnected) {
+        setIsUserAccountLoggingIn(true);
+
         // the user came to the unlock page without a mvx connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using MVX
         console.log("==== User JUST logged in with addressMvx = ", addressMvx);
@@ -119,6 +127,7 @@ const UnlockPage = () => {
       if (userLoggedInCallData?.error) {
         console.error("User account login call failed");
       } else {
+        let isTriggerFreeGift = ""; // should we trigger the "free gift" for new users?
         const celebrateEmojis = ["🥳", "🎊", "🍾", "🥂", "🍻", "🍾"];
 
         if (userLoggedInCallData?.newUserAccountCreated) {
@@ -127,6 +136,8 @@ const UnlockPage = () => {
             duration: 6000,
             icon: celebrateEmojis[Math.floor(Math.random() * celebrateEmojis.length)],
           });
+
+          isTriggerFreeGift = "g=1";
         } else if (userLoggedInCallData?.existingUserAccountLastLoginUpdated) {
           let userMessage = "";
 
@@ -142,55 +153,88 @@ const UnlockPage = () => {
             icon: celebrateEmojis[Math.floor(Math.random() * celebrateEmojis.length)],
           });
         }
+
+        // where can we send them back?
+        let fromWhere = location.state?.from || "/";
+
+        if (fromWhere.includes("?")) {
+          if (isTriggerFreeGift !== "") {
+            isTriggerFreeGift = `&${isTriggerFreeGift}`;
+          }
+
+          fromWhere = `${fromWhere}${isTriggerFreeGift}`;
+        } else {
+          if (isTriggerFreeGift !== "") {
+            isTriggerFreeGift = `?${isTriggerFreeGift}`;
+          }
+
+          fromWhere = `${fromWhere}${isTriggerFreeGift}`;
+        }
+
+        // login was a success, so we take them back to where they were if possible
+        navigate(fromWhere);
       }
     } catch (e) {
       console.error(e);
     }
+
+    setIsUserAccountLoggingIn(false);
   };
+
+  const loggingInMsg = loggingInMsgs[Math.floor(Math.random() * loggingInMsgs.length)] + "...";
 
   return (
     <div className="flex flex-auto items-center -z-1">
       <div className="m-auto" data-testid="unlockPage">
         <div className=" rounded-2xl my-4 text-center dark:bg-[#0a0a0a] bg-slate-100 drop-shadow-2xl">
-          <Button
-            className="mt-4" // Add your styling here
-            onClick={handleGoBack}>
-            <ArrowBigLeft /> Go Back
-          </Button>
-          <div className="pt-10 pb-5 px-5 px-sm-2 mx-lg-4">
-            <h4 className="mb-4 font-weight-bold">MultiversX</h4>
-            <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
-              {isLoggedInMvX ? (
-                <div className="w-full flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
-                  <Button
-                    className="w-full dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
-                    variant="outline"
-                    onClick={handleLogout}>
-                    Logout
-                  </Button>
+          {userAccountLoggingIn ? (
+            <div className="p-20 flex flex-col items-center">
+              <Loader2 className="animate-spin" />
+              <p className="mt-2">{loggingInMsg}</p>
+            </div>
+          ) : (
+            <>
+              <Button
+                className="mt-4" // Add your styling here
+                onClick={handleGoBack}>
+                <ArrowBigLeft /> Go Back
+              </Button>
+              <div className="pt-10 pb-5 px-5 px-sm-2 mx-lg-4">
+                <h4 className="mb-4 font-weight-bold">MultiversX</h4>
+                <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
+                  {isLoggedInMvX ? (
+                    <div className="w-full flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
+                      <Button
+                        className="w-full dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
+                        variant="outline"
+                        onClick={handleLogout}>
+                        Logout
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <WalletConnectLoginButton
+                        className="w-full !m-0"
+                        loginButtonText="xPortal App"
+                        {...commonProps}
+                        {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})}
+                      />
+                      <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
+                      <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
+                      <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
+                    </>
+                  )}
                 </div>
-              ) : (
-                <>
-                  <WalletConnectLoginButton
-                    className="w-full !m-0"
-                    loginButtonText="xPortal App"
-                    {...commonProps}
-                    {...(walletConnectV2ProjectId ? { isWalletConnectV2: true } : {})}
-                  />
-                  <ExtensionLoginButton className="w-full !m-0" loginButtonText="DeFi Wallet" {...commonProps} />
-                  <WebWalletLoginButton className="w-full !m-0" loginButtonText="Web Wallet" {...commonProps} />
-                  <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
-                </>
-              )}
-            </div>
-          </div>
-          <div className="pb-10 pt-5 px-5 px-sm-2 mx-lg-4">
-            <h4 className="mb-4 font-weight-bold">Solana</h4>
+              </div>
+              <div className="pb-10 pt-5 px-5 px-sm-2 mx-lg-4">
+                <h4 className="mb-4 font-weight-bold">Solana</h4>
 
-            <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
-              <WalletMultiButton className="w-full !m-0" />
-            </div>
-          </div>
+                <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
+                  <WalletMultiButton className="w-full !m-0" />
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
