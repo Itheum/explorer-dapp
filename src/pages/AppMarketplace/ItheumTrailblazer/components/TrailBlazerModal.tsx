@@ -9,7 +9,17 @@ import { Button } from "libComponents/Button";
 import { Card } from "libComponents/Card";
 import { useFilterStore } from "store/FilterStore";
 
-export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned: boolean; isFetchingDataMarshal?: boolean; data: any }) => {
+export const TrailBlazerModal = ({
+  owned,
+  isFetchingDataMarshal,
+  data,
+  dataHadIndexTitleQueues,
+}: {
+  owned: boolean;
+  isFetchingDataMarshal?: boolean;
+  data: any;
+  dataHadIndexTitleQueues?: boolean;
+}) => {
   const { filter } = useFilterStore();
   const [filteredData, setFilteredData] = useState<number>(1000);
 
@@ -205,7 +215,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         tileCode = (
           <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
             <Card className="flex flex-col items-start justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
-              <h2 className="!text-[26px] md:!text-[30px]">{dataItem.title}</h2>
+              <h2 className="!text-[26px] md:!text-[30px]">{dataHadIndexTitleQueues ? dataItem.title.substring(1) : dataItem.title}</h2>
               <h3 className="!text-[14px]">{new Date(dataItem.date).toDateString()}</h3>
 
               {showVideoContent(dataItem)}

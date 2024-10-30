@@ -23,6 +23,7 @@ export const TimeCapsuleXDay = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [owned, setOwned] = useState<boolean>(false);
+  const [dataHadIndexTitleQueues, setDataHadIndexTitleQueues] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
 
@@ -76,9 +77,11 @@ export const TimeCapsuleXDay = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
         };
+
         if (!dataNft.dataMarshal || dataNft.dataMarshal === "") {
           dataNft.updateDataNft({ dataMarshal: getApiDataMarshal(chainID) });
         }
+
         res = await dataNft.viewDataViaMVXNativeAuth(arg);
         res.data = await (res.data as Blob).text();
         res.data = JSON.parse(res.data);
@@ -87,7 +90,47 @@ export const TimeCapsuleXDay = () => {
           return new Date(b.date).valueOf() - new Date(a.date).valueOf();
         });
 
-        setData(orderedDataByDateDesc);
+        console.log("A ----------");
+        console.log(orderedDataByDateDesc);
+        console.log("----------");
+
+        /* as TB template on Zedge Storage has an issue where the exact sec/ms is not stored (only yy, mm, dd)
+        if have a work around on ordering correctly, where the titles can have a [1], [2] etc to indicate order.
+        we try to do this, and for any reason we fail, then we abort it all
+        */
+        let orderedDataTitleIndexQueues = null;
+
+        try {
+          const clonesData = [...res.data.data];
+          const getAItemTitle = clonesData?.[0]?.title;
+
+          if (getAItemTitle) {
+            const getItsFirstChar = getAItemTitle.trim().charAt(0);
+
+            if (!isNaN(parseInt(getItsFirstChar, 10))) {
+              // this means, we should now order the orderedDataByDateDesc by the title index queues
+              orderedDataTitleIndexQueues = clonesData.sort((a: any, b: any) => {
+                return parseInt(b.title.trim().charAt(0), 10) - parseInt(a.title.trim().charAt(0), 10);
+              });
+            }
+          }
+
+          console.log("B ----------");
+          console.log(orderedDataTitleIndexQueues);
+          console.log("----------");
+        } catch (e) {
+          console.log("Tried to order data by index queues in the title, but hit a error");
+          console.error(e);
+        }
+
+        if (orderedDataTitleIndexQueues !== null && orderedDataTitleIndexQueues.length === res.data.data.length) {
+          setDataHadIndexTitleQueues(true);
+          setData(orderedDataTitleIndexQueues);
+        } else {
+          setDataHadIndexTitleQueues(false);
+          setData(orderedDataByDateDesc);
+        }
+
         setIsFetchingDataMarshal(false);
       }
     } catch (err) {
@@ -128,7 +171,9 @@ export const TimeCapsuleXDay = () => {
               isDataWidget={true}
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               viewData={viewData}
-              modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
+              modalContent={
+                <TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} dataHadIndexTitleQueues={dataHadIndexTitleQueues} />
+              }
               modalTitle={"xDay Time Capsule"}
               modalTitleStyle="md:p-5 pt-5 pb-5 px-2"
               hasFilter={false}
