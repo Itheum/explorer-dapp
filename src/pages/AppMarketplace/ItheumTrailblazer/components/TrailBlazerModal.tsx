@@ -56,7 +56,7 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
   const showVideoContent = (dataItem: any) => {
     let youTubeVideoID = null;
 
-    if (dataItem?.link && dataItem.link.includes("youtdu.be")) {
+    if (dataItem?.link && dataItem.link.includes("youtu.be")) {
       // work with this: "https://youtu.be/6PBSGckWA1M"
       const splitParts = dataItem.link.trim().split("/");
       youTubeVideoID = splitParts[splitParts.length - 1];
@@ -205,8 +205,8 @@ export const TrailBlazerModal = ({ owned, isFetchingDataMarshal, data }: { owned
         tileCode = (
           <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-xl">
             <Card className="flex flex-col items-start justify-center !p-4 text-foreground bg-background border-0 rounded-xl">
-              <h2>{dataItem.title}</h2>
-              <h3>{new Date(dataItem.date).toDateString()}</h3>
+              <h2 className="!text-[26px] md:!text-[30px]">{dataItem.title}</h2>
+              <h3 className="!text-[14px]">{new Date(dataItem.date).toDateString()}</h3>
 
               {showVideoContent(dataItem)}
 

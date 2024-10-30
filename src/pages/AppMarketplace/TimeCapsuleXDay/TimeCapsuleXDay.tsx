@@ -106,7 +106,7 @@ export const TimeCapsuleXDay = () => {
       <HelmetPageMeta
         title="MultiversX xDay Time Capsule App"
         shortTitle="MultiversX xDay Time Capsule App"
-        desc="Own memories from MultiversX xDat as collectibles."
+        desc="Own memories from MultiversX xDay as collectibles."
       />
 
       <HeaderComponent
@@ -129,7 +129,7 @@ export const TimeCapsuleXDay = () => {
               owned={nfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier) ? true : false}
               viewData={viewData}
               modalContent={<TrailBlazerModal owned={owned} isFetchingDataMarshal={isFetchingDataMarshal} data={data} />}
-              modalTitle={"MultiversX xDay Time Capsule"}
+              modalTitle={"xDay Time Capsule"}
               modalTitleStyle="md:p-5 pt-5 pb-5 px-2"
               hasFilter={false}
             />
