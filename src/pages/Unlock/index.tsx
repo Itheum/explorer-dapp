@@ -132,7 +132,7 @@ const UnlockPage = () => {
 
         if (userLoggedInCallData?.newUserAccountCreated) {
           toast.success("Welcome New User! Its Great To Have You Here.", {
-            position: "top-center",
+            position: "bottom-center",
             duration: 6000,
             icon: celebrateEmojis[Math.floor(Math.random() * celebrateEmojis.length)],
           });
@@ -148,7 +148,7 @@ const UnlockPage = () => {
           }
 
           toast.success(userMessage, {
-            position: "top-center",
+            position: "bottom-center",
             duration: 6000,
             icon: celebrateEmojis[Math.floor(Math.random() * celebrateEmojis.length)],
           });
