@@ -5,12 +5,12 @@ import { Button } from "libComponents/Button";
 
 export function NFMeIDBannerCTA() {
   return (
-    <div className="mt-5 py-2 md:py-0 mb-3 border p-2 rounded-lg bg-[#00c797a6]">
+    <div className="mt-5 py-2 md:py-0 mb-3 border p-2 rounded-lg bg-[#a7fcf0]">
       <div className="flex flex-col md:flex-row items-center">
         <img className="w-[90px] animate-pulse" src={NFMeIDAvatarImg} alt="Get our NFMe ID" />
         <div className="flex flex-col justify-center p-2">
-          <p className="text-xl mb-1 text-center md:text-left">Claim Your NFMe ID Today!</p>
-          <p className="text-sm text-center md:text-left">
+          <p className="dark:text-background text-xl mb-1 text-center md:text-left">Claim Your NFMe ID Today!</p>
+          <p className="dark:text-background text-sm text-center md:text-left">
             The world’s first blockchain-native identity & reputation system for the AI Era. Stake your "Liveliness" score to earn farm rewards.
           </p>
         </div>
