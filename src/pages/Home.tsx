@@ -10,6 +10,9 @@ import { routeNames } from "routes";
 import { Button } from "../libComponents/Button";
 import { AIWorkforceTopN } from "../pages/AIWorkforce/AIWorkforce";
 import { AnalyticsSnapshot } from "../pages/Analytics/AnalyticsSnapshot";
+import { isMostLikelyMobile } from "libs/utils/misc";
+import xDayTimeCapsuleHero from "assets/img/timecapsule/custom-app-header-timecapsule-xday.png";
+import xDayTimeCapsuleHeroMobile from "assets/img/timecapsule/expl-app-timecapsule-xday-icon.png";
 
 export function returnRoute(routeKey: string) {
   return (routeNames as any)[routeKey];
@@ -27,6 +30,19 @@ export const Home = () => {
       <NFMeIDBannerCTA />
 
       <div className="flex flex-col py-2">
+        <div className="mt-2 mb-5">
+          <h1 className="!text-2xl md:!text-3xl text-center">Featured App</h1>
+          <Link to={`${routeNames.timecapsulexday}`} className="text-base hover:!no-underline hover:text-black">
+            <div className="flex flex-col md:flex-row flex-wrap-reverse p-2 rounded-md">
+              <div
+                className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+                style={{
+                  "backgroundImage": `url(${isMostLikelyMobile() ? xDayTimeCapsuleHeroMobile : xDayTimeCapsuleHero})`,
+                }}></div>
+            </div>
+          </Link>
+        </div>
+
         <div className="mt-2">
           <h1 className="!text-2xl md:!text-3xl text-center">NF-Tunes Releases</h1>
           <h2 className="dark:!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music</h2>
