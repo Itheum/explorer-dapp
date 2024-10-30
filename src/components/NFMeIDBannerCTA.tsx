@@ -11,7 +11,7 @@ export function NFMeIDBannerCTA() {
         <div className="flex flex-col justify-center p-2">
           <p className="dark:text-background text-xl mb-1 text-center md:text-left">Claim Your NFMe ID Today!</p>
           <p className="dark:text-background text-sm text-center md:text-left">
-            The world’s first blockchain-native identity & reputation system for the AI Era. Stake your "Liveliness" score to earn farm rewards.
+            The world’s first blockchain-native identity & reputation system for the AI Era. Stake your "Liveliness" to get 40% APR on farm rewards.
           </p>
         </div>
         <div className="flex md:flex-col justify-center mt-3 ml-auto mr-auto md:mr-2">
