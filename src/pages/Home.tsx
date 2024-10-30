@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import HelmetPageMeta from "components/HelmetPageMeta";
+import { NFMeIDBannerCTA } from "components/NFMeIDBannerCTA";
 import RecentDataNFTsSection from "components/RecentDataNftsSection";
 import TrendingSection from "components/TrendingSection";
 import { APP_MAPPINGS } from "libs/utils/constant";
@@ -22,6 +23,8 @@ export const Home = () => {
         shortTitle="Itheum Explorer"
         desc="Explore Itheum Data NFTs, Stream Web3 Music on NF-Tunes and Earn BiTz XP"
       />
+
+      <NFMeIDBannerCTA />
 
       <div className="flex flex-col py-2">
         <div className="mt-2">

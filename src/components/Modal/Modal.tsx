@@ -57,7 +57,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
               {hasFilter ? <Filter filterData={filterData ?? []} /> : <></>}
               <div></div>
             </DialogHeaderProgrammaticClose>
-            <div className="overflow-x-hidden overflow-y-auto scrollbar max-h-[80dvh]">{children}</div>
+            <div className="overflow-x-hidden overflow-y-auto scrollbar max-h-[80dvh] bg-background">{children}</div>
           </DialogContent>
         </Dialog>
       ) : (
@@ -74,7 +74,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
               {hasFilter ? <Filter filterData={filterData ?? []} /> : <></>}
               <div></div>
             </DialogHeader>
-            <div className="overflow-x-hidden overflow-y-auto scrollbar max-h-[80dvh]">{children}</div>
+            <div className="overflow-x-hidden overflow-y-auto scrollbar max-h-[80dvh] bg-background">{children}</div>
           </DialogContent>
         </Dialog>
       )}
