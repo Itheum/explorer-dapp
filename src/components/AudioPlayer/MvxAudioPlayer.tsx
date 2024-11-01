@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { CACHE_DURATION_SECONDS } from "config";
+import { MARSHAL_CACHE_DURATION_SECONDS } from "config";
 import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import { toastClosableError } from "libs/utils/uiShared";
 
@@ -171,7 +171,7 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
 
             stream: true,
             nestedIdxToStream: index, // get the song for the current index
-            cacheDurationSeconds: CACHE_DURATION_SECONDS,
+            cacheDurationSeconds: MARSHAL_CACHE_DURATION_SECONDS,
           });
 
           if (!res.error) {
