@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
-import { CACHE_DURATION_SECONDS } from "config";
+import { MARSHAL_CACHE_DURATION_SECONDS } from "config";
 import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
@@ -148,7 +148,6 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
   const formatTime = (_seconds: number) => {
     const minutes = Math.floor(_seconds / 60);
     const remainingSeconds = Math.floor(_seconds % 60);
-
     const formattedMinutes = String(minutes).padStart(2, "0"); // Ensure two digits
     const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
@@ -195,7 +194,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
             viewDataArgs.headers,
             true,
             index,
-            CACHE_DURATION_SECONDS
+            MARSHAL_CACHE_DURATION_SECONDS
           );
 
           if (res.ok) {

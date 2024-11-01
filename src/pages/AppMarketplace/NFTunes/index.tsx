@@ -33,7 +33,7 @@ import { Modal } from "components/Modal/Modal";
 import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import YouTubeEmbed from "components/YouTubeEmbed";
-import { SHOW_NFTS_STEP, CACHE_DURATION_SECONDS } from "config";
+import { SHOW_NFTS_STEP, MARSHAL_CACHE_DURATION_SECONDS } from "config";
 import { useTheme } from "contexts/ThemeProvider";
 import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
@@ -198,7 +198,7 @@ export const NFTunes = () => {
             "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
           },
           stream: true,
-          cacheDurationSeconds: CACHE_DURATION_SECONDS,
+          cacheDurationSeconds: MARSHAL_CACHE_DURATION_SECONDS,
         };
 
         setCurrentDataNftIndex(index);
@@ -214,7 +214,7 @@ export const NFTunes = () => {
           fwdHeaderMapLookup: { "authorization": `Bearer ${tokenLogin?.nativeAuthToken}` },
           stream: true,
           nestedIdxToStream: 1, // get the song for the first index
-          cacheDurationSeconds: CACHE_DURATION_SECONDS,
+          cacheDurationSeconds: MARSHAL_CACHE_DURATION_SECONDS,
         });
 
         // start the request for the manifest file from marshal
@@ -294,7 +294,7 @@ export const NFTunes = () => {
         viewDataArgs.headers,
         true,
         1,
-        CACHE_DURATION_SECONDS
+        MARSHAL_CACHE_DURATION_SECONDS
       );
 
       // start the request for the manifest file from marshal
@@ -307,13 +307,14 @@ export const NFTunes = () => {
         viewDataArgs.headers,
         false,
         undefined,
-        CACHE_DURATION_SECONDS
+        MARSHAL_CACHE_DURATION_SECONDS
       );
 
       let blobDataType = BlobDataType.TEXT;
 
       if (res.ok) {
         const contentType = res.headers.get("content-type") ?? "";
+
         if (contentType.search("application/json") >= 0) {
           const data = await res.json();
           const viewDataPayload: ExtendedViewDataReturnType = {
@@ -703,7 +704,7 @@ export const NFTunes = () => {
 
             <div className="flex flex-col md:flex-row">
               <Link
-                to={`https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/other/nf-tunes-bizdev-deck-V1.pdf`}
+                to={`https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/other/nf-tunes-bizdev-deck-V2.pdf`}
                 target="_blank"
                 className="mt-10 md:mx-3 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg md:max-w-[50%] text-white">
                 Why NF-Tunes? <div className="text-sm">(Perks and Benefits)</div>
