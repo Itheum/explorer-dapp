@@ -34,7 +34,9 @@ export const SUPPORTED_SOL_COLLECTIONS = IS_DEVNET
   ? ["6MgvQSDUU3Z2a5MQqPeStUyCo1AXrB8xJhyBc8YYH3uk", "6uXqBZLNdp3dT1wgJYHCXjCs36WWLThdQkKUeqdTT7ni"]
   : ["me2Sj97xewgEodSCRs31jFEyA1m3FQFzziqVXK9SVHX"];
 
-export const MARSHAL_CACHE_DURATION_SECONDS = import.meta.env.MARSHAL_CACHE_DURATION_SECONDS || 300; // 5 minutes
+export const MARSHAL_CACHE_DURATION_SECONDS = import.meta.env.MARSHAL_CACHE_DURATION_SECONDS
+  ? parseInt(import.meta.env.MARSHAL_CACHE_DURATION_SECONDS, 10)
+  : 300; // 5 minutes
 
 export enum SOL_ENV_ENUM {
   devnet = "SD",
