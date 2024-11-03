@@ -15,12 +15,12 @@ const dataset = [
     albums: [
       {
         albumId: "ar1_a2",
-        solNftName: "",
+        solNftName: "MUSG8 - Infinity Series - Hachi",
         title: "Infinity Series",
         desc: "Hachi Mugen meditates on four vibrations to unlock his true potential.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmX1GASRSSqProbmN61RBcz72EPKh687zumm8FJsaTWEHt",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/58ad11e3-a410-4ac0-8b24-88c5fadb6df9",
+        ctaAirdrop: "",
       },
       {
         albumId: "ar1_a1",
