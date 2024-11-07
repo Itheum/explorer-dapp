@@ -117,7 +117,7 @@ const dataset = [
         albumId: "ar5_a1",
         solNftName: "",
         mvxDataNftId: "DATANFTFT-e936d4-ae",
-        title: "Two Weeks",
+        title: "TWO WEEK EP",
         desc: "A collection of 3 songs, was composed and recorded by myself over the course of two weeks in the Summer of 2024. The first song of the EP, Otherside, is the first song I ever wrote back in the Summer of 2021. All vocals and instrumentation performed by Stephen Snodgrass.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/Qme3F97bs7MtkdshibxauHHDNLSvKtvw3nhJ3NiQXpGkGR",
         ctaBuy: "https://datadex.itheum.io/datanfts/marketplace/DATANFTFT-e936d4-ae",
