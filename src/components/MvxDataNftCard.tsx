@@ -1,9 +1,12 @@
 import React from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft/out";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks/useGetNetworkConfig";
+import { Link } from "react-router-dom";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
+import { useGetIsLoggedIn } from "hooks";
 import { NftMedia } from "libs/types";
 import { cn } from "libs/utils";
+import { routeNames } from "routes";
 import { Modal } from "./Modal/Modal";
 import { MXAddressLink } from "./MXAddressLink";
 import NftMediaComponent from "./NftMediaComponent";
@@ -50,6 +53,8 @@ export function MvxDataNftCard({
   openActionFireLogic?: any;
   hideIsInWalletSection?: boolean;
 }) {
+  const isLoggedIn = useGetIsLoggedIn();
+
   const {
     network: { explorerAddress },
   } = useGetNetworkConfig();
@@ -171,14 +176,28 @@ export function MvxDataNftCard({
                   {modalContent}
                 </Modal>
               ) : (
-                <div className="text-foreground bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md ">
-                  <Button
-                    className="dark:bg-[#0f0f0f] border-0 rounded-md font-medium tracking-tight !text-sm hover:opacity-90"
-                    variant="outline"
-                    onClick={() => goToMarketplace(dataNft.tokenIdentifier)}>
-                    View in Marketplace
-                  </Button>
-                </div>
+                <>
+                  {!isLoggedIn ? (
+                    <Link to={routeNames.unlock} state={{ from: location.pathname }}>
+                      <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center">
+                        <Button
+                          className="bg-background text-foreground hover:bg-background/90 border-0 rounded-md font-medium tracking-wide !text-lg"
+                          variant="outline">
+                          Login to Check
+                        </Button>
+                      </div>
+                    </Link>
+                  ) : (
+                    <div className="text-foreground bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] rounded-md ">
+                      <Button
+                        className="dark:bg-[#0f0f0f] border-0 rounded-md font-medium tracking-tight !text-sm hover:opacity-90"
+                        variant="outline"
+                        onClick={() => goToMarketplace(dataNft.tokenIdentifier)}>
+                        View in Marketplace
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </CardFooter>
           </div>

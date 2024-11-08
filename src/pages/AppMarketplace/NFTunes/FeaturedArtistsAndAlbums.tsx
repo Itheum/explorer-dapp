@@ -105,8 +105,8 @@ const dataset = [
   },
   {
     artistId: "ar5",
-    name: "Stephen Snodgrass",
-    slug: "stephen-snodgrass",
+    name: "TWO WEEK",
+    slug: "two-week",
     bio: "SF-based musician/recording artist, photographer and videographer, creating Music NFT's on the blockchain",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/stephen-snodgrass.jpg",
     dripLink: "",
@@ -401,7 +401,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                 <>
                   <div className="artist-bio w-[300px] md:w-full">
                     <div
-                      className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[350px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
+                      className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[320px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
                       style={{
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>

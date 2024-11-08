@@ -45,6 +45,7 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   const [songSource, setSongSource] = useState<{ [key: number]: string }>({}); // map to keep the already fetched songs
   const appsStore = useAppsStore();
   const [radioPlayPromptHide, setRadioPlayPromptHide] = useState(false);
+  const [imgLoading, setImgLoading] = useState(false);
 
   function eventToAttachEnded() {
     setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
@@ -250,6 +251,13 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   };
 
   const handleChangeSong = () => {
+    console.log("image loading... ");
+
+    // we should not do the image loading logic on until user interacts with play, or there is a race condition and 1st image stays blurred
+    if (firstMusicQueueDone) {
+      setImgLoading(true);
+    }
+
     const index = songs[currentTrackIndex]?.idx;
 
     if (songSource[index]) {
@@ -322,7 +330,11 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
             <img
               src={songs ? songs[currentTrackIndex]?.cover_art_url : ""}
               alt="Album Cover"
-              className="select-none w-24 h-24 rounded-md md:mr-6 border border-grey-900"
+              className={`select-none w-24 h-24 rounded-md md:mr-6 border border-grey-900 ${imgLoading ? "blur-sm" : "blur-none"}`}
+              onLoad={() => {
+                console.log("image loaded");
+                setImgLoading(false);
+              }}
               onError={({ currentTarget }) => {
                 currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
               }}
