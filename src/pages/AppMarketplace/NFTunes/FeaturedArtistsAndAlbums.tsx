@@ -496,6 +496,17 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                             </Link>
                           )}
 
+                          {mvxNetworkSelected && !addressMvx && (
+                            <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                              <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                <>
+                                  <WalletMinimal />
+                                  <span className="ml-2">Login to Check Ownership</span>
+                                </>
+                              </Button>
+                            </Link>
+                          )}
+
                           <>
                             {checkOwnershipOfAlbum(album) > -1 && (
                               <Button
