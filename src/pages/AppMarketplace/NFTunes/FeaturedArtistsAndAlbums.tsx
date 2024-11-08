@@ -173,7 +173,7 @@ const dataset = [
     artistId: "ar8",
     name: "Waveborn Luminex",
     slug: "waveborn-luminex",
-    bio: " Waveborn Luminex emerges as a radiant force in the electronic music realm, embodying the essence of soundwaves that shape their very being. With an avatar crafted from vibrant frequencies and pulsating rhythms, they illuminate the dance floor with electrifying energy, that invites listeners to immerse themselves in a cosmic journey.",
+    bio: "Waveborn Luminex emerges as a radiant force in the electronic music realm, embodying the essence of soundwaves that shape their very being. With an avatar crafted from vibrant frequencies and pulsating rhythms, they illuminate the dance floor with electrifying energy, that invites listeners to immerse themselves in a cosmic journey.",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/waveborn-luminex.jpg",
     dripLink: "",
     xLink: "",
@@ -188,6 +188,28 @@ const dataset = [
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmeTrvB5o5Ki8MALogN9tjHmJsai4wpBy8EYA38JHK2ceF",
         ctaBuy: "https://drip.haus/itheum/set/0bba5f0b-4449-458b-b717-083eefa53a2c",
         ctaAirdrop: "",
+      },
+    ],
+  },
+  {
+    artistId: "ar9",
+    name: "Yoshiro Mare",
+    slug: "yoshiro-mare",
+    bio: "Interdimensional Sound Sculptor Intentionally Creating Energetically Programmed Fields through 432 Hertz Conscious Electronic Music Portals on the Blockchain. The Code Path of The Warrior, focuses on raising awareness around Mental Health, Addiction and Serving a Higher Purpose.",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/yoshiro-mare.jpg",
+    dripLink: "",
+    xLink: "https://x.com/YoshiroMare",
+    webLink: "https://bonfire.xyz/YoshiroMare",
+    albums: [
+      {
+        albumId: "ar9_a1",
+        solNftName: "",
+        mvxDataNftId: "",
+        title: "They Were Right",
+        desc: "Unique and original digital EP from Yoshiro Mare that delivers energetically charged deep house music.",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmSMU6Y1fX4q6rVbMfJKd1jDhGpNbrDFCxoYP8vRWnuQqe",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
       },
     ],
   },
@@ -379,7 +401,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                 <>
                   <div className="artist-bio w-[300px] md:w-full">
                     <div
-                      className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[250px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
+                      className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[350px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
                       style={{
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
