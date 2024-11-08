@@ -201,13 +201,13 @@ const dataset = [
     slug: "yoshiro-mare",
     bio: "Interdimensional Sound Sculptor Intentionally Creating Energetically Programmed Fields through 432 Hertz Conscious Electronic Music Portals on the Blockchain. The Code Path of The Warrior, focuses on raising awareness around Mental Health, Addiction and Serving a Higher Purpose.",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/yoshiro-mare.jpg",
-    dripLink: "MUSG9 - Yoshiro Mare - TWR",
+    dripLink: "",
     xLink: "https://x.com/YoshiroMare",
     webLink: "https://bonfire.xyz/YoshiroMare",
     albums: [
       {
         albumId: "ar9_a1",
-        solNftName: "",
+        solNftName: "MUSG9 - Yoshiro Mare - TWR",
         mvxDataNftId: "",
         title: "They Were Right",
         desc: "Unique and original digital EP from Yoshiro Mare that delivers energetically charged deep house music.",
