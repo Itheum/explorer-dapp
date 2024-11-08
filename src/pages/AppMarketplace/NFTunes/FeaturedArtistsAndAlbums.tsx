@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Music2, Pause, Play, Loader2, Gift, ShoppingCart } from "lucide-react";
+import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "libComponents/Button";
 import { gtagGo } from "libs/utils/misc";
+import { routeNames } from "routes";
 
 const dataset = [
   {
@@ -197,7 +201,7 @@ const dataset = [
     slug: "yoshiro-mare",
     bio: "Interdimensional Sound Sculptor Intentionally Creating Energetically Programmed Fields through 432 Hertz Conscious Electronic Music Portals on the Blockchain. The Code Path of The Warrior, focuses on raising awareness around Mental Health, Addiction and Serving a Higher Purpose.",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/yoshiro-mare.jpg",
-    dripLink: "",
+    dripLink: "MUSG9 - Yoshiro Mare - TWR",
     xLink: "https://x.com/YoshiroMare",
     webLink: "https://bonfire.xyz/YoshiroMare",
     albums: [
@@ -208,8 +212,8 @@ const dataset = [
         title: "They Were Right",
         desc: "Unique and original digital EP from Yoshiro Mare that delivers energetically charged deep house music.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmSMU6Y1fX4q6rVbMfJKd1jDhGpNbrDFCxoYP8vRWnuQqe",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/6f727def-e28a-4b96-8670-077d09469a1c",
+        ctaAirdrop: "",
       },
     ],
   },
@@ -237,6 +241,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     onPlayHappened,
     checkOwnershipOfAlbum,
   } = props;
+  const { publicKey } = useWallet();
+  const { address: addressMvx } = useGetAccount();
   const [audio] = useState(new Audio());
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<boolean>(false);
   const [previewPlayingForAlbumId, setPreviewPlayingForAlbumId] = useState<string | undefined>();
@@ -246,6 +252,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [currentTime, setCurrentTime] = useState("00:00");
   const [duration, setDuration] = useState("00:00");
   const [progress, setProgress] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   function eventToAttachEnded() {
     audio.src = "";
@@ -294,7 +301,14 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   useEffect(() => {
     playPausePreview(); // with no params wil always go into the stop logic
 
-    setArtistProfile(dataset.find((i) => i.artistId === selArtistId));
+    const selDataItem = dataset.find((i) => i.artistId === selArtistId);
+
+    setArtistProfile(selDataItem);
+
+    if (selDataItem && selDataItem.slug) {
+      // update the deep link param
+      setSearchParams({ "artist-profile": selDataItem.slug });
+    }
   }, [selArtistId]);
 
   useEffect(() => {
@@ -393,7 +407,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
             ))}
           </div>
 
-          <div className="artist-profile flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
+          <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
             <div className="flex flex-col gap-4 p-8 items-start md:w-[90%] bg-background rounded-xl border border-primary/50 min-h-[350px]">
               {!artistProfile ? (
                 <div>Loading</div>
@@ -469,6 +483,30 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               )}
                             </Button>
                           )}
+
+                          {/* when not logged in, show this to convert the wallet into user account */}
+                          {!mvxNetworkSelected && !publicKey && (
+                            <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                              <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                <>
+                                  <WalletMinimal />
+                                  <span className="ml-2">Login to Check Ownership</span>
+                                </>
+                              </Button>
+                            </Link>
+                          )}
+
+                          {mvxNetworkSelected && !addressMvx && (
+                            <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                              <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                <>
+                                  <WalletMinimal />
+                                  <span className="ml-2">Login to Check Ownership</span>
+                                </>
+                              </Button>
+                            </Link>
+                          )}
+
                           <>
                             {checkOwnershipOfAlbum(album) > -1 && (
                               <Button
