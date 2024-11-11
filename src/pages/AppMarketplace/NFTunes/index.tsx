@@ -122,7 +122,15 @@ export const NFTunes = () => {
 
   useEffect(() => {
     if (!hasPendingTransactions) {
-      setShownSolAppDataNfts(solNfts.filter((nft: DasApiAsset) => nft.content.metadata.name.includes("MUS")));
+      setShownSolAppDataNfts(
+        solNfts.filter((nft: DasApiAsset) => {
+          if (nft.content.metadata.name.includes("MUS") || nft.content.metadata.name.includes("POD")) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+      );
     }
   }, [solNfts]);
 
