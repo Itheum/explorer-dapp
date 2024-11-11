@@ -9,7 +9,6 @@ import LeaderBoardTable from "../LeaderBoardTable";
 
 const GiverLeaderboard: React.FC<GiverLeaderboardProps> = (props) => {
   const { bountySubmitter, bountyId, fetchGetterLeaderBoard, showUserPosition } = props;
-
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const { address: mvxAddress } = useGetAccount();

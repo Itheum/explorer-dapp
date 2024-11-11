@@ -263,8 +263,6 @@ export const Home = () => {
           <TrendingSection />
           <RecentDataNFTsSection />
         </div>
-
-        <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
       </div>
     </>
   );

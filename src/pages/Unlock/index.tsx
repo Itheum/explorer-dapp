@@ -13,23 +13,7 @@ import { AuthRedirectWrapper, ExtensionLoginButton, WalletConnectLoginButton, We
 import { walletConnectV2ProjectId } from "config";
 import { SOL_ENV_ENUM, MVX_ENV_ENUM } from "config";
 import { Button } from "libComponents/Button";
-import { getApi, getApiWeb2Apps } from "libs/utils";
-
-// import { routeNames } from "routes";
-
-// // find a route name based on a pathname that comes in via React Router Link params
-// function getRouteNameBasedOnPathNameParam(pathname: string) {
-//   const matchPathnameToRouteName = Object.keys(routeNames).find((i: string) => {
-//     return (routeNames as any)[i] === pathname;
-//   });
-
-//   if (matchPathnameToRouteName && matchPathnameToRouteName !== "home") {
-//     // Note: if it's home route, better UX is to go the dashboard
-//     return (routeNames as any)[matchPathnameToRouteName];
-//   } else {
-//     return routeNames.home;
-//   }
-// }
+import { getMvxRpcApi, getApiWeb2Apps } from "libs/utils";
 
 /* 
 we use global vars here so we can maintain this state across routing back and forth to this unlock page
@@ -44,7 +28,9 @@ const loggingInMsgs = ["Logging you in", "Taking you to Web3", "Plugging you in"
 const UnlockPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const { address: addressMvx } = useGetAccount();
   const isLoggedInMvX = !!addressMvx;
   const { publicKey } = useWallet();
@@ -53,7 +39,7 @@ const UnlockPage = () => {
   const [userAccountLoggingIn, setIsUserAccountLoggingIn] = useState<boolean>(false);
 
   const nativeAuthProps: NativeAuthConfigType = {
-    apiAddress: `https://${getApi(chainID)}`,
+    apiAddress: `https://${getMvxRpcApi(chainID)}`,
     expirySeconds: 3600,
   };
 
@@ -184,11 +170,11 @@ const UnlockPage = () => {
   const loggingInMsg = loggingInMsgs[Math.floor(Math.random() * loggingInMsgs.length)] + "...";
 
   return (
-    <div className="flex flex-auto items-center -z-1">
+    <div className="flex flex-auto items-center -z-1]">
       <div className="m-auto" data-testid="unlockPage">
-        <div className=" rounded-2xl my-4 text-center dark:bg-[#0a0a0a] bg-slate-100 drop-shadow-2xl">
+        <div className="rounded-2xl my-4 text-center dark:bg-[#0a0a0a] bg-slate-100 drop-shadow-2xl">
           {userAccountLoggingIn ? (
-            <div className="p-20 flex flex-col items-center">
+            <div className="p-20 flex flex-col items-center mb-[300px] mt-[100px]">
               <Loader2 className="animate-spin" />
               <p className="mt-2">{loggingInMsg}</p>
             </div>

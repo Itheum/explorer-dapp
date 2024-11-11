@@ -16,7 +16,9 @@ import { useNftsStore } from "store/nfts";
 
 export const MultiversxBubbles = () => {
   const { tokenLogin } = useGetLoginInfo();
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [shownAppDataNfts, setShownAppDataNfts] = useState<DataNft[]>([]);
   const [isLoading, setIsLoading] = useState(true);

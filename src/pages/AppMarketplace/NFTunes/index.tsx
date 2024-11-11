@@ -52,7 +52,9 @@ export const NFTunes = () => {
   const { theme } = useTheme();
   const currentTheme = theme !== "system" ? theme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const { tokenLogin } = useGetLoginInfo();
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [shownMvxAppDataNfts, setShownMvxAppDataNfts] = useState<DataNft[]>([]);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
@@ -889,8 +891,6 @@ export const NFTunes = () => {
             )}
           </Modal>
         </>
-
-        <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
       </div>
     </>
   );

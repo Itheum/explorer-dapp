@@ -1,7 +1,7 @@
 {
   "name": "explorer-dapp",
   "description": "Itheum Explorer is a DApp for the public to explore and visualize data within the Itheum protocol",
-  "version": "1.24.36",
+  "version": "1.25.0",
   "author": "Itheum",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -15,8 +15,8 @@
     "@metaplex-foundation/umi": "0.8.10",
     "@metaplex-foundation/umi-bundle-defaults": "0.8.10",
     "@metaplex-foundation/umi-web3js-adapters": "0.8.10",
-    "@multiversx/sdk-core": "13.9.0",
-    "@multiversx/sdk-dapp": "2.40.11",
+    "@multiversx/sdk-core": "13.14.1",
+    "@multiversx/sdk-dapp": "3.0.9",
     "@noble/ed25519": "1.7.3",
     "@radix-ui/react-dialog": "1.0.5",
     "@radix-ui/react-dropdown-menu": "2.0.6",

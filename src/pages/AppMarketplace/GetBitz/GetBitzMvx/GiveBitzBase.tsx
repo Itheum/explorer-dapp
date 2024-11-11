@@ -31,8 +31,9 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
   const bonusBitzSum = useAccountStore((state: any) => state.bonusBitzSum);
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
-
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
   const updateGivenBitzSum = useAccountStore((state) => state.updateGivenBitzSum);
