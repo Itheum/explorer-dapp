@@ -23,7 +23,9 @@ import { useNftsStore } from "store/nfts";
 
 export const MyWallet = () => {
   const { tokenLogin } = useGetLoginInfo();
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const [viewDataRes, setViewDataRes] = useState<ExtendedViewDataReturnType>();
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [isAutoOpenFormat, setIsAutoOpenFormat] = useState<boolean>(false);

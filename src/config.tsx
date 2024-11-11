@@ -1,12 +1,12 @@
 import { IS_DEVNET } from "appsConfig";
-import exp from "constants";
 import { EnvironmentsEnum } from "libs/types";
 
 export const ELROND_NETWORK = import.meta.env.VITE_ENV_NETWORK || EnvironmentsEnum.devnet;
-// Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
+
 export const walletConnectV2ProjectId = import.meta.env.VITE_ENV_WALLETCONNECTV2_PROJECTID;
 
 export const apiTimeout = 10_000; // 10s
+
 export const TOOLS_API_URL = "https://tools.multiversx.com";
 
 export const dAppName = "Itheum Explorer";

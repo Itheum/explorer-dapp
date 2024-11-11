@@ -30,7 +30,9 @@ export interface RecentDataNFTType {
 }
 
 const RecentDataNFTsSection: React.FC = () => {
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const [latestOffers, setLatestOffers] = useState<RecentDataNFTType[]>([]);
   const [isApiUp, setIsApiUp] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

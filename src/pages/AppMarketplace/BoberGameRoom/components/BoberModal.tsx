@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from "react";
-import { Loader } from "components";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
+import { Loader } from "components";
 
 type BoberModalProps = {
   data: any;

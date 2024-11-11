@@ -1,5 +1,4 @@
 import React from "react";
-import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { ExternalLinkIcon } from "lucide-react";
 import moment from "moment-timezone";

@@ -109,7 +109,9 @@ export const GetBitzMvx = (props: any) => {
 
   const { address } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const { hasPendingTransactions } = useGetPendingTransactions();
   const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
