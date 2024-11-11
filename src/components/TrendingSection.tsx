@@ -45,7 +45,7 @@ const TrendingSection: React.FC = () => {
 
   async function fetchTrendingNfts() {
     setIsLoading(true);
-    DataNft.setNetworkConfig(chainID === "1" ? "mainnet" : "devnet", getMvxRpcApi(chainID));
+    DataNft.setNetworkConfig(chainID === "1" ? "mainnet" : "devnet", `https://${getMvxRpcApi(chainID)}`);
     const getTrendingData = await getTrendingFromBackendApi(chainID);
     const _trendingData: Array<TrendingDataCreationNftsType> = [];
 
