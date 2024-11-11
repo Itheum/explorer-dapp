@@ -1,12 +1,13 @@
-export function shortenAddress(value: string, length: number = 6): string {
-  return value.slice(0, length) + " ... " + value.slice(-length);
-}
+declare const window: {
+  ITH_GLOBAL_MVX_RPC_API_SESSION: string;
+} & Window;
 
-let MVX_RPC_API_SESSION: string = "";
+window.ITH_GLOBAL_MVX_RPC_API_SESSION = "";
+
 export const getMvxRpcApi = (chainID: string) => {
-  if (MVX_RPC_API_SESSION !== "") {
-    console.log("MVX_RPC_API_SESSION served from session ", MVX_RPC_API_SESSION);
-    return MVX_RPC_API_SESSION;
+  if (window.ITH_GLOBAL_MVX_RPC_API_SESSION !== "") {
+    console.log("ITH_GLOBAL_MVX_RPC_API_SESSION served from session ", window.ITH_GLOBAL_MVX_RPC_API_SESSION);
+    return window.ITH_GLOBAL_MVX_RPC_API_SESSION;
   }
 
   const defaultUrl = chainID === "1" ? "api.multiversx.com" : "devnet-api.multiversx.com";
@@ -15,19 +16,23 @@ export const getMvxRpcApi = (chainID: string) => {
   const defaultToPublic = Math.random() < 0.3; // math random gives you close to even distribution from 0 - 1
 
   if (defaultToPublic) {
-    MVX_RPC_API_SESSION = defaultUrl;
+    window.ITH_GLOBAL_MVX_RPC_API_SESSION = defaultUrl;
 
-    console.log("MVX_RPC_API_SESSION defaulted based on chance to public ", MVX_RPC_API_SESSION);
+    console.log("ITH_GLOBAL_MVX_RPC_API_SESSION defaulted based on chance to public ", window.ITH_GLOBAL_MVX_RPC_API_SESSION);
   } else {
     // else, we revert to original logic of using ENV variable
     const envKey = chainID === "1" ? "VITE_ENV_API_MAINNET_KEY" : "VITE_ENV_API_DEVNET_KEY";
 
-    MVX_RPC_API_SESSION = import.meta.env[envKey] || defaultUrl;
-    console.log("MVX_RPC_API_SESSION fetched rom ENV ", MVX_RPC_API_SESSION);
+    window.ITH_GLOBAL_MVX_RPC_API_SESSION = import.meta.env[envKey] || defaultUrl;
+    console.log("ITH_GLOBAL_MVX_RPC_API_SESSION fetched rom ENV ", window.ITH_GLOBAL_MVX_RPC_API_SESSION);
   }
 
-  return MVX_RPC_API_SESSION;
+  return window.ITH_GLOBAL_MVX_RPC_API_SESSION;
 };
+
+export function shortenAddress(value: string, length: number = 6): string {
+  return value.slice(0, length) + " ... " + value.slice(-length);
+}
 
 const unescape = (str: string) => {
   return str.replace(/-/g, "+").replace(/_/g, "/");
