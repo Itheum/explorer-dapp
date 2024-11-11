@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { IS_DEVNET } from "appsConfig";
 import { PulseLoader } from "libComponents/animated/PulseLoader";
 import { convertWeiToEsdt } from "libs/utils";
+import { getMvxRpcApi } from "libs/utils";
 import { ThreeDCard } from "./ThreeDCard";
 import { getHealthCheckFromBackendApi, getRecentOffersFromBackendApi } from "../libs/backend-api";
 
@@ -57,7 +58,7 @@ const RecentDataNFTsSection: React.FC = () => {
   }, [isApiUp]);
 
   const apiWrapper = async () => {
-    DataNft.setNetworkConfig(IS_DEVNET ? "devnet" : "mainnet");
+    DataNft.setNetworkConfig(IS_DEVNET ? "devnet" : "mainnet", getMvxRpcApi(chainID));
     setIsLoading(true);
 
     try {
