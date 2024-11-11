@@ -2,11 +2,31 @@ export function shortenAddress(value: string, length: number = 6): string {
   return value.slice(0, length) + " ... " + value.slice(-length);
 }
 
-export const getApi = (chainID: string) => {
-  const envKey = chainID === "1" ? "VITE_ENV_API_MAINNET_KEY" : "VITE_ENV_API_DEVNET_KEY";
+let MVX_RPC_API_SESSION: string = "";
+export const getMvxRpcApi = (chainID: string) => {
+  if (MVX_RPC_API_SESSION !== "") {
+    console.log("MVX_RPC_API_SESSION served from session ", MVX_RPC_API_SESSION);
+    return MVX_RPC_API_SESSION;
+  }
+
   const defaultUrl = chainID === "1" ? "api.multiversx.com" : "devnet-api.multiversx.com";
 
-  return import.meta.env[envKey] || defaultUrl;
+  // 30% of chance, default to the Public API
+  const defaultToPublic = Math.random() < 0.3; // math random gives you close to even distribution from 0 - 1
+
+  if (defaultToPublic) {
+    MVX_RPC_API_SESSION = defaultUrl;
+
+    console.log("MVX_RPC_API_SESSION defaulted based on chance to public ", MVX_RPC_API_SESSION);
+  } else {
+    // else, we revert to original logic of using ENV variable
+    const envKey = chainID === "1" ? "VITE_ENV_API_MAINNET_KEY" : "VITE_ENV_API_DEVNET_KEY";
+
+    MVX_RPC_API_SESSION = import.meta.env[envKey] || defaultUrl;
+    console.log("MVX_RPC_API_SESSION fetched rom ENV ", MVX_RPC_API_SESSION);
+  }
+
+  return MVX_RPC_API_SESSION;
 };
 
 const unescape = (str: string) => {

@@ -18,7 +18,9 @@ import { useNftsStore } from "store/nfts";
 export const SpreadsheetNfts = () => {
   const { tokenLogin } = useGetLoginInfo();
   const { hasPendingTransactions } = useGetPendingTransactions();
-  const { chainID } = useGetNetworkConfig();
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
   const [owned, setOwned] = useState<boolean>(false);
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(true);
   const [viewDataRes, setViewDataRes] = useState<ViewDataReturnType>();
