@@ -75,42 +75,42 @@ export const Footer = () => {
               </p>
               <ul className="text-xs md:text-sm">
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="https://x.com/itheum" target="_blank" className="hover:underline">
                     X
                   </a>
                 </li>
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="https://itheum.io/discord" target="_blank" className="hover:underline">
                     Discord
                   </a>
                 </li>
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="https://t.me/itheum" target="_blank" className="hover:underline">
                     Telegram
                   </a>
                 </li>
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="https://www.instagram.com/itheumofficial/" target="_blank" className="hover:underline">
                     Instagram
                   </a>
                 </li>
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="https://itheum.medium.com" target="_blank" className="hover:underline">
                     Medium Blog
                   </a>
                 </li>
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="https://www.youtube.com/itheum" target="_blank" className="hover:underline">
                     YouTube
                   </a>
                 </li>
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="https://github.com/Itheum" target="_blank" className="hover:underline">
                     Github
                   </a>
                 </li>
                 <li>
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="hover:underline">
+                  <a href="itheum.io" target="_blank" className="hover:underline">
                     Website
                   </a>
                 </li>
@@ -128,12 +128,12 @@ export const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="https://datadex.itheum.com/nfmeid" target="_blank" className="hover:underline">
+                  <a href="https://datadex.itheum.io/NFMeID" target="_blank" className="hover:underline">
                     Claim your NFMe ID
                   </a>
                 </li>
                 <li>
-                  <a href="https://datadex.itheum.com/nfmeid" target="_blank" className="hover:underline">
+                  <a href="https://datadex.itheum.io/NFMeID#liveliness" target="_blank" className="hover:underline">
                     Liveliness Staking
                   </a>
                 </li>
