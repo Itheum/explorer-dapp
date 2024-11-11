@@ -58,7 +58,7 @@ const RecentDataNFTsSection: React.FC = () => {
   }, [isApiUp]);
 
   const apiWrapper = async () => {
-    DataNft.setNetworkConfig(IS_DEVNET ? "devnet" : "mainnet", getMvxRpcApi(chainID));
+    DataNft.setNetworkConfig(IS_DEVNET ? "devnet" : "mainnet", `https://${getMvxRpcApi(chainID)}`);
     setIsLoading(true);
 
     try {
