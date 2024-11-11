@@ -227,6 +227,29 @@ const dataset = [
       },
     ],
   },
+  {
+    artistId: "ar10",
+    name: "Flaka & CipriSLG",
+    slug: "flaka-ciprislg",
+    bio: "Innovative publishers of Web3 education and content, featuring the Mic in Flames Web3 podcast—a groundbreaking series that can be collected as a Data NFT. Owning this Data NFT grants access to stream each episode. Introducing the world's first dynamic Podcast NFT!",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/mic-in-flames.jpg",
+    dripLink: "",
+    xLink: "https://x.com/GenuLemny",
+    webLink: "",
+    isPodcast: "1",
+    albums: [
+      {
+        albumId: "ar10_a1",
+        solNftName: "",
+        mvxDataNftId: "",
+        title: "Mic in Flames Podcast",
+        desc: "Mic in Flames is an educational Web3 space covering topics like investment DAOs, blockchain social apps, Web3 RWAs, and tools. It dives deeper into Web3, exploring innovations like Data NFTs, blending content with unique utility.",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmV2R1NS1AqLFf3vwyB1JNtCtQC8Rf5cWY7SgjGnfvuN8T",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
+      },
+    ],
+  },
 ];
 
 type FeaturedArtistsAndAlbumsProps = {
