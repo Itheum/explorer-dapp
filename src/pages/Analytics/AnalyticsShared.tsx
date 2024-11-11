@@ -28,12 +28,12 @@ export function normalizeDataForMarshalUsage(dayData: any, day: string) {
   // ... convert them to null so that the graph will "connectNulls"
   if (mvxNumbers === 0) {
     mvxNumbers = null;
-    console.log(`ERR: mvx marshal events for ${day} was 0`);
+    // console.log(`ERR: mvx marshal events for ${day} was 0`);
   }
 
   if (solNumbers === 0) {
     solNumbers = null;
-    console.log(`ERR: sol marshal events for ${day} was 0`);
+    // console.log(`ERR: sol marshal events for ${day} was 0`);
   }
 
   chainMarshalUsageDataI["mvx"] = mvxNumbers;
