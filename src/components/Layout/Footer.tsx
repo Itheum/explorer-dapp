@@ -95,6 +95,11 @@ export const Footer = () => {
                   </a>
                 </li>
                 <li>
+                  <a href="https://drip.haus/itheum" target="_blank" className="hover:underline">
+                    DRiP Haus
+                  </a>
+                </li>
+                <li>
                   <a href="https://itheum.medium.com" target="_blank" className="hover:underline">
                     Medium Blog
                   </a>
@@ -140,6 +145,11 @@ export const Footer = () => {
                 <li>
                   <a href="/nftunes" className="hover:underline">
                     NF-Tunes : Stream Web3 Music
+                  </a>
+                </li>
+                <li>
+                  <a href="https://drip.haus/itheum" className="hover:underline">
+                    Free Music Data NFTs on Solana's DRiP Haus
                   </a>
                 </li>
               </ul>
