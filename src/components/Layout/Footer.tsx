@@ -32,14 +32,20 @@ export const Footer = () => {
               <ul className="flex gap-2 mt-5">
                 <li>
                   {" "}
-                  <a href="https://itheum.com/legal/datadex/termsofuse" target="_blank" className="flex justify-center items-center gap-0.5 hover:underline">
+                  <a
+                    href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/datadex/terms-of-use"
+                    target="_blank"
+                    className="flex justify-center items-center gap-0.5 hover:underline">
                     <small>Terms of Use</small>
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </li>
                 <li>
                   {" "}
-                  <a href="https://itheum.com/legal/datadex/privacypolicy" target="_blank" className="flex justify-center items-center gap-0.5 hover:underline">
+                  <a
+                    href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/datadex/privacy-policy"
+                    target="_blank"
+                    className="flex justify-center items-center gap-0.5 hover:underline">
                     <small>Privacy Policy</small>
                     <ExternalLink className="h-3 w-3" />
                   </a>
