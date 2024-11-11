@@ -52,7 +52,7 @@ export const Footer = () => {
                   </a>
                 </li>
               </ul>
-              <div className="flex flex-col">
+              <div className="flex flex-col mt-2 opacity-60">
                 <p>
                   <small>MVX API Provider: {isPublicApi ? "Public" : "Private"}</small>
                 </p>
@@ -73,7 +73,7 @@ export const Footer = () => {
               <p className="text-md mb-2 bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500 dark:from-yellow-300 dark:to-orange-500 text-transparent font-bold text-base">
                 Connect With Us
               </p>
-              <ul className="text-xs md:text-sm">
+              <ul className="text-xs md:text-sm flex flex-col gap-1">
                 <li>
                   <a href="https://x.com/itheum" target="_blank" className="hover:underline">
                     X
@@ -121,7 +121,7 @@ export const Footer = () => {
               <p className="text-md mb-2 bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500 dark:from-yellow-300 dark:to-orange-500 text-transparent font-bold text-base">
                 More to Explore
               </p>
-              <ul className="text-xs md:text-sm">
+              <ul className="text-xs md:text-sm flex flex-col gap-1">
                 <li>
                   <a href="https://datadex.itheum.com" target="_blank" className="hover:underline">
                     Data DEX

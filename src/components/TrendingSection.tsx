@@ -4,6 +4,7 @@ import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import toast from "react-hot-toast";
 import { PulseLoader } from "libComponents/animated/PulseLoader";
 import { getHealthCheckFromBackendApi, getTrendingFromBackendApi } from "libs/backend-api";
+import { getMvxRpcApi } from "libs/utils";
 import { ThreeDCard } from "./ThreeDCard";
 
 type TrendingDataCreationNftsType = {
@@ -44,7 +45,7 @@ const TrendingSection: React.FC = () => {
 
   async function fetchTrendingNfts() {
     setIsLoading(true);
-    DataNft.setNetworkConfig(chainID === "1" ? "mainnet" : "devnet");
+    DataNft.setNetworkConfig(chainID === "1" ? "mainnet" : "devnet", getMvxRpcApi(chainID));
     const getTrendingData = await getTrendingFromBackendApi(chainID);
     const _trendingData: Array<TrendingDataCreationNftsType> = [];
 
