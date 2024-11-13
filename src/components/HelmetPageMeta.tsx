@@ -12,7 +12,7 @@ const HelmetPageMeta: React.FC<NoDataFoundProps> = ({
   title,
   shortTitle,
   desc,
-  shareImgUrl = "https://explorer.itheum.io/socialshare/itheum_explorer_social_hero.png",
+  shareImgUrl = "https://explorer.itheum.io/socialshare/itheum_explorer_social_promo_hero.png",
 }) => {
   return (
     <Helmet>
