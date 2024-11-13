@@ -65,7 +65,9 @@ const RecentDataNFTsSection: React.FC = () => {
       const offers = await getRecentOffersFromBackendApi(chainID);
       const recentNonces = offers.map((nft: any) => ({ nonce: nft.offeredTokenNonce }));
       const dataNfts: DataNft[] = await DataNft.createManyFromApi(recentNonces);
+
       const _latestOffers: RecentDataNFTType[] = [];
+
       offers.forEach((offer: Offer) => {
         const matchingDataNft = dataNfts.find(
           (dataNft: DataNft) => dataNft.nonce === offer.offeredTokenNonce && dataNft.collection === offer.offeredTokenIdentifier
