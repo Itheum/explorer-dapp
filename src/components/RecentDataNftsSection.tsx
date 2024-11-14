@@ -64,7 +64,7 @@ const RecentDataNFTsSection: React.FC = () => {
     try {
       const offers = await getRecentOffersFromBackendApi(chainID);
       const recentNonces = offers.map((nft: any) => ({ nonce: nft.offeredTokenNonce }));
-      const dataNfts: DataNft[] = await DataNft.createManyFromApi(recentNonces);
+      const dataNfts: DataNft[] = await DataNft.createManyFromApi(recentNonces, 5 * 60 * 1000);
 
       const _latestOffers: RecentDataNFTType[] = [];
 

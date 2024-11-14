@@ -170,7 +170,8 @@ export const NFTunes = () => {
       nfTunesTokens.slice(shownMvxAppDataNfts.length, shownMvxAppDataNfts.length + SHOW_NFTS_STEP).map((v) => ({
         nonce: v.nonce,
         tokenIdentifier: v.tokenIdentifier,
-      }))
+      })),
+      5 * 60 * 1000
     );
 
     setShownMvxAppDataNfts((oldNfts) => oldNfts.concat(_nfts));
