@@ -240,13 +240,13 @@ const dataset = [
     albums: [
       {
         albumId: "ar10_a1",
-        solNftName: "",
+        solNftName: "PODG1 - Mic In Flames",
         mvxDataNftId: "",
         title: "Mic in Flames Podcast",
         desc: "Mic in Flames is an educational Web3 space covering topics like investment DAOs, blockchain social apps, Web3 RWAs, and tools. It dives deeper into Web3, exploring innovations like Data NFTs, blending content with unique utility.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmV2R1NS1AqLFf3vwyB1JNtCtQC8Rf5cWY7SgjGnfvuN8T",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/7547adb0-c840-4157-a01f-d813177e91eb",
+        ctaAirdrop: "",
       },
     ],
   },
