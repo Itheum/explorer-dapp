@@ -38,7 +38,8 @@ export const BoberGameRoom: React.FC = () => {
       BOBER_GAME_ROOM_TOKENS.slice(shownAppDataNfts.length, shownAppDataNfts.length + SHOW_NFTS_STEP).map((v) => ({
         nonce: v.nonce,
         tokenIdentifier: v.tokenIdentifier,
-      }))
+      })),
+      5 * 60 * 1000
     );
 
     setShownAppDataNfts((oldNfts) => oldNfts.concat(_nfts));

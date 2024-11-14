@@ -43,7 +43,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         updateMvxNfts([]);
       } else {
         const collections = SUPPORTED_MVX_COLLECTIONS;
-        const nftsT = await DataNft.ownedByAddress(address, collections);
+        const nftsT = await DataNft.ownedByAddress(address, collections, 15 * 1000);
         updateMvxNfts(nftsT);
       }
       updateIsLoadingMvx(false);

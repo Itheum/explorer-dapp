@@ -56,7 +56,7 @@ const TrendingSection: React.FC = () => {
       _trendingData.push({ nonce: nonce, tokenIdentifier: tokenIdentifier });
     });
 
-    const dataNfts: DataNft[] = await DataNft.createManyFromApi(_trendingData);
+    const dataNfts: DataNft[] = await DataNft.createManyFromApi(_trendingData, 5 * 60 * 1000);
     const trending = getTrendingData.map((dataNft) => {
       const ratingNfts = dataNfts.find((nft) => nft.tokenIdentifier === dataNft.tokenIdentifier);
       if (ratingNfts) {
