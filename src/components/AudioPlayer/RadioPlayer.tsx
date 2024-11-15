@@ -317,7 +317,7 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
       getAlbumActionText = "Buy Album";
     } else if (currSongObj?.airdrop) {
       getAlbumActionLink = currSongObj.airdrop;
-      getAlbumActionText = "Get Album for Free!";
+      getAlbumActionText = "Get Album Airdrop!";
       isAlbumForFree = true;
     }
   }

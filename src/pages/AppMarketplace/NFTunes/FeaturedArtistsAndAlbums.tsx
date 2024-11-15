@@ -250,6 +250,29 @@ const dataset = [
       },
     ],
   },
+
+  {
+    artistId: "ar11",
+    name: "Framework Fortune",
+    slug: "framework-fortune",
+    bio: "My mission is to onboard more Music Artists to blockchain and NFTs, assisting them in breaking free from the constraints of the traditional music industry. I aim to create blueprints for novel methods of monetizing music, where artists and their communities mutually benefit and grow together. This entails transcending the conventional boundaries and nurturing genuine growth for artists and their supporters. I am the First Experiment...",
+    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/framework-fortune.jpg",
+    dripLink: "",
+    xLink: "",
+    webLink: "",
+    albums: [
+      {
+        albumId: "ar11_a1",
+        solNftName: "",
+        mvxDataNftId: "",
+        title: "Frame Favs V1",
+        desc: "This digital EP from Framework Fortune delivers a unique Hip Hop and Rap musical experience, that's exclusively yours to be collected as a Music Data NFT.",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmcJHcxsAETpStEnYZyFEp18HW18Yrt2PbPgWje1ZHgBsn ",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
+      },
+    ],
+  },
 ];
 
 type FeaturedArtistsAndAlbumsProps = {
@@ -592,7 +615,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                                 }}>
                                 <>
                                   <Gift />
-                                  <span className="ml-2">Get Album for Free!</span>
+                                  <span className="ml-2">Get Album Airdrop!</span>
                                 </>
                               </Button>
                             )}
