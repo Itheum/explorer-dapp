@@ -538,7 +538,12 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                           <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
                           <span>{`${album.title}`}</span>
                           {album.isExplicit && (
-                            <img className="max-h-[20px] ml-[10px]" src={ratingR} alt="Warning: Explicit Content" title="Warning: Explicit Content" />
+                            <img
+                              className="max-h-[20px] ml-[10px] dark:bg-white"
+                              src={ratingR}
+                              alt="Warning: Explicit Content"
+                              title="Warning: Explicit Content"
+                            />
                           )}
                         </h3>
                         <p className="">{album.desc}</p>

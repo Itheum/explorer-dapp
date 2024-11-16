@@ -350,7 +350,12 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
               <span className="font-sans text-base font-medium leading-6 text-muted-foreground">
                 {songs[currentTrackIndex]?.album}
                 {songs[currentTrackIndex]?.isExplicit && (
-                  <img className="max-h-[20px] inline ml-2 mt-[-4px]" src={ratingR} alt="Warning: Explicit Content" title="Warning: Explicit Content" />
+                  <img
+                    className="max-h-[20px] inline ml-2 mt-[-4px] dark:bg-white"
+                    src={ratingR}
+                    alt="Warning: Explicit Content"
+                    title="Warning: Explicit Content"
+                  />
                 )}
               </span>
             </div>
