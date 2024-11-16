@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
+import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Button } from "libComponents/Button";
 import { getApiWeb2Apps } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
@@ -346,7 +347,17 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
               </div>
 
               <span className="font-sans text-lg font-medium leading-6 text-foreground">{songs[currentTrackIndex]?.artist}</span>
-              <span className="font-sans text-base font-medium leading-6 text-muted-foreground">{songs[currentTrackIndex]?.album}</span>
+              <span className="font-sans text-base font-medium leading-6 text-muted-foreground">
+                {songs[currentTrackIndex]?.album}
+                {songs[currentTrackIndex]?.isExplicit && (
+                  <img
+                    className="max-h-[20px] inline ml-2 mt-[-4px] dark:bg-white"
+                    src={ratingR}
+                    alt="Warning: Explicit Content"
+                    title="Warning: Explicit Content"
+                  />
+                )}
+              </span>
             </div>
 
             {getAlbumActionLink && (
