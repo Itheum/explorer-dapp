@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal } from "lucide-react";
+import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
+import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Button } from "libComponents/Button";
 import { gtagGo } from "libs/utils/misc";
 import { routeNames } from "routes";
@@ -236,12 +237,12 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/GenuLemny",
     webLink: "",
-    isPodcast: "1",
     albums: [
       {
         albumId: "ar10_a1",
         solNftName: "PODG1 - Mic In Flames",
         mvxDataNftId: "",
+        isPodcast: "1",
         title: "Mic in Flames Podcast",
         desc: "Mic in Flames is an educational Web3 space covering topics like investment DAOs, blockchain social apps, Web3 RWAs, and tools. It dives deeper into Web3, exploring innovations like Data NFTs, blending content with unique utility.",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmV2R1NS1AqLFf3vwyB1JNtCtQC8Rf5cWY7SgjGnfvuN8T",
@@ -250,23 +251,25 @@ const dataset = [
       },
     ],
   },
-
   {
     artistId: "ar11",
     name: "Framework Fortune",
     slug: "framework-fortune",
     bio: "My mission is to onboard more Music Artists to blockchain and NFTs, assisting them in breaking free from the constraints of the traditional music industry. I aim to create blueprints for novel methods of monetizing music, where artists and their communities mutually benefit and grow together. This entails transcending the conventional boundaries and nurturing genuine growth for artists and their supporters. I am the First Experiment...",
     img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/framework-fortune.jpg",
-    dripLink: "",
+    dripLink: "drip.haus/framemusic",
     xLink: "",
-    webLink: "",
+    webLink: "https://frameworkfortune.com",
+    ytLink: "https://www.youtube.com/@frameworkfortune",
+    otherLink1: "https://www.youtube.com/@framewk",
     albums: [
       {
         albumId: "ar11_a1",
         solNftName: "",
         mvxDataNftId: "",
+        isExplicit: "1",
         title: "Frame Favs V1",
-        desc: "This digital EP from Framework Fortune delivers a unique Hip Hop and Rap musical experience, that's exclusively yours to be collected as a Music Data NFT.",
+        desc: "Playlist of my personal favorite tracks I’ve released on my DRiP Profile. Join me on my DRiP music journey to break down the walls of the traditional music industry between Artists & Fans!!!",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmcJHcxsAETpStEnYZyFEp18HW18Yrt2PbPgWje1ZHgBsn ",
         ctaBuy: "",
         ctaAirdrop: "https://drip.haus/itheum",
@@ -476,31 +479,51 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
                     <p className="artist-who mt-5">{artistProfile.bio}</p>
-                    {(artistProfile.dripLink !== "" || artistProfile.xLink !== "" || artistProfile.webLink !== "") && (
+                    {(artistProfile.dripLink !== "" ||
+                      artistProfile.xLink !== "" ||
+                      artistProfile.webLink !== "" ||
+                      artistProfile.ytLink !== "" ||
+                      artistProfile.otherLink1 !== "") && (
                       <div className="flex flex-col md:flex-row mt-5">
                         {artistProfile.dripLink && (
-                          <div>
-                            +
-                            <a className="underline hover:no-underline mx-2" href={artistProfile.dripLink} target="_blank">
+                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.dripLink} target="_blank">
+                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                              <Droplet className="m-auto w-5" />
                               Artist on Drip
-                            </a>
-                          </div>
+                            </div>
+                          </a>
                         )}
                         {artistProfile.xLink && (
-                          <div>
-                            +
-                            <a className="underline hover:no-underline mx-2" href={artistProfile.xLink} target="_blank">
+                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.xLink} target="_blank">
+                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                              <Twitter className="m-auto w-5" />
                               Artist on X
-                            </a>
-                          </div>
+                            </div>
+                          </a>
+                        )}
+                        {artistProfile.ytLink && (
+                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.ytLink} target="_blank">
+                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                              <Youtube className="m-auto w-5" />
+                              Artist on YouTube
+                            </div>
+                          </a>
                         )}
                         {artistProfile.webLink && (
-                          <div>
-                            +
-                            <a className="underline hover:no-underline mx-2" href={artistProfile.webLink} target="_blank">
-                              Artist Web
-                            </a>
-                          </div>
+                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.webLink} target="_blank">
+                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                              <Globe className="m-auto w-5" />
+                              Artist Website
+                            </div>
+                          </a>
+                        )}
+                        {artistProfile.otherLink1 && (
+                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.otherLink1} target="_blank">
+                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                              <Link2 className="m-auto w-5" />
+                              More Content
+                            </div>
+                          </a>
                         )}
                       </div>
                     )}
@@ -511,9 +534,12 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
                     {artistProfile.albums.map((album: any, idx: number) => (
                       <div key={album.albumId} className="album flex flex-col bbg-500 h-[100%] mb-3 p-5 border">
-                        <h3 className="!text-xl mb-2">
+                        <h3 className="!text-xl mb-2 flex items-baseline">
                           <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
-                          {`${album.title}`}
+                          <span>{`${album.title}`}</span>
+                          {album.isExplicit && (
+                            <img className="max-h-[20px] ml-[10px]" src={ratingR} alt="Warning: Explicit Content" title="Warning: Explicit Content" />
+                          )}
                         </h3>
                         <p className="">{album.desc}</p>
                         <div className="album-actions mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
