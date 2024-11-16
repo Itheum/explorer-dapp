@@ -265,14 +265,14 @@ const dataset = [
     albums: [
       {
         albumId: "ar11_a1",
-        solNftName: "",
+        solNftName: "MUSG10 - Frame - Frame's Favs V1",
         mvxDataNftId: "",
         isExplicit: "1",
         title: "Frame Favs V1",
         desc: "Playlist of my personal favorite tracks I’ve released on my DRiP Profile. Join me on my DRiP music journey to break down the walls of the traditional music industry between Artists & Fans!!!",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmcJHcxsAETpStEnYZyFEp18HW18Yrt2PbPgWje1ZHgBsn ",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/02657764-7fd4-4104-abd4-498488f443e2",
+        ctaAirdrop: "",
       },
     ],
   },
