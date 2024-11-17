@@ -38,7 +38,7 @@ export const Home = () => {
               id="featured"
               className="flex md:min-w-[25%] md:flex-[2] border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/framework-fortune.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/framework-fortune.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Framework Fortune's "Frame Favs V1" is Launching!</h1>
@@ -53,7 +53,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/stephen-snodgrass.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/stephen-snodgrass.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">"TWOWEEK EP" is Live!</h1>
@@ -68,7 +68,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/yoshiro-mare.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/yoshiro-mare.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Yoshiro Mare "They Were Right" EP is Launching!</h1>
@@ -84,7 +84,7 @@ export const Home = () => {
               id="featured2"
               className="flex md:min-w-[25%] md:flex-[2] border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/mic-in-flames.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/mic-in-flames.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Mic in Flames Podcast is Live!</h1>
@@ -99,7 +99,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/deep-forest.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/deep-forest.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-2xl mb-5">Grammy Winner Deep Forest's "Ethereal Echoes" EP is Live!</h1>
@@ -114,7 +114,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/llluna01-diaspora.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/llluna01-diaspora.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Llluna01's "Diaspora" is Live!</h1>
@@ -129,7 +129,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">YFGP's "Retrofy" EP is Live!</h1>
@@ -144,7 +144,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/3oe.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/3oe.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">3OE's Eternal Echo EP is Live!</h1>
@@ -159,7 +159,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/hachi-mugen_mugen-cafe.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/hachi-mugen_mugen-cafe.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Hachi Mugen's "Mugen Cafe" EP is Live!</h1>
@@ -174,7 +174,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/hachi-mugen-infinity-series.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/hachi-mugen-infinity-series.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Hachi Mugen "Infinity Series" EP is Live!</h1>
@@ -189,7 +189,7 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/featured_hero/waveborn-luminex.jpg)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/waveborn-luminex.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Waveborn Luminex "Suno" EP is Live!</h1>
@@ -264,7 +264,7 @@ export const Home = () => {
         <div className="mt-5">
           <h2 className="!text-2xl md:!text-3xl text-center">Itheum App Store</h2>
           <h3 className="dark:!text-white !text-sm text-center md:!text-xl mb-5">Decentralized Apps Powered By Data NFTs</h3>
-          <div className="flex flex-row flex-wrap gap-x-8 mt-5 justify-center md:justify-between">
+          <div className="mt-5 md:grid md:grid-cols-3 3xl:grid-cols-4">
             {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
               <div key={item.routeKey} className="mb-10 w-[341px]">
                 <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
