@@ -40,6 +40,7 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [isMutedByUserAndWithPriorVolume, setIsMutedByUserAndWithPriorVolume] = useState(-1);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState("00:00");
   const [isLoaded, setIsLoaded] = useState(false);
@@ -219,6 +220,23 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   const handleVolumeChange = (newVolume: number) => {
     audio.volume = newVolume;
     setVolume(newVolume);
+
+    // restore the mute to default, as the user might have increased the vol during mute so we restore mute state
+    if (isMutedByUserAndWithPriorVolume !== -1) {
+      setIsMutedByUserAndWithPriorVolume(-1);
+    }
+  };
+
+  const toggleMute = () => {
+    // -1 is default state (i.e. not muted)
+    if (isMutedByUserAndWithPriorVolume !== -1) {
+      handleVolumeChange(isMutedByUserAndWithPriorVolume);
+      setIsMutedByUserAndWithPriorVolume(-1);
+    } else {
+      // user muted, and we store the last volume in isMutedByUserAndWithPriorVolume so we can restore it on unmute
+      setIsMutedByUserAndWithPriorVolume(volume);
+      handleVolumeChange(0);
+    }
   };
 
   const handlePrevButton = () => {
@@ -429,7 +447,12 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
 
           <div className="select-none p-2 bg-[#0f0f0f]/10 dark:bg-[#0F0F0F]/50 rounded-b-xl border-t border-gray-400 dark:border-gray-900  flex items-center justify-between z-10 ">
             <div className="ml-2 xl:pl-8 flex w-[20%]">
-              {volume === 0 ? <VolumeX /> : volume >= 0.5 ? <Volume2 /> : <Volume1 />}
+              <div
+                onClick={() => {
+                  toggleMute();
+                }}>
+                {volume === 0 ? <VolumeX /> : volume >= 0.5 ? <Volume2 /> : <Volume1 />}
+              </div>
               <input
                 type="range"
                 min="0"

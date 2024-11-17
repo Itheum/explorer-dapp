@@ -487,7 +487,7 @@ export const NFTunes = () => {
           </div>
 
           {/* Artists and their Albums */}
-          <div id="artist-profile" className="md:mt-[50px] w-full">
+          <div className="md:mt-[50px] w-full">
             <FeaturedArtistsAndAlbums
               mvxNetworkSelected={mvxNetworkSelected}
               viewSolData={viewSolData}
@@ -715,7 +715,7 @@ export const NFTunes = () => {
 
             <div className="flex flex-col md:flex-row">
               <Link
-                to={`https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/other/nf-tunes-bizdev-deck-V2.pdf`}
+                to={`https://api.itheumcloud.com/app_nftunes/other/nf-tunes-bizdev-deck-V2.pdf`}
                 target="_blank"
                 className="mt-10 md:mx-3 hover:scale-110 transition duration-700 text-sm md:text-xl text-center p-2 md:p-4 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% rounded-lg md:max-w-[50%] text-white">
                 Why NF-Tunes? <div className="text-sm">(Perks and Benefits)</div>

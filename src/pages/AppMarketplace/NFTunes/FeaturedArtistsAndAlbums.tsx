@@ -14,7 +14,7 @@ const dataset = [
     name: "Hachi Mugen",
     slug: "hachi-mugen",
     bio: "Music saved my life. Not everyone gets a second chance. The Ethereal Enclave collapsed and mostly everyone was left for dead or thought to be now what’s left is us. Those who see opportunity despite tragedy and loss... We were BORN TO R1S3. Hachi Mugen was BORN TO R1S3. Welcome to my story.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
     dripLink: "https://drip.haus/mugenhachi",
     xLink: "https://x.com/mugenhachi",
     albums: [
@@ -43,7 +43,7 @@ const dataset = [
     name: "YFGP",
     slug: "yfgp",
     bio: "YFGP is a cutting-edge sound effects and music designer from Romania, known for merging unique music and art. Specializing in creating for commercials, NFTs, games, and videos, YFGP brings a fresh approach to digital and multimedia projects.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/manu.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/manu.jpg",
     dripLink: "",
     xLink: "https://x.com/Manu_Sounds",
     albums: [
@@ -72,7 +72,7 @@ const dataset = [
     name: "7g0Strike",
     slug: "7g0strike",
     bio: "7g0Strike transforms into a generative music artist, using AI tools to create unique tracks. By blending creativity with technology, 7g0Strike shows how AI can inspire new forms of artistic expression for everyone to experience.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
     dripLink: "",
     xLink: "",
     albums: [
@@ -92,7 +92,7 @@ const dataset = [
     name: "LLLUNA01",
     slug: "llluna01",
     bio: "LLLUNA01, a multimedia and multi-genre artist emerging from the streets of Los Angeles. From ghettos to galaxies, he has established himself as a creative force with a diverse skill set focusing on Audio, Visuals, and Culture. From the underground to professionalism, LLLUNA01 looks to help move the music industry forward with education, culture, and technology.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/llluna01.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/llluna01.jpg",
     dripLink: "https://drip.haus/llluna01",
     xLink: "https://twitter.com/0xLuna01",
     webLink: "https://linktr.ee/llluna01",
@@ -102,7 +102,7 @@ const dataset = [
         solNftName: "MUSG5 - Diaspora EP - LLLUNA01",
         title: "Diaspora EP",
         desc: "Diaspora by LLLUNA01 fuses Dubstep, Trap, and Drum & Bass Jungle into a high-energy, bass-heavy journey through global underground sounds.",
-        ctaPreviewStream: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/music/preview/llluna01-diaspora.mp3",
+        ctaPreviewStream: "https://api.itheumcloud.com/app_nftunes/music/preview/llluna01-diaspora.mp3",
         ctaBuy: "https://drip.haus/itheum/set/3866c693-3505-4ec1-b81f-7a4db8e4747d",
         ctaAirdrop: "",
       },
@@ -113,7 +113,7 @@ const dataset = [
     name: "TWOWEEK",
     slug: "two-week",
     bio: "SF-based musician/recording artist, photographer and videographer, creating Music NFT's on the blockchain",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/stephen-snodgrass.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/stephen-snodgrass.jpg",
     dripLink: "",
     xLink: "https://x.com/the_economystic",
     webLink: "",
@@ -145,7 +145,7 @@ const dataset = [
     name: "Deep Forest",
     slug: "deep-forest",
     bio: "Deep Forest, founded by composer, musician, and producer Eric Mouquet, is a pioneering group in electronic and world music and the first French artist to win a Grammy in 1995 for the album Bohème (Best World Music Album), and has also received a World Music Award and an MTV Award.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/deep-forest.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/deep-forest.jpg",
     dripLink: "",
     xLink: "https://twitter.com/deep_forest",
     webLink: "https://www.deep-forest.fr/",
@@ -167,7 +167,7 @@ const dataset = [
     name: "3OE",
     slug: "3oe",
     bio: "Shaped by space and time, we create immersive soundscapes that reflect shifting moods and environments. Each piece is a journey through evolving expressions, offering a pleasant musical experience.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/3oe.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/3oe.jpg",
     dripLink: "",
     xLink: "",
     webLink: "",
@@ -189,7 +189,7 @@ const dataset = [
     name: "Waveborn Luminex",
     slug: "waveborn-luminex",
     bio: "Waveborn Luminex emerges as a radiant force in the electronic music realm, embodying the essence of soundwaves that shape their very being. With an avatar crafted from vibrant frequencies and pulsating rhythms, they illuminate the dance floor with electrifying energy, that invites listeners to immerse themselves in a cosmic journey.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/waveborn-luminex.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/waveborn-luminex.jpg",
     dripLink: "",
     xLink: "",
     webLink: "",
@@ -211,7 +211,7 @@ const dataset = [
     name: "Yoshiro Mare",
     slug: "yoshiro-mare",
     bio: "Interdimensional Sound Sculptor Intentionally Creating Energetically Programmed Fields through 432 Hertz Conscious Electronic Music Portals on the Blockchain. The Code Path of The Warrior, focuses on raising awareness around Mental Health, Addiction and Serving a Higher Purpose.",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/yoshiro-mare.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/yoshiro-mare.jpg",
     dripLink: "",
     xLink: "https://x.com/YoshiroMare",
     webLink: "https://bonfire.xyz/YoshiroMare",
@@ -233,7 +233,7 @@ const dataset = [
     name: "Flaka & CipriSLG",
     slug: "flaka-ciprislg",
     bio: "Innovative publishers of Web3 education and content, featuring the Mic in Flames Web3 podcast—a groundbreaking series that can be collected as a Data NFT. Owning this Data NFT grants access to stream each episode. Introducing the world's first dynamic Podcast NFT!",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/mic-in-flames.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/mic-in-flames.jpg",
     dripLink: "",
     xLink: "https://x.com/GenuLemny",
     webLink: "",
@@ -256,7 +256,7 @@ const dataset = [
     name: "Framework Fortune",
     slug: "framework-fortune",
     bio: "My mission is to onboard more Music Artists to blockchain and NFTs, assisting them in breaking free from the constraints of the traditional music industry. I aim to create blueprints for novel methods of monetizing music, where artists and their communities mutually benefit and grow together. This entails transcending the conventional boundaries and nurturing genuine growth for artists and their supporters. I am the First Experiment...",
-    img: "https://assetspublic-itheum-ecosystem.s3.eu-central-1.amazonaws.com/app_nftunes/images/artist_profile/framework-fortune.jpg",
+    img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/framework-fortune.jpg",
     dripLink: "https://drip.haus/framemusic",
     xLink: "https://x.com/FramewkFortune",
     webLink: "https://frameworkfortune.com",
@@ -307,6 +307,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [previewPlayingForAlbumId, setPreviewPlayingForAlbumId] = useState<string | undefined>();
   const [previewIsReadyToPlay, setPreviewIsReadyToPlay] = useState(false);
   const [selArtistId, setSelArtistId] = useState<string>("ar1");
+  const [userInteractedWithTabs, setUserInteractedWithTabs] = useState<boolean>(false);
   const [artistProfile, setArtistProfile] = useState<any>(null);
   const [currentTime, setCurrentTime] = useState("00:00");
   const [duration, setDuration] = useState("00:00");
@@ -358,19 +359,23 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   );
 
   useEffect(() => {
+    console.log("selArtistId ", selArtistId);
     playPausePreview(); // with no params wil always go into the stop logic
 
     const selDataItem = dataset.find((i) => i.artistId === selArtistId);
 
     setArtistProfile(selDataItem);
 
-    if (selDataItem && selDataItem.slug) {
+    // if we don't do the userInteractedWithTabs, then even on page load, we go update the url with artist-profile which we don't want
+    if (selDataItem && selDataItem.slug && userInteractedWithTabs) {
       // update the deep link param
       setSearchParams({ "artist-profile": selDataItem.slug });
     }
   }, [selArtistId]);
 
   useEffect(() => {
+    console.log("featuredArtistDeepLinkSlug ", featuredArtistDeepLinkSlug);
+
     if (featuredArtistDeepLinkSlug) {
       const findArtistBySlug = dataset.find((i) => i.slug === featuredArtistDeepLinkSlug);
 
@@ -457,6 +462,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                 onClick={() => {
                   if (artist.artistId !== selArtistId) {
                     setSelArtistId(artist.artistId);
+                    setUserInteractedWithTabs(true);
 
                     gtagGo("NtuArAl", "ViewProfile", "Artist", artist.artistId);
                   }
@@ -466,7 +472,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
             ))}
           </div>
 
-          <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
+          <div id="artist-profile" className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
             <div className="flex flex-col gap-4 p-8 items-start md:w-[90%] bg-background rounded-xl border border-primary/50 min-h-[350px]">
               {!artistProfile ? (
                 <div>Loading</div>
