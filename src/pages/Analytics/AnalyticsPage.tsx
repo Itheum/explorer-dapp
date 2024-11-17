@@ -7,7 +7,6 @@ import { LoadingGraph, getAggregatedAnalyticsData, normalizeDataForMarshalUsage,
 
 export const AnalyticsPage = () => {
   const [fullChainSupplyData, setFullChainSupplyData] = useState<any[]>([]);
-  const [fullChainCirculatingSupplyData, setFullChainCirculatingSupplyData] = useState<any[]>([]);
   const [fullChainMarshalUsageData, setFullChainMarshalUsageData] = useState<any[]>([]);
   const [dataLakeUserGrowthData, setDataLakeUserGrowthData] = useState<any[]>([]);
   const [dataLakeDataVolumeGrowthData, setDataLakeDataVolumeGrowthData] = useState<any[]>([]);
@@ -24,7 +23,6 @@ export const AnalyticsPage = () => {
 
       // aggregations data
       const chainSupplyDataT = [];
-      const chainCirculatingSupplyDataT = [];
       const chainMarshalUsageDataT = [];
       const dataLakeUserGrowthDataT = [];
       const dataLakeDataVolumeGrowthDataT = [];
@@ -33,7 +31,6 @@ export const AnalyticsPage = () => {
       // S: load aggregated data
       for (const day of Object.keys(dataAggregated)) {
         const chainSupplyDataI: any = { name: day };
-        const chainCirculatingSupplyDataI: any = { name: day };
         const dataLakeUserGrowthDataI: any = { name: day };
         const dataLakeDataVolumeGrowthDataI: any = { name: day };
         const livelinessTVLDataI: any = { name: day };
@@ -43,10 +40,8 @@ export const AnalyticsPage = () => {
             case "mvx_supply":
             case "sol_supply":
               chainSupplyDataI[nft] = dataAggregated[day][nft]["total"];
-              chainCirculatingSupplyDataI[nft] = dataAggregated[day][nft]["circulating"];
 
               chainSupplyDataT.push(chainSupplyDataI);
-              chainCirculatingSupplyDataT.push(chainCirculatingSupplyDataI);
               break;
             case "marshal_usage_events":
               chainMarshalUsageDataT.push(normalizeDataForMarshalUsage(dataAggregated[day], day));
@@ -71,7 +66,6 @@ export const AnalyticsPage = () => {
       }
 
       setFullChainSupplyData(chainSupplyDataT);
-      setFullChainCirculatingSupplyData(chainCirculatingSupplyDataT);
       setFullChainMarshalUsageData(chainMarshalUsageDataT);
       setDataLakeUserGrowthData(dataLakeUserGrowthDataT);
       setDataLakeDataVolumeGrowthData(dataLakeDataVolumeGrowthDataT);
@@ -111,77 +105,6 @@ export const AnalyticsPage = () => {
                 {(fullChainSupplyData.length > 0 && (
                   <ResponsiveContainer minWidth="100%" minHeight={300} style={{ marginBottom: "2.5rem" }}>
                     <AreaChart data={fullChainSupplyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                      <defs>
-                        <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#31b3cd" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#31b3cd" stopOpacity={0} />
-                        </linearGradient>
-                        <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
-                      <YAxis />
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <Tooltip
-                        formatter={(value: any, name: any, props: any) => {
-                          const labelsForKey: any = {
-                            mvx_supply: "MultiversX Supply",
-                            sol_supply: "Solana Supply",
-                          };
-
-                          return [value, labelsForKey[name]];
-                        }}
-                        wrapperStyle={{ color: "#333" }}
-                      />
-                      <Legend
-                        formatter={(value: any, entry: any) => {
-                          const { color } = entry;
-                          const labelsForKey: any = {
-                            mvx_supply: "MultiversX Supply",
-                            sol_supply: "Solana Supply",
-                          };
-
-                          return <span style={{ color }}>{labelsForKey[value]}</span>;
-                        }}
-                      />
-                      <Area
-                        connectNulls
-                        animationDuration={3000}
-                        animationEasing="ease-in"
-                        type="monotone"
-                        dataKey="mvx_supply"
-                        stroke="#31b3cd"
-                        fillOpacity={1}
-                        fill="url(#colorUv)"
-                        stackId={1}
-                      />
-                      <Area
-                        connectNulls
-                        animationDuration={3000}
-                        animationEasing="ease-in"
-                        type="monotone"
-                        dataKey="sol_supply"
-                        stroke="#82ca9d"
-                        fillOpacity={1}
-                        fill="url(#colorPv)"
-                        stackId={1}
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                )) || <LoadingGraph />}
-              </div>
-            </div>
-
-            {/* Data NFT Circulating Supply Across Chains */}
-            <div>
-              <h2 className="flex flex-row !text-2xl">Data NFT Circulating Supply Across Chains</h2>
-              <p className="opacity-50">This is the circulating supply of Data NFTs across the chains that the Itheum Protocol operates on.</p>
-              <div className="min-h-[300px]">
-                {(fullChainCirculatingSupplyData.length > 0 && (
-                  <ResponsiveContainer minWidth="100%" minHeight={300} style={{ marginBottom: "2.5rem" }}>
-                    <AreaChart data={fullChainCirculatingSupplyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#31b3cd" stopOpacity={0.8} />
