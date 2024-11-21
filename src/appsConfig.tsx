@@ -23,6 +23,7 @@ export const MULTIVERSX_INFOGRAPHICS_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 3 },
       { tokenIdentifier: "COLNAMA-539838", nonce: 5 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 454 },
+      { tokenIdentifier: "DATANFTFT-e0b917", nonce: 648 },
     ]
   : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 3 }];
 
