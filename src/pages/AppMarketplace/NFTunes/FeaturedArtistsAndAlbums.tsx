@@ -54,8 +54,8 @@ const dataset = [
         title: "Elements",
         desc: "Elements represents a combination of two styles, two different type of vibes, in contradiction. That's what life is all about…handling those situations accordingly, knowing which one is which",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmZDBsTrVN4uscnA8HWFxb9M3d9inctGqcw9NjHcZM2ENo",
-        ctaBuy: "",
-        ctaAirdrop: "https://drip.haus/itheum",
+        ctaBuy: "https://drip.haus/itheum/set/2b5772ce-e038-4e22-8d1e-1b5d269b6862",
+        ctaAirdrop: "",
       },
       {
         albumId: "ar2_a2",
