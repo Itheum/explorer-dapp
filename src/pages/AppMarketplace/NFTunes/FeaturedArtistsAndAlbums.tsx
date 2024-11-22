@@ -575,7 +575,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                             <Button
                               disabled={isPreviewPlaying && !previewIsReadyToPlay}
                               className="!text-white text-sm mx-2 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer"
-                              onClick={async () => {
+                              onClick={() => {
                                 playPausePreview(album.ctaPreviewStream, album.albumId);
 
                                 gtagGo("NtuArAl", "PlayPausePrev", "Album", album.albumId);
