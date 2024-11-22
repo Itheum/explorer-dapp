@@ -13,12 +13,12 @@ export const Footer = () => {
   const isPublicApi = getMvxRpcApi(chainID).includes("api.multiversx.com");
 
   return (
-    <footer className="1bg-red-300 xl:mx-[7.5rem] md:mx-[4rem] h-auto mb-10 mt-5">
+    <footer className="1bg-red-300 xl:mx-[7.5rem] md:mx-[4rem] h-auto mb-10 mt-10">
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
       <div className="flex flex-col md:flex-row">
         <div className="1bg-red-300 md:w-[50%] p-5">
           <div>
-            <p className="mb-2 bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500 dark:from-yellow-300 dark:to-orange-500 text-transparent font-bold text-base">
+            <p className="mb-3 bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500 dark:from-yellow-300 dark:to-orange-500 text-transparent font-bold text-[1.5rem]">
               Itheum Explorer
             </p>
             <p className="text-xs md:text-sm">
@@ -81,46 +81,55 @@ export const Footer = () => {
               </p>
               <ul className="text-xs md:text-sm flex flex-col gap-1">
                 <li>
+                  {"> "}
                   <a href="https://x.com/itheum" target="_blank" className="hover:underline">
                     X
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://itheum.io/discord" target="_blank" className="hover:underline">
                     Discord
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://t.me/itheum" target="_blank" className="hover:underline">
                     Telegram
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://www.instagram.com/itheumofficial/" target="_blank" className="hover:underline">
                     Instagram
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://drip.haus/itheum" target="_blank" className="hover:underline">
                     DRiP Haus
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://itheum.medium.com" target="_blank" className="hover:underline">
                     Medium Blog
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://www.youtube.com/itheum" target="_blank" className="hover:underline">
                     YouTube
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://github.com/Itheum" target="_blank" className="hover:underline">
                     Github
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="itheum.io" target="_blank" className="hover:underline">
                     Website
                   </a>
@@ -134,26 +143,43 @@ export const Footer = () => {
               </p>
               <ul className="text-xs md:text-sm flex flex-col gap-1">
                 <li>
+                  {"> "}
                   <a href="https://datadex.itheum.com" target="_blank" className="hover:underline">
-                    Data DEX
+                    MultiversX Data DEX
                   </a>
                 </li>
                 <li>
+                  {"> "}
+                  <a href="https://datadex-sol.itheum.com" target="_blank" className="hover:underline">
+                    Solana Data DEX
+                  </a>
+                </li>
+                <li>
+                  {"> "}
+                  <a href="https://portal.itheum.com" target="_blank" className="hover:underline">
+                    {`Solana <> MultiversX `}Token Bridge
+                  </a>
+                </li>
+                <li>
+                  {"> "}
                   <a href="https://datadex.itheum.io/NFMeID" target="_blank" className="hover:underline">
                     Claim your NFMe ID
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://datadex.itheum.io/NFMeID#liveliness" target="_blank" className="hover:underline">
                     Liveliness Staking
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="/nftunes" className="hover:underline">
                     NF-Tunes : Stream Web3 Music
                   </a>
                 </li>
                 <li>
+                  {"> "}
                   <a href="https://drip.haus/itheum" className="hover:underline">
                     Free Music Data NFTs on Solana's DRiP Haus
                   </a>

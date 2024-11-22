@@ -12,8 +12,8 @@ export const getMvxRpcApi = (chainID: string) => {
 
   const defaultUrl = chainID === "1" ? "api.multiversx.com" : "devnet-api.multiversx.com";
 
-  // 30% of chance, default to the Public API
-  const defaultToPublic = Math.random() < 0.3; // math random gives you close to even distribution from 0 - 1
+  // 10% of chance, default to the Public API
+  const defaultToPublic = Math.random() < 0.1; // math random gives you close to even distribution from 0 - 1
 
   if (defaultToPublic) {
     window.ITH_GLOBAL_MVX_RPC_API_SESSION = defaultUrl;

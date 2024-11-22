@@ -5,6 +5,7 @@ import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitte
 import { Link, useSearchParams } from "react-router-dom";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Button } from "libComponents/Button";
+import { sleep } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { routeNames } from "routes";
 
@@ -47,6 +48,15 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/Manu_Sounds",
     albums: [
+      {
+        albumId: "ar2_a3",
+        solNftName: "MUSG11 - YFGP - Elements",
+        title: "Elements",
+        desc: "Elements represents a combination of two styles, two different type of vibes, in contradiction. That's what life is all about…handling those situations accordingly, knowing which one is which",
+        ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmZDBsTrVN4uscnA8HWFxb9M3d9inctGqcw9NjHcZM2ENo",
+        ctaBuy: "",
+        ctaAirdrop: "https://drip.haus/itheum",
+      },
       {
         albumId: "ar2_a2",
         solNftName: "MUSG2 - Cranium Beats",
@@ -395,6 +405,9 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     if (previewStreamUrl && albumId && (!isPreviewPlaying || previewPlayingForAlbumId !== albumId)) {
       onPlayHappened(true); // inform parent to stop any other playing streams on its ui
 
+      resetPreviewPlaying();
+      // await sleep(0.1); // this seems to help when some previews overlapped (took it out as it did not seem to do much when testing)
+
       setPreviewIsReadyToPlay(false);
       setIsPreviewPlaying(true);
       setPreviewPlayingForAlbumId(albumId);
@@ -418,13 +431,17 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       updateProgress();
       audio.currentTime = 0;
     } else {
-      audio.src = "";
-      audio.currentTime = 0;
-      audio.pause();
-      setPreviewIsReadyToPlay(false);
-      setIsPreviewPlaying(false);
-      setPreviewPlayingForAlbumId(undefined);
+      resetPreviewPlaying();
     }
+  }
+
+  function resetPreviewPlaying() {
+    audio.src = "";
+    audio.currentTime = 0;
+    audio.pause();
+    setPreviewIsReadyToPlay(false);
+    setIsPreviewPlaying(false);
+    setPreviewPlayingForAlbumId(undefined);
   }
 
   const updateProgress = () => {
