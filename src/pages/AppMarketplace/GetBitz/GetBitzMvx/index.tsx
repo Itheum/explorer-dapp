@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
-import { GET_BITZ_TOKEN } from "appsConfig";
+import { GET_BITZ_TOKEN_MVX } from "appsConfig";
 import { toastClosableError } from "libs/utils/uiShared";
 import { Loader } from "components";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
@@ -233,7 +233,7 @@ export const GetBitzMvx = (props: any) => {
   async function fetchGameDataNfts() {
     setIsLoading(true);
 
-    const _gameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN);
+    const _gameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN_MVX);
     setGameDataNFT(_gameDataNFT);
 
     setIsLoading(false);
@@ -403,7 +403,7 @@ export const GetBitzMvx = (props: any) => {
     // user is not logged in, ask them to connect wallet
     if (!address) {
       return (
-        <Link className="relative" to={routeNames.unlock} state={{ from: location.pathname }}>
+        <Link className="relative" to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
           <img
             className={cn("-z-1 relative z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgLogin}
@@ -723,7 +723,7 @@ export const GetBitzMvx = (props: any) => {
 
     const callConfig = {
       headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
       },
     };
 
@@ -808,7 +808,7 @@ export const GetBitzMvx = (props: any) => {
   async function fetchAndLoadMyRankOnLeaderBoard() {
     const callConfig = {
       headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
       },
     };
 

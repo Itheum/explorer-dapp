@@ -4,7 +4,7 @@ import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import axios, { AxiosError } from "axios";
 import { FlaskRound } from "lucide-react";
-import { GET_BITZ_TOKEN } from "appsConfig";
+import { GET_BITZ_TOKEN_MVX } from "appsConfig";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
 import { Loader } from "components";
 import { useGetAccount } from "hooks";
@@ -92,7 +92,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
       const callConfig = {
         headers: {
-          "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+          "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
         },
       };
 
@@ -122,7 +122,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
     const callConfig = {
       headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
       },
     };
 
@@ -155,7 +155,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   async function fetchBitSumAndGiverCounts({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }): Promise<any> {
     const callConfig = {
       headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
       },
     };
 
@@ -177,7 +177,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   async function fetchGivenBitsForGetter({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
     const callConfig = {
       headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
       },
     };
 
@@ -199,7 +199,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
   async function fetchGetterLeaderBoard({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
     const callConfig = {
       headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
       },
     };
 

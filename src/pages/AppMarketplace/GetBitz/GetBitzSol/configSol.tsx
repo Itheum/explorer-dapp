@@ -301,6 +301,15 @@ export function getDataBounties() {
       submittedOnTs: 1718877864,
       fillPerks: `Maecenas a tortor sit amet neque tristique tincidunt placerat et odio.`,
     });
+    allBounties.push({
+      bountySubmitter: "E4wVAvuuQ7AsFaonuZuhtMWcb6pNMehiWCfXWscdoB4M",
+      bountyId: "mus_ar1",
+      title: "Support Musican : Hachi Mugen",
+      summary: "",
+      readMoreLink: "",
+      submittedOnTs: 1732762661503,
+      fillPerks: ``,
+    });
     return allBounties;
   } else {
     allBounties.push({

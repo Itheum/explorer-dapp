@@ -14,6 +14,7 @@ import { walletConnectV2ProjectId } from "config";
 import { SOL_ENV_ENUM, MVX_ENV_ENUM } from "config";
 import { Button } from "libComponents/Button";
 import { getMvxRpcApi, getApiWeb2Apps } from "libs/utils";
+import { useAccountStore } from "store/account";
 
 /* 
 we use global vars here so we can maintain this state across routing back and forth to this unlock page
@@ -33,8 +34,8 @@ const UnlockPage = () => {
   } = useGetNetworkConfig();
   const { address: addressMvx } = useGetAccount();
   const isLoggedInMvX = !!addressMvx;
-  const { publicKey } = useWallet();
-  const addressSol = publicKey?.toBase58();
+  const { publicKey: publicKeySol, signMessage } = useWallet();
+  const addressSol = publicKeySol?.toBase58();
   const { pathname } = useLocation();
   const [userAccountLoggingIn, setIsUserAccountLoggingIn] = useState<boolean>(false);
 

@@ -9,6 +9,7 @@ import { Music, Music2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useThrottledCallback } from "use-debounce";
 import { NF_TUNES_TOKENS } from "appsConfig";
+import { IS_DEVNET } from "appsConfig";
 import benefitsLogo1 from "assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "assets/img/nf-tunes/benefits-logo3.png";
@@ -47,6 +48,11 @@ import { useAccountStore } from "store/account";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 import { FeaturedArtistsAndAlbums } from "./FeaturedArtistsAndAlbums";
+import { SendBitzPowerUp } from "./SendBitzPowerUp";
+
+// // give bitz
+// import useSolBitzStore from "store/solBitz";
+// import { ExternalLinkIcon } from "lucide-react";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -87,6 +93,20 @@ export const NFTunes = () => {
 
   // control the visibility base level music player model
   const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
+
+  // // gift bitz
+  // const [giftBitzWorkflow, setGiftBitzWorkflow] = useState<boolean>(false);
+  // const solBitzBalance = useSolBitzStore((state) => state.bitzBalance);
+  // const mvxBitzBalance = useAccountStore((state) => state.bitzBalance);
+  // const bitzBalance = defaultChain === "multiversx" ? mvxBitzBalance : solBitzBalance;
+  // const [bitzVal, setBitzVal] = useState<number>(0);
+
+  const [givePowerConfig, setGivePowerConfig] = useState<{
+    creatorIcon: string | undefined;
+    creatorName: string | undefined;
+    giveBitzToWho: string;
+    giveBitzToCampaignId: string;
+  }>({ creatorIcon: undefined, creatorName: undefined, giveBitzToWho: "", giveBitzToCampaignId: "" });
 
   useEffect(() => {
     const isFeaturedArtistDeepLink = searchParams.get("artist-profile");
@@ -354,12 +374,17 @@ export const NFTunes = () => {
   }
 
   function checkOwnershipOfAlbum(album: any) {
-    console.log("checkOwnershipOfAlbum");
     let albumInOwnershipListIndex = -1; // note -1 means we don't own it
 
     if (!mvxNetworkSelected) {
-      if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
-        albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftName];
+      if (IS_DEVNET) {
+        if (album?.solNftNameDevnet && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftNameDevnet] !== "undefined") {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftNameDevnet];
+        }
+      } else {
+        if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftName];
+        }
       }
     } else {
       if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap) {
@@ -379,6 +404,25 @@ export const NFTunes = () => {
     }
 
     return albumInOwnershipListIndex;
+  }
+
+  function handleSendPowerUp({
+    creatorIcon,
+    creatorName,
+    giveBitzToWho,
+    giveBitzToCampaignId,
+  }: {
+    creatorIcon: string;
+    creatorName: string;
+    giveBitzToWho: string;
+    giveBitzToCampaignId: string;
+  }) {
+    setGivePowerConfig({
+      creatorIcon,
+      creatorName,
+      giveBitzToWho,
+      giveBitzToCampaignId,
+    });
   }
 
   // in Radio, checkOwnershipOfAlbum get called when user clicks on play, as the radio comp is rerendering each time the progress bar moves (memo not working)
@@ -509,6 +553,7 @@ export const NFTunes = () => {
                 setStopRadio(true);
                 setStopPreviewPlaying(true);
               }}
+              onSendPowerUp={handleSendPowerUp}
             />
           </div>
 
@@ -900,6 +945,100 @@ export const NFTunes = () => {
             )}
           </Modal>
         </>
+
+        <>
+          <SendBitzPowerUp mvxNetworkSelected={mvxNetworkSelected} givePowerConfig={givePowerConfig} />
+        </>
+
+        {/* <>
+          <Modal
+            triggerOpen={giftBitzWorkflow}
+            triggerOnClose={() => {
+              setGiftBitzWorkflow(false);
+            }}
+            closeOnOverlayClick={false}
+            title={"Power-Up A Creator with BiTz"}
+            hasFilter={false}
+            filterData={[]}
+            modalClassName={""}
+            titleClassName={"p-4"}>
+            {
+              <div
+                className="bg-1cyan-900"
+                style={{
+                  minHeight: "10rem",
+                }}>
+                <div className="bg-1cyan-200 flex flex-col gap-2 p-10">
+                  <div className="bg-1green-200 flex items-center">
+                    <div className="bg-1blue-200">
+                      <div
+                        className="border-[0.5px] border-neutral-500/90 h-[150px] md:h-[150px] md:w-[150px] bg-no-repeat bg-cover rounded-xl"
+                        style={{
+                          "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg)`,
+                        }}></div>
+                    </div>
+                    <div className="bg-1blue-300 ml-5 text-xl font-bold">HACHI MUGEN</div>
+                  </div>
+
+                  <div className="bg-1green-300">
+                    <div className="bg-1blue-200 font-bold text-lg">BiTz</div>
+                    <div className="bg-1blue-300">Balance: {bitzBalance} BiTz</div>
+                  </div>
+
+                  <div className="bg-1green-400">
+                    <div className="bg-1blue-200">
+                      <div className="flex flex-row gap-2 justify-center items-center">
+                        <input
+                          type="range"
+                          id="rangeBitz"
+                          min="5"
+                          max={bitzBalance}
+                          step="1"
+                          value={bitzVal}
+                          onChange={(e) => setBitzVal(Number(e.target.value))}
+                          className="accent-black dark:accent-white w-full cursor-pointer custom-range-slider"
+                        />
+                        <input
+                          type="number"
+                          min="5"
+                          max={bitzBalance}
+                          step="1"
+                          value={bitzVal}
+                          onChange={(e) => setBitzVal(Math.min(Number(e.target.value), bitzBalance))}
+                          className="bg-[#35d9fa]/30 text- dark:text-[#35d9fa] focus:none focus:outline-none focus:border-transparent text-center border-[#35d9fa] rounded-md text-[2rem] p-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-1green-400">
+                    <div className="bg-1blue-300">
+                      <Button
+                        disabled={bitzVal > 4}
+                        className="!text-white text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer"
+                        onClick={() => {
+                          alert("give");
+                        }}>
+                        <span className="ml-2">Submit</span>
+                      </Button>
+                    </div>
+                    <div className="bg-1blue-300 mt-2">
+                      <div className="flex">
+                        By gifting, you agree to our <br />
+                        <a
+                          className="!text-[#35d9fa] hover:underline ml-2 flex"
+                          href="https://docs.itheum.io/product-docs/legal/ecosystem-tools-terms/bitz-xp/give-bitz"
+                          target="blank">
+                          Give BiTz terms of use <ExternalLinkIcon width={16} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </Modal>
+        </> */}
       </div>
     </>
   );

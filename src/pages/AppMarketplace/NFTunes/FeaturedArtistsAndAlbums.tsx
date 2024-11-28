@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { faHandPointer } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet } from "lucide-react";
+import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, FlaskRound } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Button } from "libComponents/Button";
-import { sleep } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { routeNames } from "routes";
 
@@ -18,6 +19,7 @@ const dataset = [
     img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
     dripLink: "https://drip.haus/mugenhachi",
     xLink: "https://x.com/mugenhachi",
+    creatorWallet: "hachi-mugen",
     albums: [
       {
         albumId: "ar1_a2",
@@ -47,6 +49,7 @@ const dataset = [
     img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/manu.jpg",
     dripLink: "",
     xLink: "https://x.com/Manu_Sounds",
+    creatorWallet: "yfgp-123456",
     albums: [
       {
         albumId: "ar2_a3",
@@ -85,6 +88,7 @@ const dataset = [
     img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
     dripLink: "",
     xLink: "",
+    creatorWallet: "7g0strike-12",
     albums: [
       {
         albumId: "ar3_a1",
@@ -106,6 +110,7 @@ const dataset = [
     dripLink: "https://drip.haus/llluna01",
     xLink: "https://twitter.com/0xLuna01",
     webLink: "https://linktr.ee/llluna01",
+    creatorWallet: "llluna01-12",
     albums: [
       {
         albumId: "ar4_a1",
@@ -127,6 +132,7 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/the_economystic",
     webLink: "",
+    creatorWallet: "two-week-12",
     albums: [
       {
         albumId: "ar5_a1",
@@ -159,6 +165,7 @@ const dataset = [
     dripLink: "",
     xLink: "https://twitter.com/deep_forest",
     webLink: "https://www.deep-forest.fr/",
+    creatorWallet: "deep-forest",
     albums: [
       {
         albumId: "ar6_a1",
@@ -181,6 +188,7 @@ const dataset = [
     dripLink: "",
     xLink: "",
     webLink: "",
+    creatorWallet: "3oe-1234567",
     albums: [
       {
         albumId: "ar7_a1",
@@ -203,10 +211,12 @@ const dataset = [
     dripLink: "",
     xLink: "",
     webLink: "",
+    creatorWallet: "waveborn-luminex",
     albums: [
       {
         albumId: "ar8_a1",
         solNftName: "MUSG7 - Galactic Gravity",
+        solNftNameDevnet: "MUSGDEV1",
         mvxDataNftId: "",
         title: "Suno",
         desc: "This is the premier Digital EP from Waveborn Luminex that delivers a unique electro pop musical experience.",
@@ -225,6 +235,7 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/YoshiroMare",
     webLink: "https://bonfire.xyz/YoshiroMare",
+    creatorWallet: "yoshiro-mare",
     albums: [
       {
         albumId: "ar9_a1",
@@ -247,6 +258,7 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/GenuLemny",
     webLink: "",
+    creatorWallet: "flaka-ciprislg",
     albums: [
       {
         albumId: "ar10_a1",
@@ -272,6 +284,7 @@ const dataset = [
     webLink: "https://frameworkfortune.com",
     ytLink: "https://www.youtube.com/@frameworkfortune",
     otherLink1: "https://www.youtube.com/@framewk",
+    creatorWallet: "framework-fortune",
     albums: [
       {
         albumId: "ar11_a1",
@@ -297,6 +310,7 @@ type FeaturedArtistsAndAlbumsProps = {
   onPlayHappened?: any;
   checkOwnershipOfAlbum: (e: any) => any;
   openActionFireLogic?: any;
+  onSendPowerUp: (e: any) => any;
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
@@ -309,6 +323,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     featuredArtistDeepLinkSlug,
     onPlayHappened,
     checkOwnershipOfAlbum,
+    onSendPowerUp,
   } = props;
   const { publicKey } = useWallet();
   const { address: addressMvx } = useGetAccount();
@@ -323,6 +338,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [duration, setDuration] = useState("00:00");
   const [progress, setProgress] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isFreeDropSampleWorkflow, setIsFreeDropSampleWorkflow] = useState(false);
 
   function eventToAttachEnded() {
     audio.src = "";
@@ -347,6 +363,12 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }
 
   useEffect(() => {
+    const isHlWorkflowDeepLink = searchParams.get("hl");
+
+    if (isHlWorkflowDeepLink === "sample") {
+      setIsFreeDropSampleWorkflow(true);
+    }
+
     audio.addEventListener("ended", eventToAttachEnded);
     audio.addEventListener("timeupdate", eventToAttachTimeUpdate);
     audio.addEventListener("canplaythrough", eventToAttachCanPlayThrough);
@@ -362,7 +384,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   useEffect(
     () => () => {
       // on unmount we have to stp playing as for some reason the play continues always otherwise
-      console.log("FeaturedArtistsAndAlbums unmount");
       playPausePreview(); // with no params wil always go into the stop logic
     },
     []
@@ -501,7 +522,39 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                       style={{
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
+
+                    <div className="mt-5">
+                      {publicKey || addressMvx ? (
+                        <Button
+                          className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                          disabled={!publicKey && !addressMvx}
+                          onClick={() => {
+                            onSendPowerUp({
+                              creatorIcon: artistProfile.img,
+                              creatorName: artistProfile.name,
+                              giveBitzToWho: artistProfile.creatorWallet,
+                              giveBitzToCampaignId: artistProfile.artistId,
+                            });
+                          }}>
+                          <>
+                            <FlaskRound />
+                            <span className="ml-2">Power-Up Creator With BiTz</span>
+                          </>
+                        </Button>
+                      ) : (
+                        <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                          <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                            <>
+                              <WalletMinimal />
+                              <span className="ml-2">Login to Power-Up Creator</span>
+                            </>
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+
                     <p className="artist-who mt-5">{artistProfile.bio}</p>
+
                     {(artistProfile.dripLink !== "" ||
                       artistProfile.xLink !== "" ||
                       artistProfile.webLink !== "" ||
@@ -596,14 +649,24 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
                           {/* when not logged in, show this to convert the wallet into user account */}
                           {!mvxNetworkSelected && !publicKey && (
-                            <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                              <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
-                                <>
-                                  <WalletMinimal />
-                                  <span className="ml-2">Login to Check Ownership</span>
-                                </>
-                              </Button>
-                            </Link>
+                            <div className="relative">
+                              <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                                <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                  <>
+                                    <WalletMinimal />
+                                    <span className="ml-2">Login to Check Ownership</span>
+                                  </>
+                                </Button>
+                              </Link>
+                              {isFreeDropSampleWorkflow && (
+                                <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
+                                  <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                                    <FontAwesomeIcon icon={faHandPointer} />
+                                  </div>
+                                  <span className="text-center">Click To Play</span>
+                                </div>
+                              )}
+                            </div>
                           )}
 
                           {mvxNetworkSelected && !addressMvx && (
@@ -619,32 +682,43 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
                           <>
                             {checkOwnershipOfAlbum(album) > -1 && (
-                              <Button
-                                disabled={isPreviewPlaying && !previewIsReadyToPlay}
-                                className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
-                                onClick={() => {
-                                  const albumInOwnershipListIndex = checkOwnershipOfAlbum(album);
+                              <div className="relative">
+                                <Button
+                                  disabled={isPreviewPlaying && !previewIsReadyToPlay}
+                                  className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
+                                  onClick={() => {
+                                    const albumInOwnershipListIndex = checkOwnershipOfAlbum(album);
 
-                                  if (albumInOwnershipListIndex > -1) {
-                                    if (!mvxNetworkSelected) {
-                                      viewSolData(albumInOwnershipListIndex);
-                                    } else {
-                                      viewMvxData(albumInOwnershipListIndex);
+                                    if (albumInOwnershipListIndex > -1) {
+                                      if (!mvxNetworkSelected) {
+                                        viewSolData(albumInOwnershipListIndex);
+                                      } else {
+                                        viewMvxData(albumInOwnershipListIndex);
+                                      }
                                     }
-                                  }
 
-                                  if (openActionFireLogic) {
-                                    openActionFireLogic();
-                                  }
+                                    if (openActionFireLogic) {
+                                      openActionFireLogic();
+                                    }
 
-                                  gtagGo("NtuArAl", "PlayAlbum", "Album", album.albumId);
-                                }}>
-                                <>
-                                  <Music2 />
-                                  <span className="ml-2">Play Album</span>
-                                </>
-                              </Button>
+                                    gtagGo("NtuArAl", "PlayAlbum", "Album", album.albumId);
+                                  }}>
+                                  <>
+                                    <Music2 />
+                                    <span className="ml-2">Play Album</span>
+                                  </>
+                                </Button>
+                                {isFreeDropSampleWorkflow && (
+                                  <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
+                                    <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                                      <FontAwesomeIcon icon={faHandPointer} />
+                                    </div>
+                                    <span className="text-center">Click To Play</span>
+                                  </div>
+                                )}
+                              </div>
                             )}
+
                             {album.ctaBuy && (
                               <Button
                                 className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"

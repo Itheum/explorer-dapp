@@ -78,10 +78,10 @@ export const MvxBitzDropdown = (props: any) => {
 export const ClaimBitzButton = (props: any) => {
   const { cooldown, handlePlayActionBtn } = props;
   const { pathname } = useLocation();
-
   const isGetBitzAppPage = () => {
     return !!pathname.match("/getbitz");
   };
+  const { updateCooldown } = useAccountStore();
 
   return (
     <Link
@@ -101,6 +101,9 @@ export const ClaimBitzButton = (props: any) => {
         ) : cooldown > 0 ? (
           <Countdown
             date={cooldown}
+            onComplete={() => {
+              updateCooldown(0);
+            }}
             renderer={(props: { hours: number; minutes: number; seconds: number; completed: boolean }) => {
               if (props.completed) {
                 return (

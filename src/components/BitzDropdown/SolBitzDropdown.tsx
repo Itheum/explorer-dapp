@@ -78,10 +78,10 @@ export const SolBitzDropdown = (props: any) => {
 export const ClaimBitzButton = (props: any) => {
   const { cooldown, handlePlayActionBtn } = props;
   const { pathname } = useLocation();
-
   const isGetBitzAppPage = () => {
     return !!pathname.match("/getbitz");
   };
+  const { updateCooldown: updateCooldownSol } = useSolBitzStore();
 
   return (
     <Link
@@ -101,6 +101,9 @@ export const ClaimBitzButton = (props: any) => {
         ) : cooldown > 0 ? (
           <Countdown
             date={cooldown}
+            onComplete={() => {
+              updateCooldownSol(0);
+            }}
             renderer={(props: { hours: number; minutes: number; seconds: number; completed: boolean }) => {
               if (props.completed) {
                 return (
