@@ -905,13 +905,9 @@ export const NFTunes = () => {
   );
 };
 
-export async function getRadioStreamsData(firstNTracks?: number) {
+export async function getRadioStreamsData() {
   try {
-    let getRadioStreamAPI = `${getApiWeb2Apps()}/datadexapi/nfTunesApp/getRadioStreams`;
-
-    if (firstNTracks) {
-      getRadioStreamAPI += `?firstNTracks=${firstNTracks}`;
-    }
+    const getRadioStreamAPI = `${getApiWeb2Apps()}/app_nftunes/json/radioStreamData.json`;
 
     const tracksRes = await axios.get(getRadioStreamAPI);
     const tracksData = tracksRes.data;
@@ -925,7 +921,7 @@ export async function getRadioStreamsData(firstNTracks?: number) {
 
 export async function getNFTuneFirstTrackBlobData() {
   try {
-    const firstNFTuneRadioTrackData = await getRadioStreamsData(1);
+    const firstNFTuneRadioTrackData = await getRadioStreamsData();
 
     if (firstNFTuneRadioTrackData && firstNFTuneRadioTrackData.length > 0) {
       const blob = await fetch(firstNFTuneRadioTrackData[0].stream).then((r) => r.blob());
