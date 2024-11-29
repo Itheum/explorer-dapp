@@ -168,7 +168,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
           setGiftBitzWorkflow(false);
         }}
         closeOnOverlayClick={false}
-        title={!isLikeMode ? "Power-Up A Creator with BiTz" : "Like Content with 5 BiTz"}
+        title={!isLikeMode ? "Power-Up This Creator With BiTz" : "Like This Content With 5 BiTz"}
         hasFilter={false}
         filterData={[]}
         modalClassName={""}
