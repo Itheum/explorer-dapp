@@ -367,7 +367,7 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
               <span className="font-sans text-lg font-medium leading-6 text-foreground">{songs[currentTrackIndex]?.artist}</span>
               <span className="font-sans text-base font-medium leading-6 text-muted-foreground">
                 {songs[currentTrackIndex]?.album}
-                {songs[currentTrackIndex]?.isExplicit && (
+                {songs[currentTrackIndex]?.isExplicit && songs[currentTrackIndex]?.isExplicit === "1" && (
                   <img
                     className="max-h-[20px] inline ml-2 mt-[-4px] dark:bg-white"
                     src={ratingR}
