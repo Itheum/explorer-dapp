@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { faHandPointer } from "@fortawesome/free-solid-svg-icons";
+import { faHandPointer, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, FlaskRound } from "lucide-react";
+import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, FlaskRound, HandHeart } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Button } from "libComponents/Button";
 import { gtagGo } from "libs/utils/misc";
+import { fetchBitSumAndGiverCounts } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
 import { routeNames } from "routes";
+import { useNftsStore } from "store/nfts";
 
 const dataset = [
   {
@@ -19,25 +21,30 @@ const dataset = [
     img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
     dripLink: "https://drip.haus/mugenhachi",
     xLink: "https://x.com/mugenhachi",
-    creatorWallet: "hachi-mugen",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar1",
     albums: [
       {
         albumId: "ar1_a2",
         solNftName: "MUSG8 - Infinity Series - Hachi",
         title: "Infinity Series",
         desc: "Hachi Mugen meditates on four vibrations to unlock his true potential.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmX1GASRSSqProbmN61RBcz72EPKh687zumm8FJsaTWEHt",
         ctaBuy: "https://drip.haus/itheum/set/58ad11e3-a410-4ac0-8b24-88c5fadb6df9",
         ctaAirdrop: "",
+        bountyId: "mus_ar1_a2",
       },
       {
         albumId: "ar1_a1",
         solNftName: "MUSG3 - Mugen Cafe EP",
         title: "Mugen Cafe",
         desc: "Cafe-style, laid-back, lo-fi tracks to sooth your soothe",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmU82pDyHJRey4YfwtyDDdgwFtubCd5Xg4wPwfKJR8JppQ",
         ctaBuy: "https://drip.haus/itheum/set/662d1e23-5bc2-454c-989a-123c403465cc",
         ctaAirdrop: "",
+        bountyId: "mus_ar1_a1",
       },
     ],
   },
@@ -49,34 +56,41 @@ const dataset = [
     img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/manu.jpg",
     dripLink: "",
     xLink: "https://x.com/Manu_Sounds",
-    creatorWallet: "yfgp-123456",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar2",
     albums: [
       {
         albumId: "ar2_a3",
         solNftName: "MUSG11 - YFGP - Elements",
         title: "Elements",
         desc: "Elements represents a combination of two styles, two different type of vibes, in contradiction. That's what life is all about…handling those situations accordingly, knowing which one is which",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/manu.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmZDBsTrVN4uscnA8HWFxb9M3d9inctGqcw9NjHcZM2ENo",
         ctaBuy: "https://drip.haus/itheum/set/2b5772ce-e038-4e22-8d1e-1b5d269b6862",
         ctaAirdrop: "",
+        bountyId: "mus_ar2_a3",
       },
       {
         albumId: "ar2_a2",
         solNftName: "MUSG2 - Cranium Beats",
         title: "Cranium Beats",
         desc: "Dark Hip Hop Instrumentals Ultimate Album, produced by YFGP; sample-based with underground flavor and dark vibes!",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/manu.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmRmMRDD8nEnmDpwpmnoadHrdbWrWradTg3jb4FnN1aWUv",
         ctaBuy: "https://drip.haus/itheum/set/325fab5f-83ad-4fdb-9a89-aba05452f54b",
         ctaAirdrop: "",
+        bountyId: "mus_ar2_a2",
       },
       {
         albumId: "ar2_a1",
         solNftName: "MUSG4 - Retrofy YFGP",
         title: "Retrofy",
         desc: "Old-school instrumentals, fat boom-bap drums, 8-bit sounds, lofi flavor, and chill vibes. Take you back to the golden days with nostalgia-filled frequencies!",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/manu.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmegnmMCUMAWaW4BdPBQvWFcXcNffKLa4DJo3jYpMg9Z6j",
         ctaBuy: "https://drip.haus/itheum/set/df074d5e-030f-4338-a2d6-ce430c6a86a9",
         ctaAirdrop: "",
+        bountyId: "mus_ar2_a1",
       },
     ],
   },
@@ -88,16 +102,19 @@ const dataset = [
     img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
     dripLink: "",
     xLink: "",
-    creatorWallet: "7g0strike-12",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar3",
     albums: [
       {
         albumId: "ar3_a1",
         solNftName: "MUSG1 - DnB Music",
         title: "Love in Disasters",
         desc: "Blends lyrics about natural disasters and love, crafted entirely with AI tools",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/7g0Strike.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmPRwT6Xt3pqtz7RbBfvaVevkZqgzXpKnVg5Hc115QBzfe",
         ctaBuy: "https://drip.haus/itheum/set/5baed2d8-9f49-41bc-af9e-a2364f79c32a",
         ctaAirdrop: "",
+        bountyId: "mus_ar3_a1",
       },
     ],
   },
@@ -110,16 +127,19 @@ const dataset = [
     dripLink: "https://drip.haus/llluna01",
     xLink: "https://twitter.com/0xLuna01",
     webLink: "https://linktr.ee/llluna01",
-    creatorWallet: "llluna01-12",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar4",
     albums: [
       {
         albumId: "ar4_a1",
         solNftName: "MUSG5 - Diaspora EP - LLLUNA01",
         title: "Diaspora EP",
         desc: "Diaspora by LLLUNA01 fuses Dubstep, Trap, and Drum & Bass Jungle into a high-energy, bass-heavy journey through global underground sounds.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/llluna01.jpg",
         ctaPreviewStream: "https://api.itheumcloud.com/app_nftunes/music/preview/llluna01-diaspora.mp3",
         ctaBuy: "https://drip.haus/itheum/set/3866c693-3505-4ec1-b81f-7a4db8e4747d",
         ctaAirdrop: "",
+        bountyId: "mus_ar4_a1",
       },
     ],
   },
@@ -132,7 +152,8 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/the_economystic",
     webLink: "",
-    creatorWallet: "two-week-12",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar5",
     albums: [
       {
         albumId: "ar5_a1",
@@ -140,9 +161,11 @@ const dataset = [
         mvxDataNftId: "DATANFTFT-e936d4-ae",
         title: "TWOWEEK EP",
         desc: "A collection of 3 songs, was composed and recorded by myself over the course of two weeks in the Summer of 2024. The first song of the EP, Otherside, is the first song I ever wrote back in the Summer of 2021. All vocals and instrumentation performed by Stephen Snodgrass.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/stephen-snodgrass.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/Qme3F97bs7MtkdshibxauHHDNLSvKtvw3nhJ3NiQXpGkGR",
         ctaBuy: "https://datadex.itheum.io/datanfts/marketplace/DATANFTFT-e936d4-ae",
         ctaAirdrop: "",
+        bountyId: "mus_ar5_a1",
       },
       {
         albumId: "ar5_a2",
@@ -150,9 +173,11 @@ const dataset = [
         mvxDataNftId: "DATANFTFT-e936d4-d5",
         title: "Twenty Too",
         desc: "Twenty Too is a journey; a song about getting lost and growing up and dualities of life and a story to be told. This song was completed - from writing to recording - all within two weeks in June 2024 immediately after completing TWOWEEK EP. All vocals and instrumentation performed by Stephen Snodgrass.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/stephen-snodgrass.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmTR5oySVzn8dXyXG7j1L1o7ZE8BZrYSkYxomr5Mh1Jo6Y",
         ctaBuy: "https://datadex.itheum.io/datanfts/marketplace/DATANFTFT-e936d4-d5",
         ctaAirdrop: "",
+        bountyId: "mus_ar5_a2",
       },
     ],
   },
@@ -165,7 +190,8 @@ const dataset = [
     dripLink: "",
     xLink: "https://twitter.com/deep_forest",
     webLink: "https://www.deep-forest.fr/",
-    creatorWallet: "deep-forest",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar6",
     albums: [
       {
         albumId: "ar6_a1",
@@ -173,9 +199,11 @@ const dataset = [
         mvxDataNftId: "DFEE-72425b",
         title: "Ethereal Echoes",
         desc: "The Chronicles of Deep Forest – an exclusive digital EP released to celebrate the 30th anniversary of their Grammy win.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/deep-forest.jpg",
         ctaPreviewStream: "https://explorer.itheum.io/assets/deep-forest-preview-mix-D_1v3lz4.mp3",
         ctaBuy: "https://datadex.itheum.io/datanfts/marketplace/DFEE-72425b-13",
         ctaAirdrop: "",
+        bountyId: "mus_ar6_a1",
       },
     ],
   },
@@ -188,7 +216,8 @@ const dataset = [
     dripLink: "",
     xLink: "",
     webLink: "",
-    creatorWallet: "3oe-1234567",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar7",
     albums: [
       {
         albumId: "ar7_a1",
@@ -196,9 +225,11 @@ const dataset = [
         mvxDataNftId: "",
         title: "Eternal Echo",
         desc: "This is the premier Digital EP from 3OE - it delivers immersive soundscapes for a pleasant musical experience.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/3oe.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmVc3L5J2x6RTuxTD3W5f83AEMXD6b9v2DELu5R9vhiStt",
         ctaBuy: "https://drip.haus/itheum/set/6f744afb-cc1f-4a66-8b85-aaa34da9af9f",
         ctaAirdrop: "",
+        bountyId: "mus_ar7_a1",
       },
     ],
   },
@@ -211,7 +242,8 @@ const dataset = [
     dripLink: "",
     xLink: "",
     webLink: "",
-    creatorWallet: "waveborn-luminex",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar8",
     albums: [
       {
         albumId: "ar8_a1",
@@ -220,9 +252,11 @@ const dataset = [
         mvxDataNftId: "",
         title: "Suno",
         desc: "This is the premier Digital EP from Waveborn Luminex that delivers a unique electro pop musical experience.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/waveborn-luminex.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmeTrvB5o5Ki8MALogN9tjHmJsai4wpBy8EYA38JHK2ceF",
         ctaBuy: "https://drip.haus/itheum/set/0bba5f0b-4449-458b-b717-083eefa53a2c",
         ctaAirdrop: "",
+        bountyId: "mus_ar8_a1",
       },
     ],
   },
@@ -235,7 +269,8 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/YoshiroMare",
     webLink: "https://bonfire.xyz/YoshiroMare",
-    creatorWallet: "yoshiro-mare",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar9",
     albums: [
       {
         albumId: "ar9_a1",
@@ -243,9 +278,11 @@ const dataset = [
         mvxDataNftId: "",
         title: "They Were Right",
         desc: "Unique and original digital EP from Yoshiro Mare that delivers energetically charged deep house music.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/yoshiro-mare.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmSMU6Y1fX4q6rVbMfJKd1jDhGpNbrDFCxoYP8vRWnuQqe",
         ctaBuy: "https://drip.haus/itheum/set/6f727def-e28a-4b96-8670-077d09469a1c",
         ctaAirdrop: "",
+        bountyId: "mus_ar9_a1",
       },
     ],
   },
@@ -258,7 +295,8 @@ const dataset = [
     dripLink: "",
     xLink: "https://x.com/GenuLemny",
     webLink: "",
-    creatorWallet: "flaka-ciprislg",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar10",
     albums: [
       {
         albumId: "ar10_a1",
@@ -267,9 +305,11 @@ const dataset = [
         isPodcast: "1",
         title: "Mic in Flames Podcast",
         desc: "Mic in Flames is an educational Web3 space covering topics like investment DAOs, blockchain social apps, Web3 RWAs, and tools. It dives deeper into Web3, exploring innovations like Data NFTs, blending content with unique utility.",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/mic-in-flames.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmV2R1NS1AqLFf3vwyB1JNtCtQC8Rf5cWY7SgjGnfvuN8T",
         ctaBuy: "https://drip.haus/itheum/set/7547adb0-c840-4157-a01f-d813177e91eb",
         ctaAirdrop: "",
+        bountyId: "mus_ar10_a1",
       },
     ],
   },
@@ -284,7 +324,8 @@ const dataset = [
     webLink: "https://frameworkfortune.com",
     ytLink: "https://www.youtube.com/@frameworkfortune",
     otherLink1: "https://www.youtube.com/@framewk",
-    creatorWallet: "framework-fortune",
+    creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+    bountyId: "mus_ar11",
     albums: [
       {
         albumId: "ar11_a1",
@@ -293,9 +334,11 @@ const dataset = [
         isExplicit: "1",
         title: "Frame Favs V1",
         desc: "Playlist of my personal favorite tracks I’ve released on my DRiP Profile. Join me on my DRiP music journey to break down the walls of the traditional music industry between Artists & Fans!!!",
+        img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/framework-fortune.jpg",
         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmcJHcxsAETpStEnYZyFEp18HW18Yrt2PbPgWje1ZHgBsn ",
         ctaBuy: "https://drip.haus/itheum/set/02657764-7fd4-4104-abd4-498488f443e2",
         ctaAirdrop: "",
+        bountyId: "mus_ar11_a1",
       },
     ],
   },
@@ -311,6 +354,7 @@ type FeaturedArtistsAndAlbumsProps = {
   checkOwnershipOfAlbum: (e: any) => any;
   openActionFireLogic?: any;
   onSendPowerUp: (e: any) => any;
+  refreshBitzCountsForBounty: { giveBitzToWho: string; giveBitzToCampaignId: string } | undefined;
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
@@ -324,6 +368,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     onPlayHappened,
     checkOwnershipOfAlbum,
     onSendPowerUp,
+    refreshBitzCountsForBounty,
   } = props;
   const { publicKey } = useWallet();
   const { address: addressMvx } = useGetAccount();
@@ -339,6 +384,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [progress, setProgress] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFreeDropSampleWorkflow, setIsFreeDropSampleWorkflow] = useState(false);
+  const { solBitzNfts } = useNftsStore();
+  const [bountyToBitzLocalMapping, setBountyToBitzLocalMapping] = useState<any>({});
 
   function eventToAttachEnded() {
     audio.src = "";
@@ -390,7 +437,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   );
 
   useEffect(() => {
-    console.log("selArtistId ", selArtistId);
     playPausePreview(); // with no params wil always go into the stop logic
 
     const selDataItem = dataset.find((i) => i.artistId === selArtistId);
@@ -402,6 +448,9 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       // update the deep link param
       setSearchParams({ "artist-profile": selDataItem.slug });
     }
+
+    // we clone selDataItem here so as to no accidentally mutate things
+    fetchBitzPowerUpsAndLikesForSelectedArtist({ ...selDataItem });
   }, [selArtistId]);
 
   useEffect(() => {
@@ -421,6 +470,93 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       playPausePreview(); // with no params wil always go into the stop logic
     }
   }, [stopPreviewPlayingNow]);
+
+  useEffect(() => {
+    async function refreshBountyBitz() {
+      if (refreshBitzCountsForBounty) {
+        const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
+
+        const response = await fetchBitSumAndGiverCounts({
+          getterAddr: refreshBitzCountsForBounty.giveBitzToWho || "",
+          campaignId: refreshBitzCountsForBounty.giveBitzToCampaignId || "",
+          collectionId: solBitzNfts[0].grouping[0].group_value,
+        });
+
+        _bountyToBitzLocalMapping[refreshBitzCountsForBounty.giveBitzToCampaignId] = {
+          syncedOn: Date.now(),
+          bitsSum: response.bitsSum,
+        };
+
+        setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+      }
+    }
+
+    if (refreshBitzCountsForBounty && solBitzNfts && solBitzNfts.length > 0) {
+      console.log("fetchBitzPowerUpsAndLikesForSelectedArtist Flush from cache and reload");
+
+      // remove the old value
+      delete bountyToBitzLocalMapping[refreshBitzCountsForBounty.giveBitzToCampaignId];
+
+      refreshBountyBitz();
+    }
+  }, [solBitzNfts, refreshBitzCountsForBounty]);
+
+  // as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
+  async function fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem: any) {
+    if (!selDataItem) {
+      return;
+    }
+
+    const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
+
+    // cache for 15 seconds
+    if (!bountyToBitzLocalMapping[selDataItem.bountyId] || Date.now() - bountyToBitzLocalMapping[selDataItem.bountyId].syncedOn > 15 * 1000) {
+      console.log("fetchBitzPowerUpsAndLikesForSelectedArtist NO cached");
+
+      const response = await fetchBitSumAndGiverCounts({
+        getterAddr: selDataItem?.creatorWallet || "",
+        campaignId: selDataItem?.bountyId || "",
+        collectionId: solBitzNfts[0].grouping[0].group_value,
+      });
+
+      _bountyToBitzLocalMapping[selDataItem?.bountyId] = {
+        syncedOn: Date.now(),
+        bitsSum: response.bitsSum,
+      };
+
+      // lets make a list of album bounties as well and queue it to be fetched
+      const albumBountyIds = selDataItem.albums.map((i: any) => i.bountyId);
+
+      if (albumBountyIds.length > 0) {
+        const albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+          return fetchBitSumAndGiverCounts({
+            getterAddr: selDataItem?.creatorWallet || "",
+            campaignId: albumBounty || "",
+            collectionId: solBitzNfts[0].grouping[0].group_value,
+          });
+        });
+
+        Promise.all(albumBitzPowerUpPromises).then((values) => {
+          console.log(values);
+
+          albumBountyIds.forEach((albumBountyId: any, idx: number) => {
+            _bountyToBitzLocalMapping[albumBountyId] = {
+              syncedOn: Date.now(),
+              bitsSum: values[idx].bitsSum,
+            };
+          });
+
+          setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+
+          // console.log({ receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts });
+        });
+      } else {
+        setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+      }
+    } else {
+      console.log("fetchBitzPowerUpsAndLikesForSelectedArtist YES cached");
+    }
+  }
 
   async function playPausePreview(previewStreamUrl?: string, albumId?: string) {
     if (previewStreamUrl && albumId && (!isPreviewPlaying || previewPlayingForAlbumId !== albumId)) {
@@ -523,7 +659,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                         "backgroundImage": `url(${artistProfile.img})`,
                       }}></div>
 
-                    <div className="mt-5">
+                    <div className="mt-5 flex flex-col md:flex-row items-center">
                       {publicKey || addressMvx ? (
                         <Button
                           className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
@@ -533,12 +669,12 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               creatorIcon: artistProfile.img,
                               creatorName: artistProfile.name,
                               giveBitzToWho: artistProfile.creatorWallet,
-                              giveBitzToCampaignId: artistProfile.artistId,
+                              giveBitzToCampaignId: artistProfile.bountyId,
                             });
                           }}>
                           <>
                             <FlaskRound />
-                            <span className="ml-2">Power-Up Creator With BiTz</span>
+                            <span className="ml-2">Power-Up Musician With BiTz</span>
                           </>
                         </Button>
                       ) : (
@@ -546,11 +682,18 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                           <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
                             <>
                               <WalletMinimal />
-                              <span className="ml-2">Login to Power-Up Creator</span>
+                              <span className="ml-2">Login to Power-Up Musician</span>
                             </>
                           </Button>
                         </Link>
                       )}
+                      <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 mt-2 md:mt-0 rounded md:min-w-[100px] flex items-center justify-center">
+                        {typeof bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum === "undefined" ? (
+                          <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
+                        ) : (
+                          <div className="p-10 md:p-0">{bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum}</div>
+                        )}
+                      </div>
                     </div>
 
                     <p className="artist-who mt-5">{artistProfile.bio}</p>
@@ -609,21 +752,75 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                     <p className="mt-5 mb-5 text-xl font-bold">NF-Tunes Discography</p>
 
                     {artistProfile.albums.map((album: any, idx: number) => (
-                      <div key={album.albumId} className="album flex flex-col bbg-500 h-[100%] mb-3 p-5 border">
-                        <h3 className="!text-xl mb-2 flex items-baseline">
-                          <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
-                          <span>{`${album.title}`}</span>
-                          {album.isExplicit && (
-                            <img
-                              className="max-h-[20px] ml-[10px] dark:bg-white"
-                              src={ratingR}
-                              alt="Warning: Explicit Content"
-                              title="Warning: Explicit Content"
-                            />
-                          )}
-                        </h3>
-                        <p className="">{album.desc}</p>
-                        <div className="album-actions mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
+                      <div key={album.albumId} className="album flex flex-col h-[100%] mb-3 p-5 border">
+                        <div className="albumDetails flex flex-col md:flex-row">
+                          <div
+                            className="albumImg bg1-red-200 border-[0.5px] border-neutral-500/90 h-[150px] w-[150px] bg-no-repeat bg-cover rounded-xl m-auto"
+                            style={{
+                              "backgroundImage": `url(${album.img})`,
+                            }}></div>
+
+                          <div className="albumText bg1-red-300 flex flex-col mt-5 md:mt-0 md:ml-5 md:pr-2 flex-1 mb-5 md:mb-0">
+                            <h3 className="!text-xl mb-2 flex items-baseline">
+                              <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
+                              <span>{`${album.title}`}</span>
+                              {album.isExplicit && (
+                                <img
+                                  className="max-h-[20px] ml-[10px] dark:bg-white"
+                                  src={ratingR}
+                                  alt="Warning: Explicit Content"
+                                  title="Warning: Explicit Content"
+                                />
+                              )}
+                            </h3>
+                            <p className="ml-2">{album.desc}</p>
+                          </div>
+
+                          <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col md:items-end">
+                            {publicKey || addressMvx ? (
+                              <div className="bg1-red-600 flex flex-row md:flex-col justify-center">
+                                <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 rounded w-[100px] flex items-center justify-center">
+                                  {typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum === "undefined" ? (
+                                    <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
+                                  ) : (
+                                    <div className="p-5 md:p-0">{bountyToBitzLocalMapping[album.bountyId]?.bitsSum}</div>
+                                  )}
+                                </div>
+                                <Button
+                                  className="!text-black ml-2 md:ml-0 text-sm w-[100px] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 cursor-pointer"
+                                  disabled={!publicKey && !addressMvx}
+                                  onClick={() => {
+                                    onSendPowerUp({
+                                      creatorIcon: album.img,
+                                      creatorName: `${artistProfile.name}'s ${album.title}`,
+                                      giveBitzToWho: artistProfile.creatorWallet,
+                                      giveBitzToCampaignId: album.bountyId,
+                                      isLikeMode: true,
+                                    });
+                                  }}>
+                                  <>
+                                    <FlaskRound />
+                                    <span className="mx-2 text-lg"> {">"} </span>
+                                    <HandHeart />
+                                  </>
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="bg1-red-600">
+                                <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                                  <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                    <>
+                                      <WalletMinimal />
+                                      <span className="ml-1">Login to Like</span>
+                                    </>
+                                  </Button>
+                                </Link>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="albumActions bg1-red-500 mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
                           {album.ctaPreviewStream && (
                             <Button
                               disabled={isPreviewPlaying && !previewIsReadyToPlay}

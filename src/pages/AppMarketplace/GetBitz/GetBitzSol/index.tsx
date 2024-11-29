@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { PublicKey } from "@solana/web3.js";
+// import { PublicKey } from "@solana/web3.js";
 import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
 import { fireworks } from "@tsparticles/fireworks";
@@ -49,7 +49,7 @@ import Meme9 from "assets/img/getbitz/memes/9.jpg";
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
 import { SUPPORTED_SOL_COLLECTIONS } from "config";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
+import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
 import { BlobDataType } from "libs/types";
 import { cn, getApiWeb2Apps, sleep } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
@@ -114,12 +114,14 @@ const GetBitzSol = (props: any) => {
   const updateBonusBitzSum = bitzStore.updateBonusBitzSum;
   const updateBonusTries = bitzStore.updateBonusTries;
 
+  // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
   const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
   const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
+  // E: Cached Signature Store Items
 
   // a single game-play related (so we have to reset these if the user wants to "replay")
   const [isFetchingDataMarshal, setIsFetchingDataMarshal] = useState<boolean>(false);
@@ -166,6 +168,14 @@ const GetBitzSol = (props: any) => {
         setPopulatedBitzStore(true);
 
         (async () => {
+          const viewDataArgs = {
+            headers: {
+              "dmf-custom-only-state": "1",
+              "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value,
+            },
+            fwdHeaderKeys: ["dmf-custom-only-state", "dmf-custom-sol-collection-id"],
+          };
+
           const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
             solPreaccessNonce,
             solPreaccessSignature,
@@ -177,7 +187,9 @@ const GetBitzSol = (props: any) => {
             updateSolPreaccessTimestamp,
           });
 
-          const getBitzGameResult = await viewDataToOnlyGetReadOnlyBitz(solBitzNfts[0], usedPreAccessNonce, usedPreAccessSignature, publicKeySol);
+          // const getBitzGameResult = await viewDataToOnlyGetReadOnlyBitz(solBitzNfts[0], usedPreAccessNonce, usedPreAccessSignature, publicKeySol);
+
+          const getBitzGameResult = await viewDataWrapperSol(publicKeySol!, usedPreAccessNonce, usedPreAccessSignature, viewDataArgs, solBitzNfts[0].id);
 
           if (getBitzGameResult) {
             const bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
@@ -284,8 +296,10 @@ const GetBitzSol = (props: any) => {
     await sleep(5);
 
     const viewDataArgs: Record<string, any> = {
-      headers: {},
-      fwdHeaderKeys: [],
+      headers: {
+        "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value,
+      },
+      fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
     };
 
     if (usingReferralCode !== "") {
@@ -293,7 +307,19 @@ const GetBitzSol = (props: any) => {
       viewDataArgs.fwdHeaderKeys.push("dmf-referral-code");
     }
 
-    const viewDataPayload = await viewData(viewDataArgs, solBitzNfts[0]);
+    // const viewDataPayload = await viewData(viewDataArgs, solBitzNfts[0]);
+    const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+      solPreaccessNonce,
+      solPreaccessSignature,
+      solPreaccessTimestamp,
+      signMessage,
+      publicKey: publicKeySol,
+      updateSolPreaccessNonce,
+      updateSolSignedPreaccess,
+      updateSolPreaccessTimestamp,
+    });
+
+    const viewDataPayload = await viewDataWrapperSol(publicKeySol!, usedPreAccessNonce, usedPreAccessSignature, viewDataArgs, solBitzNfts[0].id);
 
     if (viewDataPayload) {
       let animation;
@@ -363,60 +389,61 @@ const GetBitzSol = (props: any) => {
           (animation as unknown as Container).destroy();
         }
       }
-    } else {
-      setIsFetchingDataMarshal(false);
     }
+    // else {
+    //   setIsFetchingDataMarshal(false);
+    // }
+
+    setIsFetchingDataMarshal(false);
   }
 
-  async function viewData(viewDataArgs: any, requiredDataNFT: any) {
-    try {
-      const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
-        solPreaccessNonce,
-        solPreaccessSignature,
-        solPreaccessTimestamp,
-        signMessage,
-        publicKey: publicKeySol,
-        updateSolPreaccessNonce,
-        updateSolSignedPreaccess,
-        updateSolPreaccessTimestamp,
-      });
+  // async function viewData(viewDataArgs: any, requiredDataNFT: any) {
+  //   try {
+  //     const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+  //       solPreaccessNonce,
+  //       solPreaccessSignature,
+  //       solPreaccessTimestamp,
+  //       signMessage,
+  //       publicKey: publicKeySol,
+  //       updateSolPreaccessNonce,
+  //       updateSolSignedPreaccess,
+  //       updateSolPreaccessTimestamp,
+  //     });
 
-      if (!publicKeySol) {
-        throw new Error("Missing data for viewData");
-      }
+  //     if (!publicKeySol) {
+  //       throw new Error("Missing data for viewData");
+  //     }
 
-      const res = await itheumSolViewData(
-        requiredDataNFT.id,
-        usedPreAccessNonce,
-        usedPreAccessSignature,
-        publicKeySol,
-        viewDataArgs.fwdHeaderKeys,
-        viewDataArgs.headers
-      );
+  //     const res = await viewDataViaMarshalSol(
+  //       requiredDataNFT.id,
+  //       usedPreAccessNonce,
+  //       usedPreAccessSignature,
+  //       publicKeySol,
+  //       viewDataArgs.fwdHeaderKeys,
+  //       viewDataArgs.headers
+  //     );
 
-      const rest = await res.json();
-      let blobDataType = BlobDataType.TEXT;
-      let data;
+  //     let blobDataType = BlobDataType.TEXT;
+  //     let data;
 
-      if (res.ok) {
-        const contentType = res.headers.get("content-type");
+  //     if (res.ok) {
+  //       const contentType = res.headers.get("content-type");
 
-        if (contentType && contentType.includes("application/json")) {
-          data = rest;
-        }
+  //       if (contentType && contentType.includes("application/json")) {
+  //         data = await res.json();
+  //       }
 
-        return { data, blobDataType, contentType };
-      } else {
-        console.log("viewData threw catch error");
-        console.error(res.statusText);
+  //       return { data, blobDataType, contentType };
+  //     } else {
+  //       console.log("viewData threw catch error");
+  //       console.error(res.statusText);
 
-        return undefined;
-      }
-    } catch (err) {
-      setIsFetchingDataMarshal(false);
-      return undefined;
-    }
-  }
+  //       return undefined;
+  //     }
+  //   } catch (err) {
+  //     return undefined;
+  //   }
+  // }
 
   function gamePlayImageSprites() {
     let _viewDataRes = viewDataRes;
@@ -750,7 +777,8 @@ const GetBitzSol = (props: any) => {
 
     const callConfig = {
       headers: {
-        "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
       },
     };
 
@@ -806,7 +834,8 @@ const GetBitzSol = (props: any) => {
   async function fetchAndLoadMyRankOnLeaderBoard() {
     const callConfig = {
       headers: {
-        "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
       },
     };
     try {
@@ -934,47 +963,51 @@ const GetBitzSol = (props: any) => {
   );
 };
 
-export async function viewDataToOnlyGetReadOnlyBitz(
-  requiredDataNFT: any,
-  usedPreAccessNonce: string,
-  usedPreAccessSignature: string,
-  userPublicKey: PublicKey
-) {
-  try {
-    if (!userPublicKey) throw new Error("Missing data for viewData");
+// export async function viewDataToOnlyGetReadOnlyBitz(
+//   requiredDataNFT: any,
+//   usedPreAccessNonce: string,
+//   usedPreAccessSignature: string,
+//   userPublicKey: PublicKey
+// ) {
+//   try {
+//     if (!userPublicKey) throw new Error("Missing data for viewData");
 
-    const viewDataArgs = {
-      headers: {
-        "dmf-custom-only-state": "1",
-      },
-      fwdHeaderKeys: ["dmf-custom-only-state"],
-    };
+//     const viewDataArgs = {
+//       headers: {
+//         "dmf-custom-only-state": "1",
+//       },
+//       fwdHeaderKeys: ["dmf-custom-only-state"],
+//     };
 
-    const res = await itheumSolViewData(
-      requiredDataNFT.id,
-      usedPreAccessNonce,
-      usedPreAccessSignature,
-      userPublicKey,
-      viewDataArgs.fwdHeaderKeys,
-      viewDataArgs.headers
-    );
-    const rest = await res.json();
-    const blobDataType = BlobDataType.TEXT;
-    let data;
-    if (res.ok) {
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        data = rest;
-      }
-      return { data, blobDataType, contentType };
-    } else {
-      console.error("viewData threw catch error" + res.statusText);
+//     const res = await viewDataViaMarshalSol(
+//       requiredDataNFT.id,
+//       usedPreAccessNonce,
+//       usedPreAccessSignature,
+//       userPublicKey,
+//       viewDataArgs.fwdHeaderKeys,
+//       viewDataArgs.headers
+//     );
 
-      return undefined;
-    }
-  } catch (err) {
-    return undefined;
-  }
-}
+//     const rest = await res.json();
+//     const blobDataType = BlobDataType.TEXT;
+
+//     let data;
+
+//     if (res.ok) {
+//       const contentType = res.headers.get("content-type");
+
+//       if (contentType && contentType.includes("application/json")) {
+//         data = rest;
+//       }
+//       return { data, blobDataType, contentType };
+//     } else {
+//       console.error("viewData threw catch error" + res.statusText);
+
+//       return undefined;
+//     }
+//   } catch (err) {
+//     return undefined;
+//   }
+// }
 
 export default GetBitzSol;

@@ -302,9 +302,27 @@ export function getDataBounties() {
       fillPerks: `Maecenas a tortor sit amet neque tristique tincidunt placerat et odio.`,
     });
     allBounties.push({
-      bountySubmitter: "E4wVAvuuQ7AsFaonuZuhtMWcb6pNMehiWCfXWscdoB4M",
+      bountySubmitter: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
       bountyId: "mus_ar1",
       title: "Support Musican : Hachi Mugen",
+      summary: "",
+      readMoreLink: "",
+      submittedOnTs: 1732762661503,
+      fillPerks: ``,
+    });
+    allBounties.push({
+      bountySubmitter: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+      bountyId: "mus_ar1_a2",
+      title: "Support Musican Album : Hachi Mugen : Infinity Series",
+      summary: "",
+      readMoreLink: "",
+      submittedOnTs: 1732762661503,
+      fillPerks: ``,
+    });
+    allBounties.push({
+      bountySubmitter: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
+      bountyId: "mus_ar1_a1",
+      title: "Support Musican Album : Hachi Mugen : Mugen Cafe EP",
       summary: "",
       readMoreLink: "",
       submittedOnTs: 1732762661503,

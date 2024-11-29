@@ -13,7 +13,7 @@ import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
-import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
+import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import { toastClosableError } from "libs/utils/uiShared";
@@ -38,12 +38,16 @@ export const MyWallet = () => {
   const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
   const { publicKey, signMessage } = useWallet();
+  const { solBitzNfts } = useNftsStore();
+
+  // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
   const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
   const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
+  // E: Cached Signature Store Items
 
   useEffect(() => {
     setShownMvxDataNfts(mvxNfts.slice(0, numberOfMvxNftsShown));
@@ -168,15 +172,22 @@ export const MyWallet = () => {
       });
 
       const viewDataArgs = {
-        headers: {},
-        fwdHeaderKeys: [],
+        headers: { "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value },
+        fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
       };
 
       if (!publicKey) {
         throw new Error("Missing data for viewData");
       }
 
-      const res = await itheumSolViewData(dataNft.id, usedPreAccessNonce, usedPreAccessSignature, publicKey, viewDataArgs.fwdHeaderKeys, viewDataArgs.headers);
+      const res = await viewDataViaMarshalSol(
+        dataNft.id,
+        usedPreAccessNonce,
+        usedPreAccessSignature,
+        publicKey,
+        viewDataArgs.fwdHeaderKeys,
+        viewDataArgs.headers
+      );
 
       const contentType = res.headers.get("content-type");
       let blobDataType = BlobDataType.TEXT;

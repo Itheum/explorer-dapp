@@ -8,7 +8,8 @@ import { SUPPORTED_MVX_COLLECTIONS, SUPPORTED_SOL_COLLECTIONS } from "config";
 import { useGetAccount } from "hooks";
 import { decodeNativeAuthToken, getApiWeb2Apps } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
-import { viewDataToOnlyGetReadOnlyBitz } from "pages/AppMarketplace/GetBitz/GetBitzSol";
+// import { viewDataToOnlyGetReadOnlyBitz } from "pages/AppMarketplace/GetBitz/GetBitzSol";
+import { viewDataWrapperSol } from "libs/sol/SolViewData";
 import useSolBitzStore from "store/solBitz";
 import { useAccountStore } from "./account";
 import { useAppsStore } from "./apps";
@@ -174,7 +175,16 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     (async () => {
       if (solBitzNfts.length > 0 && solPreaccessNonce !== "" && solPreaccessSignature !== "" && publicKeySol) {
-        const getBitzGameResult = await viewDataToOnlyGetReadOnlyBitz(solBitzNfts[0], solPreaccessNonce, solPreaccessSignature, publicKeySol);
+        const viewDataArgs = {
+          headers: {
+            "dmf-custom-only-state": "1",
+            "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value,
+          },
+          fwdHeaderKeys: ["dmf-custom-only-state", "dmf-custom-sol-collection-id"],
+        };
+
+        // const getBitzGameResult = await viewDataToOnlyGetReadOnlyBitz(solBitzNfts[0], solPreaccessNonce, solPreaccessSignature, publicKeySol);
+        const getBitzGameResult = await viewDataWrapperSol(publicKeySol!, solPreaccessNonce, solPreaccessSignature, viewDataArgs, solBitzNfts[0].id);
 
         if (getBitzGameResult) {
           const bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;

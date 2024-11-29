@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Loader } from "lucide-react";
 import { FlaskRound } from "lucide-react";
-import { IS_DEVNET } from "appsConfig";
+// import { IS_DEVNET } from "appsConfig";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
 import { SUPPORTED_SOL_COLLECTIONS } from "config";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
-import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
-import { BlobDataType } from "libs/types";
+// import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
+import { getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
+// import { BlobDataType } from "libs/types";
 import { getApiWeb2Apps, sleep } from "libs/utils";
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
@@ -19,46 +20,44 @@ import { GiveBitzDataBounty, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
 
 const GiveBitzBase = () => {
-  const { publicKey, signMessage } = useWallet();
-  const address = publicKey?.toBase58();
+  const { publicKey: publicKeySol, signMessage } = useWallet();
+  const addressSol = publicKeySol?.toBase58();
+  const { solBitzNfts } = useNftsStore();
   const givenBitzSum = useSolBitzStore((state: any) => state.givenBitzSum);
   const collectedBitzSum = useSolBitzStore((state: any) => state.collectedBitzSum);
   const bonusBitzSum = useSolBitzStore((state: any) => state.bonusBitzSum);
   const bitzBalance = useSolBitzStore((state: any) => state.bitzBalance);
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-  const solNfts = useNftsStore((state) => state.solNfts);
-  const [nfts, setNfts] = useState(
-    IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
-  );
+  // const solNfts = useNftsStore((state) => state.solNfts);
+  // const [nfts, setNfts] = useState(
+  //   IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
+  // );
   const bitzStore = useSolBitzStore();
   const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
   const [fetchingDataBountiesReceivedSum, setFetchingDataBountiesReceivedSum] = useState<boolean>(true);
   const [isSendingPowerUp, setIsSendingPowerUp] = useState<boolean>(false);
 
+  // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
   const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
   const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
-
-  useEffect(() => {
-    if (publicKey) {
-      setNfts(
-        IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
-      );
-    }
-  }, [publicKey, solNfts]);
+  // E: Cached Signature Store Items
 
   useEffect(() => {
     setFetchingDataBountiesReceivedSum(true);
+
     const fetchDataBounties = async () => {
       const _dataBounties: GiveBitzDataBounty[] = await Promise.all(
         getDataBounties().map(async (item: GiveBitzDataBounty) => {
           const response = await fetchBitSumAndGiverCounts({
             getterAddr: item.bountyId === "b20" ? "erd1lgyz209038gh8l2zfxq68kzl9ljz0p22hv6l0ev8fydhx8s9cwasdtrua2" : item.bountySubmitter,
             campaignId: item.bountyId,
+            // collectionId: SUPPORTED_SOL_COLLECTIONS[0],
+            collectionId: solBitzNfts[0].grouping[0].group_value,
           });
           return {
             ...item,
@@ -74,9 +73,21 @@ const GiveBitzBase = () => {
 
       setDataBounties(sortedDataBounties);
     };
+
     fetchDataBounties();
     setFetchingDataBountiesReceivedSum(false);
+
+    // Load the giver LeaderBoards regardless on if the user has does not have the data nft in to entice them
+    fetchGiverLeaderBoard();
   }, []);
+
+  // useEffect(() => {
+  //   if (publicKeySol) {
+  //     setNfts(
+  //       IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
+  //     );
+  //   }
+  // }, [publicKeySol, solNfts]);
 
   useEffect(() => {
     const highlighters = document.querySelectorAll("[data-highlighter]");
@@ -86,36 +97,36 @@ const GiveBitzBase = () => {
   }, [dataBounties]);
 
   useEffect(() => {
-    // Load the giver LeaderBoards regardless on if the user has does not have the data nft in to entice them
-    fetchGiverLeaderBoard();
-  }, []);
-
-  useEffect(() => {
-    if (!address) {
+    if (!addressSol) {
       return;
     }
+
     // Load the giver LeaderBoards regardless on if the user has does not have the data nft in to entice them
     fetchMyGivenBitz();
-  }, [address]);
+  }, [addressSol]);
 
   // fetch MY latest given bits count
   async function fetchMyGivenBitz() {
     // dont do it for when page load or collectedBitzSum is still being collected (collectedBitzSum will be -2 or -1 state)
     if (collectedBitzSum > 0) {
       bitzStore.updateGivenBitzSum(-2);
+
       const callConfig = {
         headers: {
-          "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+          // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+          "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
         },
       };
+
       try {
-        console.log("GET CALL -----> xpGamePrivate/givenBits: giverAddr only");
-        const res = await fetch(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}`, callConfig);
+        const res = await fetch(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/givenBits?giverAddr=${addressSol}`, callConfig);
         const data = await res.json();
         await sleep(2);
+
         // update stores
         const sumGivenBits = data.bits ? parseInt(data.bits, 10) : -2;
         bitzStore.updateGivenBitzSum(sumGivenBits);
+
         if (sumGivenBits > 0) {
           bitzStore.updateBitzBalance(collectedBitzSum + bonusBitzSum - sumGivenBits); // update new balance (collected bits - given bits)
         }
@@ -129,14 +140,16 @@ const GiveBitzBase = () => {
   // fetch the full leaderboard for all givers
   async function fetchGiverLeaderBoard() {
     setGiverLeaderBoardIsLoading(true);
+
     const callConfig = {
       headers: {
-        "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
       },
     };
+
     try {
       // S: ACTUAL LOGIC
-      console.log("GET CALL -----> xpGamePrivate/giverLeaderBoard");
       const res = await fetch(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/giverLeaderBoard`, callConfig);
       const data = await res.json();
       const _toLeaderBoardTypeArr: LeaderBoardItemType[] = data.map((i: any) => {
@@ -146,50 +159,58 @@ const GiveBitzBase = () => {
         };
         return item;
       });
+
       await sleep(2);
+
       setGiverLeaderBoard(_toLeaderBoardTypeArr);
       // E: ACTUAL LOGIC
     } catch (err: any) {
       const message = "Monthly Leaderboard fetching failed:" + err.message;
       console.error(message);
     }
+
     setGiverLeaderBoardIsLoading(false);
   }
 
-  async function fetchBitSumAndGiverCounts({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }): Promise<any> {
-    const callConfig = {
-      headers: {
-        "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-      },
-    };
-    try {
-      const res = await fetch(
-        `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
-        callConfig
-      );
-      const data = await res.json();
-      return data;
-    } catch (err: any) {
-      const message = "Getting sum and giver count failed :" + address + "  " + campaignId + err.message;
-      console.error(message);
-      return false;
-    }
-  }
+  // async function fetchBitSumAndGiverCounts({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }): Promise<any> {
+  //   const callConfig = {
+  //     headers: {
+  //       "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+  //     },
+  //   };
+
+  //   try {
+  //     const res = await fetch(
+  //       `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
+  //       callConfig
+  //     );
+
+  //     const data = await res.json();
+  //     return data;
+  //   } catch (err: any) {
+  //     const message = "Getting sum and giver count failed :" + addressSol + "  " + campaignId + err.message;
+  //     console.error(message);
+  //     return false;
+  //   }
+  // }
 
   // fetch the given bits for a specific getter (creator campaign or bounty id)
   async function fetchGivenBitsForGetter({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
     const callConfig = {
       headers: {
-        "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
       },
     };
+
     try {
-      console.log("GET CALL -----> xpGamePrivate/givenBits: giverAddr && getterAddr");
       const res = await fetch(
-        `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/givenBits?giverAddr=${address}&getterAddr=${getterAddr}&campaignId=${campaignId}`,
+        `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/givenBits?giverAddr=${addressSol}&getterAddr=${getterAddr}&campaignId=${campaignId}`,
         callConfig
       );
+
       const data = await res.json();
+
       return data.bits !== undefined ? data.bits : 0;
     } catch (err: any) {
       const message = "Getting my rank on the all time leaderboard failed:" + err.message;
@@ -201,14 +222,16 @@ const GiveBitzBase = () => {
   async function fetchGetterLeaderBoard({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
     const callConfig = {
       headers: {
-        "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
+        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
       },
     };
+
     try {
       // S: ACTUAL LOGIC
-      console.log("GET CALL -----> xpGamePrivate/getterLeaderBoard : getterAddr =", getterAddr);
       const res = await fetch(`${getApiWeb2Apps()}/datadexapi/xpGamePrivate/getterLeaderBoard?getterAddr=${getterAddr}&campaignId=${campaignId}`, callConfig);
       const data = await res.json();
+
       const _toLeaderBoardTypeArr: LeaderBoardItemType[] = data.map((i: any) => {
         const item: LeaderBoardItemType = {
           playerAddr: i.giverAddr,
@@ -216,6 +239,7 @@ const GiveBitzBase = () => {
         };
         return item;
       });
+
       return _toLeaderBoardTypeArr;
       // E: ACTUAL LOGIC
     } catch (err: any) {
@@ -259,10 +283,31 @@ const GiveBitzBase = () => {
           "dmf-custom-give-bits-val": bitsVal,
           "dmf-custom-give-bits-to-who": bitsToWho,
           "dmf-custom-give-bits-to-campaign-id": bitsToCampaignId,
+          "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value,
         },
-        fwdHeaderKeys: ["dmf-custom-give-bits", "dmf-custom-give-bits-val", "dmf-custom-give-bits-to-who", "dmf-custom-give-bits-to-campaign-id"],
+        fwdHeaderKeys: [
+          "dmf-custom-give-bits",
+          "dmf-custom-give-bits-val",
+          "dmf-custom-give-bits-to-who",
+          "dmf-custom-give-bits-to-campaign-id",
+          "dmf-custom-sol-collection-id",
+        ],
       };
-      const giveBitzGameResult = await viewData(viewDataArgs, nfts[0]);
+
+      const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+        solPreaccessNonce,
+        solPreaccessSignature,
+        solPreaccessTimestamp,
+        signMessage,
+        publicKey: publicKeySol,
+        updateSolPreaccessNonce,
+        updateSolSignedPreaccess,
+        updateSolPreaccessTimestamp,
+      });
+
+      // const giveBitzGameResult = await viewData(viewDataArgs, solBitzNfts[0]);
+      const giveBitzGameResult = await viewDataWrapperSol(publicKeySol!, usedPreAccessNonce, usedPreAccessSignature, viewDataArgs, solBitzNfts[0].id);
+
       if (giveBitzGameResult) {
         if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
           throw new Error("Error: Not possible to send power-up. Error code returned. Do you have enough BiTz to give?");
@@ -280,52 +325,6 @@ const GiveBitzBase = () => {
     }
   }
 
-  async function viewData(viewDataArgs: any, requiredDataNFT: any) {
-    try {
-      const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
-        solPreaccessNonce,
-        solPreaccessSignature,
-        solPreaccessTimestamp,
-        signMessage,
-        publicKey,
-        updateSolPreaccessNonce,
-        updateSolSignedPreaccess,
-        updateSolPreaccessTimestamp,
-      });
-
-      if (!publicKey) {
-        throw new Error("Missing data for viewData");
-      }
-
-      const res = await itheumSolViewData(
-        requiredDataNFT.id,
-        usedPreAccessNonce,
-        usedPreAccessSignature,
-        publicKey,
-        viewDataArgs.fwdHeaderKeys,
-        viewDataArgs.headers
-      );
-
-      let blobDataType = BlobDataType.TEXT;
-      let data;
-
-      if (res.ok) {
-        const contentType = res.headers.get("content-type");
-
-        if (contentType && contentType.includes("application/json")) {
-          data = await res.json();
-        }
-
-        return { data, blobDataType, contentType };
-      } else {
-        console.error("viewData threw catch error", res.statusText);
-        return undefined;
-      }
-    } catch (err) {
-      return undefined;
-    }
-  }
-
   return (
     <div id="givebits" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
       <div className="flex flex-col mb-8 items-center justify-center">
@@ -333,7 +332,7 @@ const GiveBitzBase = () => {
         <span className="text-base text-foreground/75 text-center ">Power-Up VERIFIED Data Creators and Data Bounties</span>
       </div>
 
-      {address && (
+      {addressSol && (
         <div className="my-rank-and-score md:flex md:justify-center border p-[.6rem] mb-[1rem] rounded-[1rem] text-center bg-[#35d9fa] bg-opacity-25">
           <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem]">
             <p className="flex items-end md:text-lg md:mr-[1rem]">Total BitZ You Have Given for Power-Ups</p>
@@ -354,7 +353,7 @@ const GiveBitzBase = () => {
         ) : (
           <>
             {giverLeaderBoard && giverLeaderBoard.length > 0 ? (
-              <LeaderBoardTable leaderBoardData={giverLeaderBoard} address={address ?? ""} />
+              <LeaderBoardTable leaderBoardData={giverLeaderBoard} address={addressSol ?? ""} />
             ) : (
               <div className="text-center">{"No Data Yet"!}</div>
             )}
@@ -369,7 +368,7 @@ const GiveBitzBase = () => {
           <div className="flex flex-col md:flex-row items-center justify-center ">
             <h2 className="text-foreground text-4xl mb-2 text-center">Power-up Data Bounties </h2>
             <div className="flex flex-row ml-8 text-foreground text-4xl ">
-              {publicKey && (
+              {publicKeySol && (
                 <>
                   {bitzBalance === -2 ? `...` : <>{bitzBalance === -1 ? "0" : `${bitzBalance}`}</>}
                   <FlaskRound className=" w-10 h-10 fill-[#35d9fa]" />
@@ -433,5 +432,35 @@ const GiveBitzBase = () => {
     </div>
   );
 };
+
+export async function fetchBitSumAndGiverCounts({
+  getterAddr,
+  campaignId,
+  collectionId,
+}: {
+  getterAddr: string;
+  campaignId: string;
+  collectionId: string;
+}): Promise<any> {
+  const callConfig = {
+    headers: {
+      "fwd-tokenid": collectionId,
+    },
+  };
+
+  try {
+    const res = await fetch(
+      `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
+      callConfig
+    );
+
+    const data = await res.json();
+    return data;
+  } catch (err: any) {
+    const message = "Getting sum and giver count failed :" + getterAddr + "  " + campaignId + err.message;
+    console.error(message);
+    return false;
+  }
+}
 
 export default GiveBitzBase;

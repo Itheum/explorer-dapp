@@ -1,6 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import bs58 from "bs58";
 import { SOL_ENV_ENUM } from "config";
+import { BlobDataType } from "libs/types";
 import { getApiDataMarshal } from "libs/utils";
 
 export async function itheumSolPreaccess() {
@@ -11,7 +12,7 @@ export async function itheumSolPreaccess() {
   return data.nonce;
 }
 
-export async function itheumSolViewData(
+export async function viewDataViaMarshalSol(
   assetId: string,
   nonce: string,
   signature: string,
@@ -41,7 +42,7 @@ export async function itheumSolViewData(
 }
 
 export async function itheumSolViewDataInNewTab(assetId: string, nonce: string, signature: string, address: PublicKey) {
-  const response = await itheumSolViewData(assetId, nonce, signature, address, import.meta.env.VITE_ENV_NETWORK);
+  const response = await viewDataViaMarshalSol(assetId, nonce, signature, address, import.meta.env.VITE_ENV_NETWORK);
   const data = await response.blob();
   const url = window.URL.createObjectURL(data);
   window.open(url, "_blank");
@@ -109,4 +110,42 @@ export async function getOrCacheAccessNonceAndSignature({
     usedPreAccessNonce,
     usedPreAccessSignature,
   };
+}
+
+// Any method that wants to open a data nft via the marshal, can call this wrapper with viewDataArgs and tokenId
+export async function viewDataWrapperSol(publicKeySol: PublicKey, usedPreAccessNonce: string, usedPreAccessSignature: string, viewDataArgs: any, tokenId: any) {
+  try {
+    if (!publicKeySol) {
+      throw new Error("Missing data for viewData");
+    }
+
+    const res = await viewDataViaMarshalSol(
+      tokenId,
+      usedPreAccessNonce,
+      usedPreAccessSignature,
+      publicKeySol,
+      viewDataArgs.fwdHeaderKeys,
+      viewDataArgs.headers
+    );
+
+    let blobDataType = BlobDataType.TEXT;
+    let data;
+
+    if (res.ok) {
+      const contentType = res.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      }
+
+      return { data, blobDataType, contentType };
+    } else {
+      console.log("viewData threw catch error");
+      console.error(res.statusText);
+
+      return undefined;
+    }
+  } catch (err) {
+    return undefined;
+  }
 }
