@@ -56,7 +56,8 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
   // E: Cached Signature Store Items
 
   useEffect(() => {
-    if (giveBitzToWho && giveBitzToWho !== "" && giveBitzToCampaignId && giveBitzToCampaignId !== "") {
+    // if we don't do the powerUpSuccessfullyDone and poweringUpInProgress check, this block gets triggered even after a success and bitzValToGift and minBitzValNeeded get reset
+    if (!powerUpSuccessfullyDone && !poweringUpInProgress && giveBitzToWho && giveBitzToWho !== "" && giveBitzToCampaignId && giveBitzToCampaignId !== "") {
       if (isLikeMode) {
         setBitzValToGift(5);
         setMinBitzValNeeded(5);
@@ -70,7 +71,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
 
       setGiftBitzWorkflow(true);
     }
-  }, [giveBitzToWho, giveBitzToCampaignId, bitzBalance]);
+  }, [giveBitzToWho, giveBitzToCampaignId, bitzBalance, powerUpSuccessfullyDone]);
 
   async function sendPowerUp() {
     setPoweringUpInProgress(true);
@@ -163,7 +164,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
       <Modal
         triggerOpen={giftBitzWorkflow}
         triggerOnClose={() => {
-          onCloseModal(powerUpSuccessfullyDone ? { giveBitzToWho, giveBitzToCampaignId } : undefined);
+          onCloseModal(powerUpSuccessfullyDone ? { bitzValToGift, giveBitzToCampaignId } : undefined);
           setGiftBitzWorkflow(false);
         }}
         closeOnOverlayClick={false}
@@ -221,7 +222,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                         className="text-sm mt-2 cursor-pointer !text-orange-500 dark:!text-yellow-300"
                         variant="destructive"
                         onClick={() => {
-                          onCloseModal(powerUpSuccessfullyDone ? { giveBitzToWho, giveBitzToCampaignId } : undefined);
+                          onCloseModal(powerUpSuccessfullyDone ? { bitzValToGift, giveBitzToCampaignId } : undefined);
                           setGiftBitzWorkflow(false);
                         }}>
                         Close & Try Again
@@ -236,7 +237,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                         className="text-sm mt-2 cursor-pointer !text-orange-500 dark:!text-yellow-300"
                         variant="secondary"
                         onClick={() => {
-                          onCloseModal(powerUpSuccessfullyDone ? { giveBitzToWho, giveBitzToCampaignId } : undefined);
+                          onCloseModal(powerUpSuccessfullyDone ? { bitzValToGift, giveBitzToCampaignId } : undefined);
                           setGiftBitzWorkflow(false);
                         }}>
                         Close

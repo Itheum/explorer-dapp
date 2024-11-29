@@ -103,7 +103,7 @@ export const NFTunes = () => {
     isLikeMode?: boolean | undefined;
   }>({ creatorIcon: undefined, creatorName: undefined, giveBitzToWho: "", giveBitzToCampaignId: "", isLikeMode: undefined });
 
-  const [refreshBitzCountsForBounty, setRefreshBitzCountsForBounty] = useState<{ giveBitzToWho: string; giveBitzToCampaignId: string } | undefined>(undefined);
+  const [refreshBitzCountsForBounty, setRefreshBitzCountsForBounty] = useState<{ bitzValToGift: number; giveBitzToCampaignId: string } | undefined>(undefined);
 
   useEffect(() => {
     const isFeaturedArtistDeepLink = searchParams.get("artist-profile");
@@ -966,7 +966,7 @@ export const NFTunes = () => {
 
               if (forceRefreshBitzCountsForBounty) {
                 setRefreshBitzCountsForBounty({
-                  giveBitzToWho: forceRefreshBitzCountsForBounty.giveBitzToWho,
+                  bitzValToGift: forceRefreshBitzCountsForBounty.bitzValToGift,
                   giveBitzToCampaignId: forceRefreshBitzCountsForBounty.giveBitzToCampaignId,
                 });
               } else {

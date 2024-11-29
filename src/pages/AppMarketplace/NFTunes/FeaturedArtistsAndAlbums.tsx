@@ -11,6 +11,7 @@ import { gtagGo } from "libs/utils/misc";
 import { fetchBitSumAndGiverCounts } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
 import { routeNames } from "routes";
 import { useNftsStore } from "store/nfts";
+import { useDebouncedCallback } from "use-debounce";
 
 const dataset = [
   {
@@ -354,7 +355,7 @@ type FeaturedArtistsAndAlbumsProps = {
   checkOwnershipOfAlbum: (e: any) => any;
   openActionFireLogic?: any;
   onSendPowerUp: (e: any) => any;
-  refreshBitzCountsForBounty: { giveBitzToWho: string; giveBitzToCampaignId: string } | undefined;
+  refreshBitzCountsForBounty: { bitzValToGift: number; giveBitzToCampaignId: string } | undefined;
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
@@ -450,7 +451,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     }
 
     // we clone selDataItem here so as to no accidentally mutate things
-    fetchBitzPowerUpsAndLikesForSelectedArtist({ ...selDataItem });
+    // we debounce this, so that - if the user is jumping tabs.. it wait until they stop at a tab for 2.5 S before running the complex logic
+    debounced_fetchBitzPowerUpsAndLikesForSelectedArtist({ ...selDataItem });
   }, [selArtistId]);
 
   useEffect(() => {
@@ -472,38 +474,35 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }, [stopPreviewPlayingNow]);
 
   useEffect(() => {
-    async function refreshBountyBitz() {
-      if (refreshBitzCountsForBounty) {
-        const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
-
-        const response = await fetchBitSumAndGiverCounts({
-          getterAddr: refreshBitzCountsForBounty.giveBitzToWho || "",
-          campaignId: refreshBitzCountsForBounty.giveBitzToCampaignId || "",
-          collectionId: solBitzNfts[0].grouping[0].group_value,
-        });
-
-        _bountyToBitzLocalMapping[refreshBitzCountsForBounty.giveBitzToCampaignId] = {
-          syncedOn: Date.now(),
-          bitsSum: response.bitsSum,
-        };
-
-        setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
-      }
-    }
-
     if (refreshBitzCountsForBounty && solBitzNfts && solBitzNfts.length > 0) {
       console.log("fetchBitzPowerUpsAndLikesForSelectedArtist Flush from cache and reload");
 
-      // remove the old value
-      delete bountyToBitzLocalMapping[refreshBitzCountsForBounty.giveBitzToCampaignId];
+      const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
+      const currMappingVal = _bountyToBitzLocalMapping[refreshBitzCountsForBounty.giveBitzToCampaignId];
 
-      refreshBountyBitz();
+      if (typeof currMappingVal !== "undefined") {
+        _bountyToBitzLocalMapping[refreshBitzCountsForBounty.giveBitzToCampaignId] = {
+          bitsSum: currMappingVal.bitsSum + refreshBitzCountsForBounty.bitzValToGift,
+          syncedOn: Date.now(),
+        };
+      } else {
+        _bountyToBitzLocalMapping[refreshBitzCountsForBounty.giveBitzToCampaignId] = {
+          bitsSum: refreshBitzCountsForBounty.bitzValToGift,
+          syncedOn: Date.now(),
+        };
+      }
+
+      setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
     }
   }, [solBitzNfts, refreshBitzCountsForBounty]);
 
+  const debounced_fetchBitzPowerUpsAndLikesForSelectedArtist = useDebouncedCallback((selDataItem: any) => {
+    fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem);
+  }, 2500);
+
   // as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
   async function fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem: any) {
-    if (!selDataItem) {
+    if (!selDataItem || !solBitzNfts || solBitzNfts.length === 0) {
       return;
     }
 
@@ -776,16 +775,17 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                             <p className="ml-2">{album.desc}</p>
                           </div>
 
-                          <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col md:items-end">
+                          <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col items-center">
+                            <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 rounded w-[100px] flex items-center justify-center">
+                              {typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum === "undefined" ? (
+                                <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
+                              ) : (
+                                <div className="p-5 md:p-0">{bountyToBitzLocalMapping[album.bountyId]?.bitsSum}</div>
+                              )}
+                            </div>
+
                             {publicKey || addressMvx ? (
                               <div className="bg1-red-600 flex flex-row md:flex-col justify-center">
-                                <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 rounded w-[100px] flex items-center justify-center">
-                                  {typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum === "undefined" ? (
-                                    <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
-                                  ) : (
-                                    <div className="p-5 md:p-0">{bountyToBitzLocalMapping[album.bountyId]?.bitsSum}</div>
-                                  )}
-                                </div>
                                 <Button
                                   className="!text-black ml-2 md:ml-0 text-sm w-[100px] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 cursor-pointer"
                                   disabled={!publicKey && !addressMvx}
@@ -808,7 +808,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                             ) : (
                               <div className="bg1-red-600">
                                 <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                                  <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                  <Button className="text-xs cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
                                     <>
                                       <WalletMinimal />
                                       <span className="ml-1">Login to Like</span>
