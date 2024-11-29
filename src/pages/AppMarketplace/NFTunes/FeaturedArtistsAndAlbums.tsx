@@ -560,7 +560,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                         <h3 className="!text-xl mb-2 flex items-baseline">
                           <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
                           <span>{`${album.title}`}</span>
-                          {album.isExplicit && (
+                          {album.isExplicit && album.isExplicit === "1" && (
                             <img
                               className="max-h-[20px] ml-[10px] dark:bg-white"
                               src={ratingR}
