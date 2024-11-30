@@ -186,14 +186,15 @@ const UnlockPage = () => {
                 onClick={handleGoBack}>
                 <ArrowBigLeft /> Go Back
               </Button>
-              <div className="pt-10 px-5 px-sm-2 mx-lg-4">
+              <div className={`pt-10 px-5 px-sm-2 mx-lg-4 ${addressMvx ? `opacity-15 pointer-events-none` : ""}`}>
                 <h4 className="mb-4 font-weight-bold">Solana</h4>
 
                 <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
                   <WalletMultiButton className="w-full !m-0" />
                 </div>
               </div>
-              <div className="pt-10 pb-10 px-5 px-sm-2 mx-lg-4">
+
+              <div className={`pt-10 pb-10 px-5 px-sm-2 mx-lg-4 ${addressSol ? `opacity-15 pointer-events-none` : ""}`}>
                 <h4 className="mb-4 font-weight-bold">MultiversX</h4>
                 <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
                   {isLoggedInMvX ? (

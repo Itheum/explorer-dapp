@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
-import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig, useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import DOMPurify from "dompurify";
 import SVG from "react-inlinesvg";
@@ -9,7 +9,7 @@ import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { MvxDataNftCard, Loader } from "components";
 import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
-import { MvxSolSwitch } from "components/MvxSolSwitch";
+// import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
@@ -18,7 +18,7 @@ import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
-import { useLocalStorageStore } from "store/LocalStorageStore.ts";
+// import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 
 export const MyWallet = () => {
@@ -33,12 +33,13 @@ export const MyWallet = () => {
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol } = useNftsStore();
   const [numberOfMvxNftsShown, setNumberOfMvxNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownMvxDataNfts, setShownMvxDataNfts] = useState<DataNft[]>(mvxNfts.slice(0, SHOW_NFTS_STEP));
-  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
-  const mvxNetworkSelected = defaultChain === "multiversx";
+  // const defaultChain = useLocalStorageStore((state) => state.defaultChain);
+  // const mvxNetworkSelected = defaultChain === "multiversx";
   const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
-  const { publicKey, signMessage } = useWallet();
+  const { publicKey: publicKeySol, signMessage } = useWallet();
   const { solBitzNfts } = useNftsStore();
+  const { address: addressMvx } = useGetAccount();
 
   // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
@@ -165,7 +166,7 @@ export const MyWallet = () => {
         solPreaccessSignature,
         solPreaccessTimestamp,
         signMessage,
-        publicKey,
+        publicKey: publicKeySol,
         updateSolPreaccessNonce,
         updateSolSignedPreaccess,
         updateSolPreaccessTimestamp,
@@ -176,7 +177,7 @@ export const MyWallet = () => {
         fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
       };
 
-      if (!publicKey) {
+      if (!publicKeySol) {
         throw new Error("Missing data for viewData");
       }
 
@@ -184,7 +185,7 @@ export const MyWallet = () => {
         dataNft.id,
         usedPreAccessNonce,
         usedPreAccessSignature,
-        publicKey,
+        publicKeySol,
         viewDataArgs.fwdHeaderKeys,
         viewDataArgs.headers
       );
@@ -257,7 +258,8 @@ export const MyWallet = () => {
     }
   }
 
-  if ((isLoadingMvx && mvxNetworkSelected) || (isLoadingSol && !mvxNetworkSelected)) {
+  // if ((isLoadingMvx && mvxNetworkSelected) || (isLoadingSol && !mvxNetworkSelected)) {
+  if ((isLoadingMvx && addressMvx) || (isLoadingSol && publicKeySol)) {
     return <Loader />;
   }
 
@@ -265,9 +267,9 @@ export const MyWallet = () => {
     <>
       <HelmetPageMeta title="Collected Itheum Data NFTs" shortTitle="Collected Itheum Data NFTs" desc="Your collected Itheum Data NFTs" />
 
-      <MvxSolSwitch />
+      {/* <MvxSolSwitch /> */}
 
-      {mvxNetworkSelected && (
+      {addressMvx && (
         <HeaderComponent
           pageTitle={"My MultiversX Data NFTs"}
           hasImage={false}
@@ -366,7 +368,7 @@ export const MyWallet = () => {
         </HeaderComponent>
       )}
 
-      {!mvxNetworkSelected && (
+      {publicKeySol && (
         <HeaderComponent
           pageTitle={"My Solana Data NFTs"}
           hasImage={false}
@@ -452,18 +454,21 @@ export const MyWallet = () => {
               />
             ))
           ) : (
-            <h4 className="my-5 !text-xl text-center md:text-left">
-              You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting
-              <a href={DRIP_PAGE} className="ml-2 address-link underline hover:no-underline" target="_blank">
-                DRiP Haus
-              </a>
-            </h4>
+            <div className="w-[100%]">
+              <div className="text-center md:text-left">
+                You do not own any Data NFTs yet. Browse and procure Data NFTs by visiting
+                <a href={DRIP_PAGE} className="ml-2 address-link underline hover:no-underline" target="_blank">
+                  DRiP Haus
+                </a>
+              </div>
+            </div>
           )}
         </HeaderComponent>
       )}
 
+      {/* MVX Data NFTs */}
       <div className="m-auto mb-5">
-        {mvxNetworkSelected && numberOfMvxNftsShown < mvxNfts.length && (
+        {addressMvx && numberOfMvxNftsShown < mvxNfts.length && (
           <Button
             className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
             onClick={() => {
@@ -474,7 +479,8 @@ export const MyWallet = () => {
           </Button>
         )}
 
-        {!mvxNetworkSelected && numberOfSolNftsShown < solNfts.length && (
+        {/* Solana Data NFTs */}
+        {publicKeySol && numberOfSolNftsShown < solNfts.length && (
           <Button
             className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"
             onClick={() => {

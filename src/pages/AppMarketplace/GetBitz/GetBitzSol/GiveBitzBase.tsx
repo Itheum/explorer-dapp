@@ -18,6 +18,7 @@ import BonusBitzHistory from "../common/BonusBitzHistory";
 import PowerUpBounty from "../common/GiveBitz/PowerUpBounty";
 import { GiveBitzDataBounty, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
+import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 
 const GiveBitzBase = () => {
   const { publicKey: publicKeySol, signMessage } = useWallet();
@@ -53,11 +54,13 @@ const GiveBitzBase = () => {
     const fetchDataBounties = async () => {
       const _dataBounties: GiveBitzDataBounty[] = await Promise.all(
         getDataBounties().map(async (item: GiveBitzDataBounty) => {
+          const collectionidToUse = !addressSol || solBitzNfts.length === 0 ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
           const response = await fetchBitSumAndGiverCounts({
             getterAddr: item.bountyId === "b20" ? "erd1lgyz209038gh8l2zfxq68kzl9ljz0p22hv6l0ev8fydhx8s9cwasdtrua2" : item.bountySubmitter,
             campaignId: item.bountyId,
             // collectionId: SUPPORTED_SOL_COLLECTIONS[0],
-            collectionId: solBitzNfts[0].grouping[0].group_value,
+            collectionId: collectionidToUse,
           });
           return {
             ...item,
@@ -111,10 +114,12 @@ const GiveBitzBase = () => {
     if (collectedBitzSum > 0) {
       bitzStore.updateGivenBitzSum(-2);
 
+      const collectionidToUse = !addressSol || solBitzNfts.length === 0 ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
       const callConfig = {
         headers: {
           // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-          "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
+          "fwd-tokenid": collectionidToUse,
         },
       };
 
@@ -141,10 +146,12 @@ const GiveBitzBase = () => {
   async function fetchGiverLeaderBoard() {
     setGiverLeaderBoardIsLoading(true);
 
+    const collectionidToUse = !addressSol || solBitzNfts.length === 0 ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
     const callConfig = {
       headers: {
         // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
+        "fwd-tokenid": collectionidToUse,
       },
     };
 
@@ -196,10 +203,12 @@ const GiveBitzBase = () => {
 
   // fetch the given bits for a specific getter (creator campaign or bounty id)
   async function fetchGivenBitsForGetter({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
+    const collectionidToUse = !addressSol || solBitzNfts.length === 0 ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
     const callConfig = {
       headers: {
         // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
+        "fwd-tokenid": collectionidToUse,
       },
     };
 
@@ -220,10 +229,12 @@ const GiveBitzBase = () => {
 
   // fetch a getter leaderboard (creator campaign or bounty id)
   async function fetchGetterLeaderBoard({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
+    const collectionidToUse = !addressSol || solBitzNfts.length === 0 ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
     const callConfig = {
       headers: {
         // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
+        "fwd-tokenid": collectionidToUse,
       },
     };
 

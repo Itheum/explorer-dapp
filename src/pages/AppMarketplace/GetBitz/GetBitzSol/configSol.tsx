@@ -258,51 +258,6 @@ export function getDataBounties() {
   if (IS_DEVNET) {
     allBounties.push({
       bountySubmitter: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
-      bountyId: "b20",
-      title: "Alpha Gamer Passport",
-      summary: `Create a Data NFT which can be used by gamers as a Data Vault in order to crowdsource their data for the AI industry and generate revenue for the data they share.`,
-      readMoreLink: "",
-      submittedOnTs: 1718622020,
-      fillPerks: `Donate +100 BiTz to be eligible for the first drop of the Gamer Passport Data NFT.`,
-    });
-    allBounties.push({
-      bountySubmitter: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
-      bountyId: "b1",
-      title: "Dummy Bounty - SOL Address",
-      summary: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim ipsum diam, a placerat velit cursus ut. Nulla ac finibus nulla. Curabitur elementum fermentum lorem, sed porta ipsum molestie in. Praesent congue nisl eu dolor dignissim porta.`,
-      readMoreLink: "",
-      submittedOnTs: 1718877864,
-      fillPerks: `Maecenas a tortor sit amet neque tristique tincidunt placerat et odio.`,
-    });
-    allBounties.push({
-      bountySubmitter: "erd1622wqsnpdkwhzr3nxfv0673pdt2cvqq7ffjw9mvlpju9822dac6sarqw2d",
-      bountyId: "b2",
-      title: "Dummy Bounty - ERD Address",
-      summary: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim ipsum diam, a placerat velit cursus ut. Nulla ac finibus nulla. Curabitur elementum fermentum lorem, sed porta ipsum molestie in. Praesent congue nisl eu dolor dignissim porta.`,
-      readMoreLink: "",
-      submittedOnTs: 1718877864,
-      fillPerks: `Maecenas a tortor sit amet neque tristique tincidunt placerat et odio.`,
-    });
-    allBounties.push({
-      bountySubmitter: "0xF8E2166774A02f21471568752E9F863B0E697a7b",
-      bountyId: "b3",
-      title: "Dummy Bounty - ETH Address",
-      summary: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim ipsum diam, a placerat velit cursus ut. Nulla ac finibus nulla. Curabitur elementum fermentum lorem, sed porta ipsum molestie in. Praesent congue nisl eu dolor dignissim porta.`,
-      readMoreLink: "",
-      submittedOnTs: 1718877864,
-      fillPerks: `Maecenas a tortor sit amet neque tristique tincidunt placerat et odio.`,
-    });
-    allBounties.push({
-      bountySubmitter: "TOBEFILLED",
-      bountyId: "b4",
-      title: "Dummy Bounty - Filler Address",
-      summary: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim ipsum diam, a placerat velit cursus ut. Nulla ac finibus nulla. Curabitur elementum fermentum lorem, sed porta ipsum molestie in. Praesent congue nisl eu dolor dignissim porta.`,
-      readMoreLink: "",
-      submittedOnTs: 1718877864,
-      fillPerks: `Maecenas a tortor sit amet neque tristique tincidunt placerat et odio.`,
-    });
-    allBounties.push({
-      bountySubmitter: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
       bountyId: "mus_ar1",
       title: "Support Musican : Hachi Mugen",
       summary: "",

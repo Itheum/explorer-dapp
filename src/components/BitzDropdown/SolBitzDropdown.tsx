@@ -28,8 +28,8 @@ export const SolBitzDropdown = (props: any) => {
               <div className="flex flex-row items-center px-3">
                 <img src={solLogo} className="mt-[2px] w-[12px] h-[12px]" />
                 <Button className="text-sm tracking-wide hover:bg-transparent px-0.5 ml-0.5" variant="ghost">
-                  {isLoggedInSol &&
-                    (solBitzBalance === -2 ? (
+                  {isLoggedInSol ? (
+                    solBitzBalance === -2 ? (
                       <div className="flex items-center gap-0.5 blinkMe text-lg">
                         <FlaskBottleAnimation cooldown={cooldown} />
                       </div>
@@ -45,7 +45,10 @@ export const SolBitzDropdown = (props: any) => {
                           </div>
                         )}
                       </>
-                    ))}
+                    )
+                  ) : (
+                    <>CTA</>
+                  )}
                 </Button>
               </div>
             </PopoverTrigger>
@@ -140,7 +143,7 @@ export const ClaimBitzButton = (props: any) => {
   );
 };
 
-const FlaskBottleAnimation = (props: any) => {
+export const FlaskBottleAnimation = (props: any) => {
   const { cooldown } = props;
 
   return (

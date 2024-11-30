@@ -4,7 +4,7 @@ import { Home, Menu, Store, Wallet, Gamepad2, AreaChart, Music, Bot } from "luci
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
 import logo192 from "assets/img/logo192.png";
-import { SolBitzDropdown } from "components/BitzDropdown/SolBitzDropdown";
+import { SolBitzDropdown, FlaskBottleAnimation } from "components/BitzDropdown/SolBitzDropdown";
 import { CopyAddress } from "components/CopyAddress";
 import { useGetAccount, useGetIsLoggedIn } from "hooks";
 import { Button } from "libComponents/Button";
@@ -117,7 +117,7 @@ export const Navbar = () => {
               <Link
                 to={routeNames.nftunes}
                 className={navigationMenuTriggerStyle() + "dark:text-white dark:hover:!text-white text-black hover:!text-black !no-underline px-4"}>
-                NF-Tunes Web3 Music
+                NF-Tunes Music
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="cursor-pointer">
@@ -162,7 +162,7 @@ export const Navbar = () => {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            {(isLoggedInMvx || isLoggedInSol) && (
+            {isLoggedInMvx || isLoggedInSol ? (
               <>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Account</NavigationMenuTrigger>
@@ -204,6 +204,7 @@ export const Navbar = () => {
                     />
                   )}
                 </NavigationMenuItem>
+
                 <NavigationMenuItem>
                   {isLoggedInSol && (
                     <SolBitzDropdown
@@ -216,7 +217,18 @@ export const Navbar = () => {
                   )}
                 </NavigationMenuItem>
               </>
+            ) : (
+              <div className={"shadow-sm shadow-[#35d9fa] rounded-lg justify-center cursor-pointer"}>
+                <div className="flex flex-row items-center px-3">
+                  <Link to={routeNames.getbitz}>
+                    <Button className="text-sm tracking-wide hover:bg-transparent px-0.5 ml-0.5" variant="ghost">
+                      <FlaskBottleAnimation cooldown={0} />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             )}
+
             <NavigationMenuItem>
               <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
                 <div className="bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center">
@@ -288,7 +300,7 @@ export const Navbar = () => {
                 <Link to={routeNames.nftunes}>
                   <DropdownMenuItem>
                     <Music className="mr-2 h-4 w-4" />
-                    <span>NF-Tunes Web3 Music</span>
+                    <span>NF-Tunes Music</span>
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>

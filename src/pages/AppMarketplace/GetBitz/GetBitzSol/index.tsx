@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+// import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 // import { PublicKey } from "@solana/web3.js";
 import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
@@ -8,6 +8,8 @@ import { fireworks } from "@tsparticles/fireworks";
 import { motion } from "framer-motion";
 import { Loader, MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
+import { Link } from "react-router-dom";
+import { routeNames } from "routes";
 
 // Image Layers
 import aladinRugg from "assets/img/getbitz/aladin.png";
@@ -47,10 +49,11 @@ import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 
 import resultLoading from "assets/img/getbitz/pixel-loading.gif";
-import { SUPPORTED_SOL_COLLECTIONS } from "config";
+import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
-import { BlobDataType } from "libs/types";
+// import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
+import { getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
+// import { BlobDataType } from "libs/types";
 import { cn, getApiWeb2Apps, sleep } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import { useAccountStore } from "store/account";
@@ -62,6 +65,7 @@ import Faq from "../common/Faq";
 import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
 import Torch from "../common/Torch";
+import { AirDropFreeBiTzSol } from "./AirDropFreeBiTzSol";
 
 const MEME_IMGS = [
   Meme1,
@@ -99,7 +103,9 @@ const GetBitzSol = (props: any) => {
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const { solBitzNfts } = useNftsStore();
-  const { setVisible } = useWalletModal();
+  const [claimFreeAirdropWorkflow, setClaimFreeAirdropWorkflow] = useState<boolean>(false);
+
+  // const { setVisible } = useWalletModal();
 
   // store based state
   const bitzStore = useSolBitzStore();
@@ -275,7 +281,10 @@ const GetBitzSol = (props: any) => {
     const hasRequiredDataNFT = solBitzNfts && solBitzNfts.length > 0;
     setHasGameDataNFT(hasRequiredDataNFT ? true : false);
     setCheckingIfHasGameDataNFT(false);
-    setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
+
+    if (hasRequiredDataNFT) {
+      setRandomMeme(MEME_IMGS[Math.floor(Math.random() * MEME_IMGS.length)]); // set a random meme as well
+    }
   }
 
   // have to reset all "single game-play related" (see above)
@@ -452,16 +461,19 @@ const GetBitzSol = (props: any) => {
     let _isFetchingDataMarshal = isFetchingDataMarshal;
     let _isMemeBurnHappening = isMemeBurnHappening;
 
+    // user is not logged in, ask them to connect wallet
     if (!addressSol) {
       return (
-        <img
-          onClick={() => {
-            setVisible(true);
-          }}
-          className={cn("-z-1 relative z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
-          src={ImgLogin}
-          alt={"Connect your wallet to play"}
-        />
+        <Link className="relative" to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+          <img
+            // onClick={() => {
+            //   setVisible(true);
+            // }}
+            className={cn("-z-1 relative z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
+            src={ImgLogin}
+            alt={"Connect your wallet to play"}
+          />
+        </Link>
       );
     }
 
@@ -480,23 +492,37 @@ const GetBitzSol = (props: any) => {
     // user is logged in does not have the data nft, so take them to the marketplace
     if (addressSol && !checkingIfHasGameDataNFT && !hasGameDataNFT) {
       return (
-        <div
-          className="relative"
-          onClick={() => {
-            if (
-              confirm(
-                "Get BiTz XP Data NFTs from the Tensor NFT Marketplace.\n\nWe will now take you to the Tensor Marketplace, just filter the collection and select any NFT with the Trait - 'itheum.io/getxp'.\n\nThese Data NFTs will then let you play this BiTz XP game and collect XP.\n\n Make sure you enable popups in your browser now"
-              ) == true
-            ) {
-              window.open("https://www.tensor.trade/trade/itheum_drip")?.focus();
-            }
-          }}>
-          <img
-            className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
-            src={ImgGetDataNFT}
-            alt={"Get <BiTz> Data NFT from Data NFT Marketplace"}
-          />
-        </div>
+        <>
+          <div
+            className="relative"
+            onClick={() => {
+              // if (
+              //   confirm(
+              //     "Get BiTz XP Data NFTs from the Tensor NFT Marketplace.\n\nWe will now take you to the Tensor Marketplace, just filter the collection and select any NFT with the Trait - 'itheum.io/getxp'.\n\nThese Data NFTs will then let you play this BiTz XP game and collect XP.\n\n Make sure you enable popups in your browser now"
+              //   ) == true
+              // ) {
+              //   window.open("https://www.tensor.trade/trade/itheum_drip")?.focus();
+              // }
+
+              setClaimFreeAirdropWorkflow(true);
+            }}>
+            <img
+              className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
+              src={ImgGetDataNFT}
+              alt={"Get a free <BiTz> Data NFT"}
+            />
+
+            {/* The bitz power up for creators and album liks (Solana Only) */}
+            {claimFreeAirdropWorkflow && (
+              <AirDropFreeBiTzSol
+                onCloseModal={() => {
+                  setClaimFreeAirdropWorkflow(false);
+                }}
+              />
+            )}
+            <div className="mt-5 mb-10">claimFreeAirdropWorkflow = {claimFreeAirdropWorkflow.toString()}</div>
+          </div>
+        </>
       );
     }
 
@@ -775,10 +801,12 @@ const GetBitzSol = (props: any) => {
   async function fetchAndLoadLeaderBoards() {
     setLeaderBoardIsLoading(true);
 
+    const collectionidToUse = !addressSol || !hasGameDataNFT ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
     const callConfig = {
       headers: {
         // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
+        "fwd-tokenid": collectionidToUse,
       },
     };
 
@@ -832,10 +860,12 @@ const GetBitzSol = (props: any) => {
   }
 
   async function fetchAndLoadMyRankOnLeaderBoard() {
+    const collectionidToUse = !addressSol || !hasGameDataNFT ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
     const callConfig = {
       headers: {
         // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-        "fwd-tokenid": solBitzNfts[0].grouping[0].group_value,
+        "fwd-tokenid": collectionidToUse,
       },
     };
     try {
@@ -856,7 +886,7 @@ const GetBitzSol = (props: any) => {
           You are playing with referral code {usingReferralCode}
         </div>
       )}
-
+      SOLANA
       <div className="relative w-full">
         <div className="absolute -z-1 w-full">
           <img
@@ -867,7 +897,6 @@ const GetBitzSol = (props: any) => {
         </div>
         {gamePlayImageSprites()}
       </div>
-
       {!modalMode && (
         <>
           <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] max-w-[100%]">

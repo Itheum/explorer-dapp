@@ -110,11 +110,12 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       }
 
       // add all the balances into the loading phase
-      updateBitzBalance(-2);
-      updateGivenBitzSum(-2);
-      updateCooldown(-2);
-      updateCollectedBitzSum(-2);
-      updateBonusBitzSum(-2);
+      // updateBitzBalance(-2);
+      // updateGivenBitzSum(-2);
+      // updateCooldown(-2);
+      // updateCollectedBitzSum(-2);
+      // updateBonusBitzSum(-2);
+      resetBitzValsToLoadingMVX();
 
       if (mvxNFTsFetched && mvxNfts.length > 0) {
         // get the bitz game data nft details
@@ -163,10 +164,11 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
             updateBonusTries(getBitzGameResult.data.gamePlayResult.bonusTriesBeforeThisPlay || 0); // bonus tries awarded to user (currently only via referral code rewards)
           }
         } else {
-          resetBitzValsToZero();
+          resetBitzValsToZeroMVX();
         }
+        // } else if (mvxNFTsFetched && mvxNfts.length === 0) {
       } else if (mvxNFTsFetched && mvxNfts.length === 0) {
-        resetBitzValsToZero();
+        resetBitzValsToZeroMVX();
       }
     })();
   }, [addressMvx, tokenLogin, mvxNfts, mvxNFTsFetched]);
@@ -174,6 +176,8 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   // SOL - Bitz Bootstrap
   useEffect(() => {
     (async () => {
+      resetBitzValsToLoadingSOL();
+
       if (solBitzNfts.length > 0 && solPreaccessNonce !== "" && solPreaccessSignature !== "" && publicKeySol) {
         const viewDataArgs = {
           headers: {
@@ -206,17 +210,41 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
           updateBonusTriesSol(getBitzGameResult.data.gamePlayResult.bonusTriesBeforeThisPlay || 0); // bonus tries awarded to user (currently only via referral code rewards)
         }
       } else {
-        resetBitzValsToZero();
+        resetBitzValsToZeroSOL();
       }
     })();
   }, [publicKeySol, solBitzNfts, solPreaccessNonce, solPreaccessSignature]);
 
-  function resetBitzValsToZero() {
+  function resetBitzValsToZeroMVX() {
     updateBitzBalance(-1);
     updateGivenBitzSum(-1);
     updateCooldown(-1);
     updateCollectedBitzSum(-1);
     updateBonusBitzSum(-1);
+  }
+
+  function resetBitzValsToLoadingMVX() {
+    updateBitzBalance(-2);
+    updateGivenBitzSum(-2);
+    updateCooldown(-2);
+    updateCollectedBitzSum(-2);
+    updateBonusBitzSum(-2);
+  }
+
+  function resetBitzValsToZeroSOL() {
+    updateBitzBalanceSol(-1);
+    updateGivenBitzSumSol(-1);
+    updateCooldownSol(-1);
+    updateCollectedBitzSumSol(-1);
+    updateBonusBitzSumSol(-1);
+  }
+
+  function resetBitzValsToLoadingSOL() {
+    updateBitzBalanceSol(-2);
+    updateGivenBitzSumSol(-2);
+    updateCooldownSol(-2);
+    updateCollectedBitzSumSol(-2);
+    updateBonusBitzSumSol(-2);
   }
 
   return <>{children}</>;

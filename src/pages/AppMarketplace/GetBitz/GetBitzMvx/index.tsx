@@ -830,7 +830,7 @@ export const GetBitzMvx = (props: any) => {
           You are playing with referral code {usingReferralCode}
         </div>
       )}
-
+      MULTIVERSX
       <div className="relative w-full">
         <div className="absolute -z-1 w-full">
           <img
@@ -841,7 +841,6 @@ export const GetBitzMvx = (props: any) => {
         </div>
         {gamePlayImageSprites()}
       </div>
-
       {!modalMode && (
         <>
           <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">

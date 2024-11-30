@@ -5,13 +5,14 @@ import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, FlaskRound, HandHeart } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useDebouncedCallback } from "use-debounce";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Button } from "libComponents/Button";
 import { gtagGo } from "libs/utils/misc";
 import { fetchBitSumAndGiverCounts } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
 import { routeNames } from "routes";
 import { useNftsStore } from "store/nfts";
-import { useDebouncedCallback } from "use-debounce";
+import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 
 const dataset = [
   {
@@ -387,6 +388,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [isFreeDropSampleWorkflow, setIsFreeDropSampleWorkflow] = useState(false);
   const { solBitzNfts } = useNftsStore();
   const [bountyToBitzLocalMapping, setBountyToBitzLocalMapping] = useState<any>({});
+  const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
 
   function eventToAttachEnded() {
     audio.src = "";
@@ -429,13 +431,14 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     };
   }, []);
 
-  useEffect(
-    () => () => {
-      // on unmount we have to stp playing as for some reason the play continues always otherwise
-      playPausePreview(); // with no params wil always go into the stop logic
-    },
-    []
-  );
+  // WHAT IS THIS?
+  // useEffect(
+  //   () => () => {
+  //     // on unmount we have to stp playing as for some reason the play continues always otherwise
+  //     playPausePreview(); // with no params wil always go into the stop logic
+  //   },
+  //   []
+  // );
 
   useEffect(() => {
     playPausePreview(); // with no params wil always go into the stop logic
@@ -454,6 +457,14 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     // we debounce this, so that - if the user is jumping tabs.. it wait until they stop at a tab for 2.5 S before running the complex logic
     debounced_fetchBitzPowerUpsAndLikesForSelectedArtist({ ...selDataItem });
   }, [selArtistId]);
+
+  useEffect(() => {
+    if (solBitzNfts.length === 0) {
+      setUserHasNoBitzDataNftYet(true);
+    } else {
+      setUserHasNoBitzDataNftYet(false);
+    }
+  }, [solBitzNfts]);
 
   useEffect(() => {
     console.log("featuredArtistDeepLinkSlug ", featuredArtistDeepLinkSlug);
@@ -502,7 +513,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
   // as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
   async function fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem: any) {
-    if (!selDataItem || !solBitzNfts || solBitzNfts.length === 0) {
+    // if (!selDataItem || !solBitzNfts || solBitzNfts.length === 0) {
+    if (!selDataItem) {
       return;
     }
 
@@ -512,10 +524,12 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     if (!bountyToBitzLocalMapping[selDataItem.bountyId] || Date.now() - bountyToBitzLocalMapping[selDataItem.bountyId].syncedOn > 15 * 1000) {
       console.log("fetchBitzPowerUpsAndLikesForSelectedArtist NO cached");
 
+      const collectionidToUse = userHasNoBitzDataNftYet ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
       const response = await fetchBitSumAndGiverCounts({
         getterAddr: selDataItem?.creatorWallet || "",
         campaignId: selDataItem?.bountyId || "",
-        collectionId: solBitzNfts[0].grouping[0].group_value,
+        collectionId: collectionidToUse,
       });
 
       _bountyToBitzLocalMapping[selDataItem?.bountyId] = {
@@ -531,7 +545,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
           return fetchBitSumAndGiverCounts({
             getterAddr: selDataItem?.creatorWallet || "",
             campaignId: albumBounty || "",
-            collectionId: solBitzNfts[0].grouping[0].group_value,
+            collectionId: collectionidToUse,
           });
         });
 
