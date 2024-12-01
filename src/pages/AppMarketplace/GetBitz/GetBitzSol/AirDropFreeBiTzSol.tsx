@@ -28,6 +28,9 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
   const { solBitzNfts } = useNftsStore();
   const [getAirdropWorkflow, setGetAirdropWorkflow] = useState<boolean>(false);
 
+  const [freeMintBitzXpLoading, setFreeMintBitzXpLoading] = useState<boolean>(false);
+  const [freeMintBitzXpGameComingUp, setFreeMintBitzXpGameComingUp] = useState<boolean>(false);
+
   // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
@@ -43,12 +46,6 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
       setGetAirdropWorkflow(true);
     }
   }, []);
-
-  async function getAirdrop() {
-    setAirdropInProgress(true);
-
-    setAirdropInProgress(false);
-  }
 
   async function showConfetti() {
     const animation = await confetti({
@@ -78,6 +75,78 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
     }
   }
 
+  const handleFreeMintBitzXP = async () => {
+    if (!publicKeySol) {
+      return;
+    }
+
+    setFreeMintBitzXpLoading(true);
+    await sleep(5);
+
+    // const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+    //   solPreaccessNonce,
+    //   solPreaccessSignature,
+    //   solPreaccessTimestamp,
+    //   signMessage,
+    //   publicKey: userPublicKey,
+    //   updateSolPreaccessNonce,
+    //   updateSolSignedPreaccess,
+    //   updateSolPreaccessTimestamp,
+    // });
+
+    // const miscMintRes = await mintMiscDataNft(mintTemplate, userPublicKey.toBase58(), usedPreAccessSignature, usedPreAccessNonce);
+
+    // if (miscMintRes.error) {
+    //   setErrFreeMintGeneric(miscMintRes.error || miscMintRes?.e?.toString() || "unknown error");
+    // } else if (miscMintRes?.newDBLogEntryCreateFailed) {
+    //   setErrFreeMintGeneric("Misc mint passed, but the db log failed");
+    // }
+
+    // if (miscMintRes?.assetId) {
+    //   // check 10 seconds and check if the API in the backend to mark the free mint as done
+    //   await sleep(10);
+
+    //   switch (mintTemplate) {
+    //     case "bitzxp":
+    //       setFreeDropCheckNeededForBitz(freeDropCheckNeededForBitz + 1);
+    //       break;
+    //     case "musicgift":
+    //       setFreeDropCheckNeededForMusicGift(freeDropCheckNeededForMusicGift + 1);
+    //       break;
+    //     default:
+    //       break;
+    //   }
+
+    //   // update the NFT store now as we have a new NFT
+    //   const _allDataNfts: DasApiAsset[] = await fetchSolNfts(userPublicKey?.toBase58());
+    //   updateAllDataNfts(_allDataNfts);
+
+    //   // fetchSolNfts(userPublicKey?.toBase58()).then((nfts) => {
+    //   //   console.log("nfts B", nfts);
+
+    //   //   updateAllDataNfts(nfts);
+    //   // });
+
+    //   onProgressModalClose();
+    // } else {
+    //   setErrFreeMintGeneric("Free minting has failed");
+    // }
+
+    setFreeMintBitzXpLoading(false);
+    showConfetti();
+    setFreeMintBitzXpGameComingUp(true);
+  };
+
+  useEffect(() => {
+    (async () => {
+      if (freeMintBitzXpGameComingUp) {
+        await sleep(5);
+        setFreeMintBitzXpGameComingUp(false);
+        onCloseModal();
+      }
+    })();
+  }, [freeMintBitzXpGameComingUp]);
+
   return (
     <>
       <Modal
@@ -87,20 +156,41 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
           setGetAirdropWorkflow(false);
         }}
         closeOnOverlayClick={false}
-        title={"Get a free BiTz XP Data NFT Airdrop and earn BiTz XP"}
+        title={"Get Your Free BiTz XP Data NFT Airdrop!"}
         hasFilter={false}
         filterData={[]}
-        modalClassName={""}
-        titleClassName={"p-4"}>
+        modalClassName=""
+        titleClassName="p-4">
         {
           <div
             className="bg-1cyan-900"
             style={{
               minHeight: "10rem",
             }}>
-            <div className="bg-1cyan-200 flex flex-col gap-2 p-10">
-              <div className="bg-1green-200 flex items-center">
-                <div className="bg-1blue-300 ml-5 text-xl font-bold">LOREM</div>
+            <div className="bgx-cyan-900 flex flex-col gap-2 p-10">
+              <div className="bgx-green-900  items-center">
+                <div className="bgx-blue-900 text-2xl font-bold mb-2">With Itheum, your XP Data is yours to own! 🚀</div>
+                <div className="bxg-blue-800 mt-5">
+                  {" "}
+                  {`BiTz`} are Itheum XP stored in a Data NFT in your wallet. Collect them to curate, power-up, and like data—and earn rewards! Your BiTz NFT is
+                  your gateway to the Itheum Protocol and the Web3 AI Data Era {`we're`} enabling.
+                </div>
+                <div className="bgx-blue-300 mt-8">
+                  {!freeMintBitzXpGameComingUp ? (
+                    <Button
+                      className="!text-white text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer w-[300px] h-[50px]"
+                      disabled={freeMintBitzXpLoading}
+                      onClick={() => {
+                        handleFreeMintBitzXP();
+                      }}>
+                      <span className="ml-2">{freeMintBitzXpLoading ? "Minting..." : "LFG! Give Me My Airdrop!"}</span>
+                    </Button>
+                  ) : (
+                    <div className="bxg-blue-800 mt-5 bg-teal-700 p-5 rounded-lg text-lg">
+                      🙌 Success! {`Let's`} get you for first BiTz XP, game coming up in 3,2,1...
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

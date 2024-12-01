@@ -59,10 +59,10 @@ export const MvxBitzDropdown = (props: any) => {
                       <FlaskRound className="w-7 h-7 fill-[#35d9fa]" />
                     </div>
                   </div>
-                  <p className="text-xl md:text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
+                  <p className="text-xl md:text-2xl text-center font-[Clash-Medium]">What is {`BiTz`} XP?</p>
                   <p className="text-xs md:text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
-                    {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game Data
-                    Widget. Top LEADERBOARD climbers get special perks and drops!
+                    {`BiTz`} are Itheum Protocol XP. {`BiTz`} can be collected every few hours. You use {`BiTz`} points to curate and like data being created by
+                    Itheum data creators and to get rewarded in return!
                   </p>
                   <ClaimBitzButton cooldown={cooldown} handlePlayActionBtn={handlePlayActionBtn} />
                 </div>
@@ -110,7 +110,7 @@ export const ClaimBitzButton = (props: any) => {
                   <PopoverPrimitive.PopoverClose asChild>
                     <div className="flex flex-row justify-center items-center">
                       <Gift className="mx-2 text-[#35d9fa]" />
-                      <span className="text-[12px] md:text-sm"> Collect Your {`<BiTz>`} XP </span>
+                      <span className="text-[12px] md:text-sm"> Collect Your {`BiTz`} XP </span>
                     </div>
                   </PopoverPrimitive.PopoverClose>
                 );
@@ -131,7 +131,7 @@ export const ClaimBitzButton = (props: any) => {
           <PopoverPrimitive.PopoverClose asChild>
             <div className="flex flex-row justify-center items-center">
               <Gift className="mx-2 text-[#35d9fa]" />
-              <span className="text-[12px] md:text-sm"> Collect Your {`<BiTz>`} XP </span>
+              <span className="text-[12px] md:text-sm"> Collect Your {`BiTz`} XP </span>
             </div>
           </PopoverPrimitive.PopoverClose>
         )}

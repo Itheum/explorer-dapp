@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { FlaskRound, Gift } from "lucide-react";
@@ -6,10 +6,11 @@ import Countdown from "react-countdown";
 import { Link, useLocation } from "react-router-dom";
 import solLogo from "assets/img/solana-sol-logo.png";
 import { isMostLikelyMobile } from "libs/utils/misc";
-import { BIT_GAME_WINDOW_HOURS } from "pages/AppMarketplace/GetBitz/common/interfaces";
+// import { BIT_GAME_WINDOW_HOURS } from "pages/AppMarketplace/GetBitz/common/interfaces";
 import useSolBitzStore from "store/solBitz";
 import { Button } from "../../libComponents/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../libComponents/Popover";
+import { useNftsStore } from "store/nfts";
 
 export const SolBitzDropdown = (props: any) => {
   const { skipNavBarPopOverOption, showOnlyClaimBitzButton, handlePlayActionBtn } = props;
@@ -62,10 +63,10 @@ export const SolBitzDropdown = (props: any) => {
                       <FlaskRound className="w-7 h-7 fill-[#35d9fa]" />
                     </div>
                   </div>
-                  <p className="text-xl md:text-2xl text-center font-[Clash-Medium]">What is {`<BiTz>`} XP?</p>
+                  <p className="text-xl md:text-2xl text-center font-[Clash-Medium]">What is {`BiTz`} XP?</p>
                   <p className="text-xs md:text-sm  font-[Satoshi-Regular] leading-relaxed py-4 text-center">
-                    {`<BiTz>`} are Itheum Protocol XP. {`<BiTz>`} can be collected every {BIT_GAME_WINDOW_HOURS} hours by playing the Get {`<BiTz>`} game Data
-                    Widget. Top LEADERBOARD climbers get special perks and drops!
+                    {`BiTz`} are Itheum Protocol XP. {`BiTz`} can be collected every few hours. You use {`BiTz`} points to curate and like data being created by
+                    Itheum data creators and to get rewarded in return!
                   </p>
                   <ClaimBitzButton cooldown={cooldown} handlePlayActionBtn={handlePlayActionBtn} />
                 </div>
@@ -85,13 +86,14 @@ export const ClaimBitzButton = (props: any) => {
     return !!pathname.match("/getbitz");
   };
   const { updateCooldown: updateCooldownSol } = useSolBitzStore();
+  const { solBitzNfts } = useNftsStore();
 
   return (
     <Link
       className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px]"
-      to={cooldown === -2 || isGetBitzAppPage() || isMostLikelyMobile() || !handlePlayActionBtn ? "/getbitz" : "#"}
+      to={cooldown === -2 || isGetBitzAppPage() || isMostLikelyMobile() || !handlePlayActionBtn || solBitzNfts.length === 0 ? "/getbitz" : "#"}
       onClick={() => {
-        if (cooldown > -2 && !isGetBitzAppPage() && !isMostLikelyMobile() && handlePlayActionBtn) {
+        if (cooldown > -2 && !isGetBitzAppPage() && !isMostLikelyMobile() && handlePlayActionBtn && solBitzNfts.length > 0) {
           handlePlayActionBtn();
         } else {
           return;
@@ -113,7 +115,7 @@ export const ClaimBitzButton = (props: any) => {
                   <PopoverPrimitive.PopoverClose asChild>
                     <div className="flex flex-row justify-center items-center">
                       <Gift className="mx-2 text-[#35d9fa]" />
-                      <span className="text-[12px] md:text-sm"> Collect Your {`<BiTz>`} XP </span>
+                      <span className="text-[12px] md:text-sm"> Collect Your {`BiTz`} XP </span>
                     </div>
                   </PopoverPrimitive.PopoverClose>
                 );
@@ -134,7 +136,7 @@ export const ClaimBitzButton = (props: any) => {
           <PopoverPrimitive.PopoverClose asChild>
             <div className="flex flex-row justify-center items-center">
               <Gift className="mx-2 text-[#35d9fa]" />
-              <span className="text-[12px] md:text-sm"> Collect Your {`<BiTz>`} XP </span>
+              <span className="text-[12px] md:text-sm"> Collect Your {`BiTz`} XP </span>
             </div>
           </PopoverPrimitive.PopoverClose>
         )}
@@ -154,7 +156,7 @@ export const FlaskBottleAnimation = (props: any) => {
             className="absolute rounded-full w-[0.4rem] h-[0.4rem] top-[-15px] left-[10px] bg-[#35d9fa] animate-ping-slow"
             style={{ animationDelay: "1s" }}></div>
           <div
-            className="absolute rounded-full w-[0.3rem] h-[0.3rem] top-[-8px]  left-[4px] bg-[#35d9fa]  animate-ping-slow"
+            className="absolute rounded-full w-[0.3rem] h-[0.3rem] top-[-8px]  left-[4px] bg-[#35d9fa] animate-ping-slow"
             style={{ animationDelay: "0.5s" }}></div>
           <div className="absolute rounded-full w-1 h-1 top-[-5px] left-[13px]  bg-[#35d9fa] animate-ping-slow"></div>
         </>

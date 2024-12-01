@@ -52,6 +52,13 @@ const UnlockPage = () => {
   };
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
     console.log("==== effect for addressSol. addressSol = ", addressSol);
 
     if (!addressSol) {

@@ -85,7 +85,7 @@ const BonusBitzHistory: React.FC = () => {
                       <tr className="border border-[#35d9fa]/30 ">
                         <th className="p-2">When</th>
                         <th className="p-2">Reward</th>
-                        <th className="p-2 ">{`<BiTz>`} Points</th>
+                        <th className="p-2 ">{`BiTz`} Points</th>
                       </tr>
                     </thead>
                     <tbody>

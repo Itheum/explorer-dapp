@@ -5,7 +5,7 @@ import { Button } from "libComponents/Button";
 
 export function NFMeIDBannerCTA() {
   return (
-    <div className="mt-5 py-2 md:py-0 mb-3 border p-2 rounded-lg bg-[#a7fcf0]">
+    <div className="hidden mt-5 py-2 md:py-0 mb-3 border p-2 rounded-lg bg-[#a7fcf0]">
       <div className="flex flex-col md:flex-row items-center">
         <img className="w-[90px] animate-pulse" src={NFMeIDAvatarImg} alt="Get our NFMe ID" />
         <div className="flex flex-col justify-center p-2">

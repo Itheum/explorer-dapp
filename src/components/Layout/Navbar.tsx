@@ -44,7 +44,7 @@ export const Navbar = () => {
   const isLoggedInSol = !!addressSol;
   const isLoggedInMvx = useGetIsLoggedIn();
   const { address: addressMvx } = useGetAccount();
-  const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
+  // const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const setDefaultChain = useLocalStorageStore((state) => state.setDefaultChain);
   const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
   const appsStore = useAppsStore();

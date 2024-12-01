@@ -107,11 +107,14 @@ export const NFTunes = () => {
 
   useEffect(() => {
     const isFeaturedArtistDeepLink = searchParams.get("artist-profile");
+    const isHlWorkflowDeepLink = searchParams.get("hl");
 
     if (isFeaturedArtistDeepLink) {
       scrollToSection("artist-profile", 50);
       setNoRadioAutoPlay(true); // don't auto-play radio when we deep scroll to artist as its confusing
       setFeaturedArtistDeepLinkSlug(isFeaturedArtistDeepLink.trim());
+    } else if (isHlWorkflowDeepLink && isHlWorkflowDeepLink === "sigma") {
+      scrollToSection("artist-profile", 50);
     } else {
       // window.scrollTo({
       //   top: 0,

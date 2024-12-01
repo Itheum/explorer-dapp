@@ -139,10 +139,10 @@ export const GetBitzMvx = (props: any) => {
   const [burnFireGlow, setBurnFireGlow] = useState<number>(0);
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
-  const tweetText = `url=https://explorer.itheum.io/getbitz?v=3&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get <BiTz> XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " <BiTz> points 🙌!%0A%0APlay now and get your own <BiTz>! %23GetBiTz" : "Oh no, I got rugged getting <BiTz> points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
+  const tweetText = `url=https://explorer.itheum.io/getbitz?v=3&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get BiTz XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " BiTz points 🙌!%0A%0APlay now and get your own BiTz! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
   ///TODO add ?r=${address}
   const [usingReferralCode, setUsingReferralCode] = useState<string>("");
-  // const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum <BiTz> XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win <BiTz> XP 🙌. Click below to %23GetBiTz!`;
+  // const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum BiTz XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win BiTz XP 🙌. Click below to %23GetBiTz!`;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -420,7 +420,7 @@ export const GetBitzMvx = (props: any) => {
           <img
             className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgLoadingGame}
-            alt="Checking if you have <BiTz> Data NFT"
+            alt="Checking if you have BiTz Data NFT"
           />
         </div>
       );
@@ -439,7 +439,7 @@ export const GetBitzMvx = (props: any) => {
           <img
             className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgGetDataNFT}
-            alt="Get <BiTz> Data NFT from Data NFT Marketplace"
+            alt="Get BiTz Data NFT from Data NFT Marketplace"
           />
         </div>
       );
@@ -539,11 +539,9 @@ export const GetBitzMvx = (props: any) => {
                     }}>
                     <p className="text-[16px] lg:text-xl">Welcome Back Itheum OG!</p>
                     <p className="text-[16px] mt-2 lg:text-xl lg:mt-5">
-                      Ready to grab yourself some of them <span className="lg:text-3xl">🤤</span> {`<BiTz>`} points?
+                      Ready to grab yourself some of them <span className="lg:text-3xl">🤤</span> {`BiTz`} points?
                     </p>
-                    <p className="text-[18px] font-bold lg:text-2xl mt-5">
-                      But the {`<BiTz>`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!
-                    </p>
+                    <p className="text-[18px] font-bold lg:text-2xl mt-5">But the {`BiTz`} Generator God will need a Meme 🔥 Sacrifice from you to proceed!</p>
                     <p className="text-[16px] font-bold mt-2 lg:mt-5 lg:text-xl">Click here when you are ready...</p>
                     <img className="w-[40px] m-auto" src={FingerPoint} alt={"Click to Start"} />{" "}
                   </div>
@@ -568,7 +566,7 @@ export const GetBitzMvx = (props: any) => {
               {_isFetchingDataMarshal && (
                 <div>
                   <p className="text-center text-md text-gray-950 text-foreground lg:text-xl mb-[1rem]">
-                    Did the {`<BiTz>`} Generator God like that Meme Sacrifice? Only time will tell...
+                    Did the {`BiTz`} Generator God like that Meme Sacrifice? Only time will tell...
                   </p>
                   <p className="text-gray-950 text-sm text-center mb-[1rem]">Hang tight, result incoming</p>
                   <img className="w-[160px] lg:w-[230px] m-auto" src={resultLoading} alt={"Result loading"} />{" "}
@@ -586,7 +584,7 @@ export const GetBitzMvx = (props: any) => {
     if (_loadBlankGameCanvas && !_isFetchingDataMarshal && _gameDataFetched) {
       return (
         <div className="relative overflow-hidden">
-          <img className={cn("rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgGameCanvas} alt={"Get <BiTz> Points"} />
+          <img className={cn("rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgGameCanvas} alt={"Get BiTz Points"} />
           <div
             className={cn(
               "flex justify-center items-center mt-[2rem] w-[100%] h-[350px] rounded-[3rem] bg-slate-50 text-gray-950 p-[1rem] border border-primary/50 static lg:absolute lg:p-[2rem] lg:pb-[.5rem] lg:w-[500px] lg:h-[400px] lg:mt-0 lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2 lg:-translate-y-1/2",
@@ -645,7 +643,7 @@ export const GetBitzMvx = (props: any) => {
                       <>
                         <p className="text-2xl text-gray-950">w👀t! w👀t! You have won:</p>
                         <p className="text-4xl mt-[2rem] text-gray-950">
-                          {_viewDataRes.data.gamePlayResult.bitsWon} {` <BiTz>`}
+                          {_viewDataRes.data.gamePlayResult.bitsWon} {` BiTz`}
                         </p>
                         <div className="bg-black rounded-full p-[1px]">
                           <HoverBorderGradient>
@@ -712,7 +710,7 @@ export const GetBitzMvx = (props: any) => {
   function spritLayerPointsCloud() {
     return (
       <div className="flex flex-col justify-center items-center w-[200px] h-[100px] absolute top-[2%] left-[2%] rounded-[3rem] bg-slate-50 text-gray-950 p-[2rem] border border-primary/50">
-        <p className="text-sm">Your {`<BiTz>`} Points</p>
+        <p className="text-sm">Your {`BiTz`} Points</p>
         <p className="text-[1.5rem] font-bold mt-[2px]">{bitzBalance === -2 ? `...` : <>{bitzBalance === -1 ? "0" : `${bitzBalance}`}</>}</p>
       </div>
     );
@@ -836,7 +834,7 @@ export const GetBitzMvx = (props: any) => {
           <img
             className={cn("-z-1 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgLoadingGame}
-            alt={"Checking if you have <BiTz> Data NFT"}
+            alt={"Checking if you have BiTz Data NFT"}
           />
         </div>
         {gamePlayImageSprites()}
@@ -859,10 +857,10 @@ export const GetBitzMvx = (props: any) => {
                 and submit it there. Top 3 memes per week get included into the Meme Burn Game and we will showcase it on Twitter.
               </li>
               <li className="my-5">
-                4. Power Up Data Bounties with {`<BiTz>`} XP below - Give {`<BiTz>`}
+                4. Power Up Data Bounties with {`BiTz`} XP below - Give {`BiTz`}
               </li>
             </ol>
-            <p>See the full list of {`<BiTz>`} XP perks listed in the FAQ section below...</p>
+            <p>See the full list of {`BiTz`} XP perks listed in the FAQ section below...</p>
           </div>
 
           <div id="leaderboard" className="flex flex-col max-w-[100%] border border-[#35d9fa] p-[2rem] rounded-[1rem] mt-[3rem]">
@@ -878,7 +876,7 @@ export const GetBitzMvx = (props: any) => {
                     </p>
                   </div>
                   <div className="flex flex-col items-center p-[1rem] md:flex-row md:align-baseline md:pr-[2rem] md:pl-[2rem]">
-                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`<BiTz>`} Points </p>
+                    <p className="flex items-end md:text-lg md:mr-[1rem]">Your Collected {`BiTz`} Points </p>
                     <p className="text-xl md:text-2xl dark:text-[#35d9fa] font-bold">
                       {collectedBitzSum === -2 ? `...` : <>{collectedBitzSum === -1 ? "0" : `${collectedBitzSum}`}</>}
                     </p>

@@ -386,6 +386,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [progress, setProgress] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFreeDropSampleWorkflow, setIsFreeDropSampleWorkflow] = useState(false);
+  const [isSigmaWorkflow, setIsSigmaWorkflow] = useState(false);
   const { solBitzNfts } = useNftsStore();
   const [bountyToBitzLocalMapping, setBountyToBitzLocalMapping] = useState<any>({});
   const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
@@ -417,6 +418,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
     if (isHlWorkflowDeepLink === "sample") {
       setIsFreeDropSampleWorkflow(true);
+    } else if (isHlWorkflowDeepLink === "sigma") {
+      setIsSigmaWorkflow(true);
     }
 
     audio.addEventListener("ended", eventToAttachEnded);
@@ -673,33 +676,44 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                       }}></div>
 
                     <div className="mt-5 flex flex-col md:flex-row items-center">
-                      {publicKey || addressMvx ? (
-                        <Button
-                          className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                          disabled={!publicKey && !addressMvx}
-                          onClick={() => {
-                            onSendPowerUp({
-                              creatorIcon: artistProfile.img,
-                              creatorName: artistProfile.name,
-                              giveBitzToWho: artistProfile.creatorWallet,
-                              giveBitzToCampaignId: artistProfile.bountyId,
-                            });
-                          }}>
-                          <>
-                            <FlaskRound />
-                            <span className="ml-2">Power-Up Musician With BiTz</span>
-                          </>
-                        </Button>
-                      ) : (
-                        <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                          <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                      <div className="relative">
+                        {publicKey || addressMvx ? (
+                          <Button
+                            className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                            disabled={!publicKey && !addressMvx}
+                            onClick={() => {
+                              onSendPowerUp({
+                                creatorIcon: artistProfile.img,
+                                creatorName: artistProfile.name,
+                                giveBitzToWho: artistProfile.creatorWallet,
+                                giveBitzToCampaignId: artistProfile.bountyId,
+                              });
+                            }}>
                             <>
-                              <WalletMinimal />
-                              <span className="ml-2">Login to Power-Up Musician</span>
+                              <FlaskRound />
+                              <span className="ml-2">Power-Up Musician With BiTz</span>
                             </>
                           </Button>
-                        </Link>
-                      )}
+                        ) : (
+                          <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                            <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                              <>
+                                <WalletMinimal />
+                                <span className="ml-2">Login to Power-Up Musician</span>
+                              </>
+                            </Button>
+                          </Link>
+                        )}
+                        {isSigmaWorkflow && (
+                          <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
+                            <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                              <FontAwesomeIcon icon={faHandPointer} />
+                            </div>
+                            <span className="text-center">Click To Vote</span>
+                          </div>
+                        )}
+                      </div>
+
                       <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 mt-2 md:mt-0 rounded md:min-w-[100px] flex items-center justify-center">
                         {typeof bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum === "undefined" ? (
                           <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
@@ -709,56 +723,58 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                       </div>
                     </div>
 
-                    <p className="artist-who mt-5">{artistProfile.bio}</p>
+                    <div className={`${isSigmaWorkflow ? "opacity-[0.1]" : ""}`}>
+                      <p className="artist-who mt-5">{artistProfile.bio}</p>
 
-                    {(artistProfile.dripLink !== "" ||
-                      artistProfile.xLink !== "" ||
-                      artistProfile.webLink !== "" ||
-                      artistProfile.ytLink !== "" ||
-                      artistProfile.otherLink1 !== "") && (
-                      <div className="flex flex-col md:flex-row mt-5">
-                        {artistProfile.dripLink && (
-                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.dripLink} target="_blank">
-                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                              <Droplet className="m-auto w-5" />
-                              Artist on Drip
-                            </div>
-                          </a>
-                        )}
-                        {artistProfile.xLink && (
-                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.xLink} target="_blank">
-                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                              <Twitter className="m-auto w-5" />
-                              Artist on X
-                            </div>
-                          </a>
-                        )}
-                        {artistProfile.ytLink && (
-                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.ytLink} target="_blank">
-                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                              <Youtube className="m-auto w-5" />
-                              Artist on YouTube
-                            </div>
-                          </a>
-                        )}
-                        {artistProfile.webLink && (
-                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.webLink} target="_blank">
-                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                              <Globe className="m-auto w-5" />
-                              Artist Website
-                            </div>
-                          </a>
-                        )}
-                        {artistProfile.otherLink1 && (
-                          <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.otherLink1} target="_blank">
-                            <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                              <Link2 className="m-auto w-5" />
-                              More Content
-                            </div>
-                          </a>
-                        )}
-                      </div>
-                    )}
+                      {(artistProfile.dripLink !== "" ||
+                        artistProfile.xLink !== "" ||
+                        artistProfile.webLink !== "" ||
+                        artistProfile.ytLink !== "" ||
+                        artistProfile.otherLink1 !== "") && (
+                        <div className="flex flex-col md:flex-row mt-5">
+                          {artistProfile.dripLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.dripLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Droplet className="m-auto w-5" />
+                                Artist on Drip
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.xLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.xLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Twitter className="m-auto w-5" />
+                                Artist on X
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.ytLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.ytLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Youtube className="m-auto w-5" />
+                                Artist on YouTube
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.webLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.webLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Globe className="m-auto w-5" />
+                                Artist Website
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.otherLink1 && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.otherLink1} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Link2 className="m-auto w-5" />
+                                More Content
+                              </div>
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="album-list w-[300px] lg:w-full">
