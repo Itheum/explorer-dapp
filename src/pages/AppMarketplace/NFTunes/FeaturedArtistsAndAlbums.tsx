@@ -402,7 +402,9 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }, [selArtistId, artistAlbumDataset]);
 
   useEffect(() => {
-    console.log("featuredArtistDeepLinkSlug ", featuredArtistDeepLinkSlug);
+    if (artistAlbumDataset.length === 0) {
+      return;
+    }
 
     if (featuredArtistDeepLinkSlug) {
       const findArtistBySlug = artistAlbumDataset.find((i) => i.slug === featuredArtistDeepLinkSlug);
@@ -411,7 +413,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
         setSelArtistId(findArtistBySlug.artistId);
       }
     }
-  }, [featuredArtistDeepLinkSlug]);
+  }, [featuredArtistDeepLinkSlug, artistAlbumDataset]);
 
   useEffect(() => {
     if (stopPreviewPlayingNow) {
@@ -488,7 +490,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
           <Music2 className="text-secondary" />
         </div>
 
-        <div className="flex flex-col md:flex-row w-[100%] items-start bgx-purple-900">
+        <div id="artist-profile" className="flex flex-col md:flex-row w-[100%] items-start bgx-purple-900">
           {artistAlbumDataLoading || artistAlbumDataset.length === 0 ? (
             <div className="flex flex-col justify-center w-[100%]">
               {artistAlbumDataLoading ? (
@@ -520,7 +522,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                 ))}
               </div>
 
-              <div id="artist-profile" className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bgx-blue-700">
+              <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bgx-blue-700">
                 <div className="flex flex-col gap-4 p-8 items-start md:w-[90%] bg-background rounded-xl border border-primary/50 min-h-[350px]">
                   {!artistProfile ? (
                     <div>Loading</div>
