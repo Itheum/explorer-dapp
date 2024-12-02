@@ -422,7 +422,7 @@ export const NFTunes = () => {
                 <div className="px-2">NF-Tunes Radio</div>
                 {radioTracksLoading || radioTracks.length === 0 ? (
                   <div className="select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25 border-[1px] border-foreground/40 relative md:w-[100%] flex flex-col rounded-xl mt-2 p-3">
-                    {radioTracksLoading ? "Radio service powering up..." : "Radio service unavailable."}
+                    {radioTracksLoading ? "Radio service powering up..." : "⚠️ Radio service unavailable"}
                   </div>
                 ) : (
                   <RadioPlayer
@@ -905,13 +905,9 @@ export const NFTunes = () => {
   );
 };
 
-export async function getRadioStreamsData(firstNTracks?: number) {
+export async function getRadioStreamsData() {
   try {
-    let getRadioStreamAPI = `${getApiWeb2Apps()}/datadexapi/nfTunesApp/getRadioStreams`;
-
-    if (firstNTracks) {
-      getRadioStreamAPI += `?firstNTracks=${firstNTracks}`;
-    }
+    const getRadioStreamAPI = `https://api.itheumcloud.com/app_nftunes/json/radioStreamData.json`;
 
     const tracksRes = await axios.get(getRadioStreamAPI);
     const tracksData = tracksRes.data;
@@ -923,9 +919,23 @@ export async function getRadioStreamsData(firstNTracks?: number) {
   }
 }
 
+export async function getArtistsAlbumsData() {
+  try {
+    const getArtistsAlbumsAPI = `https://api.itheumcloud.com/app_nftunes/json/albumsAndArtistsData.json`;
+
+    const dataRes = await axios.get(getArtistsAlbumsAPI);
+    const dataset = dataRes.data;
+
+    return dataset;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
 export async function getNFTuneFirstTrackBlobData() {
   try {
-    const firstNFTuneRadioTrackData = await getRadioStreamsData(1);
+    const firstNFTuneRadioTrackData = await getRadioStreamsData();
 
     if (firstNFTuneRadioTrackData && firstNFTuneRadioTrackData.length > 0) {
       const blob = await fetch(firstNFTuneRadioTrackData[0].stream).then((r) => r.blob());
