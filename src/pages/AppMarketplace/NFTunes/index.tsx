@@ -448,9 +448,9 @@ export const NFTunes = () => {
         <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
         <div className="flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem] pb-6">
           <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-2 xl:pt-4 mb-16 xl:mb-32 pl-4">
-            <div className="flex flex-col w-full xl:w-[60%]">
+            {/* <div className="flex flex-col w-full xl:w-[60%]">
               <MvxSolSwitch />
-            </div>
+            </div> */}
 
             {/* New Artists Join CTA */}
             <div className="flex flex-col md:flex-row items-center justify-between p-[15px] rounded-lg w-full bg-[#333] dark:bg-primary text-primary-foreground">

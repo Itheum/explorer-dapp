@@ -28,14 +28,15 @@ import {
 import { getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { cn, sleep } from "libs/utils";
 import { APP_MAPPINGS } from "libs/utils/constant";
+import { getNFTuneFirstTrackBlobData } from "pages/AppMarketplace/NFTunes";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
 import { useAccountStore } from "store/account";
 import { useAppsStore } from "store/apps";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { SwitchButton } from "./SwitchButton";
-import { getNFTuneFirstTrackBlobData } from "../../pages/AppMarketplace/NFTunes";
 import { MvxBitzDropdown } from "../BitzDropdown/MvxBitzDropdown";
+import { DataNftAirdropsBannerCTA } from "../DataNftAirdropsBannerCTA";
 import { PlayBitzModal } from "../PlayBitzModal/PlayBitzModal";
 
 export const Navbar = () => {
@@ -44,7 +45,6 @@ export const Navbar = () => {
   const isLoggedInSol = !!addressSol;
   const isLoggedInMvx = useGetIsLoggedIn();
   const { address: addressMvx } = useGetAccount();
-  // const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const setDefaultChain = useLocalStorageStore((state) => state.setDefaultChain);
   const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
   const appsStore = useAppsStore();
@@ -389,7 +389,13 @@ export const Navbar = () => {
         {showPlayBitzModal && <PlayBitzModal showPlayBitzModel={showPlayBitzModal} handleHideBitzModel={() => setShowPlayBitzModal(false)} />}
       </div>
 
-      <div className={"bg-color-[#5d3d0d]"}>
+      {publicKeySol && (
+        <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem]">
+          <DataNftAirdropsBannerCTA />
+        </div>
+      )}
+
+      <div className={"bg-color-[#5d3d0d] mt-2"}>
         <div className={"text-center text-sm"}>{`preaccessNonce = ${solPreaccessNonce.substring(0, 8)},
 preaccessSig = ${solPreaccessSignature.substring(0, 8)},
 preaccessTS = ${solPreaccessTimestamp > -2 ? new Date(solPreaccessTimestamp).toUTCString() : solPreaccessTimestamp}`}</div>
