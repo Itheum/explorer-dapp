@@ -14,7 +14,6 @@ import { walletConnectV2ProjectId } from "config";
 import { SOL_ENV_ENUM, MVX_ENV_ENUM } from "config";
 import { Button } from "libComponents/Button";
 import { getMvxRpcApi, getApiWeb2Apps } from "libs/utils";
-import { useAccountStore } from "store/account";
 
 /* 
 we use global vars here so we can maintain this state across routing back and forth to this unlock page
@@ -34,7 +33,7 @@ const UnlockPage = () => {
   } = useGetNetworkConfig();
   const { address: addressMvx } = useGetAccount();
   const isLoggedInMvX = !!addressMvx;
-  const { publicKey: publicKeySol, signMessage } = useWallet();
+  const { publicKey: publicKeySol } = useWallet();
   const addressSol = publicKeySol?.toBase58();
   const { pathname } = useLocation();
   const [userAccountLoggingIn, setIsUserAccountLoggingIn] = useState<boolean>(false);
@@ -59,7 +58,7 @@ const UnlockPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("==== effect for addressSol. addressSol = ", addressSol);
+    // console.log("==== effect for addressSol. addressSol = ", addressSol);
 
     if (!addressSol) {
       solGotConnected = false;
@@ -69,7 +68,7 @@ const UnlockPage = () => {
 
         // the user came to the unlock page without a solana connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using SOL
-        console.log("==== User JUST logged in with addressSol = ", addressSol);
+        // console.log("==== User JUST logged in with addressSol = ", addressSol);
 
         const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SOL_ENV_ENUM.devnet : SOL_ENV_ENUM.mainnet;
         logUserLoggedInInUserAccounts(addressSol, chainId);
@@ -80,7 +79,7 @@ const UnlockPage = () => {
   }, [addressSol]);
 
   useEffect(() => {
-    console.log("==== effect for addressMvx. addressMvx = ", addressMvx);
+    // console.log("==== effect for addressMvx. addressMvx = ", addressMvx);
 
     if (!addressMvx) {
       mvxGotConnected = false;
@@ -90,7 +89,7 @@ const UnlockPage = () => {
 
         // the user came to the unlock page without a mvx connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using MVX
-        console.log("==== User JUST logged in with addressMvx = ", addressMvx);
+        // console.log("==== User JUST logged in with addressMvx = ", addressMvx);
 
         const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? MVX_ENV_ENUM.devnet : MVX_ENV_ENUM.mainnet;
         logUserLoggedInInUserAccounts(addressMvx, chainId, true);

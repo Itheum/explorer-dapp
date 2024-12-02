@@ -13,8 +13,6 @@ const GetBitz: React.FC<any> = (props) => {
   const { address: addressMvx } = useGetAccount();
   const { publicKey: publicKeySol } = useWallet();
 
-  console.log("addressMvx", addressMvx);
-
   return (
     <div>
       <HelmetPageMeta

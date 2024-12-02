@@ -4,12 +4,11 @@ import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { GET_BITZ_TOKEN_MVX, IS_DEVNET } from "appsConfig";
-import { SUPPORTED_MVX_COLLECTIONS, SUPPORTED_SOL_COLLECTIONS } from "config";
+import { SUPPORTED_MVX_COLLECTIONS } from "config";
 import { useGetAccount } from "hooks";
-import { decodeNativeAuthToken, getApiWeb2Apps } from "libs/utils";
+import { viewDataWrapperSol, fetchSolNfts } from "libs/sol/SolViewData";
+import { decodeNativeAuthToken } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
-// import { viewDataToOnlyGetReadOnlyBitz } from "pages/AppMarketplace/GetBitz/GetBitzSol";
-import { viewDataWrapperSol } from "libs/sol/SolViewData";
 import useSolBitzStore from "store/solBitz";
 import { useAccountStore } from "./account";
 import { useAppsStore } from "./apps";
@@ -46,7 +45,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const updateNfTunesRadioFirstTrackCachedBlob = useAppsStore((state) => state.updateNfTunesRadioFirstTrackCachedBlob);
 
   // NFT Store
-  const { mvxNfts, updateMvxNfts, updateIsLoadingMvx, solBitzNfts, updateSolNfts, updateIsLoadingSol, updateSolBitzNfts } = useNftsStore();
+  const { mvxNfts, updateMvxNfts, updateIsLoadingMvx, solBitzNfts, solNfts, updateSolNfts, updateIsLoadingSol, updateSolBitzNfts } = useNftsStore();
 
   // MVX Logged in - bootstrap store
   useEffect(() => {
@@ -66,32 +65,44 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     fetchMvxNfts();
   }, [addressMvx, tokenLogin]);
 
-  // SOL Logged in - bootstrap store
+  // SOL Logged in - bootstrap nft store
   useEffect(() => {
-    async function fetchSolNfts() {
+    async function getAllUsersSolNfts() {
       updateIsLoadingSol(true);
 
       if (!addressSol) {
         updateSolNfts([]);
       } else {
-        const resp = await fetch(`${getApiWeb2Apps()}/datadexapi/bespoke/sol/getDataNFTsByOwner?publicKeyb58=${addressSol}`);
-        const data = await resp.json();
-        const _allDataNfts: DasApiAsset[] = data.nfts;
+        const _allDataNfts = await fetchSolNfts(addressSol);
 
         updateSolNfts(_allDataNfts);
-
-        const _bitzDataNfts: DasApiAsset[] = IS_DEVNET
-          ? _allDataNfts.filter((nft) => nft.content.metadata.name.includes("XP"))
-          : _allDataNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"));
-
-        updateSolBitzNfts(_bitzDataNfts);
       }
 
       updateIsLoadingSol(false);
     }
 
-    fetchSolNfts();
+    getAllUsersSolNfts();
   }, [publicKeySol]);
+
+  // SOL: if someone updates data nfts (i.e. at the start when app loads and we get nfts OR they get a free mint during app session), we go over them and find bitz nfts etc
+  useEffect(() => {
+    if (!publicKeySol || solNfts.length === 0) {
+      return;
+    }
+
+    (async () => {
+      updateIsLoadingSol(true);
+
+      // get users bitz data nfts
+      const _bitzDataNfts: DasApiAsset[] = IS_DEVNET
+        ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP"))
+        : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG")); // @TODO, what is the user has multiple BiTz? IXPG2 was from drip and IXPG3 will be from us direct via the airdrop
+
+      updateSolBitzNfts(_bitzDataNfts);
+
+      updateIsLoadingSol(false);
+    })();
+  }, [publicKeySol, solNfts]);
 
   // MVX - Bitz Bootstrap
   useEffect(() => {
@@ -109,12 +120,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         }
       }
 
-      // add all the balances into the loading phase
-      // updateBitzBalance(-2);
-      // updateGivenBitzSum(-2);
-      // updateCooldown(-2);
-      // updateCollectedBitzSum(-2);
-      // updateBonusBitzSum(-2);
       resetBitzValsToLoadingMVX();
 
       if (mvxNFTsFetched && mvxNfts.length > 0) {
@@ -191,9 +196,22 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
         const getBitzGameResult = await viewDataWrapperSol(publicKeySol!, solPreaccessNonce, solPreaccessSignature, viewDataArgs, solBitzNfts[0].id);
 
         if (getBitzGameResult) {
-          const bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
-          const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
-          const sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
+          let bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
+          let sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
+          let sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
+
+          // some values can be -1 during first play or other situations, so we make it 0 or else we get weird numbers like 1 for the some coming up
+          if (bitzBeforePlay < 0) {
+            bitzBeforePlay = 0;
+          }
+
+          if (sumGivenBits < 0) {
+            sumGivenBits = 0;
+          }
+
+          if (sumBonusBitz < 0) {
+            sumBonusBitz = 0;
+          }
 
           updateBitzBalanceSol(bitzBeforePlay + sumBonusBitz - sumGivenBits); // collected bits - given bits
           updateGivenBitzSumSol(sumGivenBits); // given bits -- for power-ups

@@ -198,9 +198,22 @@ const GetBitzSol = (props: any) => {
           const getBitzGameResult = await viewDataWrapperSol(publicKeySol!, usedPreAccessNonce, usedPreAccessSignature, viewDataArgs, solBitzNfts[0].id);
 
           if (getBitzGameResult) {
-            const bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
-            const sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
-            const sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
+            let bitzBeforePlay = getBitzGameResult.data.gamePlayResult.bitsScoreBeforePlay || 0;
+            let sumGivenBits = getBitzGameResult.data?.bitsMain?.bitsGivenSum || 0;
+            let sumBonusBitz = getBitzGameResult.data?.bitsMain?.bitsBonusSum || 0;
+
+            // some values can be -1 during first play or other situations, so we make it 0 or else we get weird numbers like 1 for the some coming up
+            if (bitzBeforePlay < 0) {
+              bitzBeforePlay = 0;
+            }
+
+            if (sumGivenBits < 0) {
+              sumGivenBits = 0;
+            }
+
+            if (sumBonusBitz < 0) {
+              sumBonusBitz = 0;
+            }
 
             // if (sumGivenBits > 0) {
             updateBitzBalance(bitzBeforePlay + sumBonusBitz - sumGivenBits); // collected bits - given bits
@@ -371,12 +384,25 @@ const GetBitzSol = (props: any) => {
         )
       );
 
-      const sumBitzBalance = viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay || 0;
-      const sumBonusBitz = viewDataPayload.data?.bitsMain?.bitsBonusSum || 0;
-      const sumGivenBits = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
+      let sumBitzBalance = viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay || 0;
+      let sumBonusBitz = viewDataPayload.data?.bitsMain?.bitsBonusSum || 0;
+      let sumGivenBits = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
+
+      // some values can be -1 during first play or other situations, so we make it 0 or else we get weird numbers like 1 for the some coming up
+      if (sumBitzBalance < 0) {
+        sumBitzBalance = 0;
+      }
+
+      if (sumGivenBits < 0) {
+        sumGivenBits = 0;
+      }
+
+      if (sumBonusBitz < 0) {
+        sumBonusBitz = 0;
+      }
 
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
-        updateBitzBalance(sumBitzBalance + sumBonusBitz - sumGivenBits); // won some bis, minus given bits and show
+        updateBitzBalance(sumBitzBalance + sumBonusBitz - sumGivenBits); // won some bitz, minus given bits and show
         updateCollectedBitzSum(viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay);
       } else {
         updateBitzBalance(viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay + sumBonusBitz - sumGivenBits); // did not win bits, minus given bits from current and show
@@ -507,16 +533,6 @@ const GetBitzSol = (props: any) => {
               setClaimFreeAirdropWorkflow(true);
             }}>
             <img className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgGetDataNFT} alt={"Get a free BiTz Data NFT"} />
-
-            {/* The bitz power up for creators and album liks (Solana Only) */}
-            {claimFreeAirdropWorkflow && (
-              <AirDropFreeBiTzSol
-                onCloseModal={() => {
-                  setClaimFreeAirdropWorkflow(false);
-                }}
-              />
-            )}
-            <div className="mt-5 mb-10">claimFreeAirdropWorkflow = {claimFreeAirdropWorkflow.toString()}</div>
           </div>
         </>
       );
@@ -882,7 +898,12 @@ const GetBitzSol = (props: any) => {
           You are playing with referral code {usingReferralCode}
         </div>
       )}
-      SOLANA
+      <div
+        onClick={() => {
+          setClaimFreeAirdropWorkflow(true);
+        }}>
+        SOLANA
+      </div>
       <div className="relative w-full">
         <div className="absolute -z-1 w-full">
           <img
@@ -984,6 +1005,16 @@ const GetBitzSol = (props: any) => {
           <Faq />
         </>
       )}
+
+      {/* The bitz power up for creators and album likes (Solana Only) */}
+      {claimFreeAirdropWorkflow && (
+        <AirDropFreeBiTzSol
+          onCloseModal={() => {
+            setClaimFreeAirdropWorkflow(false);
+          }}
+        />
+      )}
+      <div className="mt-5 mb-10">claimFreeAirdropWorkflow = {claimFreeAirdropWorkflow.toString()}</div>
     </div>
   );
 };

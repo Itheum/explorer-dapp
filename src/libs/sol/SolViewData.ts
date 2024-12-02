@@ -1,8 +1,9 @@
+import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { PublicKey } from "@solana/web3.js";
 import bs58 from "bs58";
 import { SOL_ENV_ENUM } from "config";
 import { BlobDataType } from "libs/types";
-import { getApiDataMarshal } from "libs/utils";
+import { getApiDataMarshal, getApiWeb2Apps } from "libs/utils";
 
 export async function itheumSolPreaccess() {
   const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SOL_ENV_ENUM.devnet : SOL_ENV_ENUM.mainnet;
@@ -147,5 +148,57 @@ export async function viewDataWrapperSol(publicKeySol: PublicKey, usedPreAccessN
     }
   } catch (err) {
     return undefined;
+  }
+}
+
+export async function mintMiscDataNft(mintTemplate: string, mintForSolAddr: string, solSignature: string, signatureNonce: string) {
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SOL_ENV_ENUM.devnet : SOL_ENV_ENUM.mainnet;
+
+    const requestBody = { mintTemplate, mintForSolAddr, solSignature, signatureNonce, chainId };
+
+    const res = await fetch(`${getApiWeb2Apps()}/datadexapi/solNftUtils/mintMiscDataNft`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await res.json();
+
+    return data;
+  } catch (e) {
+    return {
+      error: true,
+      e,
+    };
+  }
+}
+
+export async function checkIfFreeDataNftGiftMinted(mintTemplate: string, checkForSolAddr: string) {
+  const res = await fetch(
+    `${getApiWeb2Apps()}/datadexapi/solNftUtils/checkIfFreeDataNftGiftMinted?mintTemplate=${mintTemplate}&checkForSolAddr=${checkForSolAddr}`,
+    {
+      method: "GET",
+    }
+  );
+
+  const data = await res.json();
+
+  return data;
+}
+
+export async function fetchSolNfts(solAddress: string | undefined): Promise<DasApiAsset[]> {
+  if (!solAddress) {
+    return [];
+  } else {
+    const resp = await fetch(`${getApiWeb2Apps()}/datadexapi/bespoke/sol/getDataNFTsByOwner?publicKeyb58=${solAddress}`);
+    const data = await resp.json();
+    const nfts: DasApiAsset[] = data.nfts;
+
+    return nfts;
   }
 }
