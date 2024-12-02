@@ -36,7 +36,7 @@ export const Home = () => {
           <div className="flex flex-col md:flex-row flex-wrap p-2 rounded-md">
             <div
               id="featured"
-              className="flex md:min-w-[25%] md:flex-[2] border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/artist_profile/gritbeat.png)`,
                 "backgroundBlendMode": "multiply",
@@ -54,7 +54,7 @@ export const Home = () => {
 
             <div
               id="featured2"
-              className="flex md:min-w-[25%] md:flex-[2] border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/artist_profile/bogden-cobra.png)`,
                 "backgroundBlendMode": "multiply",
@@ -71,8 +71,7 @@ export const Home = () => {
             </div>
 
             <div
-              id="featured"
-              className="flex md:min-w-[25%] md:flex-[2] border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
               }}>
