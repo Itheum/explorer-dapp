@@ -7,15 +7,12 @@ import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitte
 import { Link, useSearchParams } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
-import { Loader } from "components";
 import { Button } from "libComponents/Button";
 import { gtagGo } from "libs/utils/misc";
 import { fetchBitSumAndGiverCounts } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
 import { routeNames } from "routes";
 import { useNftsStore } from "store/nfts";
 import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
-import { getArtistsAlbumsData } from "./";
-import { sleep } from "libs/utils";
 
 const dataset = [
   {
@@ -393,8 +390,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const { solBitzNfts } = useNftsStore();
   const [bountyToBitzLocalMapping, setBountyToBitzLocalMapping] = useState<any>({});
   const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
-  const [artistAlbumDataset, setArtistAlbumDataset] = useState<any[]>([]);
-  const [artistAlbumDataLoading, setArtistAlbumDataLoading] = useState<boolean>(true);
 
   function eventToAttachEnded() {
     audio.src = "";
@@ -431,14 +426,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     audio.addEventListener("timeupdate", eventToAttachTimeUpdate);
     audio.addEventListener("canplaythrough", eventToAttachCanPlayThrough);
 
-    (async () => {
-      sleep(5);
-      const allArtistsAlbumsData = await getArtistsAlbumsData();
-      sleep(5);
-      setArtistAlbumDataset(allArtistsAlbumsData);
-      setArtistAlbumDataLoading(false);
-    })();
-
     return () => {
       audio.pause();
       audio.removeEventListener("ended", eventToAttachEnded);
@@ -448,22 +435,18 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }, []);
 
   // WHAT IS THIS?
-  useEffect(
-    () => () => {
-      // on unmount we have to stp playing as for some reason the play continues always otherwise
-      playPausePreview(); // with no params wil always go into the stop logic
-    },
-    []
-  );
+  // useEffect(
+  //   () => () => {
+  //     // on unmount we have to stp playing as for some reason the play continues always otherwise
+  //     playPausePreview(); // with no params wil always go into the stop logic
+  //   },
+  //   []
+  // );
 
   useEffect(() => {
-    if (artistAlbumDataset.length === 0) {
-      return;
-    }
-
     playPausePreview(); // with no params wil always go into the stop logic
 
-    const selDataItem = artistAlbumDataset.find((i) => i.artistId === selArtistId);
+    const selDataItem = dataset.find((i) => i.artistId === selArtistId);
 
     setArtistProfile(selDataItem);
 
@@ -476,7 +459,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     // we clone selDataItem here so as to no accidentally mutate things
     // we debounce this, so that - if the user is jumping tabs.. it wait until they stop at a tab for 2.5 S before running the complex logic
     debounced_fetchBitzPowerUpsAndLikesForSelectedArtist({ ...selDataItem });
-  }, [selArtistId, artistAlbumDataset]);
+  }, [selArtistId]);
 
   useEffect(() => {
     if (solBitzNfts.length === 0) {
@@ -487,18 +470,16 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }, [solBitzNfts]);
 
   useEffect(() => {
-    if (artistAlbumDataset.length === 0) {
-      return;
-    }
+    console.log("featuredArtistDeepLinkSlug ", featuredArtistDeepLinkSlug);
 
     if (featuredArtistDeepLinkSlug) {
-      const findArtistBySlug = artistAlbumDataset.find((i) => i.slug === featuredArtistDeepLinkSlug);
+      const findArtistBySlug = dataset.find((i) => i.slug === featuredArtistDeepLinkSlug);
 
       if (findArtistBySlug) {
         setSelArtistId(findArtistBySlug.artistId);
       }
     }
-  }, [featuredArtistDeepLinkSlug, artistAlbumDataset]);
+  }, [featuredArtistDeepLinkSlug]);
 
   useEffect(() => {
     if (stopPreviewPlayingNow) {
@@ -662,361 +643,346 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
           <Music2 className="text-secondary" />
         </div>
 
-        <div id="artist-profile" className="flex flex-col md:flex-row w-[100%] items-start bgx-purple-900">
-          {artistAlbumDataLoading || artistAlbumDataset.length === 0 ? (
-            <div className="flex flex-col justify-center w-[100%]">
-              {artistAlbumDataLoading ? (
-                <div className="m-auto">
-                  <Loader noText />
-                  Artist and Albums powering up...
-                </div>
-              ) : (
-                <div className="m-auto">⚠️ Artist and Albums unavailable</div>
-              )}
-            </div>
-          ) : (
-            <>
-              <div className="artist-list flex py-2 pb-5 mb-5 md:mb-0 md:pt-0 md:flex-col md:justify-center items-center w-[320px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
-                {artistAlbumDataset.map((artist: any) => (
-                  <div
-                    key={artist.artistId}
-                    className={`flex flex-col p-5 items-center w-[200px] md:w-[80%] xl:w-[100%] bg-background rounded-xl border border-primary/50 ${artist.artistId === selArtistId ? "bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95%" : "cursor-pointer"}`}
-                    onClick={() => {
-                      if (artist.artistId !== selArtistId) {
-                        setSelArtistId(artist.artistId);
-                        setUserInteractedWithTabs(true);
+        <div className="flex flex-col md:flex-row w-[100%] items-start bgg-purple-900">
+          <div className="artist-list flex py-2 pb-5 mb-5 md:mb-0 md:pt-0 md:flex-col md:justify-center items-center w-[320px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
+            {dataset.map((artist: any) => (
+              <div
+                key={artist.artistId}
+                className={`flex flex-col p-5 items-center w-[200px] md:w-[80%] xl:w-[100%] bg-background rounded-xl border border-primary/50 ${artist.artistId === selArtistId ? "bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95%" : "cursor-pointer"}`}
+                onClick={() => {
+                  if (artist.artistId !== selArtistId) {
+                    setSelArtistId(artist.artistId);
+                    setUserInteractedWithTabs(true);
 
-                        gtagGo("NtuArAl", "ViewProfile", "Artist", artist.artistId);
-                      }
-                    }}>
-                    <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg lg:!text-xl text-nowrap text-center`}>{artist.name}</h2>
-                  </div>
-                ))}
+                    gtagGo("NtuArAl", "ViewProfile", "Artist", artist.artistId);
+                  }
+                }}>
+                <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg lg:!text-xl text-nowrap text-center`}>{artist.name}</h2>
               </div>
+            ))}
+          </div>
 
-              <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
-                <div className="flex flex-col gap-4 p-8 items-start md:w-[90%] bg-background rounded-xl border border-primary/50 min-h-[350px]">
-                  {!artistProfile ? (
-                    <div>Loading</div>
-                  ) : (
-                    <>
-                      <div className="artist-bio w-[300px] md:w-full">
-                        <div
-                          className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[320px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
-                          style={{
-                            "backgroundImage": `url(${artistProfile.img})`,
-                          }}></div>
+          <div id="artist-profile" className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
+            <div className="flex flex-col gap-4 p-8 items-start md:w-[90%] bg-background rounded-xl border border-primary/50 min-h-[350px]">
+              {!artistProfile ? (
+                <div>Loading</div>
+              ) : (
+                <>
+                  <div className="artist-bio w-[300px] md:w-full">
+                    <div
+                      className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[320px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
+                      style={{
+                        "backgroundImage": `url(${artistProfile.img})`,
+                      }}></div>
 
-                        <div className="mt-5 flex flex-col md:flex-row items-center">
-                          <div className="relative">
+                    <div className="mt-5 flex flex-col md:flex-row items-center">
+                      <div className="relative">
+                        {publicKey || addressMvx ? (
+                          <Button
+                            className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                            disabled={!publicKey && !addressMvx}
+                            onClick={() => {
+                              onSendPowerUp({
+                                creatorIcon: artistProfile.img,
+                                creatorName: artistProfile.name,
+                                giveBitzToWho: artistProfile.creatorWallet,
+                                giveBitzToCampaignId: artistProfile.bountyId,
+                              });
+                            }}>
+                            <>
+                              <FlaskRound />
+                              <span className="ml-2">Power-Up Musician With BiTz</span>
+                            </>
+                          </Button>
+                        ) : (
+                          <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                            <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                              <>
+                                <WalletMinimal />
+                                <span className="ml-2">Login to Power-Up Musician</span>
+                              </>
+                            </Button>
+                          </Link>
+                        )}
+                        {isSigmaWorkflow && (
+                          <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
+                            <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                              <FontAwesomeIcon icon={faHandPointer} />
+                            </div>
+                            <span className="text-center">Click To Vote</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 mt-2 md:mt-0 rounded md:min-w-[100px] flex items-center justify-center">
+                        {typeof bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum === "undefined" ? (
+                          <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
+                        ) : (
+                          <div className="p-10 md:p-0">{bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className={`${isSigmaWorkflow ? "opacity-[0.1]" : ""}`}>
+                      <p className="artist-who mt-5">{artistProfile.bio}</p>
+
+                      {(artistProfile.dripLink !== "" ||
+                        artistProfile.xLink !== "" ||
+                        artistProfile.webLink !== "" ||
+                        artistProfile.ytLink !== "" ||
+                        artistProfile.otherLink1 !== "") && (
+                        <div className="flex flex-col md:flex-row mt-5">
+                          {artistProfile.dripLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.dripLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Droplet className="m-auto w-5" />
+                                Artist on Drip
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.xLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.xLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Twitter className="m-auto w-5" />
+                                Artist on X
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.ytLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.ytLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Youtube className="m-auto w-5" />
+                                Artist on YouTube
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.webLink && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.webLink} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Globe className="m-auto w-5" />
+                                Artist Website
+                              </div>
+                            </a>
+                          )}
+                          {artistProfile.otherLink1 && (
+                            <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.otherLink1} target="_blank">
+                              <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                <Link2 className="m-auto w-5" />
+                                More Content
+                              </div>
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="album-list w-[300px] lg:w-full">
+                    <p className="mt-5 mb-5 text-xl font-bold">NF-Tunes Discography</p>
+
+                    {artistProfile.albums.map((album: any, idx: number) => (
+                      <div key={album.albumId} className="album flex flex-col h-[100%] mb-3 p-5 border">
+                        <div className="albumDetails flex flex-col md:flex-row">
+                          <div
+                            className="albumImg bg1-red-200 border-[0.5px] border-neutral-500/90 h-[150px] w-[150px] bg-no-repeat bg-cover rounded-xl m-auto"
+                            style={{
+                              "backgroundImage": `url(${album.img})`,
+                            }}></div>
+
+                          <div className="albumText bg1-red-300 flex flex-col mt-5 md:mt-0 md:ml-5 md:pr-2 flex-1 mb-5 md:mb-0">
+                            <h3 className="!text-xl mb-2 flex items-baseline">
+                              <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
+                              <span>{`${album.title}`}</span>
+                              {album.isExplicit && (
+                                <img
+                                  className="max-h-[20px] ml-[10px] dark:bg-white"
+                                  src={ratingR}
+                                  alt="Warning: Explicit Content"
+                                  title="Warning: Explicit Content"
+                                />
+                              )}
+                            </h3>
+                            <p className="ml-2">{album.desc}</p>
+                          </div>
+
+                          <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col items-center">
+                            <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 rounded w-[100px] flex items-center justify-center">
+                              {typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum === "undefined" ? (
+                                <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
+                              ) : (
+                                <div className="p-5 md:p-0">{bountyToBitzLocalMapping[album.bountyId]?.bitsSum}</div>
+                              )}
+                            </div>
+
                             {publicKey || addressMvx ? (
-                              <Button
-                                className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                disabled={!publicKey && !addressMvx}
-                                onClick={() => {
-                                  onSendPowerUp({
-                                    creatorIcon: artistProfile.img,
-                                    creatorName: artistProfile.name,
-                                    giveBitzToWho: artistProfile.creatorWallet,
-                                    giveBitzToCampaignId: artistProfile.bountyId,
-                                  });
-                                }}>
-                                <>
-                                  <FlaskRound />
-                                  <span className="ml-2">Power-Up Musician With BiTz</span>
-                                </>
-                              </Button>
+                              <div className="bg1-red-600 flex flex-row md:flex-col justify-center">
+                                <Button
+                                  className="!text-black ml-2 md:ml-0 text-sm w-[100px] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 cursor-pointer"
+                                  disabled={!publicKey && !addressMvx}
+                                  onClick={() => {
+                                    onSendPowerUp({
+                                      creatorIcon: album.img,
+                                      creatorName: `${artistProfile.name}'s ${album.title}`,
+                                      giveBitzToWho: artistProfile.creatorWallet,
+                                      giveBitzToCampaignId: album.bountyId,
+                                      isLikeMode: true,
+                                    });
+                                  }}>
+                                  <>
+                                    <FlaskRound />
+                                    <span className="mx-2 text-lg"> {">"} </span>
+                                    <HandHeart />
+                                  </>
+                                </Button>
+                              </div>
                             ) : (
+                              <div className="bg1-red-600">
+                                <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                                  <Button className="text-xs cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                    <>
+                                      <WalletMinimal />
+                                      <span className="ml-1">Login to Like</span>
+                                    </>
+                                  </Button>
+                                </Link>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="albumActions bg1-red-500 mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
+                          {album.ctaPreviewStream && (
+                            <Button
+                              disabled={isPreviewPlaying && !previewIsReadyToPlay}
+                              className="!text-white text-sm mx-2 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer"
+                              onClick={() => {
+                                playPausePreview(album.ctaPreviewStream, album.albumId);
+
+                                gtagGo("NtuArAl", "PlayPausePrev", "Album", album.albumId);
+                              }}>
+                              {isPreviewPlaying && previewPlayingForAlbumId === album.albumId ? (
+                                <>
+                                  {!previewIsReadyToPlay ? <Loader2 className="animate-spin" /> : <Pause />}
+                                  <span className="ml-2"> {currentTime} - Stop Playing </span>
+                                </>
+                              ) : (
+                                <>
+                                  <Play />
+                                  <span className="ml-2">Play Preview</span>
+                                </>
+                              )}
+                            </Button>
+                          )}
+
+                          {/* when not logged in, show this to convert the wallet into user account */}
+                          {!mvxNetworkSelected && !publicKey && (
+                            <div className="relative">
                               <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
                                 <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
                                   <>
                                     <WalletMinimal />
-                                    <span className="ml-2">Login to Power-Up Musician</span>
+                                    <span className="ml-2">Login to Check Ownership</span>
                                   </>
                                 </Button>
                               </Link>
-                            )}
-                            {isSigmaWorkflow && (
-                              <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
-                                <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
-                                  <FontAwesomeIcon icon={faHandPointer} />
+                              {isFreeDropSampleWorkflow && (
+                                <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
+                                  <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                                    <FontAwesomeIcon icon={faHandPointer} />
+                                  </div>
+                                  <span className="text-center">Click To Play</span>
                                 </div>
-                                <span className="text-center">Click To Vote</span>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 mt-2 md:mt-0 rounded md:min-w-[100px] flex items-center justify-center">
-                            {typeof bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum === "undefined" ? (
-                              <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
-                            ) : (
-                              <div className="p-10 md:p-0">{bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum}</div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className={`${isSigmaWorkflow ? "opacity-[0.1]" : ""}`}>
-                          <p className="artist-who mt-5">{artistProfile.bio}</p>
-
-                          {(artistProfile.dripLink !== "" ||
-                            artistProfile.xLink !== "" ||
-                            artistProfile.webLink !== "" ||
-                            artistProfile.ytLink !== "" ||
-                            artistProfile.otherLink1 !== "") && (
-                            <div className="flex flex-col md:flex-row mt-5">
-                              {artistProfile.dripLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.dripLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Droplet className="m-auto w-5" />
-                                    Artist on Drip
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.xLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.xLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Twitter className="m-auto w-5" />
-                                    Artist on X
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.ytLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.ytLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Youtube className="m-auto w-5" />
-                                    Artist on YouTube
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.webLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.webLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Globe className="m-auto w-5" />
-                                    Artist Website
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.otherLink1 && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.otherLink1} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Link2 className="m-auto w-5" />
-                                    More Content
-                                  </div>
-                                </a>
                               )}
                             </div>
                           )}
-                        </div>
-                      </div>
 
-                      <div className="album-list w-[300px] lg:w-full">
-                        <p className="mt-5 mb-5 text-xl font-bold">NF-Tunes Discography</p>
+                          {mvxNetworkSelected && !addressMvx && (
+                            <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
+                              <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                <>
+                                  <WalletMinimal />
+                                  <span className="ml-2">Login to Check Ownership</span>
+                                </>
+                              </Button>
+                            </Link>
+                          )}
 
-                        {artistProfile.albums.map((album: any, idx: number) => (
-                          <div key={album.albumId} className="album flex flex-col h-[100%] mb-3 p-5 border">
-                            <div className="albumDetails flex flex-col md:flex-row">
-                              <div
-                                className="albumImg bg1-red-200 border-[0.5px] border-neutral-500/90 h-[150px] w-[150px] bg-no-repeat bg-cover rounded-xl m-auto"
-                                style={{
-                                  "backgroundImage": `url(${album.img})`,
-                                }}></div>
-
-                              <div className="albumText bg1-red-300 flex flex-col mt-5 md:mt-0 md:ml-5 md:pr-2 flex-1 mb-5 md:mb-0">
-                                <h3 className="!text-xl mb-2 flex items-baseline">
-                                  <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
-                                  <span>{`${album.title}`}</span>
-                                  {album.isExplicit && album.isExplicit === "1" && (
-                                    <img
-                                      className="max-h-[20px] ml-[10px] dark:bg-white"
-                                      src={ratingR}
-                                      alt="Warning: Explicit Content"
-                                      title="Warning: Explicit Content"
-                                    />
-                                  )}
-                                </h3>
-                                <p className="ml-2">{album.desc}</p>
-                              </div>
-
-                              <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col items-center">
-                                <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 rounded w-[100px] flex items-center justify-center">
-                                  {typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum === "undefined" ? (
-                                    <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
-                                  ) : (
-                                    <div className="p-5 md:p-0">{bountyToBitzLocalMapping[album.bountyId]?.bitsSum}</div>
-                                  )}
-                                </div>
-
-                                {publicKey || addressMvx ? (
-                                  <div className="bg1-red-600 flex flex-row md:flex-col justify-center">
-                                    <Button
-                                      className="!text-black ml-2 md:ml-0 text-sm w-[100px] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 cursor-pointer"
-                                      disabled={!publicKey && !addressMvx}
-                                      onClick={() => {
-                                        onSendPowerUp({
-                                          creatorIcon: album.img,
-                                          creatorName: `${artistProfile.name}'s ${album.title}`,
-                                          giveBitzToWho: artistProfile.creatorWallet,
-                                          giveBitzToCampaignId: album.bountyId,
-                                          isLikeMode: true,
-                                        });
-                                      }}>
-                                      <>
-                                        <FlaskRound />
-                                        <span className="mx-2 text-lg"> {">"} </span>
-                                        <HandHeart />
-                                      </>
-                                    </Button>
-                                  </div>
-                                ) : (
-                                  <div className="bg1-red-600">
-                                    <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                                      <Button className="text-xs cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
-                                        <>
-                                          <WalletMinimal />
-                                          <span className="ml-1">Login to Like</span>
-                                        </>
-                                      </Button>
-                                    </Link>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-
-                            <div className="albumActions bg1-red-500 mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
-                              {album.ctaPreviewStream && (
+                          <>
+                            {checkOwnershipOfAlbum(album) > -1 && (
+                              <div className="relative">
                                 <Button
                                   disabled={isPreviewPlaying && !previewIsReadyToPlay}
-                                  className="!text-white text-sm mx-2 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer"
+                                  className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
                                   onClick={() => {
-                                    playPausePreview(album.ctaPreviewStream, album.albumId);
+                                    const albumInOwnershipListIndex = checkOwnershipOfAlbum(album);
 
-                                    gtagGo("NtuArAl", "PlayPausePrev", "Album", album.albumId);
+                                    if (albumInOwnershipListIndex > -1) {
+                                      if (!mvxNetworkSelected) {
+                                        viewSolData(albumInOwnershipListIndex);
+                                      } else {
+                                        viewMvxData(albumInOwnershipListIndex);
+                                      }
+                                    }
+
+                                    if (openActionFireLogic) {
+                                      openActionFireLogic();
+                                    }
+
+                                    gtagGo("NtuArAl", "PlayAlbum", "Album", album.albumId);
                                   }}>
-                                  {isPreviewPlaying && previewPlayingForAlbumId === album.albumId ? (
-                                    <>
-                                      {!previewIsReadyToPlay ? <Loader2 className="animate-spin" /> : <Pause />}
-                                      <span className="ml-2"> {currentTime} - Stop Playing </span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Play />
-                                      <span className="ml-2">Play Preview</span>
-                                    </>
-                                  )}
+                                  <>
+                                    <Music2 />
+                                    <span className="ml-2">Play Album</span>
+                                  </>
                                 </Button>
-                              )}
-
-                              {/* when not logged in, show this to convert the wallet into user account */}
-                              {!mvxNetworkSelected && !publicKey && (
-                                <div className="relative">
-                                  <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                                    <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
-                                      <>
-                                        <WalletMinimal />
-                                        <span className="ml-2">Login to Check Ownership</span>
-                                      </>
-                                    </Button>
-                                  </Link>
-                                  {isFreeDropSampleWorkflow && (
-                                    <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
-                                      <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
-                                        <FontAwesomeIcon icon={faHandPointer} />
-                                      </div>
-                                      <span className="text-center">Click To Play</span>
+                                {isFreeDropSampleWorkflow && (
+                                  <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
+                                    <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                                      <FontAwesomeIcon icon={faHandPointer} />
                                     </div>
-                                  )}
-                                </div>
-                              )}
-
-                              {mvxNetworkSelected && !addressMvx && (
-                                <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                                  <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
-                                    <>
-                                      <WalletMinimal />
-                                      <span className="ml-2">Login to Check Ownership</span>
-                                    </>
-                                  </Button>
-                                </Link>
-                              )}
-
-                              <>
-                                {checkOwnershipOfAlbum(album) > -1 && (
-                                  <div className="relative">
-                                    <Button
-                                      disabled={isPreviewPlaying && !previewIsReadyToPlay}
-                                      className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2"
-                                      onClick={() => {
-                                        const albumInOwnershipListIndex = checkOwnershipOfAlbum(album);
-
-                                        if (albumInOwnershipListIndex > -1) {
-                                          if (!mvxNetworkSelected) {
-                                            viewSolData(albumInOwnershipListIndex);
-                                          } else {
-                                            viewMvxData(albumInOwnershipListIndex);
-                                          }
-                                        }
-
-                                        if (openActionFireLogic) {
-                                          openActionFireLogic();
-                                        }
-
-                                        gtagGo("NtuArAl", "PlayAlbum", "Album", album.albumId);
-                                      }}>
-                                      <>
-                                        <Music2 />
-                                        <span className="ml-2">Play Album</span>
-                                      </>
-                                    </Button>
-                                    {isFreeDropSampleWorkflow && (
-                                      <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
-                                        <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
-                                          <FontAwesomeIcon icon={faHandPointer} />
-                                        </div>
-                                        <span className="text-center">Click To Play</span>
-                                      </div>
-                                    )}
+                                    <span className="text-center">Click To Play</span>
                                   </div>
                                 )}
+                              </div>
+                            )}
 
-                                {album.ctaBuy && (
-                                  <Button
-                                    className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                    onClick={() => {
-                                      gtagGo("NtuArAl", "BuyAlbum", "Album", album.albumId);
+                            {album.ctaBuy && (
+                              <Button
+                                className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                                onClick={() => {
+                                  gtagGo("NtuArAl", "BuyAlbum", "Album", album.albumId);
 
-                                      window.open(album.ctaBuy)?.focus();
-                                    }}>
-                                    <>
-                                      <ShoppingCart />
-                                      <span className="ml-2">{checkOwnershipOfAlbum(album) > -1 ? "Buy More Album Copies" : "Buy Album"}</span>
-                                    </>
-                                  </Button>
-                                )}
-                                {album.ctaAirdrop && (
-                                  <Button
-                                    className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                    onClick={() => {
-                                      gtagGo("NtuArAl", "GetAlbum", "Album", album.albumId);
+                                  window.open(album.ctaBuy)?.focus();
+                                }}>
+                                <>
+                                  <ShoppingCart />
+                                  <span className="ml-2">{checkOwnershipOfAlbum(album) > -1 ? "Buy More Album Copies" : "Buy Album"}</span>
+                                </>
+                              </Button>
+                            )}
+                            {album.ctaAirdrop && (
+                              <Button
+                                className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
+                                onClick={() => {
+                                  gtagGo("NtuArAl", "GetAlbum", "Album", album.albumId);
 
-                                      window.open(album.ctaAirdrop)?.focus();
-                                    }}>
-                                    <>
-                                      <Gift />
-                                      <span className="ml-2">Get Album Airdrop!</span>
-                                    </>
-                                  </Button>
-                                )}
-                              </>
-                            </div>
-                          </div>
-                        ))}
+                                  window.open(album.ctaAirdrop)?.focus();
+                                }}>
+                                <>
+                                  <Gift />
+                                  <span className="ml-2">Get Album Airdrop!</span>
+                                </>
+                              </Button>
+                            )}
+                          </>
+                        </div>
                       </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

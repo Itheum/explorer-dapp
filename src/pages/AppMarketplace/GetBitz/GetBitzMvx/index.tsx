@@ -202,7 +202,7 @@ export const GetBitzMvx = (props: any) => {
     setBurnFireScale(`scale(${burnProgress}) translate(-13px, -15px)`);
     setBurnFireGlow(burnProgress * 0.1);
 
-    // we can sloe the burn by updating the value here...
+    // we can slow the burn by updating the value here...
     if (burnProgress === 25) {
       setIsMemeBurnHappening(false);
       playGame();
