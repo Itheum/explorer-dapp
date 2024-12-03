@@ -907,7 +907,7 @@ export const NFTunes = () => {
 
 export async function getRadioStreamsData() {
   try {
-    const getRadioStreamAPI = `https://api.itheumcloud.com/app_nftunes/json/radioStreamData.json`;
+    const getRadioStreamAPI = `https://api.itheumcloud.com/app_nftunes/assets/json/radioStreamData.json`;
 
     const tracksRes = await axios.get(getRadioStreamAPI);
     const tracksData = tracksRes.data;
@@ -921,7 +921,7 @@ export async function getRadioStreamsData() {
 
 export async function getArtistsAlbumsData() {
   try {
-    const getArtistsAlbumsAPI = `https://api.itheumcloud.com/app_nftunes/json/albumsAndArtistsData.json`;
+    const getArtistsAlbumsAPI = `https://api.itheumcloud.com/app_nftunes/assets/json/albumsAndArtistsData.json`;
 
     const dataRes = await axios.get(getArtistsAlbumsAPI);
     const dataset = dataRes.data;
