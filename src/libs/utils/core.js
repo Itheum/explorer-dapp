@@ -89,7 +89,7 @@ export function onChainDataInsights_LIB({rawReadings, userTz}) {
           timezone does not have an effect on valueOf, as they are both the same point in time (but different timezones)
           so we need to the get valueOf of thisReadingTs and this will be epoch (ms to this point in time since since 1970...)  = eventTimeUtcSinceEpoch
           ... and then add the ms time difference between user's timezone and UTC = eventTimeDiffInSec * 1000
-          ... this means we manaully adjust the valueOf by adding/removing time diff between UTC and user timezone
+          ... this means we manually adjust the valueOf by adding/removing time diff between UTC and user timezone
         */
 
         const eventTimeUtcSinceEpoch = moment.utc(newObj.createdAt).valueOf();
@@ -169,7 +169,7 @@ export function onChainDataInsights_LIB({rawReadings, userTz}) {
           timezone does not have an effect on valueOf, as they are both the same point in time (but different timezones)
           so we need to the get valueOf of thisReadingTs and this will be epoch (ms to this point in time since since 1970...)  = eventTimeUtcSinceEpoch
           ... and then add the ms time difference between user's timezone and UTC = eventTimeDiffInSec * 1000
-          ... this means we manaully adjust the valueOf by adding/removing time diff between UTC and user timezone
+          ... this means we manually adjust the valueOf by adding/removing time diff between UTC and user timezone
         */
 
         const eventTimeUtcSinceEpoch = moment.utc(newObj.createdAt).valueOf();
@@ -309,7 +309,7 @@ export function thirdPartyDataInsights_LIB({rawReadings, userTz}) {
           timezone does not have an effect on valueOf, as they are both the same point in time (but different timezones)
           so we need to the get valueOf of thisReadingTs and this will be epoch (ms to this point in time since since 1970...)  = eventTimeUtcSinceEpoch
           ... and then add the ms time difference between user's timezone and UTC = eventTimeDiffInSec * 1000
-          ... this means we manaully adjust the valueOf by adding/removing time diff between UTC and user timezone
+          ... this means we manually adjust the valueOf by adding/removing time diff between UTC and user timezone
         */
 
         const eventTimeUtcSinceEpoch = moment.utc(newObj.createdAt).valueOf();
