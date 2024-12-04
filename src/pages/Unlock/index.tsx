@@ -33,8 +33,8 @@ const UnlockPage = () => {
   } = useGetNetworkConfig();
   const { address: addressMvx } = useGetAccount();
   const isLoggedInMvX = !!addressMvx;
-  const { publicKey } = useWallet();
-  const addressSol = publicKey?.toBase58();
+  const { publicKey: publicKeySol } = useWallet();
+  const addressSol = publicKeySol?.toBase58();
   const { pathname } = useLocation();
   const [userAccountLoggingIn, setIsUserAccountLoggingIn] = useState<boolean>(false);
 
@@ -51,7 +51,14 @@ const UnlockPage = () => {
   };
 
   useEffect(() => {
-    console.log("==== effect for addressSol. addressSol = ", addressSol);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
+    // console.log("==== effect for addressSol. addressSol = ", addressSol);
 
     if (!addressSol) {
       solGotConnected = false;
@@ -61,7 +68,7 @@ const UnlockPage = () => {
 
         // the user came to the unlock page without a solana connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using SOL
-        console.log("==== User JUST logged in with addressSol = ", addressSol);
+        // console.log("==== User JUST logged in with addressSol = ", addressSol);
 
         const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? SOL_ENV_ENUM.devnet : SOL_ENV_ENUM.mainnet;
         logUserLoggedInInUserAccounts(addressSol, chainId);
@@ -72,7 +79,7 @@ const UnlockPage = () => {
   }, [addressSol]);
 
   useEffect(() => {
-    console.log("==== effect for addressMvx. addressMvx = ", addressMvx);
+    // console.log("==== effect for addressMvx. addressMvx = ", addressMvx);
 
     if (!addressMvx) {
       mvxGotConnected = false;
@@ -82,7 +89,7 @@ const UnlockPage = () => {
 
         // the user came to the unlock page without a mvx connection and then connected a wallet,
         // ... i.e a non-logged in user, just logged in using MVX
-        console.log("==== User JUST logged in with addressMvx = ", addressMvx);
+        // console.log("==== User JUST logged in with addressMvx = ", addressMvx);
 
         const chainId = import.meta.env.VITE_ENV_NETWORK === "devnet" ? MVX_ENV_ENUM.devnet : MVX_ENV_ENUM.mainnet;
         logUserLoggedInInUserAccounts(addressMvx, chainId, true);
@@ -128,9 +135,9 @@ const UnlockPage = () => {
           let userMessage = "";
 
           if (isMvx) {
-            userMessage = "Welcome Back MultiversX Champion!";
+            userMessage = "Welcome Back Itheum MultiversX OG!";
           } else {
-            userMessage = "Welcome Back Solana Legend!";
+            userMessage = "Welcome Back Itheum Solana Legend!";
           }
 
           toast.success(userMessage, {
@@ -185,11 +192,19 @@ const UnlockPage = () => {
                 onClick={handleGoBack}>
                 <ArrowBigLeft /> Go Back
               </Button>
-              <div className="pt-10 pb-5 px-5 px-sm-2 mx-lg-4">
+              <div className={`pt-10 px-5 px-sm-2 mx-lg-4 ${addressMvx ? `opacity-15 pointer-events-none` : ""}`}>
+                <h4 className="mb-4 font-weight-bold">Solana</h4>
+
+                <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
+                  <WalletMultiButton className="w-full !m-0" />
+                </div>
+              </div>
+
+              <div className={`pt-10 pb-10 px-5 px-sm-2 mx-lg-4 ${addressSol ? `opacity-15 pointer-events-none` : ""}`}>
                 <h4 className="mb-4 font-weight-bold">MultiversX</h4>
                 <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
                   {isLoggedInMvX ? (
-                    <div className="w-full flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
+                    <div className="flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
                       <Button
                         className="w-full dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
                         variant="outline"
@@ -210,13 +225,6 @@ const UnlockPage = () => {
                       <LedgerLoginButton className="w-full !m-0" loginButtonText="Ledger" {...commonProps} />
                     </>
                   )}
-                </div>
-              </div>
-              <div className="pb-10 pt-5 px-5 px-sm-2 mx-lg-4">
-                <h4 className="mb-4 font-weight-bold">Solana</h4>
-
-                <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
-                  <WalletMultiButton className="w-full !m-0" />
                 </div>
               </div>
             </>
