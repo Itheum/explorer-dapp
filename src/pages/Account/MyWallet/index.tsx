@@ -9,7 +9,6 @@ import imgGuidePopup from "assets/img/guide-unblock-popups.png";
 import { MvxDataNftCard, Loader } from "components";
 import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
-// import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import { DRIP_PAGE, MARKETPLACE_DETAILS_PAGE, SHOW_NFTS_STEP } from "config";
 import { Button } from "libComponents/Button";
@@ -18,7 +17,6 @@ import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
 import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
-// import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 
 export const MyWallet = () => {
@@ -33,8 +31,6 @@ export const MyWallet = () => {
   const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol } = useNftsStore();
   const [numberOfMvxNftsShown, setNumberOfMvxNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownMvxDataNfts, setShownMvxDataNfts] = useState<DataNft[]>(mvxNfts.slice(0, SHOW_NFTS_STEP));
-  // const defaultChain = useLocalStorageStore((state) => state.defaultChain);
-  // const mvxNetworkSelected = defaultChain === "multiversx";
   const [numberOfSolNftsShown, setNumberOfSolNftsShown] = useState<number>(SHOW_NFTS_STEP);
   const [shownSolDataNfts, setShownSolDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
   const { publicKey: publicKeySol, signMessage } = useWallet();
@@ -258,7 +254,6 @@ export const MyWallet = () => {
     }
   }
 
-  // if ((isLoadingMvx && mvxNetworkSelected) || (isLoadingSol && !mvxNetworkSelected)) {
   if ((isLoadingMvx && addressMvx) || (isLoadingSol && publicKeySol)) {
     return <Loader />;
   }
@@ -266,8 +261,6 @@ export const MyWallet = () => {
   return (
     <>
       <HelmetPageMeta title="Collected Itheum Data NFTs" shortTitle="Collected Itheum Data NFTs" desc="Your collected Itheum Data NFTs" />
-
-      {/* <MvxSolSwitch /> */}
 
       {addressMvx && (
         <HeaderComponent
