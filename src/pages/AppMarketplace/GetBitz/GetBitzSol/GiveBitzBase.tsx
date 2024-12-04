@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Loader } from "lucide-react";
 import { FlaskRound } from "lucide-react";
-// import { IS_DEVNET } from "appsConfig";
 import bounty from "assets/img/getbitz/givebitz/bountyMain.png";
-import { SUPPORTED_SOL_COLLECTIONS } from "config";
+import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 import { Highlighter } from "libComponents/animated/HighlightHoverEffect";
-// import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
 import { getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
-// import { BlobDataType } from "libs/types";
 import { getApiWeb2Apps, sleep } from "libs/utils";
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
@@ -18,7 +15,6 @@ import BonusBitzHistory from "../common/BonusBitzHistory";
 import PowerUpBounty from "../common/GiveBitz/PowerUpBounty";
 import { GiveBitzDataBounty, LeaderBoardItemType } from "../common/interfaces";
 import LeaderBoardTable from "../common/LeaderBoardTable";
-import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 
 const GiveBitzBase = () => {
   const { publicKey: publicKeySol, signMessage } = useWallet();
@@ -30,10 +26,6 @@ const GiveBitzBase = () => {
   const bitzBalance = useSolBitzStore((state: any) => state.bitzBalance);
   const [giverLeaderBoardIsLoading, setGiverLeaderBoardIsLoading] = useState<boolean>(false);
   const [giverLeaderBoard, setGiverLeaderBoard] = useState<LeaderBoardItemType[]>([]);
-  // const solNfts = useNftsStore((state) => state.solNfts);
-  // const [nfts, setNfts] = useState(
-  //   IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
-  // );
   const bitzStore = useSolBitzStore();
   const [dataBounties, setDataBounties] = useState<GiveBitzDataBounty[]>([]);
   const [fetchingDataBountiesReceivedSum, setFetchingDataBountiesReceivedSum] = useState<boolean>(true);
@@ -56,10 +48,9 @@ const GiveBitzBase = () => {
         getDataBounties().map(async (item: GiveBitzDataBounty) => {
           const collectionidToUse = !addressSol || solBitzNfts.length === 0 ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
 
-          const response = await fetchBitSumAndGiverCounts({
+          const response = await fetchBitSumAndGiverCountsSol({
             getterAddr: item.bountyId === "b20" ? "erd1lgyz209038gh8l2zfxq68kzl9ljz0p22hv6l0ev8fydhx8s9cwasdtrua2" : item.bountySubmitter,
             campaignId: item.bountyId,
-            // collectionId: SUPPORTED_SOL_COLLECTIONS[0],
             collectionId: collectionidToUse,
           });
           return {
@@ -70,9 +61,6 @@ const GiveBitzBase = () => {
         })
       );
       const sortedDataBounties = _dataBounties;
-      // .sort(
-      //   (a, b) => (b.receivedBitzSum ?? 0) - (a.receivedBitzSum ?? 0),
-      // );
 
       setDataBounties(sortedDataBounties);
     };
@@ -83,14 +71,6 @@ const GiveBitzBase = () => {
     // Load the giver LeaderBoards regardless on if the user has does not have the data nft in to entice them
     fetchGiverLeaderBoard();
   }, []);
-
-  // useEffect(() => {
-  //   if (publicKeySol) {
-  //     setNfts(
-  //       IS_DEVNET ? solNfts.filter((nft) => nft.content.metadata.name.includes("XP")) : solNfts.filter((nft) => nft.content.metadata.name.includes("IXPG2"))
-  //     );
-  //   }
-  // }, [publicKeySol, solNfts]);
 
   useEffect(() => {
     const highlighters = document.querySelectorAll("[data-highlighter]");
@@ -118,7 +98,6 @@ const GiveBitzBase = () => {
 
       const callConfig = {
         headers: {
-          // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
           "fwd-tokenid": collectionidToUse,
         },
       };
@@ -150,7 +129,6 @@ const GiveBitzBase = () => {
 
     const callConfig = {
       headers: {
-        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
         "fwd-tokenid": collectionidToUse,
       },
     };
@@ -179,35 +157,12 @@ const GiveBitzBase = () => {
     setGiverLeaderBoardIsLoading(false);
   }
 
-  // async function fetchBitSumAndGiverCounts({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }): Promise<any> {
-  //   const callConfig = {
-  //     headers: {
-  //       "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
-  //     },
-  //   };
-
-  //   try {
-  //     const res = await fetch(
-  //       `${getApiWeb2Apps()}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
-  //       callConfig
-  //     );
-
-  //     const data = await res.json();
-  //     return data;
-  //   } catch (err: any) {
-  //     const message = "Getting sum and giver count failed :" + addressSol + "  " + campaignId + err.message;
-  //     console.error(message);
-  //     return false;
-  //   }
-  // }
-
   // fetch the given bits for a specific getter (creator campaign or bounty id)
   async function fetchGivenBitsForGetter({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }) {
     const collectionidToUse = !addressSol || solBitzNfts.length === 0 ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
 
     const callConfig = {
       headers: {
-        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
         "fwd-tokenid": collectionidToUse,
       },
     };
@@ -233,7 +188,6 @@ const GiveBitzBase = () => {
 
     const callConfig = {
       headers: {
-        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
         "fwd-tokenid": collectionidToUse,
       },
     };
@@ -444,7 +398,7 @@ const GiveBitzBase = () => {
   );
 };
 
-export async function fetchBitSumAndGiverCounts({
+export async function fetchBitSumAndGiverCountsSol({
   getterAddr,
   campaignId,
   collectionId,

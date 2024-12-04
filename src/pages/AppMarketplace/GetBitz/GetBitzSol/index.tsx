@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-// import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-// import { PublicKey } from "@solana/web3.js";
 import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
 import { fireworks } from "@tsparticles/fireworks";
@@ -10,6 +8,22 @@ import { Loader, MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { routeNames } from "routes";
+import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
+import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+import { getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
+import { cn, getApiWeb2Apps, sleep } from "libs/utils";
+import { computeRemainingCooldown } from "libs/utils/functions";
+import { useAccountStore } from "store/account";
+import { useNftsStore } from "store/nfts";
+import useSolBitzStore from "store/solBitz";
+import GiveBitzBase from "./GiveBitzBase";
+import { BurningImage } from "../common/BurningImage";
+import Faq from "../common/Faq";
+import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
+import LeaderBoardTable from "../common/LeaderBoardTable";
+import Torch from "../common/Torch";
+import { AirDropFreeBiTzSol } from "./AirDropFreeBiTzSol";
 
 // Image Layers
 import aladinRugg from "assets/img/getbitz/aladin.png";
@@ -48,25 +62,6 @@ import Meme7 from "assets/img/getbitz/memes/7.jpg";
 import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
 
-import resultLoading from "assets/img/getbitz/pixel-loading.gif";
-import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
-import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-// import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
-import { getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
-// import { BlobDataType } from "libs/types";
-import { cn, getApiWeb2Apps, sleep } from "libs/utils";
-import { computeRemainingCooldown } from "libs/utils/functions";
-import { useAccountStore } from "store/account";
-import { useNftsStore } from "store/nfts";
-import useSolBitzStore from "store/solBitz";
-import GiveBitzBase from "./GiveBitzBase";
-import { BurningImage } from "../common/BurningImage";
-import Faq from "../common/Faq";
-import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
-import LeaderBoardTable from "../common/LeaderBoardTable";
-import Torch from "../common/Torch";
-import { AirDropFreeBiTzSol } from "./AirDropFreeBiTzSol";
-
 const MEME_IMGS = [
   Meme1,
   Meme2,
@@ -104,8 +99,6 @@ const GetBitzSol = (props: any) => {
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
   const { solBitzNfts } = useNftsStore();
   const [claimFreeAirdropWorkflow, setClaimFreeAirdropWorkflow] = useState<boolean>(false);
-
-  // const { setVisible } = useWalletModal();
 
   // store based state
   const bitzStore = useSolBitzStore();
@@ -193,8 +186,6 @@ const GetBitzSol = (props: any) => {
             updateSolPreaccessTimestamp,
           });
 
-          // const getBitzGameResult = await viewDataToOnlyGetReadOnlyBitz(solBitzNfts[0], usedPreAccessNonce, usedPreAccessSignature, publicKeySol);
-
           const getBitzGameResult = await viewDataWrapperSol(publicKeySol!, usedPreAccessNonce, usedPreAccessSignature, viewDataArgs, solBitzNfts[0].id);
 
           if (getBitzGameResult) {
@@ -215,11 +206,9 @@ const GetBitzSol = (props: any) => {
               sumBonusBitz = 0;
             }
 
-            // if (sumGivenBits > 0) {
             updateBitzBalance(bitzBeforePlay + sumBonusBitz - sumGivenBits); // collected bits - given bits
             updateGivenBitzSum(sumGivenBits); // given bits -- for power-ups
             updateBonusBitzSum(sumBonusBitz);
-            // }
 
             updateCooldown(
               computeRemainingCooldown(
@@ -330,7 +319,6 @@ const GetBitzSol = (props: any) => {
       viewDataArgs.fwdHeaderKeys.push("dmf-referral-code");
     }
 
-    // const viewDataPayload = await viewData(viewDataArgs, solBitzNfts[0]);
     const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
       solPreaccessNonce,
       solPreaccessSignature,
@@ -426,60 +414,9 @@ const GetBitzSol = (props: any) => {
         }
       }
     }
-    // else {
-    //   setIsFetchingDataMarshal(false);
-    // }
 
     setIsFetchingDataMarshal(false);
   }
-
-  // async function viewData(viewDataArgs: any, requiredDataNFT: any) {
-  //   try {
-  //     const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
-  //       solPreaccessNonce,
-  //       solPreaccessSignature,
-  //       solPreaccessTimestamp,
-  //       signMessage,
-  //       publicKey: publicKeySol,
-  //       updateSolPreaccessNonce,
-  //       updateSolSignedPreaccess,
-  //       updateSolPreaccessTimestamp,
-  //     });
-
-  //     if (!publicKeySol) {
-  //       throw new Error("Missing data for viewData");
-  //     }
-
-  //     const res = await viewDataViaMarshalSol(
-  //       requiredDataNFT.id,
-  //       usedPreAccessNonce,
-  //       usedPreAccessSignature,
-  //       publicKeySol,
-  //       viewDataArgs.fwdHeaderKeys,
-  //       viewDataArgs.headers
-  //     );
-
-  //     let blobDataType = BlobDataType.TEXT;
-  //     let data;
-
-  //     if (res.ok) {
-  //       const contentType = res.headers.get("content-type");
-
-  //       if (contentType && contentType.includes("application/json")) {
-  //         data = await res.json();
-  //       }
-
-  //       return { data, blobDataType, contentType };
-  //     } else {
-  //       console.log("viewData threw catch error");
-  //       console.error(res.statusText);
-
-  //       return undefined;
-  //     }
-  //   } catch (err) {
-  //     return undefined;
-  //   }
-  // }
 
   function gamePlayImageSprites() {
     let _viewDataRes = viewDataRes;
@@ -493,9 +430,6 @@ const GetBitzSol = (props: any) => {
       return (
         <Link className="relative" to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
           <img
-            // onClick={() => {
-            //   setVisible(true);
-            // }}
             className={cn("-z-1 relative z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
             src={ImgLogin}
             alt={"Connect your wallet to play"}
@@ -523,14 +457,6 @@ const GetBitzSol = (props: any) => {
           <div
             className="relative"
             onClick={() => {
-              // if (
-              //   confirm(
-              //     "Get BiTz XP Data NFTs from the Tensor NFT Marketplace.\n\nWe will now take you to the Tensor Marketplace, just filter the collection and select any NFT with the Trait - 'itheum.io/getxp'.\n\nThese Data NFTs will then let you play this BiTz XP game and collect XP.\n\n Make sure you enable popups in your browser now"
-              //   ) == true
-              // ) {
-              //   window.open("https://www.tensor.trade/trade/itheum_drip")?.focus();
-              // }
-
               setClaimFreeAirdropWorkflow(true);
             }}>
             <img className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")} src={ImgGetDataNFT} alt={"Get a free BiTz Data NFT"} />
@@ -818,7 +744,6 @@ const GetBitzSol = (props: any) => {
 
     const callConfig = {
       headers: {
-        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
         "fwd-tokenid": collectionidToUse,
       },
     };
@@ -877,7 +802,6 @@ const GetBitzSol = (props: any) => {
 
     const callConfig = {
       headers: {
-        // "fwd-tokenid": SUPPORTED_SOL_COLLECTIONS[0],
         "fwd-tokenid": collectionidToUse,
       },
     };
@@ -1016,52 +940,5 @@ const GetBitzSol = (props: any) => {
     </div>
   );
 };
-
-// export async function viewDataToOnlyGetReadOnlyBitz(
-//   requiredDataNFT: any,
-//   usedPreAccessNonce: string,
-//   usedPreAccessSignature: string,
-//   userPublicKey: PublicKey
-// ) {
-//   try {
-//     if (!userPublicKey) throw new Error("Missing data for viewData");
-
-//     const viewDataArgs = {
-//       headers: {
-//         "dmf-custom-only-state": "1",
-//       },
-//       fwdHeaderKeys: ["dmf-custom-only-state"],
-//     };
-
-//     const res = await viewDataViaMarshalSol(
-//       requiredDataNFT.id,
-//       usedPreAccessNonce,
-//       usedPreAccessSignature,
-//       userPublicKey,
-//       viewDataArgs.fwdHeaderKeys,
-//       viewDataArgs.headers
-//     );
-
-//     const rest = await res.json();
-//     const blobDataType = BlobDataType.TEXT;
-
-//     let data;
-
-//     if (res.ok) {
-//       const contentType = res.headers.get("content-type");
-
-//       if (contentType && contentType.includes("application/json")) {
-//         data = rest;
-//       }
-//       return { data, blobDataType, contentType };
-//     } else {
-//       console.error("viewData threw catch error" + res.statusText);
-
-//       return undefined;
-//     }
-//   } catch (err) {
-//     return undefined;
-//   }
-// }
 
 export default GetBitzSol;

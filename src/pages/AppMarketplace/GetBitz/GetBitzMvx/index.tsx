@@ -11,8 +11,8 @@ import { MousePointerClick } from "lucide-react";
 import Countdown from "react-countdown";
 import { Link } from "react-router-dom";
 import { GET_BITZ_TOKEN_MVX } from "appsConfig";
-import { toastClosableError } from "libs/utils/uiShared";
 import { Loader } from "components";
+import { toastClosableError } from "libs/utils/uiShared";
 import { MARKETPLACE_DETAILS_PAGE } from "config";
 import { useGetAccount, useGetPendingTransactions } from "hooks";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
@@ -22,6 +22,13 @@ import { routeNames } from "routes";
 import { BurningImage } from "../common/BurningImage";
 import Faq from "../common/Faq";
 import GiveBitzBase from "./GiveBitzBase";
+import resultLoading from "assets/img/getbitz/pixel-loading.gif";
+import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
+import { useAccountStore } from "store/account";
+import { useNftsStore } from "store/nfts";
+import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
+import LeaderBoardTable from "../common/LeaderBoardTable";
+import Torch from "../common/Torch";
 import "../common/GetBitz.css";
 
 // Image Layers
@@ -63,14 +70,6 @@ import Meme6 from "assets/img/getbitz/memes/6.jpg";
 import Meme7 from "assets/img/getbitz/memes/7.jpg";
 import Meme8 from "assets/img/getbitz/memes/8.jpg";
 import Meme9 from "assets/img/getbitz/memes/9.jpg";
-
-import resultLoading from "assets/img/getbitz/pixel-loading.gif";
-import { HoverBorderGradient } from "libComponents/animated/HoverBorderGradient";
-import { useAccountStore } from "store/account";
-import { useNftsStore } from "store/nfts";
-import { BIT_GAME_TOP_LEADER_BOARD_GROUP, LeaderBoardItemType } from "../common/interfaces";
-import LeaderBoardTable from "../common/LeaderBoardTable";
-import Torch from "../common/Torch";
 
 const MEME_IMGS = [
   Meme1,
@@ -116,15 +115,12 @@ export const GetBitzMvx = (props: any) => {
   const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
   const [checkingIfHasGameDataNFT, setCheckingIfHasGameDataNFT] = useState<boolean>(true);
   const [hasGameDataNFT, setHasGameDataNFT] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [showMessage, setShowMessage] = useState<boolean>(true);
-  const { mvxNfts: nfts, isLoadingMvx: isLoadingUserNfts } = useNftsStore();
+  const { mvxNfts: nfts } = useNftsStore();
 
   // store based state
   const bitzBalance = useAccountStore((state: any) => state.bitzBalance);
   const cooldown = useAccountStore((state: any) => state.cooldown);
   const collectedBitzSum = useAccountStore((state: any) => state.collectedBitzSum);
-  // const bonusTries = useAccountStore((state: any) => state.bonusTries);
   const updateCollectedBitzSum = useAccountStore((state) => state.updateCollectedBitzSum);
   const updateBitzBalance = useAccountStore((state) => state.updateBitzBalance);
   const updateCooldown = useAccountStore((state) => state.updateCooldown);
@@ -140,9 +136,7 @@ export const GetBitzMvx = (props: any) => {
   const [burnProgress, setBurnProgress] = useState(0);
   const [randomMeme, setRandomMeme] = useState<any>(Meme1);
   const tweetText = `url=https://explorer.itheum.io/getbitz?v=3&text=${viewDataRes?.data.gamePlayResult.bitsWon > 0 ? "I just played the Get BiTz XP Game on %23itheum and won " + viewDataRes?.data.gamePlayResult.bitsWon + " BiTz points 🙌!%0A%0APlay now and get your own BiTz! %23GetBiTz" : "Oh no, I got rugged getting BiTz points this time. Maybe you will have better luck?%0A%0ATry here to %23GetBiTz %23itheum %0A"}`;
-  ///TODO add ?r=${address}
   const [usingReferralCode, setUsingReferralCode] = useState<string>("");
-  // const tweetTextReferral = `url=https://explorer.itheum.io/getbitz?r=${address}&text=Join the %23itheum BiTz XP Game and be part of the %23web3 data ownership revolution.%0A%0AJoin via my referral link and get a bonus chance to win BiTz XP 🙌. Click below to %23GetBiTz!`;
 
   // Game canvas related
   const [loadBlankGameCanvas, setLoadBlankGameCanvas] = useState<boolean>(false);
@@ -155,7 +149,6 @@ export const GetBitzMvx = (props: any) => {
   const [myRankOnAllTimeLeaderBoard, setMyRankOnAllTimeLeaderBoard] = useState<string>("-2");
 
   // Debug / Tests
-  // const [bypassDebug, setBypassDebug] = useState<boolean>(false);
   const [inDateStringDebugMode, setInDateStringDebugMode] = useState<boolean>(false);
 
   useEffect(() => {
@@ -163,12 +156,6 @@ export const GetBitzMvx = (props: any) => {
       top: 0,
       behavior: "smooth",
     });
-
-    const timeout = setTimeout(() => {
-      setShowMessage(false);
-    }, 3000);
-
-    return () => clearTimeout(timeout);
   }, []);
 
   useEffect(() => {
@@ -231,13 +218,10 @@ export const GetBitzMvx = (props: any) => {
 
   // first, we get the Data NFT details needed for this game (but not if the current user has it)
   async function fetchGameDataNfts() {
-    setIsLoading(true);
-
     const _gameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN_MVX);
     setGameDataNFT(_gameDataNFT);
-
-    setIsLoading(false);
   }
+
   // secondly, we get the user's Data NFTs and flag if the user has the required Data NFT for the game in their wallet
   async function fetchMyNfts() {
     if (gameDataNFT) {
@@ -337,12 +321,16 @@ export const GetBitzMvx = (props: any) => {
 
       let sumScoreBitzBefore = viewDataPayload.data.gamePlayResult.bitsScoreBeforePlay || 0;
       sumScoreBitzBefore = sumScoreBitzBefore < 0 ? 0 : sumScoreBitzBefore;
+
       let sumScoreBitzAfter = viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay || 0;
       sumScoreBitzAfter = sumScoreBitzAfter < 0 ? 0 : sumScoreBitzAfter;
+
       let sumGivenBitz = viewDataPayload.data?.bitsMain?.bitsGivenSum || 0;
       sumGivenBitz = sumGivenBitz < 0 ? 0 : sumGivenBitz;
+
       let sumBonusBitz = viewDataPayload.data?.bitsMain?.bitsBonusSum || 0;
       sumBonusBitz = sumBonusBitz < 0 ? 0 : sumBonusBitz;
+
       if (viewDataPayload.data.gamePlayResult.bitsScoreAfterPlay > -1) {
         updateBitzBalance(sumScoreBitzAfter + sumBonusBitz - sumGivenBitz); // won some bis, minus given bits and show
         updateCollectedBitzSum(sumScoreBitzAfter);
@@ -360,6 +348,7 @@ export const GetBitzMvx = (props: any) => {
 
       if (animation) {
         await sleep(10);
+
         animation.stop();
         // if its confetti, then we have to destroy it
         if ((animation as unknown as Container).destroy) {
@@ -751,22 +740,9 @@ export const GetBitzMvx = (props: any) => {
     // Get All Time leaderboard
     try {
       // S: ACTUAL LOGIC
-      console.log("AXIOS CALL -----> xpGamePrivate/leaderBoard");
       const { data } = await axios.get<LeaderBoardItemType[]>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/leaderBoard`, callConfig);
-      // const toJSONString = JSON.stringify(data);
-      // const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
       setLeaderBoardAllTime(data);
       // E: ACTUAL LOGIC
-
-      // // S: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
-      // const allTimePayload =
-      //   "W3sicGxheWVyQWRkciI6ImVyZDF2eWVqdjUyZTQzZnhxOTZjc2NoeXlqOWc1N3FuOWtndHhyaGtnOTJleWhmdTVhMDIycGxxdGR4dmRtIiwiYml0cyI6MjkwLCJkYXRhTkZUSWQiOiJEQVRBTkZURlQtZTBiOTE3LWM2In0seyJwbGF5ZXJBZGRyIjoiZXJkMWV3ZXF5a3hjcmhoNW5wczRmemt0dTllZnRmN3J4cGE4eGRma3lwd3owazRodWhsMHMwNHNhNnRxeWQiLCJiaXRzIjoyNjAsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifSx7InBsYXllckFkZHIiOiJlcmQxdXdrZzlwcnh3cXZsY2xhemQ1OHR4MjJ6OWV6Y3JkYTh5bnJ2MDR6aGg4YW11bm44bDV2cTQ1dnRtMCIsImJpdHMiOjE3NSwiZGF0YU5GVElkIjoiREFUQU5GVEZULWUwYjkxNy1jNiJ9LHsicGxheWVyQWRkciI6ImVyZDF4ZHE0ZDd1ZXdwdHg5ajlrMjNhdWZyYWtsZGE5bGV1bXFjN2V1M3VlenQya2Y0ZnF4ejJzZXgycnhsIiwiYml0cyI6OTUsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifSx7InBsYXllckFkZHIiOiJlcmQxNnZqaHJnYTR5anB5ODhsd251NjR3bHhsYXB3eHR2amw5M2pheDRyZzN5cTNoenh0bmF1c2RtaGNqZiIsImJpdHMiOjcwLCJkYXRhTkZUSWQiOiJEQVRBTkZURlQtZTBiOTE3LWM2In0seyJwbGF5ZXJBZGRyIjoiZXJkMXI1M2R2ZDBoOWo2dTBnenp5ZXR4czVzajMyaHM3a256cHJzbHk3cng5eXgyM2RjbHdsenM4MzM1enciLCJiaXRzIjo3MCwiZGF0YU5GVElkIjoiREFUQU5GVEZULWUwYjkxNy1jNiJ9LHsicGxheWVyQWRkciI6ImVyZDFxbXNxNmVqMzQ0a3BuOG1jOXhmbmdqaHlsYTN6ZDZscWRtNHp4eDY2NTNqZWU2cmZxM25zM2ZrY2M3IiwiYml0cyI6NTAsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifSx7InBsYXllckFkZHIiOiJlcmQxNnU4eTQ1dTM5N201YWR1eXo5Zm5jNWdwdjNlcmF4cWh0dWVkMnF2dnJza2QzMmZmamtnc3BkNGxjbSIsImJpdHMiOjMwLCJkYXRhTkZUSWQiOiJEQVRBTkZURlQtZTBiOTE3LWM2In0seyJwbGF5ZXJBZGRyIjoiZXJkMXV0aHY4bmFqZGM0Mmg1N2w4cDk3NXRkNnI4OHgzczQ4cGZ5dXNsczQ3ZXY1Nnhjczh0eXMwM3llczUiLCJiaXRzIjoyMCwiZGF0YU5GVElkIjoiREFUQU5GVEZULWUwYjkxNy1jNiJ9LHsicGxheWVyQWRkciI6ImVyZDFseWh0OHh1eW4zaHlrdjNlcnFrd3ljZWFqeXRzNXV3cnpyNWNudTlrNHV1MzRnODc4bDNxa25kanc4IiwiYml0cyI6MjAsImRhdGFORlRJZCI6IkRBVEFORlRGVC1lMGI5MTctYzYifV0=";
-
-      // const base64ToString = atob(allTimePayload);
-      // const stringToJSON = JSON.parse(base64ToString);
-
-      // setLeaderBoardAllTime(stringToJSON);
-      // // E: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
     } catch (err) {
       const message = "Leaderboard fetching failed:" + (err as AxiosError).message;
       console.error(message);
@@ -775,26 +751,13 @@ export const GetBitzMvx = (props: any) => {
     // Get Monthly Leaderboard
     try {
       // S: ACTUAL LOGIC
-      console.log("AXIOS CALL -----> xpGamePrivate/monthLeaderBoard");
       const { data } = await axios.get<LeaderBoardItemType[]>(
         `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/monthLeaderBoard?MMYYString=${MMYYString}`,
         callConfig
       );
 
-      // const toJSONString = JSON.stringify(data);
-      // const toBase64String = btoa(toJSONString); // @TODO: we should save this in some local cache and hydrate to prevent the API always hitting
-
       setLeaderBoardMonthly(data);
       // E: ACTUAL LOGIC
-
-      // // S: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
-      // const monthlyPayload =
-      //   "W3siTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXZ5ZWp2NTJlNDNmeHE5NmNzY2h5eWo5ZzU3cW45a2d0eHJoa2c5MmV5aGZ1NWEwMjJwbHF0ZHh2ZG0iLCJiaXRzIjoyOTB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMWV3ZXF5a3hjcmhoNW5wczRmemt0dTllZnRmN3J4cGE4eGRma3lwd3owazRodWhsMHMwNHNhNnRxeWQiLCJiaXRzIjoyNjB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXV3a2c5cHJ4d3F2bGNsYXpkNTh0eDIyejllemNyZGE4eW5ydjA0emhoOGFtdW5uOGw1dnE0NXZ0bTAiLCJiaXRzIjoxNzV9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXhkcTRkN3Vld3B0eDlqOWsyM2F1ZnJha2xkYTlsZXVtcWM3ZXUzdWV6dDJrZjRmcXh6MnNleDJyeGwiLCJiaXRzIjo5NX0seyJNTVlZRGF0YU5GVElkIjoiMDNfMjRfREFUQU5GVEZULWUwYjkxNy1jNiIsInBsYXllckFkZHIiOiJlcmQxNnZqaHJnYTR5anB5ODhsd251NjR3bHhsYXB3eHR2amw5M2pheDRyZzN5cTNoenh0bmF1c2RtaGNqZiIsImJpdHMiOjcwfSx7Ik1NWVlEYXRhTkZUSWQiOiIwM18yNF9EQVRBTkZURlQtZTBiOTE3LWM2IiwicGxheWVyQWRkciI6ImVyZDFyNTNkdmQwaDlqNnUwZ3p6eWV0eHM1c2ozMmhzN2tuenByc2x5N3J4OXl4MjNkY2x3bHpzODMzNXp3IiwiYml0cyI6NzB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMXFtc3E2ZWozNDRrcG44bWM5eGZuZ2poeWxhM3pkNmxxZG00enh4NjY1M2plZTZyZnEzbnMzZmtjYzciLCJiaXRzIjo1MH0seyJNTVlZRGF0YU5GVElkIjoiMDNfMjRfREFUQU5GVEZULWUwYjkxNy1jNiIsInBsYXllckFkZHIiOiJlcmQxNnU4eTQ1dTM5N201YWR1eXo5Zm5jNWdwdjNlcmF4cWh0dWVkMnF2dnJza2QzMmZmamtnc3BkNGxjbSIsImJpdHMiOjMwfSx7Ik1NWVlEYXRhTkZUSWQiOiIwM18yNF9EQVRBTkZURlQtZTBiOTE3LWM2IiwicGxheWVyQWRkciI6ImVyZDF1dGh2OG5hamRjNDJoNTdsOHA5NzV0ZDZyODh4M3M0OHBmeXVzbHM0N2V2NTZ4Y3M4dHlzMDN5ZXM1IiwiYml0cyI6MjB9LHsiTU1ZWURhdGFORlRJZCI6IjAzXzI0X0RBVEFORlRGVC1lMGI5MTctYzYiLCJwbGF5ZXJBZGRyIjoiZXJkMWx5aHQ4eHV5bjNoeWt2M2VycWt3eWNlYWp5dHM1dXdyenI1Y251OWs0dXUzNGc4NzhsM3FrbmRqdzgiLCJiaXRzIjoyMH1d";
-      // const base64ToString = atob(monthlyPayload);
-      // const stringToJSON = JSON.parse(base64ToString);
-
-      // setLeaderBoardMonthly(stringToJSON);
-      // // E: UNCOMMENT BELOW BLOCK TO MOCK FOR LOCAL UI DEVELOPMENT (COMMENT THE ABOVE ACTUAL LOGIC)
     } catch (err) {
       const message = "Monthly Leaderboard fetching failed:" + (err as AxiosError).message;
       console.error(message);
@@ -811,7 +774,6 @@ export const GetBitzMvx = (props: any) => {
     };
 
     try {
-      console.log("AXIOS CALL -----> xpGamePrivate/playerRankOnLeaderBoard");
       const { data } = await axios.get<any>(`${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/playerRankOnLeaderBoard?playerAddr=${address}`, callConfig);
 
       setMyRankOnAllTimeLeaderBoard(data.playerRank || "N/A");
@@ -828,7 +790,6 @@ export const GetBitzMvx = (props: any) => {
           You are playing with referral code {usingReferralCode}
         </div>
       )}
-      MULTIVERSX
       <div className="relative w-full">
         <div className="absolute -z-1 w-full">
           <img
@@ -839,6 +800,7 @@ export const GetBitzMvx = (props: any) => {
         </div>
         {gamePlayImageSprites()}
       </div>
+
       {!modalMode && (
         <>
           <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] ">
@@ -936,7 +898,6 @@ export async function viewDataJSONCore(viewDataArgs: any, requiredDataNFT: DataN
   try {
     let res: any;
     res = await requiredDataNFT.viewDataViaMVXNativeAuth(viewDataArgs);
-    // res = await __viewDataViaMVXNativeAuth(viewDataArgs); // FYI - DON NOT DELETE, UNTIL WE ARE READY TO MOVE TO STG!!!
     let blobDataType = BlobDataType.TEXT;
 
     if (!res.error) {

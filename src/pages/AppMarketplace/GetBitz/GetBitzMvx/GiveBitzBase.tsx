@@ -44,10 +44,11 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
   useEffect(() => {
     setFetchingDataBountiesReceivedSum(true);
+
     const fetchDataBounties = async () => {
       const _dataBounties: GiveBitzDataBounty[] = await Promise.all(
         getDataBounties().map(async (item: GiveBitzDataBounty) => {
-          const response = await fetchBitSumAndGiverCounts({ getterAddr: item.bountySubmitter, campaignId: item.bountyId });
+          const response = await fetchBitSumAndGiverCountsMvx({ chainID, getterAddr: item.bountySubmitter, campaignId: item.bountyId });
           return { ...item, receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts };
         })
       );
@@ -55,6 +56,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
       setDataBounties(sortedDataBounties);
     };
+
     fetchDataBounties();
     setFetchingDataBountiesReceivedSum(false);
   }, []);
@@ -150,27 +152,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
     }
 
     setGiverLeaderBoardIsLoading(false);
-  }
-
-  async function fetchBitSumAndGiverCounts({ getterAddr, campaignId }: { getterAddr: string; campaignId: string }): Promise<any> {
-    const callConfig = {
-      headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
-      },
-    };
-
-    try {
-      console.log("AXIOS CALL -----> xpGamePrivate/getterBitSumAndGiverCounts");
-      const { data } = await axios.get<any[]>(
-        `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
-        callConfig
-      );
-      return data;
-    } catch (err) {
-      const message = "Getting sum and giver count failed :" + address + "  " + campaignId + (err as AxiosError).message;
-      console.error(message);
-      return false;
-    }
   }
 
   // fetch the given bits for a specific getter (creator campaign or bounty id)
@@ -327,41 +308,6 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
 
       <BonusBitzHistory />
 
-      {/* <>
-        <div className="flex flex-col mt-10 mb-8 items-center justify-center">
-          <span className="text-foreground text-4xl mb-2">Power-up Creators</span>
-          <span className="text-base text-foreground/75 text-center ">
-            VERIFIED Data Creators run "Power-Me-Up" campiagn. Check out their campaign perks and Power-Up Data Creators with your BiTz XP, Climb Data Creator
-            Leaderboards and get perks.
-          </span>
-        </div>
-
-        <div className="flex flex-col md:flex-row md:flex-wrap gap-4 items-start">
-          {getCreatorCampaigns().map((item: GiveBitzCreatorCampaign) => (
-            <PowerUpCreator
-              key={item.campaignId}
-              {...item}
-              gameDataNFT={gameDataNFT}
-              sendPowerUp={sendPowerUp}
-              fetchGivenBitsForGetter={fetchGivenBitsForGetter}
-              fetchGetterLeaderBoard={fetchGetterLeaderBoard}
-              fetchMyGivenBitz={fetchMyGivenBitz}
-              fetchGiverLeaderBoard={fetchGiverLeaderBoard}
-            />
-          ))}
-
-          <div className="power-up-tile flex flex-col direction-row justify-between border p-10 min-w-[300px] max-w-[360px] min-h-[350px]">
-            <div className="text-lg text-bond">🔌 Run a Power-Up Creator Campaign</div>
-            <p>Running a Creator Campaign will help you build your own following of "hardcore fans" who support your creative work.</p>
-            <p>
-              <a className="!text-[#7a98df] hover:underline" href="https://google-form/eoi-bitz-creator-campaign" target="blank">
-                Express your interest to run a BiTz XP Power-Up
-              </a>
-            </p>
-          </div>
-        </div>
-      </> */}
-
       <div id="bounties" className="flex flex-col w-full items-center justify-center">
         <div className="flex flex-col mt-10 mb-8 items-center justify-center ">
           <div className="flex flex-col md:flex-row items-center justify-center ">
@@ -420,5 +366,34 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
     </div>
   );
 };
+
+export async function fetchBitSumAndGiverCountsMvx({
+  chainID,
+  getterAddr,
+  campaignId,
+}: {
+  chainID: string;
+  getterAddr: string;
+  campaignId: string;
+}): Promise<any> {
+  const callConfig = {
+    headers: {
+      "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
+    },
+  };
+
+  try {
+    console.log("AXIOS CALL -----> xpGamePrivate/getterBitSumAndGiverCounts");
+    const { data } = await axios.get<any[]>(
+      `${getApiWeb2Apps(chainID)}/datadexapi/xpGamePrivate/getterBitSumAndGiverCounts?getterAddr=${getterAddr}&campaignId=${campaignId}`,
+      callConfig
+    );
+    return data;
+  } catch (err) {
+    const message = "Getting sum and giver count failed :" + getterAddr + "  " + campaignId + (err as AxiosError).message;
+    console.error(message);
+    return false;
+  }
+}
 
 export default GiveBitzBase;

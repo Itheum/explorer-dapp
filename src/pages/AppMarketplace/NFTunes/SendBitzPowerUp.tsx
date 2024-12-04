@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
@@ -8,13 +9,16 @@ import { Link } from "react-router-dom";
 import { Modal } from "components/Modal/Modal";
 import { Button } from "libComponents/Button";
 import { getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
-import { sleep } from "libs/utils";
+import { sleep, decodeNativeAuthToken } from "libs/utils";
 import { toastClosableError } from "libs/utils/uiShared";
 import { routeNames } from "routes";
 import { useAccountStore } from "store/account";
-import { useLocalStorageStore } from "store/LocalStorageStore.ts";
+// import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 import useSolBitzStore from "store/solBitz";
+import { viewDataJSONCore } from "../GetBitz/GetBitzMvx/index";
+import { GET_BITZ_TOKEN_MVX } from "appsConfig";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 
 type SendBitzPowerUpProps = {
   mvxNetworkSelected: boolean;
@@ -29,22 +33,39 @@ type SendBitzPowerUpProps = {
 };
 
 export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
-  const { mvxNetworkSelected, givePowerConfig, onCloseModal } = props;
+  // const { mvxNetworkSelected, givePowerConfig, onCloseModal } = props;
+  const { givePowerConfig, onCloseModal } = props;
   const { creatorIcon, creatorName, giveBitzToWho, giveBitzToCampaignId, isLikeMode } = givePowerConfig;
   const { publicKey: publicKeySol, signMessage } = useWallet();
   const { address: addressMvx } = useGetAccount();
-  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
+  // const defaultChain = useLocalStorageStore((state) => state.defaultChain);
   const [giftBitzWorkflow, setGiftBitzWorkflow] = useState<boolean>(false);
-  const solBitzBalance = useSolBitzStore((state) => state.bitzBalance);
-  const mvxBitzBalance = useAccountStore((state) => state.bitzBalance);
-  const bitzBalance = defaultChain === "multiversx" ? mvxBitzBalance : solBitzBalance;
   const [bitzValToGift, setBitzValToGift] = useState<number>(0);
   const [minBitzValNeeded, setMinBitzValNeeded] = useState<number>(1);
   const [poweringUpInProgress, setPoweringUpInProgress] = useState<boolean>(false);
   const [powerUpSuccessfullyDone, setPowerUpSuccessfullyDone] = useState<boolean>(false);
   const [poweringUpError, setPoweringUpError] = useState<boolean>(false);
   const { solBitzNfts } = useNftsStore();
-  const { givenBitzSum, updateBitzBalance: updateBitzBalanceSol, updateGivenBitzSum: updateGivenBitzSumSol } = useSolBitzStore();
+  const { tokenLogin } = useGetLoginInfo();
+  const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
+
+  // Bitz store data
+  // const solBitzBalance = useSolBitzStore((state) => state.bitzBalance);
+  // const mvxBitzBalance = useAccountStore((state) => state.bitzBalance);
+  const {
+    bitzBalance: solBitzBalance,
+    givenBitzSum: givenBitzSumSol,
+    updateBitzBalance: updateBitzBalanceSol,
+    updateGivenBitzSum: updateGivenBitzSumSol,
+  } = useSolBitzStore();
+  const {
+    bitzBalance: mvxBitzBalance,
+    givenBitzSum: givenBitzSumMvx,
+    updateBitzBalance: updateBitzBalanceMvx,
+    updateGivenBitzSum: updateGivenBitzSumMvx,
+  } = useAccountStore();
+  // const bitzBalance = defaultChain === "multiversx" ? mvxBitzBalance : solBitzBalance;
+  const [bitBalanceOnChain, setBitBalanceOnChain] = useState<number>(0);
 
   // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
@@ -56,42 +77,69 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
   // E: Cached Signature Store Items
 
   useEffect(() => {
+    if (addressMvx) {
+      fetchGameDataNftsMvx();
+    }
+  }, [addressMvx]);
+
+  useEffect(() => {
+    if (gameDataNFT) {
+      setBitBalanceOnChain(mvxBitzBalance);
+    }
+  }, [gameDataNFT, mvxBitzBalance]);
+
+  useEffect(() => {
+    if (publicKeySol) {
+      setBitBalanceOnChain(solBitzBalance);
+    }
+  }, [publicKeySol, solBitzBalance]);
+
+  useEffect(() => {
     // if we don't do the powerUpSuccessfullyDone and poweringUpInProgress check, this block gets triggered even after a success and bitzValToGift and minBitzValNeeded get reset
     if (!powerUpSuccessfullyDone && !poweringUpInProgress && giveBitzToWho && giveBitzToWho !== "" && giveBitzToCampaignId && giveBitzToCampaignId !== "") {
       if (isLikeMode) {
         setBitzValToGift(5);
         setMinBitzValNeeded(5);
       } else {
-        if (bitzBalance > 5) {
+        if (bitBalanceOnChain > 5) {
           setBitzValToGift(5);
         } else {
-          setBitzValToGift(bitzBalance);
+          setBitzValToGift(bitBalanceOnChain);
         }
       }
 
       setGiftBitzWorkflow(true);
     }
-  }, [giveBitzToWho, giveBitzToCampaignId, bitzBalance, powerUpSuccessfullyDone]);
+  }, [giveBitzToWho, giveBitzToCampaignId, bitBalanceOnChain, powerUpSuccessfullyDone]);
 
-  async function sendPowerUp() {
+  async function fetchGameDataNftsMvx() {
+    const _gameDataNFT = await DataNft.createFromApi(GET_BITZ_TOKEN_MVX);
+    setGameDataNFT(_gameDataNFT);
+  }
+
+  async function sendPowerUpSol() {
     setPoweringUpInProgress(true);
 
     try {
+      const headersToSend: Record<string, any> = {
+        "dmf-custom-give-bits": "1",
+        "dmf-custom-give-bits-val": bitzValToGift,
+        "dmf-custom-give-bits-to-who": giveBitzToWho,
+        "dmf-custom-give-bits-to-campaign-id": giveBitzToCampaignId,
+        "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value,
+      };
+
+      const keysToSend = [
+        "dmf-custom-give-bits",
+        "dmf-custom-give-bits-val",
+        "dmf-custom-give-bits-to-who",
+        "dmf-custom-give-bits-to-campaign-id",
+        "dmf-custom-sol-collection-id",
+      ];
+
       const viewDataArgs = {
-        headers: {
-          "dmf-custom-give-bits": "1",
-          "dmf-custom-give-bits-val": bitzValToGift,
-          "dmf-custom-give-bits-to-who": giveBitzToWho,
-          "dmf-custom-give-bits-to-campaign-id": giveBitzToCampaignId,
-          "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value,
-        },
-        fwdHeaderKeys: [
-          "dmf-custom-give-bits",
-          "dmf-custom-give-bits-val",
-          "dmf-custom-give-bits-to-who",
-          "dmf-custom-give-bits-to-campaign-id",
-          "dmf-custom-sol-collection-id",
-        ],
+        headers: headersToSend,
+        fwdHeaderKeys: keysToSend,
       };
 
       const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
@@ -113,8 +161,8 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
           setPoweringUpError(true);
         } else {
           // we can "locally" estimate and update the balance counts (no need to get it from the marshal as it will be synced when user reloads page or logs in/out or plays the get bitz game)
-          updateBitzBalanceSol(solBitzBalance - bitzValToGift); // current balance - what they donated
-          updateGivenBitzSumSol(givenBitzSum + bitzValToGift); // given bits + what they donated
+          updateBitzBalanceSol(bitBalanceOnChain - bitzValToGift); // current balance - what they donated
+          updateGivenBitzSumSol(givenBitzSumSol + bitzValToGift); // given bits + what they donated
 
           setPowerUpSuccessfullyDone(true);
           showConfetti();
@@ -126,6 +174,51 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
     } catch (err: any) {
       toastClosableError(`Error: Not possible to send power-up. ${err.toString()}`);
       setPoweringUpError(true);
+    }
+
+    setPoweringUpInProgress(false);
+  }
+
+  async function sendPowerUpMvx() {
+    setPoweringUpInProgress(true);
+
+    if (tokenLogin && gameDataNFT) {
+      try {
+        const viewDataArgs = {
+          mvxNativeAuthOrigins: [decodeNativeAuthToken(tokenLogin.nativeAuthToken || "").origin],
+          mvxNativeAuthMaxExpirySeconds: 3600,
+          fwdHeaderMapLookup: {
+            "authorization": `Bearer ${tokenLogin.nativeAuthToken}`,
+            "dmf-custom-give-bits": "1",
+            "dmf-custom-give-bits-val": bitzValToGift,
+            "dmf-custom-give-bits-to-who": giveBitzToWho,
+            "dmf-custom-give-bits-to-campaign-id": giveBitzToCampaignId,
+          },
+          fwdHeaderKeys: "authorization, dmf-custom-give-bits, dmf-custom-give-bits-val, dmf-custom-give-bits-to-who, dmf-custom-give-bits-to-campaign-id",
+        };
+
+        const giveBitzGameResult = await viewDataJSONCore(viewDataArgs, gameDataNFT);
+
+        if (giveBitzGameResult) {
+          if (giveBitzGameResult?.data?.statusCode && giveBitzGameResult?.data?.statusCode != 200) {
+            toastClosableError("Error: Not possible to send power-up. Error code returned. Do you have enough BiTz to give?");
+            setPoweringUpError(true);
+          } else {
+            // we can "locally" estimate and update the balance counts (no need to get it from the marshal as it will be synced when user reloads page or logs in/out or plays the get bitz game)
+            updateBitzBalanceMvx(bitBalanceOnChain - bitzValToGift); // current balance - what they donated
+            updateGivenBitzSumMvx(givenBitzSumMvx + bitzValToGift); // given bits + what they donated
+
+            setPowerUpSuccessfullyDone(true);
+            showConfetti();
+          }
+        } else {
+          toastClosableError("Error: Not possible to send power-up");
+          setPoweringUpError(true);
+        }
+      } catch (err: any) {
+        toastClosableError(`Error: Not possible to send power-up. ${err.toString()}`);
+        setPoweringUpError(true);
+      }
     }
 
     setPoweringUpInProgress(false);
@@ -191,14 +284,14 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                 <div className="bg-1blue-300 ml-5 text-xl font-bold">{creatorName}</div>
               </div>
 
-              {!powerUpSuccessfullyDone && bitzBalance < minBitzValNeeded && (
+              {!powerUpSuccessfullyDone && bitBalanceOnChain < minBitzValNeeded && (
                 <>
-                  {bitzBalance === -2 && (
+                  {bitBalanceOnChain === -2 && (
                     <div className="mt-2">
                       ⚠️ Do you get your free BiTz XP Data NFT yet? You will need this for this action. To get a free one, click on the button below.
                     </div>
                   )}
-                  {bitzBalance > -1 && bitzBalance < minBitzValNeeded && (
+                  {bitBalanceOnChain > -1 && bitBalanceOnChain < minBitzValNeeded && (
                     <div className="mt-2">⚠️ You don't have enough BiTz for this action. To play the BiTz game and get free XP, click on the button below.</div>
                   )}
                   <Link to={routeNames.getbitz} className="text-base hover:!no-underline hover:text-black">
@@ -209,10 +302,10 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                 </>
               )}
 
-              {(bitzBalance >= minBitzValNeeded || powerUpSuccessfullyDone) && (
+              {(bitBalanceOnChain >= minBitzValNeeded || powerUpSuccessfullyDone) && (
                 <>
                   <div className="bg-1green-300 mt-2 text-lg">
-                    <div className="bg-1blue-300">Your BiTz Balance: {bitzBalance} BiTz</div>
+                    <div className="bg-1blue-300">Your BiTz Balance: {bitBalanceOnChain} BiTz</div>
                   </div>
 
                   {poweringUpError && (
@@ -255,7 +348,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                                 type="range"
                                 id="rangeBitz"
                                 min="1"
-                                max={bitzBalance}
+                                max={bitBalanceOnChain}
                                 step="1"
                                 value={bitzValToGift}
                                 disabled={poweringUpInProgress}
@@ -265,11 +358,11 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                               <input
                                 type="number"
                                 min="1"
-                                max={bitzBalance}
+                                max={bitBalanceOnChain}
                                 step="1"
                                 value={bitzValToGift}
                                 disabled={poweringUpInProgress}
-                                onChange={(e) => setBitzValToGift(Math.min(Number(e.target.value), bitzBalance))}
+                                onChange={(e) => setBitzValToGift(Math.min(Number(e.target.value), bitBalanceOnChain))}
                                 className="bg-[#35d9fa]/30 text- dark:text-[#35d9fa] focus:none focus:outline-none focus:border-transparent text-center border-[#35d9fa] rounded-md text-[2rem] p-2"
                               />
                             </div>
@@ -280,10 +373,14 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                       <div className="bg-1green-400">
                         <div className="bg-1blue-300">
                           <Button
-                            disabled={bitzBalance < minBitzValNeeded || bitzValToGift < 1 || poweringUpInProgress}
+                            disabled={bitBalanceOnChain < minBitzValNeeded || bitzValToGift < 1 || poweringUpInProgress}
                             className="!text-white text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer w-[300px] h-[50px]"
                             onClick={() => {
-                              sendPowerUp();
+                              if (publicKeySol) {
+                                sendPowerUpSol();
+                              } else {
+                                sendPowerUpMvx();
+                              }
                             }}>
                             <span className="ml-2">
                               {poweringUpInProgress

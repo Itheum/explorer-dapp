@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { faHandPointer, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
+import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, FlaskRound, HandHeart } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -12,7 +13,8 @@ import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 import { Button } from "libComponents/Button";
 import { sleep } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
-import { fetchBitSumAndGiverCounts } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
+import { fetchBitSumAndGiverCountsMvx } from "pages/AppMarketplace/GetBitz/GetBitzMvx/GiveBitzBase";
+import { fetchBitSumAndGiverCountsSol } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
 import { routeNames } from "routes";
 import { useNftsStore } from "store/nfts";
 import { getArtistsAlbumsData } from "./";
@@ -375,7 +377,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     onSendPowerUp,
     refreshBitzCountsForBounty,
   } = props;
-  const { publicKey } = useWallet();
+  const { publicKey: publicKeySol } = useWallet();
   const { address: addressMvx } = useGetAccount();
   const [audio] = useState(new Audio());
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<boolean>(false);
@@ -395,6 +397,9 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
   const [artistAlbumDataset, setArtistAlbumDataset] = useState<any[]>([]);
   const [artistAlbumDataLoading, setArtistAlbumDataLoading] = useState<boolean>(true);
+  const {
+    network: { chainId: chainID },
+  } = useGetNetworkConfig();
 
   function eventToAttachEnded() {
     audio.src = "";
@@ -433,8 +438,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
     (async () => {
       sleep(5);
-      // const allArtistsAlbumsData = await getArtistsAlbumsData();
-      const allArtistsAlbumsData = dataset;
+      const allArtistsAlbumsData = await getArtistsAlbumsData();
+      // const allArtistsAlbumsData = dataset;
       sleep(5);
       setArtistAlbumDataset(allArtistsAlbumsData);
       setArtistAlbumDataLoading(false);
@@ -448,7 +453,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     };
   }, []);
 
-  // WHAT IS THIS?
   useEffect(
     () => () => {
       // on unmount we have to stp playing as for some reason the play continues always otherwise
@@ -508,7 +512,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   }, [stopPreviewPlayingNow]);
 
   useEffect(() => {
-    if (refreshBitzCountsForBounty && solBitzNfts && solBitzNfts.length > 0) {
+    if (refreshBitzCountsForBounty) {
       console.log("fetchBitzPowerUpsAndLikesForSelectedArtist Flush from cache and reload");
 
       const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
@@ -528,7 +532,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
       setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
     }
-  }, [solBitzNfts, refreshBitzCountsForBounty]);
+  }, [refreshBitzCountsForBounty]);
 
   const debounced_fetchBitzPowerUpsAndLikesForSelectedArtist = useDebouncedCallback((selDataItem: any) => {
     fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem);
@@ -536,7 +540,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
   // as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
   async function fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem: any) {
-    // if (!selDataItem || !solBitzNfts || solBitzNfts.length === 0) {
     if (!selDataItem) {
       return;
     }
@@ -547,13 +550,21 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     if (!bountyToBitzLocalMapping[selDataItem.bountyId] || Date.now() - bountyToBitzLocalMapping[selDataItem.bountyId].syncedOn > 15 * 1000) {
       console.log("fetchBitzPowerUpsAndLikesForSelectedArtist NO cached");
 
-      const collectionidToUse = userHasNoBitzDataNftYet ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+      let response;
+      let collectionIdToUseOnSol = "";
 
-      const response = await fetchBitSumAndGiverCounts({
-        getterAddr: selDataItem?.creatorWallet || "",
-        campaignId: selDataItem?.bountyId || "",
-        collectionId: collectionidToUse,
-      });
+      // we default the values to solana (i.e. if the user is NOT logged in, they see solana donations)
+      if (addressMvx) {
+        response = await fetchBitSumAndGiverCountsMvx({ chainID, getterAddr: selDataItem?.creatorWallet || "", campaignId: selDataItem?.bountyId || "" });
+      } else {
+        collectionIdToUseOnSol = userHasNoBitzDataNftYet ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
+        response = await fetchBitSumAndGiverCountsSol({
+          getterAddr: selDataItem?.creatorWallet || "",
+          campaignId: selDataItem?.bountyId || "",
+          collectionId: collectionIdToUseOnSol,
+        });
+      }
 
       _bountyToBitzLocalMapping[selDataItem?.bountyId] = {
         syncedOn: Date.now(),
@@ -564,17 +575,27 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       const albumBountyIds = selDataItem.albums.map((i: any) => i.bountyId);
 
       if (albumBountyIds.length > 0) {
-        const albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
-          return fetchBitSumAndGiverCounts({
-            getterAddr: selDataItem?.creatorWallet || "",
-            campaignId: albumBounty || "",
-            collectionId: collectionidToUse,
+        let albumBitzPowerUpPromises: any[] = [];
+
+        if (addressMvx) {
+          albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+            return fetchBitSumAndGiverCountsMvx({
+              chainID,
+              getterAddr: selDataItem?.creatorWallet || "",
+              campaignId: albumBounty || "",
+            });
           });
-        });
+        } else {
+          albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+            return fetchBitSumAndGiverCountsSol({
+              getterAddr: selDataItem?.creatorWallet || "",
+              campaignId: albumBounty || "",
+              collectionId: collectionIdToUseOnSol,
+            });
+          });
+        }
 
         Promise.all(albumBitzPowerUpPromises).then((values) => {
-          console.log(values);
-
           albumBountyIds.forEach((albumBountyId: any, idx: number) => {
             _bountyToBitzLocalMapping[albumBountyId] = {
               syncedOn: Date.now(),
@@ -583,7 +604,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
           });
 
           setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
-
           // console.log({ receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts });
         });
       } else {
@@ -710,10 +730,10 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
                         <div className="mt-5 flex flex-col md:flex-row items-center">
                           <div className="relative">
-                            {publicKey || addressMvx ? (
+                            {publicKeySol || addressMvx ? (
                               <Button
                                 className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                disabled={!publicKey && !addressMvx}
+                                disabled={!publicKeySol && !addressMvx}
                                 onClick={() => {
                                   onSendPowerUp({
                                     creatorIcon: artistProfile.img,
@@ -847,11 +867,11 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                                   )}
                                 </div>
 
-                                {publicKey || addressMvx ? (
+                                {publicKeySol || addressMvx ? (
                                   <div className="bg1-red-600 flex flex-row md:flex-col justify-center">
                                     <Button
                                       className="!text-black ml-2 md:ml-0 text-sm w-[100px] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 cursor-pointer"
-                                      disabled={!publicKey && !addressMvx}
+                                      disabled={!publicKeySol && !addressMvx}
                                       onClick={() => {
                                         onSendPowerUp({
                                           creatorIcon: album.img,
@@ -908,7 +928,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               )}
 
                               {/* when not logged in, show this to convert the wallet into user account */}
-                              {!mvxNetworkSelected && !publicKey && (
+                              {!mvxNetworkSelected && !publicKeySol && (
                                 <div className="relative">
                                   <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
                                     <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">

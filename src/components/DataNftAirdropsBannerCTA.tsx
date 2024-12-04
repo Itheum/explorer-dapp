@@ -17,6 +17,7 @@ export function DataNftAirdropsBannerCTA() {
   const [freeMintMusicGiftIntroToAction, setFreeMintMusicGiftIntroToAction] = useState<boolean>(false);
   const { solBitzNfts } = useNftsStore();
 
+  // below is only for so
   useEffect(() => {
     const checkFreeClaims = async () => {
       if (publicKeySol) {
@@ -59,6 +60,9 @@ export function DataNftAirdropsBannerCTA() {
 
   // should we show the banner?
   const shouldShowBanner = (!freeBitzClaimed && !freeMusicGiftClaimed) || (location.pathname === routeNames.home && !freeNfMeIdClaimed);
+
+  // should they claims a bitz?
+  //  const shouldClaimBitz = isLoggedInMvx
 
   return (
     <>

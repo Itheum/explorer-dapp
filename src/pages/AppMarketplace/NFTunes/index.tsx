@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
-import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig, useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -31,7 +31,6 @@ import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
 import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Modal } from "components/Modal/Modal";
-import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import YouTubeEmbed from "components/YouTubeEmbed";
 import { SHOW_NFTS_STEP, MARSHAL_CACHE_DURATION_SECONDS } from "config";
@@ -40,12 +39,11 @@ import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
 import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, getApiWeb2Apps } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { scrollToSection } from "libs/utils/ui";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
-import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 import { FeaturedArtistsAndAlbums } from "./FeaturedArtistsAndAlbums";
 import { SendBitzPowerUp } from "./SendBitzPowerUp";
@@ -73,11 +71,11 @@ export const NFTunes = () => {
   const [radioTracks, setRadioTracks] = useState<any[]>([]);
   const [featuredArtistDeepLinkSlug, setFeaturedArtistDeepLinkSlug] = useState<string | undefined>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
-  const mvxNetworkSelected = defaultChain === "multiversx";
+  const [mvxNetworkSelected, setMvxNetworkSelected] = useState<boolean>(false);
   const [shownSolAppDataNfts, setShownSolAppDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
-  const { publicKey, signMessage } = useWallet();
+  const { publicKey: publicKeySol, signMessage } = useWallet();
   const { solBitzNfts } = useNftsStore();
+  const { address: addressMvx } = useGetAccount();
 
   // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
@@ -106,6 +104,18 @@ export const NFTunes = () => {
   const [refreshBitzCountsForBounty, setRefreshBitzCountsForBounty] = useState<{ bitzValToGift: number; giveBitzToCampaignId: string } | undefined>(undefined);
 
   useEffect(() => {
+    if (publicKeySol) {
+      setMvxNetworkSelected(false);
+    }
+  }, [publicKeySol]);
+
+  useEffect(() => {
+    if (addressMvx) {
+      setMvxNetworkSelected(true);
+    }
+  }, [addressMvx]);
+
+  useEffect(() => {
     const isFeaturedArtistDeepLink = searchParams.get("artist-profile");
     const isHlWorkflowDeepLink = searchParams.get("hl");
 
@@ -116,10 +126,10 @@ export const NFTunes = () => {
     } else if (isHlWorkflowDeepLink && isHlWorkflowDeepLink === "sigma") {
       scrollToSection("artist-profile", 50);
     } else {
-      // window.scrollTo({
-      //   top: 0,
-      //   behavior: "smooth",
-      // });
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
 
     async function getRadioTracksData() {
@@ -141,7 +151,7 @@ export const NFTunes = () => {
   }, [hasPendingTransactions, mvxNfts]);
 
   useEffect(() => {
-    if (!hasPendingTransactions) {
+    if (publicKeySol && solNfts.length > 0) {
       setShownSolAppDataNfts(
         solNfts.filter((nft: DasApiAsset) => {
           if (nft.content.metadata.name.includes("MUS") || nft.content.metadata.name.includes("POD")) {
@@ -152,7 +162,7 @@ export const NFTunes = () => {
         })
       );
     }
-  }, [solNfts]);
+  }, [solNfts, publicKeySol]);
 
   useEffect(() => {
     if (shownSolAppDataNfts && shownSolAppDataNfts.length > 0) {
@@ -301,7 +311,7 @@ export const NFTunes = () => {
         solPreaccessSignature,
         solPreaccessTimestamp,
         signMessage,
-        publicKey,
+        publicKey: publicKeySol,
         updateSolPreaccessNonce,
         updateSolSignedPreaccess,
         updateSolPreaccessTimestamp,
@@ -314,7 +324,7 @@ export const NFTunes = () => {
         fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
       };
 
-      if (!publicKey) throw new Error("Missing data for viewData");
+      if (!publicKeySol) throw new Error("Missing data for viewData");
       setCurrentDataNftIndex(index);
 
       // start the request for the first song
@@ -322,7 +332,7 @@ export const NFTunes = () => {
         dataNft.id,
         usedPreAccessNonce,
         usedPreAccessSignature,
-        publicKey,
+        publicKeySol,
         viewDataArgs.fwdHeaderKeys,
         viewDataArgs.headers,
         true,
@@ -335,7 +345,7 @@ export const NFTunes = () => {
         dataNft.id,
         usedPreAccessNonce,
         usedPreAccessSignature,
-        publicKey,
+        publicKeySol,
         viewDataArgs.fwdHeaderKeys,
         viewDataArgs.headers,
         false,
@@ -380,8 +390,14 @@ export const NFTunes = () => {
 
     if (!mvxNetworkSelected) {
       if (IS_DEVNET) {
-        if (album?.solNftNameDevnet && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftNameDevnet] !== "undefined") {
-          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftNameDevnet];
+        // in devnet we airdrop MUSGDEV1 the matches the "MUSG7 - Galactic Gravity" mainnet one
+        if (
+          album?.solNftName &&
+          ownedSolDataNftNameAndIndexMap &&
+          album.solNftName === "MUSG7 - Galactic Gravity" &&
+          ownedSolDataNftNameAndIndexMap["MUSGDEV1"] !== "undefined"
+        ) {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap["MUSGDEV1"];
         }
       } else {
         if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
@@ -434,6 +450,8 @@ export const NFTunes = () => {
   // in Radio, checkOwnershipOfAlbum get called when user clicks on play, as the radio comp is rerendering each time the progress bar moves (memo not working)
   // ... so we throttle each call by 2000 to improve some performance
   const debouncedCheckOwnershipOfAlbum = useThrottledCallback(checkOwnershipOfAlbum, 2000, { "trailing": false });
+
+  console.log("shownSolAppDataNfts", shownSolAppDataNfts);
 
   return (
     <>
@@ -572,7 +590,7 @@ export const NFTunes = () => {
                   <HeaderComponent
                     pageTitle={""}
                     hasImage={false}
-                    pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs`}
+                    pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs YYYY`}
                     alwaysCenterTitleAndSubTitle={true}>
                     <div className="flex flex-col md:flex-row flex-wrap justify-center">
                       {shownMvxAppDataNfts.length > 0 ? (
@@ -635,7 +653,7 @@ export const NFTunes = () => {
                   <HeaderComponent
                     pageTitle={""}
                     hasImage={false}
-                    pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs`}
+                    pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs XXXX`}
                     alwaysCenterTitleAndSubTitle={true}>
                     <div className="flex flex-col md:flex-row flex-wrap justify-center">
                       {shownSolAppDataNfts.length > 0 ? (
