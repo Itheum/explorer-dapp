@@ -3,18 +3,11 @@ import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { ExternalLink } from "lucide-react";
 import { ELROND_NETWORK } from "config";
 import { getMvxRpcApi } from "libs/utils";
-import { useAccountStore } from "store/account";
 
 export const Footer = () => {
   const {
     network: { chainId: chainID },
   } = useGetNetworkConfig();
-
-  // S: Cached Signature Store Items
-  const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
-  const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
-  const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
-  // E: Cached Signature Store Items
 
   const appVersion = import.meta.env.VITE_APP_VERSION ? `v${import.meta.env.VITE_APP_VERSION}` : "version number unknown";
   const isPublicApi = getMvxRpcApi(chainID).includes("api.multiversx.com");
@@ -151,14 +144,14 @@ export const Footer = () => {
               <ul className="text-xs md:text-sm flex flex-col gap-1">
                 <li>
                   {"> "}
-                  <a href="https://datadex.itheum.com" target="_blank" className="hover:underline">
-                    MultiversX Data DEX
+                  <a href="https://workforce.itheum.com" target="_blank" className="hover:underline">
+                    Solana AI Data Workforce
                   </a>
                 </li>
                 <li>
                   {"> "}
-                  <a href="https://datadex-sol.itheum.com" target="_blank" className="hover:underline">
-                    Solana Data DEX
+                  <a href="https://datadex.itheum.com" target="_blank" className="hover:underline">
+                    MultiversX Data DEX
                   </a>
                 </li>
                 <li>
@@ -169,14 +162,26 @@ export const Footer = () => {
                 </li>
                 <li>
                   {"> "}
-                  <a href="https://datadex.itheum.io/NFMeID" target="_blank" className="hover:underline">
-                    Claim your NFMe ID
+                  <a href="https://workforce.itheum.com/NFMeID" target="_blank" className="hover:underline">
+                    Claim your NFMe ID (Solana)
+                  </a>
+                </li>
+                <li>
+                  {"> "}
+                  <a href="https://workforce.itheum.io/NFMeID#liveliness" target="_blank" className="hover:underline">
+                    Liveliness Staking (Solana)
+                  </a>
+                </li>
+                <li>
+                  {"> "}
+                  <a href="https://datadex.itheum.com/NFMeID" target="_blank" className="hover:underline">
+                    Claim your NFMe ID (MultiversX)
                   </a>
                 </li>
                 <li>
                   {"> "}
                   <a href="https://datadex.itheum.io/NFMeID#liveliness" target="_blank" className="hover:underline">
-                    Liveliness Staking
+                    Liveliness Staking (MultiversX)
                   </a>
                 </li>
                 <li>
@@ -194,14 +199,6 @@ export const Footer = () => {
               </ul>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div>
-        <div className={"bg-color-[#5d3d0d] mt-2"}>
-          <div className={"text-center text-sm"}>{`preaccessNonce = ${solPreaccessNonce.substring(0, 8)},
-preaccessSig = ${solPreaccessSignature.substring(0, 8)},
-preaccessTS = ${solPreaccessTimestamp > -2 ? new Date(solPreaccessTimestamp).toUTCString() : solPreaccessTimestamp}`}</div>
         </div>
       </div>
     </footer>
