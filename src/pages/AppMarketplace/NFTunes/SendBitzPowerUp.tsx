@@ -219,7 +219,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                     <div className="h-[100px] text-lg mt-3">
                       <div>Error! Power-up not possible.</div>
                       <Button
-                        className="text-sm mt-2 cursor-pointer !text-orange-500 dark:!text-yellow-300"
+                        className="text-sm mt-2 cursor-pointer !text-yellow-300"
                         variant="destructive"
                         onClick={() => {
                           onCloseModal(powerUpSuccessfullyDone ? { bitzValToGift, giveBitzToCampaignId } : undefined);

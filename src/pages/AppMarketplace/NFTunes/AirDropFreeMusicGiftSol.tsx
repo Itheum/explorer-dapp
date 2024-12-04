@@ -186,33 +186,13 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
                     content. Get your free Music Data NFT and join this initiative!
                   </div>
 
-                  {freeMusicGiftClaimed && (
-                    <div className="h-[100px] text-lg mt-10">
-                      <div className="text-orange-300">
-                        Error! You have already claimed your free Music Gift Data NFT. If it's not being detected, please logout and reload your browser and try
-                        again.
-                      </div>
-                      <Button
-                        className="text-sm mt-2 cursor-pointer !text-orange-500 dark:!text-yellow-300"
-                        variant="destructive"
-                        onClick={(event: any) => {
-                          // in case the modal is over another action button or method, we stop the click from propagating down to it as this may cause the state to change below the modal
-                          event.stopPropagation();
-
-                          setGetAirdropWorkflow(false);
-                          setErrFreeMintGeneric(null);
-                          onCloseModal();
-                        }}>
-                        Close, Logout, Reload and Try Again
-                      </Button>
-                    </div>
-                  )}
-
                   {errFreeMintGeneric && (
                     <div className="h-[100px] text-lg mt-10">
-                      <div className="text-orange-300">Error! Free mint of Music Gift Data NFT is not possible right now. Error = {errFreeMintGeneric}</div>
+                      <div className="text-orange-700 dark:text-orange-300 text-sm">
+                        Error! Free mint of Music Gift Data NFT is not possible right now. More Info = {errFreeMintGeneric}
+                      </div>
                       <Button
-                        className="text-sm mt-2 cursor-pointer !text-orange-500 dark:!text-yellow-300"
+                        className="text-sm mt-2 cursor-pointer !text-white"
                         variant="destructive"
                         onClick={(event: any) => {
                           // in case the modal is over another action button or method, we stop the click from propagating down to it as this may cause the state to change below the modal
@@ -241,21 +221,20 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
                           </Button>
                         </>
                       ) : (
-                        <div className="bxg-blue-800 flex flex-col mt-5 bg-teal-700 p-5 rounded-lg text-lg">
+                        <div className="bxg-blue-800 flex flex-col mt-5 text-white bg-teal-700 p-5 rounded-lg text-lg">
                           🙌 Success! {`Let's`} try it out now!
-                          <Link
-                            to={`${routeNames.nftunes}/?artist-profile=waveborn-luminex&hl=sample`}
-                            className="text-base hover:!no-underline hover:text-black">
-                            <Button
-                              onClick={() => {
-                                setGetAirdropWorkflow(false);
-                                setErrFreeMintGeneric(null);
-                                onCloseModal();
-                              }}
-                              className="!text-black mt-5 text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                              Use Music Data NFT on NF-Tunes
-                            </Button>
-                          </Link>
+                          <Button
+                            onClick={() => {
+                              // we reload like this so that if the user is in nftunes, then we actually get the workflow into focus (or it wont)
+                              location.href = `${routeNames.nftunes}/?artist-profile=waveborn-luminex&hl=sample`;
+
+                              setGetAirdropWorkflow(false);
+                              setErrFreeMintGeneric(null);
+                              onCloseModal();
+                            }}
+                            className="!text-black mt-5 text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                            Use Music Data NFT on NF-Tunes
+                          </Button>
                         </div>
                       )}
                     </div>

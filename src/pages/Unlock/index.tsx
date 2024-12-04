@@ -135,9 +135,9 @@ const UnlockPage = () => {
           let userMessage = "";
 
           if (isMvx) {
-            userMessage = "Welcome Back MultiversX Champion!";
+            userMessage = "Welcome Back Itheum MultiversX OG!";
           } else {
-            userMessage = "Welcome Back Solana Legend!";
+            userMessage = "Welcome Back Itheum Solana Legend!";
           }
 
           toast.success(userMessage, {
@@ -204,7 +204,7 @@ const UnlockPage = () => {
                 <h4 className="mb-4 font-weight-bold">MultiversX</h4>
                 <div className="flex flex-col min-w-[20rem] gap-4 px-3 items-center">
                   {isLoggedInMvX ? (
-                    <div className="w-full flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
+                    <div className="flex bg-gradient-to-r from-yellow-300 to-orange-500 p-[1px] px-[2px] rounded-lg justify-center items-center w-full">
                       <Button
                         className="w-full dark:bg-[#0f0f0f] bg-slate-50 dark:text-white hover:dark:bg-transparent/10 hover:bg-transparent border-0 rounded-md font-medium tracking-wide !text-lg"
                         variant="outline"

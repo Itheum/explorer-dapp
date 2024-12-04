@@ -8,14 +8,14 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Loader } from "components";
+import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 import { Button } from "libComponents/Button";
+import { sleep } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { fetchBitSumAndGiverCounts } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
 import { routeNames } from "routes";
 import { useNftsStore } from "store/nfts";
-import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
 import { getArtistsAlbumsData } from "./";
-import { sleep } from "libs/utils";
 
 const dataset = [
   {
@@ -433,7 +433,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
     (async () => {
       sleep(5);
-      const allArtistsAlbumsData = await getArtistsAlbumsData();
+      // const allArtistsAlbumsData = await getArtistsAlbumsData();
+      const allArtistsAlbumsData = dataset;
       sleep(5);
       setArtistAlbumDataset(allArtistsAlbumsData);
       setArtistAlbumDataLoading(false);
@@ -746,7 +747,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                             )}
                           </div>
 
-                          <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 mt-2 md:mt-0 rounded md:min-w-[100px] flex items-center justify-center">
+                          <div className="text-center mb-1 text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 mt-2 md:mt-0 rounded md:min-w-[100px] flex items-center justify-center">
                             {typeof bountyToBitzLocalMapping[artistProfile.bountyId]?.bitsSum === "undefined" ? (
                               <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
                             ) : (
@@ -838,7 +839,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               </div>
 
                               <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col items-center">
-                                <div className="text-center mb-1 text-lg h-[40px] text-[#fde047] border border-yellow-300 rounded w-[100px] flex items-center justify-center">
+                                <div className="text-center mb-1 text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 rounded w-[100px] flex items-center justify-center">
                                   {typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum === "undefined" ? (
                                     <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
                                   ) : (

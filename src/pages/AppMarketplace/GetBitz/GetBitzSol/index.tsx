@@ -902,9 +902,7 @@ const GetBitzSol = (props: any) => {
       <div
         onClick={() => {
           setClaimFreeAirdropWorkflow(true);
-        }}>
-        SOLANA
-      </div>
+        }}></div>
       <div className="relative w-full">
         <div className="absolute -z-1 w-full">
           <img
@@ -1015,7 +1013,6 @@ const GetBitzSol = (props: any) => {
           }}
         />
       )}
-      <div className="mt-5 mb-10">claimFreeAirdropWorkflow = {claimFreeAirdropWorkflow.toString()}</div>
     </div>
   );
 };

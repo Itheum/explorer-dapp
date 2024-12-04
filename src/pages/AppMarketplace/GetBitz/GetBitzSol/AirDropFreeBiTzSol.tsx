@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
@@ -8,7 +9,6 @@ import { getOrCacheAccessNonceAndSignature, mintMiscDataNft, fetchSolNfts, check
 import { sleep } from "libs/utils";
 import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
-import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 
 type AirDropFreeBiTzSolProps = {
   onCloseModal: any;
@@ -175,7 +175,7 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
               minHeight: "10rem",
             }}>
             <div className="bgx-cyan-900 flex flex-col gap-2 p-10">
-              <div className="bgx-green-900  items-center">
+              <div className="bgx-green-900 items-center">
                 <div className="bgx-blue-900 text-2xl font-bold mb-2">With Itheum, your XP Data is yours to own! 🚀</div>
                 <div className="bxg-blue-800 mt-5">
                   {" "}
@@ -185,12 +185,12 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
 
                 {freeNfMeIdClaimed && (
                   <div className="h-[100px] text-lg mt-10">
-                    <div className="text-orange-300">
+                    <div className="text-orange-700 dark:text-orange-300 text-sm">
                       Error! You have already claimed your free BiTz XP Data NFT. If it's not being detected, please logout and reload your browser and try
                       again.
                     </div>
                     <Button
-                      className="text-sm mt-2 cursor-pointer !text-orange-500 dark:!text-yellow-300"
+                      className="text-sm mt-2 cursor-pointer !text-white"
                       variant="destructive"
                       onClick={(event: any) => {
                         // in case the modal is over another action button or method, we stop the click from propagating down to it as this may cause the state to change below the modal
@@ -208,9 +208,11 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
 
                 {errFreeMintGeneric && (
                   <div className="h-[100px] text-lg mt-10">
-                    <div className="text-orange-300">Error! Free mint of BiTz XP Data NFT is not possible right now. Error = {errFreeMintGeneric}</div>
+                    <div className="text-orange-700 dark:text-orange-300 text-sm">
+                      Error! Free mint of BiTz XP Data NFT is not possible right now. More Info = {errFreeMintGeneric}
+                    </div>
                     <Button
-                      className="text-sm mt-2 cursor-pointer !text-orange-500 dark:!text-yellow-300"
+                      className="text-sm mt-2 cursor-pointer !text-white"
                       variant="destructive"
                       onClick={(event: any) => {
                         // in case the modal is over another action button or method, we stop the click from propagating down to it as this may cause the state to change below the modal
@@ -240,8 +242,8 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
                         </Button>
                       </>
                     ) : (
-                      <div className="bxg-blue-800 mt-5 bg-teal-700 p-5 rounded-lg text-lg">
-                        🙌 Success! {`Let's`} get you for first BiTz XP, game coming up in 5,4,3,2,1...
+                      <div className="bxg-blue-800 mt-5 text-white bg-teal-700 p-5 rounded-lg text-lg">
+                        🙌 Success! {`Let's`} get you your first BiTz XP, game coming up in 5,4,3,2,1...
                       </div>
                     )}
                   </div>

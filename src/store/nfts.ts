@@ -20,13 +20,13 @@ type Action = {
 
 export const useNftsStore = create<State & Action>((set) => ({
   mvxNfts: [],
-  updateMvxNfts: (value: DataNft[]) => set(() => ({ mvxNfts: value })),
   isLoadingMvx: false,
-  updateIsLoadingMvx: (value: boolean) => set(() => ({ isLoadingMvx: value })),
   solNfts: [],
-  updateSolNfts: (value: DasApiAsset[]) => set(() => ({ solNfts: value })),
   solBitzNfts: [],
-  updateSolBitzNfts: (value: DasApiAsset[]) => set(() => ({ solBitzNfts: value })),
   isLoadingSol: false,
+  updateMvxNfts: (value: DataNft[]) => set(() => ({ mvxNfts: value })),
+  updateIsLoadingMvx: (value: boolean) => set(() => ({ isLoadingMvx: value })),
+  updateSolNfts: (value: DasApiAsset[]) => set(() => ({ solNfts: value })),
+  updateSolBitzNfts: (value: DasApiAsset[]) => set(() => ({ solBitzNfts: value })),
   updateIsLoadingSol: (value: boolean) => set(() => ({ isLoadingSol: value })),
 }));

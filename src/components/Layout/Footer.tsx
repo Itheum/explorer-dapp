@@ -3,11 +3,18 @@ import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { ExternalLink } from "lucide-react";
 import { ELROND_NETWORK } from "config";
 import { getMvxRpcApi } from "libs/utils";
+import { useAccountStore } from "store/account";
 
 export const Footer = () => {
   const {
     network: { chainId: chainID },
   } = useGetNetworkConfig();
+
+  // S: Cached Signature Store Items
+  const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
+  const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
+  const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
+  // E: Cached Signature Store Items
 
   const appVersion = import.meta.env.VITE_APP_VERSION ? `v${import.meta.env.VITE_APP_VERSION}` : "version number unknown";
   const isPublicApi = getMvxRpcApi(chainID).includes("api.multiversx.com");
@@ -187,6 +194,14 @@ export const Footer = () => {
               </ul>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <div className={"bg-color-[#5d3d0d] mt-2"}>
+          <div className={"text-center text-sm"}>{`preaccessNonce = ${solPreaccessNonce.substring(0, 8)},
+preaccessSig = ${solPreaccessSignature.substring(0, 8)},
+preaccessTS = ${solPreaccessTimestamp > -2 ? new Date(solPreaccessTimestamp).toUTCString() : solPreaccessTimestamp}`}</div>
         </div>
       </div>
     </footer>

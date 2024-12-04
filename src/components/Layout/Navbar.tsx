@@ -223,6 +223,7 @@ export const Navbar = () => {
                   <Link to={routeNames.getbitz}>
                     <Button className="text-sm tracking-wide hover:bg-transparent px-0.5 ml-0.5" variant="ghost">
                       <FlaskBottleAnimation cooldown={0} />
+                      <div className="ml-1">BiTz XP</div>
                     </Button>
                   </Link>
                 </div>
@@ -394,12 +395,6 @@ export const Navbar = () => {
           <DataNftAirdropsBannerCTA />
         </div>
       )}
-
-      <div className={"bg-color-[#5d3d0d] mt-2"}>
-        <div className={"text-center text-sm"}>{`preaccessNonce = ${solPreaccessNonce.substring(0, 8)},
-preaccessSig = ${solPreaccessSignature.substring(0, 8)},
-preaccessTS = ${solPreaccessTimestamp > -2 ? new Date(solPreaccessTimestamp).toUTCString() : solPreaccessTimestamp}`}</div>
-      </div>
     </>
   );
 };
