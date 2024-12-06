@@ -71,7 +71,7 @@ export const AIWorkforce = () => {
             </div>
 
             <Link
-              to={`${!mxAddress ? "https://workforce.itheum.io/nfmeid" : "https://datadex.itheum.io/nfmeid"}`}
+              to={`${!mxAddress ? "https://ai-workforce.itheum.io/nfmeid" : "https://datadex.itheum.io/nfmeid"}`}
               target="_blank"
               className="my-5 text-base hover:!no-underline hover:text-black">
               <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">

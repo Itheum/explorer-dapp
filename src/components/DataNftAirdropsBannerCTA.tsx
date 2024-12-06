@@ -97,7 +97,7 @@ export function DataNftAirdropsBannerCTA() {
               </div>
               <div className="flex md:flex-col justify-center mt-3 ml-auto mr-auto md:mr-2">
                 <Link
-                  to={`${publicKeySol ? "https://workforce.itheum.io/nfmeid" : "https://datadex.itheum.io/nfmeid"}`}
+                  to={`${publicKeySol ? "https://ai-workforce.itheum.io/nfmeid" : "https://datadex.itheum.io/nfmeid"}`}
                   target="_blank"
                   className="text-base hover:!no-underline hover:text-black">
                   <Button

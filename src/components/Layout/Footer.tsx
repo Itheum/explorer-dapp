@@ -144,7 +144,7 @@ export const Footer = () => {
               <ul className="text-xs md:text-sm flex flex-col gap-1">
                 <li>
                   {"> "}
-                  <a href="https://workforce.itheum.com" target="_blank" className="hover:underline">
+                  <a href="https://ai-workforce.itheum.com" target="_blank" className="hover:underline">
                     Solana AI Data Workforce
                   </a>
                 </li>
@@ -162,13 +162,13 @@ export const Footer = () => {
                 </li>
                 <li>
                   {"> "}
-                  <a href="https://workforce.itheum.com/NFMeID" target="_blank" className="hover:underline">
+                  <a href="https://ai-workforce.itheum.com/NFMeID" target="_blank" className="hover:underline">
                     Claim your NFMe ID (Solana)
                   </a>
                 </li>
                 <li>
                   {"> "}
-                  <a href="https://workforce.itheum.io/NFMeID#liveliness" target="_blank" className="hover:underline">
+                  <a href="https://ai-workforce.itheum.io/NFMeID#liveliness" target="_blank" className="hover:underline">
                     Liveliness Staking (Solana)
                   </a>
                 </li>
