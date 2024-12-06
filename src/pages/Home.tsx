@@ -1,6 +1,9 @@
 import * as React from "react";
+import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
+import featuredAppNFTunesHero from "assets/img/nf-tunes/featured-app-banner.png";
+import featuredAppNFTunesMobileHero from "assets/img/nf-tunes/featured-app-banner-mobile.png";
 import xDayTimeCapsuleHero from "assets/img/timecapsule/custom-app-header-timecapsule-xday.png";
 import xDayTimeCapsuleHeroMobile from "assets/img/timecapsule/expl-app-timecapsule-xday-icon.png";
 import HelmetPageMeta from "components/HelmetPageMeta";
@@ -19,6 +22,8 @@ export function returnRoute(routeKey: string) {
 }
 
 export const Home = () => {
+  const { address: addressMvx } = useGetAccount();
+
   return (
     <>
       <HelmetPageMeta
@@ -254,18 +259,33 @@ export const Home = () => {
 
         <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
-        <div className="mt-2 mb-5">
-          <h1 className="!text-2xl md:!text-3xl text-center">Featured App</h1>
-          <Link to={`${routeNames.timecapsulexday}`} className="text-base hover:!no-underline hover:text-black">
-            <div className="flex flex-col md:flex-row flex-wrap-reverse p-2 rounded-md">
-              <div
-                className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-                style={{
-                  "backgroundImage": `url(${isMostLikelyMobile() ? xDayTimeCapsuleHeroMobile : xDayTimeCapsuleHero})`,
-                }}></div>
-            </div>
-          </Link>
-        </div>
+        {addressMvx ? (
+          <div className="mt-2 mb-5">
+            <h1 className="!text-2xl md:!text-3xl text-center">Featured App</h1>
+            <Link to={`${routeNames.timecapsulexday}`} className="text-base hover:!no-underline hover:text-black">
+              <div className="flex flex-col md:flex-row flex-wrap-reverse p-2 rounded-md">
+                <div
+                  className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[300px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+                  style={{
+                    "backgroundImage": `url(${isMostLikelyMobile() ? xDayTimeCapsuleHeroMobile : xDayTimeCapsuleHero})`,
+                  }}></div>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-2 mb-5">
+            <h1 className="!text-2xl md:!text-3xl text-center">Featured App</h1>
+            <Link to={`${routeNames.nftunes}`} className="text-base hover:!no-underline hover:text-black">
+              <div className="flex flex-col md:flex-row flex-wrap-reverse p-2 rounded-md">
+                <div
+                  className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[250px] md:h-[350px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+                  style={{
+                    "backgroundImage": `url(${isMostLikelyMobile() ? featuredAppNFTunesMobileHero : featuredAppNFTunesHero})`,
+                  }}></div>
+              </div>
+            </Link>
+          </div>
+        )}
 
         <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
@@ -339,12 +359,16 @@ export const Home = () => {
           </div>
         </div>
 
-        <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
+        {addressMvx && (
+          <>
+            <hr className="w-48 h-1 mx-auto my-10 bg-gray-300 border-0 rounded dark:bg-gray-700"></hr>
 
-        <div className="flex flex-col">
-          <TrendingSection />
-          <RecentDataNFTsSection />
-        </div>
+            <div className="flex flex-col">
+              <TrendingSection />
+              <RecentDataNFTsSection />
+            </div>
+          </>
+        )}
       </div>
     </>
   );

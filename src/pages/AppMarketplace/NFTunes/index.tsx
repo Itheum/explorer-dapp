@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataNft, ViewDataReturnType } from "@itheum/sdk-mx-data-nft";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
-import { useGetLoginInfo, useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
+import { useGetLoginInfo, useGetNetworkConfig, useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -9,6 +9,7 @@ import { Music, Music2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useThrottledCallback } from "use-debounce";
 import { NF_TUNES_TOKENS } from "appsConfig";
+import { IS_DEVNET } from "appsConfig";
 import benefitsLogo1 from "assets/img/nf-tunes/benefits-logo1.png";
 import benefitsLogo2 from "assets/img/nf-tunes/benefits-logo2.png";
 import benefitsLogo3 from "assets/img/nf-tunes/benefits-logo3.png";
@@ -30,23 +31,22 @@ import { SolAudioPlayer } from "components/AudioPlayer/SolAudioPlayer";
 import HelmetPageMeta from "components/HelmetPageMeta";
 import { HeaderComponent } from "components/Layout/HeaderComponent";
 import { Modal } from "components/Modal/Modal";
-import { MvxSolSwitch } from "components/MvxSolSwitch";
 import { SolDataNftCard } from "components/SolDataNftCard";
 import YouTubeEmbed from "components/YouTubeEmbed";
 import { SHOW_NFTS_STEP, MARSHAL_CACHE_DURATION_SECONDS } from "config";
 import { useTheme } from "contexts/ThemeProvider";
 import { useGetPendingTransactions } from "hooks";
 import { Button } from "libComponents/Button";
-import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
+import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { BlobDataType, ExtendedViewDataReturnType } from "libs/types";
-import { decodeNativeAuthToken, getApiDataMarshal, getApiWeb2Apps } from "libs/utils";
+import { decodeNativeAuthToken, getApiDataMarshal } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { scrollToSection } from "libs/utils/ui";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
-import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 import { FeaturedArtistsAndAlbums } from "./FeaturedArtistsAndAlbums";
+import { SendBitzPowerUp } from "./SendBitzPowerUp";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -71,16 +71,20 @@ export const NFTunes = () => {
   const [radioTracks, setRadioTracks] = useState<any[]>([]);
   const [featuredArtistDeepLinkSlug, setFeaturedArtistDeepLinkSlug] = useState<string | undefined>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const defaultChain = useLocalStorageStore((state) => state.defaultChain);
-  const mvxNetworkSelected = defaultChain === "multiversx";
+  const [mvxNetworkSelected, setMvxNetworkSelected] = useState<boolean>(false);
   const [shownSolAppDataNfts, setShownSolAppDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
-  const { publicKey, signMessage } = useWallet();
+  const { publicKey: publicKeySol, signMessage } = useWallet();
+  const { solBitzNfts } = useNftsStore();
+  const { address: addressMvx } = useGetAccount();
+
+  // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
   const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
   const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
   const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
   const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
+  // E: Cached Signature Store Items
 
   const [ownedSolDataNftNameAndIndexMap, setOwnedSolDataNftNameAndIndexMap] = useState<any>(null);
   const [ownedMvxDataNftNameAndIndexMap, setOwnedMvxDataNftNameAndIndexMap] = useState<any>(null);
@@ -88,13 +92,39 @@ export const NFTunes = () => {
   // control the visibility base level music player model
   const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
 
+  // give bits to a bounty (power up or like)
+  const [givePowerConfig, setGivePowerConfig] = useState<{
+    creatorIcon: string | undefined;
+    creatorName: string | undefined;
+    giveBitzToWho: string;
+    giveBitzToCampaignId: string;
+    isLikeMode?: boolean | undefined;
+  }>({ creatorIcon: undefined, creatorName: undefined, giveBitzToWho: "", giveBitzToCampaignId: "", isLikeMode: undefined });
+
+  const [refreshBitzCountsForBounty, setRefreshBitzCountsForBounty] = useState<{ bitzValToGift: number; giveBitzToCampaignId: string } | undefined>(undefined);
+
+  useEffect(() => {
+    if (publicKeySol) {
+      setMvxNetworkSelected(false);
+    }
+  }, [publicKeySol]);
+
+  useEffect(() => {
+    if (addressMvx) {
+      setMvxNetworkSelected(true);
+    }
+  }, [addressMvx]);
+
   useEffect(() => {
     const isFeaturedArtistDeepLink = searchParams.get("artist-profile");
+    const isHlWorkflowDeepLink = searchParams.get("hl");
 
     if (isFeaturedArtistDeepLink) {
       scrollToSection("artist-profile", 50);
       setNoRadioAutoPlay(true); // don't auto-play radio when we deep scroll to artist as its confusing
       setFeaturedArtistDeepLinkSlug(isFeaturedArtistDeepLink.trim());
+    } else if (isHlWorkflowDeepLink && isHlWorkflowDeepLink === "sigma") {
+      scrollToSection("artist-profile", 50);
     } else {
       window.scrollTo({
         top: 0,
@@ -121,7 +151,7 @@ export const NFTunes = () => {
   }, [hasPendingTransactions, mvxNfts]);
 
   useEffect(() => {
-    if (!hasPendingTransactions) {
+    if (publicKeySol && solNfts.length > 0) {
       setShownSolAppDataNfts(
         solNfts.filter((nft: DasApiAsset) => {
           if (nft.content.metadata.name.includes("MUS") || nft.content.metadata.name.includes("POD")) {
@@ -132,7 +162,7 @@ export const NFTunes = () => {
         })
       );
     }
-  }, [solNfts]);
+  }, [solNfts, publicKeySol]);
 
   useEffect(() => {
     if (shownSolAppDataNfts && shownSolAppDataNfts.length > 0) {
@@ -281,26 +311,28 @@ export const NFTunes = () => {
         solPreaccessSignature,
         solPreaccessTimestamp,
         signMessage,
-        publicKey,
+        publicKey: publicKeySol,
         updateSolPreaccessNonce,
         updateSolSignedPreaccess,
         updateSolPreaccessTimestamp,
       });
 
       const viewDataArgs = {
-        headers: {},
-        fwdHeaderKeys: [],
+        headers: {
+          "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value,
+        },
+        fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
       };
 
-      if (!publicKey) throw new Error("Missing data for viewData");
+      if (!publicKeySol) throw new Error("Missing data for viewData");
       setCurrentDataNftIndex(index);
 
       // start the request for the first song
-      const firstSongResPromise = itheumSolViewData(
+      const firstSongResPromise = viewDataViaMarshalSol(
         dataNft.id,
         usedPreAccessNonce,
         usedPreAccessSignature,
-        publicKey,
+        publicKeySol,
         viewDataArgs.fwdHeaderKeys,
         viewDataArgs.headers,
         true,
@@ -309,11 +341,11 @@ export const NFTunes = () => {
       );
 
       // start the request for the manifest file from marshal
-      const res = await itheumSolViewData(
+      const res = await viewDataViaMarshalSol(
         dataNft.id,
         usedPreAccessNonce,
         usedPreAccessSignature,
-        publicKey,
+        publicKeySol,
         viewDataArgs.fwdHeaderKeys,
         viewDataArgs.headers,
         false,
@@ -354,12 +386,23 @@ export const NFTunes = () => {
   }
 
   function checkOwnershipOfAlbum(album: any) {
-    console.log("checkOwnershipOfAlbum");
     let albumInOwnershipListIndex = -1; // note -1 means we don't own it
 
     if (!mvxNetworkSelected) {
-      if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
-        albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftName];
+      if (IS_DEVNET) {
+        // in devnet we airdrop MUSGDEV1 the matches the "MUSG7 - Galactic Gravity" mainnet one
+        if (
+          album?.solNftName &&
+          ownedSolDataNftNameAndIndexMap &&
+          album.solNftName === "MUSG7 - Galactic Gravity" &&
+          ownedSolDataNftNameAndIndexMap["MUSGDEV1"] !== "undefined"
+        ) {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap["MUSGDEV1"];
+        }
+      } else {
+        if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftName];
+        }
       }
     } else {
       if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap) {
@@ -381,9 +424,34 @@ export const NFTunes = () => {
     return albumInOwnershipListIndex;
   }
 
+  // here we set the power up object that will trigger the modal that allows a user to sent bitz to a target bounty
+  function handleSendPowerUp({
+    creatorIcon,
+    creatorName,
+    giveBitzToWho,
+    giveBitzToCampaignId,
+    isLikeMode,
+  }: {
+    creatorIcon: string;
+    creatorName: string;
+    giveBitzToWho: string;
+    giveBitzToCampaignId: string;
+    isLikeMode?: boolean;
+  }) {
+    setGivePowerConfig({
+      creatorIcon,
+      creatorName,
+      giveBitzToWho,
+      giveBitzToCampaignId,
+      isLikeMode,
+    });
+  }
+
   // in Radio, checkOwnershipOfAlbum get called when user clicks on play, as the radio comp is rerendering each time the progress bar moves (memo not working)
   // ... so we throttle each call by 2000 to improve some performance
   const debouncedCheckOwnershipOfAlbum = useThrottledCallback(checkOwnershipOfAlbum, 2000, { "trailing": false });
+
+  console.log("shownSolAppDataNfts", shownSolAppDataNfts);
 
   return (
     <>
@@ -398,9 +466,9 @@ export const NFTunes = () => {
         <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
         <div className="flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem] pb-6">
           <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-2 xl:pt-4 mb-16 xl:mb-32 pl-4">
-            <div className="flex flex-col w-full xl:w-[60%]">
+            {/* <div className="flex flex-col w-full xl:w-[60%]">
               <MvxSolSwitch />
-            </div>
+            </div> */}
 
             {/* New Artists Join CTA */}
             <div className="flex flex-col md:flex-row items-center justify-between p-[15px] rounded-lg w-full bg-[#333] dark:bg-primary text-primary-foreground">
@@ -509,6 +577,8 @@ export const NFTunes = () => {
                 setStopRadio(true);
                 setStopPreviewPlaying(true);
               }}
+              onSendPowerUp={handleSendPowerUp}
+              refreshBitzCountsForBounty={refreshBitzCountsForBounty}
             />
           </div>
 
@@ -520,7 +590,7 @@ export const NFTunes = () => {
                   <HeaderComponent
                     pageTitle={""}
                     hasImage={false}
-                    pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs`}
+                    pageSubtitle={`You have collected ${shownMvxAppDataNfts.length} Music Data NFTs YYYY`}
                     alwaysCenterTitleAndSubTitle={true}>
                     <div className="flex flex-col md:flex-row flex-wrap justify-center">
                       {shownMvxAppDataNfts.length > 0 ? (
@@ -583,7 +653,7 @@ export const NFTunes = () => {
                   <HeaderComponent
                     pageTitle={""}
                     hasImage={false}
-                    pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs`}
+                    pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs XXXX`}
                     alwaysCenterTitleAndSubTitle={true}>
                     <div className="flex flex-col md:flex-row flex-wrap justify-center">
                       {shownSolAppDataNfts.length > 0 ? (
@@ -900,6 +970,32 @@ export const NFTunes = () => {
             )}
           </Modal>
         </>
+
+        {/* The bitz power up for creators and album liks (Solana Only) */}
+        {givePowerConfig.giveBitzToWho !== "" && givePowerConfig.giveBitzToCampaignId !== "" && (
+          <SendBitzPowerUp
+            mvxNetworkSelected={mvxNetworkSelected}
+            givePowerConfig={givePowerConfig}
+            onCloseModal={(forceRefreshBitzCountsForBounty: any) => {
+              setGivePowerConfig({
+                creatorIcon: undefined,
+                creatorName: undefined,
+                giveBitzToWho: "",
+                giveBitzToCampaignId: "",
+                isLikeMode: undefined,
+              });
+
+              if (forceRefreshBitzCountsForBounty) {
+                setRefreshBitzCountsForBounty({
+                  bitzValToGift: forceRefreshBitzCountsForBounty.bitzValToGift,
+                  giveBitzToCampaignId: forceRefreshBitzCountsForBounty.giveBitzToCampaignId,
+                });
+              } else {
+                setRefreshBitzCountsForBounty(undefined);
+              }
+            }}
+          />
+        )}
       </div>
     </>
   );

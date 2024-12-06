@@ -22,10 +22,10 @@ export const APP_MAPPINGS = [
     img: iconTimeCapsuleXDay,
   },
   {
-    appName: "Get <BiTz> Points",
-    appDescription: "Collect Itheum <BiTz> Points",
+    appName: "Get BiTz Points",
+    appDescription: "Collect Itheum BiTz Points",
     routeKey: "getbitz",
-    desc: "Use this app to get <BiTz> XP by playing a simple meme burning game. <BiTz> XP is a proof-of-activity system for the Itheum Protocol.",
+    desc: "Use this app to get BiTz XP by playing a simple meme burning game. BiTz XP is a proof-of-activity system for the Itheum Protocol.",
     img: iconGetBitz,
   },
   {

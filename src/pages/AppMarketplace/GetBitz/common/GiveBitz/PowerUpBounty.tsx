@@ -23,7 +23,7 @@ const PowerUpBounty = (props: PowerUpBountyProps) => {
   const address = defaultChain === "multiversx" ? mvxAddress : solAddress;
 
   return (
-    <div className="power-up-tile border  min-w-[260px] max-w-[360px] relative rounded-3xl">
+    <div className="power-up-tile border min-w-[260px] max-w-[360px] relative rounded-3xl">
       <div className="group" data-highlighter>
         <div
           className={cn(

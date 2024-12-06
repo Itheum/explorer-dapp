@@ -6,6 +6,7 @@ type State = {
   mvxNfts: DataNft[];
   isLoadingMvx: boolean;
   solNfts: DasApiAsset[];
+  solBitzNfts: DasApiAsset[];
   isLoadingSol: boolean;
 };
 
@@ -13,16 +14,19 @@ type Action = {
   updateMvxNfts: (bitzBalance: State["mvxNfts"]) => void;
   updateIsLoadingMvx: (isLoading: boolean) => void;
   updateSolNfts: (solNfts: State["solNfts"]) => void;
+  updateSolBitzNfts: (solBitzNfts: State["solBitzNfts"]) => void;
   updateIsLoadingSol: (isLoading: boolean) => void;
 };
 
 export const useNftsStore = create<State & Action>((set) => ({
   mvxNfts: [],
-  updateMvxNfts: (value: DataNft[]) => set(() => ({ mvxNfts: value })),
   isLoadingMvx: false,
-  updateIsLoadingMvx: (value: boolean) => set(() => ({ isLoadingMvx: value })),
   solNfts: [],
-  updateSolNfts: (value: DasApiAsset[]) => set(() => ({ solNfts: value })),
+  solBitzNfts: [],
   isLoadingSol: false,
+  updateMvxNfts: (value: DataNft[]) => set(() => ({ mvxNfts: value })),
+  updateIsLoadingMvx: (value: boolean) => set(() => ({ isLoadingMvx: value })),
+  updateSolNfts: (value: DasApiAsset[]) => set(() => ({ solNfts: value })),
+  updateSolBitzNfts: (value: DasApiAsset[]) => set(() => ({ solBitzNfts: value })),
   updateIsLoadingSol: (value: boolean) => set(() => ({ isLoadingSol: value })),
 }));
