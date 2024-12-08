@@ -138,7 +138,10 @@ export const NFTunes = () => {
     if (shownSolAppDataNfts && shownSolAppDataNfts.length > 0) {
       const nameToIndexMap = shownSolAppDataNfts.reduce((t: any, solDataNft: DasApiAsset, idx: number) => {
         if (solDataNft?.content?.metadata?.name) {
-          t[solDataNft.content.metadata.name] = idx;
+          // find rarity if it exists or default it to "Common"
+          const rarity = solDataNft.content.metadata.attributes?.find((attr: any) => attr.trait_type === "Rarity")?.value || "Common";
+
+          t[`${solDataNft.content.metadata.name} : ${rarity}`] = idx;
         }
         return t;
       }, {});
@@ -354,12 +357,21 @@ export const NFTunes = () => {
   }
 
   function checkOwnershipOfAlbum(album: any) {
-    console.log("checkOwnershipOfAlbum");
     let albumInOwnershipListIndex = -1; // note -1 means we don't own it
 
     if (!mvxNetworkSelected) {
-      if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
-        albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftName];
+      if (album?.solNftName && ownedSolDataNftNameAndIndexMap) {
+        /* mark the albumInOwnershipListIndex as of the highest rarity album
+        Legendary
+        Rare
+        Common */
+        if (typeof ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Legendary`] !== "undefined") {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Legendary`];
+        } else if (typeof ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Rare`] !== "undefined") {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Rare`];
+        } else {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Common`];
+        }
       }
     } else {
       if (album?.mvxDataNftId && ownedMvxDataNftNameAndIndexMap) {
