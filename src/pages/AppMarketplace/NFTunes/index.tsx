@@ -168,7 +168,10 @@ export const NFTunes = () => {
     if (shownSolAppDataNfts && shownSolAppDataNfts.length > 0) {
       const nameToIndexMap = shownSolAppDataNfts.reduce((t: any, solDataNft: DasApiAsset, idx: number) => {
         if (solDataNft?.content?.metadata?.name) {
-          t[solDataNft.content.metadata.name] = idx;
+          // find rarity if it exists or default it to "Common"
+          const rarity = solDataNft.content.metadata.attributes?.find((attr: any) => attr.trait_type === "Rarity")?.value || "Common";
+
+          t[`${solDataNft.content.metadata.name} : ${rarity}`] = idx;
         }
         return t;
       }, {});
@@ -399,9 +402,17 @@ export const NFTunes = () => {
         ) {
           albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap["MUSGDEV1"];
         }
-      } else {
-        if (album?.solNftName && ownedSolDataNftNameAndIndexMap && typeof ownedSolDataNftNameAndIndexMap[album.solNftName] !== "undefined") {
-          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[album.solNftName];
+      } else if (album?.solNftName && ownedSolDataNftNameAndIndexMap) {
+        /* mark the albumInOwnershipListIndex as of the highest rarity album
+        Legendary
+        Rare
+        Common */
+        if (typeof ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Legendary`] !== "undefined") {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Legendary`];
+        } else if (typeof ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Rare`] !== "undefined") {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Rare`];
+        } else {
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Common`];
         }
       }
     } else {
@@ -1003,7 +1014,7 @@ export const NFTunes = () => {
 
 export async function getRadioStreamsData() {
   try {
-    const getRadioStreamAPI = `https://api.itheumcloud.com/app_nftunes/json/radioStreamData.json`;
+    const getRadioStreamAPI = `https://api.itheumcloud.com/app_nftunes/assets/json/radioStreamData.json`;
 
     const tracksRes = await axios.get(getRadioStreamAPI);
     const tracksData = tracksRes.data;
@@ -1017,7 +1028,7 @@ export async function getRadioStreamsData() {
 
 export async function getArtistsAlbumsData() {
   try {
-    const getArtistsAlbumsAPI = `https://api.itheumcloud.com/app_nftunes/json/albumsAndArtistsData.json`;
+    const getArtistsAlbumsAPI = `https://api.itheumcloud.com/app_nftunes/assets/json/albumsAndArtistsData.json`;
 
     const dataRes = await axios.get(getArtistsAlbumsAPI);
     const dataset = dataRes.data;
