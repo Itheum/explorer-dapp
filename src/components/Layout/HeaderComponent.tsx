@@ -19,6 +19,7 @@ type HeaderProps = {
   showNFMeIdBanner?: boolean;
   children: React.ReactNode;
 };
+
 export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
   const {
     pageTitle,

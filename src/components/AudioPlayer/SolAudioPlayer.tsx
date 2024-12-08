@@ -10,9 +10,10 @@ import "./AudioPlayer.css";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import { MARSHAL_CACHE_DURATION_SECONDS } from "config";
-import { itheumSolViewData, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
+import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
+import { useNftsStore } from "store/nfts";
 
 type SolAudioPlayerProps = {
   dataNftToOpen?: DasApiAsset;
@@ -24,12 +25,6 @@ type SolAudioPlayerProps = {
 
 export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
   const { dataNftToOpen, songs, firstSongBlobUrl, previewUrl, chainID } = props;
-  const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
-  const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
-  const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
-  const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
-  const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
-  const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
   const theme = localStorage.getItem("explorer-ui-theme");
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState("00:00");
@@ -74,6 +69,16 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
       },
     ],
   };
+  const { solBitzNfts } = useNftsStore();
+
+  // S: Cached Signature Store Items
+  const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
+  const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
+  const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
+  const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
+  const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
+  const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
+  // E: Cached Signature Store Items
 
   useEffect(() => {
     if (firstSongBlobUrl) {
@@ -177,15 +182,15 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
           });
 
           const viewDataArgs = {
-            headers: {},
-            fwdHeaderKeys: [],
+            headers: { "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value },
+            fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
           };
 
           if (!publicKey) {
             throw new Error("Missing data for viewData");
           }
 
-          const res = await itheumSolViewData(
+          const res = await viewDataViaMarshalSol(
             dataNftToOpen.id,
             usedPreAccessNonce,
             usedPreAccessSignature,

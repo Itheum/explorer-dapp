@@ -3,7 +3,7 @@ import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { GET_BITZ_TOKEN } from "appsConfig";
+import { GET_BITZ_TOKEN_MVX } from "appsConfig";
 import { Loader } from "components";
 import { createNftId, getApiWeb2Apps, sleep, timeSince } from "libs/utils";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
@@ -23,7 +23,7 @@ const BonusBitzHistory: React.FC = () => {
 
     const callConfig = {
       headers: {
-        "fwd-tokenid": createNftId(GET_BITZ_TOKEN.tokenIdentifier, GET_BITZ_TOKEN.nonce),
+        "fwd-tokenid": createNftId(GET_BITZ_TOKEN_MVX.tokenIdentifier, GET_BITZ_TOKEN_MVX.nonce),
       },
     };
 
@@ -85,7 +85,7 @@ const BonusBitzHistory: React.FC = () => {
                       <tr className="border border-[#35d9fa]/30 ">
                         <th className="p-2">When</th>
                         <th className="p-2">Reward</th>
-                        <th className="p-2 ">{`<BiTz>`} Points</th>
+                        <th className="p-2 ">{`BiTz`} Points</th>
                       </tr>
                     </thead>
                     <tbody>
