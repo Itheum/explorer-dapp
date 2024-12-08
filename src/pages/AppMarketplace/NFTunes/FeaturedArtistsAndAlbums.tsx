@@ -106,7 +106,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       return;
     }
 
-    console.log("selArtistId ", selArtistId);
     playPausePreview(); // with no params wil always go into the stop logic
 
     const selDataItem = artistAlbumDataset.find((i) => i.artistId === selArtistId);
