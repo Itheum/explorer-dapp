@@ -142,12 +142,13 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
 
     if (!_errInWorkflow) {
       await sleep(5);
-      setFreeMintBitzXpLoading(false);
       showConfetti();
       setFreeMintBitzXpGameComingUp(true);
     } else {
       setErrFreeMintGeneric(_errInWorkflow);
     }
+
+    setFreeMintBitzXpLoading(false);
   };
 
   return (
@@ -179,8 +180,8 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
                 <div className="bgx-blue-900 text-2xl font-bold mb-2">With Itheum, your XP Data is yours to own! 🚀</div>
                 <div className="bxg-blue-800 mt-5">
                   {" "}
-                  {`BiTz`} are Itheum XP stored in a Data NFT in your wallet. Collect them to curate, power-up, and like data—and earn rewards! Your BiTz NFT is
-                  your gateway to the Itheum Protocol and the Web3 AI Data Era {`we're`} enabling.
+                  BiTz are Itheum XP stored as Data NFTs in your wallet. Use them to curate, power up, and interact with data while earning rewards. Your BiTz
+                  NFT unlocks access to the Itheum Protocol and the Web3 AI Data Era.
                 </div>
 
                 {freeNfMeIdClaimed && (

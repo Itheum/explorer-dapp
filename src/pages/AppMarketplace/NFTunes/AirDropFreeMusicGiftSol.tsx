@@ -147,11 +147,12 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
 
     if (!_errInWorkflow) {
       await sleep(5);
-      setFreeMintMusicGiftLoading(false);
       showConfetti();
     } else {
       setErrFreeMintGeneric(_errInWorkflow);
     }
+
+    setFreeMintMusicGiftLoading(true);
   };
 
   return (
