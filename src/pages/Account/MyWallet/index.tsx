@@ -266,88 +266,93 @@ export const MyWallet = () => {
         <HeaderComponent
           pageTitle={"My MultiversX Data NFTs"}
           hasImage={false}
+          modalContentClass="mt-2 flex justify-center md:block"
           pageSubtitle={mvxNfts.length > 0 ? `You have collected ${mvxNfts.length} Data NFTs` : undefined}>
           {shownMvxDataNfts.length > 0 ? (
-            shownMvxDataNfts.map((dataNft, index) => (
-              <MvxDataNftCard
-                key={index}
-                index={index}
-                dataNft={dataNft}
-                isLoading={isLoadingMvx}
-                owned={true}
-                viewData={viewDataMvx}
-                isWallet={true}
-                showBalance={true}
-                modalContent={
-                  <>
-                    {isDomPurified && (
-                      <div className="p-4 bg-[#fff3cd] text-[#ae9447] text-sm" role="alert">
-                        <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential
-                        common security risks; unfortunately, this may mean that even valid and safe content may appear different from the original format.{" "}
-                        <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
-                        original file (at your own risk). <br />
-                        <br />
-                        Alternatively, <strong>as the safest option, only use official apps in the Apps Marketplace</strong> (accessible via the Header Menu in
-                        this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
-                      </div>
-                    )}
+            <>
+              <div className="md:grid md:grid-cols-3 3xl:grid-cols-5">
+                {shownMvxDataNfts.map((dataNft, index) => (
+                  <MvxDataNftCard
+                    key={index}
+                    index={index}
+                    dataNft={dataNft}
+                    isLoading={isLoadingMvx}
+                    owned={true}
+                    viewData={viewDataMvx}
+                    isWallet={true}
+                    showBalance={true}
+                    modalContent={
+                      <>
+                        {isDomPurified && (
+                          <div className="p-4 bg-[#fff3cd] text-[#ae9447] text-sm" role="alert">
+                            <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for
+                            potential common security risks; unfortunately, this may mean that even valid and safe content may appear different from the
+                            original format. <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet"
+                            feature to download the original file (at your own risk). <br />
+                            <br />
+                            Alternatively, <strong>as the safest option, only use official apps in the Apps Marketplace</strong> (accessible via the Header Menu
+                            in this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
+                          </div>
+                        )}
 
-                    {isFetchingDataMarshal ? (
-                      <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
-                        <div>
-                          <Loader noText />
-                          <p className="text-center font-weight-bold">{"Loading..."}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      viewDataRes &&
-                      !viewDataRes.error &&
-                      (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                        <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-                      ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-                        <div className="flex justify-center items-center" style={{ height: "30rem" }}>
-                          <audio controls autoPlay src={viewDataRes.data} />
-                        </div>
-                      ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                        <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-                      ) : viewDataRes.blobDataType === BlobDataType.VIDEO ? (
-                        <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls autoPlay>
-                          <source src={viewDataRes.data} type="video/mp4"></source>
-                        </video>
-                      ) : (
-                        <div className="p-2">
-                          {(isAutoOpenFormat && (
-                            <>
-                              <p className="p-2">
-                                This Data NFT content was automatically opened in a new browser window. If your browser is prompting you to allow popups, please
-                                select <b>Always allow pop-ups</b> and then close this and click on <b>View Data</b> again.
-                              </p>
-                              <img src={imgGuidePopup} style={{ width: "250px", height: "auto", borderRadius: "5px" }} />
-                              <Button
-                                variant="outline"
-                                className="mt-3"
-                                onClick={() => {
-                                  if (viewDataRes.data) {
-                                    window.open(viewDataRes.data as string, "_blank");
-                                  }
-                                }}>
-                                Or, manually open the file by clicking here
-                              </Button>
-                            </>
-                          )) || (
-                            <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                              {viewDataRes.data}
-                            </p>
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </>
-                }
-                modalTitle={"File Viewer"}
-                modalTitleStyle="p-4"
-              />
-            ))
+                        {isFetchingDataMarshal ? (
+                          <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
+                            <div>
+                              <Loader noText />
+                              <p className="text-center font-weight-bold">{"Loading..."}</p>
+                            </div>
+                          </div>
+                        ) : (
+                          viewDataRes &&
+                          !viewDataRes.error &&
+                          (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                            <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                          ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
+                            <div className="flex justify-center items-center" style={{ height: "30rem" }}>
+                              <audio controls autoPlay src={viewDataRes.data} />
+                            </div>
+                          ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                            <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                          ) : viewDataRes.blobDataType === BlobDataType.VIDEO ? (
+                            <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls autoPlay>
+                              <source src={viewDataRes.data} type="video/mp4"></source>
+                            </video>
+                          ) : (
+                            <div className="p-2">
+                              {(isAutoOpenFormat && (
+                                <>
+                                  <p className="p-2">
+                                    This Data NFT content was automatically opened in a new browser window. If your browser is prompting you to allow popups,
+                                    please select <b>Always allow pop-ups</b> and then close this and click on <b>View Data</b> again.
+                                  </p>
+                                  <img src={imgGuidePopup} style={{ width: "250px", height: "auto", borderRadius: "5px" }} />
+                                  <Button
+                                    variant="outline"
+                                    className="mt-3"
+                                    onClick={() => {
+                                      if (viewDataRes.data) {
+                                        window.open(viewDataRes.data as string, "_blank");
+                                      }
+                                    }}>
+                                    Or, manually open the file by clicking here
+                                  </Button>
+                                </>
+                              )) || (
+                                <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                                  {viewDataRes.data}
+                                </p>
+                              )}
+                            </div>
+                          ))
+                        )}
+                      </>
+                    }
+                    modalTitle={"File Viewer"}
+                    modalTitleStyle="p-4"
+                  />
+                ))}
+              </div>
+            </>
           ) : (
             <h4 className="no-items">
               <div>
@@ -365,87 +370,92 @@ export const MyWallet = () => {
         <HeaderComponent
           pageTitle={"My Solana Data NFTs"}
           hasImage={false}
+          modalContentClass="mt-2 flex justify-center md:block"
           pageSubtitle={solNfts.length > 0 ? `You have collected ${solNfts.length} Data NFTs` : undefined}>
           {shownSolDataNfts.length > 0 ? (
-            shownSolDataNfts.map((dataNft, index) => (
-              <SolDataNftCard
-                key={dataNft.id}
-                index={index}
-                dataNft={dataNft}
-                isLoading={isLoadingSol}
-                owned={true}
-                viewData={viewDataSol}
-                isWallet={true}
-                modalContent={
-                  <>
-                    {isDomPurified && (
-                      <div className="p-4 bg-[#fff3cd] text-[#ae9447] text-sm" role="alert">
-                        <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for potential
-                        common security risks; unfortunately, this may mean that even valid and safe content may appear different from the original format.{" "}
-                        <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet" feature to download the
-                        original file (at your own risk). <br />
-                        <br />
-                        Alternatively, <strong>as the safest option, only use official apps in the Apps Marketplace</strong> (accessible via the Header Menu in
-                        this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
-                      </div>
-                    )}
+            <>
+              <div className="md:grid md:grid-cols-3 3xl:grid-cols-5">
+                {shownSolDataNfts.map((dataNft, index) => (
+                  <SolDataNftCard
+                    key={dataNft.id}
+                    index={index}
+                    dataNft={dataNft}
+                    isLoading={isLoadingSol}
+                    owned={true}
+                    viewData={viewDataSol}
+                    isWallet={true}
+                    modalContent={
+                      <>
+                        {isDomPurified && (
+                          <div className="p-4 bg-[#fff3cd] text-[#ae9447] text-sm" role="alert">
+                            <strong>⚠️ Important:</strong> For your protection, this content has been automatically filtered locally in your browser for
+                            potential common security risks; unfortunately, this may mean that even valid and safe content may appear different from the
+                            original format. <strong>If you know and trust this Data Creator,</strong> then it is advisable to the use the Data DEX "Wallet"
+                            feature to download the original file (at your own risk). <br />
+                            <br />
+                            Alternatively, <strong>as the safest option, only use official apps in the Apps Marketplace</strong> (accessible via the Header Menu
+                            in this Explorer app). These apps automatically and safely visualize Data NFTs from verified Data Creators.
+                          </div>
+                        )}
 
-                    {isFetchingDataMarshal ? (
-                      <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
-                        <div>
-                          <Loader noText />
-                          <p className="text-center font-weight-bold">{"Loading..."}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      viewDataRes &&
-                      !viewDataRes.error &&
-                      (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
-                        <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-                      ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
-                        <div className="flex justify-center items-center" style={{ height: "30rem" }}>
-                          <audio controls autoPlay src={viewDataRes.data} />
-                        </div>
-                      ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
-                        <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
-                      ) : viewDataRes.blobDataType === BlobDataType.VIDEO ? (
-                        <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls autoPlay>
-                          <source src={viewDataRes.data} type="video/mp4"></source>
-                        </video>
-                      ) : (
-                        <div className="p-2">
-                          {(isAutoOpenFormat && (
-                            <>
-                              <p className="p-2">
-                                This Data NFT content was automatically opened in a new browser window. If your browser is prompting you to allow popups, please
-                                select <b>Always allow pop-ups</b> and then close this and click on <b>View Data</b> again.
-                              </p>
-                              <img src={imgGuidePopup} style={{ width: "250px", height: "auto", borderRadius: "5px" }} />
-                              <Button
-                                variant="outline"
-                                className="mt-3"
-                                onClick={() => {
-                                  if (viewDataRes.data) {
-                                    window.open(viewDataRes.data as string, "_blank");
-                                  }
-                                }}>
-                                Or, manually open the file by clicking here
-                              </Button>
-                            </>
-                          )) || (
-                            <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                              {viewDataRes.data}
-                            </p>
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </>
-                }
-                modalTitle={"File Viewer"}
-                modalTitleStyle="p-4"
-              />
-            ))
+                        {isFetchingDataMarshal ? (
+                          <div className="flex flex-col items-center justify-center min-w-[24rem] max-w-[100%] min-h-[40rem] max-h-[80svh]">
+                            <div>
+                              <Loader noText />
+                              <p className="text-center font-weight-bold">{"Loading..."}</p>
+                            </div>
+                          </div>
+                        ) : (
+                          viewDataRes &&
+                          !viewDataRes.error &&
+                          (viewDataRes.blobDataType === BlobDataType.IMAGE ? (
+                            <img src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                          ) : viewDataRes.blobDataType === BlobDataType.AUDIO ? (
+                            <div className="flex justify-center items-center" style={{ height: "30rem" }}>
+                              <audio controls autoPlay src={viewDataRes.data} />
+                            </div>
+                          ) : viewDataRes.blobDataType === BlobDataType.SVG ? (
+                            <SVG src={viewDataRes.data} style={{ width: "100%", height: "auto" }} />
+                          ) : viewDataRes.blobDataType === BlobDataType.VIDEO ? (
+                            <video className="w-auto h-auto mx-auto my-4" style={{ maxHeight: "600px" }} controls autoPlay>
+                              <source src={viewDataRes.data} type="video/mp4"></source>
+                            </video>
+                          ) : (
+                            <div className="p-2">
+                              {(isAutoOpenFormat && (
+                                <>
+                                  <p className="p-2">
+                                    This Data NFT content was automatically opened in a new browser window. If your browser is prompting you to allow popups,
+                                    please select <b>Always allow pop-ups</b> and then close this and click on <b>View Data</b> again.
+                                  </p>
+                                  <img src={imgGuidePopup} style={{ width: "250px", height: "auto", borderRadius: "5px" }} />
+                                  <Button
+                                    variant="outline"
+                                    className="mt-3"
+                                    onClick={() => {
+                                      if (viewDataRes.data) {
+                                        window.open(viewDataRes.data as string, "_blank");
+                                      }
+                                    }}>
+                                    Or, manually open the file by clicking here
+                                  </Button>
+                                </>
+                              )) || (
+                                <p className="p-2" style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                                  {viewDataRes.data}
+                                </p>
+                              )}
+                            </div>
+                          ))
+                        )}
+                      </>
+                    }
+                    modalTitle={"File Viewer"}
+                    modalTitleStyle="p-4"
+                  />
+                ))}
+              </div>
+            </>
           ) : (
             <div className="w-[100%]">
               <div className="text-center md:text-left">
@@ -459,8 +469,8 @@ export const MyWallet = () => {
         </HeaderComponent>
       )}
 
-      {/* MVX Data NFTs */}
       <div className="m-auto mb-5">
+        {/* MVX Data NFTs */}
         {addressMvx && numberOfMvxNftsShown < mvxNfts.length && (
           <Button
             className="border-0 text-background rounded-lg font-medium tracking-tight base:!text-sm md:!text-base hover:opacity-80 hover:text-black"

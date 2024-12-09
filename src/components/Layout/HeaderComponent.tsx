@@ -17,6 +17,7 @@ type HeaderProps = {
   alwaysCenterTitleAndSubTitle?: boolean;
   alwaysLeftAlignBodyContentOnMD?: boolean;
   showNFMeIdBanner?: boolean;
+  modalContentClass?: string;
   children: React.ReactNode;
 };
 
@@ -37,6 +38,7 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
     alwaysCenterTitleAndSubTitle,
     alwaysLeftAlignBodyContentOnMD,
     showNFMeIdBanner,
+    modalContentClass,
     children,
   } = props;
   return (
@@ -77,7 +79,11 @@ export const HeaderComponent: React.FC<HeaderProps> = (props: HeaderProps) => {
               <></>
             )}
             <div
-              className={`flex flex-wrap base:flex-row flex-col justify-center ${alwaysLeftAlignBodyContentOnMD ? "md:justify-start" : "md:justify-around"} gap-x-8`}>
+              className={
+                modalContentClass
+                  ? modalContentClass
+                  : `flex flex-wrap base:flex-row flex-col justify-center ${alwaysLeftAlignBodyContentOnMD ? "md:justify-start" : "md:justify-around"} gap-x-8`
+              }>
               {children}
             </div>
           </div>
