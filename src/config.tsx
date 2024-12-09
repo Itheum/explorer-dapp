@@ -11,7 +11,7 @@ export const TOOLS_API_URL = "https://tools.multiversx.com";
 
 export const dAppName = "Itheum Explorer";
 
-export const SHOW_NFTS_STEP = 10;
+export const SHOW_NFTS_STEP = 20;
 
 export const MARKETPLACE_DETAILS_PAGE = IS_DEVNET ? "https://test.datadex.itheum.io/datanfts/marketplace/" : "https://datadex.itheum.io/datanfts/marketplace/";
 

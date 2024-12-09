@@ -34,7 +34,7 @@ export const Home = () => {
 
       <NFMeIDBannerCTA />
 
-      <div className="flex flex-col py-2">
+      <div className="flex flex-col py-2 px-4 md:px-0">
         <div className="mt-2">
           <h1 className="!text-2xl md:!text-3xl text-center">NF-Tunes Releases</h1>
           <h2 className="dark:!text-white !text-sm text-center md:!text-xl mb-5">Data NFT powered Music</h2>
@@ -51,7 +51,7 @@ export const Home = () => {
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">GritBeat's "Subnautical II" EP is Launching!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=gritbeat`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen and Get Airdrop
+                    Listen Now
                   </Button>
                 </Link>
               </div>
@@ -69,7 +69,7 @@ export const Home = () => {
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Bogdan Cobra's "Sundown" EP is Launching!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=bogdan-cobra`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen and Get Airdrop
+                    Listen Now
                   </Button>
                 </Link>
               </div>
@@ -333,7 +333,7 @@ export const Home = () => {
         <div className="mt-5">
           <h2 className="!text-2xl md:!text-3xl text-center">Itheum App Store</h2>
           <h3 className="dark:!text-white !text-sm text-center md:!text-xl mb-5">Decentralized Apps Powered By Data NFTs</h3>
-          <div className="mt-5 md:grid md:grid-cols-3 3xl:grid-cols-4">
+          <div className="mt-5 flex flex-col items-center md:grid md:grid-cols-3 3xl:grid-cols-4">
             {APP_MAPPINGS.filter((app) => SUPPORTED_APPS.includes(app.routeKey)).map((item) => (
               <div key={item.routeKey} className="mb-10 w-[341px]">
                 <div className="mb-4 border-[0.5px] rounded-t-[30px] border-neutral-500/90">
