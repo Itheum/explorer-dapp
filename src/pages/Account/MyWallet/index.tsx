@@ -169,7 +169,7 @@ export const MyWallet = () => {
       });
 
       const viewDataArgs = {
-        headers: { "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value },
+        headers: { "dmf-custom-sol-collection-id": dataNft.grouping[0].group_value },
         fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
       };
 
