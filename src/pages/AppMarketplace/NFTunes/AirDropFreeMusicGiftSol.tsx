@@ -152,7 +152,7 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
       setErrFreeMintGeneric(_errInWorkflow);
     }
 
-    setFreeMintMusicGiftLoading(true);
+    setFreeMintMusicGiftLoading(false);
   };
 
   return (
