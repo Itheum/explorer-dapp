@@ -242,9 +242,9 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
                   )}
 
                   {(!freeMusicGiftClaimed || errFreeMintGeneric) && (
-                    <div className="text-xs mt-2">
+                    <div className="text-xs mt-4">
                       Requirements: Only 1 per address, completely free to you, but you need SOL in your wallet, which will NOT be used but is to make sure your
-                      wallet exists and can receive the NFT.
+                      wallet exists and can receive the NFT. {freeMintMusicGiftLoading && <>(⏳ Please wait, this can take a few minutes.)</>}
                     </div>
                   )}
                 </div>
