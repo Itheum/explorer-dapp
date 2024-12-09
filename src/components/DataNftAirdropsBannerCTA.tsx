@@ -67,7 +67,7 @@ export function DataNftAirdropsBannerCTA() {
   return (
     <>
       {!freeDropCheckLoading && shouldShowBanner && (
-        <div className="mt-5 py-2 md:py-0 mb-3 border p-2 rounded-lg bg-[#fa882157] w-[100%]">
+        <div className="py-2 px-4 md:px-0 m-5 border rounded-lg bg-[#fa882157] w-[100%]">
           <div className="flex flex-col md:flex-col items-center">
             <div className="flex flex-col justify-center p-2">
               <p className="dark:text-white text-2xl mb-1 text-center">Hello Human, You Have Some Free Data NFTs to Claim!</p>
@@ -75,12 +75,12 @@ export function DataNftAirdropsBannerCTA() {
                 Claim the free Data NFTs, join the AI Data Workforce, prove your reputation, co-create creative data with AI and get rewarded
               </p>
             </div>
-            <div className="flex flex-row justify-center p-2">
+            <div className="flex flex-col md:flex-row justify-center p-2">
               <div className="flex md:flex-col justify-center mt-3 ml-auto mr-auto md:mr-2">
                 <Link to={routeNames.getbitz}>
                   <Button
                     disabled={freeBitzClaimed || location.pathname === routeNames.getbitz}
-                    className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 w-[220px]">
                     {`${location.pathname === routeNames.getbitz ? "Claim Below" : "Claim BiTz XP Data NFT"}`}
                   </Button>
                 </Link>
@@ -91,7 +91,7 @@ export function DataNftAirdropsBannerCTA() {
                   onClick={() => {
                     setFreeMintMusicGiftIntroToAction(true);
                   }}
-                  className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                  className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 w-[220px]">
                   Claim Music Data NFT
                 </Button>
               </div>
@@ -102,7 +102,7 @@ export function DataNftAirdropsBannerCTA() {
                   className="text-base hover:!no-underline hover:text-black">
                   <Button
                     disabled={freeNfMeIdClaimed}
-                    className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 w-[220px]">
                     Claim NFMe ID
                   </Button>
                 </Link>
