@@ -400,7 +400,7 @@ export const NFTunes = () => {
           album.solNftName === "MUSG7 - Galactic Gravity" &&
           ownedSolDataNftNameAndIndexMap["MUSGDEV1"] !== "undefined"
         ) {
-          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap["MUSGDEV1"];
+          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap["MUSGDEV1 : Common"];
         }
       } else if (album?.solNftName && ownedSolDataNftNameAndIndexMap) {
         /* mark the albumInOwnershipListIndex as of the highest rarity album
