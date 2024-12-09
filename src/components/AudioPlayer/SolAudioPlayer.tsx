@@ -182,7 +182,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
           });
 
           const viewDataArgs = {
-            headers: { "dmf-custom-sol-collection-id": solBitzNfts[0].grouping[0].group_value },
+            headers: { "dmf-custom-sol-collection-id": dataNftToOpen.grouping[0].group_value },
             fwdHeaderKeys: ["dmf-custom-sol-collection-id"],
           };
 
