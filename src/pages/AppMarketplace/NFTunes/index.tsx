@@ -664,7 +664,7 @@ export const NFTunes = () => {
                   <HeaderComponent
                     pageTitle={""}
                     hasImage={false}
-                    pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs XXXX`}
+                    pageSubtitle={`You have collected ${shownSolAppDataNfts.length} Music Data NFTs`}
                     alwaysCenterTitleAndSubTitle={true}>
                     <div className="flex flex-col md:flex-row flex-wrap justify-center">
                       {shownSolAppDataNfts.length > 0 ? (
