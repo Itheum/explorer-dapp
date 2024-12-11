@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { DataNft } from "@itheum/sdk-mx-data-nft";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useGetLoginInfo } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -6,6 +7,7 @@ import { confetti } from "@tsparticles/confetti";
 import { Container } from "@tsparticles/engine";
 import { ExternalLinkIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { GET_BITZ_TOKEN_MVX } from "appsConfig";
 import { Modal } from "components/Modal/Modal";
 import { Button } from "libComponents/Button";
 import { getOrCacheAccessNonceAndSignature, viewDataWrapperSol } from "libs/sol/SolViewData";
@@ -13,12 +15,9 @@ import { sleep, decodeNativeAuthToken } from "libs/utils";
 import { toastClosableError } from "libs/utils/uiShared";
 import { routeNames } from "routes";
 import { useAccountStore } from "store/account";
-// import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { useNftsStore } from "store/nfts";
 import useSolBitzStore from "store/solBitz";
 import { viewDataJSONCore } from "../GetBitz/GetBitzMvx/index";
-import { GET_BITZ_TOKEN_MVX } from "appsConfig";
-import { DataNft } from "@itheum/sdk-mx-data-nft";
 
 type SendBitzPowerUpProps = {
   mvxNetworkSelected: boolean;
@@ -33,12 +32,10 @@ type SendBitzPowerUpProps = {
 };
 
 export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
-  // const { mvxNetworkSelected, givePowerConfig, onCloseModal } = props;
   const { givePowerConfig, onCloseModal } = props;
   const { creatorIcon, creatorName, giveBitzToWho, giveBitzToCampaignId, isLikeMode } = givePowerConfig;
   const { publicKey: publicKeySol, signMessage } = useWallet();
   const { address: addressMvx } = useGetAccount();
-  // const defaultChain = useLocalStorageStore((state) => state.defaultChain);
   const [giftBitzWorkflow, setGiftBitzWorkflow] = useState<boolean>(false);
   const [bitzValToGift, setBitzValToGift] = useState<number>(0);
   const [minBitzValNeeded, setMinBitzValNeeded] = useState<number>(1);
@@ -48,10 +45,8 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
   const { solBitzNfts } = useNftsStore();
   const { tokenLogin } = useGetLoginInfo();
   const [gameDataNFT, setGameDataNFT] = useState<DataNft>();
+  const [showDetails, setShowDetails] = useState<boolean>(false);
 
-  // Bitz store data
-  // const solBitzBalance = useSolBitzStore((state) => state.bitzBalance);
-  // const mvxBitzBalance = useAccountStore((state) => state.bitzBalance);
   const {
     bitzBalance: solBitzBalance,
     givenBitzSum: givenBitzSumSol,
@@ -261,29 +256,63 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
           setGiftBitzWorkflow(false);
         }}
         closeOnOverlayClick={false}
-        title={!isLikeMode ? "Power-Up This Creator With BiTz" : "Like This Content With 5 BiTz"}
+        title={!isLikeMode ? "Power-Up This Creator With BiTz" : "Like This Album With 5 BiTz"}
         hasFilter={false}
         filterData={[]}
         modalClassName={""}
-        titleClassName={"p-4"}>
+        titleClassName={"p-6 md:!p-4 !text-2xl md:!text-3xl"}>
         {
           <div
-            className="bg-1cyan-900"
+            className="bg1-cyan-900"
             style={{
               minHeight: "10rem",
             }}>
-            <div className="bg-1cyan-200 flex flex-col gap-2 p-10">
-              <div className="bg-1green-200 flex items-center">
-                <div className="bg-1blue-200">
+            <div className="bg1-cyan-200 flex flex-col gap-2 p-8">
+              <div className="text-md mb-2">
+                {" "}
+                {isLikeMode ? (
+                  <>
+                    <span className="font-bold cursor-pointer" onClick={() => setShowDetails((prev) => !prev)}>
+                      ℹ️ Why should you like albums?
+                    </span>{" "}
+                    {showDetails && (
+                      <div>
+                        Most liked albums get promoted and featured more on NF-Tunes and other social channels (this supports the Musician) and in return, you
+                        can earn monthly badges that can earn you rewards. Learn more about the rewards program{" "}
+                        <a href="https://docs.itheum.io/product-docs/nftunes/give-bitz-to-like" target="_blank" className="text-blue-500">
+                          here
+                        </a>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <span className="font-bold cursor-pointer" onClick={() => setShowDetails((prev) => !prev)}>
+                      ℹ️ Why should you power-up musicians?
+                    </span>{" "}
+                    {showDetails && (
+                      <div>
+                        Musicians with the most Bitz powering them will be featured more on NF-Tunes and other social channels and they will get monthly badges
+                        that can earn them rewards (this supports the Musician) and in return, you can also earn monthly badges that can earn you rewards. Learn
+                        more about the rewards program{" "}
+                        <a href="https://docs.itheum.io/product-docs/nftunes/give-bitz-to-powerup" target="_blank" className="text-blue-500">
+                          here
+                        </a>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+              <div className="bg1-green-200 flex flex-col md:flex-row md:items-center">
+                <div className="bg1-blue-200">
                   <div
-                    className="border-[0.5px] border-neutral-500/90 h-[150px] md:h-[150px] md:w-[150px] bg-no-repeat bg-cover rounded-xl"
+                    className="border-[0.5px] border-neutral-500/90 w-[150px] h-[150px] md:h-[150px] md:w-[150px] bg-no-repeat bg-cover rounded-xl"
                     style={{
                       "backgroundImage": `url(${creatorIcon})`,
                     }}></div>
                 </div>
-                <div className="bg-1blue-300 ml-5 text-xl font-bold">{creatorName}</div>
+                <div className="bg1-blue-300 md:ml-5 mt-5 md:mt-0 text-xl font-bold">{creatorName}</div>
               </div>
-
               {!powerUpSuccessfullyDone && bitBalanceOnChain < minBitzValNeeded && (
                 <>
                   {bitBalanceOnChain === -2 && (
@@ -301,7 +330,6 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                   </Link>
                 </>
               )}
-
               {(bitBalanceOnChain >= minBitzValNeeded || powerUpSuccessfullyDone) && (
                 <>
                   <div className="bg-1green-300 mt-2 text-lg">
@@ -363,7 +391,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                                 value={bitzValToGift}
                                 disabled={poweringUpInProgress}
                                 onChange={(e) => setBitzValToGift(Math.min(Number(e.target.value), bitBalanceOnChain))}
-                                className="bg-[#35d9fa]/30 text- dark:text-[#35d9fa] focus:none focus:outline-none focus:border-transparent text-center border-[#35d9fa] rounded-md text-[2rem] p-2"
+                                className="bg-[#fde047]/30 focus:none focus:outline-none focus:border-transparent text-center border-[#35d9fa] rounded-md text-[2rem] p-2"
                               />
                             </div>
                           </div>
@@ -374,7 +402,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                         <div className="bg-1blue-300">
                           <Button
                             disabled={bitBalanceOnChain < minBitzValNeeded || bitzValToGift < 1 || poweringUpInProgress}
-                            className="!text-white text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer w-[300px] h-[50px]"
+                            className="!text-white text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer w-[200px] md:w-[300px] md:h-[50px]"
                             onClick={() => {
                               if (publicKeySol) {
                                 sendPowerUpSol();
@@ -391,8 +419,8 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                             </span>
                           </Button>
                         </div>
-                        <div className="bg-1blue-300 mt-5">
-                          <div className="flex">
+                        <div className="bg1-blue-300 mt-5">
+                          <div className="flex flex-col md:flex-row">
                             By gifting, you agree to our a
                             <br />
                             <a
