@@ -4,24 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
-import {
-  Music2,
-  Pause,
-  Play,
-  Loader2,
-  Gift,
-  ShoppingCart,
-  WalletMinimal,
-  Twitter,
-  Youtube,
-  Link2,
-  Globe,
-  Droplet,
-  FlaskRound,
-  HandHeart,
-  Heart,
-  Zap,
-} from "lucide-react";
+import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, Heart, Zap } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
@@ -379,6 +362,7 @@ type FeaturedArtistsAndAlbumsProps = {
   openActionFireLogic?: any;
   onSendPowerUp: (e: any) => any;
   refreshBitzCountsForBounty: { bitzValToGift: number; giveBitzToCampaignId: string } | undefined;
+  onChangedBountyToBitzLocalMapping: (e: any) => any;
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
@@ -393,6 +377,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     checkOwnershipOfAlbum,
     onSendPowerUp,
     refreshBitzCountsForBounty,
+    onChangedBountyToBitzLocalMapping,
   } = props;
   const { publicKey: publicKeySol } = useWallet();
   const { address: addressMvx } = useGetAccount();
@@ -551,85 +536,100 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     }
   }, [refreshBitzCountsForBounty]);
 
+  useEffect(() => {
+    if (bountyToBitzLocalMapping) {
+      onChangedBountyToBitzLocalMapping(bountyToBitzLocalMapping);
+    }
+  }, [bountyToBitzLocalMapping]);
+
   const debounced_fetchBitzPowerUpsAndLikesForSelectedArtist = useDebouncedCallback((selDataItem: any) => {
-    fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem);
+    fetchBitzPowerUpsAndLikesForSelectedArtist(
+      selDataItem,
+      bountyToBitzLocalMapping,
+      addressMvx,
+      chainID,
+      userHasNoBitzDataNftYet,
+      solBitzNfts,
+      setBountyToBitzLocalMapping,
+      false
+    );
   }, 2500);
 
-  // as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
-  async function fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem: any) {
-    if (!selDataItem) {
-      return;
-    }
+  // // as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
+  // async function fetchBitzPowerUpsAndLikesForSelectedArtist(selDataItem: any) {
+  //   if (!selDataItem) {
+  //     return;
+  //   }
 
-    const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
+  //   const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
 
-    // cache for 15 seconds
-    if (!bountyToBitzLocalMapping[selDataItem.bountyId] || Date.now() - bountyToBitzLocalMapping[selDataItem.bountyId].syncedOn > 15 * 1000) {
-      console.log("fetchBitzPowerUpsAndLikesForSelectedArtist NO cached");
+  //   // cache for 15 seconds
+  //   if (!bountyToBitzLocalMapping[selDataItem.bountyId] || Date.now() - bountyToBitzLocalMapping[selDataItem.bountyId].syncedOn > 15 * 1000) {
+  //     console.log("fetchBitzPowerUpsAndLikesForSelectedArtist NO cached");
 
-      let response;
-      let collectionIdToUseOnSol = "";
+  //     let response;
+  //     let collectionIdToUseOnSol = "";
 
-      // we default the values to solana (i.e. if the user is NOT logged in, they see solana donations)
-      if (addressMvx) {
-        response = await fetchBitSumAndGiverCountsMvx({ chainID, getterAddr: selDataItem?.creatorWallet || "", campaignId: selDataItem?.bountyId || "" });
-      } else {
-        collectionIdToUseOnSol = userHasNoBitzDataNftYet ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+  //     // we default the values to solana (i.e. if the user is NOT logged in, they see solana donations)
+  //     if (addressMvx) {
+  //       response = await fetchBitSumAndGiverCountsMvx({ chainID, getterAddr: selDataItem?.creatorWallet || "", campaignId: selDataItem?.bountyId || "" });
+  //     } else {
+  //       collectionIdToUseOnSol = userHasNoBitzDataNftYet ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
 
-        response = await fetchBitSumAndGiverCountsSol({
-          getterAddr: selDataItem?.creatorWallet || "",
-          campaignId: selDataItem?.bountyId || "",
-          collectionId: collectionIdToUseOnSol,
-        });
-      }
+  //       response = await fetchBitSumAndGiverCountsSol({
+  //         getterAddr: selDataItem?.creatorWallet || "",
+  //         campaignId: selDataItem?.bountyId || "",
+  //         collectionId: collectionIdToUseOnSol,
+  //       });
+  //     }
 
-      _bountyToBitzLocalMapping[selDataItem?.bountyId] = {
-        syncedOn: Date.now(),
-        bitsSum: response.bitsSum,
-      };
+  //     _bountyToBitzLocalMapping[selDataItem?.bountyId] = {
+  //       syncedOn: Date.now(),
+  //       bitsSum: response.bitsSum,
+  //     };
 
-      // lets make a list of album bounties as well and queue it to be fetched
-      const albumBountyIds = selDataItem.albums.map((i: any) => i.bountyId);
+  //     // lets make a list of album bounties as well and queue it to be fetched
+  //     const albumBountyIds = selDataItem.albums.map((i: any) => i.bountyId);
 
-      if (albumBountyIds.length > 0) {
-        let albumBitzPowerUpPromises: any[] = [];
+  //     if (albumBountyIds.length > 0) {
+  //       let albumBitzPowerUpPromises: any[] = [];
 
-        if (addressMvx) {
-          albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
-            return fetchBitSumAndGiverCountsMvx({
-              chainID,
-              getterAddr: selDataItem?.creatorWallet || "",
-              campaignId: albumBounty || "",
-            });
-          });
-        } else {
-          albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
-            return fetchBitSumAndGiverCountsSol({
-              getterAddr: selDataItem?.creatorWallet || "",
-              campaignId: albumBounty || "",
-              collectionId: collectionIdToUseOnSol,
-            });
-          });
-        }
+  //       if (addressMvx) {
+  //         albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+  //           return fetchBitSumAndGiverCountsMvx({
+  //             chainID,
+  //             getterAddr: selDataItem?.creatorWallet || "",
+  //             campaignId: albumBounty || "",
+  //           });
+  //         });
+  //       } else {
+  //         albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+  //           return fetchBitSumAndGiverCountsSol({
+  //             getterAddr: selDataItem?.creatorWallet || "",
+  //             campaignId: albumBounty || "",
+  //             collectionId: collectionIdToUseOnSol,
+  //           });
+  //         });
+  //       }
 
-        Promise.all(albumBitzPowerUpPromises).then((values) => {
-          albumBountyIds.forEach((albumBountyId: any, idx: number) => {
-            _bountyToBitzLocalMapping[albumBountyId] = {
-              syncedOn: Date.now(),
-              bitsSum: values[idx].bitsSum,
-            };
-          });
+  //       Promise.all(albumBitzPowerUpPromises).then((values) => {
+  //         albumBountyIds.forEach((albumBountyId: any, idx: number) => {
+  //           _bountyToBitzLocalMapping[albumBountyId] = {
+  //             syncedOn: Date.now(),
+  //             bitsSum: values[idx].bitsSum,
+  //           };
+  //         });
 
-          setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
-          // console.log({ receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts });
-        });
-      } else {
-        setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
-      }
-    } else {
-      console.log("fetchBitzPowerUpsAndLikesForSelectedArtist YES cached");
-    }
-  }
+  //         setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+  //         // console.log({ receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts });
+  //       });
+  //     } else {
+  //       setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+  //     }
+  //   } else {
+  //     console.log("fetchBitzPowerUpsAndLikesForSelectedArtist YES cached");
+  //   }
+  // }
 
   async function playPausePreview(previewStreamUrl?: string, albumId?: string) {
     if (previewStreamUrl && albumId && (!isPreviewPlaying || previewPlayingForAlbumId !== albumId)) {
@@ -896,7 +896,18 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
 
                               <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col items-center">
                                 <div
-                                  className={`${userLoggedInWithWallet && typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum !== "undefined" ? " hover:bg-orange-100 cursor-pointer dark:hover:text-orange-500" : ""} text-center mb-1 text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 rounded w-[100px] flex items-center justify-center`}>
+                                  className={`${userLoggedInWithWallet && typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum !== "undefined" ? " hover:bg-orange-100 cursor-pointer dark:hover:text-orange-500" : ""} text-center mb-1 text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 rounded w-[100px] flex items-center justify-center`}
+                                  onClick={() => {
+                                    if (userLoggedInWithWallet && typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum !== "undefined") {
+                                      onSendPowerUp({
+                                        creatorIcon: album.img,
+                                        creatorName: `${artistProfile.name}'s ${album.title}`,
+                                        giveBitzToWho: artistProfile.creatorWallet,
+                                        giveBitzToCampaignId: album.bountyId,
+                                        isLikeMode: true,
+                                      });
+                                    }
+                                  }}>
                                   {typeof bountyToBitzLocalMapping[album.bountyId]?.bitsSum === "undefined" ? (
                                     <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
                                   ) : (
@@ -997,7 +1008,11 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                                         }
 
                                         if (openActionFireLogic) {
-                                          openActionFireLogic();
+                                          openActionFireLogic({
+                                            giveBitzToCampaignId: album.bountyId,
+                                            bountyBitzSum: bountyToBitzLocalMapping[album.bountyId]?.bitsSum,
+                                            creatorWallet: artistProfile.creatorWallet,
+                                          });
                                         }
 
                                         gtagGo("NtuArAl", "PlayAlbum", "Album", album.albumId);
@@ -1062,3 +1077,93 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     </div>
   );
 };
+
+// as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
+export async function fetchBitzPowerUpsAndLikesForSelectedArtist(
+  selDataItem: any,
+  bountyToBitzLocalMapping: any,
+  addressMvx: any,
+  chainID: any,
+  userHasNoBitzDataNftYet: any,
+  solBitzNfts: any,
+  setBountyToBitzLocalMapping: any,
+  isSingleAlbumBounty: boolean
+) {
+  if (!selDataItem) {
+    return;
+  }
+
+  const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyToBitzLocalMapping };
+
+  // cache for 15 seconds
+  if (!bountyToBitzLocalMapping[selDataItem.bountyId] || Date.now() - bountyToBitzLocalMapping[selDataItem.bountyId].syncedOn > 15 * 1000) {
+    console.log("fetchBitzPowerUpsAndLikesForSelectedArtist NO cached");
+
+    let response;
+    let collectionIdToUseOnSol = "";
+
+    // we default the values to solana (i.e. if the user is NOT logged in, they see solana donations)
+    if (addressMvx) {
+      response = await fetchBitSumAndGiverCountsMvx({ chainID, getterAddr: selDataItem?.creatorWallet || "", campaignId: selDataItem?.bountyId || "" });
+    } else {
+      collectionIdToUseOnSol = userHasNoBitzDataNftYet ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
+      response = await fetchBitSumAndGiverCountsSol({
+        getterAddr: selDataItem?.creatorWallet || "",
+        campaignId: selDataItem?.bountyId || "",
+        collectionId: collectionIdToUseOnSol,
+      });
+    }
+
+    _bountyToBitzLocalMapping[selDataItem?.bountyId] = {
+      syncedOn: Date.now(),
+      bitsSum: response.bitsSum,
+    };
+
+    if (isSingleAlbumBounty) {
+      setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+      return;
+    }
+
+    // lets make a list of album bounties as well and queue it to be fetched
+    const albumBountyIds = selDataItem.albums.map((i: any) => i.bountyId);
+
+    if (albumBountyIds.length > 0) {
+      let albumBitzPowerUpPromises: any[] = [];
+
+      if (addressMvx) {
+        albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+          return fetchBitSumAndGiverCountsMvx({
+            chainID,
+            getterAddr: selDataItem?.creatorWallet || "",
+            campaignId: albumBounty || "",
+          });
+        });
+      } else {
+        albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+          return fetchBitSumAndGiverCountsSol({
+            getterAddr: selDataItem?.creatorWallet || "",
+            campaignId: albumBounty || "",
+            collectionId: collectionIdToUseOnSol,
+          });
+        });
+      }
+
+      Promise.all(albumBitzPowerUpPromises).then((values) => {
+        albumBountyIds.forEach((albumBountyId: any, idx: number) => {
+          _bountyToBitzLocalMapping[albumBountyId] = {
+            syncedOn: Date.now(),
+            bitsSum: values[idx].bitsSum,
+          };
+        });
+
+        setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+        // console.log({ receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts });
+      });
+    } else {
+      setBountyToBitzLocalMapping(_bountyToBitzLocalMapping);
+    }
+  } else {
+    console.log("fetchBitzPowerUpsAndLikesForSelectedArtist YES cached");
+  }
+}

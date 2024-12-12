@@ -62,7 +62,7 @@ export const NFTunes = () => {
   const [currentDataNftIndex, setCurrentDataNftIndex] = useState(-1);
   const [dataMarshalResponse, setDataMarshalResponse] = useState({ "data_stream": {}, "data": [] });
   const [firstSongBlobUrl, setFirstSongBlobUrl] = useState<string>();
-  const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx } = useNftsStore();
+  const { mvxNfts, isLoadingMvx, solNfts, isLoadingSol, updateIsLoadingMvx, solBitzNfts } = useNftsStore();
   const nfTunesTokens = [...NF_TUNES_TOKENS].filter((v) => mvxNfts.find((nft) => nft.collection === v.tokenIdentifier && nft.nonce === v.nonce));
   const [stopRadio, setStopRadio] = useState<boolean>(false);
   const [noRadioAutoPlay, setNoRadioAutoPlay] = useState<boolean>(true);
@@ -74,8 +74,16 @@ export const NFTunes = () => {
   const [mvxNetworkSelected, setMvxNetworkSelected] = useState<boolean>(false);
   const [shownSolAppDataNfts, setShownSolAppDataNfts] = useState<DasApiAsset[]>(solNfts.slice(0, SHOW_NFTS_STEP));
   const { publicKey: publicKeySol, signMessage } = useWallet();
-  const { solBitzNfts } = useNftsStore();
   const { address: addressMvx } = useGetAccount();
+  const [bitzGiftingMeta, setBitzGiftingMeta] = useState<{
+    giveBitzToCampaignId: string;
+    bountyBitzSum: number;
+    creatorWallet: string;
+  } | null>(null);
+
+  // this is a copy of the bitz balances bounties are getting (inside FeaturedArtistsAndAlbums.tsx) during the users ui session
+  // ... but it only get progressively loaded as the user moves between tabs to see the atrist and their albums (so its not a complete state)
+  const [bountyToBitzLocalMappingCopy, setBountyToBitzLocalMappingCopy] = useState<any>({});
 
   // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
@@ -462,8 +470,6 @@ export const NFTunes = () => {
   // ... so we throttle each call by 2000 to improve some performance
   const debouncedCheckOwnershipOfAlbum = useThrottledCallback(checkOwnershipOfAlbum, 2000, { "trailing": false });
 
-  console.log("shownSolAppDataNfts", shownSolAppDataNfts);
-
   return (
     <>
       <HelmetPageMeta
@@ -521,11 +527,19 @@ export const NFTunes = () => {
                     mvxNetworkSelected={mvxNetworkSelected}
                     viewSolData={viewSolData}
                     viewMvxData={viewMvxData}
-                    openActionFireLogic={() => {
+                    openActionFireLogic={(_bitzGiftingMeta?: any) => {
                       setLaunchBaseLevelMusicPlayer(true);
                       setStopRadio(true);
                       setStopPreviewPlaying(true);
+
+                      if (_bitzGiftingMeta) {
+                        setBitzGiftingMeta(_bitzGiftingMeta);
+                      }
                     }}
+                    solBitzNfts={solBitzNfts}
+                    addressMvx={addressMvx}
+                    chainID={chainID}
+                    onChangedBountyToBitzLocalMapping={setBountyToBitzLocalMappingCopy}
                   />
                 )}
               </div>
@@ -583,13 +597,18 @@ export const NFTunes = () => {
                 }
               }}
               checkOwnershipOfAlbum={checkOwnershipOfAlbum}
-              openActionFireLogic={() => {
+              openActionFireLogic={(_bitzGiftingMeta?: any) => {
                 setLaunchBaseLevelMusicPlayer(true);
                 setStopRadio(true);
                 setStopPreviewPlaying(true);
+
+                if (_bitzGiftingMeta) {
+                  setBitzGiftingMeta(_bitzGiftingMeta);
+                }
               }}
               onSendPowerUp={handleSendPowerUp}
               refreshBitzCountsForBounty={refreshBitzCountsForBounty}
+              onChangedBountyToBitzLocalMapping={setBountyToBitzLocalMappingCopy}
             />
           </div>
 
@@ -644,9 +663,13 @@ export const NFTunes = () => {
                               modalTitle="Music Player"
                               modalTitleStyle="p-4"
                               openActionBtnText="Play Album"
-                              openActionFireLogic={() => {
+                              openActionFireLogic={(_bitzGiftingMeta?: any) => {
                                 setStopRadio(true);
                                 setStopPreviewPlaying(true);
+
+                                if (_bitzGiftingMeta) {
+                                  setBitzGiftingMeta(_bitzGiftingMeta);
+                                }
                               }}
                               cardStyles="mx-3"
                               hideIsInWalletSection={true}
@@ -698,6 +721,7 @@ export const NFTunes = () => {
                                         songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                         firstSongBlobUrl={firstSongBlobUrl}
                                         chainID={chainID}
+                                        onSendPowerUp={handleSendPowerUp}
                                       />
                                     )}
                                   </>
@@ -706,9 +730,13 @@ export const NFTunes = () => {
                               modalTitle="Music Player"
                               modalTitleStyle="p-4"
                               openActionBtnText="Play Album"
-                              openActionFireLogic={() => {
+                              openActionFireLogic={(_bitzGiftingMeta?: any) => {
                                 setStopRadio(true);
                                 setStopPreviewPlaying(true);
+
+                                if (_bitzGiftingMeta) {
+                                  setBitzGiftingMeta(_bitzGiftingMeta);
+                                }
                               }}
                               cardStyles="mx-3"
                               hideIsInWalletSection={true}
@@ -941,6 +969,9 @@ export const NFTunes = () => {
             triggerOpen={launchBaseLevelMusicPlayer}
             triggerOnClose={() => {
               setLaunchBaseLevelMusicPlayer(false);
+
+              // clear this -- its used to carry a like content via bits session to the player so we can collect likes inside it
+              setBitzGiftingMeta(null);
             }}
             closeOnOverlayClick={false}
             title={"Music Player"}
@@ -967,6 +998,9 @@ export const NFTunes = () => {
                     songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                     firstSongBlobUrl={firstSongBlobUrl}
                     chainID={chainID}
+                    onSendPowerUp={handleSendPowerUp}
+                    bitzGiftingMeta={bitzGiftingMeta}
+                    bountyToBitzLocalMapping={bountyToBitzLocalMappingCopy}
                   />
                 ) : (
                   <MvxAudioPlayer
