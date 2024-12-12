@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { DasApiAsset } from "@metaplex-foundation/digital-asset-standard-api";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { ArrowBigLeft, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, XCircle } from "lucide-react";
+import { ArrowBigLeft, Heart, Library, Loader2, Pause, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -13,7 +13,6 @@ import { MARSHAL_CACHE_DURATION_SECONDS } from "config";
 import { viewDataViaMarshalSol, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAccountStore } from "store/account";
-import { useNftsStore } from "store/nfts";
 
 type SolAudioPlayerProps = {
   dataNftToOpen?: DasApiAsset;
@@ -21,10 +20,17 @@ type SolAudioPlayerProps = {
   firstSongBlobUrl?: string;
   previewUrl?: string;
   chainID?: string;
+  onSendPowerUp: (e: any) => any;
+  bitzGiftingMeta?: {
+    giveBitzToCampaignId: string;
+    bountyBitzSum: number;
+    creatorWallet: string;
+  } | null;
+  bountyToBitzLocalMapping?: any;
 };
 
 export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
-  const { dataNftToOpen, songs, firstSongBlobUrl, previewUrl, chainID } = props;
+  const { dataNftToOpen, songs, firstSongBlobUrl, previewUrl, chainID, onSendPowerUp, bitzGiftingMeta, bountyToBitzLocalMapping } = props;
   const theme = localStorage.getItem("explorer-ui-theme");
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState("00:00");
@@ -69,7 +75,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
       },
     ],
   };
-  const { solBitzNfts } = useNftsStore();
+  const [imgLoading, setImgLoading] = useState(false);
 
   // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
@@ -259,6 +265,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
   };
 
   const handlePrevButton = () => {
+    setImgLoading(true);
     if (currentTrackIndex <= 0) {
       setCurrentTrackIndex(songs.length - 1);
       return;
@@ -267,6 +274,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
   };
 
   const handleNextButton = () => {
+    setImgLoading(true);
     if (currentTrackIndex >= songs.length - 1) {
       setCurrentTrackIndex(0);
       return;
@@ -329,6 +337,18 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
     }
   };
 
+  const likeAlbumWithBiTz = (song: any) => {
+    if (song && bitzGiftingMeta) {
+      onSendPowerUp({
+        creatorIcon: song.cover_art_url,
+        creatorName: `${song.artist}'s ${song.album}`,
+        giveBitzToWho: bitzGiftingMeta.creatorWallet,
+        giveBitzToCampaignId: bitzGiftingMeta.giveBitzToCampaignId,
+        isLikeMode: true,
+      });
+    }
+  };
+
   return (
     <div className="bg-background">
       <div className="">
@@ -372,19 +392,22 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
               </div>
             </div>
           ) : (
-            <div className="overflow-hidden  w-full flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center">
-              <div className=" select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25   border-[1px] border-foreground/40  relative md:w-[60%] flex flex-col rounded-xl">
-                <div className="px-10 pt-10 pb-4 flex flex-col md:flex-row  items-center">
+            <div className="overflow-hidden  w-full flex flex-col bg-bgWhite dark:bg-bgDark items-center justify-center ">
+              <div className="select-none h-[30%] bg-[#FaFaFa]/25 dark:bg-[#0F0F0F]/25 border-[1px] border-foreground/40 relative md:w-[60%] flex flex-col rounded-xl">
+                <div className="px-10 pt-10 pb-4 flex flex-col md:flex-row items-center mt-5 md:mt-0">
                   <img
                     src={songs ? songs[currentTrackIndex]?.cover_art_url : ""}
                     alt="Album Cover"
-                    className=" select-none w-24 h-24 rounded-md md:mr-6 border border-grey-900"
+                    className={`select-none w-[130px] md:w-[250px] h-[auto] rounded-md md:mr-6 border border-grey-900 ${imgLoading ? "blur-sm" : "blur-none"}`}
+                    onLoad={() => {
+                      setImgLoading(false);
+                    }}
                     onError={({ currentTarget }) => {
                       currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                     }}
                   />
                   {previewUrl ? (
-                    <div className="flex flex-col select-text justify-center ">
+                    <div className="flex flex-col select-text justify-center">
                       <span className="font-sans text-lg font-medium leading-7 text-foreground">{songs[currentTrackIndex]?.title}</span>{" "}
                       <span className="font-sans text-base font-medium text-foreground/60">Preview</span>
                       <span className="font-sans text-base font-medium leading-6 text-muted-foreground overflow-ellipsis overflow-y-auto  max-w-[90%] max-h-32 ">
@@ -392,18 +415,17 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
                       </span>
                     </div>
                   ) : (
-                    <div className="flex flex-col select-text">
+                    <div className="flex flex-col select-text mt-2">
                       <div>
                         <span className="font-sans text-lg font-medium leading-7 text-foreground">{songs[currentTrackIndex]?.title}</span>{" "}
                       </div>
 
                       <span className="font-sans text-base font-medium text-foreground/60">{songs[currentTrackIndex]?.category}</span>
                       <span className="font-sans text-lg font-medium leading-6 text-foreground">{songs[currentTrackIndex]?.artist}</span>
-                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground">{songs[currentTrackIndex]?.album}</span>
+                      <span className="font-sans text-base font-medium leading-6 text-muted-foreground">Album: {songs[currentTrackIndex]?.album}</span>
                     </div>
                   )}
                 </div>
-
                 <div className="gap-2 text-foreground select-none w-full flex flex-row justify-center items-center px-10 pb-6">
                   <span className="w-[4rem] p-2 text-xs font-sans font-medium text-muted-foreground">{currentTime}</span>
                   <input
@@ -417,7 +439,6 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
                   />{" "}
                   <span className="w-[4rem] p-2 text-xs font-sans font-medium text-muted-foreground ">{duration}</span>
                 </div>
-
                 <div className="select-none p-2 bg-[#0f0f0f]/10 dark:bg-[#0F0F0F]/50 rounded-b-xl border-t border-gray-400 dark:border-gray-900  flex items-center justify-between z-10 ">
                   <div className="ml-2 xl:pl-8 flex w-[20%]">
                     {volume === 0 ? <VolumeX /> : volume >= 0.5 ? <Volume2 /> : <Volume1 />}
@@ -454,6 +475,26 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
                     <Library className="w-full hover:scale-105" />
                   </button>
                 </div>
+
+                {/* like album */}
+                {bitzGiftingMeta && (
+                  <div
+                    className={`absolute right-2 top-2 text-center mb-1 text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 rounded w-[100px] flex items-center justify-center cursor-pointer`}
+                    onClick={() => {
+                      likeAlbumWithBiTz(songs[currentTrackIndex]);
+                    }}>
+                    <div
+                      className="p-5 md:p-0 flex items-center gap-2"
+                      title={"Like This Album With 5 BiTz"}
+                      onClick={() => {
+                        likeAlbumWithBiTz(songs[currentTrackIndex]);
+                      }}>
+                      {bitzGiftingMeta ? bountyToBitzLocalMapping[bitzGiftingMeta.giveBitzToCampaignId].bitsSum : 0}
+
+                      <Heart className="w-4 h-4" />
+                    </div>
+                  </div>
+                )}
               </div>
               {!previewUrl && (
                 <div className="w-[80%] 2xl:w-[70%] mt-8 mx-auto">
