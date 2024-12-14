@@ -67,6 +67,7 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
       },
     ],
   };
+  const [imgLoading, setImgLoading] = useState(false);
 
   useEffect(() => {
     if (firstSongBlobUrl) {
@@ -156,7 +157,8 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
           ...prevState, // keep all other key-value pairs
           [index]: "Fetching", // update the value of specific key
         }));
-        /// if not previously fetched, fetch now and save the url of the blob
+
+        // if not previously fetched, fetch now and save the url of the blob
         if (dataNftToOpen) {
           if (!dataNftToOpen.dataMarshal || dataNftToOpen.dataMarshal === "") {
             dataNftToOpen.updateDataNft({ dataMarshal: getApiDataMarshal(chainID ?? "D") });
@@ -229,6 +231,8 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
   };
 
   const handlePrevButton = () => {
+    setImgLoading(true);
+
     if (currentTrackIndex <= 0) {
       setCurrentTrackIndex(songs.length - 1);
       return;
@@ -237,6 +241,8 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
   };
 
   const handleNextButton = () => {
+    setImgLoading(true);
+
     if (currentTrackIndex >= songs.length - 1) {
       setCurrentTrackIndex(0);
       return;
@@ -324,7 +330,7 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
                         <img
                           src={song.cover_art_url}
                           alt={"Not Loaded"}
-                          className={`flex items-center justify-center w-24 h-24 rounded-md border border-grey-900 `}
+                          className={`flex items-center justify-center w-24 h-24 rounded-md border border-grey-900`}
                           onError={({ currentTarget }) => {
                             currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                           }}
@@ -348,13 +354,16 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
                   <img
                     src={songs ? songs[currentTrackIndex]?.cover_art_url : ""}
                     alt="Album Cover"
-                    className=" select-none w-24 h-24 rounded-md md:mr-6 border border-grey-900"
+                    className={`select-none w-[130px] md:w-[250px] h-[auto] rounded-md md:mr-6 border border-grey-900 ${imgLoading ? "blur-sm" : "blur-none"}`}
+                    onLoad={() => {
+                      setImgLoading(false);
+                    }}
                     onError={({ currentTarget }) => {
                       currentTarget.src = theme === "light" ? DEFAULT_SONG_LIGHT_IMAGE : DEFAULT_SONG_IMAGE;
                     }}
                   />
                   {previewUrl ? (
-                    <div className="flex flex-col select-text justify-center ">
+                    <div className="flex flex-col select-text justify-center">
                       <span className="font-sans text-lg font-medium leading-7 text-foreground">{songs[currentTrackIndex]?.title}</span>{" "}
                       <span className="font-sans text-base font-medium text-foreground/60">Preview</span>
                       <span className="font-sans text-base font-medium leading-6 text-muted-foreground overflow-ellipsis overflow-y-auto  max-w-[90%] max-h-32 ">
@@ -362,7 +371,7 @@ export const MvxAudioPlayer = (props: MvxAudioPlayerProps) => {
                       </span>
                     </div>
                   ) : (
-                    <div className="flex flex-col select-text">
+                    <div className="flex flex-col select-text mt-2">
                       <div>
                         <span className="font-sans text-lg font-medium leading-7 text-foreground">{songs[currentTrackIndex]?.title}</span>{" "}
                       </div>

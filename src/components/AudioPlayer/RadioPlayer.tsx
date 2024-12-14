@@ -2,7 +2,7 @@ import React, { useEffect, useState, memo } from "react";
 import { faHandPointer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { Loader2, Pause, Music2, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Gift, ShoppingCart } from "lucide-react";
+import { Loader2, Pause, Music2, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Gift, ShoppingCart, Heart } from "lucide-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
@@ -14,6 +14,7 @@ import { getApiWeb2Apps } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { toastClosableError } from "libs/utils/uiShared";
 import { useAppsStore } from "store/apps";
+import { fetchBitzPowerUpsAndLikesForSelectedArtist } from "pages/AppMarketplace/NFTunes/FeaturedArtistsAndAlbums";
 
 type RadioPlayerProps = {
   songs?: any;
@@ -25,6 +26,10 @@ type RadioPlayerProps = {
   viewSolData: (e: number) => void;
   viewMvxData: (e: number) => void;
   openActionFireLogic?: any;
+  solBitzNfts?: any;
+  addressMvx?: any;
+  chainID?: any;
+  onChangedBountyToBitzLocalMapping: (e: any) => any;
 };
 
 let firstInteractionWithPlayDone = false; // a simple flag so we can track usage on 1st time user clicks on play (as the usage for first track wont capture like other tracks)
@@ -32,7 +37,20 @@ let firstMusicQueueDone = false;
 
 // @TODO figure out why memo does not work, when we play, this comp keeps rerendering
 export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps) {
-  const { songs, stopRadioNow, onPlayHappened, checkOwnershipOfAlbum, mvxNetworkSelected, viewSolData, viewMvxData, openActionFireLogic } = props;
+  const {
+    songs,
+    stopRadioNow,
+    onPlayHappened,
+    checkOwnershipOfAlbum,
+    mvxNetworkSelected,
+    viewSolData,
+    viewMvxData,
+    openActionFireLogic,
+    solBitzNfts,
+    addressMvx,
+    chainID,
+    onChangedBountyToBitzLocalMapping,
+  } = props;
 
   const theme = localStorage.getItem("explorer-ui-theme");
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -48,6 +66,8 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   const appsStore = useAppsStore();
   const [radioPlayPromptHide, setRadioPlayPromptHide] = useState(false);
   const [imgLoading, setImgLoading] = useState(false);
+  const [bountyToBitzLocalMapping, setBountyToBitzLocalMapping] = useState<any>({});
+  const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
 
   function eventToAttachEnded() {
     setCurrentTrackIndex((prevCurrentTrackIndex) => (prevCurrentTrackIndex < songs.length - 1 ? prevCurrentTrackIndex + 1 : 0));
@@ -114,7 +134,35 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
     setIsPlaying(false);
     setIsLoaded(false);
     handleChangeSong();
+
+    console.log("song", songs[currentTrackIndex]);
+
+    fetchBitzPowerUpsAndLikesForSelectedArtist(
+      songs[currentTrackIndex],
+      bountyToBitzLocalMapping,
+      addressMvx,
+      chainID,
+      userHasNoBitzDataNftYet,
+      solBitzNfts,
+      setBountyToBitzLocalMapping,
+      true
+    );
   }, [currentTrackIndex, songSource[songs[currentTrackIndex]?.idx]]);
+
+  useEffect(() => {
+    if (bountyToBitzLocalMapping) {
+      console.log("bountyToBitzLocalMapping", bountyToBitzLocalMapping);
+      onChangedBountyToBitzLocalMapping(bountyToBitzLocalMapping);
+    }
+  }, [bountyToBitzLocalMapping]);
+
+  useEffect(() => {
+    if (solBitzNfts.length === 0) {
+      setUserHasNoBitzDataNftYet(true);
+    } else {
+      setUserHasNoBitzDataNftYet(false);
+    }
+  }, [solBitzNfts]);
 
   // format time as minutes:seconds
   const formatTime = (_seconds: number) => {
@@ -351,7 +399,6 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
               alt="Album Cover"
               className={`select-none w-24 h-24 rounded-md md:mr-6 border border-grey-900 ${imgLoading ? "blur-sm" : "blur-none"}`}
               onLoad={() => {
-                console.log("image loaded");
                 setImgLoading(false);
               }}
               onError={({ currentTarget }) => {
@@ -429,6 +476,25 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
                 </div>
               </div>
             )}
+
+            <div
+              className={`ml-5 text-center text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 rounded w-[100px] flex items-center justify-center opacity-50`}
+              title="Login to Like this Album in the Artists & Albums Section Below"
+              onClick={() => {
+                // @TODO: implement this
+                // likeAlbumWithBiTz(songs[currentTrackIndex]);
+              }}>
+              <div
+                className="p-5 md:p-0 flex items-center gap-2"
+                title="Login to Like this Album in the Artists & Albums Section Below"
+                onClick={() => {
+                  // @TODO: implement this
+                  // likeAlbumWithBiTz(songs[currentTrackIndex]);
+                }}>
+                {bountyToBitzLocalMapping[songs[currentTrackIndex].bountyId] ? bountyToBitzLocalMapping[songs[currentTrackIndex].bountyId].bitsSum : 0}
+                <Heart className="w-4 h-4" />
+              </div>
+            </div>
           </div>
 
           <div className="gap-2 text-foreground select-none w-full flex flex-row justify-center items-center px-10 pb-6">

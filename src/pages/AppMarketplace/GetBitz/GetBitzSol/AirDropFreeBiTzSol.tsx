@@ -120,7 +120,7 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
         _errInWorkflow = "Misc mint passed, but the db log failed.";
       }
 
-      if (miscMintRes?.assetId) {
+      if (miscMintRes?.mintDoneMintMetaSkipped) {
         // wait some delay in seconds and check if the API in the backend to mark the free mint as done
         await sleep(15);
 
@@ -168,7 +168,7 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
         hasFilter={false}
         filterData={[]}
         modalClassName=""
-        titleClassName="p-4">
+        titleClassName={"p-6 md:!p-4 !text-2xl md:!text-3xl"}>
         {
           <div
             className="bg-1cyan-900"
@@ -234,7 +234,7 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
                     {!freeMintBitzXpGameComingUp ? (
                       <>
                         <Button
-                          className="!text-white text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer w-[300px] h-[50px]"
+                          className="!text-white md:text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer md:w-[300px] h-[50px]"
                           disabled={freeMintBitzXpLoading}
                           onClick={() => {
                             handleFreeMintBitzXP();
