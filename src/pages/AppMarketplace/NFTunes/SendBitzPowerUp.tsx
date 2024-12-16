@@ -21,7 +21,7 @@ import { viewDataJSONCore } from "../GetBitz/GetBitzMvx/index";
 
 type SendBitzPowerUpProps = {
   mvxNetworkSelected: boolean;
-  givePowerConfig: {
+  giveBitzForMusicBountyConfig: {
     creatorIcon?: string | undefined;
     creatorName?: string | undefined;
     giveBitzToWho: string;
@@ -32,8 +32,8 @@ type SendBitzPowerUpProps = {
 };
 
 export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
-  const { givePowerConfig, onCloseModal } = props;
-  const { creatorIcon, creatorName, giveBitzToWho, giveBitzToCampaignId, isLikeMode } = givePowerConfig;
+  const { giveBitzForMusicBountyConfig, onCloseModal } = props;
+  const { creatorIcon, creatorName, giveBitzToWho, giveBitzToCampaignId, isLikeMode } = giveBitzForMusicBountyConfig;
   const { publicKey: publicKeySol, signMessage } = useWallet();
   const { address: addressMvx } = useGetAccount();
   const [giftBitzWorkflow, setGiftBitzWorkflow] = useState<boolean>(false);

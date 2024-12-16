@@ -47,6 +47,10 @@ import { useAccountStore } from "store/account";
 import { useNftsStore } from "store/nfts";
 import { FeaturedArtistsAndAlbums } from "./FeaturedArtistsAndAlbums";
 import { SendBitzPowerUp } from "./SendBitzPowerUp";
+import { DEFAULT_BITZ_COLLECTION_SOL } from "config";
+import { fetchBitSumAndGiverCountsMvx } from "pages/AppMarketplace/GetBitz/GetBitzMvx/GiveBitzBase";
+import { fetchBitSumAndGiverCountsSol } from "pages/AppMarketplace/GetBitz/GetBitzSol/GiveBitzBase";
+import { GiftBitzToArtistMeta } from "./types/common";
 
 export const NFTunes = () => {
   const { theme } = useTheme();
@@ -81,10 +85,6 @@ export const NFTunes = () => {
     creatorWallet: string;
   } | null>(null);
 
-  // this is a copy of the bitz balances bounties are getting (inside FeaturedArtistsAndAlbums.tsx) during the users ui session
-  // ... but it only get progressively loaded as the user moves between tabs to see the atrist and their albums (so its not a complete state)
-  const [bountyToBitzLocalMappingCopy, setBountyToBitzLocalMappingCopy] = useState<any>({});
-
   // S: Cached Signature Store Items
   const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
   const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
@@ -101,7 +101,7 @@ export const NFTunes = () => {
   const [launchBaseLevelMusicPlayer, setLaunchBaseLevelMusicPlayer] = useState<boolean>(false);
 
   // give bits to a bounty (power up or like)
-  const [givePowerConfig, setGivePowerConfig] = useState<{
+  const [giveBitzForMusicBountyConfig, setGiveBitzForMusicBountyConfig] = useState<{
     creatorIcon: string | undefined;
     creatorName: string | undefined;
     giveBitzToWho: string;
@@ -109,7 +109,9 @@ export const NFTunes = () => {
     isLikeMode?: boolean | undefined;
   }>({ creatorIcon: undefined, creatorName: undefined, giveBitzToWho: "", giveBitzToCampaignId: "", isLikeMode: undefined });
 
-  const [refreshBitzCountsForBounty, setRefreshBitzCountsForBounty] = useState<{ bitzValToGift: number; giveBitzToCampaignId: string } | undefined>(undefined);
+  // this is a copy of the bitz balances bounties are getting (inside FeaturedArtistsAndAlbums.tsx) during the users ui session
+  // ... but it only get progressively loaded as the user moves between tabs to see the atrist and their albums (so its not a complete state)
+  const [bountyBitzSumGlobalMapping, setMusicBountyBitzSumGlobalMapping] = useState<any>({});
 
   useEffect(() => {
     if (publicKeySol) {
@@ -134,10 +136,10 @@ export const NFTunes = () => {
     } else if (isHlWorkflowDeepLink && isHlWorkflowDeepLink === "sigma") {
       scrollToSection("artist-profile", 50);
     } else {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      // window.scrollTo({
+      //   top: 0,
+      //   behavior: "smooth",
+      // });
     }
 
     async function getRadioTracksData() {
@@ -444,7 +446,7 @@ export const NFTunes = () => {
   }
 
   // here we set the power up object that will trigger the modal that allows a user to sent bitz to a target bounty
-  function handleSendPowerUp({
+  function handleSendBitzForMusicBounty({
     creatorIcon,
     creatorName,
     giveBitzToWho,
@@ -457,7 +459,7 @@ export const NFTunes = () => {
     giveBitzToCampaignId: string;
     isLikeMode?: boolean;
   }) {
-    setGivePowerConfig({
+    setGiveBitzForMusicBountyConfig({
       creatorIcon,
       creatorName,
       giveBitzToWho,
@@ -483,10 +485,6 @@ export const NFTunes = () => {
         <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
         <div className="flex flex-col justify-center items-center font-[Clash-Regular] w-full max-w-[100rem] pb-6">
           <div className="flex flex-col justify-center items-center xl:items-start h-[100vsh] w-[100%] pt-2 xl:pt-4 mb-16 xl:mb-32 md:pl-4">
-            {/* <div className="flex flex-col w-full xl:w-[60%]">
-              <MvxSolSwitch />
-            </div> */}
-
             {/* New Artists Join CTA */}
             <div className="flex flex-col md:flex-row items-center justify-between p-[15px] rounded-lg w-full bg-[#333] dark:bg-primary text-primary-foreground">
               <img className="w-[50px] md:w-70px" src={currentTheme === "dark" ? megaphone : megaphoneLight} alt="megaphone" />
@@ -522,7 +520,7 @@ export const NFTunes = () => {
                         setStopPreviewPlaying(true);
                       }
                     }}
-                    songs={radioTracks}
+                    radioTracks={radioTracks}
                     checkOwnershipOfAlbum={debouncedCheckOwnershipOfAlbum}
                     mvxNetworkSelected={mvxNetworkSelected}
                     viewSolData={viewSolData}
@@ -537,9 +535,10 @@ export const NFTunes = () => {
                       }
                     }}
                     solBitzNfts={solBitzNfts}
-                    addressMvx={addressMvx}
                     chainID={chainID}
-                    onChangedBountyToBitzLocalMapping={setBountyToBitzLocalMappingCopy}
+                    onSendBitzForMusicBounty={handleSendBitzForMusicBounty}
+                    bountyBitzSumGlobalMapping={bountyBitzSumGlobalMapping}
+                    setMusicBountyBitzSumGlobalMapping={setMusicBountyBitzSumGlobalMapping}
                   />
                 )}
               </div>
@@ -606,9 +605,9 @@ export const NFTunes = () => {
                   setBitzGiftingMeta(_bitzGiftingMeta);
                 }
               }}
-              onSendPowerUp={handleSendPowerUp}
-              refreshBitzCountsForBounty={refreshBitzCountsForBounty}
-              onChangedBountyToBitzLocalMapping={setBountyToBitzLocalMappingCopy}
+              onSendBitzForMusicBounty={handleSendBitzForMusicBounty}
+              bountyBitzSumGlobalMapping={bountyBitzSumGlobalMapping}
+              setMusicBountyBitzSumGlobalMapping={setMusicBountyBitzSumGlobalMapping}
             />
           </div>
 
@@ -721,7 +720,7 @@ export const NFTunes = () => {
                                         songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                                         firstSongBlobUrl={firstSongBlobUrl}
                                         chainID={chainID}
-                                        onSendPowerUp={handleSendPowerUp}
+                                        onSendBitzForMusicBounty={handleSendBitzForMusicBounty}
                                       />
                                     )}
                                   </>
@@ -998,9 +997,9 @@ export const NFTunes = () => {
                     songs={dataMarshalResponse ? dataMarshalResponse.data : []}
                     firstSongBlobUrl={firstSongBlobUrl}
                     chainID={chainID}
-                    onSendPowerUp={handleSendPowerUp}
+                    onSendBitzForMusicBounty={handleSendBitzForMusicBounty}
                     bitzGiftingMeta={bitzGiftingMeta}
-                    bountyToBitzLocalMapping={bountyToBitzLocalMappingCopy}
+                    bountyBitzSumGlobalMapping={bountyBitzSumGlobalMapping}
                   />
                 ) : (
                   <MvxAudioPlayer
@@ -1017,12 +1016,12 @@ export const NFTunes = () => {
         </>
 
         {/* The bitz power up for creators and album liks (Solana Only) */}
-        {givePowerConfig.giveBitzToWho !== "" && givePowerConfig.giveBitzToCampaignId !== "" && (
+        {giveBitzForMusicBountyConfig.giveBitzToWho !== "" && giveBitzForMusicBountyConfig.giveBitzToCampaignId !== "" && (
           <SendBitzPowerUp
             mvxNetworkSelected={mvxNetworkSelected}
-            givePowerConfig={givePowerConfig}
+            giveBitzForMusicBountyConfig={giveBitzForMusicBountyConfig}
             onCloseModal={(forceRefreshBitzCountsForBounty: any) => {
-              setGivePowerConfig({
+              setGiveBitzForMusicBountyConfig({
                 creatorIcon: undefined,
                 creatorName: undefined,
                 giveBitzToWho: "",
@@ -1031,12 +1030,22 @@ export const NFTunes = () => {
               });
 
               if (forceRefreshBitzCountsForBounty) {
-                setRefreshBitzCountsForBounty({
-                  bitzValToGift: forceRefreshBitzCountsForBounty.bitzValToGift,
-                  giveBitzToCampaignId: forceRefreshBitzCountsForBounty.giveBitzToCampaignId,
-                });
-              } else {
-                setRefreshBitzCountsForBounty(undefined);
+                const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyBitzSumGlobalMapping };
+                const currMappingVal = _bountyToBitzLocalMapping[forceRefreshBitzCountsForBounty.giveBitzToCampaignId];
+
+                if (typeof currMappingVal !== "undefined") {
+                  _bountyToBitzLocalMapping[forceRefreshBitzCountsForBounty.giveBitzToCampaignId] = {
+                    bitsSum: currMappingVal.bitsSum + forceRefreshBitzCountsForBounty.bitzValToGift,
+                    syncedOn: Date.now(),
+                  };
+                } else {
+                  _bountyToBitzLocalMapping[forceRefreshBitzCountsForBounty.giveBitzToCampaignId] = {
+                    bitsSum: forceRefreshBitzCountsForBounty.bitzValToGift,
+                    syncedOn: Date.now(),
+                  };
+                }
+
+                setMusicBountyBitzSumGlobalMapping(_bountyToBitzLocalMapping);
               }
             }}
           />
@@ -1089,3 +1098,116 @@ export async function getNFTuneFirstTrackBlobData() {
     return "";
   }
 }
+
+// S: GIVING BITZ FOR ARTIST POWER-UPS AND ALBUM LIKES
+// as the user swaps tabs, we fetch the likes and power-up counts and cache them locally
+
+// we use a global window state variable here as musicBountyBitzSumGlobalMapping can be updated by multiple child components at the same time (e.g. RadioPlayer and FeaturedArtistsAndAlbums)
+// .. and reach state is not sync updated. But we still use setMusicBountyBitzSumGlobalMapping to update the state so we can feed the "update" effect to all the children that need it
+let _bountyBitzSumGlobalMappingWindow: Record<any, any> = {};
+
+export async function fetchBitzPowerUpsAndLikesForSelectedArtist({
+  giftBitzToArtistMeta,
+  addressMvx,
+  chainID,
+  userHasNoBitzDataNftYet,
+  solBitzNfts,
+  bountyBitzSumGlobalMapping,
+  setMusicBountyBitzSumGlobalMapping,
+  isSingleAlbumBounty,
+}: {
+  giftBitzToArtistMeta: GiftBitzToArtistMeta;
+  addressMvx: any;
+  chainID: any;
+  userHasNoBitzDataNftYet: any;
+  solBitzNfts: any;
+  bountyBitzSumGlobalMapping: any;
+  setMusicBountyBitzSumGlobalMapping: any;
+  isSingleAlbumBounty: boolean;
+}) {
+  const _bountyToBitzLocalMapping: Record<any, any> = { ..._bountyBitzSumGlobalMappingWindow };
+  console.log("&&& _bountyBitzSumGlobalMappingWindow", _bountyBitzSumGlobalMappingWindow);
+
+  // cache for 30 seconds
+  if (
+    !_bountyBitzSumGlobalMappingWindow[giftBitzToArtistMeta.bountyId] ||
+    Date.now() - _bountyBitzSumGlobalMappingWindow[giftBitzToArtistMeta.bountyId].syncedOn > 30 * 1000
+  ) {
+    console.log(`&&& fetchBitzPowerUpsAndLikesForSelectedArtist ${giftBitzToArtistMeta.bountyId} - is radio ${isSingleAlbumBounty} - NO cached`);
+
+    let response;
+    let collectionIdToUseOnSol = "";
+
+    // we default the values to solana (i.e. if the user is NOT logged in, they see solana donations)
+    if (addressMvx) {
+      response = await fetchBitSumAndGiverCountsMvx({
+        chainID,
+        getterAddr: giftBitzToArtistMeta?.creatorWallet || "",
+        campaignId: giftBitzToArtistMeta?.bountyId || "",
+      });
+    } else {
+      collectionIdToUseOnSol = userHasNoBitzDataNftYet ? DEFAULT_BITZ_COLLECTION_SOL : solBitzNfts[0].grouping[0].group_value;
+
+      response = await fetchBitSumAndGiverCountsSol({
+        getterAddr: giftBitzToArtistMeta?.creatorWallet || "",
+        campaignId: giftBitzToArtistMeta?.bountyId || "",
+        collectionId: collectionIdToUseOnSol,
+      });
+    }
+
+    _bountyToBitzLocalMapping[giftBitzToArtistMeta?.bountyId] = {
+      syncedOn: Date.now(),
+      bitsSum: response.bitsSum,
+    };
+
+    if (isSingleAlbumBounty) {
+      _bountyBitzSumGlobalMappingWindow = _bountyToBitzLocalMapping;
+      setMusicBountyBitzSumGlobalMapping(_bountyToBitzLocalMapping);
+      return;
+    }
+
+    // lets make a list of album bounties as well and queue it to be fetched
+    const albumBountyIds = giftBitzToArtistMeta.albums.map((i: any) => i.bountyId);
+
+    if (albumBountyIds.length > 0) {
+      let albumBitzPowerUpPromises: any[] = [];
+
+      if (addressMvx) {
+        albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+          return fetchBitSumAndGiverCountsMvx({
+            chainID,
+            getterAddr: giftBitzToArtistMeta?.creatorWallet || "",
+            campaignId: albumBounty || "",
+          });
+        });
+      } else {
+        albumBitzPowerUpPromises = albumBountyIds.map((albumBounty: any) => {
+          return fetchBitSumAndGiverCountsSol({
+            getterAddr: giftBitzToArtistMeta?.creatorWallet || "",
+            campaignId: albumBounty || "",
+            collectionId: collectionIdToUseOnSol,
+          });
+        });
+      }
+
+      Promise.all(albumBitzPowerUpPromises).then((values) => {
+        albumBountyIds.forEach((albumBountyId: any, idx: number) => {
+          _bountyToBitzLocalMapping[albumBountyId] = {
+            syncedOn: Date.now(),
+            bitsSum: values[idx].bitsSum,
+          };
+        });
+
+        _bountyBitzSumGlobalMappingWindow = _bountyToBitzLocalMapping;
+        setMusicBountyBitzSumGlobalMapping(_bountyToBitzLocalMapping);
+        // console.log({ receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts });
+      });
+    } else {
+      _bountyBitzSumGlobalMappingWindow = _bountyToBitzLocalMapping;
+      setMusicBountyBitzSumGlobalMapping(_bountyToBitzLocalMapping);
+    }
+  } else {
+    console.log(`&&& fetchBitzPowerUpsAndLikesForSelectedArtist ${giftBitzToArtistMeta.bountyId} - is radio ${isSingleAlbumBounty} - YES cached`);
+  }
+}
+// E: GIVING BITZ FOR ARTIST POWER-UPS AND ALBUM LIKES

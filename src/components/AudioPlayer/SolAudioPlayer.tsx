@@ -20,17 +20,17 @@ type SolAudioPlayerProps = {
   firstSongBlobUrl?: string;
   previewUrl?: string;
   chainID?: string;
-  onSendPowerUp: (e: any) => any;
+  onSendBitzForMusicBounty: (e: any) => any;
   bitzGiftingMeta?: {
     giveBitzToCampaignId: string;
     bountyBitzSum: number;
     creatorWallet: string;
   } | null;
-  bountyToBitzLocalMapping?: any;
+  bountyBitzSumGlobalMapping?: any;
 };
 
 export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
-  const { dataNftToOpen, songs, firstSongBlobUrl, previewUrl, chainID, onSendPowerUp, bitzGiftingMeta, bountyToBitzLocalMapping } = props;
+  const { dataNftToOpen, songs, firstSongBlobUrl, previewUrl, chainID, onSendBitzForMusicBounty, bitzGiftingMeta, bountyBitzSumGlobalMapping } = props;
   const theme = localStorage.getItem("explorer-ui-theme");
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState("00:00");
@@ -339,7 +339,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
 
   const likeAlbumWithBiTz = (song: any) => {
     if (song && bitzGiftingMeta) {
-      onSendPowerUp({
+      onSendBitzForMusicBounty({
         creatorIcon: song.cover_art_url,
         creatorName: `${song.artist}'s ${song.album}`,
         giveBitzToWho: bitzGiftingMeta.creatorWallet,
@@ -489,7 +489,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
                       onClick={() => {
                         likeAlbumWithBiTz(songs[currentTrackIndex]);
                       }}>
-                      {bitzGiftingMeta ? bountyToBitzLocalMapping[bitzGiftingMeta.giveBitzToCampaignId].bitsSum : 0}
+                      {bitzGiftingMeta ? bountyBitzSumGlobalMapping[bitzGiftingMeta.giveBitzToCampaignId].bitsSum : 0}
 
                       <Heart className="w-4 h-4" />
                     </div>
