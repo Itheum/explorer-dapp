@@ -18,6 +18,7 @@ export interface TrendingNft {
   tokenIdentifier: string;
   rating: number;
 }
+
 export interface NftMedia {
   url: string;
   originalUrl: string;
