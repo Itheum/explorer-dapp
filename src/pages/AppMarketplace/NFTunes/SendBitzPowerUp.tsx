@@ -279,7 +279,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                       <div>
                         Most liked albums get promoted and featured more on NF-Tunes and other social channels (this supports the Musician) and in return, you
                         can earn monthly badges that can earn you rewards. Learn more about the rewards program{" "}
-                        <a href="https://docs.itheum.io/product-docs/nftunes/give-bitz-to-like" target="_blank" className="text-blue-500">
+                        <a href="https://docs.itheum.io/product-docs/product/ai-data-workforce/badges" target="_blank" className="text-blue-500">
                           here
                         </a>
                       </div>
@@ -295,7 +295,7 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                         Musicians with the most Bitz powering them will be featured more on NF-Tunes and other social channels and they will get monthly badges
                         that can earn them rewards (this supports the Musician) and in return, you can also earn monthly badges that can earn you rewards. Learn
                         more about the rewards program{" "}
-                        <a href="https://docs.itheum.io/product-docs/nftunes/give-bitz-to-powerup" target="_blank" className="text-blue-500">
+                        <a href="https://docs.itheum.io/product-docs/product/ai-data-workforce/badges" target="_blank" className="text-blue-500">
                           here
                         </a>
                       </div>
@@ -332,8 +332,8 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
               )}
               {(bitBalanceOnChain >= minBitzValNeeded || powerUpSuccessfullyDone) && (
                 <>
-                  <div className="bg-1green-300 mt-2 text-lg">
-                    <div className="bg-1blue-300">Your BiTz Balance: {bitBalanceOnChain} BiTz</div>
+                  <div className="mt-2 text-lg">
+                    <div className="">Your BiTz Balance: {bitBalanceOnChain} BiTz</div>
                   </div>
 
                   {poweringUpError && (
@@ -369,8 +369,8 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                   {!powerUpSuccessfullyDone && !poweringUpError && (
                     <>
                       {!isLikeMode && (
-                        <div className="bg-1green-400">
-                          <div className="bg-1blue-200">
+                        <div className="">
+                          <div className="">
                             <div className="flex flex-row gap-2 justify-center items-center">
                               <input
                                 type="range"
@@ -398,8 +398,8 @@ export const SendBitzPowerUp = (props: SendBitzPowerUpProps) => {
                         </div>
                       )}
 
-                      <div className="bg-1green-400">
-                        <div className="bg-1blue-300">
+                      <div className="">
+                        <div className="">
                           <Button
                             disabled={bitBalanceOnChain < minBitzValNeeded || bitzValToGift < 1 || poweringUpInProgress}
                             className="!text-white text-lg bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer w-[200px] md:w-[300px] md:h-[50px]"

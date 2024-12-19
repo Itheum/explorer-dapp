@@ -17,6 +17,7 @@ import { useNftsStore } from "store/nfts";
 import { getArtistsAlbumsData } from "./";
 import { fetchBitzPowerUpsAndLikesForSelectedArtist } from "./index";
 import { GiftBitzToArtistMeta } from "./types/common";
+import { getBestBuyCtaLink } from "./types/utils";
 
 // e.g. artist + albums data
 //   {
@@ -302,7 +303,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
           <Music2 className="text-secondary" />
         </div>
 
-        <div id="artist-profile" className="flex flex-col md:flex-row w-[100%] items-start bgx-purple-900">
+        <div id="artist-profile" className="flex flex-col md:flex-row w-[100%] items-start">
           {artistAlbumDataLoading || artistAlbumDataset.length === 0 ? (
             <div className="flex flex-col justify-center w-[100%]">
               {artistAlbumDataLoading ? (
@@ -633,13 +634,13 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                                   </div>
                                 )}
 
-                                {album.ctaBuy && (
+                                {getBestBuyCtaLink({ ctaBuy: album.ctaBuy, dripSet: album.dripSet }) && (
                                   <Button
                                     className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
                                     onClick={() => {
                                       gtagGo("NtuArAl", "BuyAlbum", "Album", album.albumId);
 
-                                      window.open(album.ctaBuy)?.focus();
+                                      window.open(getBestBuyCtaLink({ ctaBuy: album.ctaBuy, dripSet: album.dripSet }))?.focus();
                                     }}>
                                     <>
                                       <ShoppingCart />

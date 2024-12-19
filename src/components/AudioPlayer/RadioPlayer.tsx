@@ -19,6 +19,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { GiftBitzToArtistMeta } from "pages/AppMarketplace/NFTunes/types/common";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useGetAccount } from "hooks/sdkDappHooks";
+import { getBestBuyCtaLink } from "pages/AppMarketplace/NFTunes/types/utils";
 
 type RadioPlayerProps = {
   radioTracks?: any;
@@ -377,6 +378,7 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   };
 
   // is it a airdrop or buy option
+  // @TODO this below logic get called each time during a render (e.g. when the radio plays it re-render) -- see if we can optimize to use useMemo or something as its only needed if the song changes
   let currSongObj = null;
   let getAlbumActionText = null;
   let getAlbumActionLink = null;
@@ -387,8 +389,10 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
     currSongObj = radioTracks[currentTrackIndex];
     checkedOwnershipOfAlbumAndItsIndex = checkOwnershipOfAlbum(currSongObj);
 
-    if (currSongObj?.buy) {
-      getAlbumActionLink = currSongObj.buy;
+    const ctaBuyLink = getBestBuyCtaLink({ ctaBuy: currSongObj?.ctaBuy, dripSet: currSongObj?.dripSet });
+
+    if (ctaBuyLink) {
+      getAlbumActionLink = ctaBuyLink;
       getAlbumActionText = checkedOwnershipOfAlbumAndItsIndex > -1 ? "Buy More Album Copies" : "Buy Album";
       getAlbumActionText = "Buy Album";
     } else if (currSongObj?.airdrop) {

@@ -88,9 +88,9 @@ export const AnalyticsPage = () => {
         pageTitle={"Protocol Analytics"}
         subTitle={"View key growth metrics of the Itheum Protocol across the multiple chains it operates on."}
         hasImage={false}>
-        <div className="w-[100%] bg-green-000">
-          <div className="mt-10 bg-red-000">
-            <div className="mb-10 bg-red-000">
+        <div className="w-[100%]">
+          <div className="mt-10">
+            <div className="mb-10">
               <h2 className="flex flex-row !text-3xl">Data NFTs</h2>
               <p className="opacity-50">
                 Each Data NFT acts as a web3 license for data usage. Data NFTs can unlock 'Active or Passive' data. Here is the total supply of Data NFTs.
@@ -247,8 +247,8 @@ export const AnalyticsPage = () => {
 
           <hr className="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
 
-          <div className="mt-10 bg-red-000">
-            <div className="mb-5 bg-red-000">
+          <div className="mt-10">
+            <div className="mb-5">
               <h2 className="flex flex-row !text-3xl">AI Data Workforce</h2>
               <p className="opacity-50">
                 Users bond $ITHEUM tokens, mint a{" "}
@@ -304,13 +304,13 @@ export const AnalyticsPage = () => {
 
           <hr className="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
 
-          <div className="mt-10 bg-blue-000">
+          <div className="mt-10">
             <h2 className="flex flex-row !text-3xl">Itheum Data Realm</h2>
             <p className="opacity-50">
               The Itheum Data Realm is a bulk pool of 'Passive' Data collected from users, currently being populated by gaming data. Data Coalition DAOs broker
               the trade of the bulk data and share earnings with users who contribute their data to the pool.
             </p>
-            <div className="mt-10 bg-red-000 flex flex-col md:flex-row">
+            <div className="mt-10 flex flex-col md:flex-row">
               {/* Data Lake Passive Data Collected From Users Growth */}
               <div className="flex-1">
                 <h2 className="flex flex-row !text-xl">User Plugged-In</h2>

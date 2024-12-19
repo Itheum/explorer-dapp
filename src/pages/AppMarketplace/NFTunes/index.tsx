@@ -1033,7 +1033,7 @@ export const NFTunes = () => {
                 const _bountyToBitzLocalMapping: Record<any, any> = { ...bountyBitzSumGlobalMapping };
                 const currMappingVal = _bountyToBitzLocalMapping[forceRefreshBitzCountsForBounty.giveBitzToCampaignId];
 
-                if (typeof currMappingVal !== "undefined") {
+                if (typeof currMappingVal !== "undefined" && typeof currMappingVal.bitsSum !== "undefined") {
                   _bountyToBitzLocalMapping[forceRefreshBitzCountsForBounty.giveBitzToCampaignId] = {
                     bitsSum: currMappingVal.bitsSum + forceRefreshBitzCountsForBounty.bitzValToGift,
                     syncedOn: Date.now(),
@@ -1128,10 +1128,10 @@ export async function fetchBitzPowerUpsAndLikesForSelectedArtist({
   const _bountyToBitzLocalMapping: Record<any, any> = { ..._bountyBitzSumGlobalMappingWindow };
   console.log("&&& _bountyBitzSumGlobalMappingWindow", _bountyBitzSumGlobalMappingWindow);
 
-  // cache for 30 seconds
+  // cache for 120 seconds
   if (
     !_bountyBitzSumGlobalMappingWindow[giftBitzToArtistMeta.bountyId] ||
-    Date.now() - _bountyBitzSumGlobalMappingWindow[giftBitzToArtistMeta.bountyId].syncedOn > 30 * 1000
+    Date.now() - _bountyBitzSumGlobalMappingWindow[giftBitzToArtistMeta.bountyId].syncedOn > 120 * 1000
   ) {
     console.log(`&&& fetchBitzPowerUpsAndLikesForSelectedArtist ${giftBitzToArtistMeta.bountyId} - is radio ${isSingleAlbumBounty} - NO cached`);
 
@@ -1157,7 +1157,7 @@ export async function fetchBitzPowerUpsAndLikesForSelectedArtist({
 
     _bountyToBitzLocalMapping[giftBitzToArtistMeta?.bountyId] = {
       syncedOn: Date.now(),
-      bitsSum: response.bitsSum,
+      bitsSum: response?.bitsSum,
     };
 
     if (isSingleAlbumBounty) {
@@ -1194,7 +1194,7 @@ export async function fetchBitzPowerUpsAndLikesForSelectedArtist({
         albumBountyIds.forEach((albumBountyId: any, idx: number) => {
           _bountyToBitzLocalMapping[albumBountyId] = {
             syncedOn: Date.now(),
-            bitsSum: values[idx].bitsSum,
+            bitsSum: values[idx]?.bitsSum,
           };
         });
 

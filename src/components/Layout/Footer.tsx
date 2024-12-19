@@ -13,10 +13,10 @@ export const Footer = () => {
   const isPublicApi = getMvxRpcApi(chainID).includes("api.multiversx.com");
 
   return (
-    <footer className="1bg-red-300 xl:mx-[7.5rem] md:mx-[4rem] h-auto mb-10 mt-10">
+    <footer className="xl:mx-[7.5rem] md:mx-[4rem] h-auto mb-10 mt-10">
       <div className="w-full h-[2px] bg-[linear-gradient(to_right,#737373,#A76262,#5D3899,#5D3899,#A76262,#737373)] animate-gradient bg-[length:200%_auto]"></div>
       <div className="flex flex-col md:flex-row">
-        <div className="1bg-red-300 md:w-[50%] p-5">
+        <div className="md:w-[50%] p-5">
           <div>
             <p className="mb-3 bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500 dark:from-yellow-300 dark:to-orange-500 text-transparent font-bold text-[1.5rem]">
               Itheum Explorer
@@ -27,7 +27,7 @@ export const Footer = () => {
               activity!
             </p>
           </div>
-          <div className="1bg-orange-300">
+          <div className="">
             <div className="flex py-5 flex-col">
               <ul className="flex gap-2 mt-5">
                 <li>
@@ -73,9 +73,9 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="1bg-red-900 flex md:flex-col md:w-[50%] pl-5 h-auto border-l-2">
-          <div className="1bg-green-500 flex justify-between">
-            <div className="1bg-green-300 py-5 md:flex-1">
+        <div className="flex md:flex-col md:w-[50%] pl-5 h-auto border-l-2">
+          <div className="flex justify-between">
+            <div className="py-5 md:flex-1">
               <p className="text-md mb-2 bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500 dark:from-yellow-300 dark:to-orange-500 text-transparent font-bold text-base">
                 Connect With Us
               </p>
@@ -137,7 +137,7 @@ export const Footer = () => {
               </ul>
             </div>
 
-            <div className="1bg-blue-300 py-5 ml-10 md:ml-[auto] md:flex-1">
+            <div className="py-5 ml-10 md:ml-[auto] md:flex-1">
               <p className="text-md mb-2 bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500 dark:from-yellow-300 dark:to-orange-500 text-transparent font-bold text-base">
                 More to Explore
               </p>

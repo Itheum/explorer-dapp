@@ -174,15 +174,15 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
         titleClassName={"p-6 md:!p-4 !text-2xl md:!text-3xl"}>
         {
           <div
-            className="bg-1cyan-900"
+            className=""
             style={{
               minHeight: "10rem",
             }}>
-            <div className="bgx-cyan-900 p-8">
-              <div className="flex flex-col-reverse md:flex-row bgx-green-900 items-center">
-                <div className="pr-5">
-                  <div className="bgx-blue-900 text-2xl font-bold mb-2">Revolutionizing Music with AI 🚀</div>
-                  <div className="bxg-blue-800 mt-5">
+            <div className="p-8">
+              <div className="flex flex-col-reverse md:flex-row items-center">
+                <div className="md:pr-5">
+                  <div className="text-2xl font-bold mb-2">Revolutionizing Music with AI 🚀</div>
+                  <div className="mt-5">
                     Itheum connects AI Agents, musicians, and fans to amplify music and train AI models, empowering real-world artists and enhancing music
                     content. Get your free Music Data NFT and join this initiative!
                   </div>
@@ -209,7 +209,7 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
                   )}
 
                   {!errFreeMintGeneric && (
-                    <div className="bgx-blue-300 mt-8">
+                    <div className="mt-8">
                       {!freeMusicGiftClaimed ? (
                         <>
                           <Button
@@ -222,7 +222,7 @@ export const AirDropFreeMusicGiftSol = (props: AirDropFreeMusicGiftSolSolProps) 
                           </Button>
                         </>
                       ) : (
-                        <div className="bxg-blue-800 flex flex-col mt-5 text-white bg-teal-700 p-5 rounded-lg text-lg">
+                        <div className="bxg-blue-800 flex flex-col mt-5 text-white bg-teal-700 p-5 rounded-lg text-lg text-center">
                           🙌 Success! {`Let's`} try it out now!
                           <Button
                             onClick={() => {
