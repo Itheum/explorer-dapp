@@ -457,7 +457,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
                   <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-900/0 border border-grey-300 shadow-xl flex items-center justify-center">
                     <button onClick={togglePlay} className="focus:outline-none" disabled={!isLoaded}>
                       {!isLoaded ? (
-                        <Loader2 className="w-full text-center animate-spin  hover:scale-105" />
+                        <Loader2 className="w-full text-center animate-spin hover:scale-105" />
                       ) : isPlaying ? (
                         <Pause className="w-full text-center hover:scale-105" />
                       ) : (
@@ -489,7 +489,7 @@ export const SolAudioPlayer = (props: SolAudioPlayerProps) => {
                       onClick={() => {
                         likeAlbumWithBiTz(songs[currentTrackIndex]);
                       }}>
-                      {bitzGiftingMeta ? bountyBitzSumGlobalMapping[bitzGiftingMeta.giveBitzToCampaignId].bitsSum : 0}
+                      {bitzGiftingMeta ? bountyBitzSumGlobalMapping[bitzGiftingMeta.giveBitzToCampaignId]?.bitsSum : 0}
 
                       <Heart className="w-4 h-4" />
                     </div>

@@ -171,14 +171,14 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
         titleClassName={"p-6 md:!p-4 !text-2xl md:!text-3xl"}>
         {
           <div
-            className="bg-1cyan-900"
+            className=""
             style={{
               minHeight: "10rem",
             }}>
-            <div className="bgx-cyan-900 flex flex-col gap-2 p-10">
-              <div className="bgx-green-900 items-center">
-                <div className="bgx-blue-900 text-2xl font-bold mb-2">With Itheum, your XP Data is yours to own! 🚀</div>
-                <div className="bxg-blue-800 mt-5">
+            <div className="flex flex-col gap-2 p-10">
+              <div className="items-center">
+                <div className="text-2xl font-bold mb-2">With Itheum, your XP Data is yours to own! 🚀</div>
+                <div className="mt-5">
                   {" "}
                   BiTz are Itheum XP stored as Data NFTs in your wallet. Use them to curate, power up, and interact with data while earning rewards. Your BiTz
                   NFT unlocks access to the Itheum Protocol and the Web3 AI Data Era.
@@ -230,7 +230,7 @@ export const AirDropFreeBiTzSol = (props: AirDropFreeBiTzSolProps) => {
                 )}
 
                 {!errFreeMintGeneric && !freeNfMeIdClaimed && (
-                  <div className="bgx-blue-300 mt-8">
+                  <div className="mt-8">
                     {!freeMintBitzXpGameComingUp ? (
                       <>
                         <Button

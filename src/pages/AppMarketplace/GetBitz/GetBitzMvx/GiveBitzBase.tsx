@@ -49,7 +49,7 @@ const GiveBitzBase = (props: GiveBitzBaseProps) => {
       const _dataBounties: GiveBitzDataBounty[] = await Promise.all(
         getDataBounties().map(async (item: GiveBitzDataBounty) => {
           const response = await fetchBitSumAndGiverCountsMvx({ chainID, getterAddr: item.bountySubmitter, campaignId: item.bountyId });
-          return { ...item, receivedBitzSum: response.bitsSum, giverCounts: response.giverCounts };
+          return { ...item, receivedBitzSum: response?.bitsSum, giverCounts: response.giverCounts };
         })
       );
       const sortedDataBounties = _dataBounties.sort((a, b) => (b.receivedBitzSum ?? 0) - (a.receivedBitzSum ?? 0));

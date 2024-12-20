@@ -113,7 +113,7 @@ export const AnalyticsSnapshot = () => {
             </div>
           </div>
 
-          <div className="flex-1 bg-red-000 border-dotted border border-[#CCCCCC] dark:border-[#6a6a6a] rounded-3xl">
+          <div className="flex-1 border-dotted border border-[#CCCCCC] dark:border-[#6a6a6a] rounded-3xl">
             <div className="min-h-[300px]">
               {(fullChainMarshalUsageData.length > 0 && (
                 <ResponsiveContainer minWidth="100%" minHeight={300} style={{ marginBottom: "2.5rem" }}>
