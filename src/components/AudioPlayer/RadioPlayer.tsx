@@ -1,24 +1,25 @@
 import React, { useEffect, useState, memo } from "react";
 import { faHandPointer, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useWallet } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { Loader2, Pause, Music2, Play, RefreshCcwDot, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Gift, ShoppingCart, Heart } from "lucide-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./AudioPlayer.css";
+import { useDebouncedCallback } from "use-debounce";
 import DEFAULT_SONG_IMAGE from "assets/img/audio-player-image.png";
 import DEFAULT_SONG_LIGHT_IMAGE from "assets/img/audio-player-light-image.png";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
+import { useGetAccount } from "hooks/sdkDappHooks";
 import { Button } from "libComponents/Button";
 import { getApiWeb2Apps } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { toastClosableError } from "libs/utils/uiShared";
 import { fetchBitzPowerUpsAndLikesForSelectedArtist } from "pages/AppMarketplace/NFTunes";
-import { useAppsStore } from "store/apps";
-import { useDebouncedCallback } from "use-debounce";
 import { GiftBitzToArtistMeta } from "pages/AppMarketplace/NFTunes/types/common";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useGetAccount } from "hooks/sdkDappHooks";
+import { getBestBuyCtaLink } from "pages/AppMarketplace/NFTunes/types/utils";
+import { useAppsStore } from "store/apps";
 
 type RadioPlayerProps = {
   radioTracks?: any;
@@ -109,7 +110,6 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
       chainID,
       userHasNoBitzDataNftYet,
       solBitzNfts,
-      bountyBitzSumGlobalMapping,
       setMusicBountyBitzSumGlobalMapping,
       isSingleAlbumBounty: true,
     });
@@ -377,6 +377,7 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   };
 
   // is it a airdrop or buy option
+  // @TODO this below logic get called each time during a render (e.g. when the radio plays it re-render) -- see if we can optimize to use useMemo or something as its only needed if the song changes
   let currSongObj = null;
   let getAlbumActionText = null;
   let getAlbumActionLink = null;
@@ -387,8 +388,10 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
     currSongObj = radioTracks[currentTrackIndex];
     checkedOwnershipOfAlbumAndItsIndex = checkOwnershipOfAlbum(currSongObj);
 
-    if (currSongObj?.buy) {
-      getAlbumActionLink = currSongObj.buy;
+    const ctaBuyLink = getBestBuyCtaLink({ ctaBuy: currSongObj?.ctaBuy, dripSet: currSongObj?.dripSet });
+
+    if (ctaBuyLink) {
+      getAlbumActionLink = ctaBuyLink;
       getAlbumActionText = checkedOwnershipOfAlbumAndItsIndex > -1 ? "Buy More Album Copies" : "Buy Album";
       getAlbumActionText = "Buy Album";
     } else if (currSongObj?.airdrop) {

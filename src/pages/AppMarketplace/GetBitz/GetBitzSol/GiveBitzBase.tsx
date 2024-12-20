@@ -55,7 +55,7 @@ const GiveBitzBase = () => {
           });
           return {
             ...item,
-            receivedBitzSum: response.bitsSum,
+            receivedBitzSum: response?.bitsSum,
             giverCounts: response.giverCounts,
           };
         })
