@@ -138,7 +138,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       chainID,
       userHasNoBitzDataNftYet,
       solBitzNfts,
-      bountyBitzSumGlobalMapping,
       setMusicBountyBitzSumGlobalMapping,
       isSingleAlbumBounty: false,
     });

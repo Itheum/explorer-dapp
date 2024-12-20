@@ -1112,7 +1112,6 @@ export async function fetchBitzPowerUpsAndLikesForSelectedArtist({
   chainID,
   userHasNoBitzDataNftYet,
   solBitzNfts,
-  bountyBitzSumGlobalMapping,
   setMusicBountyBitzSumGlobalMapping,
   isSingleAlbumBounty,
 }: {
@@ -1121,7 +1120,6 @@ export async function fetchBitzPowerUpsAndLikesForSelectedArtist({
   chainID: any;
   userHasNoBitzDataNftYet: any;
   solBitzNfts: any;
-  bountyBitzSumGlobalMapping: any;
   setMusicBountyBitzSumGlobalMapping: any;
   isSingleAlbumBounty: boolean;
 }) {
@@ -1208,6 +1206,7 @@ export async function fetchBitzPowerUpsAndLikesForSelectedArtist({
     }
   } else {
     console.log(`&&& fetchBitzPowerUpsAndLikesForSelectedArtist ${giftBitzToArtistMeta.bountyId} - is radio ${isSingleAlbumBounty} - YES cached`);
+    setMusicBountyBitzSumGlobalMapping(_bountyBitzSumGlobalMappingWindow);
   }
 }
 // E: GIVING BITZ FOR ARTIST POWER-UPS AND ALBUM LIKES
