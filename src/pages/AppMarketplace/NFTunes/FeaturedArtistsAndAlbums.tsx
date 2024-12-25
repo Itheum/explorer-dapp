@@ -533,7 +533,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                               </div>
                             </div>
 
-                            <div className="albumActions bg1-red-500 mt-3 flex flex-col lg:flex-row space-y-2 lg:space-y-0">
+                            <div className="albumActions mt-3 flex flex-wrap flex-col gap-2 lg:flex-row space-y-2 lg:space-y-0">
                               {album.ctaPreviewStream && (
                                 <Button
                                   disabled={isPreviewPlaying && !previewIsReadyToPlay}
@@ -568,6 +568,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                                       </>
                                     </Button>
                                   </Link>
+
                                   {isFreeDropSampleWorkflow && (
                                     <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
                                       <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
