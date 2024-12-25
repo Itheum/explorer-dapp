@@ -2,8 +2,8 @@ import * as React from "react";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { Link } from "react-router-dom";
 import { SUPPORTED_APPS } from "appsConfig";
-import featuredAppNFTunesHero from "assets/img/nf-tunes/featured-app-banner.png";
 import featuredAppNFTunesMobileHero from "assets/img/nf-tunes/featured-app-banner-mobile.png";
+import featuredAppNFTunesHero from "assets/img/nf-tunes/featured-app-banner.png";
 import xDayTimeCapsuleHero from "assets/img/timecapsule/custom-app-header-timecapsule-xday.png";
 import xDayTimeCapsuleHeroMobile from "assets/img/timecapsule/expl-app-timecapsule-xday-icon.png";
 import HelmetPageMeta from "components/HelmetPageMeta";
@@ -44,13 +44,13 @@ export const Home = () => {
               id="featured1"
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://gateway.lighthouse.storage/ipfs/bafybeigoe7tekqogeyofpmwdnjlo62zln7fserppzdvfn563nvrwk3sqxy/72112.image_GasMoney.gif)`,
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/OllyGChristmasBallad.jpg)`,
                 "backgroundBlendMode": "multiply",
                 "backgroundColor": "#161616a3",
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Llluna01's "Problem Child EP" is Launching!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=llluna01`} className="text-base hover:!no-underline hover:text-black">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">OllyG's "Christmas Ballad" is Launching!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=olly-g`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen & Get Airdrop
                   </Button>
@@ -59,16 +59,16 @@ export const Home = () => {
             </div>
 
             <div
-              id="featured2"
+              id="featured1"
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/artist_profile/gritbeat.png)`,
+                "backgroundImage": `url(https://gateway.lighthouse.storage/ipfs/bafybeigoe7tekqogeyofpmwdnjlo62zln7fserppzdvfn563nvrwk3sqxy/72112.image_GasMoney.gif)`,
                 "backgroundBlendMode": "multiply",
                 "backgroundColor": "#161616a3",
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">GritBeat's "Subnautical II" EP is Launching!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=gritbeat`} className="text-base hover:!no-underline hover:text-black">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Llluna01's "Problem Child EP" is Live!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=llluna01`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
                   </Button>
@@ -77,6 +77,23 @@ export const Home = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row flex-wrap p-2 rounded-md">
+            <div
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              style={{
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/artist_profile/gritbeat.png)`,
+                "backgroundBlendMode": "multiply",
+                "backgroundColor": "#161616a3",
+              }}>
+              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">GritBeat's "Subnautical II" EP is Live!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=gritbeat`} className="text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Listen Now
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
@@ -100,7 +117,7 @@ export const Home = () => {
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">YFGP's "Elements" EP is Launching!</h1>
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">YFGP's "Elements" EP is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=yfgp`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen Now
