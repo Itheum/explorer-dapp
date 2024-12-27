@@ -63,6 +63,7 @@ export async function getOrCacheAccessNonceAndSignature({
   updateSolPreaccessNonce,
   updateSolSignedPreaccess,
   updateSolPreaccessTimestamp,
+  forceNewSession = false,
 }: {
   solPreaccessNonce: string;
   solPreaccessSignature: string;
@@ -72,6 +73,7 @@ export async function getOrCacheAccessNonceAndSignature({
   updateSolPreaccessNonce: any;
   updateSolSignedPreaccess: any;
   updateSolPreaccessTimestamp: any;
+  forceNewSession?: boolean;
 }) {
   let usedPreAccessNonce = solPreaccessNonce;
   let usedPreAccessSignature = solPreaccessSignature;
@@ -79,7 +81,12 @@ export async function getOrCacheAccessNonceAndSignature({
   // Marshal Access lasts for 30 Mins. We cache it for this amount of time
   const minsMarshalAllowsForNonceCaching = 20;
 
-  if (solPreaccessSignature === "" || solPreaccessTimestamp === -2 || solPreaccessTimestamp + minsMarshalAllowsForNonceCaching * 60 * 1000 < Date.now()) {
+  if (
+    forceNewSession ||
+    solPreaccessSignature === "" ||
+    solPreaccessTimestamp === -2 ||
+    solPreaccessTimestamp + minsMarshalAllowsForNonceCaching * 60 * 1000 < Date.now()
+  ) {
     const preAccessNonce = await itheumSolPreaccess();
     const message = new TextEncoder().encode(preAccessNonce);
 
