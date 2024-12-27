@@ -25,13 +25,11 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "libComponents/NavigationMenu";
-import { getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { cn, sleep } from "libs/utils";
 import { APP_MAPPINGS } from "libs/utils/constant";
 import { getNFTuneFirstTrackBlobData } from "pages/AppMarketplace/NFTunes";
 import { returnRoute } from "pages/Home";
 import { routeNames } from "routes";
-import { useAccountStore } from "store/account";
 import { useAppsStore } from "store/apps";
 import { useLocalStorageStore } from "store/LocalStorageStore.ts";
 import { SwitchButton } from "./SwitchButton";
@@ -49,15 +47,6 @@ export const Navbar = () => {
   const [showPlayBitzModal, setShowPlayBitzModal] = useState<boolean>(false);
   const appsStore = useAppsStore();
   const updateNfTunesRadioFirstTrackCachedBlob = appsStore.updateNfTunesRadioFirstTrackCachedBlob;
-
-  // S: Cached Signature Store Items
-  const solPreaccessNonce = useAccountStore((state: any) => state.solPreaccessNonce);
-  const solPreaccessSignature = useAccountStore((state: any) => state.solPreaccessSignature);
-  const solPreaccessTimestamp = useAccountStore((state: any) => state.solPreaccessTimestamp);
-  const updateSolPreaccessNonce = useAccountStore((state: any) => state.updateSolPreaccessNonce);
-  const updateSolPreaccessTimestamp = useAccountStore((state: any) => state.updateSolPreaccessTimestamp);
-  const updateSolSignedPreaccess = useAccountStore((state: any) => state.updateSolSignedPreaccess);
-  // E: Cached Signature Store Items
 
   useEffect(() => {
     // lets get the 1st song blob for NFTunes Radio, so we can store in the "browser" cache for fast playback
@@ -78,25 +67,6 @@ export const Navbar = () => {
 
     cacheFirstNFTuneRadioTrack();
   }, []);
-
-  useEffect(() => {
-    if (publicKeySol) {
-      cacheSignatureSessions();
-    }
-  }, [publicKeySol]);
-
-  async function cacheSignatureSessions() {
-    const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
-      solPreaccessNonce,
-      solPreaccessSignature,
-      solPreaccessTimestamp,
-      signMessage,
-      publicKey: publicKeySol,
-      updateSolPreaccessNonce,
-      updateSolSignedPreaccess,
-      updateSolPreaccessTimestamp,
-    });
-  }
 
   return (
     <>

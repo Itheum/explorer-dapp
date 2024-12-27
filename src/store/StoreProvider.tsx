@@ -6,7 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { GET_BITZ_TOKEN_MVX, IS_DEVNET } from "appsConfig";
 import { SUPPORTED_MVX_COLLECTIONS } from "config";
 import { useGetAccount } from "hooks";
-import { viewDataWrapperSol, fetchSolNfts } from "libs/sol/SolViewData";
+import { viewDataWrapperSol, fetchSolNfts, getOrCacheAccessNonceAndSignature } from "libs/sol/SolViewData";
 import { decodeNativeAuthToken } from "libs/utils";
 import { computeRemainingCooldown } from "libs/utils/functions";
 import useSolBitzStore from "store/solBitz";
@@ -18,7 +18,7 @@ import { viewDataJSONCore } from "../pages/AppMarketplace/GetBitz/GetBitzMvx";
 export const StoreProvider = ({ children }: PropsWithChildren) => {
   const { address: addressMvx } = useGetAccount();
   const { tokenLogin } = useGetLoginInfo();
-  const { publicKey: publicKeySol } = useWallet();
+  const { publicKey: publicKeySol, signMessage } = useWallet();
   const addressSol = publicKeySol?.toBase58();
 
   // flag to check locally if we got the MVX NFTs
@@ -39,7 +39,8 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     updateBonusBitzSum: updateBonusBitzSumSol,
     updateBonusTries: updateBonusTriesSol,
   } = useSolBitzStore();
-  const { solPreaccessNonce, solPreaccessSignature } = useAccountStore();
+  const { solPreaccessNonce, solPreaccessSignature, solPreaccessTimestamp, updateSolPreaccessNonce, updateSolPreaccessTimestamp, updateSolSignedPreaccess } =
+    useAccountStore();
 
   // APPs Store
   const updateNfTunesRadioFirstTrackCachedBlob = useAppsStore((state) => state.updateNfTunesRadioFirstTrackCachedBlob);
@@ -67,8 +68,11 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
 
   // SOL Logged in - bootstrap nft store
   useEffect(() => {
-    async function getAllUsersSolNfts() {
+    async function getAllUsersSolNftsAndRefreshSignatureSession() {
       updateIsLoadingSol(true);
+
+      // the user might have just logged in or swapped wallets via phantom, so we force refresh the signature session so it's accurate
+      await cacheSolSignatureSession();
 
       if (!addressSol) {
         updateSolNfts([]);
@@ -81,7 +85,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       updateIsLoadingSol(false);
     }
 
-    getAllUsersSolNfts();
+    getAllUsersSolNftsAndRefreshSignatureSession();
   }, [publicKeySol]);
 
   // SOL: if someone updates data nfts (i.e. at the start when app loads and we get nfts OR they get a free mint during app session), we go over them and find bitz nfts etc
@@ -192,7 +196,6 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
           fwdHeaderKeys: ["dmf-custom-only-state", "dmf-custom-sol-collection-id"],
         };
 
-        // const getBitzGameResult = await viewDataToOnlyGetReadOnlyBitz(solBitzNfts[0], solPreaccessNonce, solPreaccessSignature, publicKeySol);
         const getBitzGameResult = await viewDataWrapperSol(publicKeySol!, solPreaccessNonce, solPreaccessSignature, viewDataArgs, solBitzNfts[0].id);
 
         if (getBitzGameResult) {
@@ -263,6 +266,20 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     updateCooldownSol(-2);
     updateCollectedBitzSumSol(-2);
     updateBonusBitzSumSol(-2);
+  }
+
+  async function cacheSolSignatureSession() {
+    const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
+      solPreaccessNonce,
+      solPreaccessSignature,
+      solPreaccessTimestamp,
+      signMessage,
+      publicKey: publicKeySol,
+      updateSolPreaccessNonce,
+      updateSolSignedPreaccess,
+      updateSolPreaccessTimestamp,
+      forceNewSession: true,
+    });
   }
 
   return <>{children}</>;
