@@ -33,10 +33,10 @@ type RadioPlayerProps = {
   openActionFireLogic?: any;
   solBitzNfts?: any;
   chainID?: any;
-
   onSendBitzForMusicBounty: (e: any) => any;
   bountyBitzSumGlobalMapping: any;
   setMusicBountyBitzSumGlobalMapping: any;
+  userHasNoBitzDataNftYet: boolean;
 };
 
 let firstInteractionWithPlayDone = false; // a simple flag so we can track usage on 1st time user clicks on play (as the usage for first track wont capture like other tracks)
@@ -55,10 +55,10 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
     openActionFireLogic,
     solBitzNfts,
     chainID,
-
     onSendBitzForMusicBounty,
     bountyBitzSumGlobalMapping,
     setMusicBountyBitzSumGlobalMapping,
+    userHasNoBitzDataNftYet,
   } = props;
 
   const theme = localStorage.getItem("explorer-ui-theme");
@@ -75,7 +75,7 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
   const appsStore = useAppsStore();
   const [radioPlayPromptHide, setRadioPlayPromptHide] = useState(false);
   const [imgLoading, setImgLoading] = useState(false);
-  const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
+  // const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
   const { publicKey: publicKeySol } = useWallet();
   const { address: addressMvx } = useGetAccount();
 
@@ -161,17 +161,18 @@ export const RadioPlayer = memo(function RadioPlayerBase(props: RadioPlayerProps
     // we debounce this, so that - if the user is jumping tabs.. it wait until they stop at a tab for 2.5 S before running the complex logic
     // we also only get the data AFTER the track is fetched or else this gets called 2 times
     if (songSource[radioTracks[currentTrackIndex]?.idx] && songSource[radioTracks[currentTrackIndex]?.idx] !== "Fetching") {
+      console.log("&&& { ...radioTracks[currentTrackIndex] } ", { ...radioTracks[currentTrackIndex] });
       debounced_fetchBitzPowerUpsAndLikesForSelectedArtist({ ...radioTracks[currentTrackIndex] });
     }
   }, [currentTrackIndex, songSource[radioTracks[currentTrackIndex]?.idx]]);
 
-  useEffect(() => {
-    if (solBitzNfts.length === 0) {
-      setUserHasNoBitzDataNftYet(true);
-    } else {
-      setUserHasNoBitzDataNftYet(false);
-    }
-  }, [solBitzNfts]);
+  // useEffect(() => {
+  //   if (solBitzNfts.length === 0) {
+  //     setUserHasNoBitzDataNftYet(true);
+  //   } else {
+  //     setUserHasNoBitzDataNftYet(false);
+  //   }
+  // }, [solBitzNfts]);
 
   // format time as minutes:seconds
   const formatTime = (_seconds: number) => {

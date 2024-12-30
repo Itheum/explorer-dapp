@@ -85,7 +85,9 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
       updateIsLoadingSol(false);
     }
 
-    getAllUsersSolNftsAndRefreshSignatureSession();
+    if (publicKeySol) {
+      getAllUsersSolNftsAndRefreshSignatureSession();
+    }
   }, [publicKeySol]);
 
   // SOL: if someone updates data nfts (i.e. at the start when app loads and we get nfts OR they get a free mint during app session), we go over them and find bitz nfts etc

@@ -4,57 +4,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
 import { useGetNetworkConfig } from "@multiversx/sdk-dapp/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Music2, Pause, Play, Loader2, Gift, ShoppingCart, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, Heart, Zap } from "lucide-react";
+import { Music2, WalletMinimal, Twitter, Youtube, Link2, Globe, Droplet, Zap, CircleArrowLeft } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
-import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Loader } from "components";
 import { Button } from "libComponents/Button";
 import { sleep } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
+import { scrollToSection } from "libs/utils/ui";
 import { routeNames } from "routes";
 import { useNftsStore } from "store/nfts";
 import { getArtistsAlbumsData } from "./";
+import { ArtistDiscography } from "./ArtistDiscography";
 import { fetchBitzPowerUpsAndLikesForSelectedArtist } from "./index";
 import { GiftBitzToArtistMeta } from "./types/common";
-import { getBestBuyCtaLink } from "./types/utils";
-
-// e.g. artist + albums data
-//   {
-//     artistId: "ar1",
-//     name: "Hachi Mugen",
-//     slug: "hachi-mugen",
-//     bio: "Music saved my life. Not everyone gets a second chance. The Ethereal Enclave collapsed and mostly everyone was left for dead or thought to be now what’s left is us. Those who see opportunity despite tragedy and loss... We were BORN TO R1S3. Hachi Mugen was BORN TO R1S3. Welcome to my story.",
-//     img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
-//     dripLink: "https://drip.haus/mugenhachi",
-//     xLink: "https://x.com/mugenhachi",
-//     creatorWallet: "3ibP6nxaKocQPA8S5ntXSo1Xd4aYSa93QKjPzDaPqAmB",
-//     bountyId: "mus_ar1",
-//     albums: [
-//       {
-//         albumId: "ar1_a2",
-//         solNftName: "MUSG8 - Infinity Series - Hachi",
-//         title: "Infinity Series",
-//         desc: "Hachi Mugen meditates on four vibrations to unlock his true potential.",
-//         img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
-//         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmX1GASRSSqProbmN61RBcz72EPKh687zumm8FJsaTWEHt",
-//         ctaBuy: "https://drip.haus/itheum/set/58ad11e3-a410-4ac0-8b24-88c5fadb6df9",
-//         ctaAirdrop: "",
-//         bountyId: "mus_ar1_a2",
-//       },
-//       {
-//         albumId: "ar1_a1",
-//         solNftName: "MUSG3 - Mugen Cafe EP",
-//         title: "Mugen Cafe",
-//         desc: "Cafe-style, laid-back, lo-fi tracks to sooth your soothe",
-//         img: "https://api.itheumcloud.com/app_nftunes/images/artist_profile/hachi-mugen.jpg",
-//         ctaPreviewStream: "https://gateway.pinata.cloud/ipfs/QmU82pDyHJRey4YfwtyDDdgwFtubCd5Xg4wPwfKJR8JppQ",
-//         ctaBuy: "https://drip.haus/itheum/set/662d1e23-5bc2-454c-989a-123c403465cc",
-//         ctaAirdrop: "",
-//         bountyId: "mus_ar1_a1",
-//       },
-//     ],
-//   },
 
 type FeaturedArtistsAndAlbumsProps = {
   mvxNetworkSelected: boolean;
@@ -66,9 +29,10 @@ type FeaturedArtistsAndAlbumsProps = {
   checkOwnershipOfAlbum: (e: any) => any;
   openActionFireLogic?: any;
   onSendBitzForMusicBounty: (e: any) => any;
-
   bountyBitzSumGlobalMapping: any;
   setMusicBountyBitzSumGlobalMapping: any;
+  userHasNoBitzDataNftYet: boolean;
+  onFeaturedArtistDeepLinkSlug: (e: string | undefined) => any;
 };
 
 export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) => {
@@ -82,9 +46,10 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
     onPlayHappened,
     checkOwnershipOfAlbum,
     onSendBitzForMusicBounty,
-
     bountyBitzSumGlobalMapping,
     setMusicBountyBitzSumGlobalMapping,
+    userHasNoBitzDataNftYet,
+    onFeaturedArtistDeepLinkSlug,
   } = props;
   const { publicKey: publicKeySol } = useWallet();
   const { address: addressMvx } = useGetAccount();
@@ -92,9 +57,10 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [isPreviewPlaying, setIsPreviewPlaying] = useState<boolean>(false);
   const [previewPlayingForAlbumId, setPreviewPlayingForAlbumId] = useState<string | undefined>();
   const [previewIsReadyToPlay, setPreviewIsReadyToPlay] = useState(false);
-  const [selArtistId, setSelArtistId] = useState<string>("ar1");
+  const [selArtistId, setSelArtistId] = useState<string | undefined>();
   const [userInteractedWithTabs, setUserInteractedWithTabs] = useState<boolean>(false);
   const [artistProfile, setArtistProfile] = useState<any>(null);
+  const [inArtistProfileView, setInArtistProfileView] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState("00:00");
   const [duration, setDuration] = useState("00:00");
   const [progress, setProgress] = useState(0);
@@ -102,7 +68,6 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const [isFreeDropSampleWorkflow, setIsFreeDropSampleWorkflow] = useState(false);
   const [isSigmaWorkflow, setIsSigmaWorkflow] = useState(false);
   const { solBitzNfts } = useNftsStore();
-  const [userHasNoBitzDataNftYet, setUserHasNoBitzDataNftYet] = useState(false);
   const [artistAlbumDataset, setArtistAlbumDataset] = useState<any[]>([]);
   const [artistAlbumDataLoading, setArtistAlbumDataLoading] = useState<boolean>(true);
   const {
@@ -182,7 +147,7 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   );
 
   useEffect(() => {
-    if (artistAlbumDataset.length === 0) {
+    if (artistAlbumDataset.length === 0 || !selArtistId) {
       return;
     }
 
@@ -198,18 +163,12 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       setSearchParams({ "artist-profile": selDataItem.slug });
     }
 
+    console.log("&&& selDataItem ", selDataItem);
+
     // we clone selDataItem here so as to no accidentally mutate things
     // we debounce this, so that - if the user is jumping tabs.. it wait until they stop at a tab for 2.5 S before running the complex logic
     debounced_fetchBitzPowerUpsAndLikesForSelectedArtist({ ...selDataItem });
   }, [selArtistId, artistAlbumDataset]);
-
-  useEffect(() => {
-    if (solBitzNfts.length === 0) {
-      setUserHasNoBitzDataNftYet(true);
-    } else {
-      setUserHasNoBitzDataNftYet(false);
-    }
-  }, [solBitzNfts]);
 
   useEffect(() => {
     if (artistAlbumDataset.length === 0) {
@@ -222,6 +181,8 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
       if (findArtistBySlug) {
         setSelArtistId(findArtistBySlug.artistId);
       }
+
+      setInArtistProfileView(true);
     }
   }, [featuredArtistDeepLinkSlug, artistAlbumDataset]);
 
@@ -294,11 +255,15 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
   const userLoggedInWithWallet = publicKeySol || addressMvx;
 
   return (
-    <div className="flex flex-col justify-center items-center w-full p-3 md:p-6 xl:pb-0">
-      <div className="flex flex-col mb-16 xl:mb-32 justify-center w-[100%] items-center xl:items-start">
-        <div className="flex flex-row rounded-lg mb-6 md:mb-12 px-8 xl:px-16 text-center gap-4 bg-[#333] dark:bg-primary md:text-2xl xl:text-3xl justify-center items-center ">
+    <div className="flex flex-col justify-center items-center w-full p-3 xl:pb-0">
+      <div className="flex flex-col mb-8 justify-center w-[100%] items-center xl:items-start">
+        <div
+          className="flex flex-row rounded-lg mb-6 md:mb-6 px-8 xl:px-16 text-center gap-4 bg-[#333] dark:bg-primary md:text-2xl xl:text-3xl justify-center items-center cursor-pointer"
+          onClick={() => {
+            setInArtistProfileView(false);
+          }}>
           <Music2 className="text-secondary" />
-          <span className="text-secondary">Artists & Albums</span>
+          <span className="text-secondary">Artists</span>
           <Music2 className="text-secondary" />
         </div>
 
@@ -315,363 +280,228 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
               )}
             </div>
           ) : (
-            <>
-              <div className="artist-list flex py-2 pb-5 mb-5 md:mb-0 md:pt-0 md:flex-col md:justify-center items-center w-[320px] md:w-[350px] gap-5 overflow-x-scroll md:overflow-x-auto bbg-800">
-                {artistAlbumDataset.map((artist: any) => (
-                  <div
-                    key={artist.artistId}
-                    className={`flex flex-col p-5 items-center w-[200px] md:w-[80%] xl:w-[100%] bg-background rounded-xl border border-primary/50 ${artist.artistId === selArtistId ? "bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95%" : "cursor-pointer"}`}
-                    onClick={() => {
-                      if (artist.artistId !== selArtistId) {
-                        setSelArtistId(artist.artistId);
-                        setUserInteractedWithTabs(true);
+            <div className="">
+              {!inArtistProfileView && (
+                <div className="flex flex-col gap-4 p-8 items-start bg-background rounded-xl border border-primary/50 min-h-[350px]">
+                  <div className="artist-boxes flex flex-wrap justify-around p-2 after:content-[''] after:w-[300px] after:m-2">
+                    {artistAlbumDataset.map((artist: any) => (
+                      <div
+                        key={artist.artistId}
+                        className={`flex w-[300px] h-[300px] m-2 cursor-pointer`}
+                        onClick={() => {
+                          if (artist.artistId !== selArtistId) {
+                            // notify the home page, which then triggers an effect to setSelArtistId
+                            onFeaturedArtistDeepLinkSlug(artist.slug);
 
-                        gtagGo("NtuArAl", "ViewProfile", "Artist", artist.artistId);
-                      }
-                    }}>
-                    <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg lg:!text-xl text-nowrap text-center`}>{artist.name}</h2>
+                            setUserInteractedWithTabs(true);
+                            scrollToSection("artist-profile");
+
+                            gtagGo("NtuArAl", "ViewProfile", "Artist", artist.artistId);
+                          }
+
+                          setInArtistProfileView(true);
+                        }}>
+                        <div
+                          className="relative h-[100%] w-[100%] bg-no-repeat bg-cover rounded-xl cursor-pointer"
+                          style={{
+                            "backgroundImage": `url(${artist.img})`,
+                          }}>
+                          <div className="bg-black absolute bottom-0 w-[100%] p-2 rounded-b-xl">
+                            <h2 className={`!text-lg !text-white lg:!text-xl text-nowrap text-center`}>{artist.name}</h2>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
 
-              <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full mt-2 md:mt-0 bbg-blue-700">
-                <div className="flex flex-col gap-4 p-8 items-start md:w-[90%] bg-background rounded-xl border border-primary/50 min-h-[350px]">
+              {inArtistProfileView && (
+                <div className="flex flex-col gap-4 p-8 items-start bg-background rounded-xl border border-primary/50 min-h-[350px]">
                   {!artistProfile ? (
                     <div>Loading</div>
                   ) : (
                     <>
-                      <div className="artist-bio w-[300px] md:w-full">
+                      {/* back to all artists  */}
+                      <Button
+                        className="text-sm mb-2 cursor-pointer"
+                        variant="outline"
+                        onClick={() => {
+                          setInArtistProfileView(false);
+
+                          // remove the artist-profile param from the url
+                          const currentParams = Object.fromEntries(searchParams.entries());
+                          delete currentParams["artist-profile"];
+                          setSearchParams(currentParams);
+
+                          // reset the featuredArtistDeepLinkSlug
+                          onFeaturedArtistDeepLinkSlug(undefined);
+                        }}>
+                        <>
+                          <CircleArrowLeft />
+                          <span className="ml-2">Back to All Artists</span>
+                        </>
+                      </Button>
+
+                      <div className="artist-bio w-[300px] md:w-full flex flex-row">
                         <div
-                          className="border-[0.5px] border-neutral-500/90 h-[100px] md:h-[320px] md:w-[100%] bg-no-repeat bg-cover rounded-xl"
+                          className="relative border-[0.5px] border-neutral-500/90 h-[100px] md:h-[320px] w-[400px] flex-1 bg-no-repeat bg-cover rounded-xl"
                           style={{
                             "backgroundImage": `url(${artistProfile.img})`,
-                          }}></div>
-
-                        <div className="mt-5 flex flex-col md:flex-row items-center">
-                          <div className="relative">
-                            {userLoggedInWithWallet ? (
-                              <Button
-                                className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 mx-2 cursor-pointer rounded-none rounded-l-sm"
-                                disabled={!publicKeySol && !addressMvx}
-                                onClick={() => {
-                                  onSendBitzForMusicBounty({
-                                    creatorIcon: artistProfile.img,
-                                    creatorName: artistProfile.name,
-                                    giveBitzToWho: artistProfile.creatorWallet,
-                                    giveBitzToCampaignId: artistProfile.bountyId,
-                                  });
-                                }}>
-                                <>
-                                  <Zap className="w-4 h-4" />
-                                  <span className="ml-2">Power-Up Musician</span>
-                                </>
-                              </Button>
-                            ) : (
-                              <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                                <Button
-                                  className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300 rounded-none rounded-l-sm"
-                                  variant="outline">
-                                  <>
-                                    <WalletMinimal />
-                                    <span className="ml-2">Login to Power-Up Musician</span>
-                                  </>
-                                </Button>
-                              </Link>
-                            )}
-                            {isSigmaWorkflow && (
-                              <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
-                                <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
-                                  <FontAwesomeIcon icon={faHandPointer} />
-                                </div>
-                                <span className="text-center">Click To Vote</span>
-                              </div>
-                            )}
+                          }}>
+                          <div className="bg-black absolute bottom-0 w-[100%] p-2 rounded-b-xl">
+                            <h2 className={`!text-lg !text-white lg:!text-xl text-nowrap text-center`}>{artistProfile.name}</h2>
                           </div>
+                        </div>
 
-                          <div
-                            className={`${userLoggedInWithWallet && typeof bountyBitzSumGlobalMapping[artistProfile.bountyId]?.bitsSum !== "undefined" ? "-ml-[12px] hover:bg-orange-100 dark:hover:text-orange-500 cursor-pointer" : "ml-0"} text-center text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 mt-2 md:mt-0 rounded-r md:min-w-[100px] flex items-center justify-center `}>
-                            {typeof bountyBitzSumGlobalMapping[artistProfile.bountyId]?.bitsSum === "undefined" ? (
-                              <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
-                            ) : (
-                              <div
-                                className="p-10 md:p-10"
-                                onClick={() => {
-                                  if (userLoggedInWithWallet) {
+                        {/* artists details and power up */}
+                        <div className="p-5 flex-1">
+                          <div className="flex flex-col md:flex-row items-center">
+                            <div className="relative">
+                              {userLoggedInWithWallet ? (
+                                <Button
+                                  className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 mx-2 cursor-pointer rounded-none rounded-l-sm"
+                                  disabled={!publicKeySol && !addressMvx}
+                                  onClick={() => {
                                     onSendBitzForMusicBounty({
                                       creatorIcon: artistProfile.img,
                                       creatorName: artistProfile.name,
                                       giveBitzToWho: artistProfile.creatorWallet,
                                       giveBitzToCampaignId: artistProfile.bountyId,
                                     });
-                                  }
-                                }}>
-                                <span className="font-bold text-sm">Total Power</span>
-                                <span className="ml-1 mt-[10px] text-sm">{bountyBitzSumGlobalMapping[artistProfile.bountyId]?.bitsSum}</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className={`${isSigmaWorkflow ? "opacity-[0.1]" : ""}`}>
-                          <p className="artist-who mt-5">{artistProfile.bio}</p>
-
-                          {(artistProfile.dripLink !== "" ||
-                            artistProfile.xLink !== "" ||
-                            artistProfile.webLink !== "" ||
-                            artistProfile.ytLink !== "" ||
-                            artistProfile.otherLink1 !== "") && (
-                            <div className="flex flex-col md:flex-row mt-5">
-                              {artistProfile.dripLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.dripLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Droplet className="m-auto w-5" />
-                                    Artist on Drip
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.xLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.xLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Twitter className="m-auto w-5" />
-                                    Artist on X
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.ytLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.ytLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Youtube className="m-auto w-5" />
-                                    Artist on YouTube
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.webLink && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.webLink} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Globe className="m-auto w-5" />
-                                    Artist Website
-                                  </div>
-                                </a>
-                              )}
-                              {artistProfile.otherLink1 && (
-                                <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.otherLink1} target="_blank">
-                                  <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
-                                    <Link2 className="m-auto w-5" />
-                                    More Content
-                                  </div>
-                                </a>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="album-list w-[300px] lg:w-full">
-                        <p className="mt-5 mb-5 text-xl font-bold">NF-Tunes Discography</p>
-
-                        {artistProfile.albums.map((album: any, idx: number) => (
-                          <div key={album.albumId} className="album flex flex-col h-[100%] mb-3 p-5 border">
-                            <div className="albumDetails flex flex-col md:flex-row">
-                              <div
-                                className="albumImg bg1-red-200 border-[0.5px] border-neutral-500/90 h-[150px] w-[150px] bg-no-repeat bg-cover rounded-xl m-auto"
-                                style={{
-                                  "backgroundImage": `url(${album.img})`,
-                                }}></div>
-
-                              <div className="albumText bg1-red-300 flex flex-col mt-5 md:mt-0 md:ml-5 md:pr-2 flex-1 mb-5 md:mb-0">
-                                <h3 className="!text-xl mb-2 flex items-baseline">
-                                  <span className="text-3xl mr-1 opacity-50">{`${idx + 1}. `}</span>
-                                  <span>{`${album.title}`}</span>
-                                  {album.isExplicit && album.isExplicit === "1" && (
-                                    <img
-                                      className="max-h-[20px] ml-[10px] dark:bg-white"
-                                      src={ratingR}
-                                      alt="Warning: Explicit Content"
-                                      title="Warning: Explicit Content"
-                                    />
-                                  )}
-                                </h3>
-                                <p className="ml-2">{album.desc}</p>
-                              </div>
-
-                              <div className="albumLikes bg1-red-600 md:w-[135px] flex flex-col items-center">
-                                <div
-                                  className={`${userLoggedInWithWallet && typeof bountyBitzSumGlobalMapping[album.bountyId]?.bitsSum !== "undefined" ? " hover:bg-orange-100 cursor-pointer dark:hover:text-orange-500" : ""} text-center mb-1 text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 rounded w-[100px] flex items-center justify-center`}
-                                  onClick={() => {
-                                    if (userLoggedInWithWallet && typeof bountyBitzSumGlobalMapping[album.bountyId]?.bitsSum !== "undefined") {
-                                      onSendBitzForMusicBounty({
-                                        creatorIcon: album.img,
-                                        creatorName: `${artistProfile.name}'s ${album.title}`,
-                                        giveBitzToWho: artistProfile.creatorWallet,
-                                        giveBitzToCampaignId: album.bountyId,
-                                        isLikeMode: true,
-                                      });
-                                    }
                                   }}>
-                                  {typeof bountyBitzSumGlobalMapping[album.bountyId]?.bitsSum === "undefined" ? (
-                                    <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
-                                  ) : (
-                                    <div
-                                      className="p-5 md:p-0 flex items-center gap-2"
-                                      title={userLoggedInWithWallet ? "Like This Album With 5 BiTz" : "Login to Like This Album"}
-                                      onClick={() => {
-                                        if (userLoggedInWithWallet) {
-                                          onSendBitzForMusicBounty({
-                                            creatorIcon: album.img,
-                                            creatorName: `${artistProfile.name}'s ${album.title}`,
-                                            giveBitzToWho: artistProfile.creatorWallet,
-                                            giveBitzToCampaignId: album.bountyId,
-                                            isLikeMode: true,
-                                          });
-                                        }
-                                      }}>
-                                      {bountyBitzSumGlobalMapping[album.bountyId]?.bitsSum}
-                                      <Heart className="w-4 h-4" />
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="albumActions mt-3 flex flex-wrap flex-col gap-2 lg:flex-row space-y-2 lg:space-y-0">
-                              {album.ctaPreviewStream && (
-                                <Button
-                                  disabled={isPreviewPlaying && !previewIsReadyToPlay}
-                                  className="!text-white text-sm mx-2 bg-gradient-to-br from-[#737373] from-5% via-[#A76262] via-30% to-[#5D3899] to-95% cursor-pointer"
-                                  onClick={() => {
-                                    playPausePreview(album.ctaPreviewStream, album.albumId);
-
-                                    gtagGo("NtuArAl", "PlayPausePrev", "Album", album.albumId);
-                                  }}>
-                                  {isPreviewPlaying && previewPlayingForAlbumId === album.albumId ? (
-                                    <>
-                                      {!previewIsReadyToPlay ? <Loader2 className="animate-spin" /> : <Pause />}
-                                      <span className="ml-2"> {currentTime} - Stop Playing </span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Play />
-                                      <span className="ml-2">Play Preview</span>
-                                    </>
-                                  )}
+                                  <>
+                                    <Zap className="w-4 h-4" />
+                                    <span className="ml-2">Power-Up Musician</span>
+                                  </>
                                 </Button>
-                              )}
-
-                              {/* when not logged in, show this to convert the wallet into user account */}
-                              {!mvxNetworkSelected && !publicKeySol && (
-                                <div className="relative">
-                                  <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                                    <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
-                                      <>
-                                        <WalletMinimal />
-                                        <span className="ml-2">Login to Check Ownership</span>
-                                      </>
-                                    </Button>
-                                  </Link>
-
-                                  {isFreeDropSampleWorkflow && (
-                                    <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
-                                      <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
-                                        <FontAwesomeIcon icon={faHandPointer} />
-                                      </div>
-                                      <span className="text-center">Click To Play</span>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-
-                              {mvxNetworkSelected && !addressMvx && (
+                              ) : (
                                 <Link to={routeNames.unlock} state={{ from: `${location.pathname}${location.search}` }}>
-                                  <Button className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300" variant="outline">
+                                  <Button
+                                    className="text-sm mx-2 cursor-pointer !text-orange-500 dark:!text-yellow-300 rounded-none rounded-l-sm"
+                                    variant="outline">
                                     <>
                                       <WalletMinimal />
-                                      <span className="ml-2">Login to Check Ownership</span>
+                                      <span className="ml-2">Login to Power-Up Musician</span>
                                     </>
                                   </Button>
                                 </Link>
                               )}
-
-                              <>
-                                {checkOwnershipOfAlbum(album) > -1 && (
-                                  <div className="relative p-2 md:p-0">
-                                    <Button
-                                      disabled={isPreviewPlaying && !previewIsReadyToPlay}
-                                      className="!text-black w-full text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 cursor-pointer"
-                                      onClick={() => {
-                                        const albumInOwnershipListIndex = checkOwnershipOfAlbum(album);
-
-                                        if (albumInOwnershipListIndex > -1) {
-                                          if (!mvxNetworkSelected) {
-                                            viewSolData(albumInOwnershipListIndex);
-                                          } else {
-                                            viewMvxData(albumInOwnershipListIndex);
-                                          }
-                                        }
-
-                                        if (openActionFireLogic) {
-                                          openActionFireLogic({
-                                            giveBitzToCampaignId: album.bountyId,
-                                            bountyBitzSum: bountyBitzSumGlobalMapping[album.bountyId]?.bitsSum,
-                                            creatorWallet: artistProfile.creatorWallet,
-                                          });
-                                        }
-
-                                        gtagGo("NtuArAl", "PlayAlbum", "Album", album.albumId);
-                                      }}>
-                                      <>
-                                        <Music2 />
-                                        <span className="ml-2">Play Album</span>
-                                      </>
-                                    </Button>
-                                    {isFreeDropSampleWorkflow && (
-                                      <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
-                                        <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
-                                          <FontAwesomeIcon icon={faHandPointer} />
-                                        </div>
-                                        <span className="text-center">Click To Play</span>
-                                      </div>
-                                    )}
+                              {isSigmaWorkflow && (
+                                <div className="animate-bounce p-3 text-sm absolute w-[110px] ml-[-18px] mt-[12px] text-center">
+                                  <div className="m-auto mb-[2px] bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
+                                    <FontAwesomeIcon icon={faHandPointer} />
                                   </div>
-                                )}
+                                  <span className="text-center">Click To Vote</span>
+                                </div>
+                              )}
+                            </div>
 
-                                {getBestBuyCtaLink({ ctaBuy: album.ctaBuy, dripSet: album.dripSet }) && (
-                                  <Button
-                                    className="!text-black text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                    onClick={() => {
-                                      gtagGo("NtuArAl", "BuyAlbum", "Album", album.albumId);
-
-                                      window.open(getBestBuyCtaLink({ ctaBuy: album.ctaBuy, dripSet: album.dripSet }))?.focus();
-                                    }}>
-                                    <>
-                                      <ShoppingCart />
-                                      <span className="ml-2">{checkOwnershipOfAlbum(album) > -1 ? "Buy More Album Copies" : "Buy Album"}</span>
-                                    </>
-                                  </Button>
-                                )}
-                                {album.ctaAirdrop && (
-                                  <Button
-                                    className="!text-white text-sm px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-700 to-orange-800 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mx-2 cursor-pointer"
-                                    onClick={() => {
-                                      gtagGo("NtuArAl", "GetAlbum", "Album", album.albumId);
-
-                                      window.open(album.ctaAirdrop)?.focus();
-                                    }}>
-                                    <>
-                                      <Gift />
-                                      <span className="ml-2">Get Album Airdrop!</span>
-                                    </>
-                                  </Button>
-                                )}
-                              </>
+                            <div
+                              className={`${userLoggedInWithWallet && typeof bountyBitzSumGlobalMapping[artistProfile.bountyId]?.bitsSum !== "undefined" ? "-ml-[12px] hover:bg-orange-100 dark:hover:text-orange-500 cursor-pointer" : "ml-0"} text-center text-lg h-[40px] text-orange-500 dark:text-[#fde047] border border-orange-500 dark:border-yellow-300 mt-2 md:mt-0 rounded-r md:min-w-[100px] flex items-center justify-center `}>
+                              {typeof bountyBitzSumGlobalMapping[artistProfile.bountyId]?.bitsSum === "undefined" ? (
+                                <FontAwesomeIcon spin={true} color="#fde047" icon={faSpinner} size="lg" className="m-2" />
+                              ) : (
+                                <div
+                                  className="p-10 md:p-10"
+                                  onClick={() => {
+                                    if (userLoggedInWithWallet) {
+                                      onSendBitzForMusicBounty({
+                                        creatorIcon: artistProfile.img,
+                                        creatorName: artistProfile.name,
+                                        giveBitzToWho: artistProfile.creatorWallet,
+                                        giveBitzToCampaignId: artistProfile.bountyId,
+                                      });
+                                    }
+                                  }}>
+                                  <span className="font-bold text-sm">Total Power</span>
+                                  <span className="ml-1 mt-[10px] text-sm">{bountyBitzSumGlobalMapping[artistProfile.bountyId]?.bitsSum}</span>
+                                </div>
+                              )}
                             </div>
                           </div>
-                        ))}
+
+                          <div className={`${isSigmaWorkflow ? "opacity-[0.1]" : ""}`}>
+                            <p className="artist-who mt-5">{artistProfile.bio}</p>
+
+                            {(artistProfile.dripLink !== "" ||
+                              artistProfile.xLink !== "" ||
+                              artistProfile.webLink !== "" ||
+                              artistProfile.ytLink !== "" ||
+                              artistProfile.otherLink1 !== "") && (
+                              <div className="flex flex-col md:flex-row mt-5 flex-wrap">
+                                {artistProfile.dripLink && (
+                                  <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.dripLink} target="_blank">
+                                    <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                      <Droplet className="m-auto w-5" />
+                                      Artist on Drip
+                                    </div>
+                                  </a>
+                                )}
+                                {artistProfile.xLink && (
+                                  <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.xLink} target="_blank">
+                                    <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                      <Twitter className="m-auto w-5" />
+                                      Artist on X
+                                    </div>
+                                  </a>
+                                )}
+                                {artistProfile.ytLink && (
+                                  <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.ytLink} target="_blank">
+                                    <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                      <Youtube className="m-auto w-5" />
+                                      Artist on YouTube
+                                    </div>
+                                  </a>
+                                )}
+                                {artistProfile.webLink && (
+                                  <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.webLink} target="_blank">
+                                    <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                      <Globe className="m-auto w-5" />
+                                      Artist Website
+                                    </div>
+                                  </a>
+                                )}
+                                {artistProfile.otherLink1 && (
+                                  <a className="underline hover:no-underline mx-2 text-sm mt-1" href={artistProfile.otherLink1} target="_blank">
+                                    <div className="border-[0.5px] text-center p-2 m-2 flex flex-col justify-center align-middle">
+                                      <Link2 className="m-auto w-5" />
+                                      More Content
+                                    </div>
+                                  </a>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="artist-discography w-[300px] lg:w-full">
+                        <p className="mt-5 mb-5 text-xl font-bold">NF-Tunes Discography</p>
+
+                        <ArtistDiscography
+                          albums={artistProfile.albums}
+                          bountyBitzSumGlobalMapping={bountyBitzSumGlobalMapping}
+                          onSendBitzForMusicBounty={onSendBitzForMusicBounty}
+                          artistProfile={artistProfile}
+                          isPreviewPlaying={isPreviewPlaying}
+                          previewIsReadyToPlay={previewIsReadyToPlay}
+                          playPausePreview={playPausePreview}
+                          previewPlayingForAlbumId={previewPlayingForAlbumId}
+                          currentTime={currentTime}
+                          mvxNetworkSelected={mvxNetworkSelected}
+                          isFreeDropSampleWorkflow={isFreeDropSampleWorkflow}
+                          checkOwnershipOfAlbum={checkOwnershipOfAlbum}
+                          viewSolData={viewSolData}
+                          viewMvxData={viewMvxData}
+                          openActionFireLogic={openActionFireLogic}
+                        />
                       </div>
                     </>
                   )}
                 </div>
-              </div>
-            </>
+              )}
+            </div>
           )}
         </div>
       </div>
