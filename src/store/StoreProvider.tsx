@@ -269,6 +269,10 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   }
 
   async function cacheSolSignatureSession() {
+    if (!publicKeySol) {
+      return;
+    }
+
     const { usedPreAccessNonce, usedPreAccessSignature } = await getOrCacheAccessNonceAndSignature({
       solPreaccessNonce,
       solPreaccessSignature,

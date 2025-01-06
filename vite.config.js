@@ -11,7 +11,7 @@ export default defineConfig({
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(process.env.npm_package_version),
   },
   server: {
-    port: Number(process.env.PORT) || 3000,
+    port: Number(process.env.PORT) || 8000,
     strictPort: true,
     host: true,
     https: true,

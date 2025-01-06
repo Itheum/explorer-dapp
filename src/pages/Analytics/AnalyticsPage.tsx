@@ -8,8 +8,6 @@ import { LoadingGraph, getAggregatedAnalyticsData, normalizeDataForMarshalUsage,
 export const AnalyticsPage = () => {
   const [fullChainSupplyData, setFullChainSupplyData] = useState<any[]>([]);
   const [fullChainMarshalUsageData, setFullChainMarshalUsageData] = useState<any[]>([]);
-  const [dataLakeUserGrowthData, setDataLakeUserGrowthData] = useState<any[]>([]);
-  const [dataLakeDataVolumeGrowthData, setDataLakeDataVolumeGrowthData] = useState<any[]>([]);
   const [livelinessTVLData, setLivelinessTVLData] = useState<any[]>([]);
 
   useEffect(() => {
@@ -24,15 +22,11 @@ export const AnalyticsPage = () => {
       // aggregations data
       const chainSupplyDataT = [];
       const chainMarshalUsageDataT = [];
-      const dataLakeUserGrowthDataT = [];
-      const dataLakeDataVolumeGrowthDataT = [];
       const livelinessTVLDataT = [];
 
       // S: load aggregated data
       for (const day of Object.keys(dataAggregated)) {
         const chainSupplyDataI: any = { name: day };
-        const dataLakeUserGrowthDataI: any = { name: day };
-        const dataLakeDataVolumeGrowthDataI: any = { name: day };
         const livelinessTVLDataI: any = { name: day };
 
         for (const nft of Object.keys(dataAggregated[day])) {
@@ -45,13 +39,6 @@ export const AnalyticsPage = () => {
               break;
             case "marshal_usage_events":
               chainMarshalUsageDataT.push(normalizeDataForMarshalUsage(dataAggregated[day], day));
-              break;
-            case "data_lake_metrics":
-              dataLakeUserGrowthDataI["totalUsers"] = dataAggregated[day][nft]["totalUsers"];
-              dataLakeDataVolumeGrowthDataI["totalBytes"] = dataAggregated[day][nft]["totalBytes"];
-
-              dataLakeUserGrowthDataT.push(dataLakeUserGrowthDataI);
-              dataLakeDataVolumeGrowthDataT.push(dataLakeDataVolumeGrowthDataI);
               break;
             case "bonding_tvl":
               livelinessTVLDataI["bal"] = Number(convertWeiToEsdt(dataAggregated[day][nft]["bal"], DEFAULT_DECIMALS, 0));
@@ -67,14 +54,46 @@ export const AnalyticsPage = () => {
 
       setFullChainSupplyData(chainSupplyDataT);
       setFullChainMarshalUsageData(chainMarshalUsageDataT);
-      setDataLakeUserGrowthData(dataLakeUserGrowthDataT);
-      setDataLakeDataVolumeGrowthData(dataLakeDataVolumeGrowthDataT);
       setLivelinessTVLData(livelinessTVLDataT);
       // E: load aggregated data
     }
 
     getDataAndInitGraphData();
   }, []);
+
+  const getLatestTVL = (data: any[]) => {
+    if (!data.length) return null;
+    return data.reduce((latest, current) => (new Date(latest.name) > new Date(current.name) ? latest : current)).bal;
+  };
+
+  const getLatestTotalSupply = (data: any[]) => {
+    if (!data.length) return null;
+    const latest = data.reduce((latest, current) => (new Date(latest.name) > new Date(current.name) ? latest : current));
+    return (latest.mvx_supply || 0) + (latest.sol_supply || 0);
+  };
+
+  const getTotalMarshalEvents = (data: any[], days?: number) => {
+    if (!data.length) return null;
+
+    if (days) {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - days);
+
+      return data
+        .filter((day) => new Date(day.name) >= cutoffDate)
+        .reduce((total, day) => {
+          const mvxEvents = day.mvx || 0;
+          const solEvents = day.sol || 0;
+          return total + mvxEvents + solEvents;
+        }, 0);
+    }
+
+    return data.reduce((total, day) => {
+      const mvxEvents = day.mvx || 0;
+      const solEvents = day.sol || 0;
+      return total + mvxEvents + solEvents;
+    }, 0);
+  };
 
   return (
     <>
@@ -99,8 +118,16 @@ export const AnalyticsPage = () => {
 
             {/* Data NFT Total Supply Across Chains */}
             <div>
-              <h2 className="flex flex-row !text-2xl">Data NFT Total Supply Across Chains</h2>
-              <p className="opacity-50">This is the total supply of Data NFTs minted across the chains that the Itheum Protocol operates on.</p>
+              <h2 className="flex flex-row !text-xl">Data NFT Total Supply Across Chains</h2>
+              <h2 className="flex flex-row !text-3xl mt-2">
+                <span className="bg-gradient-to-r from-[#31b3cd] to-[#82ca9d] text-transparent bg-clip-text">
+                  {fullChainSupplyData.length > 0 ? `${getLatestTotalSupply(fullChainSupplyData).toLocaleString()} Data NFTs` : "Loading..."}
+                </span>
+              </h2>
+              <p className="opacity-50 my-3">
+                This is the total supply of Data NFTs minted across the chains that the Itheum Protocol operates on. Increasing supply indicated that more
+                Itheum sourced data is being created
+              </p>
               <div className="min-h-[300px]">
                 {(fullChainSupplyData.length > 0 && (
                   <ResponsiveContainer minWidth="100%" minHeight={300} style={{ marginBottom: "2.5rem" }}>
@@ -172,10 +199,25 @@ export const AnalyticsPage = () => {
 
             {/* Data Marshal Brokerage Events Across Chains */}
             <div>
-              <h2 className="flex flex-row !text-2xl">Data Marshal Brokerage Events Across Chains</h2>
-              <p className="opacity-50">
+              <h2 className="flex flex-row !text-xl">Data Marshal Brokerage Events Across Chains</h2>
+
+              <h2 className="flex flex-row !text-3xl mt-2">
+                <span className="bg-gradient-to-r from-[#31b3cd] to-[#82ca9d] text-transparent bg-clip-text">
+                  {fullChainMarshalUsageData.length > 0 ? (
+                    <div className="flex flex-col">
+                      <div>{`${getTotalMarshalEvents(fullChainMarshalUsageData).toLocaleString()} Total Events`}</div>
+                      <div className="text-lg mt-2">Last 7 days: {getTotalMarshalEvents(fullChainMarshalUsageData, 7).toLocaleString()} events</div>
+                      <div className="text-lg">Last 30 days: {getTotalMarshalEvents(fullChainMarshalUsageData, 30).toLocaleString()} events</div>
+                    </div>
+                  ) : (
+                    "Loading..."
+                  )}
+                </span>
+              </h2>
+
+              <p className="opacity-50 my-3">
                 Data Marshal nodes are brokerage nodes that allow data streams within Data NFTs to be securely accessed. They operate across all the chains that
-                the Itheum Protocol is on.
+                the Itheum Protocol is on. This chart is a good indicator om how much Itheum sourced data is being consumed.
               </p>
               <div className="min-h-[300px]">
                 {(fullChainMarshalUsageData.length > 0 && (
@@ -264,12 +306,18 @@ export const AnalyticsPage = () => {
 
             {/* Liveliness TVL */}
             <div>
-              <h2 className="flex flex-row !text-2xl">Liveliness Staking TVL (Total Value Locked)</h2>
-              <p className="opacity-50">
+              <h2 className="flex flex-row !text-xl">Liveliness Staking TVL (Total Value Locked): </h2>
+              <h2 className="flex flex-row !text-3xl mt-2">
+                <span className="bg-gradient-to-r from-[#31b3cd] to-[#82ca9d] text-transparent bg-clip-text">
+                  {livelinessTVLData.length > 0 ? `${getLatestTVL(livelinessTVLData).toLocaleString()} $ITHEUM` : "Loading..."}
+                </span>
+              </h2>
+              <p className="opacity-50 my-3">
                 Total $ITHEUM staked by users who are part of the{" "}
                 <a className="underline hover:no-underline" href="/aiworkforce" target="_blank">
                   Itheum AI Data Workforce
                 </a>
+                . Increasing Liveliness TVL indicated that more users want to provide or use Itheum sourced data.
               </p>
               <div className="mt-10">
                 {(livelinessTVLData.length > 0 && (
@@ -298,73 +346,6 @@ export const AnalyticsPage = () => {
                     </AreaChart>
                   </ResponsiveContainer>
                 )) || <LoadingGraph />}
-              </div>
-            </div>
-          </div>
-
-          <hr className="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
-
-          <div className="mt-10">
-            <h2 className="flex flex-row !text-3xl">Itheum Data Realm</h2>
-            <p className="opacity-50">
-              The Itheum Data Realm is a bulk pool of 'Passive' Data collected from users, currently being populated by gaming data. Data Coalition DAOs broker
-              the trade of the bulk data and share earnings with users who contribute their data to the pool.
-            </p>
-            <div className="mt-10 flex flex-col md:flex-row">
-              {/* Data Lake Passive Data Collected From Users Growth */}
-              <div className="flex-1">
-                <h2 className="flex flex-row !text-xl">User Plugged-In</h2>
-                <div className="min-h-[300px]">
-                  {(dataLakeUserGrowthData.length > 0 && (
-                    <ResponsiveContainer minWidth={"100%"} height={300} style={{ marginBottom: "2.5rem" }}>
-                      <AreaChart data={dataLakeUserGrowthData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                        <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
-                        <YAxis hide />
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <Tooltip formatter={(value, name) => [value, "Users"]} wrapperStyle={{ color: "#333" }} />
-                        <Area
-                          connectNulls
-                          animationDuration={3000}
-                          animationEasing="ease-in"
-                          type="monotone"
-                          dataKey="totalUsers"
-                          stroke="#31b3cd"
-                          fillOpacity={1}
-                          fill="url(#colorUv)"
-                          stackId={1}
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  )) || <LoadingGraph />}
-                </div>
-              </div>
-
-              {/* Data Lake Data Collected Volume Growth (Bytes) */}
-              <div className="flex-1">
-                <h2 className="flex flex-row !text-xl">Data Volume (Bytes)</h2>
-                <div className="min-h-[300px]">
-                  {(dataLakeDataVolumeGrowthData.length > 0 && (
-                    <ResponsiveContainer minWidth={"100%"} height={300} style={{ marginBottom: "2.5rem" }}>
-                      <AreaChart data={dataLakeDataVolumeGrowthData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                        <XAxis dataKey="name" tickFormatter={formatYAxisDate} tick={{ fontSize: 10 }} />
-                        <YAxis label="Total Volume (Bytes)" hide />
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <Tooltip formatter={(value, name) => [value.toLocaleString(), "Data Collected (in Bytes)"]} wrapperStyle={{ color: "#333" }} />
-                        <Area
-                          connectNulls
-                          animationDuration={3000}
-                          animationEasing="ease-in"
-                          type="monotone"
-                          dataKey="totalBytes"
-                          stroke="#31b3cd"
-                          fillOpacity={1}
-                          fill="url(#colorUv)"
-                          stackId={1}
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  )) || <LoadingGraph />}
-                </div>
               </div>
             </div>
           </div>

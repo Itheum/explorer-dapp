@@ -16,6 +16,7 @@ import { getApiWeb2Apps } from "libs/utils";
 import { ActionModalStep1, ActionModalStep3 } from "./ActionModals";
 import { ActionButton, GameTitleSnapShotGrid, VolumeChartAnalytics, faqList } from "./SharedComps";
 import { getAggregatedAnalyticsData } from "../Analytics/AnalyticsShared";
+import lastDataSnapShortB4HaltingGamerPassport_6Jan from "./lastDataSnapShortB4HaltingGamerPassport_6Jan.json";
 
 export const GamerPassport = () => {
   const { publicKey, signMessage } = useWallet();
@@ -57,7 +58,11 @@ export const GamerPassport = () => {
     });
 
     async function getDataAndInitGraphData() {
-      const dataAggregated = await getAggregatedAnalyticsData();
+      // const dataAggregated = await getAggregatedAnalyticsData();
+      /*
+      we disabled the data harvest on 6 jan 24 so we can focus on apps like music and nftunes
+      */
+      const dataAggregated: any = lastDataSnapShortB4HaltingGamerPassport_6Jan;
 
       // aggregations data
       const dataLakeUserGrowthDataT = [];
@@ -228,6 +233,15 @@ export const GamerPassport = () => {
       />
 
       <div className="w-[100%] py-2">
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-5">
+          <p>
+            The Itheum protocol has temporarily paused support for this app to focus on music verticals.{" "}
+            <span className="text-blue-600 hover:underline cursor-pointer" onClick={() => scrollToSection("FAQ")}>
+              Learn more in FAQ
+            </span>
+          </p>
+        </div>
+        <div></div>
         <div
           id="hero"
           className="mt-2 h-[330px] md:h-[400px] bg-no-repeat bg-cover md:bg-contain bg-top md:bg-fixed rounded-3xl"
@@ -237,13 +251,14 @@ export const GamerPassport = () => {
             <h2 className="!text-white !text-lg md:!text-xl md:w-[500px] text-center mt-2">Play your games, share your data, and score monthly rewards!</h2>
             {!userInDataCollection && !userInReview && (
               <Button
+                disabled={true}
                 onClick={() => scrollToSection("join-process")}
                 className="!text-black text-sm tracking-tight relative px-[2.35rem] bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100 mt-3">
                 Sign Up
               </Button>
             )}
 
-            <>
+            {/* <>
               {!userInDataCollection && !userInReview && (
                 <h3 className="!text-white !text-sm md:!text-md md:w-[500px] text-center mt-5">Already Signed up? Login for your gaming data dashboard!</h3>
               )}
@@ -251,7 +266,7 @@ export const GamerPassport = () => {
                 style={{ color: "#FFFFFF", height: "40px", backgroundColor: "#006ee4", fontWeight: "normal", fontSize: "15px", marginTop: "15px" }}>
                 {addressSol ? "Account" : "Gamer Login"}
               </WalletMultiButton>
-            </>
+            </> */}
           </div>
         </div>
 
@@ -396,7 +411,7 @@ export const GamerPassport = () => {
                           onClick={() => {
                             setShowActionModalStep1(true);
                           }}>
-                          <ActionButton mlAdjustment={"-ml-10"} btnText="Check Eligibility" disableBtn={!step1InProgress} />
+                          <ActionButton mlAdjustment={"-ml-10"} btnText="Check Eligibility" disableBtn={true === true || !step1InProgress} />
                         </div>
                       </>
                     )}
