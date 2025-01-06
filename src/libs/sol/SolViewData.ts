@@ -75,6 +75,10 @@ export async function getOrCacheAccessNonceAndSignature({
   updateSolPreaccessTimestamp: any;
   forceNewSession?: boolean;
 }) {
+  if (!publicKey) {
+    return;
+  }
+
   let usedPreAccessNonce = solPreaccessNonce;
   let usedPreAccessSignature = solPreaccessSignature;
 

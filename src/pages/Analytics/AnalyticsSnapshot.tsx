@@ -2,6 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Legend, ResponsiveContainer, AreaChart, Area } from "recharts";
 import { LoadingGraph, getAggregatedAnalyticsData, normalizeDataForMarshalUsage } from "./AnalyticsShared";
 
+const getTotalMarshalEvents = (data: any[]) => {
+  return data.reduce((total, day) => total + (day.mvx || 0) + (day.sol || 0), 0);
+};
+
+const getLatestTotalSupply = (data: any[]) => {
+  if (data.length === 0) return 0;
+  const latest = data[data.length - 1];
+  return (latest.mvx_supply || 0) + (latest.sol_supply || 0);
+};
+
 export const AnalyticsSnapshot = () => {
   const [fullChainSupplyData, setFullChainSupplyData] = useState<any[]>([]);
   const [fullChainMarshalUsageData, setFullChainMarshalUsageData] = useState<any[]>([]);
@@ -109,7 +119,12 @@ export const AnalyticsSnapshot = () => {
                   </AreaChart>
                 </ResponsiveContainer>
               )) || <LoadingGraph />}
-              <h2 className="!text-lg text-center mb-5">Data NFT Supply</h2>
+              <h2 className="!text-lg text-center">Data NFT Supply</h2>
+              <h2 className="flex flex-row !text-3xl mt-2 mb-5">
+                <span className="m-auto bg-gradient-to-r from-[#31b3cd] to-[#82ca9d] text-transparent bg-clip-text">
+                  {fullChainSupplyData.length > 0 ? `${getLatestTotalSupply(fullChainSupplyData).toLocaleString()} Data NFTs` : "Loading..."}
+                </span>
+              </h2>
             </div>
           </div>
 
@@ -175,7 +190,12 @@ export const AnalyticsSnapshot = () => {
                   </AreaChart>
                 </ResponsiveContainer>
               )) || <LoadingGraph />}
-              <h2 className="!text-lg text-center mb-5">Data Marshal Brokerage Events</h2>
+              <h2 className="!text-lg text-center">Data Marshal Brokerage Events</h2>
+              <h2 className="flex flex-row !text-3xl mt-2 mb-5">
+                <span className="m-auto bg-gradient-to-r from-[#31b3cd] to-[#82ca9d] text-transparent bg-clip-text">
+                  {fullChainMarshalUsageData.length > 0 ? `${getTotalMarshalEvents(fullChainMarshalUsageData).toLocaleString()} Total Events` : "Loading..."}
+                </span>
+              </h2>
             </div>
           </div>
         </div>

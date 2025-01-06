@@ -124,6 +124,23 @@ export function VolumeChartAnalytics({
 
 export const faqList = [
   {
+    title: "I've noticed that the gamer passport app has been paused, what next?",
+    content: (
+      <>
+        <p>
+          The Itheum protocol shifted their focus to web3 music as a lot of growth was seen in this space during late 2024 and early 2025. To ensure the Itheum
+          protocol can capitalize on this growth, we have paused development and support of the gamer passport app so our team can be dedicated to one area of
+          growth at a time. We may resume support for this app again in future. Do you have any questions or have you already joined the game passport and want
+          your data deleted from the data late? then please reach out to us on discord at{" "}
+          <a href="https://itheum.io/discord" target="blank">
+            https://itheum.io/discord
+          </a>{" "}
+          and we will be happy to help.
+        </p>
+      </>
+    ),
+  },
+  {
     title: "I've joined, but my submission is being reviewed, what next?",
     content: (
       <>
