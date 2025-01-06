@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks";
+import { useWallet } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import HelmetPageMeta from "components/HelmetPageMeta";
@@ -11,6 +12,7 @@ import { WorkersSnapShotGrid } from "./SharedComps";
 const WORKFORCE_API_PAGE_SIZE = 150;
 
 export const AIWorkforce = () => {
+  const { publicKey: publicKeySol } = useWallet();
   const [appBootingUp, setAppBootingUp] = useState<boolean>(true);
   const [workforcePageLoading, setWorkforcePageLoading] = useState<boolean>(true);
   const [rankedWorkforce, setRankedWorkforce] = useState<any[]>([]);
@@ -56,7 +58,7 @@ export const AIWorkforce = () => {
       <HelmetPageMeta
         title="Itheum AI Data Workforce"
         shortTitle="Itheum AI Data Workforce"
-        desc="Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Data Workforce as a Data Provider"
+        desc="Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Data Workforce to work with AI Agents"
         shareImgUrl="https://explorer.itheum.io/socialshare/itheum_aiworkforce_social_hero.png"
       />
 
@@ -66,21 +68,29 @@ export const AIWorkforce = () => {
             <div className="w-80% md:w-[60%]">
               <h1 className="!text-xl text-center md:!text-2xl">Join the Itheum AI Data Workforce</h1>
               <h2 className="!text-sm md:!text-xl text-center mt-2">
-                Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Data Workforce as a Data Provider
+                Mint Your NFMe ID, Boost Your Liveliness, Farm Staking Rewards and Join the Itheum AI Data Workforce to work with AI Agents
               </h2>
             </div>
 
-            <Link
-              to={`${!mxAddress ? "https://ai-workforce.itheum.io/nfmeid" : "https://datadex.itheum.io/nfmeid"}`}
-              target="_blank"
-              className="my-5 text-base hover:!no-underline hover:text-black">
-              <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                Claim NFMe ID
-              </Button>
-            </Link>
+            <div className="flex flex-col md:flex-row gap-2">
+              {!mxAddress && (
+                <Link to={"https://ai-workforce.itheum.io/nfmeid"} target="_blank" className="my-5 text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Claim NFMe ID on Solana
+                  </Button>
+                </Link>
+              )}
+              {!publicKeySol && (
+                <Link to={"https://datadex.itheum.io/nfmeid"} target="_blank" className="my-5 text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Claim NFMe ID on MultiversX
+                  </Button>
+                </Link>
+              )}
+            </div>
 
             <div className="py-1 text-sm relative p-2">
-              <span className="hidden md:block absolute flex h-8 w-8 top-0 right-0">
+              <span className="md:block absolute flex h-8 w-8 top-0 right-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
               </span>
               <p className="text-center md:text-left">Already have a NFMeID with Liveliness? find yourself below - look out for the pulsating orb</p>
