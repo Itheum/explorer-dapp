@@ -417,12 +417,32 @@ export const NFTunes = () => {
         Legendary
         Rare
         Common */
-        if (typeof ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Legendary`] !== "undefined") {
-          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Legendary`];
-        } else if (typeof ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Rare`] !== "undefined") {
-          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Rare`];
-        } else {
-          albumInOwnershipListIndex = ownedSolDataNftNameAndIndexMap[`${album.solNftName} : Common`];
+
+        // Normalize the album name
+        const normalizeString = (str: string) => str.replace(/[^0-9a-zA-Z]/g, "").toLowerCase();
+
+        // Create normalized map
+        const normalizedMap = Object.entries(ownedSolDataNftNameAndIndexMap).reduce(
+          (acc, [key, value]) => {
+            const normalizedKey = normalizeString(key);
+            acc[normalizedKey] = value as number;
+            return acc;
+          },
+          {} as Record<string, number>
+        );
+
+        // Normalize the album name we're looking for
+        const normalizedAlbumName = normalizeString(album.solNftName);
+
+        // Check for ownership across rarities
+        // we normalize the values as the drip album and the extra bonus mint album names might not exactly match
+        // ... e.g. we convert key "MUSG20 - Olly'G - MonaLisa Rap - Common" to "musg20ollygmonalisarapcommon"
+        if (typeof normalizedMap[`${normalizedAlbumName}legendary`] !== "undefined") {
+          albumInOwnershipListIndex = normalizedMap[`${normalizedAlbumName}legendary`];
+        } else if (typeof normalizedMap[`${normalizedAlbumName}rare`] !== "undefined") {
+          albumInOwnershipListIndex = normalizedMap[`${normalizedAlbumName}rare`];
+        } else if (typeof normalizedMap[`${normalizedAlbumName}common`] !== "undefined") {
+          albumInOwnershipListIndex = normalizedMap[`${normalizedAlbumName}common`];
         }
       }
     } else {
