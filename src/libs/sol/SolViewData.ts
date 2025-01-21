@@ -208,7 +208,8 @@ export async function fetchSolNfts(solAddress: string | undefined): Promise<DasA
   } else {
     const resp = await fetch(`${getApiWeb2Apps()}/datadexapi/bespoke/sol/getDataNFTsByOwner?publicKeyb58=${solAddress}`);
     const data = await resp.json();
-    const nfts: DasApiAsset[] = data.nfts;
+    // filter out burnt nfts (@TODO should be fixed in the backend)
+    const nfts: DasApiAsset[] = data.nfts.filter((nft: DasApiAsset) => !nft.burnt);
 
     return nfts;
   }
