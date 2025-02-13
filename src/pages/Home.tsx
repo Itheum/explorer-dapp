@@ -44,6 +44,42 @@ export const Home = () => {
               id="featured2"
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/ANXELS.jpg)`,
+                "backgroundBlendMode": "multiply",
+                "backgroundColor": "#161616a3",
+              }}>
+              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">ANXELS "In the Beginning…" is Live!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=anxels`} className="text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Listen & Collect
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div
+              id="featured1"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              style={{
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/OllyG_Valentines_Love_Serenade_for_Love.jpg)`,
+                "backgroundBlendMode": "multiply",
+                "backgroundColor": "#161616a3",
+              }}>
+              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Olly-G's "Valentine's Love Whispers" is Live!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=olly-g`} className="text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Listen & Collect
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row flex-wrap p-2 pt-0 rounded-md">
+            <div
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/Waveborn_Luminex_Lost_And_Wondering.jpeg)`,
                 "backgroundBlendMode": "multiply",
                 "backgroundColor": "#161616a3",
@@ -59,7 +95,6 @@ export const Home = () => {
             </div>
 
             <div
-              id="featured1"
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/Uncomplex.jpg)`,
@@ -75,8 +110,6 @@ export const Home = () => {
                 </Link>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row flex-wrap p-2 pt-0 rounded-md">
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
