@@ -44,6 +44,41 @@ export const Home = () => {
               id="featured1"
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/YFGP_Streetz_Cover.jpg)`,
+                "backgroundBlendMode": "multiply",
+                "backgroundColor": "#161616a3",
+              }}>
+              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">YFGP's "Streetz" is Live!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=yfgp`} className="text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Listen & Collect
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div
+              id="featured2"
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              style={{
+                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/YFGP_Elevated_Cover.jpg)`,
+                "backgroundBlendMode": "multiply",
+                "backgroundColor": "#161616a3",
+              }}>
+              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
+                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">YFGP's "Fate and 808s" is Live!</h1>
+                <Link to={`${routeNames.nftunes}/?artist-profile=yfgp`} className="text-base hover:!no-underline hover:text-black">
+                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
+                    Listen & Collect
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row flex-wrap p-2 pt-0 rounded-md">
+            <div
+              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
+              style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/Bobby_Ibo_Finding_Bliss.jpg)`,
                 "backgroundBlendMode": "multiply",
                 "backgroundColor": "#161616a3",
@@ -58,7 +93,6 @@ export const Home = () => {
               </div>
             </div>
             <div
-              id="featured2"
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/ANXELS.jpg)`,
@@ -74,8 +108,7 @@ export const Home = () => {
                 </Link>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row flex-wrap p-2 pt-0 rounded-md">
+
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
@@ -92,6 +125,7 @@ export const Home = () => {
                 </Link>
               </div>
             </div>
+
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
@@ -125,6 +159,7 @@ export const Home = () => {
                 </Link>
               </div>
             </div>
+
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
@@ -152,23 +187,6 @@ export const Home = () => {
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Llluna01's "Problem Child EP" is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=llluna01`} className="text-base hover:!no-underline hover:text-black">
-                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen & Collect
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div
-              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-              style={{
-                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/assets/img/OllyGChristmasBallad.jpg)`,
-                "backgroundBlendMode": "multiply",
-                "backgroundColor": "#161616a3",
-              }}>
-              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">OllyG's "Christmas Ballad" is Launching!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=olly-g`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen & Collect
                   </Button>
@@ -243,36 +261,6 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/stephen-snodgrass.jpg)`,
-              }}>
-              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">"TWOWEEK EP" is Live!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=two-week`} className="text-base hover:!no-underline hover:text-black">
-                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen & Collect
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div
-              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-              style={{
-                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/yoshiro-mare.jpg)`,
-              }}>
-              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Yoshiro Mare "They Were Right" EP is Live!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=yoshiro-mare`} className="text-base hover:!no-underline hover:text-black">
-                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen & Collect
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div
-              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-              style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/mic-in-flames.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
@@ -318,36 +306,6 @@ export const Home = () => {
             <div
               className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
               style={{
-                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/manu_retrofy.jpg)`,
-              }}>
-              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">YFGP's "Retrofy" EP is Live!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=yfgp`} className="text-base hover:!no-underline hover:text-black">
-                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen & Collect
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div
-              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-              style={{
-                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/3oe.jpg)`,
-              }}>
-              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">3OE's Eternal Echo EP is Live!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=3oe`} className="text-base hover:!no-underline hover:text-black">
-                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen & Collect
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div
-              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-              style={{
                 "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/hachi-mugen_mugen-cafe.jpg)`,
               }}>
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
@@ -368,21 +326,6 @@ export const Home = () => {
               <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
                 <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Hachi Mugen "Infinity Series" EP is Live!</h1>
                 <Link to={`${routeNames.nftunes}/?artist-profile=hachi-mugen`} className="text-base hover:!no-underline hover:text-black">
-                  <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
-                    Listen & Collect
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div
-              className="flex md:min-w-[25%] md:flex-1 border-[0.5px] border-neutral-500/90 mt-2 min-h-[200px] md:h-[330px] bg-no-repeat bg-cover rounded-3xl mx-2 py-5 md:py-1"
-              style={{
-                "backgroundImage": `url(https://api.itheumcloud.com/app_nftunes/images/featured_hero/waveborn-luminex.jpg)`,
-              }}>
-              <div className="flex flex-col w-[80%] h-[100%] m-auto justify-center items-center">
-                <h1 className="!text-lg !text-white text-center md:!text-3xl mb-5">Waveborn Luminex "Suno" EP is Live!</h1>
-                <Link to={`${routeNames.nftunes}/?artist-profile=waveborn-luminex`} className="text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
                     Listen & Collect
                   </Button>
