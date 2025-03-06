@@ -378,10 +378,6 @@ export const GetBitzMvx = (props: any) => {
     }
   }
 
-  function goToMarketplace(tokenIdentifier: string) {
-    window.open(`${MARKETPLACE_DETAILS_PAGE}${tokenIdentifier}`)?.focus();
-  }
-
   function gamePlayImageSprites() {
     let _viewDataRes = viewDataRes;
     let _loadBlankGameCanvas = loadBlankGameCanvas;
@@ -421,9 +417,7 @@ export const GetBitzMvx = (props: any) => {
         <div
           className="relative"
           onClick={() => {
-            if (gameDataNFT) {
-              goToMarketplace(gameDataNFT.tokenIdentifier);
-            }
+            window.open("https://datadex.itheum.io/datanfts/marketplace/DATANFTFT-e936d4-07", "_blank")?.focus();
           }}>
           <img
             className={cn("z-5 rounded-[3rem] w-full cursor-pointer", modalMode ? "rounded" : "")}
