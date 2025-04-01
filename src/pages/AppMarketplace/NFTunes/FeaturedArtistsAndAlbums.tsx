@@ -10,7 +10,7 @@ import { useDebouncedCallback } from "use-debounce";
 import ratingR from "assets/img/nf-tunes/rating-R.png";
 import { Loader } from "components";
 import { Button } from "libComponents/Button";
-import { sleep } from "libs/utils";
+import { scrollToSection, sleep } from "libs/utils";
 import { gtagGo } from "libs/utils/misc";
 import { routeNames } from "routes";
 import { useNftsStore } from "store/nfts";
@@ -325,11 +325,14 @@ export const FeaturedArtistsAndAlbums = (props: FeaturedArtistsAndAlbumsProps) =
                       if (artist.artistId !== selArtistId) {
                         setSelArtistId(artist.artistId);
                         setUserInteractedWithTabs(true);
+                        scrollToSection("artist-profile");
 
                         gtagGo("NtuArAl", "ViewProfile", "Artist", artist.artistId);
                       }
                     }}>
-                    <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg lg:!text-xl text-nowrap text-center`}>{artist.name}</h2>
+                    <h2 className={`${artist.artistId === selArtistId ? "!text-white" : ""} !text-lg lg:!text-xl text-nowrap text-center`}>
+                      {artist.name.replaceAll("_", " ")}
+                    </h2>
                   </div>
                 ))}
               </div>
