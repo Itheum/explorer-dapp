@@ -63,7 +63,7 @@ export const NF_TUNES_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e936d4", nonce: 15 },
       { tokenIdentifier: "DATANFTFT-e936d4", nonce: 174 },
       { tokenIdentifier: "DATANFTFT-e936d4", nonce: 213 },
-     { tokenIdentifier: "DATANFTFT-e936d4", nonce: 237 },
+      { tokenIdentifier: "DATANFTFT-e936d4", nonce: 237 },
       ...Array.from({ length: 91 }, (_, i) => ({ tokenIdentifier: "DFEE-72425b", nonce: i })),
     ];
 
@@ -111,7 +111,10 @@ export const SPREADSHEET_NFTS_TOKENS: app_token[] = IS_DEVNET
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 610 },
       { tokenIdentifier: "DATANFTFT-e0b917", nonce: 611 },
     ]
-  : [{ tokenIdentifier: "DATANFTFT-e936d4", nonce: 185 }];
+  : [
+      { tokenIdentifier: "DATANFTFT-e936d4", nonce: 185 },
+      { tokenIdentifier: "MICIMUSTAR-1920e7", nonce: 1 },
+    ];
 
 export const GET_BITZ_TOKEN_MVX: app_token = IS_DEVNET
   ? { tokenIdentifier: "DATANFTFT-e0b917", nonce: 198 }

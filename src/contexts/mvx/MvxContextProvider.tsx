@@ -12,6 +12,9 @@ export const MvxContextProvider: FC<{ children: ReactNode }> = ({ children }) =>
     network: { chainId: chainID },
   } = useGetNetworkConfig();
 
+  console.log("MvxContextProvider ELROND_NETWORK", ELROND_NETWORK);
+  console.log("MvxContextProvider chainID", chainID);
+
   return (
     <>
       <DappProvider
