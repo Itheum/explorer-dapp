@@ -840,7 +840,7 @@ const GetBitzSol = (props: any) => {
       {!modalMode && (
         <>
           <div className="p-5 text-lg font-bold border border-[#35d9fa] rounded-[1rem] mt-[3rem] max-w-[100%]">
-            <h2 className="text-center text-white mb-[1rem] text-4xl">Get BiTz Perks</h2>
+            <h2 className="text-center text-white mb-[1rem] text-4xl">Get BiTz Perks </h2>
 
             <ol className="mt-5">
               <li className="my-5">
