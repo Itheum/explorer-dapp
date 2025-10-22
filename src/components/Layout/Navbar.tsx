@@ -360,11 +360,11 @@ export const Navbar = () => {
         {showPlayBitzModal && <PlayBitzModal showPlayBitzModel={showPlayBitzModal} handleHideBitzModel={() => setShowPlayBitzModal(false)} />}
       </div>
 
-      {publicKeySol && (
+      {/* {publicKeySol && (
         <div className="flex flex-row justify-between items-center xl:mx-[7.5rem] md:mx-[4rem]">
           <DataNftAirdropsBannerCTA />
         </div>
-      )}
+      )} */}
     </>
   );
 };

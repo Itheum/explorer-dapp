@@ -72,7 +72,7 @@ export const AIWorkforce = () => {
               </h2>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-2">
+            <div className="hidden flex flex-col md:flex-row gap-2">
               {!mxAddress && (
                 <Link to={"https://ai-workforce.itheum.io/nfmeid"} target="_blank" className="my-5 text-base hover:!no-underline hover:text-black">
                   <Button className="!text-black text-sm tracking-tight relative px-[2.35rem] left-2 bottom-1.5 bg-gradient-to-r from-yellow-300 to-orange-500 transition ease-in-out delay-150 duration-300 hover:translate-y-1.5 hover:-translate-x-[8px] hover:scale-100">
