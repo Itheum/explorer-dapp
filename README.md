@@ -7,6 +7,13 @@ It's a basic implementation of [@multiversx/sdk-dapp](https://www.npmjs.com/pack
 
 See [Dapp template](https://template-dapp.multiversx.com/) for live demo.
 
+> [!IMPORTANT]
+> **AI Agents**: Before making any changes to this repository, you must read the [AGENTS.md](AGENTS.md) contract and review the [docs/current-state.md](docs/current-state.md).
+
+## Documentation Index
+- **AI Agent Contract:** [AGENTS.md](AGENTS.md)
+- **Current State:** [docs/current-state.md](docs/current-state.md)
+- **Roadmap:** [docs/roadmap.md](docs/roadmap.md)
 ## Requirements
 
 - Node.js version 12.16.2+
@@ -57,9 +64,6 @@ To build the project run:
 yarn build
 ```
 
-## Roadmap
-
-See the [open issues](https://github.com/multiversx/mx-template-dapp/issues) for a list of proposed features (and known issues).
 
 ## Contributing
 
@@ -73,6 +77,3 @@ One can contribute by creating _pull requests_, or by opening _issues_ for disco
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## Known Issues
-
-If you see some build error in docket or other CICD services related to vite and `@rollup/rollup-linux-x64-gnu`... you will need to `git rm -r --cached ./package-lock.json` locally and make sure you dont commit `package-lock.json`
